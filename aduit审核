@@ -1,0 +1,91 @@
+任务：从飞书 Base 表逐行读取第 101 行到第 200 行的 instance_id，并逐个使用 codeGen审查 技能做真实审查和回写。
+
+
+固定表：
+ `https://bcnrsnl3m9wk.feishu.cn/base/LBpEbTOxsaIN7zs4GU3cMbSbnKc?table=tblwmE5NwwskvhOk&view=vewgrZPsp1`    
+
+
+技能与脚本目录：
+～/pro/codeGen/codegen_review_deploy_20260602_0529_full
+
+
+硬性流程，不满足任一项视为任务失败：
+
+
+1. 先读取技能规则
+   - 必须先读 codeGen审查 技能说明。
+   - 必须继承 codegen质检 规则。
+   - 默认只做静态审查，不启动 Docker，除非我另行明确要求。
+   - codex cli 不能用时，不要假装已调用；直接按技能规则手工审查。
+
+
+2. 先获取真实目标列表
+   - 记录每一行的 row index、record_id、instance_id、质检1、质检2、质检结果当前状态。
+   - 禁止凭本地缓存、旧文件、猜测的 instance_id 开始审查。
+   - 读取完后先输出目标清单，再开始审查。
+
+
+3. 每个 instance_id 必须独立审查
+   - 每个实例都必须单独读取并检查：
+     problem_statement
+     test_files
+     test_script
+     rollout_result_json
+     repo_url / 原仓库代码上下文
+   - 禁止复用上一行结论。
+   - 禁止只看质检1/质检2 投票。
+   - 禁止只写“通过/不通过”短评。
+   - 每个问题都必须有证据来源：题面原文、测试文件路径/函数/断言、脚本命令、rollout 日志片段或代码位置。
+   - 没有证据的位置，不能写进最终结论。
+
+
+4. 严格按 live 状态机只走一个分支
+
+   - 禁止写错字段，禁止改源字段，禁止覆盖 problem_statement/test_files/test_script/rollout_result_json。
+
+
+5. 每个 instance_id 的输出必须包含证据包
+   对每个实例必须留下以下记录：
+   - instance_id
+   - row index 和 record_id
+   - 本轮选择的分支：质检1 / 质检2 / 仲裁
+   - 已读取的四件套文件或字段
+   - test_files 覆盖范围：路径、测试类/函数/关键断言
+   - test_script 实际运行选择器或命令
+   - rollout_result_json 关键证据摘要
+   - 需求与测试是否一致的结论
+   - 写回字段名
+   - 写回前 dry-run 或 payload 校验结果
+   - 写回后 live readback 结果
+
+
+6. 写回必须 live 验证
+   - 写回后必须立即从飞书 live 表读回。
+   - 读回字段必须与本轮写入一致。
+   - 只显示本轮写入字段的摘要、长度或 JSON 校验结果即可。
+   - 没有 live readback，不算完成。
+
+
+7. 并发规则
+   - 可以最多开 3 个子 agent。
+   - 子 agent 只能处理明确分配的 instance_id 子集。
+   - 每个子 agent 必须按上面完整流程独立审查，不允许批量套模板。
+   - 主 agent 负责汇总 live readback，不得只相信子 agent 口头完成。
+   - 如果任一子 agent 缺少证据包或 readback，主 agent 必须标记该实例未完成并补审。
+
+
+8. 最终汇总格式
+   最终必须按表格列出 12 行：
+   row_index | instance_id | record_id | 分支 | 写回字段 | 结论 | live_readback | 证据包路径/摘要 | 状态
+   状态只能是：
+   - 完成
+   - 未完成：并说明阻塞原因
+   - 失败：并说明失败命令/字段/权限/证据缺口
+
+
+铁律：
+不允许偷懒乱写。
+不允许用“已检查”“看起来没问题”代替证据。
+不允许跳过 test_files/test_script/rollout_result_json。
+不允许没有 live readback 就说完成。
+不允许因为是批量任务就降低单个 instance_id 的审查质量。
