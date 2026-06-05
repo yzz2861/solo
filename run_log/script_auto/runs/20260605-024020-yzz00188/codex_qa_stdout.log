@@ -1,0 +1,8 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目主入口 `main.py` 能调起批处理，样例也能跑出结果，但交付内容有明显错配，影响可用性：`src/pick_mismatch_processor.py:437-441` 把 `invalid_records` 统计成坏数据条数，`test_data/missing_material_samples.json` 会出现 `total_records=6, invalid_records=7`；`src/report_generator.py:64-88` 生成分组报表时依赖 `pick_date`，但 `group_results` 未写入该字段，导致 `output/group_reports/over_threshold_samples_group.csv` 该列为空；复核表同样因字段映射不一致，`output/review_tables/over_threshold_samples_review.csv` 的 `时间窗口(小时)` 为空。结果不可信，未达到可交付标准。
+- 主要证据: `main.py:21-59` 存在真实 CLI 入口，且内存验证四个样例均返回 `success=True`；`src/pick_mismatch_processor.py:325-379` 可完成批处理；但 `src/pick_mismatch_processor.py:437-441` 的无效记录统计口径错误，`src/report_generator.py:64-88` 与 `config/report_templates.json:4-20` 的分组字段不一致，`src/report_generator.py:135-176` 与 `config/report_templates.json:42-60` 的复核字段不一致。
+- 阻断问题: 1. 摘要指标失真，`invalid_records` 不是按记录数统计。2. 报表模板与实际输出字段不匹配，关键列为空。3. 这会直接影响用户对批处理结果和人工复核表的判断。
+- 建议: 1. 将 `invalid_records` 改为按无效记录去重计数，并保留错误条数单独字段。2. 在 `group_results` 中补齐 `pick_date` 或从模板移除该维度。3. 将 `time_window_hours` 显式映射到复核表的 `time_window`。4. 补充针对样例数据的断言测试，覆盖摘要和报表列完整性。

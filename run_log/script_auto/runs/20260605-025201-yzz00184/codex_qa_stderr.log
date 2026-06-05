@@ -1,0 +1,1988 @@
+Reading additional input from stdin...
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00184
+model: gpt-5.4-mini
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 019e93fd-b6df-7322-a1a6-5caa370d99b2
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00184
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00184
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+codex
+我先按“solo质检”口径检查项目入口、依赖和核心链路，再对照 README 和真实产物判断是否能运行、能否满足原始目标。先把仓库结构和质检规则摸清，再做结论。
+web search: 
+web search: solo质检 Codex skill
+exec
+/bin/zsh -lc "rg --files -g 'SKILL.md' -g '*solo*' -g '*质检*' .codex /Users/bill/.codex /Users/bill/.agents 2>/dev/null | head -200" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 337ms:
+/Users/bill/.agents/skills/lark-approval/SKILL.md
+/Users/bill/.agents/skills/lark-whiteboard/SKILL.md
+/Users/bill/.agents/skills/lark-task/SKILL.md
+/Users/bill/.agents/skills/lark-sheets/SKILL.md
+/Users/bill/.agents/skills/lark-im/SKILL.md
+/Users/bill/.agents/skills/lark-slides/SKILL.md
+/Users/bill/.agents/skills/lark-base/SKILL.md
+/Users/bill/.agents/skills/lark-doc/SKILL.md
+/Users/bill/.agents/skills/lark-wiki/SKILL.md
+/Users/bill/.agents/skills/lark-workflow-meeting-summary/SKILL.md
+/Users/bill/.agents/skills/lark-drive/SKILL.md
+/Users/bill/.agents/skills/lark-workflow-standup-report/SKILL.md
+/Users/bill/.agents/skills/lark-calendar/SKILL.md
+/Users/bill/.agents/skills/lark-vc/SKILL.md
+/Users/bill/.agents/skills/lark-skill-maker/SKILL.md
+/Users/bill/.agents/skills/lark-openapi-explorer/SKILL.md
+/Users/bill/.agents/skills/lark-minutes/SKILL.md
+/Users/bill/.agents/skills/lark-mail/SKILL.md
+/Users/bill/.agents/skills/lark-contact/SKILL.md
+/Users/bill/.agents/skills/lark-event/SKILL.md
+/Users/bill/.agents/skills/lark-shared/SKILL.md
+/Users/bill/.agents/skills/lark-attendance/SKILL.md
+/Users/bill/.codex/skills/capability-evaluation/SKILL.md
+/Users/bill/.codex/plugins/cache/openai-bundled/computer-use/1.0.799/skills/computer-use/SKILL.md
+/Users/bill/.codex/skills/codeGen标注/SKILL.md
+/Users/bill/.codex/skills/codegen质检/SKILL.md
+/Users/bill/.codex/skills/codeGen审查/SKILL.md
+/Users/bill/.codex/plugins/cache/openai-primary-runtime/documents/26.601.10930/skills/documents/SKILL.md
+/Users/bill/.codex/plugins/cache/openai-primary-runtime/presentations/26.601.10930/skills/presentations/SKILL.md
+/Users/bill/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.601.10930/skills/spreadsheets/SKILL.md
+/Users/bill/.codex/plugins/cache/openai-bundled/browser/26.519.41501/skills/browser/SKILL.md
+
+codex
+我在确认仓库里可验证的入口和构建配置，同时找“solo质检”对应的本地规则文件；如果仓库里没有单独技能文件，我会按你给的质检口径直接核查。
+exec
+/bin/zsh -lc "find .. -maxdepth 3 -iname '*solo*' -o -iname '*质检*' -o -iname 'SKILL.md' | sed -n '1,200p'" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc 'pwd && rg --files .' in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 107ms:
+./late_return_stats.py
+./test_late_return_stats.py
+
+ succeeded in 366ms:
+../yzz00048/node_modules/vite-plugin-trae-solo-badge
+../yzz00038/node_modules/vite-plugin-trae-solo-badge
+../yzz00032/node_modules/vite-plugin-trae-solo-badge
+
+exec
+/bin/zsh -lc "sed -n '1,220p' late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 0ms:
+"""
+学生宿舍晚归统计脚本
+
+将原始晚归记录整理为可复核报告:
+- 输入: 业务记录列表、问题字典、去重键、报表模板
+- 输出: 统计结果、异常样本、趋势摘要、导出文件
+- 缺失/重复/越界数据分别标注
+- 保留处理批次和来源标识
+"""
+
+import csv
+import hashlib
+import json
+import os
+import uuid
+from collections import Counter, defaultdict
+from copy import deepcopy
+from datetime import datetime, date, time, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+
+class AnomalyType(str, Enum):
+    MISSING = "缺失"
+    DUPLICATE = "重复"
+    OUT_OF_BOUND = "越界"
+    OK = "正常"
+
+
+class TaskStatus(str, Enum):
+    PENDING = "pending"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    PARTIAL_FAILED = "partial_failed"
+    FAILED = "failed"
+
+
+class LateReturnRecord:
+    __slots__ = (
+        "student_id", "student_name", "dormitory", "room_number",
+        "return_date", "return_time", "reason", "recorder",
+        "source_id", "_raw", "_dedup_key_values",
+    )
+
+    def __init__(self, raw: Dict[str, Any]):
+        self._raw = raw
+        self.student_id = str(raw.get("student_id", "")).strip()
+        self.student_name = str(raw.get("student_name", "")).strip()
+        self.dormitory = str(raw.get("dormitory", "")).strip()
+        self.room_number = str(raw.get("room_number", "")).strip()
+        self.return_date = str(raw.get("return_date", "")).strip()
+        self.return_time = str(raw.get("return_time", "")).strip()
+        self.reason = str(raw.get("reason", "")).strip()
+        self.recorder = str(raw.get("recorder", "")).strip()
+        self.source_id = str(raw.get("source_id", "")).strip()
+        self._dedup_key_values = None
+
+    @property
+    def raw(self) -> Dict[str, Any]:
+        return self._raw
+
+    def dedup_key(self, keys: List[str]) -> str:
+        if self._dedup_key_values is not None and not keys:
+            return self._dedup_key_values
+        parts = []
+        for k in keys:
+            v = self._raw.get(k, "")
+            parts.append(f"{k}={v}")
+        return "|".join(parts)
+
+    def missing_fields(self, required: List[str]) -> List[str]:
+        missing = []
+        for f in required:
+            val = self._raw.get(f)
+            if val is None or (isinstance(val, str) and val.strip() == ""):
+                missing.append(f)
+        return missing
+
+    def out_of_bound_fields(self, bounds: Dict[str, Dict[str, Any]]) -> List[str]:
+        violations = []
+        for field, rule in bounds.items():
+            val = self._raw.get(field)
+            if val is None or (isinstance(val, str) and val.strip() == ""):
+                continue
+            if "min" in rule:
+                try:
+                    if float(val) < float(rule["min"]):
+                        violations.append(field)
+                        continue
+                except (ValueError, TypeError):
+                    pass
+            if "max" in rule:
+                try:
+                    if float(val) > float(rule["max"]):
+                        violations.append(field)
+                        continue
+                except (ValueError, TypeError):
+                    pass
+            if "time_after" in rule:
+                try:
+                    t = self._parse_time(val)
+                    threshold = self._parse_time(rule["time_after"])
+                    if t is not None and threshold is not None and t < threshold:
+                        violations.append(field)
+                        continue
+                except (ValueError, TypeError):
+                    pass
+            if "time_before" in rule:
+                try:
+                    t = self._parse_time(val)
+                    threshold = self._parse_time(rule["time_before"])
+                    if t is not None and threshold is not None and t > threshold:
+                        violations.append(field)
+                        continue
+                except (ValueError, TypeError):
+                    pass
+            if "allowed_values" in rule:
+                if str(val) not in [str(v) for v in rule["allowed_values"]]:
+                    violations.append(field)
+        return violations
+
+    @staticmethod
+    def _parse_time(val) -> Optional[time]:
+        if isinstance(val, time):
+            return val
+        s = str(val).strip()
+        for fmt in ("%H:%M", "%H:%M:%S"):
+            try:
+                return datetime.strptime(s, fmt).time()
+            except ValueError:
+                continue
+        return None
+
+
+class ProcessingBatch:
+    def __init__(self, source: str = ""):
+        self.batch_id = uuid.uuid4().hex[:12]
+        self.source = source
+        self.created_at = datetime.now().isoformat()
+        self.status = TaskStatus.PENDING
+        self.total_input = 0
+        self.total_processed = 0
+        self.total_anomalies = 0
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "batch_id": self.batch_id,
+            "source": self.source,
+            "created_at": self.created_at,
+            "status": self.status.value,
+            "total_input": self.total_input,
+            "total_processed": self.total_processed,
+            "total_anomalies": self.total_anomalies,
+        }
+
+
+class ProblemDictionary:
+    def __init__(self, config: Dict[str, Any]):
+        self.required_fields: List[str] = config.get("required_fields", [])
+        self.dedup_keys: List[str] = config.get("dedup_keys", [])
+        self.bounds: Dict[str, Dict[str, Any]] = config.get("bounds", {})
+        self.anomaly_descriptions: Dict[str, str] = config.get("anomaly_descriptions", {})
+        self.field_labels: Dict[str, str] = config.get("field_labels", {})
+        self.time_threshold: str = config.get("time_threshold", "22:30")
+
+    def describe_anomaly(self, anomaly_type: str, field: str = "") -> str:
+        key = f"{anomaly_type}.{field}" if field else anomaly_type
+        if key in self.anomaly_descriptions:
+            return self.anomaly_descriptions[key]
+        if anomaly_type in self.anomaly_descriptions:
+            return self.anomaly_descriptions[anomaly_type]
+        label = self.field_labels.get(field, field)
+        if anomaly_type == AnomalyType.MISSING.value:
+            return f"字段[{label}]为空"
+        if anomaly_type == AnomalyType.DUPLICATE.value:
+            return f"记录重复"
+        if anomaly_type == AnomalyType.OUT_OF_BOUND.value:
+            return f"字段[{label}]越界"
+        return f"异常({anomaly_type})"
+
+
+class ReportTemplate:
+    def __init__(self, config: Dict[str, Any]):
+        self.title = config.get("title", "学生宿舍晚归统计报告")
+        self.summary_fields = config.get("summary_fields", [
+            "total_records", "valid_records", "anomaly_count",
+            "missing_count", "duplicate_count", "out_of_bound_count",
+        ])
+        self.group_by = config.get("group_by", ["dormitory"])
+        self.trend_field = config.get("trend_field", "return_date")
+        self.anomaly_sample_size = config.get("anomaly_sample_size", 10)
+        self.export_format = config.get("export_format", "csv")
+
+
+class AnnotatedRecord:
+    def __init__(self, record: LateReturnRecord, batch: ProcessingBatch):
+        self.record = record
+        self.batch = batch
+        self.anomalies: List[Dict[str, str]] = []
+        self.is_valid = True
+        self.is_duplicate = False
+
+    def add_anomaly(self, anomaly_type: AnomalyType, field: str, description: str):
+        self.anomalies.append({
+            "type": anomaly_type.value,
+            "field": field,
+            "description": description,
+        })
+        if anomaly_type == AnomalyType.DUPLICATE:
+            self.is_duplicate = True
+        else:
+            self.is_valid = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            **self.record.raw,
+            "_batch_id": self.batch.batch_id,
+            "_source": self.batch.source,
+            "_is_valid": self.is_valid,
+            "_is_duplicate": self.is_duplicate,
+
+exec
+/bin/zsh -lc "sed -n '1,220p' test_late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 0ms:
+import csv
+import json
+import os
+import unittest
+from copy import deepcopy
+
+from late_return_stats import (
+    AnomalyType,
+    LateReturnProcessor,
+    LateReturnRecord,
+    ProblemDictionary,
+    ProcessingBatch,
+    ReportTemplate,
+    TaskStatus,
+    run_late_return_stats,
+)
+
+
+SAMPLE_PROBLEM_DICT = {
+    "required_fields": ["student_id", "student_name", "dormitory", "return_date", "return_time"],
+    "dedup_keys": ["student_id", "return_date", "return_time"],
+    "bounds": {
+        "return_time": {
+            "time_after": "22:30",
+        },
+    },
+    "anomaly_descriptions": {
+        "缺失.student_id": "学号为空",
+        "缺失.student_name": "姓名为空",
+        "缺失.dormitory": "楼栋为空",
+        "缺失.return_date": "日期为空",
+        "缺失.return_time": "时间为空",
+        "重复": "该记录与已有记录重复",
+        "越界.return_time": "晚归时间未达到22:30阈值",
+    },
+    "field_labels": {
+        "student_id": "学号",
+        "student_name": "姓名",
+        "dormitory": "楼栋",
+        "return_date": "日期",
+        "return_time": "时间",
+    },
+    "time_threshold": "22:30",
+}
+
+SAMPLE_TEMPLATE = {
+    "title": "晚归统计报告",
+    "group_by": ["dormitory"],
+    "trend_field": "return_date",
+    "anomaly_sample_size": 5,
+    "export_format": "csv",
+}
+
+VALID_RECORD = {
+    "student_id": "2024001",
+    "student_name": "张三",
+    "dormitory": "1号楼",
+    "room_number": "301",
+    "return_date": "2025-05-01",
+    "return_time": "23:10",
+    "reason": "自习",
+    "recorder": "李老师",
+    "source_id": "SRC001",
+}
+
+MISSING_FIELD_RECORD = {
+    "student_id": "",
+    "student_name": "李四",
+    "dormitory": "1号楼",
+    "room_number": "302",
+    "return_date": "2025-05-01",
+    "return_time": "23:30",
+    "reason": "社团",
+    "recorder": "李老师",
+    "source_id": "SRC002",
+}
+
+OUT_OF_BOUND_RECORD = {
+    "student_id": "2024003",
+    "student_name": "王五",
+    "dormitory": "2号楼",
+    "room_number": "201",
+    "return_date": "2025-05-01",
+    "return_time": "21:00",
+    "reason": "自习",
+    "recorder": "王老师",
+    "source_id": "SRC003",
+}
+
+DUPLICATE_RECORD = {
+    "student_id": "2024001",
+    "student_name": "张三",
+    "dormitory": "1号楼",
+    "room_number": "301",
+    "return_date": "2025-05-01",
+    "return_time": "23:10",
+    "reason": "自习",
+    "recorder": "李老师",
+    "source_id": "SRC004",
+}
+
+
+def _clean_exports():
+    for f in os.listdir("."):
+        if f.startswith("late_return_report_"):
+            os.remove(f)
+
+
+class TestLateReturnRecord(unittest.TestCase):
+    def test_missing_fields(self):
+        rec = LateReturnRecord({"student_id": "", "student_name": "A"})
+        missing = rec.missing_fields(["student_id", "student_name", "return_date"])
+        self.assertIn("student_id", missing)
+        self.assertIn("return_date", missing)
+        self.assertNotIn("student_name", missing)
+
+    def test_dedup_key(self):
+        rec = LateReturnRecord({"student_id": "001", "return_date": "2025-01-01"})
+        key = rec.dedup_key(["student_id", "return_date"])
+        self.assertEqual(key, "student_id=001|return_date=2025-01-01")
+
+    def test_out_of_bound_time(self):
+        rec = LateReturnRecord({"return_time": "21:00"})
+        bounds = {"return_time": {"time_after": "22:30"}}
+        violations = rec.out_of_bound_fields(bounds)
+        self.assertIn("return_time", violations)
+
+    def test_in_bound_time(self):
+        rec = LateReturnRecord({"return_time": "23:00"})
+        bounds = {"return_time": {"time_after": "22:30"}}
+        violations = rec.out_of_bound_fields(bounds)
+        self.assertNotIn("return_time", violations)
+
+    def test_numeric_bounds(self):
+        rec = LateReturnRecord({"score": "150"})
+        bounds = {"score": {"min": 0, "max": 100}}
+        violations = rec.out_of_bound_fields(bounds)
+        self.assertIn("score", violations)
+
+
+class TestSingleSuccess(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_single_valid_record(self):
+        result = run_late_return_stats(
+            records=[VALID_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="门禁系统A",
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["total_records"], 1)
+        self.assertEqual(stats["valid_records"], 1)
+        self.assertEqual(stats["anomaly_count"], 0)
+        self.assertEqual(stats["missing_count"], 0)
+        self.assertEqual(stats["duplicate_count"], 0)
+        self.assertEqual(stats["out_of_bound_count"], 0)
+        self.assertEqual(result["batch"]["status"], "completed")
+        self.assertEqual(result["batch"]["source"], "门禁系统A")
+        self.assertTrue(result["batch"]["batch_id"])
+
+    def test_single_record_with_missing(self):
+        result = run_late_return_stats(
+            records=[MISSING_FIELD_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["total_records"], 1)
+        self.assertEqual(stats["valid_records"], 0)
+        self.assertEqual(stats["missing_count"], 1)
+        self.assertEqual(stats["anomaly_count"], 1)
+        self.assertEqual(result["batch"]["status"], "failed")
+        samples = result["anomaly_samples"]
+        self.assertTrue(any(s["anomaly_type"] == "缺失" for s in samples))
+
+    def test_single_record_out_of_bound(self):
+        result = run_late_return_stats(
+            records=[OUT_OF_BOUND_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["out_of_bound_count"], 1)
+        self.assertEqual(stats["valid_records"], 0)
+        samples = result["anomaly_samples"]
+        self.assertTrue(any(s["anomaly_type"] == "越界" for s in samples))
+
+
+class TestBatchPartialFailure(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_mixed_batch(self):
+        records = [VALID_RECORD, MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD, DUPLICATE_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="测试批量",
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["total_records"], 4)
+        self.assertTrue(stats["valid_records"] >= 1)
+        self.assertTrue(stats["anomaly_count"] >= 1)
+        self.assertEqual(result["batch"]["status"], "partial_failed")
+        self.assertEqual(result["batch"]["source"], "测试批量")
+
+    def test_batch_with_duplicates(self):
+        records = [VALID_RECORD, DUPLICATE_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+
+exec
+/bin/zsh -lc "sed -n '220,520p' test_late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 337ms:
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["duplicate_count"], 1)
+        self.assertEqual(stats["total_records"], 2)
+
+    def test_all_invalid_batch(self):
+        records = [MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        self.assertEqual(result["batch"]["status"], "failed")
+
+
+class TestManualReview(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_anomaly_samples_have_batch_and_source(self):
+        records = [MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="人工录入",
+        )
+        for sample in result["anomaly_samples"]:
+            self.assertIn("batch_id", sample)
+            self.assertEqual(sample["source"], "人工录入")
+            self.assertIn("record", sample)
+            self.assertIn("anomaly_details", sample)
+
+    def test_anomaly_explanation_readable(self):
+        result = run_late_return_stats(
+            records=[MISSING_FIELD_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        samples = result["anomaly_samples"]
+        self.assertTrue(len(samples) > 0)
+        missing_samples = [s for s in samples if s["anomaly_type"] == "缺失"]
+        self.assertTrue(len(missing_samples) > 0)
+        details = missing_samples[0]["anomaly_details"]
+        descriptions = [d["description"] for d in details]
+        self.assertTrue(any("学号" in d for d in descriptions))
+
+    def test_export_csv_retains_batch_and_source(self):
+        records = [VALID_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="门禁系统B",
+        )
+        export_path = result["export_file"]
+        self.assertTrue(os.path.exists(export_path))
+        with open(export_path, encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["_source"], "门禁系统B")
+        self.assertTrue(rows[0]["_batch_id"])
+
+    def test_export_json_format(self):
+        template = dict(SAMPLE_TEMPLATE)
+        template["export_format"] = "json"
+        records = [VALID_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=template,
+        )
+        export_path = result["export_file"]
+        self.assertTrue(os.path.exists(export_path))
+        with open(export_path, encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertIn("batch", data)
+        self.assertIn("statistics", data)
+        self.assertIn("records", data)
+        self.assertIn("_batch_id", data["records"][0])
+        self.assertIn("_source", data["records"][0])
+
+
+class TestDuplicateSubmission(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_duplicate_submission_new_batch(self):
+        result1 = run_late_return_stats(
+            records=[VALID_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="首次提交",
+        )
+        result2 = run_late_return_stats(
+            records=[VALID_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+            source="重复提交",
+        )
+        self.assertNotEqual(result1["batch"]["batch_id"], result2["batch"]["batch_id"])
+        self.assertEqual(result2["batch"]["source"], "重复提交")
+        self.assertEqual(result2["statistics"]["total_records"], 1)
+
+    def test_processor_replay(self):
+        pd = ProblemDictionary(SAMPLE_PROBLEM_DICT)
+        tmpl = ReportTemplate(SAMPLE_TEMPLATE)
+        proc = LateReturnProcessor(pd, tmpl, source="重放测试")
+        result1 = proc.process([VALID_RECORD])
+        batch1_id = result1["batch"]["batch_id"]
+        result2 = proc.replay([VALID_RECORD])
+        batch2_id = result2["batch"]["batch_id"]
+        self.assertNotEqual(batch1_id, batch2_id)
+        self.assertEqual(result2["statistics"]["total_records"], 1)
+
+
+class TestCalculationCaliber(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_caliber_valid_plus_anomaly_equals_total(self):
+        records = [
+            VALID_RECORD,
+            MISSING_FIELD_RECORD,
+            OUT_OF_BOUND_RECORD,
+            DUPLICATE_RECORD,
+            {
+                "student_id": "2024005",
+                "student_name": "赵六",
+                "dormitory": "3号楼",
+                "room_number": "101",
+                "return_date": "2025-05-02",
+                "return_time": "23:45",
+                "reason": "",
+                "recorder": "张老师",
+                "source_id": "SRC005",
+            },
+        ]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        stats = result["statistics"]
+        self.assertEqual(stats["valid_records"] + stats["anomaly_count"], stats["total_records"])
+
+    def test_group_stats_sum_matches_total(self):
+        records = [VALID_RECORD, OUT_OF_BOUND_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        group_stats = result["statistics"]["group_stats"]
+        total_from_groups = sum(g["total"] for g in group_stats.values())
+        self.assertEqual(total_from_groups, result["statistics"]["total_records"])
+
+    def test_trend_data_sum_matches_total(self):
+        records = [
+            VALID_RECORD,
+            {
+                "student_id": "2024005",
+                "student_name": "赵六",
+                "dormitory": "1号楼",
+                "room_number": "101",
+                "return_date": "2025-05-02",
+                "return_time": "23:45",
+                "reason": "",
+                "recorder": "张老师",
+                "source_id": "SRC005",
+            },
+        ]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        trend = result["statistics"]["trend_data"]
+        total_from_trend = sum(t["total"] for t in trend.values())
+        self.assertEqual(total_from_trend, result["statistics"]["total_records"])
+
+    def test_anomaly_type_counts_consistent(self):
+        records = [MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD, VALID_RECORD, DUPLICATE_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        stats = result["statistics"]
+        self.assertEqual(
+            stats["missing_count"] + stats["duplicate_count"] + stats["out_of_bound_count"],
+            stats["anomaly_count"],
+        )
+
+
+class TestTaskStatus(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_empty_input_failed(self):
+        result = run_late_return_stats(
+            records=[],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        self.assertEqual(result["batch"]["status"], "failed")
+
+    def test_all_valid_completed(self):
+        result = run_late_return_stats(
+            records=[VALID_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        self.assertEqual(result["batch"]["status"], "completed")
+
+    def test_mixed_partial_failed(self):
+        records = [VALID_RECORD, MISSING_FIELD_RECORD]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        self.assertEqual(result["batch"]["status"], "partial_failed")
+
+
+class TestDataReplay(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_replay_produces_same_statistics(self):
+        records = [VALID_RECORD, MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD]
+        pd = ProblemDictionary(SAMPLE_PROBLEM_DICT)
+        tmpl = ReportTemplate(SAMPLE_TEMPLATE)
+        proc = LateReturnProcessor(pd, tmpl, source="回放源")
+
+        result1 = proc.process(records)
+        stats1 = result1["statistics"]
+
+        result2 = proc.replay(records)
+        stats2 = result2["statistics"]
+
+        self.assertEqual(stats1["total_records"], stats2["total_records"])
+        self.assertEqual(stats1["valid_records"], stats2["valid_records"])
+        self.assertEqual(stats1["missing_count"], stats2["missing_count"])
+        self.assertEqual(stats1["out_of_bound_count"], stats2["out_of_bound_count"])
+        self.assertNotEqual(result1["batch"]["batch_id"], result2["batch"]["batch_id"])
+
+    def test_replay_with_modified_data(self):
+        records_v1 = [VALID_RECORD]
+        records_v2 = [VALID_RECORD, MISSING_FIELD_RECORD]
+
+        pd = ProblemDictionary(SAMPLE_PROBLEM_DICT)
+        tmpl = ReportTemplate(SAMPLE_TEMPLATE)
+        proc = LateReturnProcessor(pd, tmpl, source="回放源")
+
+        proc.process(records_v1)
+        result2 = proc.replay(records_v2)
+        self.assertEqual(result2["statistics"]["total_records"], 2)
+        self.assertEqual(result2["statistics"]["missing_count"], 1)
+
+
+class TestTrendSummary(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_trend_summary_multi_day(self):
+        records = [
+            VALID_RECORD,
+            {
+                "student_id": "2024005",
+                "student_name": "赵六",
+                "dormitory": "1号楼",
+                "room_number": "101",
+                "return_date": "2025-05-03",
+                "return_time": "23:00",
+                "reason": "",
+                "recorder": "张老师",
+                "source_id": "SRC005",
+            },
+        ]
+
+exec
+/bin/zsh -lc "sed -n '520,760p' test_late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 240ms:
+        ]
+        result = run_late_return_stats(
+            records=records,
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        summary = result["trend_summary"]
+        self.assertIn("统计周期", summary)
+        self.assertIn("趋势", summary)
+
+    def test_trend_summary_single_day(self):
+        result = run_late_return_stats(
+            records=[VALID_RECORD],
+            problem_dict_config=SAMPLE_PROBLEM_DICT,
+            template_config=SAMPLE_TEMPLATE,
+        )
+        summary = result["trend_summary"]
+        self.assertIn("单日数据", summary)
+
+
+class TestProcessingBatch(unittest.TestCase):
+    def test_batch_to_dict(self):
+        batch = ProcessingBatch(source="测试源")
+        d = batch.to_dict()
+        self.assertIn("batch_id", d)
+        self.assertEqual(d["source"], "测试源")
+        self.assertIn("created_at", d)
+        self.assertEqual(d["status"], "pending")
+
+    def test_batch_id_unique(self):
+        b1 = ProcessingBatch()
+        b2 = ProcessingBatch()
+        self.assertNotEqual(b1.batch_id, b2.batch_id)
+
+
+class TestDedupKeysParameter(unittest.TestCase):
+    def setUp(self):
+        _clean_exports()
+
+    def tearDown(self):
+        _clean_exports()
+
+    def test_dedup_keys_override(self):
+        custom_dict = dict(SAMPLE_PROBLEM_DICT)
+        del custom_dict["dedup_keys"]
+        result = run_late_return_stats(
+            records=[VALID_RECORD, DUPLICATE_RECORD],
+            problem_dict_config=custom_dict,
+            dedup_keys=["student_id", "return_date", "return_time"],
+            template_config=SAMPLE_TEMPLATE,
+        )
+        self.assertEqual(result["statistics"]["duplicate_count"], 1)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+exec
+/bin/zsh -lc "sed -n '520,760p' late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "sed -n '220,520p' late_return_stats.py" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 337ms:
+            "_is_duplicate": self.is_duplicate,
+            "_anomalies": self.anomalies,
+        }
+
+
+class StatisticsResult:
+    def __init__(self):
+        self.total_records = 0
+        self.valid_records = 0
+        self.anomaly_count = 0
+        self.missing_count = 0
+        self.duplicate_count = 0
+        self.out_of_bound_count = 0
+        self.group_stats: Dict[str, Dict[str, Any]] = {}
+        self.trend_data: Dict[str, Dict[str, int]] = {}
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "total_records": self.total_records,
+            "valid_records": self.valid_records,
+            "anomaly_count": self.anomaly_count,
+            "missing_count": self.missing_count,
+            "duplicate_count": self.duplicate_count,
+            "out_of_bound_count": self.out_of_bound_count,
+            "group_stats": self.group_stats,
+            "trend_data": self.trend_data,
+        }
+
+
+class LateReturnProcessor:
+    def __init__(
+        self,
+        problem_dict: ProblemDictionary,
+        template: ReportTemplate,
+        source: str = "",
+    ):
+        self.problem_dict = problem_dict
+        self.template = template
+        self.batch = ProcessingBatch(source=source)
+        self.annotated: List[AnnotatedRecord] = []
+        self.stats = StatisticsResult()
+        self.dedup_tracker: Dict[str, int] = {}
+
+    def process(self, raw_records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        self.batch.status = TaskStatus.PROCESSING
+        self.batch.total_input = len(raw_records)
+
+        records = [LateReturnRecord(r) for r in raw_records]
+
+        self._dedup_tracker_reset(records)
+
+        anomaly_count = 0
+        for rec in records:
+            ann = AnnotatedRecord(rec, self.batch)
+            self._check_missing(ann)
+            self._check_duplicate(ann)
+            self._check_bounds(ann)
+            self.annotated.append(ann)
+            if ann.anomalies:
+                anomaly_count += 1
+
+        self.batch.total_processed = len(self.annotated)
+        self.batch.total_anomalies = anomaly_count
+
+        self._compute_stats()
+
+        status = self._determine_status()
+        self.batch.status = status
+
+        return self._build_output()
+
+    def _dedup_tracker_reset(self, records: List[LateReturnRecord]):
+        self.dedup_tracker = {}
+        keys = self.problem_dict.dedup_keys
+        for rec in records:
+            dk = rec.dedup_key(keys)
+            self.dedup_tracker[dk] = self.dedup_tracker.get(dk, 0) + 1
+
+    def _check_missing(self, ann: AnnotatedRecord):
+        missing = ann.record.missing_fields(self.problem_dict.required_fields)
+        for f in missing:
+            desc = self.problem_dict.describe_anomaly(AnomalyType.MISSING.value, f)
+            ann.add_anomaly(AnomalyType.MISSING, f, desc)
+
+    def _check_duplicate(self, ann: AnnotatedRecord):
+        dk = ann.record.dedup_key(self.problem_dict.dedup_keys)
+        count = self.dedup_tracker.get(dk, 1)
+        if count > 1:
+            desc = self.problem_dict.describe_anomaly(AnomalyType.DUPLICATE.value)
+            ann.add_anomaly(AnomalyType.DUPLICATE, "__dedup__", desc)
+            self.dedup_tracker[dk] = count - 1
+
+    def _check_bounds(self, ann: AnnotatedRecord):
+        violations = ann.record.out_of_bound_fields(self.problem_dict.bounds)
+        for f in violations:
+            desc = self.problem_dict.describe_anomaly(AnomalyType.OUT_OF_BOUND.value, f)
+            ann.add_anomaly(AnomalyType.OUT_OF_BOUND, f, desc)
+
+    def _compute_stats(self):
+        total = len(self.annotated)
+        valid = sum(1 for a in self.annotated if a.is_valid and not a.is_duplicate)
+        missing = sum(1 for a in self.annotated if any(an["type"] == AnomalyType.MISSING.value for an in a.anomalies))
+        duplicate = sum(1 for a in self.annotated if a.is_duplicate)
+        out_of_bound = sum(1 for a in self.annotated if any(an["type"] == AnomalyType.OUT_OF_BOUND.value for an in a.anomalies))
+        anomaly = total - valid
+
+        self.stats.total_records = total
+        self.stats.valid_records = valid
+        self.stats.anomaly_count = anomaly
+        self.stats.missing_count = missing
+        self.stats.duplicate_count = duplicate
+        self.stats.out_of_bound_count = out_of_bound
+
+        self._compute_group_stats()
+        self._compute_trend()
+
+    def _compute_group_stats(self):
+        group_fields = self.template.group_by
+        groups: Dict[str, List[AnnotatedRecord]] = defaultdict(list)
+        for ann in self.annotated:
+            key_parts = []
+            for gf in group_fields:
+                key_parts.append(str(ann.record.raw.get(gf, "")))
+            key = "|".join(key_parts)
+            groups[key].append(ann)
+
+        for key, anns in groups.items():
+            g_total = len(anns)
+            g_valid = sum(1 for a in anns if a.is_valid and not a.is_duplicate)
+            g_missing = sum(1 for a in anns if any(an["type"] == AnomalyType.MISSING.value for an in a.anomalies))
+            g_dup = sum(1 for a in anns if a.is_duplicate)
+            g_oob = sum(1 for a in anns if any(an["type"] == AnomalyType.OUT_OF_BOUND.value for an in a.anomalies))
+            self.stats.group_stats[key] = {
+                "total": g_total,
+                "valid": g_valid,
+                "missing": g_missing,
+                "duplicate": g_dup,
+                "out_of_bound": g_oob,
+            }
+
+    def _compute_trend(self):
+        trend_field = self.template.trend_field
+        trend: Dict[str, Dict[str, int]] = defaultdict(lambda: {"total": 0, "valid": 0, "anomaly": 0})
+        for ann in self.annotated:
+            date_val = str(ann.record.raw.get(trend_field, "unknown"))
+            trend[date_val]["total"] += 1
+            if ann.is_valid and not ann.is_duplicate:
+                trend[date_val]["valid"] += 1
+            else:
+                trend[date_val]["anomaly"] += 1
+        self.stats.trend_data = dict(sorted(trend.items()))
+
+    def _determine_status(self) -> TaskStatus:
+        if self.stats.total_records == 0:
+            return TaskStatus.FAILED
+        if self.stats.valid_records == 0:
+            return TaskStatus.FAILED
+        if self.stats.anomaly_count > 0 and self.stats.valid_records > 0:
+            return TaskStatus.PARTIAL_FAILED
+        return TaskStatus.COMPLETED
+
+    def _build_output(self) -> Dict[str, Any]:
+        anomaly_samples = self._collect_anomaly_samples()
+        trend_summary = self._build_trend_summary()
+        export_path = self._export_file()
+
+        return {
+            "batch": self.batch.to_dict(),
+            "statistics": self.stats.to_dict(),
+            "anomaly_samples": anomaly_samples,
+            "trend_summary": trend_summary,
+            "export_file": export_path,
+        }
+
+    def _collect_anomaly_samples(self) -> List[Dict[str, Any]]:
+        samples = []
+        by_type: Dict[str, List[AnnotatedRecord]] = defaultdict(list)
+        for ann in self.annotated:
+            for an in ann.anomalies:
+                by_type[an["type"]].append(ann)
+
+        limit = self.template.anomaly_sample_size
+        for atype in [AnomalyType.MISSING.value, AnomalyType.DUPLICATE.value, AnomalyType.OUT_OF_BOUND.value]:
+            for ann in by_type.get(atype, [])[:limit]:
+                samples.append({
+                    "record": ann.record.raw,
+                    "batch_id": ann.batch.batch_id,
+                    "source": ann.batch.source,
+                    "anomaly_type": atype,
+                    "anomaly_details": ann.anomalies,
+                })
+        return samples
+
+    def _build_trend_summary(self) -> str:
+        if not self.stats.trend_data:
+            return "无趋势数据"
+        dates = list(self.stats.trend_data.keys())
+        if len(dates) < 2:
+            return f"仅有单日数据({dates[0]})，无法计算趋势"
+        first = self.stats.trend_data[dates[0]]
+        last = self.stats.trend_data[dates[-1]]
+        first_rate = first["anomaly"] / first["total"] if first["total"] else 0
+        last_rate = last["anomaly"] / last["total"] if last["total"] else 0
+        if last_rate > first_rate:
+            direction = "上升"
+        elif last_rate < first_rate:
+            direction = "下降"
+        else:
+            direction = "持平"
+        return (
+            f"统计周期: {dates[0]} ~ {dates[-1]}, "
+            f"首日异常率 {first_rate:.1%}, 末日异常率 {last_rate:.1%}, "
+            f"趋势: {direction}"
+        )
+
+    def _export_file(self) -> str:
+        fmt = self.template.export_format
+        filename = f"late_return_report_{self.batch.batch_id}.{fmt}"
+        if fmt == "csv":
+            self._export_csv(filename)
+        elif fmt == "json":
+            self._export_json(filename)
+        else:
+            self._export_csv(filename)
+        return filename
+
+    def _export_csv(self, filename: str):
+        if not self.annotated:
+            return
+        fieldnames = list(self.annotated[0].record.raw.keys())
+        meta_fields = ["_batch_id", "_source", "_is_valid", "_is_duplicate", "_anomaly_types", "_anomaly_descriptions"]
+        fieldnames += meta_fields
+
+        with open(filename, "w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for ann in self.annotated:
+                row = ann.to_dict()
+                row["_anomaly_types"] = ";".join(a["type"] for a in ann.anomalies)
+                row["_anomaly_descriptions"] = ";".join(a["description"] for a in ann.anomalies)
+                del row["_anomalies"]
+                writer.writerow(row)
+
+    def _export_json(self, filename: str):
+        data = {
+            "batch": self.batch.to_dict(),
+            "statistics": self.stats.to_dict(),
+            "records": [ann.to_dict() for ann in self.annotated],
+        }
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+    def get_annotated_records(self) -> List[AnnotatedRecord]:
+        return self.annotated
+
+    def replay(self, raw_records: List[Dict[str, Any]]) -> Dict[str, Any]:
+        self.annotated = []
+        self.stats = StatisticsResult()
+        self.dedup_tracker = {}
+        self.batch = ProcessingBatch(source=self.batch.source)
+        return self.process(raw_records)
+
+
+def run_late_return_stats(
+    records: List[Dict[str, Any]],
+    problem_dict_config: Dict[str, Any],
+    dedup_keys: Optional[List[str]] = None,
+    template_config: Optional[Dict[str, Any]] = None,
+    source: str = "",
+) -> Dict[str, Any]:
+    if dedup_keys:
+        problem_dict_config.setdefault("dedup_keys", dedup_keys)
+    problem_dict = ProblemDictionary(problem_dict_config)
+    template = ReportTemplate(template_config or {})
+    processor = LateReturnProcessor(problem_dict, template, source=source)
+    return processor.process(records)
+
+ succeeded in 406ms:
+codex
+我已经把代码结构看完了，接下来做一次不落盘的实跑验证：用内存方式绕开导出，检查统计、重复、趋势和批次状态是否和测试/描述一致。
+exec
+/bin/zsh -lc "python - <<'PY'
+from late_return_stats import run_late_return_stats, LateReturnProcessor, ProblemDictionary, ReportTemplate
+
+SAMPLE_PROBLEM_DICT = {
+    'required_fields': ['student_id', 'student_name', 'dormitory', 'return_date', 'return_time'],
+    'dedup_keys': ['student_id', 'return_date', 'return_time'],
+    'bounds': {'return_time': {'time_after': '22:30'}},
+    'anomaly_descriptions': {
+        '缺失.student_id': '学号为空',
+        '缺失.student_name': '姓名为空',
+        '缺失.dormitory': '楼栋为空',
+        '缺失.return_date': '日期为空',
+        '缺失.return_time': '时间为空',
+        '重复': '该记录与已有记录重复',
+        '越界.return_time': '晚归时间未达到22:30阈值',
+    },
+    'field_labels': {
+        'student_id': '学号',
+        'student_name': '姓名',
+        'dormitory': '楼栋',
+        'return_date': '日期',
+        'return_time': '时间',
+    },
+    'time_threshold': '22:30',
+}
+SAMPLE_TEMPLATE = {'title': '晚归统计报告', 'group_by': ['dormitory'], 'trend_field': 'return_date', 'anomaly_sample_size': 5, 'export_format': 'csv'}
+VALID_RECORD = {'student_id': '2024001', 'student_name': '张三', 'dormitory': '1号楼', 'room_number': '301', 'return_date': '2025-05-01', 'return_time': '23:10', 'reason': '自习', 'recorder': '李老师', 'source_id': 'SRC001'}
+MISSING_FIELD_RECORD = {'student_id': '', 'student_name': '李四', 'dormitory': '1号楼', 'room_number': '302', 'return_date': '2025-05-01', 'return_time': '23:30', 'reason': '社团', 'recorder': '李老师', 'source_id': 'SRC002'}
+OUT_OF_BOUND_RECORD = {'student_id': '2024003', 'student_name': '王五', 'dormitory': '2号楼', 'room_number': '201', 'return_date': '2025-05-01', 'return_time': '21:00', 'reason': '自习', 'recorder': '王老师', 'source_id': 'SRC003'}
+DUPLICATE_RECORD = {'student_id': '2024001', 'student_name': '张三', 'dormitory': '1号楼', 'room_number': '301', 'return_date': '2025-05-01', 'return_time': '23:10', 'reason': '自习', 'recorder': '李老师', 'source_id': 'SRC004'}
+
+LateReturnProcessor._export_file = lambda self: 'noop'
+for name, records in {
+    'valid': [VALID_RECORD],
+    'missing': [MISSING_FIELD_RECORD],
+    'oob': [OUT_OF_BOUND_RECORD],
+    'dup': [VALID_RECORD, DUPLICATE_RECORD],
+    'mixed': [VALID_RECORD, MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD, DUPLICATE_RECORD],
+}.items():
+    r = run_late_return_stats(records=records, problem_dict_config=dict(SAMPLE_PROBLEM_DICT), template_config=SAMPLE_TEMPLATE, source=name)
+    print(name, r['batch']['status'], r['statistics'])
+PY" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "python - <<'PY'
+from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor
+SAMPLE_PROBLEM_DICT = {'required_fields': ['student_id', 'student_name', 'dormitory', 'return_date', 'return_time'], 'dedup_keys': ['student_id', 'return_date', 'return_time'], 'bounds': {'return_time': {'time_after': '22:30'}}, 'anomaly_descriptions': {}, 'field_labels': {}, 'time_threshold': '22:30'}
+SAMPLE_TEMPLATE = {'group_by': ['dormitory'], 'trend_field': 'return_date', 'anomaly_sample_size': 5, 'export_format': 'csv'}
+LateReturnProcessor._export_file = lambda self: 'noop'
+proc = LateReturnProcessor(ProblemDictionary(SAMPLE_PROBLEM_DICT), ReportTemplate(SAMPLE_TEMPLATE), source='x')
+records = [
+ {'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},
+ {'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},
+ {'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},
+]
+res = proc.process(records)
+print(res['statistics'])
+print([a.anomalies for a in proc.get_annotated_records()])
+PY" in /Users/bill/Documents/solo/workspaces/yzz00184
+ exited 1 in 195ms:
+zsh:1: can't create temp file for here document: operation not permitted
+
+ exited 1 in 655ms:
+zsh:1: can't create temp file for here document: operation not permitted
+
+codex
+刚才的实跑方式被当前只读环境限制住了，改用 `python -c` 直接执行内存验证，不依赖 here-doc 和临时文件。这样能继续核统计逻辑，而不触碰仓库内容。
+exec
+/bin/zsh -lc "python -c \"from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor;LateReturnProcessor._export_file=lambda self:'noop';pd=ProblemDictionary({'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'});tmpl=ReportTemplate({'group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'});proc=LateReturnProcessor(pd,tmpl,source='x');records=[{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'}];res=proc.process(records);print(res['statistics']);print([a.anomalies for a in proc.get_annotated_records()])\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "python -c \"from late_return_stats import run_late_return_stats, LateReturnProcessor;SAMPLE_PROBLEM_DICT={'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{'缺失.student_id':'学号为空','缺失.student_name':'姓名为空','缺失.dormitory':'楼栋为空','缺失.return_date':'日期为空','缺失.return_time':'时间为空','重复':'该记录与已有记录重复','越界.return_time':'晚归时间未达到22:30阈值'},'field_labels':{'student_id':'学号','student_name':'姓名','dormitory':'楼栋','return_date':'日期','return_time':'时间'},'time_threshold':'22:30'};SAMPLE_TEMPLATE={'title':'晚归统计报告','group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'};VALID_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC001'};MISSING_FIELD_RECORD={'student_id':'','student_name':'李四','dormitory':'1号楼','room_number':'302','return_date':'2025-05-01','return_time':'23:30','reason':'社团','recorder':'李老师','source_id':'SRC002'};OUT_OF_BOUND_RECORD={'student_id':'2024003','student_name':'王五','dormitory':'2号楼','room_number':'201','return_date':'2025-05-01','return_time':'21:00','reason':'自习','recorder':'王老师','source_id':'SRC003'};DUPLICATE_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC004'};LateReturnProcessor._export_file=lambda self:'noop';\\
+for name,records in {'valid':[VALID_RECORD],'missing':[MISSING_FIELD_RECORD],'oob':[OUT_OF_BOUND_RECORD],'dup':[VALID_RECORD,DUPLICATE_RECORD],'mixed':[VALID_RECORD,MISSING_FIELD_RECORD,OUT_OF_BOUND_RECORD,DUPLICATE_RECORD]}.items():\\
+ r=run_late_return_stats(records=records,problem_dict_config=dict(SAMPLE_PROBLEM_DICT),template_config=SAMPLE_TEMPLATE,source=name);print(name,r['batch']['status'],r['statistics'])\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+ exited 127 in 108ms:
+zsh:1: command not found: python
+
+codex
+环境里没有 `python` 命令，我切到 `python3` 再跑一次。重点是验证统计结果和批次状态，不改变仓库内容。
+exec
+/bin/zsh -lc "python3 -c \"from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor;LateReturnProcessor._export_file=lambda self:'noop';pd=ProblemDictionary({'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'});tmpl=ReportTemplate({'group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'});proc=LateReturnProcessor(pd,tmpl,source='x');records=[{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'},{'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'}];res=proc.process(records);print(res['statistics']);print([a.anomalies for a in proc.get_annotated_records()])\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "python3 -c \"from late_return_stats import run_late_return_stats, LateReturnProcessor;SAMPLE_PROBLEM_DICT={'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{'缺失.student_id':'学号为空','缺失.student_name':'姓名为空','缺失.dormitory':'楼栋为空','缺失.return_date':'日期为空','缺失.return_time':'时间为空','重复':'该记录与已有记录重复','越界.return_time':'晚归时间未达到22:30阈值'},'field_labels':{'student_id':'学号','student_name':'姓名','dormitory':'楼栋','return_date':'日期','return_time':'时间'},'time_threshold':'22:30'};SAMPLE_TEMPLATE={'title':'晚归统计报告','group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'};VALID_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC001'};MISSING_FIELD_RECORD={'student_id':'','student_name':'李四','dormitory':'1号楼','room_number':'302','return_date':'2025-05-01','return_time':'23:30','reason':'社团','recorder':'李老师','source_id':'SRC002'};OUT_OF_BOUND_RECORD={'student_id':'2024003','student_name':'王五','dormitory':'2号楼','room_number':'201','return_date':'2025-05-01','return_time':'21:00','reason':'自习','recorder':'王老师','source_id':'SRC003'};DUPLICATE_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC004'};LateReturnProcessor._export_file=lambda self:'noop';for name,records in {'valid':[VALID_RECORD],'missing':[MISSING_FIELD_RECORD],'oob':[OUT_OF_BOUND_RECORD],'dup':[VALID_RECORD,DUPLICATE_RECORD],'mixed':[VALID_RECORD,MISSING_FIELD_RECORD,OUT_OF_BOUND_RECORD,DUPLICATE_RECORD]}.items(): r=run_late_return_stats(records=records,problem_dict_config=dict(SAMPLE_PROBLEM_DICT),template_config=SAMPLE_TEMPLATE,source=name);print(name,r['batch']['status'],r['statistics'])\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ exited 1 in 1277ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-qpqHvy9t' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-PqdpxJzb' (errno=Operation not permitted)
+  File "<string>", line 1
+    from late_return_stats import run_late_return_stats, LateReturnProcessor;SAMPLE_PROBLEM_DICT={'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{'缺失.student_id':'学号为空','缺失.student_name':'姓名为空','缺失.dormitory':'楼栋为空','缺失.return_date':'日期为空','缺失.return_time':'时间为空','重复':'该记录与已有记录重复','越界.return_time':'晚归时间未达到22:30阈值'},'field_labels':{'student_id':'学号','student_name':'姓名','dormitory':'楼栋','return_date':'日期','return_time':'时间'},'time_threshold':'22:30'};SAMPLE_TEMPLATE={'title':'晚归统计报告','group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'};VALID_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC001'};MISSING_FIELD_RECORD={'student_id':'','student_name':'李四','dormitory':'1号楼','room_number':'302','return_date':'2025-05-01','return_time':'23:30','reason':'社团','recorder':'李老师','source_id':'SRC002'};OUT_OF_BOUND_RECORD={'student_id':'2024003','student_name':'王五','dormitory':'2号楼','room_number':'201','return_date':'2025-05-01','return_time':'21:00','reason':'自习','recorder':'王老师','source_id':'SRC003'};DUPLICATE_RECORD={'student_id':'2024001','student_name':'张三','dormitory':'1号楼','room_number':'301','return_date':'2025-05-01','return_time':'23:10','reason':'自习','recorder':'李老师','source_id':'SRC004'};LateReturnProcessor._export_file=lambda self:'noop';for name,records in {'valid':[VALID_RECORD],'missing':[MISSING_FIELD_RECORD],'oob':[OUT_OF_BOUND_RECORD],'dup':[VALID_RECORD,DUPLICATE_RECORD],'mixed':[VALID_RECORD,MISSING_FIELD_RECORD,OUT_OF_BOUND_RECORD,DUPLICATE_RECORD]}.items(): r=run_late_return_stats(records=records,problem_dict_config=dict(SAMPLE_PROBLEM_DICT),template_config=SAMPLE_TEMPLATE,source=name);print(name,r['batch']['status'],r['statistics'])
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^
+SyntaxError: invalid syntax
+
+ succeeded in 2045ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-MIokT47K' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-NgbVwCXi' (errno=Operation not permitted)
+{'total_records': 3, 'valid_records': 1, 'anomaly_count': 2, 'missing_count': 0, 'duplicate_count': 2, 'out_of_bound_count': 0, 'group_stats': {'d': {'total': 3, 'valid': 1, 'missing': 0, 'duplicate': 2, 'out_of_bound': 0}}, 'trend_data': {'2025-01-01': {'total': 3, 'valid': 1, 'anomaly': 2}}}
+[[{'type': '重复', 'field': '__dedup__', 'description': '记录重复'}], [{'type': '重复', 'field': '__dedup__', 'description': '记录重复'}], []]
+
+codex
+我发现一个值得重点核查的状态复用点：`process()` 直接累积 `self.annotated`，而不是每次从干净状态开始。我要验证它是不是会让同一个处理器的第二次运行把第一次的数据也算进去。
+exec
+/bin/zsh -lc "python3 -B -c \"from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor; pd=ProblemDictionary({'required_fields':['student_id','student_name','dormitory','return_date','return_time'],'dedup_keys':['student_id','return_date','return_time'],'bounds':{'return_time':{'time_after':'22:30'}},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'}); tmpl=ReportTemplate({'group_by':['dormitory'],'trend_field':'return_date','anomaly_sample_size':5,'export_format':'csv'}); LateReturnProcessor._export_file=lambda self:'noop'; proc=LateReturnProcessor(pd, tmpl, source='x'); rec={'student_id':'1','student_name':'a','dormitory':'d','return_date':'2025-01-01','return_time':'23:00'}; r1=proc.process([rec]); r2=proc.process([rec]); print(r1['statistics']['total_records'], r2['statistics']['total_records']); print(r1['statistics']['valid_records'], r2['statistics']['valid_records']); print(r2['batch']['total_input'], r2['batch']['total_processed'])\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 1257ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-veaWV72P' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-OWFI9KG0' (errno=Operation not permitted)
+1 2
+1 2
+1 2
+
+codex
+我已经确认至少有一个可复现的问题，而且能说明为什么不是“边缘情况”：同一个 `LateReturnProcessor` 连续 `process()` 两次会把前一次结果累加进第二次。再补一个导出健壮性检查，确认是否存在对异构字段的直接崩溃点。
+exec
+/bin/zsh -lc "nl -ba test_late_return_stats.py | sed -n '1,260p'" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "nl -ba late_return_stats.py | sed -n '380,620p'" in /Users/bill/Documents/solo/workspaces/yzz00184
+exec
+/bin/zsh -lc "nl -ba late_return_stats.py | sed -n '180,380p'" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 303ms:
+     1	import csv
+     2	import json
+     3	import os
+     4	import unittest
+     5	from copy import deepcopy
+     6	
+     7	from late_return_stats import (
+     8	    AnomalyType,
+     9	    LateReturnProcessor,
+    10	    LateReturnRecord,
+    11	    ProblemDictionary,
+    12	    ProcessingBatch,
+    13	    ReportTemplate,
+    14	    TaskStatus,
+    15	    run_late_return_stats,
+    16	)
+    17	
+    18	
+    19	SAMPLE_PROBLEM_DICT = {
+    20	    "required_fields": ["student_id", "student_name", "dormitory", "return_date", "return_time"],
+    21	    "dedup_keys": ["student_id", "return_date", "return_time"],
+    22	    "bounds": {
+    23	        "return_time": {
+    24	            "time_after": "22:30",
+    25	        },
+    26	    },
+    27	    "anomaly_descriptions": {
+    28	        "缺失.student_id": "学号为空",
+    29	        "缺失.student_name": "姓名为空",
+    30	        "缺失.dormitory": "楼栋为空",
+    31	        "缺失.return_date": "日期为空",
+    32	        "缺失.return_time": "时间为空",
+    33	        "重复": "该记录与已有记录重复",
+    34	        "越界.return_time": "晚归时间未达到22:30阈值",
+    35	    },
+    36	    "field_labels": {
+    37	        "student_id": "学号",
+    38	        "student_name": "姓名",
+    39	        "dormitory": "楼栋",
+    40	        "return_date": "日期",
+    41	        "return_time": "时间",
+    42	    },
+    43	    "time_threshold": "22:30",
+    44	}
+    45	
+    46	SAMPLE_TEMPLATE = {
+    47	    "title": "晚归统计报告",
+    48	    "group_by": ["dormitory"],
+    49	    "trend_field": "return_date",
+    50	    "anomaly_sample_size": 5,
+    51	    "export_format": "csv",
+    52	}
+    53	
+    54	VALID_RECORD = {
+    55	    "student_id": "2024001",
+    56	    "student_name": "张三",
+    57	    "dormitory": "1号楼",
+    58	    "room_number": "301",
+    59	    "return_date": "2025-05-01",
+    60	    "return_time": "23:10",
+    61	    "reason": "自习",
+    62	    "recorder": "李老师",
+    63	    "source_id": "SRC001",
+    64	}
+    65	
+    66	MISSING_FIELD_RECORD = {
+    67	    "student_id": "",
+    68	    "student_name": "李四",
+    69	    "dormitory": "1号楼",
+    70	    "room_number": "302",
+    71	    "return_date": "2025-05-01",
+    72	    "return_time": "23:30",
+    73	    "reason": "社团",
+    74	    "recorder": "李老师",
+    75	    "source_id": "SRC002",
+    76	}
+    77	
+    78	OUT_OF_BOUND_RECORD = {
+    79	    "student_id": "2024003",
+    80	    "student_name": "王五",
+    81	    "dormitory": "2号楼",
+    82	    "room_number": "201",
+    83	    "return_date": "2025-05-01",
+    84	    "return_time": "21:00",
+    85	    "reason": "自习",
+    86	    "recorder": "王老师",
+    87	    "source_id": "SRC003",
+    88	}
+    89	
+    90	DUPLICATE_RECORD = {
+    91	    "student_id": "2024001",
+    92	    "student_name": "张三",
+    93	    "dormitory": "1号楼",
+    94	    "room_number": "301",
+    95	    "return_date": "2025-05-01",
+    96	    "return_time": "23:10",
+    97	    "reason": "自习",
+    98	    "recorder": "李老师",
+    99	    "source_id": "SRC004",
+   100	}
+   101	
+   102	
+   103	def _clean_exports():
+   104	    for f in os.listdir("."):
+   105	        if f.startswith("late_return_report_"):
+   106	            os.remove(f)
+   107	
+   108	
+   109	class TestLateReturnRecord(unittest.TestCase):
+   110	    def test_missing_fields(self):
+   111	        rec = LateReturnRecord({"student_id": "", "student_name": "A"})
+   112	        missing = rec.missing_fields(["student_id", "student_name", "return_date"])
+   113	        self.assertIn("student_id", missing)
+   114	        self.assertIn("return_date", missing)
+   115	        self.assertNotIn("student_name", missing)
+   116	
+   117	    def test_dedup_key(self):
+   118	        rec = LateReturnRecord({"student_id": "001", "return_date": "2025-01-01"})
+   119	        key = rec.dedup_key(["student_id", "return_date"])
+   120	        self.assertEqual(key, "student_id=001|return_date=2025-01-01")
+   121	
+   122	    def test_out_of_bound_time(self):
+   123	        rec = LateReturnRecord({"return_time": "21:00"})
+   124	        bounds = {"return_time": {"time_after": "22:30"}}
+   125	        violations = rec.out_of_bound_fields(bounds)
+   126	        self.assertIn("return_time", violations)
+   127	
+   128	    def test_in_bound_time(self):
+   129	        rec = LateReturnRecord({"return_time": "23:00"})
+   130	        bounds = {"return_time": {"time_after": "22:30"}}
+   131	        violations = rec.out_of_bound_fields(bounds)
+   132	        self.assertNotIn("return_time", violations)
+   133	
+   134	    def test_numeric_bounds(self):
+   135	        rec = LateReturnRecord({"score": "150"})
+   136	        bounds = {"score": {"min": 0, "max": 100}}
+   137	        violations = rec.out_of_bound_fields(bounds)
+   138	        self.assertIn("score", violations)
+   139	
+   140	
+   141	class TestSingleSuccess(unittest.TestCase):
+   142	    def setUp(self):
+   143	        _clean_exports()
+   144	
+   145	    def tearDown(self):
+   146	        _clean_exports()
+   147	
+   148	    def test_single_valid_record(self):
+   149	        result = run_late_return_stats(
+   150	            records=[VALID_RECORD],
+   151	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   152	            template_config=SAMPLE_TEMPLATE,
+   153	            source="门禁系统A",
+   154	        )
+   155	        stats = result["statistics"]
+   156	        self.assertEqual(stats["total_records"], 1)
+   157	        self.assertEqual(stats["valid_records"], 1)
+   158	        self.assertEqual(stats["anomaly_count"], 0)
+   159	        self.assertEqual(stats["missing_count"], 0)
+   160	        self.assertEqual(stats["duplicate_count"], 0)
+   161	        self.assertEqual(stats["out_of_bound_count"], 0)
+   162	        self.assertEqual(result["batch"]["status"], "completed")
+   163	        self.assertEqual(result["batch"]["source"], "门禁系统A")
+   164	        self.assertTrue(result["batch"]["batch_id"])
+   165	
+   166	    def test_single_record_with_missing(self):
+   167	        result = run_late_return_stats(
+   168	            records=[MISSING_FIELD_RECORD],
+   169	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   170	            template_config=SAMPLE_TEMPLATE,
+   171	        )
+   172	        stats = result["statistics"]
+   173	        self.assertEqual(stats["total_records"], 1)
+   174	        self.assertEqual(stats["valid_records"], 0)
+   175	        self.assertEqual(stats["missing_count"], 1)
+   176	        self.assertEqual(stats["anomaly_count"], 1)
+   177	        self.assertEqual(result["batch"]["status"], "failed")
+   178	        samples = result["anomaly_samples"]
+   179	        self.assertTrue(any(s["anomaly_type"] == "缺失" for s in samples))
+   180	
+   181	    def test_single_record_out_of_bound(self):
+   182	        result = run_late_return_stats(
+   183	            records=[OUT_OF_BOUND_RECORD],
+   184	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   185	            template_config=SAMPLE_TEMPLATE,
+   186	        )
+   187	        stats = result["statistics"]
+   188	        self.assertEqual(stats["out_of_bound_count"], 1)
+   189	        self.assertEqual(stats["valid_records"], 0)
+   190	        samples = result["anomaly_samples"]
+   191	        self.assertTrue(any(s["anomaly_type"] == "越界" for s in samples))
+   192	
+   193	
+   194	class TestBatchPartialFailure(unittest.TestCase):
+   195	    def setUp(self):
+   196	        _clean_exports()
+   197	
+   198	    def tearDown(self):
+   199	        _clean_exports()
+   200	
+   201	    def test_mixed_batch(self):
+   202	        records = [VALID_RECORD, MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD, DUPLICATE_RECORD]
+   203	        result = run_late_return_stats(
+   204	            records=records,
+   205	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   206	            template_config=SAMPLE_TEMPLATE,
+   207	            source="测试批量",
+   208	        )
+   209	        stats = result["statistics"]
+   210	        self.assertEqual(stats["total_records"], 4)
+   211	        self.assertTrue(stats["valid_records"] >= 1)
+   212	        self.assertTrue(stats["anomaly_count"] >= 1)
+   213	        self.assertEqual(result["batch"]["status"], "partial_failed")
+   214	        self.assertEqual(result["batch"]["source"], "测试批量")
+   215	
+   216	    def test_batch_with_duplicates(self):
+   217	        records = [VALID_RECORD, DUPLICATE_RECORD]
+   218	        result = run_late_return_stats(
+   219	            records=records,
+   220	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   221	            template_config=SAMPLE_TEMPLATE,
+   222	        )
+   223	        stats = result["statistics"]
+   224	        self.assertEqual(stats["duplicate_count"], 1)
+   225	        self.assertEqual(stats["total_records"], 2)
+   226	
+   227	    def test_all_invalid_batch(self):
+   228	        records = [MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD]
+   229	        result = run_late_return_stats(
+   230	            records=records,
+   231	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   232	            template_config=SAMPLE_TEMPLATE,
+   233	        )
+   234	        self.assertEqual(result["batch"]["status"], "failed")
+   235	
+   236	
+   237	class TestManualReview(unittest.TestCase):
+   238	    def setUp(self):
+   239	        _clean_exports()
+   240	
+   241	    def tearDown(self):
+   242	        _clean_exports()
+   243	
+   244	    def test_anomaly_samples_have_batch_and_source(self):
+   245	        records = [MISSING_FIELD_RECORD, OUT_OF_BOUND_RECORD]
+   246	        result = run_late_return_stats(
+   247	            records=records,
+   248	            problem_dict_config=SAMPLE_PROBLEM_DICT,
+   249	            template_config=SAMPLE_TEMPLATE,
+   250	            source="人工录入",
+   251	        )
+   252	        for sample in result["anomaly_samples"]:
+   253	            self.assertIn("batch_id", sample)
+   254	            self.assertEqual(sample["source"], "人工录入")
+   255	            self.assertIn("record", sample)
+   256	            self.assertIn("anomaly_details", sample)
+   257	
+   258	    def test_anomaly_explanation_readable(self):
+   259	        result = run_late_return_stats(
+   260	            records=[MISSING_FIELD_RECORD],
+
+ succeeded in 274ms:
+   380	
+   381	    def _build_output(self) -> Dict[str, Any]:
+   382	        anomaly_samples = self._collect_anomaly_samples()
+   383	        trend_summary = self._build_trend_summary()
+   384	        export_path = self._export_file()
+   385	
+   386	        return {
+   387	            "batch": self.batch.to_dict(),
+   388	            "statistics": self.stats.to_dict(),
+   389	            "anomaly_samples": anomaly_samples,
+   390	            "trend_summary": trend_summary,
+   391	            "export_file": export_path,
+   392	        }
+   393	
+   394	    def _collect_anomaly_samples(self) -> List[Dict[str, Any]]:
+   395	        samples = []
+   396	        by_type: Dict[str, List[AnnotatedRecord]] = defaultdict(list)
+   397	        for ann in self.annotated:
+   398	            for an in ann.anomalies:
+   399	                by_type[an["type"]].append(ann)
+   400	
+   401	        limit = self.template.anomaly_sample_size
+   402	        for atype in [AnomalyType.MISSING.value, AnomalyType.DUPLICATE.value, AnomalyType.OUT_OF_BOUND.value]:
+   403	            for ann in by_type.get(atype, [])[:limit]:
+   404	                samples.append({
+   405	                    "record": ann.record.raw,
+   406	                    "batch_id": ann.batch.batch_id,
+   407	                    "source": ann.batch.source,
+   408	                    "anomaly_type": atype,
+   409	                    "anomaly_details": ann.anomalies,
+   410	                })
+   411	        return samples
+   412	
+   413	    def _build_trend_summary(self) -> str:
+   414	        if not self.stats.trend_data:
+   415	            return "无趋势数据"
+   416	        dates = list(self.stats.trend_data.keys())
+   417	        if len(dates) < 2:
+   418	            return f"仅有单日数据({dates[0]})，无法计算趋势"
+   419	        first = self.stats.trend_data[dates[0]]
+   420	        last = self.stats.trend_data[dates[-1]]
+   421	        first_rate = first["anomaly"] / first["total"] if first["total"] else 0
+   422	        last_rate = last["anomaly"] / last["total"] if last["total"] else 0
+   423	        if last_rate > first_rate:
+   424	            direction = "上升"
+   425	        elif last_rate < first_rate:
+   426	            direction = "下降"
+   427	        else:
+   428	            direction = "持平"
+   429	        return (
+   430	            f"统计周期: {dates[0]} ~ {dates[-1]}, "
+   431	            f"首日异常率 {first_rate:.1%}, 末日异常率 {last_rate:.1%}, "
+   432	            f"趋势: {direction}"
+   433	        )
+   434	
+   435	    def _export_file(self) -> str:
+   436	        fmt = self.template.export_format
+   437	        filename = f"late_return_report_{self.batch.batch_id}.{fmt}"
+   438	        if fmt == "csv":
+   439	            self._export_csv(filename)
+   440	        elif fmt == "json":
+   441	            self._export_json(filename)
+   442	        else:
+   443	            self._export_csv(filename)
+   444	        return filename
+   445	
+   446	    def _export_csv(self, filename: str):
+   447	        if not self.annotated:
+   448	            return
+   449	        fieldnames = list(self.annotated[0].record.raw.keys())
+   450	        meta_fields = ["_batch_id", "_source", "_is_valid", "_is_duplicate", "_anomaly_types", "_anomaly_descriptions"]
+   451	        fieldnames += meta_fields
+   452	
+   453	        with open(filename, "w", newline="", encoding="utf-8-sig") as f:
+   454	            writer = csv.DictWriter(f, fieldnames=fieldnames)
+   455	            writer.writeheader()
+   456	            for ann in self.annotated:
+   457	                row = ann.to_dict()
+   458	                row["_anomaly_types"] = ";".join(a["type"] for a in ann.anomalies)
+   459	                row["_anomaly_descriptions"] = ";".join(a["description"] for a in ann.anomalies)
+   460	                del row["_anomalies"]
+   461	                writer.writerow(row)
+   462	
+   463	    def _export_json(self, filename: str):
+   464	        data = {
+   465	            "batch": self.batch.to_dict(),
+   466	            "statistics": self.stats.to_dict(),
+   467	            "records": [ann.to_dict() for ann in self.annotated],
+   468	        }
+   469	        with open(filename, "w", encoding="utf-8") as f:
+   470	            json.dump(data, f, ensure_ascii=False, indent=2)
+   471	
+   472	    def get_annotated_records(self) -> List[AnnotatedRecord]:
+   473	        return self.annotated
+   474	
+   475	    def replay(self, raw_records: List[Dict[str, Any]]) -> Dict[str, Any]:
+   476	        self.annotated = []
+   477	        self.stats = StatisticsResult()
+   478	        self.dedup_tracker = {}
+   479	        self.batch = ProcessingBatch(source=self.batch.source)
+   480	        return self.process(raw_records)
+   481	
+   482	
+   483	def run_late_return_stats(
+   484	    records: List[Dict[str, Any]],
+   485	    problem_dict_config: Dict[str, Any],
+   486	    dedup_keys: Optional[List[str]] = None,
+   487	    template_config: Optional[Dict[str, Any]] = None,
+   488	    source: str = "",
+   489	) -> Dict[str, Any]:
+   490	    if dedup_keys:
+   491	        problem_dict_config.setdefault("dedup_keys", dedup_keys)
+   492	    problem_dict = ProblemDictionary(problem_dict_config)
+   493	    template = ReportTemplate(template_config or {})
+   494	    processor = LateReturnProcessor(problem_dict, template, source=source)
+   495	    return processor.process(records)
+
+ succeeded in 194ms:
+   180	
+   181	
+   182	class ReportTemplate:
+   183	    def __init__(self, config: Dict[str, Any]):
+   184	        self.title = config.get("title", "学生宿舍晚归统计报告")
+   185	        self.summary_fields = config.get("summary_fields", [
+   186	            "total_records", "valid_records", "anomaly_count",
+   187	            "missing_count", "duplicate_count", "out_of_bound_count",
+   188	        ])
+   189	        self.group_by = config.get("group_by", ["dormitory"])
+   190	        self.trend_field = config.get("trend_field", "return_date")
+   191	        self.anomaly_sample_size = config.get("anomaly_sample_size", 10)
+   192	        self.export_format = config.get("export_format", "csv")
+   193	
+   194	
+   195	class AnnotatedRecord:
+   196	    def __init__(self, record: LateReturnRecord, batch: ProcessingBatch):
+   197	        self.record = record
+   198	        self.batch = batch
+   199	        self.anomalies: List[Dict[str, str]] = []
+   200	        self.is_valid = True
+   201	        self.is_duplicate = False
+   202	
+   203	    def add_anomaly(self, anomaly_type: AnomalyType, field: str, description: str):
+   204	        self.anomalies.append({
+   205	            "type": anomaly_type.value,
+   206	            "field": field,
+   207	            "description": description,
+   208	        })
+   209	        if anomaly_type == AnomalyType.DUPLICATE:
+   210	            self.is_duplicate = True
+   211	        else:
+   212	            self.is_valid = False
+   213	
+   214	    def to_dict(self) -> Dict[str, Any]:
+   215	        return {
+   216	            **self.record.raw,
+   217	            "_batch_id": self.batch.batch_id,
+   218	            "_source": self.batch.source,
+   219	            "_is_valid": self.is_valid,
+   220	            "_is_duplicate": self.is_duplicate,
+   221	            "_anomalies": self.anomalies,
+   222	        }
+   223	
+   224	
+   225	class StatisticsResult:
+   226	    def __init__(self):
+   227	        self.total_records = 0
+   228	        self.valid_records = 0
+   229	        self.anomaly_count = 0
+   230	        self.missing_count = 0
+   231	        self.duplicate_count = 0
+   232	        self.out_of_bound_count = 0
+   233	        self.group_stats: Dict[str, Dict[str, Any]] = {}
+   234	        self.trend_data: Dict[str, Dict[str, int]] = {}
+   235	
+   236	    def to_dict(self) -> Dict[str, Any]:
+   237	        return {
+   238	            "total_records": self.total_records,
+   239	            "valid_records": self.valid_records,
+   240	            "anomaly_count": self.anomaly_count,
+   241	            "missing_count": self.missing_count,
+   242	            "duplicate_count": self.duplicate_count,
+   243	            "out_of_bound_count": self.out_of_bound_count,
+   244	            "group_stats": self.group_stats,
+   245	            "trend_data": self.trend_data,
+   246	        }
+   247	
+   248	
+   249	class LateReturnProcessor:
+   250	    def __init__(
+   251	        self,
+   252	        problem_dict: ProblemDictionary,
+   253	        template: ReportTemplate,
+   254	        source: str = "",
+   255	    ):
+   256	        self.problem_dict = problem_dict
+   257	        self.template = template
+   258	        self.batch = ProcessingBatch(source=source)
+   259	        self.annotated: List[AnnotatedRecord] = []
+   260	        self.stats = StatisticsResult()
+   261	        self.dedup_tracker: Dict[str, int] = {}
+   262	
+   263	    def process(self, raw_records: List[Dict[str, Any]]) -> Dict[str, Any]:
+   264	        self.batch.status = TaskStatus.PROCESSING
+   265	        self.batch.total_input = len(raw_records)
+   266	
+   267	        records = [LateReturnRecord(r) for r in raw_records]
+   268	
+   269	        self._dedup_tracker_reset(records)
+   270	
+   271	        anomaly_count = 0
+   272	        for rec in records:
+   273	            ann = AnnotatedRecord(rec, self.batch)
+   274	            self._check_missing(ann)
+   275	            self._check_duplicate(ann)
+   276	            self._check_bounds(ann)
+   277	            self.annotated.append(ann)
+   278	            if ann.anomalies:
+   279	                anomaly_count += 1
+   280	
+   281	        self.batch.total_processed = len(self.annotated)
+   282	        self.batch.total_anomalies = anomaly_count
+   283	
+   284	        self._compute_stats()
+   285	
+   286	        status = self._determine_status()
+   287	        self.batch.status = status
+   288	
+   289	        return self._build_output()
+   290	
+   291	    def _dedup_tracker_reset(self, records: List[LateReturnRecord]):
+   292	        self.dedup_tracker = {}
+   293	        keys = self.problem_dict.dedup_keys
+   294	        for rec in records:
+   295	            dk = rec.dedup_key(keys)
+   296	            self.dedup_tracker[dk] = self.dedup_tracker.get(dk, 0) + 1
+   297	
+   298	    def _check_missing(self, ann: AnnotatedRecord):
+   299	        missing = ann.record.missing_fields(self.problem_dict.required_fields)
+   300	        for f in missing:
+   301	            desc = self.problem_dict.describe_anomaly(AnomalyType.MISSING.value, f)
+   302	            ann.add_anomaly(AnomalyType.MISSING, f, desc)
+   303	
+   304	    def _check_duplicate(self, ann: AnnotatedRecord):
+   305	        dk = ann.record.dedup_key(self.problem_dict.dedup_keys)
+   306	        count = self.dedup_tracker.get(dk, 1)
+   307	        if count > 1:
+   308	            desc = self.problem_dict.describe_anomaly(AnomalyType.DUPLICATE.value)
+   309	            ann.add_anomaly(AnomalyType.DUPLICATE, "__dedup__", desc)
+   310	            self.dedup_tracker[dk] = count - 1
+   311	
+   312	    def _check_bounds(self, ann: AnnotatedRecord):
+   313	        violations = ann.record.out_of_bound_fields(self.problem_dict.bounds)
+   314	        for f in violations:
+   315	            desc = self.problem_dict.describe_anomaly(AnomalyType.OUT_OF_BOUND.value, f)
+   316	            ann.add_anomaly(AnomalyType.OUT_OF_BOUND, f, desc)
+   317	
+   318	    def _compute_stats(self):
+   319	        total = len(self.annotated)
+   320	        valid = sum(1 for a in self.annotated if a.is_valid and not a.is_duplicate)
+   321	        missing = sum(1 for a in self.annotated if any(an["type"] == AnomalyType.MISSING.value for an in a.anomalies))
+   322	        duplicate = sum(1 for a in self.annotated if a.is_duplicate)
+   323	        out_of_bound = sum(1 for a in self.annotated if any(an["type"] == AnomalyType.OUT_OF_BOUND.value for an in a.anomalies))
+   324	        anomaly = total - valid
+   325	
+   326	        self.stats.total_records = total
+   327	        self.stats.valid_records = valid
+   328	        self.stats.anomaly_count = anomaly
+   329	        self.stats.missing_count = missing
+   330	        self.stats.duplicate_count = duplicate
+   331	        self.stats.out_of_bound_count = out_of_bound
+   332	
+   333	        self._compute_group_stats()
+   334	        self._compute_trend()
+   335	
+   336	    def _compute_group_stats(self):
+   337	        group_fields = self.template.group_by
+   338	        groups: Dict[str, List[AnnotatedRecord]] = defaultdict(list)
+   339	        for ann in self.annotated:
+   340	            key_parts = []
+   341	            for gf in group_fields:
+   342	                key_parts.append(str(ann.record.raw.get(gf, "")))
+   343	            key = "|".join(key_parts)
+   344	            groups[key].append(ann)
+   345	
+   346	        for key, anns in groups.items():
+   347	            g_total = len(anns)
+   348	            g_valid = sum(1 for a in anns if a.is_valid and not a.is_duplicate)
+   349	            g_missing = sum(1 for a in anns if any(an["type"] == AnomalyType.MISSING.value for an in a.anomalies))
+   350	            g_dup = sum(1 for a in anns if a.is_duplicate)
+   351	            g_oob = sum(1 for a in anns if any(an["type"] == AnomalyType.OUT_OF_BOUND.value for an in a.anomalies))
+   352	            self.stats.group_stats[key] = {
+   353	                "total": g_total,
+   354	                "valid": g_valid,
+   355	                "missing": g_missing,
+   356	                "duplicate": g_dup,
+   357	                "out_of_bound": g_oob,
+   358	            }
+   359	
+   360	    def _compute_trend(self):
+   361	        trend_field = self.template.trend_field
+   362	        trend: Dict[str, Dict[str, int]] = defaultdict(lambda: {"total": 0, "valid": 0, "anomaly": 0})
+   363	        for ann in self.annotated:
+   364	            date_val = str(ann.record.raw.get(trend_field, "unknown"))
+   365	            trend[date_val]["total"] += 1
+   366	            if ann.is_valid and not ann.is_duplicate:
+   367	                trend[date_val]["valid"] += 1
+   368	            else:
+   369	                trend[date_val]["anomaly"] += 1
+   370	        self.stats.trend_data = dict(sorted(trend.items()))
+   371	
+   372	    def _determine_status(self) -> TaskStatus:
+   373	        if self.stats.total_records == 0:
+   374	            return TaskStatus.FAILED
+   375	        if self.stats.valid_records == 0:
+   376	            return TaskStatus.FAILED
+   377	        if self.stats.anomaly_count > 0 and self.stats.valid_records > 0:
+   378	            return TaskStatus.PARTIAL_FAILED
+   379	        return TaskStatus.COMPLETED
+   380	
+
+codex
+再补一个实际导出链路的验证：看 CSV 导出是否能接受不同字段集的记录。这个点如果失败，说明批处理遇到真实业务脏数据时会直接中断。
+exec
+/bin/zsh -lc "python3 -B -c \"import builtins, io; from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor; pd=ProblemDictionary({'required_fields':['student_id'],'dedup_keys':['student_id'],'bounds':{},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'}); tmpl=ReportTemplate({'group_by':['student_id'],'trend_field':'student_id','export_format':'csv'}); proc=LateReturnProcessor(pd, tmpl); records=[{'student_id':'1','a':'x'},{'student_id':'2','b':'y'}]; proc.annotated=[]; proc.batch.total_input=2; proc.batch.total_processed=2; proc._dedup_tracker_reset([proc.annotated]);
+# build annotations by normal path but suppress export later
+proc._export_file=lambda :'noop'; res=proc.process(records); print(res['statistics']);\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ exited 1 in 1295ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-YPBGSuSj' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-oU32wwqS' (errno=Operation not permitted)
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Users/bill/Documents/solo/workspaces/yzz00184/late_return_stats.py", line 295, in _dedup_tracker_reset
+    dk = rec.dedup_key(keys)
+AttributeError: 'list' object has no attribute 'dedup_key'
+
+exec
+/bin/zsh -lc "python3 -B -c \"import builtins, io; from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor, LateReturnRecord, AnnotatedRecord, ProcessingBatch; pd=ProblemDictionary({'required_fields':['student_id'],'dedup_keys':['student_id'],'bounds':{},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'}); tmpl=ReportTemplate({'group_by':['student_id'],'trend_field':'student_id','export_format':'csv'}); proc=LateReturnProcessor(pd, tmpl); proc.annotated=[AnnotatedRecord(LateReturnRecord({'student_id':'1','a':'x'}), proc.batch), AnnotatedRecord(LateReturnRecord({'student_id':'2','b':'y'}), proc.batch)]; proc.annotated[0].anomalies=[]; proc.annotated[1].anomalies=[]; class Dummy(io.StringIO):
+    def __enter__(self): return self
+    def __exit__(self, *args): pass
+orig_open=builtins.open; builtins.open=lambda *a,**k: Dummy();
+try:
+    proc._export_csv('dummy.csv')
+    print('ok')
+except Exception as e:
+    print(type(e).__name__, e)
+finally:
+    builtins.open=orig_open\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ exited 1 in 593ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-8jfQCOEm' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-e8bKzFZd' (errno=Operation not permitted)
+  File "<string>", line 1
+    import builtins, io; from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor, LateReturnRecord, AnnotatedRecord, ProcessingBatch; pd=ProblemDictionary({'required_fields':['student_id'],'dedup_keys':['student_id'],'bounds':{},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'}); tmpl=ReportTemplate({'group_by':['student_id'],'trend_field':'student_id','export_format':'csv'}); proc=LateReturnProcessor(pd, tmpl); proc.annotated=[AnnotatedRecord(LateReturnRecord({'student_id':'1','a':'x'}), proc.batch), AnnotatedRecord(LateReturnRecord({'student_id':'2','b':'y'}), proc.batch)]; proc.annotated[0].anomalies=[]; proc.annotated[1].anomalies=[]; class Dummy(io.StringIO):
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^
+SyntaxError: invalid syntax
+
+exec
+/bin/zsh -lc "python3 -B -c \"import builtins, io; from late_return_stats import ProblemDictionary, ReportTemplate, LateReturnProcessor, LateReturnRecord, AnnotatedRecord; pd=ProblemDictionary({'required_fields':['student_id'],'dedup_keys':['student_id'],'bounds':{},'anomaly_descriptions':{},'field_labels':{},'time_threshold':'22:30'}); tmpl=ReportTemplate({'group_by':['student_id'],'trend_field':'student_id','export_format':'csv'}); proc=LateReturnProcessor(pd, tmpl); proc.annotated=[AnnotatedRecord(LateReturnRecord({'student_id':'1','a':'x'}), proc.batch), AnnotatedRecord(LateReturnRecord({'student_id':'2','b':'y'}), proc.batch)]; orig_open=builtins.open; builtins.open=lambda *a,**k: io.StringIO();
+try:
+    proc._export_csv('dummy.csv')
+    print('ok')
+except Exception as e:
+    print(type(e).__name__, e)
+finally:
+    builtins.open=orig_open\"" in /Users/bill/Documents/solo/workspaces/yzz00184
+ succeeded in 953ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-13dNa1GK' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-XFx2Gv7q' (errno=Operation not permitted)
+ValueError dict contains fields not in fieldnames: 'b'
+
+codex
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: `LateReturnProcessor.process()` 没有在每次运行前重置内部状态，导致同一实例重复调用会把上一次的 `annotated` 和统计结果累加进下一次；同时 `_export_csv()` 直接用首条记录的字段集作为 `fieldnames`，遇到后续记录携带额外字段时会抛错中断导出。这样会让批处理结果失真，且真实数据一旦字段不齐就无法完成导出，阻断“可运行、可复核”的核心目标。
+- 主要证据:
+- `late_return_stats.py:263-289`，同一 `LateReturnProcessor` 连续 `process()` 两次，第二次 `total_records` 会从 1 变成 2，证明状态被累积污染。
+- `late_return_stats.py:446-461`，CSV 导出对异构字段不兼容；实测两条记录字段不一致时直接报 `ValueError dict contains fields not in fieldnames: 'b'`。
+- `test_late_return_stats.py` 只覆盖了单次处理和固定字段样例，没有覆盖处理器复用和异构输入导出。
+- 阻断问题:
+- `process()` 缺少幂等/重置逻辑，重复调用会污染统计。
+- CSV 导出对真实业务里常见的变字段输入不鲁棒，导出链路可能直接失败。
+- 建议:
+- 在 `process()` 开头重置 `annotated`、`stats`、`dedup_tracker`，或明确限制单实例单次使用并在接口层防御。
+- 导出 CSV 时统一字段集合，或对多余字段做兼容处理。
+- 增加“同一实例重复处理”和“异构字段导出”的测试用例。
+tokens used
+43,051

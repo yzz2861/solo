@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因:
+- 主要证据:
+- `app/main.py:14` 定义了 FastAPI 应用，`app/main.py:50`、`app/main.py:69`、`app/main.py:81`、`app/main.py:190` 分别提供核心处理、历史回放、历史查询和可直接启动的 `uvicorn` 入口。
+- `app/services/processor.py:27`、`app/services/processor.py:93`、`app/services/processor.py:192` 覆盖了重复提交校验、明细分流、状态汇总和响应构建，主业务链路是闭合的。
+- `app/services/validator.py:24`、`app/services/validator.py:323` 覆盖请求级校验和材料缺失检测，和“校验失败/需补充”的分流一致。
+- `app/services/rule_engine.py:72`、`app/services/rule_engine.py:241` 定义了阈值、黑名单、高风险设备/地区、频繁遗失等规则，并区分锁定与人工复核。
+- `requirements.txt:1` 已声明运行与测试依赖，仓库中也有完整测试用例 `tests/test_compensation_api.py:23`、`tests/test_compensation_api.py:68`、`tests/test_compensation_api.py:133`、`tests/test_compensation_api.py:248`，覆盖了可办理、阈值、补充、回放、重复提交和分类分离等核心场景。
+- 本地实测 `GET /` 返回 200/ok，`POST /api/compensation/process` 在正常单据、黑名单、材料缺失场景分别返回 `PROCESSABLE`、`LOCKED`、`NEED_SUPPLEMENT`，核心入口可用。
+- 阻断问题: 无
+- 建议: 可补一份简短 README 或启动说明，降低后续验证成本。

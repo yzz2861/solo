@@ -1,0 +1,32 @@
+[
+  {
+    "idea_id": "yzz00188",
+    "status": "pending_reopen",
+    "mark": "not_discarded_trae_mistake",
+    "marked_at": "2026-06-05T02:46:07",
+    "workspace": "/Users/bill/Documents/solo/workspaces/yzz00188",
+    "run_dir": "/Users/bill/Documents/solo/run_log/script_auto/runs/20260605-024020-yzz00188",
+    "workbook": "/Users/bill/Documents/solo/result/yzz00188.xlsx",
+    "reason": "产物不满意：项目主入口 `main.py` 能调起批处理，样例也能跑出结果，但交付内容有明显错配，影响可用性：`src/pick_mismatch_processor.py:437-441` 把 `invalid_records` 统计成坏数据条数，`test_data/missing_material_samples.json` 会出现 `total_records=6, invalid_records=7`；`src/report_generator.py:64-88` 生成分组报表时依赖 `pick_date`，但 `group_results` 未写入该字段，导致 `output/group_reports/over_threshold_samples_group.csv` 该列为空；复核表同样因字段映射不一致，`output/review_tables/over_threshold_samples_review.csv` 的 `时间窗口(小时)` 为空。结果不可信，未达到可交付标准。"
+  },
+  {
+    "idea_id": "yzz00184",
+    "status": "pending_reopen",
+    "mark": "not_discarded_trae_mistake",
+    "marked_at": "2026-06-05T02:58:54",
+    "workspace": "/Users/bill/Documents/solo/workspaces/yzz00184",
+    "run_dir": "/Users/bill/Documents/solo/run_log/script_auto/runs/20260605-025201-yzz00184",
+    "workbook": "/Users/bill/Documents/solo/result/yzz00184.xlsx",
+    "reason": "产物不满意：`LateReturnProcessor.process()` 没有在每次运行前重置内部状态，导致同一实例重复调用会把上一次的 `annotated` 和统计结果累加进下一次；同时 `_export_csv()` 直接用首条记录的字段集作为 `fieldnames`，遇到后续记录携带额外字段时会抛错中断导出。这样会让批处理结果失真，且真实数据一旦字段不齐就无法完成导出，阻断“可运行、可复核”的核心目标。"
+  },
+  {
+    "idea_id": "yzz00183",
+    "status": "pending_reopen",
+    "mark": "not_discarded_trae_mistake",
+    "marked_at": "2026-06-05T03:06:17",
+    "workspace": "/Users/bill/Documents/solo/workspaces/yzz00183",
+    "run_dir": "/Users/bill/Documents/solo/run_log/script_auto/runs/20260605-025503-yzz00183",
+    "workbook": "/Users/bill/Documents/solo/result/yzz00183.xlsx",
+    "reason": "产物不满意：核心接口链路没有完成验收。`app/main.py:41-47` 的 `/api/v1/strategy/judge` 会先写入处理历史，再走落库；而 `app/database.py:11-23` 把 SQLite 固定到相对路径 `pump_strategy.db`，没有可配置的数据目录或回退方案。当前交付形态下，这条写入链路会直接中断，导致首个判断请求无法完成，后续复核、回放、历史查询也就没有稳定数据基础。另有规则冲突分支在 `app/rule_engine.py:209-218` 基本不可达，和“同时命中启/停泵冲突”的说明存在偏差。"
+  }
+]

@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始目标明确要求验收规则冲突、任务状态和数据回放。项目能完成样例数据的读取、校验、去重、分级和汇总，但规则冲突只在 `src/validator.py` 内部检测，`src/pipeline.py` 没有把冲突写入坏数据清单、JSON结果或复核表，`output/demo/result.json` 也没有相关字段，业务人员无法在产物中复盘规则异常。另一个明显问题是 `src/pipeline.py:79-87` 先导出 JSON 后才设置 `end_time`，导致 `output/demo/result.json` 的 `task_status.end_time` 为空，任务状态产物不完整。此外直接执行 `python3 src/main.py --help` 会因相对导入失败，只能推断使用 `python3 -m src.main`。
+- 主要证据:
+  - 原始提示词要求生成分组报表、坏数据清单、JSON结果、人工复核表，并验收规则冲突、任务状态、数据回放、批次和来源标识。
+  - `python3 -m src.main --help` 可显示 CLI 参数；`python3 src/main.py --help` 报 `ImportError: attempted relative import with no known parent package`。
+  - 只读计算链路验证结果：20 条原始、16 条有效、4 条无效、1 条重复、15 条分级、5 个汇总报表、1 个规则冲突。
+  - `output/demo/result.json` 中有报表、坏数据和复核数据，但 `task_status.end_time` 为空，且无规则冲突输出。
+- 阻断问题:
+  - 规则冲突未进入任何交付产物，无法满足规则冲突验收和业务复盘。
+  - JSON 任务状态导出时机错误，完成结果中的结束时间为空。
+  - 脚本入口对直接运行不友好，且无 README/包配置说明真实启动命令。
+- 建议:
+  - 在流水线结果中加入 `rule_conflicts`，或将规则冲突写入坏数据/任务状态，并在 JSON 中保留可追溯详情。
+  - 在最终导出 JSON 前设置 `end_time`，避免任务状态字段为空。
+  - 增加最小 README 或可执行入口，明确使用 `python3 -m src.main ...`。

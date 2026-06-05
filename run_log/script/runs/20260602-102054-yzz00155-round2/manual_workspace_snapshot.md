@@ -1,0 +1,29 @@
+# Workspace Snapshot
+
+- dist/acceptance-test.js
+- dist/config/rules.js
+- dist/engine/ruleEngine.js
+- dist/routes/api.js
+- dist/server.js
+- dist/types/index.js
+- dist/utils/fileManager.js
+- output/bad-records/bad_records_2026-06-01T18-15-30-387Z.json
+- output/bad-records/bad_records_2026-06-01T18-15-40-041Z.json
+- output/bad-records/bad_records_2026-06-02T00-37-51-273Z.json
+- output/bad-records/bad_records_2026-06-02T02-25-07-324Z.json
+- output/results/CL2025000001_2026-06-02T00-38-12-153Z.json
+- output/results/CL2025000001_2026-06-02T02-27-03-509Z.json
+- output/results/sorting_results_2026-06-01T18-15-30-385Z.json
+- output/results/sorting_results_2026-06-01T18-15-40-040Z.json
+- output/results/sorting_results_2026-06-02T00-37-51-271Z.json
+- output/results/sorting_results_2026-06-02T02-25-07-319Z.json
+- package-lock.json
+- package.json
+- src/acceptance-test.ts
+- src/config/rules.ts
+- src/engine/ruleEngine.ts
+- src/routes/api.ts
+- src/server.ts
+- src/types/index.ts
+- src/utils/fileManager.ts
+- tsconfig.json

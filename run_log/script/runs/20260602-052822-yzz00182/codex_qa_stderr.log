@@ -1,0 +1,2119 @@
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00182
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019e85b3-0cfc-7fd1-92fc-44d7911cf017
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00182
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00182
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+codex
+我会按“solo质检”的口径做只读检查；当前可用技能列表里没有看到名为“solo质检”的技能，所以我会用质检标准直接执行，不改文件、不提交。先读取项目结构、入口配置和可能的原始需求线索。
+exec
+/bin/zsh -lc "find .. -maxdepth 2 -type f \\( -iname '*prompt*' -o -iname '*readme*' -o -iname 'package.json' -o -iname 'pyproject.toml' -o -iname 'requirements.txt' -o -iname 'go.mod' -o -iname 'Cargo.toml' \\) -print" in /Users/bill/Documents/solo/workspaces/yzz00182
+exec
+/bin/zsh -lc 'rg --files' in /Users/bill/Documents/solo/workspaces/yzz00182
+exec
+/bin/zsh -lc 'ls -la' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 112ms:
+../yzz00151/requirements.txt
+../yzz00158/package.json
+../yzz00159/requirements.txt
+../yzz00161/package.json
+../yzz00040/package.json
+../yzz00047/package.json
+../yzz00048/README.md
+../yzz00048/package.json
+../yzz00046/README.md
+../yzz00046/package.json
+../yzz00041/requirements.txt
+../yzz00041/README.md
+../yzz00030/package.json
+../yzz00031/requirements.txt
+../yzz00031/pyproject.toml
+../yzz00031/README.md
+../yzz00038/README.md
+../yzz00038/package.json
+../yzz00186/requirements.txt
+../yzz00181/README.md
+../yzz00180/requirements.txt
+../yzz00155/package.json
+../yzz00164/pyproject.toml
+../yzz00154/pyproject.toml
+../yzz00043/requirements.txt
+../yzz00042/package.json
+../yzz00045/package.json
+../yzz00033/requirements.txt
+../yzz00032/README.md
+../yzz00032/package.json
+../yzz00035/README.md
+../yzz00185/pyproject.toml
+../yzz00178/requirements.txt
+../yzz00179/requirements.txt
+../yzz00179/pyproject.toml
+../yzz00183/requirements.txt
+../yzz00177/package.json
+
+ succeeded in 116ms:
+total 120
+drwxr-xr-x@  9 bill  staff    288 Jun  2 07:36 .
+drwxr-xr-x  58 bill  staff   1856 Jun  2 05:30 ..
+-rw-r--r--@  1 bill  staff   1104 Jun  2 07:40 audit_history.json
+-rw-r--r--@  1 bill  staff   5597 Jun  2 07:40 audit_log.log
+-rw-r--r--@  1 bill  staff   3541 Jun  2 07:09 business_records.csv
+-rw-r--r--@  1 bill  staff  33576 Jun  2 07:21 cleaning_route_audit.py
+-rw-r--r--@  1 bill  staff    437 Jun  2 07:08 config.json
+drwxr-xr-x@ 12 bill  staff    384 Jun  2 07:40 output
+-rw-r--r--@  1 bill  staff   1010 Jun  2 07:08 problem_dict.csv
+
+ succeeded in 154ms:
+problem_dict.csv
+audit_history.json
+business_records.csv
+audit_log.log
+output/审计明细_20260602_073601.csv
+output/统计结果_20260602_073601.xlsx
+output/历史轨迹_20260602_074029.json
+output/异常样本_20260602_073601.xlsx
+output/历史轨迹_20260602_073601.json
+output/统计结果_20260602_074029.xlsx
+output/异常样本_20260602_074029.xlsx
+output/趋势摘要_20260602_073601.json
+output/趋势摘要_20260602_074029.json
+output/审计明细_20260602_074029.csv
+cleaning_route_audit.py
+config.json
+
+codex
+项目看起来是单脚本数据处理产物，没有 README 或依赖清单。接下来我会静态核对脚本入口、依赖、配置和已有输出，避免运行会写文件的流程。
+exec
+/bin/zsh -lc "sed -n '1,220p' cleaning_route_audit.py" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+高铁动车组保洁交路关键记录审计脚本
+
+功能：
+1. 准入判断 - 根据时间窗口、分组维度对业务记录进行筛选
+2. 差异提示 - 对比业务记录与问题字典，标记异常
+3. 结果归档 - 按风险等级分类，生成统计报告和导出文件
+
+风险等级：低风险、中风险、高风险、无法判定
+"""
+
+import os
+import sys
+import json
+import hashlib
+import logging
+import argparse
+from datetime import datetime, timedelta
+from collections import defaultdict, Counter
+from pathlib import Path
+
+import pandas as pd
+import numpy as np
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('audit_log.log', encoding='utf-8')
+    ]
+)
+logger = logging.getLogger(__name__)
+
+RISK_LEVELS = ['低风险', '中风险', '高风险', '无法判定']
+
+
+class CleaningRouteAuditor:
+    def __init__(self, config_path=None):
+        self.config = self._load_default_config()
+        if config_path and os.path.exists(config_path):
+            self._load_config(config_path)
+        
+        self.business_records = None
+        self.problem_dict = None
+        self.report_template = None
+        self.dedup_keys = []
+        
+        self.time_window_start = None
+        self.time_window_end = None
+        
+        self.audit_results = []
+        self.statistics = {}
+        self.anomaly_samples = []
+        self.trend_summary = {}
+        self.history_trace = []
+    
+    def _load_default_config(self):
+        return {
+            'time_column': '记录时间',
+            'group_columns': ['车次号', '车组号', '保洁班组'],
+            'risk_thresholds': {
+                '低风险': 0.3,
+                '中风险': 0.6,
+                '高风险': 0.9
+            },
+            'time_window_days': 7,
+            'dedup_keys': ['车次号', '车组号', '保洁日期', '作业类型'],
+            'export_formats': ['xlsx', 'csv', 'json'],
+            'history_file': 'audit_history.json',
+            'anomaly_sample_size': 20
+        }
+    
+    def _load_config(self, config_path):
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                user_config = json.load(f)
+                self.config.update(user_config)
+            logger.info(f"已加载配置文件: {config_path}")
+        except Exception as e:
+            logger.warning(f"加载配置文件失败，使用默认配置: {e}")
+    
+    def load_data(self, records_path, problem_dict_path, template_path=None):
+        logger.info("开始加载数据...")
+        
+        self.business_records = self._read_file(records_path)
+        logger.info(f"加载业务记录: {len(self.business_records)} 条")
+        
+        self.problem_dict = self._read_file(problem_dict_path)
+        logger.info(f"加载问题字典: {len(self.problem_dict)} 条")
+        
+        if template_path and os.path.exists(template_path):
+            self.report_template = self._read_file(template_path)
+            logger.info(f"加载报表模板: {len(self.report_template)} 条")
+        
+        self.dedup_keys = self.config.get('dedup_keys', [])
+        self._validate_columns()
+        self._set_time_window()
+        self._load_history()
+    
+    def _read_file(self, file_path):
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"文件不存在: {file_path}")
+        
+        ext = os.path.splitext(file_path)[1].lower()
+        
+        if ext in ['.xlsx', '.xls']:
+            return pd.read_excel(file_path)
+        elif ext == '.csv':
+            return pd.read_csv(file_path, encoding='utf-8')
+        elif ext == '.json':
+            return pd.read_json(file_path)
+        else:
+            raise ValueError(f"不支持的文件格式: {ext}")
+    
+    def _validate_columns(self):
+        required_cols = [self.config['time_column']] + self.dedup_keys
+        
+        for col in required_cols:
+            if col not in self.business_records.columns:
+                raise ValueError(f"业务记录缺少必要列: {col}")
+        
+        problem_required = ['问题类型', '问题描述', '风险等级', '判定规则']
+        for col in problem_required:
+            if col not in self.problem_dict.columns:
+                raise ValueError(f"问题字典缺少必要列: {col}")
+        
+        self.business_records[self.config['time_column']] = pd.to_datetime(
+            self.business_records[self.config['time_column']]
+        )
+    
+    def _set_time_window(self):
+        time_col = self.config['time_column']
+        days = self.config.get('time_window_days', 7)
+        
+        max_time = self.business_records[time_col].max()
+        self.time_window_end = max_time
+        self.time_window_start = max_time - timedelta(days=days)
+        
+        logger.info(f"时间窗口: {self.time_window_start.strftime('%Y-%m-%d')} 至 {self.time_window_end.strftime('%Y-%m-%d')}")
+    
+    def _load_history(self):
+        history_file = self.config.get('history_file', 'audit_history.json')
+        if os.path.exists(history_file):
+            try:
+                with open(history_file, 'r', encoding='utf-8') as f:
+                    self.history_trace = json.load(f)
+                logger.info(f"加载历史审计轨迹: {len(self.history_trace)} 条")
+            except Exception as e:
+                logger.warning(f"加载历史轨迹失败: {e}")
+                self.history_trace = []
+    
+    def _save_history(self):
+        history_file = self.config.get('history_file', 'audit_history.json')
+        try:
+            with open(history_file, 'w', encoding='utf-8') as f:
+                json.dump(self.history_trace, f, ensure_ascii=False, indent=2)
+            logger.info(f"历史轨迹已保存: {len(self.history_trace)} 条")
+        except Exception as e:
+            logger.error(f"保存历史轨迹失败: {e}")
+    
+    def _generate_record_id(self, record):
+        key_parts = [str(record.get(k, '')) for k in self.dedup_keys]
+        key_str = '|'.join(key_parts)
+        return hashlib.md5(key_str.encode('utf-8')).hexdigest()
+    
+    def run_audit(self):
+        logger.info("开始执行审计...")
+        
+        filtered_records = self._admission_filter()
+        logger.info(f"准入筛选后记录: {len(filtered_records)} 条")
+        
+        deduplicated_records = self._deduplicate(filtered_records)
+        logger.info(f"去重后记录: {len(deduplicated_records)} 条")
+        
+        self._judge_risk(deduplicated_records)
+        self._generate_statistics()
+        self._extract_anomaly_samples()
+        self._generate_trend_summary()
+        self._update_history_trace()
+        
+        logger.info("审计完成")
+    
+    def _admission_filter(self):
+        time_col = self.config['time_column']
+        
+        mask = (
+            (self.business_records[time_col] >= self.time_window_start) &
+            (self.business_records[time_col] <= self.time_window_end)
+        )
+        
+        filtered = self.business_records[mask].copy()
+        
+        for col in self.config.get('group_columns', []):
+            if col in filtered.columns:
+                filtered = filtered.dropna(subset=[col])
+        
+        logger.info(f"准入判断 - 剔除时间窗口外记录: {len(self.business_records) - len(filtered)} 条")
+        logger.info(f"准入解释: 时间窗口 {self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}, "
+                   f"分组维度 {', '.join(self.config.get('group_columns', []))}")
+        
+        return filtered
+    
+    def _deduplicate(self, records):
+        records['_record_id'] = records.apply(self._generate_record_id, axis=1)
+        duplicate_count = records.duplicated(subset=['_record_id']).sum()
+        
+        if duplicate_count > 0:
+            logger.info(f"去重 - 发现重复记录: {duplicate_count} 条")
+            logger.info(f"去重键: {', '.join(self.dedup_keys)}")
+        
+        deduplicated = records.drop_duplicates(subset=['_record_id'], keep='first').copy()
+        return deduplicated
+    
+    def _judge_risk(self, records):
+        problem_rules = self._build_problem_rules()
+        
+        for _, record in records.iterrows():
+
+exec
+/bin/zsh -lc "sed -n '1,220p' config.json" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+{
+    "time_column": "记录时间",
+    "group_columns": ["车次号", "车组号", "保洁班组"],
+    "risk_thresholds": {
+        "低风险": 0.3,
+        "中风险": 0.6,
+        "高风险": 0.9
+    },
+    "time_window_days": 7,
+    "dedup_keys": ["车次号", "车组号", "保洁日期", "作业类型"],
+    "export_formats": ["xlsx", "csv", "json"],
+    "history_file": "audit_history.json",
+    "anomaly_sample_size": 20
+}
+
+exec
+/bin/zsh -lc "sed -n '520,900p' cleaning_route_audit.py" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+            else:
+                analysis_parts.append(f"近7天高风险保持平稳，维持在{high_risk_trend[-1]}左右")
+        
+        if wow:
+            analysis_parts.append(f"周环比{wow['trend']}，变化率{wow['change_rate']}")
+        
+        return '; '.join(analysis_parts)
+    
+    def _update_history_trace(self):
+        trace_entry = {
+            'audit_id': hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
+            'audit_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'time_window': self.statistics['summary']['time_window'],
+            'total_records': self.statistics['summary']['total_records'],
+            'risk_distribution': self.statistics['risk_distribution']['counts'],
+            'export_files': [],
+            'operator': 'system'
+        }
+        self.history_trace.append(trace_entry)
+        self._save_history()
+    
+    def export_results(self, output_dir='output'):
+        logger.info("开始导出结果...")
+        os.makedirs(output_dir, exist_ok=True)
+        
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        export_files = []
+        
+        results_df = pd.DataFrame([
+            {
+                '记录ID': r['record_id'],
+                '风险等级': r['risk_level'],
+                '状态': r['status'],
+                '原因': r['reason'],
+                '风险得分': f"{r['risk_score']:.2f}",
+                '阈值解释': r['threshold_explanation'],
+                '匹配问题': '; '.join(r['matched_problems']) if r['matched_problems'] else '无',
+                '审计时间': r['judge_time'],
+                '时间窗口': r['time_window'],
+                **{k: v for k, v in r['record_data'].items() if k != '_record_id'}
+            }
+            for r in self.audit_results
+        ])
+        
+        stats_file = os.path.join(output_dir, f'统计结果_{timestamp}.xlsx')
+        with pd.ExcelWriter(stats_file, engine='openpyxl') as writer:
+            results_df.to_excel(writer, sheet_name='审计明细', index=False)
+            
+            pd.DataFrame([{
+                '指标': '总记录数',
+                '数值': self.statistics['summary']['total_records']
+            }, {
+                '指标': '时间窗口',
+                '数值': self.statistics['summary']['time_window']
+            }, {
+                '指标': '审计时间',
+                '数值': self.statistics['summary']['audit_time']
+            }]).to_excel(writer, sheet_name='统计概览', index=False)
+            
+            pd.DataFrame([{
+                '风险等级': level,
+                '数量': self.statistics['risk_distribution']['counts'].get(level, 0),
+                '占比': self.statistics['risk_distribution']['percentages'].get(level, '0.00%')
+            } for level in RISK_LEVELS]).to_excel(writer, sheet_name='风险分布', index=False)
+            
+            for group_col, group_data in self.statistics['group_statistics'].items():
+                group_df = pd.DataFrame([{
+                    group_col: name,
+                    '总记录数': data['total'],
+                    '高风险': data['高风险'],
+                    '中风险': data['中风险'],
+                    '低风险': data['低风险'],
+                    '无法判定': data['无法判定']
+                } for name, data in group_data.items()])
+                group_df.to_excel(writer, sheet_name=f'按{group_col}统计', index=False)
+            
+            if self.trend_summary.get('daily_distribution'):
+                pd.DataFrame(self.trend_summary['daily_distribution']).to_excel(
+                    writer, sheet_name='日趋势', index=False
+                )
+        
+        export_files.append(stats_file)
+        logger.info(f"已导出统计结果: {stats_file}")
+        
+        anomaly_file = os.path.join(output_dir, f'异常样本_{timestamp}.xlsx')
+        with pd.ExcelWriter(anomaly_file, engine='openpyxl') as writer:
+            for risk_type, samples in self.anomaly_samples.items():
+                if samples:
+                    df = pd.DataFrame([{
+                        '记录ID': s['record_id'],
+                        '风险等级': s['risk_level'],
+                        '状态': s['status'],
+                        '原因': s['reason'],
+                        '风险得分': f"{s['risk_score']:.2f}",
+                        '阈值解释': s['threshold_explanation'],
+                        '匹配问题': '; '.join(s['matched_problems']) if s['matched_problems'] else '无',
+                        **{k: v for k, v in s['record_data'].items() if k != '_record_id'}
+                    } for s in samples])
+                    sheet_name = {'high_risk_samples': '高风险样本', 
+                                 'medium_risk_samples': '中风险样本',
+                                 'undetermined_samples': '无法判定样本'}.get(risk_type, risk_type)
+                    df.to_excel(writer, sheet_name=sheet_name, index=False)
+        
+        export_files.append(anomaly_file)
+        logger.info(f"已导出异常样本: {anomaly_file}")
+        
+        summary_file = os.path.join(output_dir, f'趋势摘要_{timestamp}.json')
+        with open(summary_file, 'w', encoding='utf-8') as f:
+            json.dump({
+                'statistics': self.statistics,
+                'trend_summary': self.trend_summary,
+                'anomaly_sample_counts': {
+                    '高风险样本数': len(self.anomaly_samples.get('high_risk_samples', [])),
+                    '中风险样本数': len(self.anomaly_samples.get('medium_risk_samples', [])),
+                    '无法判定样本数': len(self.anomaly_samples.get('undetermined_samples', []))
+                }
+            }, f, ensure_ascii=False, indent=2)
+        
+        export_files.append(summary_file)
+        logger.info(f"已导出趋势摘要: {summary_file}")
+        
+        csv_file = os.path.join(output_dir, f'审计明细_{timestamp}.csv')
+        results_df.to_csv(csv_file, index=False, encoding='utf-8-sig')
+        export_files.append(csv_file)
+        logger.info(f"已导出CSV明细: {csv_file}")
+        
+        if self.history_trace:
+            history_file = os.path.join(output_dir, f'历史轨迹_{timestamp}.json')
+            with open(history_file, 'w', encoding='utf-8') as f:
+                json.dump(self.history_trace, f, ensure_ascii=False, indent=2)
+            export_files.append(history_file)
+            logger.info(f"已导出历史轨迹: {history_file}")
+        
+        if self.history_trace:
+            self.history_trace[-1]['export_files'] = export_files
+            self._save_history()
+        
+        return export_files
+    
+    def print_report(self):
+        print("\n" + "="*80)
+        print("高铁动车组保洁交路关键记录审计报告")
+        print("="*80)
+        
+        print(f"\n【审计概览】")
+        print(f"  总记录数: {self.statistics['summary']['total_records']}")
+        print(f"  时间窗口: {self.statistics['summary']['time_window']}")
+        print(f"  审计时间: {self.statistics['summary']['audit_time']}")
+        
+        print(f"\n【风险分布】")
+        for level in RISK_LEVELS:
+            count = self.statistics['risk_distribution']['counts'].get(level, 0)
+            pct = self.statistics['risk_distribution']['percentages'].get(level, '0.00%')
+            bar = '█' * int(count / max(1, self.statistics['summary']['total_records']) * 50)
+            print(f"  {level}: {count:5d} ({pct:7s}) {bar}")
+        
+        print(f"\n【阈值配置】")
+        for level, threshold in self.statistics['thresholds'].items():
+            print(f"  {level}: 风险得分 >= {threshold}")
+        
+        print(f"\n【状态分布】")
+        for status, count in self.statistics['status_distribution'].items():
+            print(f"  {status}: {count}")
+        
+        if self.statistics['group_statistics']:
+            print(f"\n【分组统计】")
+            for group_col, group_data in self.statistics['group_statistics'].items():
+                print(f"\n  按 {group_col}:")
+                for name, data in list(group_data.items())[:5]:
+                    print(f"    {name}: 总{data['total']}, 高{data['高风险']}, 中{data['中风险']}, 低{data['低风险']}")
+                if len(group_data) > 5:
+                    print(f"    ... 还有 {len(group_data) - 5} 个分组")
+        
+        if self.statistics['problem_matches']:
+            print(f"\n【高频问题】")
+            for problem, count in list(self.statistics['problem_matches'].items())[:5]:
+                print(f"  {problem}: {count} 次")
+        
+        if self.trend_summary.get('analysis'):
+            print(f"\n【趋势分析】")
+            print(f"  {self.trend_summary['analysis']}")
+        
+        print(f"\n【异常样本统计】")
+        print(f"  高风险样本: {len(self.anomaly_samples.get('high_risk_samples', []))} 条")
+        print(f"  中风险样本: {len(self.anomaly_samples.get('medium_risk_samples', []))} 条")
+        print(f"  无法判定: {len(self.anomaly_samples.get('undetermined_samples', []))} 条")
+        
+        if self.anomaly_samples.get('high_risk_samples'):
+            print(f"\n【高风险示例】")
+            sample = self.anomaly_samples['high_risk_samples'][0]
+            print(f"  记录ID: {sample['record_id']}")
+            print(f"  风险等级: {sample['risk_level']}")
+            print(f"  状态: {sample['status']}")
+            print(f"  原因: {sample['reason'][:100]}..." if len(sample['reason']) > 100 else f"  原因: {sample['reason']}")
+            print(f"  阈值解释: {sample['threshold_explanation']}")
+        
+        print(f"\n【历史轨迹】")
+        print(f"  累计审计次数: {len(self.history_trace)}")
+        if self.history_trace:
+            recent = self.history_trace[-1]
+            print(f"  本次审计ID: {recent['audit_id']}")
+            print(f"  本次时间: {recent['audit_time']}")
+        
+        print("\n" + "="*80)
+        print("审计完成")
+        print("="*80 + "\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(description='高铁动车组保洁交路关键记录审计系统')
+    parser.add_argument('--records', required=True, help='业务记录文件路径 (.xlsx/.csv/.json)')
+    parser.add_argument('--problems', required=True, help='问题字典文件路径 (.xlsx/.csv/.json)')
+    parser.add_argument('--template', help='报表模板文件路径 (可选)')
+    parser.add_argument('--config', help='配置文件路径 (可选)')
+    parser.add_argument('--output', default='output', help='输出目录 (默认: output)')
+    parser.add_argument('--no-report', action='store_true', help='不打印报告')
+    
+    args = parser.parse_args()
+    
+    try:
+        auditor = CleaningRouteAuditor(args.config)
+        auditor.load_data(args.records, args.problems, args.template)
+        auditor.run_audit()
+        export_files = auditor.export_results(args.output)
+        
+        if not args.no_report:
+            auditor.print_report()
+        
+        print(f"\n导出文件列表:")
+        for f in export_files:
+            print(f"  - {f}")
+        
+        return 0
+        
+    except Exception as e:
+        logger.error(f"审计执行失败: {e}", exc_info=True)
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+
+exec
+/bin/zsh -lc "sed -n '220,520p' cleaning_route_audit.py" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+        for _, record in records.iterrows():
+            result = self._judge_single_record(record, problem_rules)
+            self.audit_results.append(result)
+        
+        self._ensure_consistency()
+    
+    def _build_problem_rules(self):
+        rules = defaultdict(list)
+        
+        for _, problem in self.problem_dict.iterrows():
+            problem_type = str(problem['问题类型']).strip()
+            rules[problem_type].append({
+                'problem_type': problem_type,
+                'description': str(problem['问题描述']),
+                'risk_level': str(problem['风险等级']),
+                'judge_rule': str(problem['判定规则']),
+                'threshold': problem.get('阈值', 0.5)
+            })
+        
+        return rules
+    
+    def _judge_single_record(self, record, problem_rules):
+        matched_problems = []
+        risk_scores = []
+        reasons = []
+        
+        for problem_type, rules in problem_rules.items():
+            for rule in rules:
+                is_match, match_detail = self._apply_rule(record, rule)
+                if is_match:
+                    matched_problems.append(rule)
+                    risk_scores.append(self._risk_to_score(rule['risk_level']))
+                    reasons.append(f"{rule['problem_type']}: {rule['description']} - {match_detail}")
+        
+        if not matched_problems:
+            final_risk = '低风险'
+            reason = '未匹配到问题规则，记录正常'
+            status = '通过'
+        else:
+            max_score = max(risk_scores)
+            final_risk = self._score_to_risk(max_score)
+            
+            if final_risk == '高风险':
+                status = '不通过'
+            elif final_risk == '中风险':
+                status = '待复核'
+            else:
+                status = '通过'
+            
+            reason = '; '.join(reasons)
+        
+        record_dict = record.to_dict()
+        record_dict = {k: (v if pd.notna(v) else '') for k, v in record_dict.items()}
+        
+        return {
+            'record_id': record.get('_record_id', ''),
+            'record_data': record_dict,
+            'matched_problems': [p['description'] for p in matched_problems],
+            'risk_level': final_risk,
+            'risk_score': max(risk_scores) if risk_scores else 0.0,
+            'status': status,
+            'reason': reason,
+            'judge_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'time_window': f"{self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}",
+            'threshold_explanation': self._explain_threshold(final_risk, max(risk_scores) if risk_scores else 0.0)
+        }
+    
+    def _apply_rule(self, record, rule):
+        judge_rule = rule['judge_rule']
+        is_match = False
+        detail = ""
+        
+        try:
+            if '>' in judge_rule:
+                col, val = judge_rule.split('>', 1)
+                col = col.strip()
+                val = float(val.strip())
+                if col in record and pd.notna(record[col]):
+                    record_val = float(record[col])
+                    is_match = record_val > val
+                    detail = f"{col}={record_val} > 阈值{val}"
+            elif '<' in judge_rule:
+                col, val = judge_rule.split('<', 1)
+                col = col.strip()
+                val = float(val.strip())
+                if col in record and pd.notna(record[col]):
+                    record_val = float(record[col])
+                    is_match = record_val < val
+                    detail = f"{col}={record_val} < 阈值{val}"
+            elif '=' in judge_rule:
+                col, val = judge_rule.split('=', 1)
+                col = col.strip()
+                val = val.strip().strip("'\"")
+                if col in record and pd.notna(record[col]):
+                    record_val = str(record[col]).strip()
+                    is_match = record_val == val
+                    detail = f"{col}='{record_val}' == 期望值'{val}'"
+            elif '包含' in judge_rule:
+                col, val = judge_rule.split('包含', 1)
+                col = col.strip()
+                val = val.strip().strip("'\"")
+                if col in record and pd.notna(record[col]):
+                    record_val = str(record[col])
+                    is_match = val in record_val
+                    detail = f"{col}包含'{val}'"
+            elif '不包含' in judge_rule:
+                col, val = judge_rule.split('不包含', 1)
+                col = col.strip()
+                val = val.strip().strip("'\"")
+                if col in record and pd.notna(record[col]):
+                    record_val = str(record[col])
+                    is_match = val not in record_val
+                    detail = f"{col}不包含'{val}'"
+        except Exception as e:
+            logger.warning(f"规则应用失败 {judge_rule}: {e}")
+            is_match = False
+        
+        return is_match, detail
+    
+    def _risk_to_score(self, risk_level):
+        thresholds = self.config['risk_thresholds']
+        mapping = {
+            '低风险': thresholds['低风险'] + 0.05,
+            '中风险': (thresholds['中风险'] + thresholds['高风险']) / 2,
+            '高风险': thresholds['高风险'] + 0.05,
+            '无法判定': 0.0
+        }
+        return mapping.get(risk_level, 0.0)
+    
+    def _score_to_risk(self, score):
+        thresholds = self.config['risk_thresholds']
+        if score >= thresholds['高风险']:
+            return '高风险'
+        elif score >= thresholds['中风险']:
+            return '中风险'
+        elif score >= thresholds['低风险']:
+            return '低风险'
+        else:
+            return '无法判定'
+    
+    def _explain_threshold(self, risk_level, score):
+        thresholds = self.config['risk_thresholds']
+        explanations = {
+            '高风险': f"风险得分 {score:.2f} >= {thresholds['高风险']}，判定为高风险",
+            '中风险': f"{thresholds['中风险']} <= 风险得分 {score:.2f} < {thresholds['高风险']}，判定为中风险",
+            '低风险': f"{thresholds['低风险']} <= 风险得分 {score:.2f} < {thresholds['中风险']}，判定为低风险",
+            '无法判定': f"风险得分 {score:.2f} < {thresholds['低风险']}，无法判定"
+        }
+        return explanations.get(risk_level, f"风险得分 {score:.2f}")
+    
+    def _ensure_consistency(self):
+        valid_risk_count = sum(1 for r in self.audit_results if r['risk_level'] in RISK_LEVELS)
+        if valid_risk_count != len(self.audit_results):
+            invalid_count = len(self.audit_results) - valid_risk_count
+            logger.warning(f"发现 {invalid_count} 条无效风险等级，已修正为'无法判定'")
+            
+            for result in self.audit_results:
+                if result['risk_level'] not in RISK_LEVELS:
+                    result['risk_level'] = '无法判定'
+                    result['status'] = '待复核'
+                    result['reason'] = result['reason'] + ' [风险等级修正：原状态无效]'
+        
+        for result in self.audit_results:
+            if result['risk_level'] == '高风险' and result['status'] != '不通过':
+                result['status'] = '不通过'
+                result['reason'] = result['reason'] + ' [状态修正：高风险自动标记为不通过]'
+    
+    def _generate_statistics(self):
+        total = len(self.audit_results)
+        
+        risk_counts = Counter(r['risk_level'] for r in self.audit_results)
+        status_counts = Counter(r['status'] for r in self.audit_results)
+        
+        risk_percentages = {
+            level: f"{risk_counts.get(level, 0) / total * 100:.2f}%" if total > 0 else "0.00%"
+            for level in RISK_LEVELS
+        }
+        
+        group_stats = {}
+        for group_col in self.config.get('group_columns', []):
+            group_data = defaultdict(lambda: {'total': 0, '高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0})
+            for result in self.audit_results:
+                group_val = result['record_data'].get(group_col, '未知')
+                group_data[group_val]['total'] += 1
+                group_data[group_val][result['risk_level']] += 1
+            
+            group_stats[group_col] = dict(group_data)
+        
+        problem_matches = Counter()
+        for result in self.audit_results:
+            for problem in result['matched_problems']:
+                problem_matches[problem] += 1
+        
+        self.statistics = {
+            'summary': {
+                'total_records': total,
+                'time_window': f"{self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}",
+                'audit_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            },
+            'risk_distribution': {
+                'counts': dict(risk_counts),
+                'percentages': risk_percentages
+            },
+            'status_distribution': dict(status_counts),
+            'group_statistics': group_stats,
+            'problem_matches': dict(problem_matches.most_common(10)),
+            'thresholds': self.config['risk_thresholds']
+        }
+        
+        logger.info(f"统计完成 - 总记录:{total}, "
+                   f"高风险:{risk_counts.get('高风险', 0)}, "
+                   f"中风险:{risk_counts.get('中风险', 0)}, "
+                   f"低风险:{risk_counts.get('低风险', 0)}, "
+                   f"无法判定:{risk_counts.get('无法判定', 0)}")
+    
+    def _extract_anomaly_samples(self):
+        high_risk = [r for r in self.audit_results if r['risk_level'] == '高风险']
+        medium_risk = [r for r in self.audit_results if r['risk_level'] == '中风险']
+        undetermined = [r for r in self.audit_results if r['risk_level'] == '无法判定']
+        
+        sample_size = self.config.get('anomaly_sample_size', 20)
+        
+        self.anomaly_samples = {
+            'high_risk_samples': high_risk[:sample_size],
+            'medium_risk_samples': medium_risk[:sample_size],
+            'undetermined_samples': undetermined[:sample_size]
+        }
+        
+        logger.info(f"提取异常样本 - 高风险:{len(high_risk)}, 中风险:{len(medium_risk)}, 无法判定:{len(undetermined)}")
+    
+    def _generate_trend_summary(self):
+        time_col = self.config['time_column']
+        
+        if time_col not in self.business_records.columns:
+            self.trend_summary = {'error': '缺少时间列，无法生成趋势'}
+            return
+        
+        records_with_date = self.business_records.copy()
+        records_with_date['日期'] = records_with_date[time_col].dt.date
+        
+        daily_counts = defaultdict(lambda: {'total': 0, '高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0})
+        
+        for result in self.audit_results:
+            record_time = result['record_data'].get(time_col, '')
+            if isinstance(record_time, pd.Timestamp):
+                date_key = record_time.date().strftime('%Y-%m-%d')
+            elif isinstance(record_time, str) and record_time:
+                try:
+                    date_key = datetime.strptime(record_time, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d')
+                except:
+                    date_key = record_time[:10]
+            else:
+                continue
+            
+            daily_counts[date_key]['total'] += 1
+            daily_counts[date_key][result['risk_level']] += 1
+        
+        sorted_dates = sorted(daily_counts.keys())
+        trend_data = [{'日期': date, **daily_counts[date]} for date in sorted_dates]
+        
+        week_over_week = {}
+        if len(sorted_dates) >= 14:
+            current_week = sorted_dates[-7:]
+            previous_week = sorted_dates[-14:-7]
+            
+            current_total = sum(daily_counts[d]['total'] for d in current_week)
+            previous_total = sum(daily_counts[d]['total'] for d in previous_week)
+            
+            if previous_total > 0:
+                change_rate = (current_total - previous_total) / previous_total * 100
+                week_over_week = {
+                    'current_week_total': current_total,
+                    'previous_week_total': previous_total,
+                    'change_rate': f"{change_rate:+.2f}%",
+                    'trend': '上升' if change_rate > 0 else ('下降' if change_rate < 0 else '持平')
+                }
+        
+        self.trend_summary = {
+            'daily_distribution': trend_data,
+            'week_over_week': week_over_week,
+            'peak_day': max(daily_counts.items(), key=lambda x: x[1]['高风险']) if daily_counts else None,
+            'analysis': self._generate_trend_analysis(trend_data, week_over_week)
+        }
+        
+        logger.info("趋势摘要生成完成")
+    
+    def _generate_trend_analysis(self, trend_data, wow):
+        if not trend_data:
+            return "数据不足，无法分析"
+        
+        recent = trend_data[-7:] if len(trend_data) >= 7 else trend_data
+        high_risk_trend = [d['高风险'] for d in recent]
+        
+        analysis_parts = []
+        
+        if len(high_risk_trend) >= 2:
+            if high_risk_trend[-1] > high_risk_trend[0]:
+                analysis_parts.append(f"近7天高风险呈上升趋势，从{high_risk_trend[0]}增至{high_risk_trend[-1]}")
+            elif high_risk_trend[-1] < high_risk_trend[0]:
+                analysis_parts.append(f"近7天高风险呈下降趋势，从{high_risk_trend[0]}降至{high_risk_trend[-1]}")
+            else:
+
+codex
+脚本有明确 CLI 入口，但顶层日志配置会打开 `audit_log.log`，完整运行还会写历史和输出文件；我会改用静态编译、依赖探测和已有日志/产物来判断运行链路。
+exec
+/bin/zsh -lc 'tail -n 80 audit_log.log' in /Users/bill/Documents/solo/workspaces/yzz00182
+exec
+/bin/zsh -lc 'head -n 5 business_records.csv' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+车次号,车组号,保洁日期,作业类型,记录时间,保洁班组,保洁人员,作业时长,客室评分,卫生间评分,座椅状态,垃圾箱容量,洗手液存量,签到状态,资质状态,消毒状态,记录完整性
+G101,CRH380A-001,2026-05-27,日常保洁,2026-05-27 08:30:00,保洁一组,张三,45,95,90,干净,45,80,已签到,有效,已执行,完整
+G102,CRH380A-002,2026-05-27,深度保洁,2026-05-27 10:00:00,保洁一组,李四,130,75,88,有污渍,85,30,已签到,有效,已执行,完整
+G103,CRH380B-001,2026-05-27,日常保洁,2026-05-27 14:20:00,保洁二组,王五,25,92,95,干净,30,50,已签到,有效,已执行,完整
+G104,CRH380A-001,2026-05-28,深度保洁,2026-05-28 09:15:00,保洁二组,赵六,60,88,82,干净,60,15,已签到,有效,已执行,完整
+
+ succeeded in 0ms:
+2026-06-02 07:18:10,553 - INFO - 已加载配置文件: config.json
+2026-06-02 07:18:10,553 - INFO - 开始加载数据...
+2026-06-02 07:18:10,558 - INFO - 加载业务记录: 24 条
+2026-06-02 07:18:10,559 - INFO - 加载问题字典: 12 条
+2026-06-02 07:18:10,566 - INFO - 时间窗口: 2026-05-26 至 2026-06-02
+2026-06-02 07:18:10,567 - INFO - 开始执行审计...
+2026-06-02 07:18:10,571 - INFO - 准入判断 - 剔除时间窗口外记录: 2 条
+2026-06-02 07:18:10,571 - INFO - 准入解释: 时间窗口 2026-05-26 ~ 2026-06-02, 分组维度 车次号, 车组号, 保洁班组
+2026-06-02 07:18:10,571 - INFO - 准入筛选后记录: 22 条
+2026-06-02 07:18:10,573 - INFO - 去重 - 发现重复记录: 1 条
+2026-06-02 07:18:10,573 - INFO - 去重键: 车次号, 车组号, 保洁日期, 作业类型
+2026-06-02 07:18:10,574 - INFO - 去重后记录: 21 条
+2026-06-02 07:18:10,579 - INFO - 统计完成 - 总记录:21, 高风险:8, 中风险:0, 低风险:13, 无法判定:0
+2026-06-02 07:18:10,579 - INFO - 提取异常样本 - 高风险:8, 中风险:0, 无法判定:0
+2026-06-02 07:18:10,580 - INFO - 趋势摘要生成完成
+2026-06-02 07:18:10,580 - INFO - 历史轨迹已保存: 1 条
+2026-06-02 07:18:10,581 - INFO - 审计完成
+2026-06-02 07:18:10,581 - INFO - 开始导出结果...
+2026-06-02 07:18:10,793 - INFO - 已导出统计结果: output/统计结果_20260602_071810.xlsx
+2026-06-02 07:18:10,806 - INFO - 已导出异常样本: output/异常样本_20260602_071810.xlsx
+2026-06-02 07:18:10,806 - INFO - 已导出趋势摘要: output/趋势摘要_20260602_071810.json
+2026-06-02 07:18:10,810 - INFO - 已导出CSV明细: output/审计明细_20260602_071810.csv
+2026-06-02 07:18:10,810 - INFO - 已导出历史轨迹: output/历史轨迹_20260602_071810.json
+2026-06-02 07:18:10,810 - INFO - 历史轨迹已保存: 1 条
+2026-06-02 07:36:01,136 - INFO - 已加载配置文件: config.json
+2026-06-02 07:36:01,137 - INFO - 开始加载数据...
+2026-06-02 07:36:01,150 - INFO - 加载业务记录: 24 条
+2026-06-02 07:36:01,153 - INFO - 加载问题字典: 12 条
+2026-06-02 07:36:01,170 - INFO - 时间窗口: 2026-05-26 至 2026-06-02
+2026-06-02 07:36:01,170 - INFO - 开始执行审计...
+2026-06-02 07:36:01,185 - INFO - 准入判断 - 剔除时间窗口外记录: 2 条
+2026-06-02 07:36:01,186 - INFO - 准入解释: 时间窗口 2026-05-26 ~ 2026-06-02, 分组维度 车次号, 车组号, 保洁班组
+2026-06-02 07:36:01,186 - INFO - 准入筛选后记录: 22 条
+2026-06-02 07:36:01,190 - INFO - 去重 - 发现重复记录: 1 条
+2026-06-02 07:36:01,190 - INFO - 去重键: 车次号, 车组号, 保洁日期, 作业类型
+2026-06-02 07:36:01,191 - INFO - 去重后记录: 21 条
+2026-06-02 07:36:01,331 - INFO - 统计完成 - 总记录:21, 高风险:8, 中风险:2, 低风险:11, 无法判定:0
+2026-06-02 07:36:01,331 - INFO - 提取异常样本 - 高风险:8, 中风险:2, 无法判定:0
+2026-06-02 07:36:01,333 - INFO - 趋势摘要生成完成
+2026-06-02 07:36:01,334 - INFO - 历史轨迹已保存: 1 条
+2026-06-02 07:36:01,334 - INFO - 审计完成
+2026-06-02 07:36:01,334 - INFO - 开始导出结果...
+2026-06-02 07:36:02,275 - INFO - 已导出统计结果: output/统计结果_20260602_073601.xlsx
+2026-06-02 07:36:02,357 - INFO - 已导出异常样本: output/异常样本_20260602_073601.xlsx
+2026-06-02 07:36:02,358 - INFO - 已导出趋势摘要: output/趋势摘要_20260602_073601.json
+2026-06-02 07:36:02,384 - INFO - 已导出CSV明细: output/审计明细_20260602_073601.csv
+2026-06-02 07:36:02,390 - INFO - 已导出历史轨迹: output/历史轨迹_20260602_073601.json
+2026-06-02 07:36:02,397 - INFO - 历史轨迹已保存: 1 条
+2026-06-02 07:40:29,421 - INFO - 已加载配置文件: config.json
+2026-06-02 07:40:29,422 - INFO - 开始加载数据...
+2026-06-02 07:40:29,430 - INFO - 加载业务记录: 24 条
+2026-06-02 07:40:29,433 - INFO - 加载问题字典: 12 条
+2026-06-02 07:40:29,441 - INFO - 时间窗口: 2026-05-26 至 2026-06-02
+2026-06-02 07:40:29,442 - INFO - 加载历史审计轨迹: 1 条
+2026-06-02 07:40:29,442 - INFO - 开始执行审计...
+2026-06-02 07:40:29,453 - INFO - 准入判断 - 剔除时间窗口外记录: 2 条
+2026-06-02 07:40:29,453 - INFO - 准入解释: 时间窗口 2026-05-26 ~ 2026-06-02, 分组维度 车次号, 车组号, 保洁班组
+2026-06-02 07:40:29,453 - INFO - 准入筛选后记录: 22 条
+2026-06-02 07:40:29,456 - INFO - 去重 - 发现重复记录: 1 条
+2026-06-02 07:40:29,456 - INFO - 去重键: 车次号, 车组号, 保洁日期, 作业类型
+2026-06-02 07:40:29,457 - INFO - 去重后记录: 21 条
+2026-06-02 07:40:29,465 - INFO - 统计完成 - 总记录:21, 高风险:8, 中风险:2, 低风险:11, 无法判定:0
+2026-06-02 07:40:29,465 - INFO - 提取异常样本 - 高风险:8, 中风险:2, 无法判定:0
+2026-06-02 07:40:29,467 - INFO - 趋势摘要生成完成
+2026-06-02 07:40:29,468 - INFO - 历史轨迹已保存: 2 条
+2026-06-02 07:40:29,468 - INFO - 审计完成
+2026-06-02 07:40:29,468 - INFO - 开始导出结果...
+2026-06-02 07:40:29,814 - INFO - 已导出统计结果: output/统计结果_20260602_074029.xlsx
+2026-06-02 07:40:29,853 - INFO - 已导出异常样本: output/异常样本_20260602_074029.xlsx
+2026-06-02 07:40:29,854 - INFO - 已导出趋势摘要: output/趋势摘要_20260602_074029.json
+2026-06-02 07:40:29,868 - INFO - 已导出CSV明细: output/审计明细_20260602_074029.csv
+2026-06-02 07:40:29,869 - INFO - 已导出历史轨迹: output/历史轨迹_20260602_074029.json
+2026-06-02 07:40:29,871 - INFO - 历史轨迹已保存: 2 条
+
+exec
+/bin/zsh -lc 'head -n 5 problem_dict.csv' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+问题类型,问题描述,风险等级,判定规则,阈值
+作业时间异常,保洁作业时间超过标准时长,高风险,作业时长>120,120
+作业时间异常,保洁作业时间短于最低标准,中风险,作业时长<30,30
+质量问题,客室清洁度评分低于合格线,高风险,客室评分<80,80
+质量问题,卫生间清洁度评分低于合格线,中风险,卫生间评分<85,85
+
+codex
+只读沙箱不允许 shell here-doc 创建临时文件，刚才两个 Python 探测命令因此失败；这不是项目问题。我会改成单行命令继续做语法和依赖核对。
+exec
+/bin/zsh -lc 'wc -l business_records.csv problem_dict.csv cleaning_route_audit.py audit_history.json' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+      25 business_records.csv
+      13 problem_dict.csv
+     760 cleaning_route_audit.py
+      39 audit_history.json
+     837 total
+
+exec
+/bin/zsh -lc 'find output -maxdepth 1 -type f -print | sort' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+output/历史轨迹_20260602_073601.json
+output/历史轨迹_20260602_074029.json
+output/审计明细_20260602_073601.csv
+output/审计明细_20260602_074029.csv
+output/异常样本_20260602_073601.xlsx
+output/异常样本_20260602_074029.xlsx
+output/统计结果_20260602_073601.xlsx
+output/统计结果_20260602_074029.xlsx
+output/趋势摘要_20260602_073601.json
+output/趋势摘要_20260602_074029.json
+
+exec
+/bin/zsh -lc "python3 -c \"import importlib.util; print('\\n'.join(f'{m}: ' + ('installed' if importlib.util.find_spec(m) else 'missing') for m in ['pandas','numpy','openpyxl']))\"" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-m9wG1jjD' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-G3y6Mkwn' (errno=Operation not permitted)
+pandas: installed
+numpy: installed
+openpyxl: installed
+
+exec
+/bin/zsh -lc "python3 -c \"from pathlib import Path; src=Path('cleaning_route_audit.py').read_text(encoding='utf-8'); compile(src, 'cleaning_route_audit.py', 'exec'); print('syntax_ok')\"" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-qMfQBFRA' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-t3QW44VS' (errno=Operation not permitted)
+syntax_ok
+
+exec
+/bin/zsh -lc "nl -ba cleaning_route_audit.py | sed -n '1,120p'" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+     1	#!/usr/bin/env python3
+     2	# -*- coding: utf-8 -*-
+     3	"""
+     4	高铁动车组保洁交路关键记录审计脚本
+     5	
+     6	功能：
+     7	1. 准入判断 - 根据时间窗口、分组维度对业务记录进行筛选
+     8	2. 差异提示 - 对比业务记录与问题字典，标记异常
+     9	3. 结果归档 - 按风险等级分类，生成统计报告和导出文件
+    10	
+    11	风险等级：低风险、中风险、高风险、无法判定
+    12	"""
+    13	
+    14	import os
+    15	import sys
+    16	import json
+    17	import hashlib
+    18	import logging
+    19	import argparse
+    20	from datetime import datetime, timedelta
+    21	from collections import defaultdict, Counter
+    22	from pathlib import Path
+    23	
+    24	import pandas as pd
+    25	import numpy as np
+    26	
+    27	logging.basicConfig(
+    28	    level=logging.INFO,
+    29	    format='%(asctime)s - %(levelname)s - %(message)s',
+    30	    handlers=[
+    31	        logging.StreamHandler(sys.stdout),
+    32	        logging.FileHandler('audit_log.log', encoding='utf-8')
+    33	    ]
+    34	)
+    35	logger = logging.getLogger(__name__)
+    36	
+    37	RISK_LEVELS = ['低风险', '中风险', '高风险', '无法判定']
+    38	
+    39	
+    40	class CleaningRouteAuditor:
+    41	    def __init__(self, config_path=None):
+    42	        self.config = self._load_default_config()
+    43	        if config_path and os.path.exists(config_path):
+    44	            self._load_config(config_path)
+    45	        
+    46	        self.business_records = None
+    47	        self.problem_dict = None
+    48	        self.report_template = None
+    49	        self.dedup_keys = []
+    50	        
+    51	        self.time_window_start = None
+    52	        self.time_window_end = None
+    53	        
+    54	        self.audit_results = []
+    55	        self.statistics = {}
+    56	        self.anomaly_samples = []
+    57	        self.trend_summary = {}
+    58	        self.history_trace = []
+    59	    
+    60	    def _load_default_config(self):
+    61	        return {
+    62	            'time_column': '记录时间',
+    63	            'group_columns': ['车次号', '车组号', '保洁班组'],
+    64	            'risk_thresholds': {
+    65	                '低风险': 0.3,
+    66	                '中风险': 0.6,
+    67	                '高风险': 0.9
+    68	            },
+    69	            'time_window_days': 7,
+    70	            'dedup_keys': ['车次号', '车组号', '保洁日期', '作业类型'],
+    71	            'export_formats': ['xlsx', 'csv', 'json'],
+    72	            'history_file': 'audit_history.json',
+    73	            'anomaly_sample_size': 20
+    74	        }
+    75	    
+    76	    def _load_config(self, config_path):
+    77	        try:
+    78	            with open(config_path, 'r', encoding='utf-8') as f:
+    79	                user_config = json.load(f)
+    80	                self.config.update(user_config)
+    81	            logger.info(f"已加载配置文件: {config_path}")
+    82	        except Exception as e:
+    83	            logger.warning(f"加载配置文件失败，使用默认配置: {e}")
+    84	    
+    85	    def load_data(self, records_path, problem_dict_path, template_path=None):
+    86	        logger.info("开始加载数据...")
+    87	        
+    88	        self.business_records = self._read_file(records_path)
+    89	        logger.info(f"加载业务记录: {len(self.business_records)} 条")
+    90	        
+    91	        self.problem_dict = self._read_file(problem_dict_path)
+    92	        logger.info(f"加载问题字典: {len(self.problem_dict)} 条")
+    93	        
+    94	        if template_path and os.path.exists(template_path):
+    95	            self.report_template = self._read_file(template_path)
+    96	            logger.info(f"加载报表模板: {len(self.report_template)} 条")
+    97	        
+    98	        self.dedup_keys = self.config.get('dedup_keys', [])
+    99	        self._validate_columns()
+   100	        self._set_time_window()
+   101	        self._load_history()
+   102	    
+   103	    def _read_file(self, file_path):
+   104	        if not os.path.exists(file_path):
+   105	            raise FileNotFoundError(f"文件不存在: {file_path}")
+   106	        
+   107	        ext = os.path.splitext(file_path)[1].lower()
+   108	        
+   109	        if ext in ['.xlsx', '.xls']:
+   110	            return pd.read_excel(file_path)
+   111	        elif ext == '.csv':
+   112	            return pd.read_csv(file_path, encoding='utf-8')
+   113	        elif ext == '.json':
+   114	            return pd.read_json(file_path)
+   115	        else:
+   116	            raise ValueError(f"不支持的文件格式: {ext}")
+   117	    
+   118	    def _validate_columns(self):
+   119	        required_cols = [self.config['time_column']] + self.dedup_keys
+   120	        
+
+exec
+/bin/zsh -lc "nl -ba cleaning_route_audit.py | sed -n '280,460p'" in /Users/bill/Documents/solo/workspaces/yzz00182
+exec
+/bin/zsh -lc "nl -ba cleaning_route_audit.py | sed -n '120,280p'" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+   280	            'status': status,
+   281	            'reason': reason,
+   282	            'judge_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   283	            'time_window': f"{self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}",
+   284	            'threshold_explanation': self._explain_threshold(final_risk, max(risk_scores) if risk_scores else 0.0)
+   285	        }
+   286	    
+   287	    def _apply_rule(self, record, rule):
+   288	        judge_rule = rule['judge_rule']
+   289	        is_match = False
+   290	        detail = ""
+   291	        
+   292	        try:
+   293	            if '>' in judge_rule:
+   294	                col, val = judge_rule.split('>', 1)
+   295	                col = col.strip()
+   296	                val = float(val.strip())
+   297	                if col in record and pd.notna(record[col]):
+   298	                    record_val = float(record[col])
+   299	                    is_match = record_val > val
+   300	                    detail = f"{col}={record_val} > 阈值{val}"
+   301	            elif '<' in judge_rule:
+   302	                col, val = judge_rule.split('<', 1)
+   303	                col = col.strip()
+   304	                val = float(val.strip())
+   305	                if col in record and pd.notna(record[col]):
+   306	                    record_val = float(record[col])
+   307	                    is_match = record_val < val
+   308	                    detail = f"{col}={record_val} < 阈值{val}"
+   309	            elif '=' in judge_rule:
+   310	                col, val = judge_rule.split('=', 1)
+   311	                col = col.strip()
+   312	                val = val.strip().strip("'\"")
+   313	                if col in record and pd.notna(record[col]):
+   314	                    record_val = str(record[col]).strip()
+   315	                    is_match = record_val == val
+   316	                    detail = f"{col}='{record_val}' == 期望值'{val}'"
+   317	            elif '包含' in judge_rule:
+   318	                col, val = judge_rule.split('包含', 1)
+   319	                col = col.strip()
+   320	                val = val.strip().strip("'\"")
+   321	                if col in record and pd.notna(record[col]):
+   322	                    record_val = str(record[col])
+   323	                    is_match = val in record_val
+   324	                    detail = f"{col}包含'{val}'"
+   325	            elif '不包含' in judge_rule:
+   326	                col, val = judge_rule.split('不包含', 1)
+   327	                col = col.strip()
+   328	                val = val.strip().strip("'\"")
+   329	                if col in record and pd.notna(record[col]):
+   330	                    record_val = str(record[col])
+   331	                    is_match = val not in record_val
+   332	                    detail = f"{col}不包含'{val}'"
+   333	        except Exception as e:
+   334	            logger.warning(f"规则应用失败 {judge_rule}: {e}")
+   335	            is_match = False
+   336	        
+   337	        return is_match, detail
+   338	    
+   339	    def _risk_to_score(self, risk_level):
+   340	        thresholds = self.config['risk_thresholds']
+   341	        mapping = {
+   342	            '低风险': thresholds['低风险'] + 0.05,
+   343	            '中风险': (thresholds['中风险'] + thresholds['高风险']) / 2,
+   344	            '高风险': thresholds['高风险'] + 0.05,
+   345	            '无法判定': 0.0
+   346	        }
+   347	        return mapping.get(risk_level, 0.0)
+   348	    
+   349	    def _score_to_risk(self, score):
+   350	        thresholds = self.config['risk_thresholds']
+   351	        if score >= thresholds['高风险']:
+   352	            return '高风险'
+   353	        elif score >= thresholds['中风险']:
+   354	            return '中风险'
+   355	        elif score >= thresholds['低风险']:
+   356	            return '低风险'
+   357	        else:
+   358	            return '无法判定'
+   359	    
+   360	    def _explain_threshold(self, risk_level, score):
+   361	        thresholds = self.config['risk_thresholds']
+   362	        explanations = {
+   363	            '高风险': f"风险得分 {score:.2f} >= {thresholds['高风险']}，判定为高风险",
+   364	            '中风险': f"{thresholds['中风险']} <= 风险得分 {score:.2f} < {thresholds['高风险']}，判定为中风险",
+   365	            '低风险': f"{thresholds['低风险']} <= 风险得分 {score:.2f} < {thresholds['中风险']}，判定为低风险",
+   366	            '无法判定': f"风险得分 {score:.2f} < {thresholds['低风险']}，无法判定"
+   367	        }
+   368	        return explanations.get(risk_level, f"风险得分 {score:.2f}")
+   369	    
+   370	    def _ensure_consistency(self):
+   371	        valid_risk_count = sum(1 for r in self.audit_results if r['risk_level'] in RISK_LEVELS)
+   372	        if valid_risk_count != len(self.audit_results):
+   373	            invalid_count = len(self.audit_results) - valid_risk_count
+   374	            logger.warning(f"发现 {invalid_count} 条无效风险等级，已修正为'无法判定'")
+   375	            
+   376	            for result in self.audit_results:
+   377	                if result['risk_level'] not in RISK_LEVELS:
+   378	                    result['risk_level'] = '无法判定'
+   379	                    result['status'] = '待复核'
+   380	                    result['reason'] = result['reason'] + ' [风险等级修正：原状态无效]'
+   381	        
+   382	        for result in self.audit_results:
+   383	            if result['risk_level'] == '高风险' and result['status'] != '不通过':
+   384	                result['status'] = '不通过'
+   385	                result['reason'] = result['reason'] + ' [状态修正：高风险自动标记为不通过]'
+   386	    
+   387	    def _generate_statistics(self):
+   388	        total = len(self.audit_results)
+   389	        
+   390	        risk_counts = Counter(r['risk_level'] for r in self.audit_results)
+   391	        status_counts = Counter(r['status'] for r in self.audit_results)
+   392	        
+   393	        risk_percentages = {
+   394	            level: f"{risk_counts.get(level, 0) / total * 100:.2f}%" if total > 0 else "0.00%"
+   395	            for level in RISK_LEVELS
+   396	        }
+   397	        
+   398	        group_stats = {}
+   399	        for group_col in self.config.get('group_columns', []):
+   400	            group_data = defaultdict(lambda: {'total': 0, '高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0})
+   401	            for result in self.audit_results:
+   402	                group_val = result['record_data'].get(group_col, '未知')
+   403	                group_data[group_val]['total'] += 1
+   404	                group_data[group_val][result['risk_level']] += 1
+   405	            
+   406	            group_stats[group_col] = dict(group_data)
+   407	        
+   408	        problem_matches = Counter()
+   409	        for result in self.audit_results:
+   410	            for problem in result['matched_problems']:
+   411	                problem_matches[problem] += 1
+   412	        
+   413	        self.statistics = {
+   414	            'summary': {
+   415	                'total_records': total,
+   416	                'time_window': f"{self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}",
+   417	                'audit_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+   418	            },
+   419	            'risk_distribution': {
+   420	                'counts': dict(risk_counts),
+   421	                'percentages': risk_percentages
+   422	            },
+   423	            'status_distribution': dict(status_counts),
+   424	            'group_statistics': group_stats,
+   425	            'problem_matches': dict(problem_matches.most_common(10)),
+   426	            'thresholds': self.config['risk_thresholds']
+   427	        }
+   428	        
+   429	        logger.info(f"统计完成 - 总记录:{total}, "
+   430	                   f"高风险:{risk_counts.get('高风险', 0)}, "
+   431	                   f"中风险:{risk_counts.get('中风险', 0)}, "
+   432	                   f"低风险:{risk_counts.get('低风险', 0)}, "
+   433	                   f"无法判定:{risk_counts.get('无法判定', 0)}")
+   434	    
+   435	    def _extract_anomaly_samples(self):
+   436	        high_risk = [r for r in self.audit_results if r['risk_level'] == '高风险']
+   437	        medium_risk = [r for r in self.audit_results if r['risk_level'] == '中风险']
+   438	        undetermined = [r for r in self.audit_results if r['risk_level'] == '无法判定']
+   439	        
+   440	        sample_size = self.config.get('anomaly_sample_size', 20)
+   441	        
+   442	        self.anomaly_samples = {
+   443	            'high_risk_samples': high_risk[:sample_size],
+   444	            'medium_risk_samples': medium_risk[:sample_size],
+   445	            'undetermined_samples': undetermined[:sample_size]
+   446	        }
+   447	        
+   448	        logger.info(f"提取异常样本 - 高风险:{len(high_risk)}, 中风险:{len(medium_risk)}, 无法判定:{len(undetermined)}")
+   449	    
+   450	    def _generate_trend_summary(self):
+   451	        time_col = self.config['time_column']
+   452	        
+   453	        if time_col not in self.business_records.columns:
+   454	            self.trend_summary = {'error': '缺少时间列，无法生成趋势'}
+   455	            return
+   456	        
+   457	        records_with_date = self.business_records.copy()
+   458	        records_with_date['日期'] = records_with_date[time_col].dt.date
+   459	        
+   460	        daily_counts = defaultdict(lambda: {'total': 0, '高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0})
+
+ succeeded in 0ms:
+   120	        
+   121	        for col in required_cols:
+   122	            if col not in self.business_records.columns:
+   123	                raise ValueError(f"业务记录缺少必要列: {col}")
+   124	        
+   125	        problem_required = ['问题类型', '问题描述', '风险等级', '判定规则']
+   126	        for col in problem_required:
+   127	            if col not in self.problem_dict.columns:
+   128	                raise ValueError(f"问题字典缺少必要列: {col}")
+   129	        
+   130	        self.business_records[self.config['time_column']] = pd.to_datetime(
+   131	            self.business_records[self.config['time_column']]
+   132	        )
+   133	    
+   134	    def _set_time_window(self):
+   135	        time_col = self.config['time_column']
+   136	        days = self.config.get('time_window_days', 7)
+   137	        
+   138	        max_time = self.business_records[time_col].max()
+   139	        self.time_window_end = max_time
+   140	        self.time_window_start = max_time - timedelta(days=days)
+   141	        
+   142	        logger.info(f"时间窗口: {self.time_window_start.strftime('%Y-%m-%d')} 至 {self.time_window_end.strftime('%Y-%m-%d')}")
+   143	    
+   144	    def _load_history(self):
+   145	        history_file = self.config.get('history_file', 'audit_history.json')
+   146	        if os.path.exists(history_file):
+   147	            try:
+   148	                with open(history_file, 'r', encoding='utf-8') as f:
+   149	                    self.history_trace = json.load(f)
+   150	                logger.info(f"加载历史审计轨迹: {len(self.history_trace)} 条")
+   151	            except Exception as e:
+   152	                logger.warning(f"加载历史轨迹失败: {e}")
+   153	                self.history_trace = []
+   154	    
+   155	    def _save_history(self):
+   156	        history_file = self.config.get('history_file', 'audit_history.json')
+   157	        try:
+   158	            with open(history_file, 'w', encoding='utf-8') as f:
+   159	                json.dump(self.history_trace, f, ensure_ascii=False, indent=2)
+   160	            logger.info(f"历史轨迹已保存: {len(self.history_trace)} 条")
+   161	        except Exception as e:
+   162	            logger.error(f"保存历史轨迹失败: {e}")
+   163	    
+   164	    def _generate_record_id(self, record):
+   165	        key_parts = [str(record.get(k, '')) for k in self.dedup_keys]
+   166	        key_str = '|'.join(key_parts)
+   167	        return hashlib.md5(key_str.encode('utf-8')).hexdigest()
+   168	    
+   169	    def run_audit(self):
+   170	        logger.info("开始执行审计...")
+   171	        
+   172	        filtered_records = self._admission_filter()
+   173	        logger.info(f"准入筛选后记录: {len(filtered_records)} 条")
+   174	        
+   175	        deduplicated_records = self._deduplicate(filtered_records)
+   176	        logger.info(f"去重后记录: {len(deduplicated_records)} 条")
+   177	        
+   178	        self._judge_risk(deduplicated_records)
+   179	        self._generate_statistics()
+   180	        self._extract_anomaly_samples()
+   181	        self._generate_trend_summary()
+   182	        self._update_history_trace()
+   183	        
+   184	        logger.info("审计完成")
+   185	    
+   186	    def _admission_filter(self):
+   187	        time_col = self.config['time_column']
+   188	        
+   189	        mask = (
+   190	            (self.business_records[time_col] >= self.time_window_start) &
+   191	            (self.business_records[time_col] <= self.time_window_end)
+   192	        )
+   193	        
+   194	        filtered = self.business_records[mask].copy()
+   195	        
+   196	        for col in self.config.get('group_columns', []):
+   197	            if col in filtered.columns:
+   198	                filtered = filtered.dropna(subset=[col])
+   199	        
+   200	        logger.info(f"准入判断 - 剔除时间窗口外记录: {len(self.business_records) - len(filtered)} 条")
+   201	        logger.info(f"准入解释: 时间窗口 {self.time_window_start.strftime('%Y-%m-%d')} ~ {self.time_window_end.strftime('%Y-%m-%d')}, "
+   202	                   f"分组维度 {', '.join(self.config.get('group_columns', []))}")
+   203	        
+   204	        return filtered
+   205	    
+   206	    def _deduplicate(self, records):
+   207	        records['_record_id'] = records.apply(self._generate_record_id, axis=1)
+   208	        duplicate_count = records.duplicated(subset=['_record_id']).sum()
+   209	        
+   210	        if duplicate_count > 0:
+   211	            logger.info(f"去重 - 发现重复记录: {duplicate_count} 条")
+   212	            logger.info(f"去重键: {', '.join(self.dedup_keys)}")
+   213	        
+   214	        deduplicated = records.drop_duplicates(subset=['_record_id'], keep='first').copy()
+   215	        return deduplicated
+   216	    
+   217	    def _judge_risk(self, records):
+   218	        problem_rules = self._build_problem_rules()
+   219	        
+   220	        for _, record in records.iterrows():
+   221	            result = self._judge_single_record(record, problem_rules)
+   222	            self.audit_results.append(result)
+   223	        
+   224	        self._ensure_consistency()
+   225	    
+   226	    def _build_problem_rules(self):
+   227	        rules = defaultdict(list)
+   228	        
+   229	        for _, problem in self.problem_dict.iterrows():
+   230	            problem_type = str(problem['问题类型']).strip()
+   231	            rules[problem_type].append({
+   232	                'problem_type': problem_type,
+   233	                'description': str(problem['问题描述']),
+   234	                'risk_level': str(problem['风险等级']),
+   235	                'judge_rule': str(problem['判定规则']),
+   236	                'threshold': problem.get('阈值', 0.5)
+   237	            })
+   238	        
+   239	        return rules
+   240	    
+   241	    def _judge_single_record(self, record, problem_rules):
+   242	        matched_problems = []
+   243	        risk_scores = []
+   244	        reasons = []
+   245	        
+   246	        for problem_type, rules in problem_rules.items():
+   247	            for rule in rules:
+   248	                is_match, match_detail = self._apply_rule(record, rule)
+   249	                if is_match:
+   250	                    matched_problems.append(rule)
+   251	                    risk_scores.append(self._risk_to_score(rule['risk_level']))
+   252	                    reasons.append(f"{rule['problem_type']}: {rule['description']} - {match_detail}")
+   253	        
+   254	        if not matched_problems:
+   255	            final_risk = '低风险'
+   256	            reason = '未匹配到问题规则，记录正常'
+   257	            status = '通过'
+   258	        else:
+   259	            max_score = max(risk_scores)
+   260	            final_risk = self._score_to_risk(max_score)
+   261	            
+   262	            if final_risk == '高风险':
+   263	                status = '不通过'
+   264	            elif final_risk == '中风险':
+   265	                status = '待复核'
+   266	            else:
+   267	                status = '通过'
+   268	            
+   269	            reason = '; '.join(reasons)
+   270	        
+   271	        record_dict = record.to_dict()
+   272	        record_dict = {k: (v if pd.notna(v) else '') for k, v in record_dict.items()}
+   273	        
+   274	        return {
+   275	            'record_id': record.get('_record_id', ''),
+   276	            'record_data': record_dict,
+   277	            'matched_problems': [p['description'] for p in matched_problems],
+   278	            'risk_level': final_risk,
+   279	            'risk_score': max(risk_scores) if risk_scores else 0.0,
+   280	            'status': status,
+
+exec
+/bin/zsh -lc 'cat problem_dict.csv' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+问题类型,问题描述,风险等级,判定规则,阈值
+作业时间异常,保洁作业时间超过标准时长,高风险,作业时长>120,120
+作业时间异常,保洁作业时间短于最低标准,中风险,作业时长<30,30
+质量问题,客室清洁度评分低于合格线,高风险,客室评分<80,80
+质量问题,卫生间清洁度评分低于合格线,中风险,卫生间评分<85,85
+质量问题,座椅清洁存在污渍,中风险,座椅状态='有污渍',
+设备异常,垃圾箱容量超过阈值,高风险,垃圾箱容量>90,90
+设备异常,洗手液存量不足,低风险,洗手液存量<20,20
+人员问题,保洁人员未按规定签到,高风险,签到状态='未签到',
+人员问题,保洁人员资质过期,高风险,资质状态='过期',
+流程问题,未按规定进行终末消毒,高风险,消毒状态='未执行',
+流程问题,作业记录缺失关键信息,中风险,记录完整性='不完整',
+时间异常,记录时间不在运营时段内,中风险,记录时间不包含'06:00',
+
+exec
+/bin/zsh -lc "nl -ba cleaning_route_audit.py | sed -n '640,760p'" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+   640	        
+   641	        csv_file = os.path.join(output_dir, f'审计明细_{timestamp}.csv')
+   642	        results_df.to_csv(csv_file, index=False, encoding='utf-8-sig')
+   643	        export_files.append(csv_file)
+   644	        logger.info(f"已导出CSV明细: {csv_file}")
+   645	        
+   646	        if self.history_trace:
+   647	            history_file = os.path.join(output_dir, f'历史轨迹_{timestamp}.json')
+   648	            with open(history_file, 'w', encoding='utf-8') as f:
+   649	                json.dump(self.history_trace, f, ensure_ascii=False, indent=2)
+   650	            export_files.append(history_file)
+   651	            logger.info(f"已导出历史轨迹: {history_file}")
+   652	        
+   653	        if self.history_trace:
+   654	            self.history_trace[-1]['export_files'] = export_files
+   655	            self._save_history()
+   656	        
+   657	        return export_files
+   658	    
+   659	    def print_report(self):
+   660	        print("\n" + "="*80)
+   661	        print("高铁动车组保洁交路关键记录审计报告")
+   662	        print("="*80)
+   663	        
+   664	        print(f"\n【审计概览】")
+   665	        print(f"  总记录数: {self.statistics['summary']['total_records']}")
+   666	        print(f"  时间窗口: {self.statistics['summary']['time_window']}")
+   667	        print(f"  审计时间: {self.statistics['summary']['audit_time']}")
+   668	        
+   669	        print(f"\n【风险分布】")
+   670	        for level in RISK_LEVELS:
+   671	            count = self.statistics['risk_distribution']['counts'].get(level, 0)
+   672	            pct = self.statistics['risk_distribution']['percentages'].get(level, '0.00%')
+   673	            bar = '█' * int(count / max(1, self.statistics['summary']['total_records']) * 50)
+   674	            print(f"  {level}: {count:5d} ({pct:7s}) {bar}")
+   675	        
+   676	        print(f"\n【阈值配置】")
+   677	        for level, threshold in self.statistics['thresholds'].items():
+   678	            print(f"  {level}: 风险得分 >= {threshold}")
+   679	        
+   680	        print(f"\n【状态分布】")
+   681	        for status, count in self.statistics['status_distribution'].items():
+   682	            print(f"  {status}: {count}")
+   683	        
+   684	        if self.statistics['group_statistics']:
+   685	            print(f"\n【分组统计】")
+   686	            for group_col, group_data in self.statistics['group_statistics'].items():
+   687	                print(f"\n  按 {group_col}:")
+   688	                for name, data in list(group_data.items())[:5]:
+   689	                    print(f"    {name}: 总{data['total']}, 高{data['高风险']}, 中{data['中风险']}, 低{data['低风险']}")
+   690	                if len(group_data) > 5:
+   691	                    print(f"    ... 还有 {len(group_data) - 5} 个分组")
+   692	        
+   693	        if self.statistics['problem_matches']:
+   694	            print(f"\n【高频问题】")
+   695	            for problem, count in list(self.statistics['problem_matches'].items())[:5]:
+   696	                print(f"  {problem}: {count} 次")
+   697	        
+   698	        if self.trend_summary.get('analysis'):
+   699	            print(f"\n【趋势分析】")
+   700	            print(f"  {self.trend_summary['analysis']}")
+   701	        
+   702	        print(f"\n【异常样本统计】")
+   703	        print(f"  高风险样本: {len(self.anomaly_samples.get('high_risk_samples', []))} 条")
+   704	        print(f"  中风险样本: {len(self.anomaly_samples.get('medium_risk_samples', []))} 条")
+   705	        print(f"  无法判定: {len(self.anomaly_samples.get('undetermined_samples', []))} 条")
+   706	        
+   707	        if self.anomaly_samples.get('high_risk_samples'):
+   708	            print(f"\n【高风险示例】")
+   709	            sample = self.anomaly_samples['high_risk_samples'][0]
+   710	            print(f"  记录ID: {sample['record_id']}")
+   711	            print(f"  风险等级: {sample['risk_level']}")
+   712	            print(f"  状态: {sample['status']}")
+   713	            print(f"  原因: {sample['reason'][:100]}..." if len(sample['reason']) > 100 else f"  原因: {sample['reason']}")
+   714	            print(f"  阈值解释: {sample['threshold_explanation']}")
+   715	        
+   716	        print(f"\n【历史轨迹】")
+   717	        print(f"  累计审计次数: {len(self.history_trace)}")
+   718	        if self.history_trace:
+   719	            recent = self.history_trace[-1]
+   720	            print(f"  本次审计ID: {recent['audit_id']}")
+   721	            print(f"  本次时间: {recent['audit_time']}")
+   722	        
+   723	        print("\n" + "="*80)
+   724	        print("审计完成")
+   725	        print("="*80 + "\n")
+   726	
+   727	
+   728	def main():
+   729	    parser = argparse.ArgumentParser(description='高铁动车组保洁交路关键记录审计系统')
+   730	    parser.add_argument('--records', required=True, help='业务记录文件路径 (.xlsx/.csv/.json)')
+   731	    parser.add_argument('--problems', required=True, help='问题字典文件路径 (.xlsx/.csv/.json)')
+   732	    parser.add_argument('--template', help='报表模板文件路径 (可选)')
+   733	    parser.add_argument('--config', help='配置文件路径 (可选)')
+   734	    parser.add_argument('--output', default='output', help='输出目录 (默认: output)')
+   735	    parser.add_argument('--no-report', action='store_true', help='不打印报告')
+   736	    
+   737	    args = parser.parse_args()
+   738	    
+   739	    try:
+   740	        auditor = CleaningRouteAuditor(args.config)
+   741	        auditor.load_data(args.records, args.problems, args.template)
+   742	        auditor.run_audit()
+   743	        export_files = auditor.export_results(args.output)
+   744	        
+   745	        if not args.no_report:
+   746	            auditor.print_report()
+   747	        
+   748	        print(f"\n导出文件列表:")
+   749	        for f in export_files:
+   750	            print(f"  - {f}")
+   751	        
+   752	        return 0
+   753	        
+   754	    except Exception as e:
+   755	        logger.error(f"审计执行失败: {e}", exc_info=True)
+   756	        return 1
+   757	
+   758	
+   759	if __name__ == '__main__':
+   760	    sys.exit(main())
+
+exec
+/bin/zsh -lc 'head -n 8 output/审计明细_20260602_074029.csv' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+﻿记录ID,风险等级,状态,原因,风险得分,阈值解释,匹配问题,审计时间,时间窗口,车次号,车组号,保洁日期,作业类型,记录时间,保洁班组,保洁人员,作业时长,客室评分,卫生间评分,座椅状态,垃圾箱容量,洗手液存量,签到状态,资质状态,消毒状态,记录完整性
+e7c0c35994d2d987306bfb91b676f90a,低风险,通过,未匹配到问题规则，记录正常,0.00,0.3 <= 风险得分 0.00 < 0.6，判定为低风险,无,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G101,CRH380A-001,2026-05-27,日常保洁,2026-05-27 08:30:00,保洁一组,张三,45,95,90,干净,45,80,已签到,有效,已执行,完整
+576bbc7bd60c98ba6f3da09059e2840e,高风险,不通过,作业时间异常: 保洁作业时间超过标准时长 - 作业时长=130.0 > 阈值120.0; 质量问题: 客室清洁度评分低于合格线 - 客室评分=75.0 < 阈值80.0; 质量问题: 座椅清洁存在污渍 - 座椅状态='有污渍' == 期望值'有污渍',0.95,风险得分 0.95 >= 0.9，判定为高风险,保洁作业时间超过标准时长; 客室清洁度评分低于合格线; 座椅清洁存在污渍,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G102,CRH380A-002,2026-05-27,深度保洁,2026-05-27 10:00:00,保洁一组,李四,130,75,88,有污渍,85,30,已签到,有效,已执行,完整
+f1b30d170be5aeac064f383dc70b2f68,中风险,待复核,作业时间异常: 保洁作业时间短于最低标准 - 作业时长=25.0 < 阈值30.0,0.75,0.6 <= 风险得分 0.75 < 0.9，判定为中风险,保洁作业时间短于最低标准,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G103,CRH380B-001,2026-05-27,日常保洁,2026-05-27 14:20:00,保洁二组,王五,25,92,95,干净,30,50,已签到,有效,已执行,完整
+af7949bfe76b3a8c94d588706257bab1,中风险,待复核,质量问题: 卫生间清洁度评分低于合格线 - 卫生间评分=82.0 < 阈值85.0; 设备异常: 洗手液存量不足 - 洗手液存量=15.0 < 阈值20.0,0.75,0.6 <= 风险得分 0.75 < 0.9，判定为中风险,卫生间清洁度评分低于合格线; 洗手液存量不足,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G104,CRH380A-001,2026-05-28,深度保洁,2026-05-28 09:15:00,保洁二组,赵六,60,88,82,干净,60,15,已签到,有效,已执行,完整
+3a5fa801ca3d398e3c59b42b04867340,高风险,不通过,质量问题: 客室清洁度评分低于合格线 - 客室评分=78.0 < 阈值80.0; 质量问题: 卫生间清洁度评分低于合格线 - 卫生间评分=80.0 < 阈值85.0; 质量问题: 座椅清洁存在污渍 - 座椅状态='有污渍' == 期望值'有污渍'; 设备异常: 垃圾箱容量超过阈值 - 垃圾箱容量=95.0 > 阈值90.0; 人员问题: 保洁人员未按规定签到 - 签到状态='未签到' == 期望值'未签到'; 流程问题: 作业记录缺失关键信息 - 记录完整性='不完整' == 期望值'不完整',0.95,风险得分 0.95 >= 0.9，判定为高风险,客室清洁度评分低于合格线; 卫生间清洁度评分低于合格线; 座椅清洁存在污渍; 垃圾箱容量超过阈值; 保洁人员未按规定签到; 作业记录缺失关键信息,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G105,CRH380B-002,2026-05-28,日常保洁,2026-05-28 11:45:00,保洁一组,张三,90,78,80,有污渍,95,70,未签到,有效,已执行,不完整
+58d04ed642065bc1ce83d214d330d6ba,低风险,通过,未匹配到问题规则，记录正常,0.00,0.3 <= 风险得分 0.00 < 0.6，判定为低风险,无,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G106,CRH380A-003,2026-05-28,日常保洁,2026-05-28 16:30:00,保洁三组,钱七,55,90,92,干净,40,40,已签到,有效,已执行,完整
+8d446a089c217f1357cb8307e358ada4,高风险,不通过,人员问题: 保洁人员资质过期 - 资质状态='过期' == 期望值'过期',0.95,风险得分 0.95 >= 0.9，判定为高风险,保洁人员资质过期,2026-06-02 07:40:29,2026-05-26 ~ 2026-06-02,G107,CRH380B-001,2026-05-29,深度保洁,2026-05-29 07:00:00,保洁二组,孙八,75,85,88,干净,55,60,已签到,过期,已执行,完整
+
+exec
+/bin/zsh -lc 'cat output/趋势摘要_20260602_074029.json' in /Users/bill/Documents/solo/workspaces/yzz00182
+exec
+/bin/zsh -lc 'cat audit_history.json' in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+[
+  {
+    "audit_id": "6003a56b",
+    "audit_time": "2026-06-02 07:36:01",
+    "time_window": "2026-05-26 ~ 2026-06-02",
+    "total_records": 21,
+    "risk_distribution": {
+      "低风险": 11,
+      "高风险": 8,
+      "中风险": 2
+    },
+    "export_files": [
+      "output/统计结果_20260602_073601.xlsx",
+      "output/异常样本_20260602_073601.xlsx",
+      "output/趋势摘要_20260602_073601.json",
+      "output/审计明细_20260602_073601.csv",
+      "output/历史轨迹_20260602_073601.json"
+    ],
+    "operator": "system"
+  },
+  {
+    "audit_id": "0cbea124",
+    "audit_time": "2026-06-02 07:40:29",
+    "time_window": "2026-05-26 ~ 2026-06-02",
+    "total_records": 21,
+    "risk_distribution": {
+      "低风险": 11,
+      "高风险": 8,
+      "中风险": 2
+    },
+    "export_files": [
+      "output/统计结果_20260602_074029.xlsx",
+      "output/异常样本_20260602_074029.xlsx",
+      "output/趋势摘要_20260602_074029.json",
+      "output/审计明细_20260602_074029.csv",
+      "output/历史轨迹_20260602_074029.json"
+    ],
+    "operator": "system"
+  }
+]
+ succeeded in 0ms:
+{
+  "statistics": {
+    "summary": {
+      "total_records": 21,
+      "time_window": "2026-05-26 ~ 2026-06-02",
+      "audit_time": "2026-06-02 07:40:29"
+    },
+    "risk_distribution": {
+      "counts": {
+        "低风险": 11,
+        "高风险": 8,
+        "中风险": 2
+      },
+      "percentages": {
+        "低风险": "52.38%",
+        "中风险": "9.52%",
+        "高风险": "38.10%",
+        "无法判定": "0.00%"
+      }
+    },
+    "status_distribution": {
+      "通过": 11,
+      "不通过": 8,
+      "待复核": 2
+    },
+    "group_statistics": {
+      "车次号": {
+        "G101": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G102": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G103": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 1,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G104": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 1,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G105": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G106": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G107": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G108": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G109": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G110": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G111": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G112": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G113": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G114": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G115": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G116": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G117": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G118": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G119": {
+          "total": 1,
+          "高风险": 1,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "G120": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "G121": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        }
+      },
+      "车组号": {
+        "CRH380A-001": {
+          "total": 4,
+          "高风险": 1,
+          "中风险": 1,
+          "低风险": 2,
+          "无法判定": 0
+        },
+        "CRH380A-002": {
+          "total": 3,
+          "高风险": 2,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "CRH380B-001": {
+          "total": 4,
+          "高风险": 1,
+          "中风险": 1,
+          "低风险": 2,
+          "无法判定": 0
+        },
+        "CRH380B-002": {
+          "total": 3,
+          "高风险": 2,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        },
+        "CRH380A-003": {
+          "total": 2,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 2,
+          "无法判定": 0
+        },
+        "CRH380B-003": {
+          "total": 2,
+          "高风险": 2,
+          "中风险": 0,
+          "低风险": 0,
+          "无法判定": 0
+        },
+        "CRH380A-004": {
+          "total": 2,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 2,
+          "无法判定": 0
+        },
+        "CRH380B-004": {
+          "total": 1,
+          "高风险": 0,
+          "中风险": 0,
+          "低风险": 1,
+          "无法判定": 0
+        }
+      },
+      "保洁班组": {
+        "保洁一组": {
+          "total": 8,
+          "高风险": 4,
+          "中风险": 0,
+          "低风险": 4,
+          "无法判定": 0
+        },
+        "保洁二组": {
+          "total": 7,
+          "高风险": 2,
+          "中风险": 2,
+          "低风险": 3,
+          "无法判定": 0
+        },
+        "保洁三组": {
+          "total": 6,
+          "高风险": 2,
+          "中风险": 0,
+          "低风险": 4,
+          "无法判定": 0
+        }
+      }
+    },
+    "problem_matches": {
+      "客室清洁度评分低于合格线": 5,
+      "座椅清洁存在污渍": 5,
+      "卫生间清洁度评分低于合格线": 5,
+      "垃圾箱容量超过阈值": 3,
+      "作业记录缺失关键信息": 3,
+      "保洁作业时间超过标准时长": 2,
+      "洗手液存量不足": 2,
+      "保洁人员未按规定签到": 2,
+      "未按规定进行终末消毒": 2,
+      "保洁作业时间短于最低标准": 1
+    },
+    "thresholds": {
+      "低风险": 0.3,
+      "中风险": 0.6,
+      "高风险": 0.9
+    }
+  },
+  "trend_summary": {
+    "daily_distribution": [
+      {
+        "日期": "2026-05-27",
+        "total": 3,
+        "高风险": 1,
+        "中风险": 1,
+        "低风险": 1,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-05-28",
+        "total": 3,
+        "高风险": 1,
+        "中风险": 1,
+        "低风险": 1,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-05-29",
+        "total": 3,
+        "高风险": 3,
+        "中风险": 0,
+        "低风险": 0,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-05-30",
+        "total": 3,
+        "高风险": 0,
+        "中风险": 0,
+        "低风险": 3,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-05-31",
+        "total": 3,
+        "高风险": 0,
+        "中风险": 0,
+        "低风险": 3,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-06-01",
+        "total": 3,
+        "高风险": 2,
+        "中风险": 0,
+        "低风险": 1,
+        "无法判定": 0
+      },
+      {
+        "日期": "2026-06-02",
+        "total": 3,
+        "高风险": 1,
+        "中风险": 0,
+        "低风险": 2,
+        "无法判定": 0
+      }
+    ],
+    "week_over_week": {},
+    "peak_day": [
+      "2026-05-29",
+      {
+        "total": 3,
+        "高风险": 3,
+        "中风险": 0,
+        "低风险": 0,
+        "无法判定": 0
+      }
+    ],
+    "analysis": "近7天高风险保持平稳，维持在1左右"
+  },
+  "anomaly_sample_counts": {
+    "高风险样本数": 8,
+    "中风险样本数": 2,
+    "无法判定样本数": 0
+  }
+}
+exec
+/bin/zsh -lc "find . -maxdepth 2 -type f \\( -name 'README*' -o -name 'requirements.txt' -o -name 'pyproject.toml' -o -name 'Pipfile' -o -name 'environment.yml' \\) -print" in /Users/bill/Documents/solo/workspaces/yzz00182
+ succeeded in 0ms:
+codex
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目有可识别的 Python CLI 入口，且已有日志显示曾成功生成审计输出，但核心规则匹配存在结果错误。`problem_dict.csv` 中包含 `记录时间不包含'06:00'` 规则，`cleaning_route_audit.py:317` 先判断 `包含`，导致 `cleaning_route_audit.py:325` 的 `不包含` 分支永远无法处理这类规则，实际会把字段解析成不存在的 `记录时间不`，从而静默漏判“时间异常”。这会直接影响“对比业务记录与问题字典，标记异常”的主要目标，输出结果不可信。
+- 主要证据:
+  - `cleaning_route_audit.py:728` 定义了 CLI 入口，参数包括 `--records`、`--problems`、`--config`、`--output`。
+  - 静态语法检查通过；本机已存在 `pandas`、`numpy`、`openpyxl`。
+  - `audit_log.log` 显示曾处理 24 条业务记录、去重后 21 条，并导出 CSV/XLSX/JSON。
+  - `output/趋势摘要_20260602_074029.json` 的 `problem_matches` 中没有“记录时间不在运营时段内”，与规则漏判一致。
+- 阻断问题:
+  - `不包含` 规则解析顺序错误，导致问题字典中的时间异常规则无法生效。
+- 建议:
+  - 将 `不包含` 判断放在 `包含` 之前，并补充针对 `包含`、`不包含`、`=`、`>`、`<` 的最小测试用例。
+  - 增加 `requirements.txt` 或等价依赖清单，降低换环境运行失败风险。
+tokens used
+73,815

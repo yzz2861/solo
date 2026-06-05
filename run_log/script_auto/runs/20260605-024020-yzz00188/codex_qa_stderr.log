@@ -1,0 +1,1859 @@
+Reading additional input from stdin...
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00188
+model: gpt-5.4-mini
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 019e93f3-0248-7e13-8425-f58aeaf6eaef
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00188
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00188
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+codex
+按“solo质检”口径做一次只读质检：先确认项目入口、依赖和 README/脚本是否闭环，再核对实际运行链路是否和原始目标一致，最后给出明确通过/不通过结论。
+exec
+/bin/zsh -lc "pwd && rg --files -g 'package.json' -g 'pnpm-lock.yaml' -g 'yarn.lock' -g 'package-lock.json' -g 'README*' -g 'vite.config.*' -g 'next.config.*' -g 'nuxt.config.*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'server/**' -g 'index.*' -g 'main.*' -g 'tsconfig.json' -g 'vite.*' -g 'docker-compose*' -g 'Dockerfile*'" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc 'git status --short' in /Users/bill/Documents/solo/workspaces/yzz00188
+ exited 128 in 751ms:
+git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+git: error: couldn't create cache file '/tmp/xcrun_db-lN5Le0G0' (errno=Operation not permitted)
+git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+git: error: couldn't create cache file '/tmp/xcrun_db-ZdQBuXp9' (errno=Operation not permitted)
+fatal: not a git repository (or any of the parent directories): .git
+
+ succeeded in 928ms:
+/Users/bill/Documents/solo/workspaces/yzz00188
+src/pick_mismatch_processor.py
+src/report_generator.py
+main.py
+
+codex
+目录里文件很少，先把 `main.py` 和 `src/` 两个模块读完，确认有没有真实入口、参数解析和输出链路，以及它们是不是能独立跑起来。
+exec
+/bin/zsh -lc "sed -n '1,260p' src/report_generator.py" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import json
+import csv
+import os
+from datetime import datetime
+from typing import Dict, List, Any
+
+
+class ReportGenerator:
+    
+    def __init__(self, config_dir: str = 'config', output_dir: str = 'output'):
+        self.config_dir = config_dir
+        self.output_dir = output_dir
+        self.load_templates()
+        self._ensure_output_dir()
+    
+    def load_templates(self):
+        with open(os.path.join(self.config_dir, 'report_templates.json'), 'r', encoding='utf-8') as f:
+            self.templates = json.load(f)
+    
+    def _ensure_output_dir(self):
+        os.makedirs(self.output_dir, exist_ok=True)
+        for subdir in ['group_reports', 'bad_data', 'json_results', 'review_tables']:
+            os.makedirs(os.path.join(self.output_dir, subdir), exist_ok=True)
+    
+    def generate_all_reports(self, process_result: Dict[str, Any], 
+                              filename_prefix: str = None) -> Dict[str, str]:
+        if not process_result.get('success', False):
+            return {'error': process_result.get('error', '处理失败')}
+        
+        if filename_prefix is None:
+            filename_prefix = f"batch_{process_result['batch_id']}"
+        
+        generated_files = {}
+        
+        group_report_path = self.generate_group_report(
+            process_result, 
+            os.path.join(self.output_dir, 'group_reports', f"{filename_prefix}_group.csv")
+        )
+        generated_files['group_report'] = group_report_path
+        
+        bad_data_path = self.generate_bad_data_report(
+            process_result,
+            os.path.join(self.output_dir, 'bad_data', f"{filename_prefix}_bad_data.csv")
+        )
+        generated_files['bad_data_report'] = bad_data_path
+        
+        json_path = self.generate_json_result(
+            process_result,
+            os.path.join(self.output_dir, 'json_results', f"{filename_prefix}_result.json")
+        )
+        generated_files['json_result'] = json_path
+        
+        review_path = self.generate_review_report(
+            process_result,
+            os.path.join(self.output_dir, 'review_tables', f"{filename_prefix}_review.csv")
+        )
+        generated_files['review_report'] = review_path
+        
+        return generated_files
+    
+    def generate_group_report(self, process_result: Dict[str, Any], 
+                               output_path: str) -> str:
+        template = self.templates['group_report']
+        group_results = process_result.get('group_results', [])
+        
+        headers = [d['name'] for d in template['group_dimensions']] + \
+                  [d['name'] for d in template['metrics']]
+        
+        key_mapping = {}
+        for d in template['group_dimensions'] + template['metrics']:
+            key_mapping[d['name']] = d['key']
+        
+        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+            writer = csv.DictWriter(f, fieldnames=headers)
+            writer.writeheader()
+            
+            for row in group_results:
+                output_row = {}
+                for header in headers:
+                    key = key_mapping[header]
+                    value = row.get(key, '')
+                    if isinstance(value, float):
+                        value = f"{value:.2f}"
+                    output_row[header] = value
+                writer.writerow(output_row)
+        
+        return output_path
+    
+    def generate_bad_data_report(self, process_result: Dict[str, Any], 
+                                  output_path: str) -> str:
+        template = self.templates['bad_data_report']
+        bad_data = process_result.get('bad_data', [])
+        
+        field_configs = template['fields']
+        headers = [f['name'] for f in field_configs]
+        key_mapping = {f['name']: f['key'] for f in field_configs}
+        
+        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+            writer = csv.DictWriter(f, fieldnames=headers)
+            writer.writeheader()
+            
+            for error in bad_data:
+                output_row = {}
+                for header in headers:
+                    key = key_mapping[header]
+                    output_row[header] = error.get(key, '')
+                writer.writerow(output_row)
+        
+        return output_path
+    
+    def generate_json_result(self, process_result: Dict[str, Any], 
+                              output_path: str) -> str:
+        template = self.templates['json_output']
+        include_fields = template['include_fields']
+        
+        output_data = {}
+        for field in include_fields:
+            if field in process_result:
+                output_data[field] = process_result[field]
+        
+        output_data['batch_info'] = {
+            'batch_id': process_result.get('batch_id'),
+            'process_time': process_result.get('process_time'),
+            'generated_at': datetime.now().isoformat()
+        }
+        
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(output_data, f, ensure_ascii=False, indent=template['indent'])
+        
+        return output_path
+    
+    def generate_review_report(self, process_result: Dict[str, Any], 
+                                output_path: str) -> str:
+        template = self.templates['review_report']
+        problems = process_result.get('problem_details', [])
+        raw_results = process_result.get('raw_results', [])
+        
+        record_lookup = {}
+        for result in raw_results:
+            record_lookup[result['trace_id']] = result.get('record', {})
+        
+        field_configs = template['fields']
+        headers = [f['name'] for f in field_configs]
+        key_mapping = {f['name']: f['key'] for f in field_configs}
+        
+        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+            writer = csv.DictWriter(f, fieldnames=headers)
+            writer.writeheader()
+            
+            for problem in problems:
+                record = record_lookup.get(problem['trace_id'], {})
+                output_row = {}
+                
+                for header in headers:
+                    key = key_mapping[header]
+                    
+                    if key in problem:
+                        value = problem[key]
+                    elif key in record:
+                        value = record[key]
+                    elif key == 'review_status':
+                        value = '待复核'
+                    else:
+                        value = ''
+                    
+                    if isinstance(value, float):
+                        value = f"{value:.4f}"
+                    elif isinstance(value, bool):
+                        value = '是' if value else '否'
+                    
+                    output_row[header] = value
+                
+                writer.writerow(output_row)
+        
+        return output_path
+
+exec
+/bin/zsh -lc "sed -n '1,220p' main.py" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import json
+import sys
+import os
+import argparse
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from src.pick_mismatch_processor import PickMismatchProcessor
+from src.report_generator import ReportGenerator
+
+
+def load_records_from_file(file_path: str) -> list:
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return data.get('records', []), data.get('batch_id')
+
+
+def process_file(input_file: str, output_prefix: str = None, config_dir: str = 'config'):
+    print(f"\n{'='*60}")
+    print(f"处理文件: {input_file}")
+    print(f"{'='*60}")
+    
+    records, batch_id = load_records_from_file(input_file)
+    print(f"加载记录数: {len(records)}")
+    
+    processor = PickMismatchProcessor(config_dir=config_dir)
+    result = processor.process_batch(records, batch_id=batch_id)
+    
+    if not result.get('success', False):
+        print(f"处理失败: {result.get('error', '未知错误')}")
+        return result
+    
+    summary = result['summary']
+    print(f"\n处理摘要:")
+    print(f"  总记录数: {summary['total_records']}")
+    print(f"  有效记录: {summary['valid_records']}")
+    print(f"  无效记录: {summary['invalid_records']}")
+    print(f"  有问题记录: {summary['records_with_problems']}")
+    print(f"  无问题记录: {summary['problem_free_records']}")
+    print(f"\n严重度分布:")
+    print(f"  高风险: {summary['severity_breakdown']['high']}")
+    print(f"  中风险: {summary['severity_breakdown']['medium']}")
+    print(f"  低风险: {summary['severity_breakdown']['low']}")
+    print(f"  总严重度评分: {summary['total_severity_score']}")
+    
+    if output_prefix is None:
+        output_prefix = os.path.splitext(os.path.basename(input_file))[0]
+    
+    report_gen = ReportGenerator(config_dir=config_dir)
+    generated_files = report_gen.generate_all_reports(result, filename_prefix=output_prefix)
+    
+    print(f"\n生成的报表文件:")
+    for report_type, file_path in generated_files.items():
+        print(f"  {report_type}: {file_path}")
+    
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description='仓库拣货错位记录处理脚本')
+    parser.add_argument('input_file', nargs='?', help='输入JSON文件路径')
+    parser.add_argument('--output', '-o', help='输出文件前缀')
+    parser.add_argument('--config', '-c', default='config', help='配置目录')
+    parser.add_argument('--test', action='store_true', help='运行所有测试样例')
+    
+    args = parser.parse_args()
+    
+    if args.test:
+        print("运行所有测试样例...")
+        test_files = [
+            'test_data/compliant_samples.json',
+            'test_data/over_threshold_samples.json',
+            'test_data/missing_material_samples.json',
+            'test_data/history_replay_samples.json'
+        ]
+        
+        all_results = []
+        for test_file in test_files:
+            if os.path.exists(test_file):
+                result = process_file(test_file, config_dir=args.config)
+                all_results.append(result)
+        
+        print(f"\n{'='*60}")
+        print("测试完成，共运行 %d 个测试样例" % len(all_results))
+        print(f"{'='*60}")
+        return
+    
+    if not args.input_file:
+        parser.print_help()
+        return
+    
+    if not os.path.exists(args.input_file):
+        print(f"错误: 输入文件不存在: {args.input_file}")
+        sys.exit(1)
+    
+    process_file(args.input_file, output_prefix=args.output, config_dir=args.config)
+
+
+if __name__ == '__main__':
+    main()
+
+exec
+/bin/zsh -lc "sed -n '1,260p' src/pick_mismatch_processor.py" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import json
+import hashlib
+import uuid
+import csv
+import os
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Tuple, Optional
+from collections import defaultdict
+
+
+class PickMismatchProcessor:
+    
+    def __init__(self, config_dir: str = 'config'):
+        self.config_dir = config_dir
+        self.load_configs()
+        self.processed_records = set()
+        self.trace_counter = 0
+    
+    def load_configs(self):
+        with open(os.path.join(self.config_dir, 'problem_dictionary.json'), 'r', encoding='utf-8') as f:
+            self.problem_dict = json.load(f)
+        
+        with open(os.path.join(self.config_dir, 'deduplication_keys.json'), 'r', encoding='utf-8') as f:
+            self.dedup_config = json.load(f)
+        
+        with open(os.path.join(self.config_dir, 'report_templates.json'), 'r', encoding='utf-8') as f:
+            self.report_templates = json.load(f)
+    
+    def generate_trace_id(self, record: Dict[str, Any], batch_id: str) -> str:
+        self.trace_counter += 1
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        record_hash = hashlib.md5(
+            json.dumps(record, sort_keys=True, ensure_ascii=False).encode()
+        ).hexdigest()[:8]
+        return f"PICK-{timestamp}-{batch_id}-{self.trace_counter:04d}-{record_hash}"
+    
+    def validate_admission(self, record: Dict[str, Any]) -> Tuple[bool, List[Dict[str, Any]]]:
+        errors = []
+        required_fields = self.problem_dict['admission_criteria']['required_fields']
+        
+        for field in required_fields:
+            if field not in record or record[field] in (None, '', []):
+                errors.append({
+                    'error_type': 'missing_required_field',
+                    'field_name': field,
+                    'field_value': record.get(field, ''),
+                    'error_message': f'必填字段缺失: {field}'
+                })
+        
+        if 'pick_time' in record and record['pick_time']:
+            try:
+                if isinstance(record['pick_time'], str):
+                    datetime.fromisoformat(record['pick_time'].replace('Z', '+00:00'))
+            except ValueError:
+                errors.append({
+                    'error_type': 'invalid_date_format',
+                    'field_name': 'pick_time',
+                    'field_value': record['pick_time'],
+                    'error_message': '日期格式无效，需为ISO格式'
+                })
+        
+        if 'actual_qty' in record and record['actual_qty'] is not None:
+            try:
+                qty = float(record['actual_qty'])
+                if qty < 0:
+                    errors.append({
+                        'error_type': 'value_out_of_range',
+                        'field_name': 'actual_qty',
+                        'field_value': record['actual_qty'],
+                        'error_message': '数量不能为负数'
+                    })
+            except (ValueError, TypeError):
+                errors.append({
+                    'error_type': 'invalid_data_type',
+                    'field_name': 'actual_qty',
+                    'field_value': record['actual_qty'],
+                    'error_message': '数量应为数值类型'
+                })
+        
+        return len(errors) == 0, errors
+    
+    def generate_dedup_key(self, record: Dict[str, Any], key_type: str = 'default') -> str:
+        rule = self.dedup_config['deduplication_rules'][key_type]
+        
+        if rule['key_type'] == 'primary_key':
+            key_fields = self.dedup_config['primary_key']
+        else:
+            key_fields = self.dedup_config['composite_keys'].get(rule['key_type'], [])
+        
+        key_values = []
+        for field in key_fields:
+            val = record.get(field, '')
+            key_values.append(str(val))
+        
+        raw_key = '|'.join(key_values)
+        return hashlib.md5(raw_key.encode('utf-8')).hexdigest()
+    
+    def check_duplicate(self, record: Dict[str, Any], dedup_key: str) -> Tuple[bool, Optional[str]]:
+        if dedup_key in self.processed_records:
+            return True, 'record_already_processed'
+        
+        if self.dedup_config['time_based_deduplication']['enabled']:
+            pass
+        
+        return False, None
+    
+    def calculate_difference(self, record: Dict[str, Any], problem_type: str) -> Tuple[float, bool, str]:
+        problem_config = self.problem_dict['problem_types'][problem_type]
+        fields = problem_config['fields']
+        formula = problem_config['formula']
+        threshold = problem_config['threshold']
+        compare_type = problem_config.get('compare', '>=')
+        
+        field_values = {f: record.get(f) for f in fields}
+        
+        if None in field_values.values():
+            return 0.0, False, '字段缺失，无法计算'
+        
+        try:
+            diff_value = self._evaluate_formula(formula, field_values)
+            
+            if isinstance(threshold, (int, float)):
+                if compare_type == '<=':
+                    is_hit = diff_value <= threshold
+                elif compare_type == '<':
+                    is_hit = diff_value < threshold
+                elif compare_type == '>':
+                    is_hit = diff_value > threshold
+                else:
+                    is_hit = diff_value >= threshold
+            else:
+                is_hit = bool(diff_value)
+            
+            explanation = self._generate_explanation(
+                problem_type, field_values, diff_value, threshold, is_hit, compare_type
+            )
+            
+            return diff_value, is_hit, explanation
+        except Exception as e:
+            return 0.0, False, f'计算异常: {str(e)}'
+    
+    def _evaluate_formula(self, formula: str, values: Dict[str, Any]) -> float:
+        if '!=' in formula:
+            field1, field2 = formula.split(' != ')
+            field1 = field1.strip()
+            field2 = field2.strip()
+            return 1.0 if values.get(field1) != values.get(field2) else 0.0
+        
+        if 'abs(' in formula and ') / ' in formula:
+            close_paren_idx = formula.find(')')
+            abs_content = formula[4:close_paren_idx]
+            field1, field2 = abs_content.split(' - ')
+            field1 = field1.strip()
+            field2 = field2.strip()
+            divisor_part = formula[close_paren_idx+3:].strip()
+            v1 = float(values.get(field1, 0))
+            v2 = float(values.get(field2, 0))
+            divisor = float(values.get(divisor_part, 1))
+            return abs(v1 - v2) / divisor if divisor != 0 else 999.0
+        
+        if 'abs(' in formula and ' - ' in formula:
+            inner = formula[4:-1]
+            field1, field2 = inner.split(' - ')
+            field1 = field1.strip()
+            field2 = field2.strip()
+            return abs(float(values.get(field1, 0)) - float(values.get(field2, 0)))
+        
+        if 'days_between' in formula:
+            field1 = formula[formula.index('(')+1:formula.index(',')].strip()
+            field2 = formula[formula.index(',')+1:formula.index(')')].strip()
+            d1 = datetime.fromisoformat(str(values.get(field1)).replace('Z', '+00:00'))
+            d2 = datetime.fromisoformat(str(values.get(field2)).replace('Z', '+00:00'))
+            return (d1 - d2).days
+        
+        if 'minutes_between' in formula:
+            field1 = formula[formula.index('(')+1:formula.index(',')].strip()
+            field2 = formula[formula.index(',')+1:formula.index(')')].strip()
+            d1 = datetime.fromisoformat(str(values.get(field1)).replace('Z', '+00:00'))
+            d2 = datetime.fromisoformat(str(values.get(field2)).replace('Z', '+00:00'))
+            return max(0, (d1 - d2).total_seconds() / 60)
+        
+        return 0.0
+    
+    def _generate_explanation(self, problem_type: str, values: Dict[str, Any], 
+                              diff_value: float, threshold: Any, is_hit: bool,
+                              compare_type: str = '>=') -> str:
+        problem_config = self.problem_dict['problem_types'][problem_type]
+        problem_name = problem_config['name']
+        time_window = problem_config['time_window_hours']
+        
+        if problem_type == 'quantity_mismatch':
+            exp = f"预期数量{values.get('expected_qty')}，实际数量{values.get('actual_qty')}，差异{diff_value}件"
+        elif problem_type == 'location_mismatch':
+            exp = f"预期库位{values.get('expected_location')}，实际库位{values.get('actual_location')}"
+        elif problem_type == 'sku_mismatch':
+            exp = f"预期SKU{values.get('expected_sku')}，实际SKU{values.get('actual_sku')}"
+        elif problem_type == 'batch_mismatch':
+            exp = f"预期批次{values.get('expected_batch')}，实际批次{values.get('actual_batch')}"
+        elif problem_type == 'expiry_mismatch':
+            exp = f"效期剩余{diff_value}天"
+        elif problem_type == 'weight_mismatch':
+            exp = f"重量偏差率{diff_value*100:.2f}%"
+        elif problem_type == 'delay_pick':
+            exp = f"拣货超时{diff_value:.1f}分钟"
+        else:
+            exp = f"差异值{diff_value}"
+        
+        if isinstance(threshold, (int, float)):
+            threshold_text = f"阈值{compare_type}{threshold}"
+        else:
+            threshold_text = "不相等"
+        hit_text = "命中" if is_hit else "未命中"
+        return f"{problem_name}: {exp}，{threshold_text}，{hit_text}。时间窗口：{time_window}小时"
+    
+    def check_time_window(self, record: Dict[str, Any], problem_type: str, 
+                          reference_time: datetime) -> Tuple[bool, str]:
+        problem_config = self.problem_dict['problem_types'][problem_type]
+        window_hours = problem_config['time_window_hours']
+        
+        pick_time_str = record.get('pick_time', '')
+        if not pick_time_str:
+            return False, '拣货时间缺失'
+        
+        try:
+            pick_time = datetime.fromisoformat(pick_time_str.replace('Z', '+00:00'))
+        except ValueError:
+            return False, '拣货时间格式错误'
+        
+        if reference_time.tzinfo is None:
+            reference_time = reference_time.replace(tzinfo=pick_time.tzinfo)
+        
+        time_diff = abs((reference_time - pick_time).total_seconds() / 3600)
+        within_window = time_diff <= window_hours
+        
+        return within_window, f"拣货时间距参考时间{time_diff:.1f}小时，时间窗口{window_hours}小时，{'在窗口内' if within_window else '超出窗口'}"
+    
+    def process_record(self, record: Dict[str, Any], batch_id: str, 
+                       reference_time: datetime = None) -> Dict[str, Any]:
+        if reference_time is None:
+            reference_time = datetime.now()
+        
+        trace_id = self.generate_trace_id(record, batch_id)
+        
+        is_valid, errors = self.validate_admission(record)
+        
+        if not is_valid:
+            for error in errors:
+                error.update({
+                    'trace_id': trace_id,
+                    'pick_id': record.get('pick_id', ''),
+                    'order_no': record.get('order_no', ''),
+                    'process_time': datetime.now().isoformat()
+                })
+            return {
+                'trace_id': trace_id,
+                'record': record,
+                'is_valid': False,
+
+codex
+`main.py` 只是薄入口，关键在 processor 的完整链路和外部配置。继续补全剩余实现，再看是否缺少配置、测试数据或依赖文件，避免只看到了半截逻辑。
+exec
+/bin/zsh -lc 'rg --files' in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "sed -n '261,520p' src/pick_mismatch_processor.py" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+                'errors': errors,
+                'problems': []
+            }
+        
+        dedup_key = self.generate_dedup_key(record)
+        is_duplicate, dup_reason = self.check_duplicate(record, dedup_key)
+        
+        if is_duplicate:
+            error = {
+                'trace_id': trace_id,
+                'pick_id': record.get('pick_id', ''),
+                'order_no': record.get('order_no', ''),
+                'error_type': 'duplicate_record',
+                'error_message': f'重复记录: {dup_reason}',
+                'field_name': 'dedup_key',
+                'field_value': dedup_key,
+                'process_time': datetime.now().isoformat()
+            }
+            return {
+                'trace_id': trace_id,
+                'record': record,
+                'is_valid': False,
+                'errors': [error],
+                'problems': []
+            }
+        
+        problems = []
+        for problem_type in self.problem_dict['problem_types']:
+            diff_value, is_hit, explanation = self.calculate_difference(record, problem_type)
+            
+            if is_hit:
+                within_window, window_explanation = self.check_time_window(
+                    record, problem_type, reference_time
+                )
+                
+                if not within_window:
+                    continue
+                
+                problem_config = self.problem_dict['problem_types'][problem_type]
+                problems.append({
+                    'trace_id': trace_id,
+                    'problem_type': problem_type,
+                    'problem_name': problem_config['name'],
+                    'problem_level': problem_config['level'],
+                    'threshold': problem_config['threshold'],
+                    'threshold_hit': is_hit,
+                    'difference_value': diff_value,
+                    'time_window_hours': problem_config['time_window_hours'],
+                    'within_time_window': within_window,
+                    'explanation': f"{explanation}。{window_explanation}",
+                    'severity_weight': self.problem_dict['severity_weights'][problem_config['level']]
+                })
+        
+        self.processed_records.add(dedup_key)
+        
+        return {
+            'trace_id': trace_id,
+            'record': record,
+            'is_valid': True,
+            'errors': [],
+            'problems': problems,
+            'dedup_key': dedup_key
+        }
+    
+    def process_batch(self, records: List[Dict[str, Any]], 
+                      batch_id: str = None) -> Dict[str, Any]:
+        if batch_id is None:
+            batch_id = hashlib.md5(
+                str(datetime.now().timestamp()).encode()
+            ).hexdigest()[:8].upper()
+        
+        max_records = self.problem_dict['admission_criteria']['max_records_per_batch']
+        min_records = self.problem_dict['admission_criteria']['min_records_per_batch']
+        
+        if len(records) > max_records:
+            return {
+                'success': False,
+                'error': f'批次记录数超过限制: {len(records)} > {max_records}'
+            }
+        if len(records) < min_records:
+            return {
+                'success': False,
+                'error': f'批次记录数不足: {len(records)} < {min_records}'
+            }
+        
+        self.processed_records.clear()
+        self.trace_counter = 0
+        reference_time = datetime.now()
+        
+        results = []
+        bad_data = []
+        problem_details = []
+        
+        for record in records:
+            result = self.process_record(record, batch_id, reference_time)
+            results.append(result)
+            
+            if not result['is_valid']:
+                bad_data.extend(result['errors'])
+            
+            problem_details.extend(result['problems'])
+        
+        group_results = self._generate_group_results(results)
+        summary = self._generate_summary(results, bad_data, problem_details)
+        
+        return {
+            'success': True,
+            'batch_id': batch_id,
+            'process_time': reference_time.isoformat(),
+            'metadata': {
+                'total_records': len(records),
+                'config_version': self.problem_dict['version']
+            },
+            'summary': summary,
+            'group_results': group_results,
+            'problem_details': problem_details,
+            'bad_data': bad_data,
+            'raw_results': results
+        }
+    
+    def _generate_group_results(self, results: List[Dict[str, Any]]) -> Dict[str, Any]:
+        groups = defaultdict(lambda: {
+            'total_count': 0,
+            'problem_count': 0,
+            'high_severity_count': 0,
+            'severity_score': 0
+        })
+        
+        for result in results:
+            record = result['record']
+            has_problem = len(result['problems']) > 0
+            
+            wh = record.get('warehouse_code', 'UNKNOWN')
+            picker = record.get('picker_id', 'UNKNOWN')
+            
+            if has_problem:
+                for problem in result['problems']:
+                    key = (wh, picker, problem['problem_type'])
+                    groups[key]['total_count'] += 1
+                    groups[key]['problem_count'] += 1
+                    if problem['problem_level'] == 'high':
+                        groups[key]['high_severity_count'] += 1
+                    groups[key]['severity_score'] += problem['severity_weight']
+            else:
+                key = (wh, picker, 'none')
+                groups[key]['total_count'] += 1
+        
+        formatted_groups = []
+        for (warehouse, picker, problem_type), metrics in groups.items():
+            metrics['problem_rate'] = (
+                metrics['problem_count'] / metrics['total_count'] * 100 
+                if metrics['total_count'] > 0 else 0
+            )
+            formatted_groups.append({
+                'warehouse_code': warehouse,
+                'picker_id': picker,
+                'problem_type': problem_type,
+                **metrics
+            })
+        
+        return formatted_groups
+    
+    def _generate_summary(self, results: List[Dict[str, Any]], 
+                          bad_data: List[Dict[str, Any]], 
+                          problems: List[Dict[str, Any]]) -> Dict[str, Any]:
+        valid_count = sum(1 for r in results if r['is_valid'])
+        problem_count = sum(1 for r in results if r['problems'])
+        
+        high_count = sum(1 for p in problems if p['problem_level'] == 'high')
+        medium_count = sum(1 for p in problems if p['problem_level'] == 'medium')
+        low_count = sum(1 for p in problems if p['problem_level'] == 'low')
+        
+        problem_type_counts = defaultdict(int)
+        for p in problems:
+            problem_type_counts[p['problem_type']] += 1
+        
+        return {
+            'total_records': len(results),
+            'valid_records': valid_count,
+            'invalid_records': len(bad_data),
+            'records_with_problems': problem_count,
+            'problem_free_records': valid_count - problem_count,
+            'severity_breakdown': {
+                'high': high_count,
+                'medium': medium_count,
+                'low': low_count
+            },
+            'problem_type_breakdown': dict(problem_type_counts),
+            'total_severity_score': sum(p['severity_weight'] for p in problems)
+        }
+
+ succeeded in 232ms:
+src/pick_mismatch_processor.py
+src/report_generator.py
+main.py
+output/group_reports/compliant_samples_group.csv
+output/group_reports/over_threshold_samples_group.csv
+output/group_reports/history_replay_samples_group.csv
+output/group_reports/missing_material_samples_group.csv
+output/review_tables/missing_material_samples_review.csv
+output/review_tables/over_threshold_samples_review.csv
+output/review_tables/history_replay_samples_review.csv
+output/review_tables/compliant_samples_review.csv
+output/bad_data/missing_material_samples_bad_data.csv
+output/bad_data/compliant_samples_bad_data.csv
+output/bad_data/history_replay_samples_bad_data.csv
+output/bad_data/over_threshold_samples_bad_data.csv
+output/json_results/history_replay_samples_result.json
+output/json_results/over_threshold_samples_result.json
+output/json_results/missing_material_samples_result.json
+output/json_results/compliant_samples_result.json
+test_data/compliant_samples.json
+test_data/missing_material_samples.json
+test_data/over_threshold_samples.json
+test_data/history_replay_samples.json
+config/problem_dictionary.json
+config/deduplication_keys.json
+config/report_templates.json
+
+codex
+现在有了完整文件清单，仓库形态很像一个离线批处理脚本。下一步对照配置和样例数据，看“核心流程”是不是能用真实入口 `main.py` 跑通，以及有没有明显的功能偏差或不可运行点。
+exec
+/bin/zsh -lc "sed -n '1,240p' config/problem_dictionary.json" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+{
+  "version": "1.0.0",
+  "description": "仓库拣货错位问题字典",
+  "problem_types": {
+    "quantity_mismatch": {
+      "name": "数量不符",
+      "level": "high",
+      "threshold": 1,
+      "time_window_hours": 24,
+      "fields": ["expected_qty", "actual_qty"],
+      "formula": "abs(expected_qty - actual_qty)",
+      "description": "拣货数量与预期不符"
+    },
+    "location_mismatch": {
+      "name": "库位错位",
+      "level": "medium",
+      "threshold": 1,
+      "time_window_hours": 48,
+      "fields": ["expected_location", "actual_location"],
+      "formula": "expected_location != actual_location",
+      "description": "拣货库位与预期不符"
+    },
+    "sku_mismatch": {
+      "name": "商品错拣",
+      "level": "high",
+      "threshold": 1,
+      "time_window_hours": 24,
+      "fields": ["expected_sku", "actual_sku"],
+      "formula": "expected_sku != actual_sku",
+      "description": "拣货商品SKU与预期不符"
+    },
+    "batch_mismatch": {
+      "name": "批次错误",
+      "level": "medium",
+      "threshold": 1,
+      "time_window_hours": 72,
+      "fields": ["expected_batch", "actual_batch"],
+      "formula": "expected_batch != actual_batch",
+      "description": "拣货批次与预期不符"
+    },
+    "expiry_mismatch": {
+      "name": "效期异常",
+      "level": "medium",
+      "threshold": 7,
+      "compare": "<=",
+      "time_window_hours": 168,
+      "fields": ["expiry_date", "pick_date"],
+      "formula": "days_between(expiry_date, pick_date)",
+      "description": "商品有效期小于等于阈值天数"
+    },
+    "weight_mismatch": {
+      "name": "重量偏差",
+      "level": "low",
+      "threshold": 0.1,
+      "time_window_hours": 24,
+      "fields": ["expected_weight", "actual_weight"],
+      "formula": "abs(expected_weight - actual_weight) / expected_weight",
+      "description": "拣货重量偏差率超过阈值"
+    },
+    "delay_pick": {
+      "name": "拣货超时",
+      "level": "low",
+      "threshold": 30,
+      "time_window_hours": 24,
+      "fields": ["expected_pick_time", "actual_pick_time"],
+      "formula": "minutes_between(actual_pick_time, expected_pick_time)",
+      "description": "拣货操作超时分钟数"
+    }
+  },
+  "severity_weights": {
+    "high": 3,
+    "medium": 2,
+    "low": 1
+  },
+  "admission_criteria": {
+    "required_fields": [
+      "pick_id",
+      "order_no",
+      "sku_code",
+      "pick_time",
+      "picker_id",
+      "warehouse_code"
+    ],
+    "max_records_per_batch": 10000,
+    "min_records_per_batch": 1
+  }
+}
+
+exec
+/bin/zsh -lc "sed -n '1,220p' config/deduplication_keys.json" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+{
+  "version": "1.0.0",
+  "description": "拣货记录去重键配置",
+  "primary_key": ["pick_id"],
+  "composite_keys": {
+    "order_sku_picker": ["order_no", "sku_code", "picker_id", "pick_time"],
+    "location_batch": ["warehouse_code", "location_code", "batch_no", "pick_date"],
+    "strict_duplicate": ["order_no", "sku_code", "actual_qty", "pick_time", "picker_id"]
+  },
+  "deduplication_rules": {
+    "default": {
+      "key_type": "primary_key",
+      "keep_strategy": "latest",
+      "mark_duplicate": true
+    },
+    "strict": {
+      "key_type": "strict_duplicate",
+      "keep_strategy": "earliest",
+      "mark_duplicate": true
+    }
+  },
+  "time_based_deduplication": {
+    "enabled": true,
+    "time_window_minutes": 5,
+    "key_fields": ["order_no", "sku_code", "picker_id"]
+  }
+}
+
+exec
+/bin/zsh -lc "sed -n '1,220p' test_data/compliant_samples.json" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+{
+  "description": "合规样例 - 完全符合要求的拣货记录",
+  "batch_id": "COMPLIANT-001",
+  "records": [
+    {
+      "pick_id": "PICK202606020001",
+      "order_no": "ORD20260602001",
+      "sku_code": "SKU001",
+      "pick_time": "2026-06-02T10:30:00+08:00",
+      "picker_id": "P001",
+      "warehouse_code": "WH001",
+      "expected_qty": 10,
+      "actual_qty": 10,
+      "expected_location": "A-01-01",
+      "actual_location": "A-01-01",
+      "expected_sku": "SKU001",
+      "actual_sku": "SKU001",
+      "expected_batch": "B20260101",
+      "actual_batch": "B20260101",
+      "expiry_date": "2027-06-01T00:00:00+08:00",
+      "pick_date": "2026-06-02T00:00:00+08:00",
+      "expected_weight": 10.0,
+      "actual_weight": 10.0,
+      "expected_pick_time": "2026-06-02T10:20:00+08:00",
+      "actual_pick_time": "2026-06-02T10:25:00+08:00"
+    },
+    {
+      "pick_id": "PICK202606020002",
+      "order_no": "ORD20260602002",
+      "sku_code": "SKU002",
+      "pick_time": "2026-06-02T11:00:00+08:00",
+      "picker_id": "P002",
+      "warehouse_code": "WH001",
+      "expected_qty": 5,
+      "actual_qty": 5,
+      "expected_location": "B-02-03",
+      "actual_location": "B-02-03",
+      "expected_sku": "SKU002",
+      "actual_sku": "SKU002",
+      "expected_batch": "B20260215",
+      "actual_batch": "B20260215",
+      "expiry_date": "2027-03-15T00:00:00+08:00",
+      "pick_date": "2026-06-02T00:00:00+08:00",
+      "expected_weight": 2.5,
+      "actual_weight": 2.5,
+      "expected_pick_time": "2026-06-02T10:55:00+08:00",
+      "actual_pick_time": "2026-06-02T10:58:00+08:00"
+    },
+    {
+      "pick_id": "PICK202606020003",
+      "order_no": "ORD20260602003",
+      "sku_code": "SKU003",
+      "pick_time": "2026-06-02T14:00:00+08:00",
+      "picker_id": "P001",
+      "warehouse_code": "WH002",
+      "expected_qty": 20,
+      "actual_qty": 20,
+      "expected_location": "C-03-05",
+      "actual_location": "C-03-05",
+      "expected_sku": "SKU003",
+      "actual_sku": "SKU003",
+      "expected_batch": "B20260301",
+      "actual_batch": "B20260301",
+      "expiry_date": "2027-06-01T00:00:00+08:00",
+      "pick_date": "2026-06-02T00:00:00+08:00",
+      "expected_weight": 50.0,
+      "actual_weight": 49.8,
+      "expected_pick_time": "2026-06-02T13:50:00+08:00",
+      "actual_pick_time": "2026-06-02T13:55:00+08:00"
+    }
+  ]
+}
+
+exec
+/bin/zsh -lc "sed -n '1,240p' config/report_templates.json" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+{
+  "version": "1.0.0",
+  "description": "报表模板配置",
+  "group_report": {
+    "name": "分组分析报表",
+    "group_dimensions": [
+      {"key": "warehouse_code", "name": "仓库编码"},
+      {"key": "picker_id", "name": "拣货员ID"},
+      {"key": "problem_type", "name": "问题类型"},
+      {"key": "pick_date", "name": "拣货日期"}
+    ],
+    "metrics": [
+      {"key": "total_count", "name": "记录总数"},
+      {"key": "problem_count", "name": "问题记录数"},
+      {"key": "problem_rate", "name": "问题率(%)"},
+      {"key": "high_severity_count", "name": "高风险数"},
+      {"key": "severity_score", "name": "严重度评分"}
+    ],
+    "sort_by": ["problem_rate", "desc"],
+    "format": "csv"
+  },
+  "bad_data_report": {
+    "name": "坏数据清单",
+    "fields": [
+      {"key": "trace_id", "name": "追溯编号"},
+      {"key": "pick_id", "name": "拣货ID"},
+      {"key": "order_no", "name": "订单号"},
+      {"key": "error_type", "name": "错误类型"},
+      {"key": "error_message", "name": "错误详情"},
+      {"key": "field_name", "name": "问题字段"},
+      {"key": "field_value", "name": "字段值"},
+      {"key": "process_time", "name": "处理时间"}
+    ],
+    "error_types": [
+      "missing_required_field",
+      "invalid_data_type",
+      "duplicate_record",
+      "invalid_date_format",
+      "value_out_of_range"
+    ]
+  },
+  "review_report": {
+    "name": "人工复核表",
+    "fields": [
+      {"key": "trace_id", "name": "追溯编号"},
+      {"key": "pick_id", "name": "拣货ID"},
+      {"key": "order_no", "name": "订单号"},
+      {"key": "sku_code", "name": "商品编码"},
+      {"key": "problem_type", "name": "问题类型"},
+      {"key": "problem_level", "name": "严重等级"},
+      {"key": "threshold_hit", "name": "命中阈值"},
+      {"key": "difference_value", "name": "差异值"},
+      {"key": "time_window", "name": "时间窗口(小时)"},
+      {"key": "explanation", "name": "判定说明"},
+      {"key": "review_status", "name": "复核状态"},
+      {"key": "reviewer", "name": "复核人"},
+      {"key": "review_time", "name": "复核时间"}
+    ],
+    "review_status_options": ["待复核", "已确认", "已驳回", "需补充"]
+  },
+  "json_output": {
+    "include_fields": [
+      "metadata",
+      "summary",
+      "group_results",
+      "problem_details",
+      "bad_data",
+      "trace_info"
+    ],
+    "indent": 2,
+    "encoding": "utf-8"
+  }
+}
+
+codex
+配置和样例已经能对上“拣货错位检测+报表输出”的意图。现在做一次实际链路验证：不走写盘的入口，只在内存里调用 processor，看核心批处理是否能正常产出结果，顺便找隐藏逻辑 bug。
+exec
+/bin/zsh -lc "python3 -B - <<'PY'
+import json
+from src.pick_mismatch_processor import PickMismatchProcessor
+with open('test_data/over_threshold_samples.json', encoding='utf-8') as f:
+    data=json.load(f)
+p=PickMismatchProcessor(config_dir='config')
+r=p.process_batch(data['records'], batch_id=data.get('batch_id'))
+print(json.dumps(r['summary'], ensure_ascii=False, indent=2))
+print('problems', len(r['problem_details']))
+print('bad_data', len(r['bad_data']))
+PY" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "python3 -B - <<'PY'
+import json
+from src.pick_mismatch_processor import PickMismatchProcessor
+for name in ['compliant_samples','over_threshold_samples','missing_material_samples','history_replay_samples']:
+    with open(f'test_data/{name}.json', encoding='utf-8') as f:
+        data=json.load(f)
+    p=PickMismatchProcessor(config_dir='config')
+    r=p.process_batch(data['records'], batch_id=data.get('batch_id'))
+    print(name, r['success'], r.get('summary',{}).get('total_records'), r.get('summary',{}).get('invalid_records'), r.get('summary',{}).get('records_with_problems'))
+PY" in /Users/bill/Documents/solo/workspaces/yzz00188
+ exited 1 in 104ms:
+zsh:1: can't create temp file for here document: operation not permitted
+
+ exited 1 in 105ms:
+zsh:1: can't create temp file for here document: operation not permitted
+
+codex
+这里的 shell 不能用 heredoc 临时文件，我换成 `python -c` 单行验证，不改任何文件，只检查实际对象运行结果。
+exec
+/bin/zsh -lc "python3 -B -c \"import json; from src.pick_mismatch_processor import PickMismatchProcessor; data=json.load(open('test_data/over_threshold_samples.json', encoding='utf-8')); p=PickMismatchProcessor(config_dir='config'); r=p.process_batch(data['records'], batch_id=data.get('batch_id')); print(json.dumps(r['summary'], ensure_ascii=False, indent=2)); print('problems', len(r['problem_details'])); print('bad_data', len(r['bad_data']))\"" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "python3 -B -c \"import json; from src.pick_mismatch_processor import PickMismatchProcessor; names=['compliant_samples','over_threshold_samples','missing_material_samples','history_replay_samples'];
+for name in names:
+    data=json.load(open(f'test_data/{name}.json', encoding='utf-8')); p=PickMismatchProcessor(config_dir='config'); r=p.process_batch(data['records'], batch_id=data.get('batch_id')); print(name, r['success'], r.get('summary',{}).get('total_records'), r.get('summary',{}).get('invalid_records'), r.get('summary',{}).get('records_with_problems'))\"" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 447ms:
+{
+  "total_records": 5,
+  "valid_records": 5,
+  "invalid_records": 0,
+  "records_with_problems": 2,
+  "problem_free_records": 3,
+  "severity_breakdown": {
+    "high": 0,
+    "medium": 3,
+    "low": 0
+  },
+  "problem_type_breakdown": {
+    "batch_mismatch": 1,
+    "expiry_mismatch": 2
+  },
+  "total_severity_score": 6
+}
+problems 3
+bad_data 0
+
+ succeeded in 447ms:
+compliant_samples True 3 0 0
+over_threshold_samples True 5 0 2
+missing_material_samples True 6 7 0
+history_replay_samples True 6 1 2
+
+codex
+我已经确认核心处理函数本身能跑出结果。现在检查报表层面的“实际产物”是否和模板一致，重点看空列、字段缺失、以及是否有明显的误导性输出。
+exec
+/bin/zsh -lc "sed -n '1,40p' output/json_results/over_threshold_samples_result.json" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "sed -n '1,8p' output/group_reports/over_threshold_samples_group.csv" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "sed -n '1,8p' output/review_tables/over_threshold_samples_review.csv" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 285ms:
+﻿仓库编码,拣货员ID,问题类型,拣货日期,记录总数,问题记录数,问题率(%),高风险数,严重度评分
+WH001,P003,quantity_mismatch,,1,1,100.00,1,3
+WH001,P003,location_mismatch,,1,1,100.00,0,2
+WH002,P004,sku_mismatch,,1,1,100.00,1,3
+WH002,P004,batch_mismatch,,1,1,100.00,0,2
+WH002,P004,expiry_mismatch,,1,1,100.00,0,2
+WH002,P004,delay_pick,,1,1,100.00,0,1
+WH003,P005,expiry_mismatch,,1,1,100.00,0,2
+
+ succeeded in 285ms:
+{
+  "metadata": {
+    "total_records": 5,
+    "config_version": "1.0.0"
+  },
+  "summary": {
+    "total_records": 5,
+    "valid_records": 5,
+    "invalid_records": 0,
+    "records_with_problems": 5,
+    "problem_free_records": 0,
+    "severity_breakdown": {
+      "high": 2,
+      "medium": 4,
+      "low": 3
+    },
+    "problem_type_breakdown": {
+      "quantity_mismatch": 1,
+      "location_mismatch": 1,
+      "sku_mismatch": 1,
+      "batch_mismatch": 1,
+      "expiry_mismatch": 2,
+      "delay_pick": 2,
+      "weight_mismatch": 1
+    },
+    "total_severity_score": 17
+  },
+  "group_results": [
+    {
+      "warehouse_code": "WH001",
+      "picker_id": "P003",
+      "problem_type": "quantity_mismatch",
+      "total_count": 1,
+      "problem_count": 1,
+      "high_severity_count": 1,
+      "severity_score": 3,
+      "problem_rate": 100.0
+    },
+    {
+      "warehouse_code": "WH001",
+
+ succeeded in 284ms:
+﻿追溯编号,拣货ID,订单号,商品编码,问题类型,严重等级,命中阈值,差异值,时间窗口(小时),判定说明,复核状态,复核人,复核时间
+PICK-20260602102709-OVERTHRESH-001-0001-19351f89,PICK202606020101,ORD20260602101,SKU001,quantity_mismatch,high,是,2.0000,,数量不符: 预期数量10，实际数量8，差异2.0件，阈值>=1，命中。时间窗口：24小时。拣货时间距参考时间0.0小时，时间窗口24小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0002-11838ece,PICK202606020102,ORD20260602102,SKU002,location_mismatch,medium,是,1.0000,,库位错位: 预期库位B-02-03，实际库位D-04-01，阈值>=1，命中。时间窗口：48小时。拣货时间距参考时间0.5小时，时间窗口48小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0003-7e35eaff,PICK202606020103,ORD20260602103,SKU003,sku_mismatch,high,是,1.0000,,商品错拣: 预期SKUSKU003，实际SKUSKU999，阈值>=1，命中。时间窗口：24小时。拣货时间距参考时间3.5小时，时间窗口24小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0004-63abc16a,PICK202606020104,ORD20260602104,SKU004,batch_mismatch,medium,是,1.0000,,批次错误: 预期批次B20260401，实际批次B20251201，阈值>=1，命中。时间窗口：72小时。拣货时间距参考时间4.5小时，时间窗口72小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0004-63abc16a,PICK202606020104,ORD20260602104,SKU004,expiry_mismatch,medium,是,3,,效期异常: 效期剩余3天，阈值<=7，命中。时间窗口：168小时。拣货时间距参考时间4.5小时，时间窗口168小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0004-63abc16a,PICK202606020104,ORD20260602104,SKU004,delay_pick,low,是,40.0000,,拣货超时: 拣货超时40.0分钟，阈值>=30，命中。时间窗口：24小时。拣货时间距参考时间4.5小时，时间窗口24小时，在窗口内,待复核,,
+PICK-20260602102709-OVERTHRESH-001-0005-0865e78f,PICK202606020105,ORD20260602105,SKU005,expiry_mismatch,medium,是,1,,效期异常: 效期剩余1天，阈值<=7，命中。时间窗口：168小时。拣货时间距参考时间5.5小时，时间窗口168小时，在窗口内,待复核,,
+
+codex
+我已经看到一处明显的报表字段偏差，但先不下结论。再核对一下去重和回放样例，看看是否存在会直接破坏批处理结果的阻断性问题，而不是单纯的报表空列。
+exec
+/bin/zsh -lc "python3 -B -c \"import json; from src.pick_mismatch_processor import PickMismatchProcessor; data=json.load(open('test_data/history_replay_samples.json', encoding='utf-8')); p=PickMismatchProcessor(config_dir='config'); r=p.process_batch(data['records'], batch_id=data.get('batch_id')); print(json.dumps(r['summary'], ensure_ascii=False, indent=2)); print('bad_data', len(r['bad_data'])); print('problem_details', len(r['problem_details'])); print('duplicates', sum(1 for x in r['raw_results'] if x.get('errors') and x['errors'][0]['error_type']=='duplicate_record'))\"" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "python3 -B -c \"import json; from src.pick_mismatch_processor import PickMismatchProcessor; data=json.load(open('test_data/missing_material_samples.json', encoding='utf-8')); p=PickMismatchProcessor(config_dir='config'); r=p.process_batch(data['records'], batch_id=data.get('batch_id')); print(json.dumps(r['summary'], ensure_ascii=False, indent=2)); print('bad_data sample', r['bad_data'][:3])\"" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 662ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-NdXiI1lf' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-5yNBPD4J' (errno=Operation not permitted)
+{
+  "total_records": 6,
+  "valid_records": 5,
+  "invalid_records": 1,
+  "records_with_problems": 2,
+  "problem_free_records": 3,
+  "severity_breakdown": {
+    "high": 0,
+    "medium": 2,
+    "low": 0
+  },
+  "problem_type_breakdown": {
+    "expiry_mismatch": 2
+  },
+  "total_severity_score": 4
+}
+bad_data 1
+problem_details 2
+duplicates 1
+
+ succeeded in 591ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-ORLy0hED' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-IlEdyzn9' (errno=Operation not permitted)
+{
+  "total_records": 6,
+  "valid_records": 1,
+  "invalid_records": 7,
+  "records_with_problems": 0,
+  "problem_free_records": 1,
+  "severity_breakdown": {
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "problem_type_breakdown": {},
+  "total_severity_score": 0
+}
+bad_data sample [{'error_type': 'missing_required_field', 'field_name': 'order_no', 'field_value': '', 'error_message': '必填字段缺失: order_no', 'trace_id': 'PICK-20260605024528-MISSING-001-0001-72e55453', 'pick_id': 'PICK202406010201', 'order_no': '', 'process_time': '2026-06-05T02:45:28.974017'}, {'error_type': 'invalid_date_format', 'field_name': 'pick_time', 'field_value': 'invalid-date-format', 'error_message': '日期格式无效，需为ISO格式', 'trace_id': 'PICK-20260605024528-MISSING-001-0002-2308a63e', 'pick_id': 'PICK202406010202', 'order_no': 'ORD20240601202', 'process_time': '2026-06-05T02:45:28.974629'}, {'error_type': 'missing_required_field', 'field_name': 'pick_id', 'field_value': '', 'error_message': '必填字段缺失: pick_id', 'trace_id': 'PICK-20260605024528-MISSING-001-0003-7354e498', 'pick_id': '', 'order_no': 'ORD20240601203', 'process_time': '2026-06-05T02:45:28.986739'}]
+
+codex
+为了把问题说清楚，我把关键缺陷定位到具体行号：摘要计数、分组报表字段映射、复核报表字段映射。这些是最终质检结论里最有证据力的部分。
+exec
+/bin/zsh -lc "nl -ba config/report_templates.json | sed -n '1,220p'" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "nl -ba src/report_generator.py | sed -n '1,220p'" in /Users/bill/Documents/solo/workspaces/yzz00188
+exec
+/bin/zsh -lc "nl -ba src/pick_mismatch_processor.py | sed -n '300,420p'" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+   300	                problems.append({
+   301	                    'trace_id': trace_id,
+   302	                    'problem_type': problem_type,
+   303	                    'problem_name': problem_config['name'],
+   304	                    'problem_level': problem_config['level'],
+   305	                    'threshold': problem_config['threshold'],
+   306	                    'threshold_hit': is_hit,
+   307	                    'difference_value': diff_value,
+   308	                    'time_window_hours': problem_config['time_window_hours'],
+   309	                    'within_time_window': within_window,
+   310	                    'explanation': f"{explanation}。{window_explanation}",
+   311	                    'severity_weight': self.problem_dict['severity_weights'][problem_config['level']]
+   312	                })
+   313	        
+   314	        self.processed_records.add(dedup_key)
+   315	        
+   316	        return {
+   317	            'trace_id': trace_id,
+   318	            'record': record,
+   319	            'is_valid': True,
+   320	            'errors': [],
+   321	            'problems': problems,
+   322	            'dedup_key': dedup_key
+   323	        }
+   324	    
+   325	    def process_batch(self, records: List[Dict[str, Any]], 
+   326	                      batch_id: str = None) -> Dict[str, Any]:
+   327	        if batch_id is None:
+   328	            batch_id = hashlib.md5(
+   329	                str(datetime.now().timestamp()).encode()
+   330	            ).hexdigest()[:8].upper()
+   331	        
+   332	        max_records = self.problem_dict['admission_criteria']['max_records_per_batch']
+   333	        min_records = self.problem_dict['admission_criteria']['min_records_per_batch']
+   334	        
+   335	        if len(records) > max_records:
+   336	            return {
+   337	                'success': False,
+   338	                'error': f'批次记录数超过限制: {len(records)} > {max_records}'
+   339	            }
+   340	        if len(records) < min_records:
+   341	            return {
+   342	                'success': False,
+   343	                'error': f'批次记录数不足: {len(records)} < {min_records}'
+   344	            }
+   345	        
+   346	        self.processed_records.clear()
+   347	        self.trace_counter = 0
+   348	        reference_time = datetime.now()
+   349	        
+   350	        results = []
+   351	        bad_data = []
+   352	        problem_details = []
+   353	        
+   354	        for record in records:
+   355	            result = self.process_record(record, batch_id, reference_time)
+   356	            results.append(result)
+   357	            
+   358	            if not result['is_valid']:
+   359	                bad_data.extend(result['errors'])
+   360	            
+   361	            problem_details.extend(result['problems'])
+   362	        
+   363	        group_results = self._generate_group_results(results)
+   364	        summary = self._generate_summary(results, bad_data, problem_details)
+   365	        
+   366	        return {
+   367	            'success': True,
+   368	            'batch_id': batch_id,
+   369	            'process_time': reference_time.isoformat(),
+   370	            'metadata': {
+   371	                'total_records': len(records),
+   372	                'config_version': self.problem_dict['version']
+   373	            },
+   374	            'summary': summary,
+   375	            'group_results': group_results,
+   376	            'problem_details': problem_details,
+   377	            'bad_data': bad_data,
+   378	            'raw_results': results
+   379	        }
+   380	    
+   381	    def _generate_group_results(self, results: List[Dict[str, Any]]) -> Dict[str, Any]:
+   382	        groups = defaultdict(lambda: {
+   383	            'total_count': 0,
+   384	            'problem_count': 0,
+   385	            'high_severity_count': 0,
+   386	            'severity_score': 0
+   387	        })
+   388	        
+   389	        for result in results:
+   390	            record = result['record']
+   391	            has_problem = len(result['problems']) > 0
+   392	            
+   393	            wh = record.get('warehouse_code', 'UNKNOWN')
+   394	            picker = record.get('picker_id', 'UNKNOWN')
+   395	            
+   396	            if has_problem:
+   397	                for problem in result['problems']:
+   398	                    key = (wh, picker, problem['problem_type'])
+   399	                    groups[key]['total_count'] += 1
+   400	                    groups[key]['problem_count'] += 1
+   401	                    if problem['problem_level'] == 'high':
+   402	                        groups[key]['high_severity_count'] += 1
+   403	                    groups[key]['severity_score'] += problem['severity_weight']
+   404	            else:
+   405	                key = (wh, picker, 'none')
+   406	                groups[key]['total_count'] += 1
+   407	        
+   408	        formatted_groups = []
+   409	        for (warehouse, picker, problem_type), metrics in groups.items():
+   410	            metrics['problem_rate'] = (
+   411	                metrics['problem_count'] / metrics['total_count'] * 100 
+   412	                if metrics['total_count'] > 0 else 0
+   413	            )
+   414	            formatted_groups.append({
+   415	                'warehouse_code': warehouse,
+   416	                'picker_id': picker,
+   417	                'problem_type': problem_type,
+   418	                **metrics
+   419	            })
+   420	        
+
+ succeeded in 136ms:
+     1	#!/usr/bin/env python3
+     2	# -*- coding: utf-8 -*-
+     3	
+     4	import json
+     5	import csv
+     6	import os
+     7	from datetime import datetime
+     8	from typing import Dict, List, Any
+     9	
+    10	
+    11	class ReportGenerator:
+    12	    
+    13	    def __init__(self, config_dir: str = 'config', output_dir: str = 'output'):
+    14	        self.config_dir = config_dir
+    15	        self.output_dir = output_dir
+    16	        self.load_templates()
+    17	        self._ensure_output_dir()
+    18	    
+    19	    def load_templates(self):
+    20	        with open(os.path.join(self.config_dir, 'report_templates.json'), 'r', encoding='utf-8') as f:
+    21	            self.templates = json.load(f)
+    22	    
+    23	    def _ensure_output_dir(self):
+    24	        os.makedirs(self.output_dir, exist_ok=True)
+    25	        for subdir in ['group_reports', 'bad_data', 'json_results', 'review_tables']:
+    26	            os.makedirs(os.path.join(self.output_dir, subdir), exist_ok=True)
+    27	    
+    28	    def generate_all_reports(self, process_result: Dict[str, Any], 
+    29	                              filename_prefix: str = None) -> Dict[str, str]:
+    30	        if not process_result.get('success', False):
+    31	            return {'error': process_result.get('error', '处理失败')}
+    32	        
+    33	        if filename_prefix is None:
+    34	            filename_prefix = f"batch_{process_result['batch_id']}"
+    35	        
+    36	        generated_files = {}
+    37	        
+    38	        group_report_path = self.generate_group_report(
+    39	            process_result, 
+    40	            os.path.join(self.output_dir, 'group_reports', f"{filename_prefix}_group.csv")
+    41	        )
+    42	        generated_files['group_report'] = group_report_path
+    43	        
+    44	        bad_data_path = self.generate_bad_data_report(
+    45	            process_result,
+    46	            os.path.join(self.output_dir, 'bad_data', f"{filename_prefix}_bad_data.csv")
+    47	        )
+    48	        generated_files['bad_data_report'] = bad_data_path
+    49	        
+    50	        json_path = self.generate_json_result(
+    51	            process_result,
+    52	            os.path.join(self.output_dir, 'json_results', f"{filename_prefix}_result.json")
+    53	        )
+    54	        generated_files['json_result'] = json_path
+    55	        
+    56	        review_path = self.generate_review_report(
+    57	            process_result,
+    58	            os.path.join(self.output_dir, 'review_tables', f"{filename_prefix}_review.csv")
+    59	        )
+    60	        generated_files['review_report'] = review_path
+    61	        
+    62	        return generated_files
+    63	    
+    64	    def generate_group_report(self, process_result: Dict[str, Any], 
+    65	                               output_path: str) -> str:
+    66	        template = self.templates['group_report']
+    67	        group_results = process_result.get('group_results', [])
+    68	        
+    69	        headers = [d['name'] for d in template['group_dimensions']] + \
+    70	                  [d['name'] for d in template['metrics']]
+    71	        
+    72	        key_mapping = {}
+    73	        for d in template['group_dimensions'] + template['metrics']:
+    74	            key_mapping[d['name']] = d['key']
+    75	        
+    76	        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+    77	            writer = csv.DictWriter(f, fieldnames=headers)
+    78	            writer.writeheader()
+    79	            
+    80	            for row in group_results:
+    81	                output_row = {}
+    82	                for header in headers:
+    83	                    key = key_mapping[header]
+    84	                    value = row.get(key, '')
+    85	                    if isinstance(value, float):
+    86	                        value = f"{value:.2f}"
+    87	                    output_row[header] = value
+    88	                writer.writerow(output_row)
+    89	        
+    90	        return output_path
+    91	    
+    92	    def generate_bad_data_report(self, process_result: Dict[str, Any], 
+    93	                                  output_path: str) -> str:
+    94	        template = self.templates['bad_data_report']
+    95	        bad_data = process_result.get('bad_data', [])
+    96	        
+    97	        field_configs = template['fields']
+    98	        headers = [f['name'] for f in field_configs]
+    99	        key_mapping = {f['name']: f['key'] for f in field_configs}
+   100	        
+   101	        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+   102	            writer = csv.DictWriter(f, fieldnames=headers)
+   103	            writer.writeheader()
+   104	            
+   105	            for error in bad_data:
+   106	                output_row = {}
+   107	                for header in headers:
+   108	                    key = key_mapping[header]
+   109	                    output_row[header] = error.get(key, '')
+   110	                writer.writerow(output_row)
+   111	        
+   112	        return output_path
+   113	    
+   114	    def generate_json_result(self, process_result: Dict[str, Any], 
+   115	                              output_path: str) -> str:
+   116	        template = self.templates['json_output']
+   117	        include_fields = template['include_fields']
+   118	        
+   119	        output_data = {}
+   120	        for field in include_fields:
+   121	            if field in process_result:
+   122	                output_data[field] = process_result[field]
+   123	        
+   124	        output_data['batch_info'] = {
+   125	            'batch_id': process_result.get('batch_id'),
+   126	            'process_time': process_result.get('process_time'),
+   127	            'generated_at': datetime.now().isoformat()
+   128	        }
+   129	        
+   130	        with open(output_path, 'w', encoding='utf-8') as f:
+   131	            json.dump(output_data, f, ensure_ascii=False, indent=template['indent'])
+   132	        
+   133	        return output_path
+   134	    
+   135	    def generate_review_report(self, process_result: Dict[str, Any], 
+   136	                                output_path: str) -> str:
+   137	        template = self.templates['review_report']
+   138	        problems = process_result.get('problem_details', [])
+   139	        raw_results = process_result.get('raw_results', [])
+   140	        
+   141	        record_lookup = {}
+   142	        for result in raw_results:
+   143	            record_lookup[result['trace_id']] = result.get('record', {})
+   144	        
+   145	        field_configs = template['fields']
+   146	        headers = [f['name'] for f in field_configs]
+   147	        key_mapping = {f['name']: f['key'] for f in field_configs}
+   148	        
+   149	        with open(output_path, 'w', newline='', encoding='utf-8-sig') as f:
+   150	            writer = csv.DictWriter(f, fieldnames=headers)
+   151	            writer.writeheader()
+   152	            
+   153	            for problem in problems:
+   154	                record = record_lookup.get(problem['trace_id'], {})
+   155	                output_row = {}
+   156	                
+   157	                for header in headers:
+   158	                    key = key_mapping[header]
+   159	                    
+   160	                    if key in problem:
+   161	                        value = problem[key]
+   162	                    elif key in record:
+   163	                        value = record[key]
+   164	                    elif key == 'review_status':
+   165	                        value = '待复核'
+   166	                    else:
+   167	                        value = ''
+   168	                    
+   169	                    if isinstance(value, float):
+   170	                        value = f"{value:.4f}"
+   171	                    elif isinstance(value, bool):
+   172	                        value = '是' if value else '否'
+   173	                    
+   174	                    output_row[header] = value
+   175	                
+   176	                writer.writerow(output_row)
+   177	        
+   178	        return output_path
+
+ succeeded in 136ms:
+     1	{
+     2	  "version": "1.0.0",
+     3	  "description": "报表模板配置",
+     4	  "group_report": {
+     5	    "name": "分组分析报表",
+     6	    "group_dimensions": [
+     7	      {"key": "warehouse_code", "name": "仓库编码"},
+     8	      {"key": "picker_id", "name": "拣货员ID"},
+     9	      {"key": "problem_type", "name": "问题类型"},
+    10	      {"key": "pick_date", "name": "拣货日期"}
+    11	    ],
+    12	    "metrics": [
+    13	      {"key": "total_count", "name": "记录总数"},
+    14	      {"key": "problem_count", "name": "问题记录数"},
+    15	      {"key": "problem_rate", "name": "问题率(%)"},
+    16	      {"key": "high_severity_count", "name": "高风险数"},
+    17	      {"key": "severity_score", "name": "严重度评分"}
+    18	    ],
+    19	    "sort_by": ["problem_rate", "desc"],
+    20	    "format": "csv"
+    21	  },
+    22	  "bad_data_report": {
+    23	    "name": "坏数据清单",
+    24	    "fields": [
+    25	      {"key": "trace_id", "name": "追溯编号"},
+    26	      {"key": "pick_id", "name": "拣货ID"},
+    27	      {"key": "order_no", "name": "订单号"},
+    28	      {"key": "error_type", "name": "错误类型"},
+    29	      {"key": "error_message", "name": "错误详情"},
+    30	      {"key": "field_name", "name": "问题字段"},
+    31	      {"key": "field_value", "name": "字段值"},
+    32	      {"key": "process_time", "name": "处理时间"}
+    33	    ],
+    34	    "error_types": [
+    35	      "missing_required_field",
+    36	      "invalid_data_type",
+    37	      "duplicate_record",
+    38	      "invalid_date_format",
+    39	      "value_out_of_range"
+    40	    ]
+    41	  },
+    42	  "review_report": {
+    43	    "name": "人工复核表",
+    44	    "fields": [
+    45	      {"key": "trace_id", "name": "追溯编号"},
+    46	      {"key": "pick_id", "name": "拣货ID"},
+    47	      {"key": "order_no", "name": "订单号"},
+    48	      {"key": "sku_code", "name": "商品编码"},
+    49	      {"key": "problem_type", "name": "问题类型"},
+    50	      {"key": "problem_level", "name": "严重等级"},
+    51	      {"key": "threshold_hit", "name": "命中阈值"},
+    52	      {"key": "difference_value", "name": "差异值"},
+    53	      {"key": "time_window", "name": "时间窗口(小时)"},
+    54	      {"key": "explanation", "name": "判定说明"},
+    55	      {"key": "review_status", "name": "复核状态"},
+    56	      {"key": "reviewer", "name": "复核人"},
+    57	      {"key": "review_time", "name": "复核时间"}
+    58	    ],
+    59	    "review_status_options": ["待复核", "已确认", "已驳回", "需补充"]
+    60	  },
+    61	  "json_output": {
+    62	    "include_fields": [
+    63	      "metadata",
+    64	      "summary",
+    65	      "group_results",
+    66	      "problem_details",
+    67	      "bad_data",
+    68	      "trace_info"
+    69	    ],
+    70	    "indent": 2,
+    71	    "encoding": "utf-8"
+    72	  }
+    73	}
+
+exec
+/bin/zsh -lc "nl -ba main.py | sed -n '1,220p'" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+     1	#!/usr/bin/env python3
+     2	# -*- coding: utf-8 -*-
+     3	
+     4	import json
+     5	import sys
+     6	import os
+     7	import argparse
+     8	
+     9	sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    10	
+    11	from src.pick_mismatch_processor import PickMismatchProcessor
+    12	from src.report_generator import ReportGenerator
+    13	
+    14	
+    15	def load_records_from_file(file_path: str) -> list:
+    16	    with open(file_path, 'r', encoding='utf-8') as f:
+    17	        data = json.load(f)
+    18	    return data.get('records', []), data.get('batch_id')
+    19	
+    20	
+    21	def process_file(input_file: str, output_prefix: str = None, config_dir: str = 'config'):
+    22	    print(f"\n{'='*60}")
+    23	    print(f"处理文件: {input_file}")
+    24	    print(f"{'='*60}")
+    25	    
+    26	    records, batch_id = load_records_from_file(input_file)
+    27	    print(f"加载记录数: {len(records)}")
+    28	    
+    29	    processor = PickMismatchProcessor(config_dir=config_dir)
+    30	    result = processor.process_batch(records, batch_id=batch_id)
+    31	    
+    32	    if not result.get('success', False):
+    33	        print(f"处理失败: {result.get('error', '未知错误')}")
+    34	        return result
+    35	    
+    36	    summary = result['summary']
+    37	    print(f"\n处理摘要:")
+    38	    print(f"  总记录数: {summary['total_records']}")
+    39	    print(f"  有效记录: {summary['valid_records']}")
+    40	    print(f"  无效记录: {summary['invalid_records']}")
+    41	    print(f"  有问题记录: {summary['records_with_problems']}")
+    42	    print(f"  无问题记录: {summary['problem_free_records']}")
+    43	    print(f"\n严重度分布:")
+    44	    print(f"  高风险: {summary['severity_breakdown']['high']}")
+    45	    print(f"  中风险: {summary['severity_breakdown']['medium']}")
+    46	    print(f"  低风险: {summary['severity_breakdown']['low']}")
+    47	    print(f"  总严重度评分: {summary['total_severity_score']}")
+    48	    
+    49	    if output_prefix is None:
+    50	        output_prefix = os.path.splitext(os.path.basename(input_file))[0]
+    51	    
+    52	    report_gen = ReportGenerator(config_dir=config_dir)
+    53	    generated_files = report_gen.generate_all_reports(result, filename_prefix=output_prefix)
+    54	    
+    55	    print(f"\n生成的报表文件:")
+    56	    for report_type, file_path in generated_files.items():
+    57	        print(f"  {report_type}: {file_path}")
+    58	    
+    59	    return result
+    60	
+    61	
+    62	def main():
+    63	    parser = argparse.ArgumentParser(description='仓库拣货错位记录处理脚本')
+    64	    parser.add_argument('input_file', nargs='?', help='输入JSON文件路径')
+    65	    parser.add_argument('--output', '-o', help='输出文件前缀')
+    66	    parser.add_argument('--config', '-c', default='config', help='配置目录')
+    67	    parser.add_argument('--test', action='store_true', help='运行所有测试样例')
+    68	    
+    69	    args = parser.parse_args()
+    70	    
+    71	    if args.test:
+    72	        print("运行所有测试样例...")
+    73	        test_files = [
+    74	            'test_data/compliant_samples.json',
+    75	            'test_data/over_threshold_samples.json',
+    76	            'test_data/missing_material_samples.json',
+    77	            'test_data/history_replay_samples.json'
+    78	        ]
+    79	        
+    80	        all_results = []
+    81	        for test_file in test_files:
+    82	            if os.path.exists(test_file):
+    83	                result = process_file(test_file, config_dir=args.config)
+    84	                all_results.append(result)
+    85	        
+    86	        print(f"\n{'='*60}")
+    87	        print("测试完成，共运行 %d 个测试样例" % len(all_results))
+    88	        print(f"{'='*60}")
+    89	        return
+    90	    
+    91	    if not args.input_file:
+    92	        parser.print_help()
+    93	        return
+    94	    
+    95	    if not os.path.exists(args.input_file):
+    96	        print(f"错误: 输入文件不存在: {args.input_file}")
+    97	        sys.exit(1)
+    98	    
+    99	    process_file(args.input_file, output_prefix=args.output, config_dir=args.config)
+   100	
+   101	
+   102	if __name__ == '__main__':
+   103	    main()
+
+exec
+/bin/zsh -lc "nl -ba src/pick_mismatch_processor.py | sed -n '420,470p'" in /Users/bill/Documents/solo/workspaces/yzz00188
+ succeeded in 0ms:
+   420	        
+   421	        return formatted_groups
+   422	    
+   423	    def _generate_summary(self, results: List[Dict[str, Any]], 
+   424	                          bad_data: List[Dict[str, Any]], 
+   425	                          problems: List[Dict[str, Any]]) -> Dict[str, Any]:
+   426	        valid_count = sum(1 for r in results if r['is_valid'])
+   427	        problem_count = sum(1 for r in results if r['problems'])
+   428	        
+   429	        high_count = sum(1 for p in problems if p['problem_level'] == 'high')
+   430	        medium_count = sum(1 for p in problems if p['problem_level'] == 'medium')
+   431	        low_count = sum(1 for p in problems if p['problem_level'] == 'low')
+   432	        
+   433	        problem_type_counts = defaultdict(int)
+   434	        for p in problems:
+   435	            problem_type_counts[p['problem_type']] += 1
+   436	        
+   437	        return {
+   438	            'total_records': len(results),
+   439	            'valid_records': valid_count,
+   440	            'invalid_records': len(bad_data),
+   441	            'records_with_problems': problem_count,
+   442	            'problem_free_records': valid_count - problem_count,
+   443	            'severity_breakdown': {
+   444	                'high': high_count,
+   445	                'medium': medium_count,
+   446	                'low': low_count
+   447	            },
+   448	            'problem_type_breakdown': dict(problem_type_counts),
+   449	            'total_severity_score': sum(p['severity_weight'] for p in problems)
+   450	        }
+
+codex
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目主入口 `main.py` 能调起批处理，样例也能跑出结果，但交付内容有明显错配，影响可用性：`src/pick_mismatch_processor.py:437-441` 把 `invalid_records` 统计成坏数据条数，`test_data/missing_material_samples.json` 会出现 `total_records=6, invalid_records=7`；`src/report_generator.py:64-88` 生成分组报表时依赖 `pick_date`，但 `group_results` 未写入该字段，导致 `output/group_reports/over_threshold_samples_group.csv` 该列为空；复核表同样因字段映射不一致，`output/review_tables/over_threshold_samples_review.csv` 的 `时间窗口(小时)` 为空。结果不可信，未达到可交付标准。
+- 主要证据: `main.py:21-59` 存在真实 CLI 入口，且内存验证四个样例均返回 `success=True`；`src/pick_mismatch_processor.py:325-379` 可完成批处理；但 `src/pick_mismatch_processor.py:437-441` 的无效记录统计口径错误，`src/report_generator.py:64-88` 与 `config/report_templates.json:4-20` 的分组字段不一致，`src/report_generator.py:135-176` 与 `config/report_templates.json:42-60` 的复核字段不一致。
+- 阻断问题: 1. 摘要指标失真，`invalid_records` 不是按记录数统计。2. 报表模板与实际输出字段不匹配，关键列为空。3. 这会直接影响用户对批处理结果和人工复核表的判断。
+- 建议: 1. 将 `invalid_records` 改为按无效记录去重计数，并保留错误条数单独字段。2. 在 `group_results` 中补齐 `pick_date` 或从模板移除该维度。3. 将 `time_window_hours` 显式映射到复核表的 `time_window`。4. 补充针对样例数据的断言测试，覆盖摘要和报表列完整性。
+tokens used
+39,088

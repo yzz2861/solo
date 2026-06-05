@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 核心接口链路没有完成验收。`app/main.py:41-47` 的 `/api/v1/strategy/judge` 会先写入处理历史，再走落库；而 `app/database.py:11-23` 把 SQLite 固定到相对路径 `pump_strategy.db`，没有可配置的数据目录或回退方案。当前交付形态下，这条写入链路会直接中断，导致首个判断请求无法完成，后续复核、回放、历史查询也就没有稳定数据基础。另有规则冲突分支在 `app/rule_engine.py:209-218` 基本不可达，和“同时命中启/停泵冲突”的说明存在偏差。
+- 主要证据:
+- `app/main.py:41-47`：`judge_strategy` 一进入就写 `processing_history`，这是核心写路径。
+- `app/database.py:11-23`：数据库路径硬编码为 `pump_strategy.db`，且没有环境变量/配置入口。
+- 直接调用 `/api/v1/strategy/judge` 时，当前工作区返回 `sqlite3.OperationalError: attempt to write a readonly database`，核心流程无法跑通。
+- `app/rule_engine.py:154-231`：冲突检测依赖 `matched_rules` 中的启/停泵规则组合，但启泵和停泵条件本身互斥，`action_conflict` 分支几乎不可达。
+- 阻断问题:
+- 核心判断接口依赖对 `pump_strategy.db` 的写入，但当前交付环境下该路径不可写，导致 `/api/v1/strategy/judge` 无法落库，项目不能完成真实的核心流程验证。
+- 建议:
+- 把数据库路径改成可配置项，并确保启动时创建可写的数据文件或目录。
+- 补一个最小可运行入口或启动脚本，至少覆盖 judge/review/status/playback 的端到端自检。
+- 若保留规则冲突能力，补一个真正可触发的冲突模型，或移除不可达分支，避免说明与实现不一致。

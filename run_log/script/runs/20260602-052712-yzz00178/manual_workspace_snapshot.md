@@ -1,0 +1,21 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/lastfailed
+- .pytest_cache/v/cache/nodeids
+- app/__init__.py
+- app/main.py
+- app/models/__init__.py
+- app/models/schemas.py
+- app/services/__init__.py
+- app/services/processor.py
+- app/services/rule_engine.py
+- app/services/storage.py
+- app/services/validator.py
+- app/utils/__init__.py
+- app/utils/trace_id_generator.py
+- requirements.txt
+- tests/__init__.py
+- tests/test_compensation_api.py

@@ -1,0 +1,27 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/lastfailed
+- .pytest_cache/v/cache/nodeids
+- data/sample/dictionary.csv
+- data/sample/raw_detail.csv
+- data/sample/stat_periods.json
+- data/sample/threshold_rules.json
+- output/demo/bad_data.csv
+- output/demo/group_report.csv
+- output/demo/result.json
+- output/demo/review_table.csv
+- src/__init__.py
+- src/aggregator.py
+- src/deduplicator.py
+- src/exporter.py
+- src/grader.py
+- src/loader.py
+- src/main.py
+- src/models.py
+- src/pipeline.py
+- src/validator.py
+- tests/__init__.py
+- tests/test_pipeline.py

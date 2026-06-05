@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: `LateReturnProcessor.process()` 没有在每次运行前重置内部状态，导致同一实例重复调用会把上一次的 `annotated` 和统计结果累加进下一次；同时 `_export_csv()` 直接用首条记录的字段集作为 `fieldnames`，遇到后续记录携带额外字段时会抛错中断导出。这样会让批处理结果失真，且真实数据一旦字段不齐就无法完成导出，阻断“可运行、可复核”的核心目标。
+- 主要证据:
+- `late_return_stats.py:263-289`，同一 `LateReturnProcessor` 连续 `process()` 两次，第二次 `total_records` 会从 1 变成 2，证明状态被累积污染。
+- `late_return_stats.py:446-461`，CSV 导出对异构字段不兼容；实测两条记录字段不一致时直接报 `ValueError dict contains fields not in fieldnames: 'b'`。
+- `test_late_return_stats.py` 只覆盖了单次处理和固定字段样例，没有覆盖处理器复用和异构输入导出。
+- 阻断问题:
+- `process()` 缺少幂等/重置逻辑，重复调用会污染统计。
+- CSV 导出对真实业务里常见的变字段输入不鲁棒，导出链路可能直接失败。
+- 建议:
+- 在 `process()` 开头重置 `annotated`、`stats`、`dedup_tracker`，或明确限制单实例单次使用并在接口层防御。
+- 导出 CSV 时统一字段集合，或对多余字段做兼容处理。
+- 增加“同一实例重复处理”和“异构字段导出”的测试用例。

@@ -1,0 +1,3 @@
+项目实现了 FastAPI 入口和配额批次处理主流程，但重复请求稳定性存在缺陷：`app/services.py:138` 查询已存在批次明细时没有 `order_by`，同一 `batch_no` 第二次返回的 `details` 顺序可能与首次处理顺序不同；我用内存 SQLite 直接调用 `QuotaService.process_batch` 验证混合明细后，重复响应出现明细顺序变化，影响原始提示词“重复请求要保持稳定结论”的 API 回执稳定性。此外，`app/rules.py:113` 对 `storage/api_calls` 触发的 `needs_supplement` 返回 `failure_reason=None`，无法解释需补充原因，响应解释信息不完整。
+
+请修改第一轮发现的问题， 保留已有功能，完成后确保项目仍可安装、可运行、可验证。

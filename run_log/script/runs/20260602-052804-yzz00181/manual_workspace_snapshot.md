@@ -1,0 +1,31 @@
+# Workspace Snapshot
+
+- README.md
+- fall_risk_cli/__init__.py
+- fall_risk_cli/__main__.py
+- fall_risk_cli/cli.py
+- fall_risk_cli/exporter.py
+- fall_risk_cli/history.py
+- fall_risk_cli/loader.py
+- fall_risk_cli/models.py
+- fall_risk_cli/sample_data.py
+- fall_risk_cli/validator.py
+- fall_risk_cli.py
+- output/BATCH-20260602-064429-A61EA3_正常记录.csv
+- output/BATCH-20260602-064429-A61EA3_正常记录.json
+- output/BATCH-20260602-064647-6732F7_异常记录.csv
+- output/BATCH-20260602-064647-6732F7_异常记录.json
+- output/BATCH-20260602-064905-06D9F9_异常记录.csv
+- output/BATCH-20260602-064905-06D9F9_异常记录.json
+- output/历史轨迹.json
+- pytest.ini
+- samples/output/历史轨迹.json
+- samples/合规样例_主清单.csv
+- samples/合规样例_补充表.csv
+- samples/材料缺失样例_主清单.csv
+- samples/材料缺失样例_补充表.csv
+- samples/校验规则.json
+- samples/超阈值样例_主清单.csv
+- samples/超阈值样例_补充表.csv
+- test_output.txt
+- tests/test_acceptance.py

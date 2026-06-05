@@ -1,0 +1,13 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因:
+- 主要证据:
+  - `package.json` 已提供可执行入口 `spray-check`，并有 `npm start` / `npm test` 脚本；`src/index.js` 真实串起了 `DataReader -> Validator -> ResultWriter` 的核心链路。
+  - 用现有样例 `data/main_list.csv`、`data/supplement.csv`、`data/rules.json` 做内存校验，结果为 `normal=5 / exceptions=5 / toReview=5 / badRows=6`，与现有产物 `data/output/full/summary.json` 一致，说明核心流程可跑通。
+  - `tests/run-tests.js` 覆盖了完整数据、时间越界、编号错误、配置缺失四类场景，项目不是只有入口文件而已。
+- 阻断问题: 无
+- 建议:
+  - `--no-header` 选项目前没有真正改变 CSV 解析行为，属于未生效功能，建议补齐或移除。
+  - 测试与默认输出目录都写在仓库内，后续可考虑改到临时目录，减少对工作区文件的污染。

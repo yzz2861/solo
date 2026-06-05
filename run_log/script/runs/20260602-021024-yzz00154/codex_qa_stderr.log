@@ -1,0 +1,2111 @@
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00154
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019e8495-7e72-7451-834a-b5aec9bf905b
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00154
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00154
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+codex
+我会按“solo质检”的口径做只读检查：先识别项目入口和原始目标线索，再尝试用现有文件验证安装/运行链路，不改文件、不提交。
+exec
+/bin/zsh -lc 'ls -la' in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+total 8
+drwxr-xr-x@  7 bill  staff  224 Jun  2 02:16 .
+drwxr-xr-x  27 bill  staff  864 Jun  2 02:10 ..
+drwxr-xr-x@  6 bill  staff  192 Jun  2 02:16 .pytest_cache
+drwxr-xr-x@  7 bill  staff  224 Jun  2 02:14 app
+-rw-r--r--@  1 bill  staff  409 Jun  2 02:12 pyproject.toml
+drwxr-xr-x@  7 bill  staff  224 Jun  2 02:12 teacher_allowance_api.egg-info
+drwxr-xr-x@  4 bill  staff  128 Jun  2 02:16 tests
+
+exec
+/bin/zsh -lc "find .. -maxdepth 2 -iname '*prompt*' -o -iname '*task*' -o -iname '*readme*'" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+../yzz00048/README.md
+../yzz00046/README.md
+../yzz00041/README.md
+../yzz00031/README.md
+../yzz00038/README.md
+../yzz00032/README.md
+../yzz00035/README.md
+
+exec
+/bin/zsh -lc "rg --files -g '"'!*node_modules*'"' -g '"'!*.png'"' -g '"'!*.jpg'"' -g '"'!*.jpeg'"' -g '"'!*.gif'"' -g '"'!*.webp'"'" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+teacher_allowance_api.egg-info/dependency_links.txt
+teacher_allowance_api.egg-info/top_level.txt
+teacher_allowance_api.egg-info/requires.txt
+teacher_allowance_api.egg-info/SOURCES.txt
+teacher_allowance_api.egg-info/PKG-INFO
+tests/__init__.py
+tests/test_allowance.py
+pyproject.toml
+app/engine/calculator.py
+app/engine/__init__.py
+app/main.py
+app/api/routes.py
+app/api/__init__.py
+app/models/state.py
+app/models/record.py
+app/models/rule.py
+app/models/__init__.py
+app/models/object.py
+app/__init__.py
+
+codex
+当前目录没有 README，但存在 `pyproject.toml`、FastAPI 风格入口和测试文件；接下来我会对配置、路由、核心计算和测试期望做交叉验证。
+exec
+/bin/zsh -lc "sed -n '1,220p' pyproject.toml" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+[project]
+name = "teacher-allowance-api"
+version = "0.1.0"
+description = "Teacher Course Hour Allowance Calculation API"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "httpx>=0.24.0",
+]
+
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+exec
+/bin/zsh -lc "sed -n '1,260p' tests/test_allowance.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from __future__ import annotations
+
+import pytest
+
+from app.engine.calculator import AllowanceEngine
+from app.models.object import CalculateRequest, CourseType, TeacherObject, TeacherStatus, TimeWindow
+from app.models.record import RecordStore
+from app.models.rule import RuleAction, calculate_allowance
+from app.models.state import InvalidTransitionError, TaskState, TaskStatus
+
+
+def _make_teacher(
+    teacher_id: str = "T001",
+    name: str = "张三",
+    status: TeacherStatus = TeacherStatus.ACTIVE,
+    course_hours: float = 80.0,
+    course_type: CourseType = CourseType.LECTURE,
+    base_rate: float = 50.0,
+    materials_submitted: bool = True,
+) -> TeacherObject:
+    return TeacherObject(
+        teacher_id=teacher_id,
+        name=name,
+        status=status,
+        course_hours=course_hours,
+        course_type=course_type,
+        base_rate=base_rate,
+        materials_submitted=materials_submitted,
+    )
+
+
+def _make_request(
+    business_id: str = "BIZ001",
+    teacher: TeacherObject | None = None,
+    rule_version: str = "v1",
+    operator: str = "admin",
+) -> CalculateRequest:
+    return CalculateRequest(
+        business_id=business_id,
+        teacher=teacher or _make_teacher(),
+        time_window=TimeWindow(start_date="2026-05-01", end_date="2026-05-31"),
+        rule_version=rule_version,
+        operator=operator,
+    )
+
+
+class TestSingleSuccess:
+    def test_active_teacher_normal_hours_pass(self):
+        engine = AllowanceEngine()
+        req = _make_request(business_id="BIZ-S001", teacher=_make_teacher(course_hours=80))
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PASS
+        assert result.task_status == TaskStatus.PASSED
+        assert result.allowance_amount == 80 * 50 * 1.0 * 1.0
+        assert "核算通过" in result.readable_reason
+        assert "80" in result.calculation_detail
+        assert len(result.rule_hits) == 0
+
+    def test_lab_course_multiplier(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=60, course_type=CourseType.LAB)
+        req = _make_request(business_id="BIZ-S002", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PASS
+        assert result.allowance_amount == 60 * 50 * 1.2 * 1.0
+
+    def test_practice_course_multiplier(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=40, course_type=CourseType.PRACTICE)
+        req = _make_request(business_id="BIZ-S003", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PASS
+        assert result.allowance_amount == 40 * 50 * 1.3 * 1.0
+
+    def test_custom_base_rate(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=100, base_rate=80.0)
+        req = _make_request(business_id="BIZ-S004", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PASS
+        assert result.allowance_amount == 100 * 80.0 * 1.0 * 1.0
+
+
+class TestBatchPartialFailure:
+    def test_batch_with_mixed_results(self):
+        engine = AllowanceEngine()
+        requests = [
+            _make_request(
+                business_id="BIZ-B001",
+                teacher=_make_teacher(teacher_id="T1", course_hours=80),
+            ),
+            _make_request(
+                business_id="BIZ-B002",
+                teacher=_make_teacher(
+                    teacher_id="T2", course_hours=80, materials_submitted=False
+                ),
+            ),
+            _make_request(
+                business_id="BIZ-B003",
+                teacher=_make_teacher(
+                    teacher_id="T3", course_hours=210
+                ),
+            ),
+        ]
+        results = engine.batch_calculate(requests)
+
+        assert len(results) == 3
+        assert results[0].final_action == RuleAction.PASS
+        assert results[0].task_status == TaskStatus.PASSED
+
+        assert results[1].final_action == RuleAction.BLOCK
+        assert results[1].task_status == TaskStatus.BLOCKED
+        assert "材料" in results[1].readable_reason
+
+        assert results[2].final_action == RuleAction.PENDING_REVIEW
+        assert results[2].task_status == TaskStatus.PENDING_REVIEW
+        assert "上限" in results[2].readable_reason
+
+
+class TestManualReview:
+    def test_non_active_teacher_enters_review(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=60)
+        req = _make_request(business_id="BIZ-R001", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PENDING_REVIEW
+        assert result.task_status == TaskStatus.PENDING_REVIEW
+        assert "复核" in result.readable_reason
+
+    def test_exceed_max_hours_enters_review(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=210)
+        req = _make_request(business_id="BIZ-R002", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PENDING_REVIEW
+        assert result.task_status == TaskStatus.PENDING_REVIEW
+
+    def test_review_approved(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=60)
+        req = _make_request(business_id="BIZ-R003", teacher=teacher)
+        engine.calculate(req)
+
+        review_result = engine.review(
+            business_id="BIZ-R003",
+            approved=True,
+            operator="reviewer1",
+            reason="退休教师返聘，材料齐全",
+        )
+
+        assert review_result.task_status == TaskStatus.REVIEW_APPROVED
+        assert review_result.final_action == RuleAction.PASS
+        assert "复核通过" in review_result.readable_reason
+
+    def test_review_rejected(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=60)
+        req = _make_request(business_id="BIZ-R004", teacher=teacher)
+        engine.calculate(req)
+
+        review_result = engine.review(
+            business_id="BIZ-R004",
+            approved=False,
+            operator="reviewer1",
+            reason="材料不属实",
+        )
+
+        assert review_result.task_status == TaskStatus.REVIEW_REJECTED
+        assert review_result.final_action == RuleAction.BLOCK
+
+    def test_review_only_allowed_in_pending_review(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=80)
+        req = _make_request(business_id="BIZ-R005", teacher=teacher)
+        engine.calculate(req)
+
+        review_result = engine.review(
+            business_id="BIZ-R005",
+            approved=True,
+            operator="reviewer1",
+            reason="不应到达此处",
+        )
+
+        assert "不可复核" in review_result.readable_reason
+
+    def test_missing_materials_blocks_not_review(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=80, materials_submitted=False)
+        req = _make_request(business_id="BIZ-R006", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.BLOCK
+        assert result.task_status == TaskStatus.BLOCKED
+        assert "材料" in result.readable_reason
+
+    def test_high_risk_and_missing_materials_blocks(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(
+            course_hours=210, materials_submitted=False
+        )
+        req = _make_request(business_id="BIZ-R007", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.BLOCK
+        assert result.task_status == TaskStatus.BLOCKED
+        assert "材料" in result.readable_reason
+
+
+class TestDuplicateSubmission:
+    def test_duplicate_submission_blocked(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=80)
+        req1 = _make_request(business_id="BIZ-D001", teacher=teacher)
+        result1 = engine.calculate(req1)
+
+        assert result1.final_action == RuleAction.PASS
+        assert result1.task_status == TaskStatus.PASSED
+
+        result2 = engine.calculate(req1)
+        assert "重复核算" in result2.readable_reason
+
+    def test_resubmit_after_block(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=80, materials_submitted=False)
+        req1 = _make_request(business_id="BIZ-D002", teacher=teacher)
+        result1 = engine.calculate(req1)
+
+        assert result1.task_status == TaskStatus.BLOCKED
+
+        teacher_fixed = _make_teacher(course_hours=80, materials_submitted=True)
+        req2 = _make_request(business_id="BIZ-D002", teacher=teacher_fixed)
+        result2 = engine.calculate(req2)
+
+        assert result2.final_action == RuleAction.PASS
+        assert result2.task_status == TaskStatus.PASSED
+
+    def test_resubmit_after_review_rejected(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=60)
+        req1 = _make_request(business_id="BIZ-D003", teacher=teacher)
+        engine.calculate(req1)
+
+        engine.review("BIZ-D003", approved=False, operator="reviewer1", reason="拒绝")
+
+        state = engine.get_state("BIZ-D003")
+        assert state.current_status == TaskStatus.REVIEW_REJECTED
+
+        teacher2 = _make_teacher(status=TeacherStatus.ACTIVE, course_hours=60)
+        req2 = _make_request(business_id="BIZ-D003", teacher=teacher2)
+        result2 = engine.calculate(req2)
+
+        assert result2.final_action == RuleAction.PASS
+        assert result2.task_status == TaskStatus.PASSED
+
+
+exec
+/bin/zsh -lc "sed -n '1,260p' app/engine/calculator.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+exec
+/bin/zsh -lc "sed -n '1,260p' app/api/routes.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from __future__ import annotations
+
+from typing import Dict, List, Optional
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+
+from app.engine.calculator import AllowanceEngine
+from app.models.object import CalculateRequest, TeacherObject, TimeWindow
+from app.models.record import CalculateResult
+from app.models.rule import RuleAction
+from app.models.state import TaskStatus
+
+router = APIRouter(prefix="/api/v1/allowance", tags=["课时津贴核算"])
+
+engine = AllowanceEngine()
+
+
+class ReviewRequest(BaseModel):
+    business_id: str = Field(..., description="业务编号")
+    approved: bool = Field(..., description="是否通过复核")
+    operator: str = Field(..., description="复核操作人")
+    reason: str = Field(default="", description="复核原因说明")
+
+
+class BatchCalculateRequest(BaseModel):
+    requests: List[CalculateRequest] = Field(..., description="批量核算请求列表")
+
+
+class ReplayResponse(BaseModel):
+    business_id: str
+    audit_records: List[Dict] = Field(default_factory=list)
+    state_transitions: List[Dict] = Field(default_factory=list)
+
+
+@router.post("/calculate", response_model=CalculateResult)
+def calculate_allowance(request: CalculateRequest):
+    result = engine.calculate(request)
+    return result
+
+
+@router.post("/batch-calculate", response_model=List[CalculateResult])
+def batch_calculate(request: BatchCalculateRequest):
+    results = engine.batch_calculate(request.requests)
+    return results
+
+
+@router.post("/review", response_model=CalculateResult)
+def review_task(request: ReviewRequest):
+    result = engine.review(
+        business_id=request.business_id,
+        approved=request.approved,
+        operator=request.operator,
+        reason=request.reason,
+    )
+    return result
+
+
+@router.get("/replay/{business_id}", response_model=List[Dict])
+def replay_business(business_id: str):
+    data = engine.replay(business_id)
+    if not data:
+        raise HTTPException(status_code=404, detail=f"未找到业务编号 {business_id} 的记录")
+    return data
+
+
+@router.get("/status/{business_id}")
+def get_task_status(business_id: str):
+    state = engine.get_state(business_id)
+    if not state:
+        raise HTTPException(status_code=404, detail=f"未找到业务编号 {business_id} 的状态")
+    result = engine.store.get_result(business_id)
+    return {
+        "business_id": business_id,
+        "current_status": state.current_status.value,
+        "is_terminal": state.is_terminal(),
+        "transitions": state.replay(),
+        "result": result.model_dump() if result else None,
+    }
+
+ succeeded in 0ms:
+from __future__ import annotations
+
+from typing import Dict, List, Optional, Tuple
+
+from app.models.object import CalculateRequest, TeacherObject, TeacherStatus, CourseType
+from app.models.record import (
+    AuditRecord,
+    CalculateResult,
+    RecordStore,
+    RuleHitDetail,
+)
+from app.models.rule import (
+    RuleAction,
+    RuleDefinition,
+    RiskLevel,
+    calculate_allowance,
+    get_rules,
+)
+from app.models.state import (
+    InvalidTransitionError,
+    TaskState,
+    TaskStatus,
+)
+
+
+class AllowanceEngine:
+    def __init__(self, store: Optional[RecordStore] = None) -> None:
+        self.store = store or RecordStore()
+        self._states: Dict[str, TaskState] = {}
+
+    def _get_state(self, business_id: str) -> TaskState:
+        if business_id not in self._states:
+            self._states[business_id] = TaskState(business_id=business_id)
+        return self._states[business_id]
+
+    def _evaluate_condition(self, teacher: TeacherObject, condition) -> bool:
+        field = condition.field
+        op = condition.operator
+        val = condition.value
+
+        actual = getattr(teacher, field, None)
+        if actual is None:
+            return False
+
+        if isinstance(actual, bool):
+            actual_str = str(actual).lower()
+        elif hasattr(actual, "value"):
+            actual_str = str(actual.value)
+        else:
+            actual_str = str(actual)
+
+        if op == "eq":
+            return actual_str == val
+        elif op == "neq":
+            return actual_str != val
+        elif op == "gt":
+            try:
+                return float(actual_str) > float(val)
+            except (ValueError, TypeError):
+                return False
+        elif op == "lt":
+            try:
+                return float(actual_str) < float(val)
+            except (ValueError, TypeError):
+                return False
+        elif op == "in":
+            return actual_str in val.split(",")
+        elif op == "not_in":
+            return actual_str not in val.split(",")
+        return False
+
+    def _evaluate_rules(
+        self, teacher: TeacherObject, rules: List[RuleDefinition]
+    ) -> Tuple[RuleAction, List[RuleHitDetail], List[str]]:
+        hits: List[RuleHitDetail] = []
+        risk_flags: List[str] = []
+
+        sorted_rules = sorted(
+            [r for r in rules if r.enabled], key=lambda r: -r.priority
+        )
+
+        for rule in sorted_rules:
+            all_match = all(
+                self._evaluate_condition(teacher, c) for c in rule.conditions
+            )
+            if all_match and rule.conditions:
+                hits.append(
+                    RuleHitDetail(
+                        rule_id=rule.rule_id,
+                        rule_name=rule.name,
+                        risk_level=rule.risk_level,
+                        action=rule.action,
+                        reason=rule.description,
+                    )
+                )
+                risk_flags.append(f"{rule.rule_id}:{rule.risk_level.value}")
+
+        if not hits:
+            return RuleAction.PASS, hits, risk_flags
+
+        has_block = any(h.action == RuleAction.BLOCK for h in hits)
+        has_pending = any(h.action == RuleAction.PENDING_REVIEW for h in hits)
+
+        if has_block:
+            return RuleAction.BLOCK, hits, risk_flags
+        if has_pending:
+            return RuleAction.PENDING_REVIEW, hits, risk_flags
+
+        return RuleAction.PASS, hits, risk_flags
+
+    def _build_reason(
+        self,
+        action: RuleAction,
+        hits: List[RuleHitDetail],
+        teacher: TeacherObject,
+        amount: float,
+    ) -> str:
+        if action == RuleAction.PASS and not hits:
+            return (
+                f"教师{teacher.name}({teacher.teacher_id})核算通过，"
+                f"课时{teacher.course_hours}，津贴{amount}元"
+            )
+        if action == RuleAction.BLOCK:
+            reasons = "；".join(h.reason for h in hits if h.action == RuleAction.BLOCK)
+            return f"核算拦截：{reasons}"
+        if action == RuleAction.PENDING_REVIEW:
+            reasons = "；".join(
+                h.reason for h in hits if h.action == RuleAction.PENDING_REVIEW
+            )
+            return f"待人工复核：{reasons}"
+        return "核算通过"
+
+    def calculate(self, request: CalculateRequest) -> CalculateResult:
+        state = self._get_state(request.business_id)
+
+        if state.current_status not in (
+            TaskStatus.SUBMITTED,
+            TaskStatus.BLOCKED,
+            TaskStatus.REVIEW_REJECTED,
+        ):
+            return CalculateResult(
+                business_id=request.business_id,
+                teacher_id=request.teacher.teacher_id,
+                final_action=RuleAction.BLOCK,
+                task_status=state.current_status,
+                readable_reason=f"任务状态为{state.current_status.value}，不允许重复核算",
+            )
+
+        state.transition(TaskStatus.PROCESSING, operator=request.operator)
+
+        rules = get_rules(request.rule_version)
+        action, hits, risk_flags = self._evaluate_rules(request.teacher, rules)
+
+        amount = calculate_allowance(
+            course_hours=request.teacher.course_hours,
+            course_type=request.teacher.course_type,
+            teacher_status=request.teacher.status,
+            base_rate=request.teacher.base_rate,
+        )
+
+        course_type_name = request.teacher.course_type.value
+        status_name = request.teacher.status.value
+        multiplier = {
+            CourseType.LECTURE: 1.0,
+            CourseType.LAB: 1.2,
+            CourseType.SEMINAR: 1.1,
+            CourseType.PRACTICE: 1.3,
+        }.get(request.teacher.course_type, 1.0)
+        status_factor = {
+            TeacherStatus.ACTIVE: 1.0,
+            TeacherStatus.SUSPENDED: 0.0,
+            TeacherStatus.RETIRED: 0.5,
+            TeacherStatus.ON_LEAVE: 0.3,
+        }.get(request.teacher.status, 0.0)
+
+        calc_detail = (
+            f"课时{request.teacher.course_hours} × 基础费率{request.teacher.base_rate}元"
+            f" × 课程类型系数{multiplier}({course_type_name})"
+            f" × 状态系数{status_factor}({status_name})"
+            f" = {amount}元"
+        )
+
+        readable_reason = self._build_reason(action, hits, request.teacher, amount)
+
+        if action == RuleAction.PASS and not hits:
+            state.transition(TaskStatus.PASSED, operator=request.operator)
+            task_status = TaskStatus.PASSED
+        elif action == RuleAction.BLOCK:
+            state.transition(
+                TaskStatus.BLOCKED, operator=request.operator, reason=readable_reason
+            )
+            task_status = TaskStatus.BLOCKED
+        elif action == RuleAction.PENDING_REVIEW:
+            state.transition(
+                TaskStatus.PENDING_REVIEW,
+                operator=request.operator,
+                reason=readable_reason,
+            )
+            task_status = TaskStatus.PENDING_REVIEW
+        else:
+            state.transition(TaskStatus.PASSED, operator=request.operator)
+            task_status = TaskStatus.PASSED
+
+        result = CalculateResult(
+            business_id=request.business_id,
+            teacher_id=request.teacher.teacher_id,
+            allowance_amount=amount,
+            calculation_detail=calc_detail,
+            final_action=action,
+            task_status=task_status,
+            readable_reason=readable_reason,
+            rule_hits=hits,
+            risk_flags=risk_flags,
+        )
+
+        self.store.save_result(request.business_id, result)
+
+        self.store.append_record(
+            AuditRecord(
+                record_id=f"{request.business_id}-calc",
+                business_id=request.business_id,
+                teacher_id=request.teacher.teacher_id,
+                operator=request.operator,
+                action=f"calculate:{action.value}",
+                detail=readable_reason,
+                metadata=result.model_dump(),
+            )
+        )
+
+        return result
+
+    def review(
+        self,
+        business_id: str,
+        approved: bool,
+        operator: str,
+        reason: str = "",
+    ) -> CalculateResult:
+        state = self._get_state(business_id)
+
+        if state.current_status != TaskStatus.PENDING_REVIEW:
+            return CalculateResult(
+                business_id=business_id,
+                teacher_id="",
+                final_action=RuleAction.BLOCK,
+                task_status=state.current_status,
+                readable_reason=f"当前状态{state.current_status.value}不可复核，仅待复核状态允许复核",
+            )
+
+        if approved:
+            state.transition(
+                TaskStatus.REVIEW_APPROVED, operator=operator, reason=reason
+            )
+            existing = self.store.get_result(business_id)
+            task_status = TaskStatus.REVIEW_APPROVED
+            if existing:
+                existing.task_status = task_status
+                existing.final_action = RuleAction.PASS
+                existing.readable_reason = f"复核通过：{reason}" if reason else "复核通过"
+                self.store.save_result(business_id, existing)
+
+exec
+/bin/zsh -lc "sed -n '1,240p' app/main.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from fastapi import FastAPI
+
+from app.api.routes import router
+
+
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title="教师课时津贴核算API",
+        description="四层架构(对象/规则/状态/记录)的课时津贴核算系统",
+        version="0.1.0",
+    )
+    app.include_router(router)
+    return app
+
+
+app = create_app()
+
+exec
+/bin/zsh -lc "sed -n '1,260p' app/models/object.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from __future__ import annotations
+
+from enum import Enum
+from typing import Optional
+from pydantic import BaseModel, Field
+
+
+class TeacherStatus(str, Enum):
+    ACTIVE = "active"
+    SUSPENDED = "suspended"
+    RETIRED = "retired"
+    ON_LEAVE = "on_leave"
+
+
+class CourseType(str, Enum):
+    LECTURE = "lecture"
+    LAB = "lab"
+    SEMINAR = "seminar"
+    PRACTICE = "practice"
+
+
+class TeacherObject(BaseModel):
+    teacher_id: str = Field(..., description="教师编号")
+    name: str = Field(..., description="教师姓名")
+    status: TeacherStatus = Field(..., description="教师当前状态")
+    department: str = Field(default="", description="所属院系")
+    course_hours: float = Field(default=0.0, description="已完成课时数")
+    course_type: CourseType = Field(default=CourseType.LECTURE, description="课程类型")
+    base_rate: float = Field(default=50.0, description="基础课时费率(元/课时)")
+    materials_submitted: bool = Field(default=True, description="是否已提交完整材料")
+
+
+class TimeWindow(BaseModel):
+    start_date: str = Field(..., description="核算起始日期 YYYY-MM-DD")
+    end_date: str = Field(..., description="核算截止日期 YYYY-MM-DD")
+
+
+class CalculateRequest(BaseModel):
+    business_id: str = Field(..., description="业务编号")
+    teacher: TeacherObject = Field(..., description="教师对象")
+    time_window: TimeWindow = Field(..., description="时间窗口")
+    rule_version: str = Field(default="v1", description="规则版本")
+    operator: str = Field(..., description="操作人")
+
+exec
+/bin/zsh -lc "sed -n '201,520p' app/engine/calculator.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+            state.transition(TaskStatus.PASSED, operator=request.operator)
+            task_status = TaskStatus.PASSED
+
+        result = CalculateResult(
+            business_id=request.business_id,
+            teacher_id=request.teacher.teacher_id,
+            allowance_amount=amount,
+            calculation_detail=calc_detail,
+            final_action=action,
+            task_status=task_status,
+            readable_reason=readable_reason,
+            rule_hits=hits,
+            risk_flags=risk_flags,
+        )
+
+        self.store.save_result(request.business_id, result)
+
+        self.store.append_record(
+            AuditRecord(
+                record_id=f"{request.business_id}-calc",
+                business_id=request.business_id,
+                teacher_id=request.teacher.teacher_id,
+                operator=request.operator,
+                action=f"calculate:{action.value}",
+                detail=readable_reason,
+                metadata=result.model_dump(),
+            )
+        )
+
+        return result
+
+    def review(
+        self,
+        business_id: str,
+        approved: bool,
+        operator: str,
+        reason: str = "",
+    ) -> CalculateResult:
+        state = self._get_state(business_id)
+
+        if state.current_status != TaskStatus.PENDING_REVIEW:
+            return CalculateResult(
+                business_id=business_id,
+                teacher_id="",
+                final_action=RuleAction.BLOCK,
+                task_status=state.current_status,
+                readable_reason=f"当前状态{state.current_status.value}不可复核，仅待复核状态允许复核",
+            )
+
+        if approved:
+            state.transition(
+                TaskStatus.REVIEW_APPROVED, operator=operator, reason=reason
+            )
+            existing = self.store.get_result(business_id)
+            task_status = TaskStatus.REVIEW_APPROVED
+            if existing:
+                existing.task_status = task_status
+                existing.final_action = RuleAction.PASS
+                existing.readable_reason = f"复核通过：{reason}" if reason else "复核通过"
+                self.store.save_result(business_id, existing)
+        else:
+            state.transition(
+                TaskStatus.REVIEW_REJECTED, operator=operator, reason=reason
+            )
+            existing = self.store.get_result(business_id)
+            task_status = TaskStatus.REVIEW_REJECTED
+            if existing:
+                existing.task_status = task_status
+                existing.final_action = RuleAction.BLOCK
+                existing.readable_reason = f"复核驳回：{reason}" if reason else "复核驳回"
+                self.store.save_result(business_id, existing)
+
+        self.store.append_record(
+            AuditRecord(
+                record_id=f"{business_id}-review",
+                business_id=business_id,
+                teacher_id=existing.teacher_id if existing else "",
+                operator=operator,
+                action=f"review:{'approved' if approved else 'rejected'}",
+                detail=reason,
+            )
+        )
+
+        return self.store.get_result(business_id) or CalculateResult(
+            business_id=business_id,
+            teacher_id="",
+            final_action=RuleAction.BLOCK,
+            task_status=task_status,
+            readable_reason="复核完成",
+        )
+
+    def batch_calculate(
+        self, requests: List[CalculateRequest]
+    ) -> List[CalculateResult]:
+        return [self.calculate(req) for req in requests]
+
+    def get_state(self, business_id: str) -> Optional[TaskState]:
+        return self._states.get(business_id)
+
+    def replay(self, business_id: str) -> List[Dict]:
+        records = self.store.replay_by_business_id(business_id)
+        state = self._states.get(business_id)
+        if not records and state is None:
+            return []
+        result = {
+            "audit_records": [r.model_dump() for r in records],
+            "state_transitions": state.replay() if state else [],
+        }
+        return [result]
+
+exec
+/bin/zsh -lc "sed -n '261,520p' tests/test_allowance.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+
+class TestCalculationCaliber:
+    def test_calculation_detail_contains_all_factors(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(
+            course_hours=100,
+            course_type=CourseType.LAB,
+            base_rate=60.0,
+        )
+        req = _make_request(business_id="BIZ-C001", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert "100" in result.calculation_detail
+        assert "60" in result.calculation_detail
+        assert "1.2" in result.calculation_detail
+        assert "lab" in result.calculation_detail
+        assert "1.0" in result.calculation_detail
+        assert "active" in result.calculation_detail
+        expected = 100 * 60 * 1.2 * 1.0
+        assert result.allowance_amount == expected
+
+    def test_suspended_teacher_zero_allowance(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.SUSPENDED, course_hours=100)
+        req = _make_request(business_id="BIZ-C002", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.allowance_amount == 0.0
+        assert result.final_action == RuleAction.PENDING_REVIEW
+
+    def test_retired_teacher_half_allowance(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=100)
+        req = _make_request(business_id="BIZ-C003", teacher=teacher)
+        result = engine.calculate(req)
+
+        expected = 100 * 50 * 1.0 * 0.5
+        assert result.allowance_amount == expected
+
+    def test_v2_stricter_threshold(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=155)
+        req = _make_request(business_id="BIZ-C004", teacher=teacher, rule_version="v2")
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PENDING_REVIEW
+        any_v2_hit = any(h.rule_id == "R005" for h in result.rule_hits)
+        assert any_v2_hit
+
+    def test_v1_normal_at_155_hours(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=155)
+        req = _make_request(business_id="BIZ-C005", teacher=teacher, rule_version="v1")
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PASS
+
+
+class TestExceptionExplanation:
+    def test_blocked_reason_is_human_readable(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(materials_submitted=False)
+        req = _make_request(business_id="BIZ-E001", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.BLOCK
+        assert "拦截" in result.readable_reason
+        assert "材料" in result.readable_reason
+
+    def test_pending_review_reason_is_human_readable(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.ON_LEAVE)
+        req = _make_request(business_id="BIZ-E002", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert result.final_action == RuleAction.PENDING_REVIEW
+        assert "复核" in result.readable_reason
+
+    def test_pass_reason_includes_teacher_info(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(name="李四", teacher_id="T888", course_hours=90)
+        req = _make_request(business_id="BIZ-E003", teacher=teacher)
+        result = engine.calculate(req)
+
+        assert "李四" in result.readable_reason
+        assert "T888" in result.readable_reason
+        assert "90" in result.readable_reason
+
+
+class TestTaskStatus:
+    def test_full_lifecycle_pass(self):
+        state = TaskState(business_id="ST001")
+        assert state.current_status == TaskStatus.SUBMITTED
+        state.transition(TaskStatus.PROCESSING)
+        assert state.current_status == TaskStatus.PROCESSING
+        state.transition(TaskStatus.PASSED)
+        assert state.current_status == TaskStatus.PASSED
+        assert state.is_terminal()
+
+    def test_full_lifecycle_review_approved(self):
+        state = TaskState(business_id="ST002")
+        state.transition(TaskStatus.PROCESSING)
+        state.transition(TaskStatus.PENDING_REVIEW)
+        state.transition(TaskStatus.REVIEW_APPROVED)
+        assert state.is_terminal()
+
+    def test_invalid_transition_raises(self):
+        state = TaskState(business_id="ST003")
+        with pytest.raises(InvalidTransitionError):
+            state.transition(TaskStatus.PASSED)
+
+    def test_cannot_transition_from_terminal(self):
+        state = TaskState(business_id="ST004")
+        state.transition(TaskStatus.PROCESSING)
+        state.transition(TaskStatus.PASSED)
+        with pytest.raises(InvalidTransitionError):
+            state.transition(TaskStatus.PROCESSING)
+
+
+class TestDataReplay:
+    def test_replay_returns_audit_records(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(course_hours=80)
+        req = _make_request(business_id="BIZ-RP001", teacher=teacher)
+        engine.calculate(req)
+
+        replay_data = engine.replay("BIZ-RP001")
+        assert len(replay_data) == 1
+        assert len(replay_data[0]["audit_records"]) >= 1
+        assert len(replay_data[0]["state_transitions"]) >= 1
+
+    def test_replay_captures_review_flow(self):
+        engine = AllowanceEngine()
+        teacher = _make_teacher(status=TeacherStatus.RETIRED, course_hours=60)
+        req = _make_request(business_id="BIZ-RP002", teacher=teacher)
+        engine.calculate(req)
+        engine.review("BIZ-RP002", approved=True, operator="reviewer1", reason="批准")
+
+        replay_data = engine.replay("BIZ-RP002")
+        assert len(replay_data[0]["audit_records"]) == 2
+        transitions = replay_data[0]["state_transitions"]
+        assert len(transitions) >= 3
+
+    def test_replay_nonexistent_returns_empty(self):
+        engine = AllowanceEngine()
+        replay_data = engine.replay("BIZ-NONEXIST")
+        assert len(replay_data) == 0
+
+
+class TestCalculateAllowanceFunction:
+    def test_active_lecture(self):
+        assert calculate_allowance(80, CourseType.LECTURE, TeacherStatus.ACTIVE, 50) == 4000.0
+
+    def test_active_lab(self):
+        assert calculate_allowance(80, CourseType.LAB, TeacherStatus.ACTIVE, 50) == 4800.0
+
+    def test_retired_lecture(self):
+        assert calculate_allowance(80, CourseType.LECTURE, TeacherStatus.RETIRED, 50) == 2000.0
+
+    def test_suspended_zero(self):
+        assert calculate_allowance(80, CourseType.LECTURE, TeacherStatus.SUSPENDED, 50) == 0.0
+
+    def test_on_leave_partial(self):
+        assert calculate_allowance(80, CourseType.LECTURE, TeacherStatus.ON_LEAVE, 50) == 1200.0
+
+exec
+/bin/zsh -lc "sed -n '1,320p' app/models/rule.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from __future__ import annotations
+
+from enum import Enum
+from typing import Dict, List, Optional
+from pydantic import BaseModel, Field
+
+from app.models.object import CourseType, TeacherStatus
+
+
+class RiskLevel(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
+class RuleAction(str, Enum):
+    PASS = "pass"
+    BLOCK = "block"
+    PENDING_REVIEW = "pending_review"
+
+
+class RuleCondition(BaseModel):
+    field: str
+    operator: str
+    value: str
+
+
+class RuleDefinition(BaseModel):
+    rule_id: str
+    name: str
+    description: str
+    risk_level: RiskLevel = RiskLevel.LOW
+    action: RuleAction = RuleAction.PASS
+    conditions: List[RuleCondition] = Field(default_factory=list)
+    priority: int = Field(default=0)
+    enabled: bool = Field(default=True)
+
+
+class RuleVersion(BaseModel):
+    version: str
+    effective_from: str
+    effective_to: Optional[str] = None
+    rules: List[RuleDefinition] = Field(default_factory=list)
+
+
+COURSE_TYPE_MULTIPLIER: Dict[CourseType, float] = {
+    CourseType.LECTURE: 1.0,
+    CourseType.LAB: 1.2,
+    CourseType.SEMINAR: 1.1,
+    CourseType.PRACTICE: 1.3,
+}
+
+STATUS_ALLOWANCE_FACTOR: Dict[TeacherStatus, float] = {
+    TeacherStatus.ACTIVE: 1.0,
+    TeacherStatus.SUSPENDED: 0.0,
+    TeacherStatus.RETIRED: 0.5,
+    TeacherStatus.ON_LEAVE: 0.3,
+}
+
+MAX_HOURS_PER_MONTH = 200.0
+HIGH_RISK_HOURS_THRESHOLD = 160.0
+
+DEFAULT_RULES_V1: List[RuleDefinition] = [
+    RuleDefinition(
+        rule_id="R001",
+        name="教师状态校验",
+        description="教师状态异常(停职/退休/休假)时触发复核",
+        risk_level=RiskLevel.MEDIUM,
+        action=RuleAction.PENDING_REVIEW,
+        conditions=[RuleCondition(field="status", operator="not_in", value="active")],
+        priority=10,
+    ),
+    RuleDefinition(
+        rule_id="R002",
+        name="材料完整性校验",
+        description="教师未提交完整材料时拦截",
+        risk_level=RiskLevel.HIGH,
+        action=RuleAction.BLOCK,
+        conditions=[RuleCondition(field="materials_submitted", operator="eq", value="false")],
+        priority=20,
+    ),
+    RuleDefinition(
+        rule_id="R003",
+        name="课时上限校验",
+        description="课时超出月度上限200时触发复核",
+        risk_level=RiskLevel.HIGH,
+        action=RuleAction.PENDING_REVIEW,
+        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(MAX_HOURS_PER_MONTH))],
+        priority=15,
+    ),
+    RuleDefinition(
+        rule_id="R004",
+        name="高风险课时校验",
+        description="课时超过160但未超上限时标记为中等风险",
+        risk_level=RiskLevel.MEDIUM,
+        action=RuleAction.PASS,
+        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(HIGH_RISK_HOURS_THRESHOLD))],
+        priority=5,
+    ),
+]
+
+DEFAULT_RULES_V2: List[RuleDefinition] = [
+    RuleDefinition(
+        rule_id="R001",
+        name="教师状态校验",
+        description="教师状态异常(停职/退休/休假)时触发复核",
+        risk_level=RiskLevel.MEDIUM,
+        action=RuleAction.PENDING_REVIEW,
+        conditions=[RuleCondition(field="status", operator="not_in", value="active")],
+        priority=10,
+    ),
+    RuleDefinition(
+        rule_id="R002",
+        name="材料完整性校验",
+        description="教师未提交完整材料时拦截",
+        risk_level=RiskLevel.HIGH,
+        action=RuleAction.BLOCK,
+        conditions=[RuleCondition(field="materials_submitted", operator="eq", value="false")],
+        priority=20,
+    ),
+    RuleDefinition(
+        rule_id="R003",
+        name="课时上限校验",
+        description="课时超出月度上限200时触发复核",
+        risk_level=RiskLevel.HIGH,
+        action=RuleAction.PENDING_REVIEW,
+        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(MAX_HOURS_PER_MONTH))],
+        priority=15,
+    ),
+    RuleDefinition(
+        rule_id="R005",
+        name="v2-课时超额阶梯校验",
+        description="v2新增: 课时超过150即触发复核（比v1更严格）",
+        risk_level=RiskLevel.MEDIUM,
+        action=RuleAction.PENDING_REVIEW,
+        conditions=[RuleCondition(field="course_hours", operator="gt", value="150")],
+        priority=8,
+    ),
+]
+
+RULE_REGISTRY: Dict[str, List[RuleDefinition]] = {
+    "v1": DEFAULT_RULES_V1,
+    "v2": DEFAULT_RULES_V2,
+}
+
+
+def get_rules(version: str) -> List[RuleDefinition]:
+    return RULE_REGISTRY.get(version, DEFAULT_RULES_V1)
+
+
+def calculate_allowance(
+    course_hours: float,
+    course_type: CourseType,
+    teacher_status: TeacherStatus,
+    base_rate: float,
+) -> float:
+    multiplier = COURSE_TYPE_MULTIPLIER.get(course_type, 1.0)
+    status_factor = STATUS_ALLOWANCE_FACTOR.get(teacher_status, 0.0)
+    return round(course_hours * base_rate * multiplier * status_factor, 2)
+
+exec
+/bin/zsh -lc "sed -n '1,300p' app/models/state.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+exec
+/bin/zsh -lc "sed -n '1,320p' app/models/record.py" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+from __future__ import annotations
+
+from datetime import datetime
+from typing import Dict, List, Optional
+from pydantic import BaseModel, Field
+
+from app.models.rule import RiskLevel, RuleAction
+from app.models.state import TaskStatus
+
+
+class RuleHitDetail(BaseModel):
+    rule_id: str
+    rule_name: str
+    risk_level: RiskLevel
+    action: RuleAction
+    reason: str
+
+
+class CalculateResult(BaseModel):
+    business_id: str
+    teacher_id: str
+    allowance_amount: float = 0.0
+    calculation_detail: str = ""
+    final_action: RuleAction = RuleAction.PASS
+    task_status: TaskStatus = TaskStatus.SUBMITTED
+    readable_reason: str = ""
+    rule_hits: List[RuleHitDetail] = Field(default_factory=list)
+    risk_flags: List[str] = Field(default_factory=list)
+
+
+class AuditRecord(BaseModel):
+    record_id: str
+    business_id: str
+    teacher_id: str
+    operator: str
+    action: str
+    detail: str
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    metadata: Dict = Field(default_factory=dict)
+
+
+class RecordStore(BaseModel):
+    records: List[AuditRecord] = Field(default_factory=list)
+    results: Dict[str, CalculateResult] = Field(default_factory=dict)
+
+    def append_record(self, record: AuditRecord) -> None:
+        self.records.append(record)
+
+    def save_result(self, business_id: str, result: CalculateResult) -> None:
+        self.results[business_id] = result
+
+    def get_result(self, business_id: str) -> Optional[CalculateResult]:
+        return self.results.get(business_id)
+
+    def has_result(self, business_id: str) -> bool:
+        return business_id in self.results
+
+    def replay_by_business_id(self, business_id: str) -> List[AuditRecord]:
+        return [r for r in self.records if r.business_id == business_id]
+
+ succeeded in 0ms:
+from __future__ import annotations
+
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Optional
+from pydantic import BaseModel, Field
+
+
+class TaskStatus(str, Enum):
+    SUBMITTED = "submitted"
+    PROCESSING = "processing"
+    PASSED = "passed"
+    BLOCKED = "blocked"
+    PENDING_REVIEW = "pending_review"
+    REVIEW_APPROVED = "review_approved"
+    REVIEW_REJECTED = "review_rejected"
+
+
+VALID_TRANSITIONS: Dict[TaskStatus, List[TaskStatus]] = {
+    TaskStatus.SUBMITTED: [TaskStatus.PROCESSING],
+    TaskStatus.PROCESSING: [TaskStatus.PASSED, TaskStatus.BLOCKED, TaskStatus.PENDING_REVIEW],
+    TaskStatus.PENDING_REVIEW: [TaskStatus.REVIEW_APPROVED, TaskStatus.REVIEW_REJECTED],
+    TaskStatus.PASSED: [],
+    TaskStatus.BLOCKED: [TaskStatus.PROCESSING],
+    TaskStatus.REVIEW_APPROVED: [],
+    TaskStatus.REVIEW_REJECTED: [TaskStatus.PROCESSING],
+}
+
+TERMINAL_STATES = {
+    TaskStatus.PASSED,
+    TaskStatus.REVIEW_APPROVED,
+}
+
+
+class StateTransition(BaseModel):
+    from_status: TaskStatus
+    to_status: TaskStatus
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    operator: str = ""
+    reason: str = ""
+
+
+class TaskState(BaseModel):
+    business_id: str
+    current_status: TaskStatus = TaskStatus.SUBMITTED
+    transitions: List[StateTransition] = Field(default_factory=list)
+
+    def can_transition(self, target: TaskStatus) -> bool:
+        return target in VALID_TRANSITIONS.get(self.current_status, [])
+
+    def transition(self, target: TaskStatus, operator: str = "", reason: str = "") -> None:
+        if not self.can_transition(target):
+            raise InvalidTransitionError(
+                f"不允许从 {self.current_status.value} 转到 {target.value}"
+            )
+        record = StateTransition(
+            from_status=self.current_status,
+            to_status=target,
+            operator=operator,
+            reason=reason,
+        )
+        self.transitions.append(record)
+        self.current_status = target
+
+    def is_terminal(self) -> bool:
+        return self.current_status in TERMINAL_STATES
+
+    def replay(self) -> List[Dict]:
+        return [t.model_dump() for t in self.transitions]
+
+
+class InvalidTransitionError(Exception):
+    pass
+
+codex
+从代码看这是“教师课时津贴核算 API”的 0-1 项目，真实入口是 `app.main:app`，核心覆盖单笔核算、批量核算、人工复核、状态查询和回放。我会继续跑现有测试与一次 API 级导入/请求验证，判断是否存在运行链路阻断。
+exec
+/bin/zsh -lc 'python -m pytest -q' in /Users/bill/Documents/solo/workspaces/yzz00154
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+codex
+这里的 shell 环境没有 `python` 命令，且只读沙箱不允许 here-doc 临时文件；我会改用 `python3 -c` 做只读验证。
+exec
+/bin/zsh -lc 'python3 -m pytest -q' in /Users/bill/Documents/solo/workspaces/yzz00154
+exec
+/bin/zsh -lc "python3 -c \"from fastapi.testclient import TestClient; from app.main import app; client=TestClient(app); payload={'business_id':'BIZ-QC-001','teacher':{'teacher_id':'T001','name':'张三','status':'active','course_hours':80,'course_type':'lecture','base_rate':50,'materials_submitted':True},'time_window':{'start_date':'2026-05-01','end_date':'2026-05-31'},'rule_version':'v1','operator':'qc'}; r=client.post('/api/v1/allowance/calculate', json=payload); print(r.status_code); print(r.json())\"" in /Users/bill/Documents/solo/workspaces/yzz00154
+ exited 1 in 253ms:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pytest/__main__.py", line 9, in <module>
+    raise SystemExit(pytest.console_main())
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 201, in console_main
+    code = main()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 156, in main
+    config = _prepareconfig(args, plugins)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 342, in _prepareconfig
+    config = pluginmanager.hook.pytest_cmdline_parse(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/helpconfig.py", line 112, in pytest_cmdline_parse
+    config = yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1146, in pytest_cmdline_parse
+    self.parse(args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1527, in parse
+    self._preparse(args, addopts=addopts)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1431, in _preparse
+    self.hook.pytest_load_initial_conftests(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/warnings.py", line 129, in pytest_load_initial_conftests
+    return (yield)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 116, in _multicall
+    next(function_gen)  # first yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 170, in pytest_load_initial_conftests
+    capman.start_global_capturing()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 773, in start_global_capturing
+    self._global_capturing = _get_multicapture(self._method)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 714, in _get_multicapture
+    return MultiCapture(in_=FDCapture(0), out=FDCapture(1), err=FDCapture(2))
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 493, in __init__
+    TemporaryFile(buffering=0),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 581, in TemporaryFile
+    prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 118, in _sanitize_params
+    dir = gettempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 287, in gettempdir
+    tempdir = _get_default_tempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 219, in _get_default_tempdir
+    raise FileNotFoundError(_errno.ENOENT,
+FileNotFoundError: [Errno 2] No usable temporary directory found in ['/var/folders/jn/d_ttb_pn6j55lr85szdw4_1r0000gn/T/', '/tmp', '/var/tmp', '/usr/tmp', '/Users/bill/Documents/solo/workspaces/yzz00154']
+
+ succeeded in 462ms:
+200
+{'business_id': 'BIZ-QC-001', 'teacher_id': 'T001', 'allowance_amount': 4000.0, 'calculation_detail': '课时80.0 × 基础费率50.0元 × 课程类型系数1.0(lecture) × 状态系数1.0(active) = 4000.0元', 'final_action': 'pass', 'task_status': 'passed', 'readable_reason': '教师张三(T001)核算通过，课时80.0，津贴4000.0元', 'rule_hits': [], 'risk_flags': []}
+
+codex
+API 级请求已经能跑通，返回 200 且金额/状态符合预期。`pytest` 首次失败是当前只读沙箱没有可用临时目录导致的测试运行器问题，我会关闭 pytest 捕获和缓存再验证一次，避免把环境限制误判为项目缺陷。
+exec
+/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -q -s -p no:cacheprovider' in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 316ms:
+...................................
+35 passed in 0.15s
+
+codex
+现有 35 个测试在禁用捕获/缓存后全部通过；这说明核心业务逻辑和项目自带验收用例可执行。最后我会补一轮入口与配置行号核对，整理结论。
+exec
+/bin/zsh -lc 'nl -ba pyproject.toml' in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+     1	[project]
+     2	name = "teacher-allowance-api"
+     3	version = "0.1.0"
+     4	description = "Teacher Course Hour Allowance Calculation API"
+     5	requires-python = ">=3.9"
+     6	dependencies = [
+     7	    "fastapi>=0.100.0",
+     8	    "uvicorn>=0.20.0",
+     9	    "pydantic>=2.0.0",
+    10	]
+    11	
+    12	[project.optional-dependencies]
+    13	dev = [
+    14	    "pytest>=7.0.0",
+    15	    "httpx>=0.24.0",
+    16	]
+    17	
+    18	[build-system]
+    19	requires = ["setuptools>=65.0"]
+    20	build-backend = "setuptools.build_meta"
+
+exec
+/bin/zsh -lc "nl -ba app/api/routes.py | sed -n '1,140p'" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+     1	from __future__ import annotations
+     2	
+     3	from typing import Dict, List, Optional
+     4	
+     5	from fastapi import APIRouter, HTTPException
+     6	from pydantic import BaseModel, Field
+     7	
+     8	from app.engine.calculator import AllowanceEngine
+     9	from app.models.object import CalculateRequest, TeacherObject, TimeWindow
+    10	from app.models.record import CalculateResult
+    11	from app.models.rule import RuleAction
+    12	from app.models.state import TaskStatus
+    13	
+    14	router = APIRouter(prefix="/api/v1/allowance", tags=["课时津贴核算"])
+    15	
+    16	engine = AllowanceEngine()
+    17	
+    18	
+    19	class ReviewRequest(BaseModel):
+    20	    business_id: str = Field(..., description="业务编号")
+    21	    approved: bool = Field(..., description="是否通过复核")
+    22	    operator: str = Field(..., description="复核操作人")
+    23	    reason: str = Field(default="", description="复核原因说明")
+    24	
+    25	
+    26	class BatchCalculateRequest(BaseModel):
+    27	    requests: List[CalculateRequest] = Field(..., description="批量核算请求列表")
+    28	
+    29	
+    30	class ReplayResponse(BaseModel):
+    31	    business_id: str
+    32	    audit_records: List[Dict] = Field(default_factory=list)
+    33	    state_transitions: List[Dict] = Field(default_factory=list)
+    34	
+    35	
+    36	@router.post("/calculate", response_model=CalculateResult)
+    37	def calculate_allowance(request: CalculateRequest):
+    38	    result = engine.calculate(request)
+    39	    return result
+    40	
+    41	
+    42	@router.post("/batch-calculate", response_model=List[CalculateResult])
+    43	def batch_calculate(request: BatchCalculateRequest):
+    44	    results = engine.batch_calculate(request.requests)
+    45	    return results
+    46	
+    47	
+    48	@router.post("/review", response_model=CalculateResult)
+    49	def review_task(request: ReviewRequest):
+    50	    result = engine.review(
+    51	        business_id=request.business_id,
+    52	        approved=request.approved,
+    53	        operator=request.operator,
+    54	        reason=request.reason,
+    55	    )
+    56	    return result
+    57	
+    58	
+    59	@router.get("/replay/{business_id}", response_model=List[Dict])
+    60	def replay_business(business_id: str):
+    61	    data = engine.replay(business_id)
+    62	    if not data:
+    63	        raise HTTPException(status_code=404, detail=f"未找到业务编号 {business_id} 的记录")
+    64	    return data
+    65	
+    66	
+    67	@router.get("/status/{business_id}")
+    68	def get_task_status(business_id: str):
+    69	    state = engine.get_state(business_id)
+    70	    if not state:
+    71	        raise HTTPException(status_code=404, detail=f"未找到业务编号 {business_id} 的状态")
+    72	    result = engine.store.get_result(business_id)
+    73	    return {
+    74	        "business_id": business_id,
+    75	        "current_status": state.current_status.value,
+    76	        "is_terminal": state.is_terminal(),
+    77	        "transitions": state.replay(),
+    78	        "result": result.model_dump() if result else None,
+    79	    }
+
+exec
+/bin/zsh -lc 'nl -ba app/main.py' in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+     1	from fastapi import FastAPI
+     2	
+     3	from app.api.routes import router
+     4	
+     5	
+     6	def create_app() -> FastAPI:
+     7	    app = FastAPI(
+     8	        title="教师课时津贴核算API",
+     9	        description="四层架构(对象/规则/状态/记录)的课时津贴核算系统",
+    10	        version="0.1.0",
+    11	    )
+    12	    app.include_router(router)
+    13	    return app
+    14	
+    15	
+    16	app = create_app()
+
+exec
+/bin/zsh -lc "nl -ba app/models/rule.py | sed -n '1,180p'" in /Users/bill/Documents/solo/workspaces/yzz00154
+exec
+/bin/zsh -lc "nl -ba app/engine/calculator.py | sed -n '1,280p'" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+     1	from __future__ import annotations
+     2	
+     3	from enum import Enum
+     4	from typing import Dict, List, Optional
+     5	from pydantic import BaseModel, Field
+     6	
+     7	from app.models.object import CourseType, TeacherStatus
+     8	
+     9	
+    10	class RiskLevel(str, Enum):
+    11	    LOW = "low"
+    12	    MEDIUM = "medium"
+    13	    HIGH = "high"
+    14	
+    15	
+    16	class RuleAction(str, Enum):
+    17	    PASS = "pass"
+    18	    BLOCK = "block"
+    19	    PENDING_REVIEW = "pending_review"
+    20	
+    21	
+    22	class RuleCondition(BaseModel):
+    23	    field: str
+    24	    operator: str
+    25	    value: str
+    26	
+    27	
+    28	class RuleDefinition(BaseModel):
+    29	    rule_id: str
+    30	    name: str
+    31	    description: str
+    32	    risk_level: RiskLevel = RiskLevel.LOW
+    33	    action: RuleAction = RuleAction.PASS
+    34	    conditions: List[RuleCondition] = Field(default_factory=list)
+    35	    priority: int = Field(default=0)
+    36	    enabled: bool = Field(default=True)
+    37	
+    38	
+    39	class RuleVersion(BaseModel):
+    40	    version: str
+    41	    effective_from: str
+    42	    effective_to: Optional[str] = None
+    43	    rules: List[RuleDefinition] = Field(default_factory=list)
+    44	
+    45	
+    46	COURSE_TYPE_MULTIPLIER: Dict[CourseType, float] = {
+    47	    CourseType.LECTURE: 1.0,
+    48	    CourseType.LAB: 1.2,
+    49	    CourseType.SEMINAR: 1.1,
+    50	    CourseType.PRACTICE: 1.3,
+    51	}
+    52	
+    53	STATUS_ALLOWANCE_FACTOR: Dict[TeacherStatus, float] = {
+    54	    TeacherStatus.ACTIVE: 1.0,
+    55	    TeacherStatus.SUSPENDED: 0.0,
+    56	    TeacherStatus.RETIRED: 0.5,
+    57	    TeacherStatus.ON_LEAVE: 0.3,
+    58	}
+    59	
+    60	MAX_HOURS_PER_MONTH = 200.0
+    61	HIGH_RISK_HOURS_THRESHOLD = 160.0
+    62	
+    63	DEFAULT_RULES_V1: List[RuleDefinition] = [
+    64	    RuleDefinition(
+    65	        rule_id="R001",
+    66	        name="教师状态校验",
+    67	        description="教师状态异常(停职/退休/休假)时触发复核",
+    68	        risk_level=RiskLevel.MEDIUM,
+    69	        action=RuleAction.PENDING_REVIEW,
+    70	        conditions=[RuleCondition(field="status", operator="not_in", value="active")],
+    71	        priority=10,
+    72	    ),
+    73	    RuleDefinition(
+    74	        rule_id="R002",
+    75	        name="材料完整性校验",
+    76	        description="教师未提交完整材料时拦截",
+    77	        risk_level=RiskLevel.HIGH,
+    78	        action=RuleAction.BLOCK,
+    79	        conditions=[RuleCondition(field="materials_submitted", operator="eq", value="false")],
+    80	        priority=20,
+    81	    ),
+    82	    RuleDefinition(
+    83	        rule_id="R003",
+    84	        name="课时上限校验",
+    85	        description="课时超出月度上限200时触发复核",
+    86	        risk_level=RiskLevel.HIGH,
+    87	        action=RuleAction.PENDING_REVIEW,
+    88	        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(MAX_HOURS_PER_MONTH))],
+    89	        priority=15,
+    90	    ),
+    91	    RuleDefinition(
+    92	        rule_id="R004",
+    93	        name="高风险课时校验",
+    94	        description="课时超过160但未超上限时标记为中等风险",
+    95	        risk_level=RiskLevel.MEDIUM,
+    96	        action=RuleAction.PASS,
+    97	        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(HIGH_RISK_HOURS_THRESHOLD))],
+    98	        priority=5,
+    99	    ),
+   100	]
+   101	
+   102	DEFAULT_RULES_V2: List[RuleDefinition] = [
+   103	    RuleDefinition(
+   104	        rule_id="R001",
+   105	        name="教师状态校验",
+   106	        description="教师状态异常(停职/退休/休假)时触发复核",
+   107	        risk_level=RiskLevel.MEDIUM,
+   108	        action=RuleAction.PENDING_REVIEW,
+   109	        conditions=[RuleCondition(field="status", operator="not_in", value="active")],
+   110	        priority=10,
+   111	    ),
+   112	    RuleDefinition(
+   113	        rule_id="R002",
+   114	        name="材料完整性校验",
+   115	        description="教师未提交完整材料时拦截",
+   116	        risk_level=RiskLevel.HIGH,
+   117	        action=RuleAction.BLOCK,
+   118	        conditions=[RuleCondition(field="materials_submitted", operator="eq", value="false")],
+   119	        priority=20,
+   120	    ),
+   121	    RuleDefinition(
+   122	        rule_id="R003",
+   123	        name="课时上限校验",
+   124	        description="课时超出月度上限200时触发复核",
+   125	        risk_level=RiskLevel.HIGH,
+   126	        action=RuleAction.PENDING_REVIEW,
+   127	        conditions=[RuleCondition(field="course_hours", operator="gt", value=str(MAX_HOURS_PER_MONTH))],
+   128	        priority=15,
+   129	    ),
+   130	    RuleDefinition(
+   131	        rule_id="R005",
+   132	        name="v2-课时超额阶梯校验",
+   133	        description="v2新增: 课时超过150即触发复核（比v1更严格）",
+   134	        risk_level=RiskLevel.MEDIUM,
+   135	        action=RuleAction.PENDING_REVIEW,
+   136	        conditions=[RuleCondition(field="course_hours", operator="gt", value="150")],
+   137	        priority=8,
+   138	    ),
+   139	]
+   140	
+   141	RULE_REGISTRY: Dict[str, List[RuleDefinition]] = {
+   142	    "v1": DEFAULT_RULES_V1,
+   143	    "v2": DEFAULT_RULES_V2,
+   144	}
+   145	
+   146	
+   147	def get_rules(version: str) -> List[RuleDefinition]:
+   148	    return RULE_REGISTRY.get(version, DEFAULT_RULES_V1)
+   149	
+   150	
+   151	def calculate_allowance(
+   152	    course_hours: float,
+   153	    course_type: CourseType,
+   154	    teacher_status: TeacherStatus,
+   155	    base_rate: float,
+   156	) -> float:
+   157	    multiplier = COURSE_TYPE_MULTIPLIER.get(course_type, 1.0)
+   158	    status_factor = STATUS_ALLOWANCE_FACTOR.get(teacher_status, 0.0)
+   159	    return round(course_hours * base_rate * multiplier * status_factor, 2)
+
+ succeeded in 0ms:
+     1	from __future__ import annotations
+     2	
+     3	from typing import Dict, List, Optional, Tuple
+     4	
+     5	from app.models.object import CalculateRequest, TeacherObject, TeacherStatus, CourseType
+     6	from app.models.record import (
+     7	    AuditRecord,
+     8	    CalculateResult,
+     9	    RecordStore,
+    10	    RuleHitDetail,
+    11	)
+    12	from app.models.rule import (
+    13	    RuleAction,
+    14	    RuleDefinition,
+    15	    RiskLevel,
+    16	    calculate_allowance,
+    17	    get_rules,
+    18	)
+    19	from app.models.state import (
+    20	    InvalidTransitionError,
+    21	    TaskState,
+    22	    TaskStatus,
+    23	)
+    24	
+    25	
+    26	class AllowanceEngine:
+    27	    def __init__(self, store: Optional[RecordStore] = None) -> None:
+    28	        self.store = store or RecordStore()
+    29	        self._states: Dict[str, TaskState] = {}
+    30	
+    31	    def _get_state(self, business_id: str) -> TaskState:
+    32	        if business_id not in self._states:
+    33	            self._states[business_id] = TaskState(business_id=business_id)
+    34	        return self._states[business_id]
+    35	
+    36	    def _evaluate_condition(self, teacher: TeacherObject, condition) -> bool:
+    37	        field = condition.field
+    38	        op = condition.operator
+    39	        val = condition.value
+    40	
+    41	        actual = getattr(teacher, field, None)
+    42	        if actual is None:
+    43	            return False
+    44	
+    45	        if isinstance(actual, bool):
+    46	            actual_str = str(actual).lower()
+    47	        elif hasattr(actual, "value"):
+    48	            actual_str = str(actual.value)
+    49	        else:
+    50	            actual_str = str(actual)
+    51	
+    52	        if op == "eq":
+    53	            return actual_str == val
+    54	        elif op == "neq":
+    55	            return actual_str != val
+    56	        elif op == "gt":
+    57	            try:
+    58	                return float(actual_str) > float(val)
+    59	            except (ValueError, TypeError):
+    60	                return False
+    61	        elif op == "lt":
+    62	            try:
+    63	                return float(actual_str) < float(val)
+    64	            except (ValueError, TypeError):
+    65	                return False
+    66	        elif op == "in":
+    67	            return actual_str in val.split(",")
+    68	        elif op == "not_in":
+    69	            return actual_str not in val.split(",")
+    70	        return False
+    71	
+    72	    def _evaluate_rules(
+    73	        self, teacher: TeacherObject, rules: List[RuleDefinition]
+    74	    ) -> Tuple[RuleAction, List[RuleHitDetail], List[str]]:
+    75	        hits: List[RuleHitDetail] = []
+    76	        risk_flags: List[str] = []
+    77	
+    78	        sorted_rules = sorted(
+    79	            [r for r in rules if r.enabled], key=lambda r: -r.priority
+    80	        )
+    81	
+    82	        for rule in sorted_rules:
+    83	            all_match = all(
+    84	                self._evaluate_condition(teacher, c) for c in rule.conditions
+    85	            )
+    86	            if all_match and rule.conditions:
+    87	                hits.append(
+    88	                    RuleHitDetail(
+    89	                        rule_id=rule.rule_id,
+    90	                        rule_name=rule.name,
+    91	                        risk_level=rule.risk_level,
+    92	                        action=rule.action,
+    93	                        reason=rule.description,
+    94	                    )
+    95	                )
+    96	                risk_flags.append(f"{rule.rule_id}:{rule.risk_level.value}")
+    97	
+    98	        if not hits:
+    99	            return RuleAction.PASS, hits, risk_flags
+   100	
+   101	        has_block = any(h.action == RuleAction.BLOCK for h in hits)
+   102	        has_pending = any(h.action == RuleAction.PENDING_REVIEW for h in hits)
+   103	
+   104	        if has_block:
+   105	            return RuleAction.BLOCK, hits, risk_flags
+   106	        if has_pending:
+   107	            return RuleAction.PENDING_REVIEW, hits, risk_flags
+   108	
+   109	        return RuleAction.PASS, hits, risk_flags
+   110	
+   111	    def _build_reason(
+   112	        self,
+   113	        action: RuleAction,
+   114	        hits: List[RuleHitDetail],
+   115	        teacher: TeacherObject,
+   116	        amount: float,
+   117	    ) -> str:
+   118	        if action == RuleAction.PASS and not hits:
+   119	            return (
+   120	                f"教师{teacher.name}({teacher.teacher_id})核算通过，"
+   121	                f"课时{teacher.course_hours}，津贴{amount}元"
+   122	            )
+   123	        if action == RuleAction.BLOCK:
+   124	            reasons = "；".join(h.reason for h in hits if h.action == RuleAction.BLOCK)
+   125	            return f"核算拦截：{reasons}"
+   126	        if action == RuleAction.PENDING_REVIEW:
+   127	            reasons = "；".join(
+   128	                h.reason for h in hits if h.action == RuleAction.PENDING_REVIEW
+   129	            )
+   130	            return f"待人工复核：{reasons}"
+   131	        return "核算通过"
+   132	
+   133	    def calculate(self, request: CalculateRequest) -> CalculateResult:
+   134	        state = self._get_state(request.business_id)
+   135	
+   136	        if state.current_status not in (
+   137	            TaskStatus.SUBMITTED,
+   138	            TaskStatus.BLOCKED,
+   139	            TaskStatus.REVIEW_REJECTED,
+   140	        ):
+   141	            return CalculateResult(
+   142	                business_id=request.business_id,
+   143	                teacher_id=request.teacher.teacher_id,
+   144	                final_action=RuleAction.BLOCK,
+   145	                task_status=state.current_status,
+   146	                readable_reason=f"任务状态为{state.current_status.value}，不允许重复核算",
+   147	            )
+   148	
+   149	        state.transition(TaskStatus.PROCESSING, operator=request.operator)
+   150	
+   151	        rules = get_rules(request.rule_version)
+   152	        action, hits, risk_flags = self._evaluate_rules(request.teacher, rules)
+   153	
+   154	        amount = calculate_allowance(
+   155	            course_hours=request.teacher.course_hours,
+   156	            course_type=request.teacher.course_type,
+   157	            teacher_status=request.teacher.status,
+   158	            base_rate=request.teacher.base_rate,
+   159	        )
+   160	
+   161	        course_type_name = request.teacher.course_type.value
+   162	        status_name = request.teacher.status.value
+   163	        multiplier = {
+   164	            CourseType.LECTURE: 1.0,
+   165	            CourseType.LAB: 1.2,
+   166	            CourseType.SEMINAR: 1.1,
+   167	            CourseType.PRACTICE: 1.3,
+   168	        }.get(request.teacher.course_type, 1.0)
+   169	        status_factor = {
+   170	            TeacherStatus.ACTIVE: 1.0,
+   171	            TeacherStatus.SUSPENDED: 0.0,
+   172	            TeacherStatus.RETIRED: 0.5,
+   173	            TeacherStatus.ON_LEAVE: 0.3,
+   174	        }.get(request.teacher.status, 0.0)
+   175	
+   176	        calc_detail = (
+   177	            f"课时{request.teacher.course_hours} × 基础费率{request.teacher.base_rate}元"
+   178	            f" × 课程类型系数{multiplier}({course_type_name})"
+   179	            f" × 状态系数{status_factor}({status_name})"
+   180	            f" = {amount}元"
+   181	        )
+   182	
+   183	        readable_reason = self._build_reason(action, hits, request.teacher, amount)
+   184	
+   185	        if action == RuleAction.PASS and not hits:
+   186	            state.transition(TaskStatus.PASSED, operator=request.operator)
+   187	            task_status = TaskStatus.PASSED
+   188	        elif action == RuleAction.BLOCK:
+   189	            state.transition(
+   190	                TaskStatus.BLOCKED, operator=request.operator, reason=readable_reason
+   191	            )
+   192	            task_status = TaskStatus.BLOCKED
+   193	        elif action == RuleAction.PENDING_REVIEW:
+   194	            state.transition(
+   195	                TaskStatus.PENDING_REVIEW,
+   196	                operator=request.operator,
+   197	                reason=readable_reason,
+   198	            )
+   199	            task_status = TaskStatus.PENDING_REVIEW
+   200	        else:
+   201	            state.transition(TaskStatus.PASSED, operator=request.operator)
+   202	            task_status = TaskStatus.PASSED
+   203	
+   204	        result = CalculateResult(
+   205	            business_id=request.business_id,
+   206	            teacher_id=request.teacher.teacher_id,
+   207	            allowance_amount=amount,
+   208	            calculation_detail=calc_detail,
+   209	            final_action=action,
+   210	            task_status=task_status,
+   211	            readable_reason=readable_reason,
+   212	            rule_hits=hits,
+   213	            risk_flags=risk_flags,
+   214	        )
+   215	
+   216	        self.store.save_result(request.business_id, result)
+   217	
+   218	        self.store.append_record(
+   219	            AuditRecord(
+   220	                record_id=f"{request.business_id}-calc",
+   221	                business_id=request.business_id,
+   222	                teacher_id=request.teacher.teacher_id,
+   223	                operator=request.operator,
+   224	                action=f"calculate:{action.value}",
+   225	                detail=readable_reason,
+   226	                metadata=result.model_dump(),
+   227	            )
+   228	        )
+   229	
+   230	        return result
+   231	
+   232	    def review(
+   233	        self,
+   234	        business_id: str,
+   235	        approved: bool,
+   236	        operator: str,
+   237	        reason: str = "",
+   238	    ) -> CalculateResult:
+   239	        state = self._get_state(business_id)
+   240	
+   241	        if state.current_status != TaskStatus.PENDING_REVIEW:
+   242	            return CalculateResult(
+   243	                business_id=business_id,
+   244	                teacher_id="",
+   245	                final_action=RuleAction.BLOCK,
+   246	                task_status=state.current_status,
+   247	                readable_reason=f"当前状态{state.current_status.value}不可复核，仅待复核状态允许复核",
+   248	            )
+   249	
+   250	        if approved:
+   251	            state.transition(
+   252	                TaskStatus.REVIEW_APPROVED, operator=operator, reason=reason
+   253	            )
+   254	            existing = self.store.get_result(business_id)
+   255	            task_status = TaskStatus.REVIEW_APPROVED
+   256	            if existing:
+   257	                existing.task_status = task_status
+   258	                existing.final_action = RuleAction.PASS
+   259	                existing.readable_reason = f"复核通过：{reason}" if reason else "复核通过"
+   260	                self.store.save_result(business_id, existing)
+   261	        else:
+   262	            state.transition(
+   263	                TaskStatus.REVIEW_REJECTED, operator=operator, reason=reason
+   264	            )
+   265	            existing = self.store.get_result(business_id)
+   266	            task_status = TaskStatus.REVIEW_REJECTED
+   267	            if existing:
+   268	                existing.task_status = task_status
+   269	                existing.final_action = RuleAction.BLOCK
+   270	                existing.readable_reason = f"复核驳回：{reason}" if reason else "复核驳回"
+   271	                self.store.save_result(business_id, existing)
+   272	
+   273	        self.store.append_record(
+   274	            AuditRecord(
+   275	                record_id=f"{business_id}-review",
+   276	                business_id=business_id,
+   277	                teacher_id=existing.teacher_id if existing else "",
+   278	                operator=operator,
+   279	                action=f"review:{'approved' if approved else 'rejected'}",
+   280	                detail=reason,
+
+exec
+/bin/zsh -lc "nl -ba app/engine/calculator.py | sed -n '280,360p'" in /Users/bill/Documents/solo/workspaces/yzz00154
+ succeeded in 0ms:
+   280	                detail=reason,
+   281	            )
+   282	        )
+   283	
+   284	        return self.store.get_result(business_id) or CalculateResult(
+   285	            business_id=business_id,
+   286	            teacher_id="",
+   287	            final_action=RuleAction.BLOCK,
+   288	            task_status=task_status,
+   289	            readable_reason="复核完成",
+   290	        )
+   291	
+   292	    def batch_calculate(
+   293	        self, requests: List[CalculateRequest]
+   294	    ) -> List[CalculateResult]:
+   295	        return [self.calculate(req) for req in requests]
+   296	
+   297	    def get_state(self, business_id: str) -> Optional[TaskState]:
+   298	        return self._states.get(business_id)
+   299	
+   300	    def replay(self, business_id: str) -> List[Dict]:
+   301	        records = self.store.replay_by_business_id(business_id)
+   302	        state = self._states.get(business_id)
+   303	        if not records and state is None:
+   304	            return []
+   305	        result = {
+   306	            "audit_records": [r.model_dump() for r in records],
+   307	            "state_transitions": state.replay() if state else [],
+   308	        }
+   309	        return [result]
+
+codex
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml:1` 定义了 Python 项目及 FastAPI、uvicorn、pydantic 依赖。
+  - `app/main.py:6` 提供 FastAPI 应用入口 `app.main:app`。
+  - `app/api/routes.py:36`、`app/api/routes.py:42`、`app/api/routes.py:48`、`app/api/routes.py:59`、`app/api/routes.py:67` 覆盖单笔核算、批量核算、复核、回放、状态查询接口。
+  - `app/models/rule.py:46`、`app/models/rule.py:63`、`app/models/rule.py:102` 实现课程系数、教师状态系数、v1/v2 规则。
+  - `app/engine/calculator.py:133`、`app/engine/calculator.py:232`、`app/engine/calculator.py:292` 实现核算、人工复核、批量核算核心流程。
+  - 验证结果：`PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -q -s -p no:cacheprovider` 通过，`35 passed in 0.15s`。
+  - API 级验证：使用 FastAPI `TestClient` 调用 `/api/v1/allowance/calculate` 返回 200，正常教师 80 课时返回 `allowance_amount=4000.0`、`final_action=pass`、`task_status=passed`。
+- 阻断问题: 未发现阻断性问题。
+- 建议:
+  - 可补充 README，说明 `uvicorn app.main:app --reload` 启动命令和接口示例，便于人工验收。
+  - 当前数据存储为内存态，若目标包含生产可用或跨进程持久化，需要补数据库或文件持久化。
+tokens used
+80,292

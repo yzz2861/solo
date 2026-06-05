@@ -1,0 +1,1 @@
+产物不满意：虽然 `app/main.py` 可导入，ASGI 方式访问 `/health` 与 `/api/compensation/process` 能返回 200，核心赔付处理路径也能得到 `PROCESSABLE` 结果；但项目自带测试入口不可用。`tests/test_compensation_api.py:17` 使用 `TestClient(app)`，在当前由 `requirements.txt:5` 允许安装的 `httpx 0.28.1` 环境下收集阶段直接报 `TypeError: __init__() got an unexpected keyword argument 'app'`。这说明依赖范围未约束导致真实验证链路失效，用户无法按项目内测试入口确认赔付校验、状态分流、历史回放等核心流程是否稳定。

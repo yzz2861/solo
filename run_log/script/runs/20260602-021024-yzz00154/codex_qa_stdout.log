@@ -1,0 +1,17 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml:1` 定义了 Python 项目及 FastAPI、uvicorn、pydantic 依赖。
+  - `app/main.py:6` 提供 FastAPI 应用入口 `app.main:app`。
+  - `app/api/routes.py:36`、`app/api/routes.py:42`、`app/api/routes.py:48`、`app/api/routes.py:59`、`app/api/routes.py:67` 覆盖单笔核算、批量核算、复核、回放、状态查询接口。
+  - `app/models/rule.py:46`、`app/models/rule.py:63`、`app/models/rule.py:102` 实现课程系数、教师状态系数、v1/v2 规则。
+  - `app/engine/calculator.py:133`、`app/engine/calculator.py:232`、`app/engine/calculator.py:292` 实现核算、人工复核、批量核算核心流程。
+  - 验证结果：`PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest -q -s -p no:cacheprovider` 通过，`35 passed in 0.15s`。
+  - API 级验证：使用 FastAPI `TestClient` 调用 `/api/v1/allowance/calculate` 返回 200，正常教师 80 课时返回 `allowance_amount=4000.0`、`final_action=pass`、`task_status=passed`。
+- 阻断问题: 未发现阻断性问题。
+- 建议:
+  - 可补充 README，说明 `uvicorn app.main:app --reload` 启动命令和接口示例，便于人工验收。
+  - 当前数据存储为内存态，若目标包含生产可用或跨进程持久化，需要补数据库或文件持久化。

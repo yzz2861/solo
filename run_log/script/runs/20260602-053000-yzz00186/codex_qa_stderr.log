@@ -1,0 +1,4263 @@
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00186
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019e85b4-16ab-70f3-986a-07bbe5418db7
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00186
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00186
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+codex
+我会按“solo质检”的口径做只读检查；当前技能列表里没有名为“solo质检”的技能文件可读取，所以我会直接按你给出的质检规则执行，不改文件、不提交。先定位项目入口、原始目标线索和实际可运行链路。
+exec
+/bin/zsh -lc "find .. -maxdepth 2 -iname '*solo*' -o -iname '*prompt*' -o -iname '*task*' -o -iname '*README*'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+../yzz00048/README.md
+../yzz00046/README.md
+../yzz00041/README.md
+../yzz00031/README.md
+../yzz00038/README.md
+../yzz00181/README.md
+../yzz00032/README.md
+../yzz00035/README.md
+
+exec
+/bin/zsh -lc "pwd && rg --files -g '"'!*node_modules*'"' -g '"'!*.png'"' -g '"'!*.jpg'"' -g '"'!*.jpeg'"' -g '"'!*.gif'"' -g '"'!*.webp'"' | sed -n '1,160p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+/Users/bill/Documents/solo/workspaces/yzz00186
+tea_grading_cli/cli.py
+tea_grading_cli/reader.py
+tea_grading_cli/__init__.py
+tea_grading_cli/exporter.py
+tea_grading_cli/models.py
+tea_grading_cli/grader.py
+tea_grading_cli/validator.py
+setup.py
+tests/data/missing_material/supplement.csv
+tests/data/missing_material/grading_criteria.json
+tests/data/missing_material/main_list.csv
+tests/data/missing_material/validation_rules.json
+tests/data/over_threshold/supplement.csv
+tests/data/over_threshold/grading_criteria.json
+tests/data/over_threshold/main_list.csv
+tests/data/over_threshold/validation_rules.json
+tests/data/compliant/supplement.csv
+tests/data/compliant/grading_criteria.json
+tests/data/compliant/main_list.csv
+tests/data/compliant/validation_rules.json
+tests/data/history_replay/supplement.csv
+tests/data/history_replay/grading_criteria.json
+tests/data/history_replay/main_list.csv
+tests/data/history_replay/history.csv
+tests/data/history_replay/validation_rules.json
+tests/test_acceptance.py
+tests/__init__.py
+requirements.txt
+
+codex
+当前仓库是一个 Python CLI 项目，没有 README，也不是 Git 仓库。下一步我会从 `setup.py`、测试用例和代码入口反推原始目标与验收场景，再尝试用现有环境执行真实入口。
+exec
+/bin/zsh -lc "sed -n '1,220p' setup.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+from setuptools import setup, find_packages
+
+setup(
+    name="tea-grading-cli",
+    version="1.0.0",
+    description="茶叶鲜叶收购定级CLI工具",
+    packages=find_packages(),
+    include_package_data=True,
+    install_requires=[
+        "click>=8.1.0",
+        "pandas>=2.0.0",
+        "openpyxl>=3.1.0",
+        "jsonschema>=4.17.0",
+        "rich>=13.0.0",
+    ],
+    entry_points={
+        "console_scripts": [
+            "tea-grading=tea_grading_cli.cli:cli",
+        ],
+    },
+    python_requires=">=3.8",
+)
+
+exec
+/bin/zsh -lc "sed -n '1,260p' tests/test_acceptance.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+import os
+import json
+import shutil
+import tempfile
+from pathlib import Path
+from unittest import TestCase
+
+import pandas as pd
+from click.testing import CliRunner
+
+from tea_grading_cli.cli import cli
+from tea_grading_cli.reader import DataReader
+from tea_grading_cli.validator import ValidationEngine
+from tea_grading_cli.grader import TeaGrader
+from tea_grading_cli.exporter import ResultExporter
+from tea_grading_cli.models import GradeLevel, BadRowReason
+
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+
+
+class CompliantSampleTest(TestCase):
+    """合规样例：所有记录通过校验与定级"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'compliant')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_cli_run_compliant(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+        self.assertIn('处理完成', result.output)
+
+    def test_all_records_graded(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        self.assertEqual(len(bad_rows), 0, f"合规样例不应有坏行: {bad_rows}")
+        self.assertEqual(len(main_records), 5)
+
+    def test_success_result_file_exists(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        success_files = list(Path(self.output_dir).glob('定级成功结果_*.csv'))
+        self.assertTrue(len(success_files) > 0, "应生成成功结果文件")
+        df = pd.read_csv(success_files[0])
+        self.assertEqual(len(df), 5, f"应有5条成功记录，实际{len(df)}")
+
+    def test_bad_records_file_empty(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        bad_files = list(Path(self.output_dir).glob('坏行记录_*.csv'))
+        if bad_files:
+            try:
+                df = pd.read_csv(bad_files[0])
+                self.assertEqual(len(df), 0, "合规样例不应有坏行记录")
+            except pd.errors.EmptyDataError:
+                pass
+
+    def test_operation_log_exists(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        log_files = list(Path(self.output_dir).glob('操作日志_*.log'))
+        self.assertTrue(len(log_files) > 0, "应生成操作日志文件")
+
+    def test_summary_json_exists(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        summary_files = list(Path(self.output_dir).glob('处理汇总_*.json'))
+        self.assertTrue(len(summary_files) > 0, "应生成处理汇总JSON")
+        with open(summary_files[0], 'r', encoding='utf-8') as f:
+            summary = json.load(f)
+        self.assertEqual(summary['成功记录数'], 5)
+        self.assertEqual(summary['坏行记录数'], 0)
+
+    def test_grade_distribution(self):
+        main_records, _ = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+        criteria = DataReader.read_grading_criteria(self.criteria_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        val_results = {}
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(m, supplements, seen)
+            val_results[m.id] = (is_valid, err, diff)
+            seen.add(m.id)
+
+        grader = TeaGrader(criteria)
+        result = grader.grade_records(main_records, supplements, val_results)
+
+        grade_values = [r.final_grade for r in result.graded_records]
+        self.assertTrue(all(g != GradeLevel.REJECT for g in grade_values),
+                        "合规样例不应有不合格等级")
+
+    def test_console_output_shows_success_count(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        self.assertIn('5', result.output, "控制台应显示5条成功记录")
+
+
+class OverThresholdSampleTest(TestCase):
+    """超阈值样例：水分、单价、数量等超出阈值"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'over_threshold')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_cli_run_over_threshold(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+
+    def test_bad_rows_detected(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+        criteria = DataReader.read_grading_criteria(self.criteria_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        val_results = {}
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(m, supplements, seen)
+            val_results[m.id] = (is_valid, err, diff)
+            seen.add(m.id)
+
+        grader = TeaGrader(criteria)
+        result = grader.grade_records(main_records, supplements, val_results,
+                                      initial_bad_rows=bad_rows)
+
+        self.assertTrue(result.bad_count > 0, f"应有超阈值坏行，实际坏行数={result.bad_count}")
+
+    def test_moisture_over_threshold_isolated(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+        criteria = DataReader.read_grading_criteria(self.criteria_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        val_results = {}
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(m, supplements, seen)
+            val_results[m.id] = (is_valid, err, diff)
+            seen.add(m.id)
+
+        grader = TeaGrader(criteria)
+        result = grader.grade_records(main_records, supplements, val_results,
+                                      initial_bad_rows=bad_rows)
+
+        bad_ids = [r.main_record.id for r in result.bad_records]
+        self.assertIn('H001', bad_ids, "H001水分超标应被隔离")
+
+    def test_bad_records_file_has_content(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        bad_files = list(Path(self.output_dir).glob('坏行记录_*.csv'))
+        self.assertTrue(len(bad_files) > 0, "应生成坏行记录文件")
+        df = pd.read_csv(bad_files[0])
+        self.assertTrue(len(df) > 0, "坏行记录文件应有内容")
+
+    def test_bad_row_reason_present(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        bad_files = list(Path(self.output_dir).glob('坏行记录_*.csv'))
+        if bad_files:
+            df = pd.read_csv(bad_files[0])
+            self.assertTrue('坏行原因' in df.columns, "坏行记录应包含坏行原因列")
+
+    def test_console_shows_bad_count(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        self.assertTrue(result.bad_count > 0 if hasattr(result, 'bad_count') else True)
+
+
+class MissingMaterialSampleTest(TestCase):
+
+exec
+/bin/zsh -lc "printf 'requirements:\\n'; sed -n '1,120p' requirements.txt; printf '\\noutput files:\\n'; find output -maxdepth 2 -type f -print" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+requirements:
+click>=8.1.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+jsonschema>=4.17.0
+rich>=13.0.0
+
+output files:
+
+exec
+/bin/zsh -lc "for f in tea_grading_cli/*.py; do printf '\\n### %s\\n' \""'$f"; sed -n '"'1,240p' \""'$f"; done' in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+
+### tea_grading_cli/__init__.py
+"""茶叶鲜叶收购定级CLI工具"""
+
+__version__ = "1.0.0"
+
+### tea_grading_cli/cli.py
+import os
+import sys
+import json
+from datetime import datetime
+from pathlib import Path
+
+import click
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
+from .reader import DataReader
+from .validator import ValidationEngine
+from .grader import TeaGrader
+from .exporter import ResultExporter
+from .models import GradeLevel, ProcessingResult
+
+console = Console()
+
+
+def _print_summary(result: ProcessingResult, dry_run: bool):
+    mode = "[yellow]DRY-RUN[/yellow] " if dry_run else ""
+    console.print(Panel(
+        f"{mode}处理完成",
+        style="bold green" if result.bad_count == 0 else "bold yellow"
+    ))
+
+    table = Table(title=f"{mode}处理汇总", show_header=True, header_style="bold cyan")
+    table.add_column("指标", style="dim")
+    table.add_column("值", justify="right")
+    table.add_row("总记录数", str(result.success_count + result.bad_count))
+    table.add_row("成功记录数", str(result.success_count), style="green")
+    table.add_row("坏行记录数", str(result.bad_count), style="red" if result.bad_count > 0 else "green")
+    table.add_row("总结算金额(元)", f"{result.total_amount:,.2f}")
+    console.print(table)
+
+    if result.graded_records or result.bad_records:
+        grade_dist = {}
+        for r in result.graded_records:
+            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+        for r in result.bad_records:
+            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+
+        gt = Table(title="等级分布", show_header=True, header_style="bold cyan")
+        gt.add_column("等级")
+        gt.add_column("数量", justify="right")
+        for grade in GradeLevel:
+            cnt = grade_dist.get(grade.value, 0)
+            if cnt:
+                style = "red" if grade == GradeLevel.REJECT else None
+                gt.add_row(grade.value, str(cnt), style=style)
+        console.print(gt)
+
+
+def _print_bad_rows_preview(result: ProcessingResult, limit: int = 10):
+    if not result.bad_records:
+        return
+    table = Table(title="坏行预览", show_header=True, header_style="bold red")
+    table.add_column("记录编号")
+    table.add_column("供应商")
+    table.add_column("坏行原因")
+    for r in result.bad_records[:limit]:
+        table.add_row(r.main_record.id, r.main_record.supplier_name, r.bad_reason or "")
+    if len(result.bad_records) > limit:
+        table.add_row("...", f"(共 {len(result.bad_records)} 条)", "")
+    console.print(table)
+
+
+def _print_diff_preview(result: ProcessingResult, limit: int = 10):
+    all_records = result.graded_records + result.bad_records
+    diff_records = [r for r in all_records if r.diff_fields]
+    if not diff_records:
+        return
+    table = Table(title="差异预览", show_header=True, header_style="bold yellow")
+    table.add_column("记录编号")
+    table.add_column("差异字段")
+    table.add_column("说明")
+    count = 0
+    for r in diff_records:
+        for field, diff in r.diff_fields.items():
+            if count >= limit:
+                break
+            if '主清单' in diff:
+                desc = f"主清单={diff['主清单']}, 实际={diff['实际检测']}, 差值={diff['差值']}"
+            elif 'history' in diff:
+                desc = f"历史={diff['history']}, 当前={diff['current']}, 差异={diff['diff']}"
+            else:
+                desc = str(diff)
+            table.add_row(r.main_record.id, field, desc)
+            count += 1
+    if len(diff_records) > limit:
+        table.add_row("...", "", f"(共 {count} 项差异)")
+    console.print(table)
+
+
+@click.group()
+@click.version_option(version="1.0.0", prog_name="tea-grading")
+def cli():
+    """茶叶鲜叶收购定级CLI工具"""
+    pass
+
+
+@cli.command()
+@click.option('--main', 'main_file', required=True, help='主清单文件路径 (CSV/XLSX/JSON)')
+@click.option('--supplement', 'supplement_file', required=True, help='补充表文件路径 (CSV/XLSX/JSON)')
+@click.option('--rules', 'rules_file', required=True, help='校验规则文件路径 (JSON)')
+@click.option('--criteria', 'criteria_file', required=True, help='定级标准文件路径 (JSON)')
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录 (默认: ./output)')
+@click.option('--dry-run', is_flag=True, default=False, help='仅预览，不输出正式结果文件')
+@click.option('--history', 'history_file', default=None, help='历史记录文件路径 (用于历史回放比对)')
+@click.option('--use-actual/--no-use-actual', default=True, help='是否使用补充表实际检测值定级 (默认: 使用)')
+@click.option('--strict', is_flag=True, default=False, help='严格模式：缺少补充记录的行标记为坏行')
+def run(main_file, supplement_file, rules_file, criteria_file, output_dir,
+        dry_run, history_file, use_actual, strict):
+    """执行茶叶鲜叶收购定级全流程"""
+
+    console.print(Panel("茶叶鲜叶收购定级", style="bold cyan"))
+
+    validation_engine_for_params = ValidationEngine([])
+    param_errors = validation_engine_for_params.validate_parameters(
+        main_file, supplement_file, rules_file, output_dir if not dry_run else output_dir
+    )
+    if not os.path.exists(criteria_file):
+        param_errors.append(f"定级标准文件不存在: {criteria_file}")
+    if param_errors:
+        for err in param_errors:
+            console.print(f"[red]参数错误: {err}[/red]")
+        sys.exit(1)
+
+    console.print(f"[dim]主清单: {main_file}[/dim]")
+    console.print(f"[dim]补充表: {supplement_file}[/dim]")
+    console.print(f"[dim]校验规则: {rules_file}[/dim]")
+    console.print(f"[dim]定级标准: {criteria_file}[/dim]")
+    if history_file:
+        console.print(f"[dim]历史记录: {history_file}[/dim]")
+    if dry_run:
+        console.print("[yellow]DRY-RUN 模式: 仅预览，不输出正式结果[/yellow]")
+
+    main_records, bad_rows = DataReader.read_main_list(main_file)
+    supplements = DataReader.read_supplement(supplement_file)
+    rules = DataReader.read_validation_rules(rules_file)
+    criteria = DataReader.read_grading_criteria(criteria_file)
+
+    history_data = {}
+    if history_file:
+        history_data = DataReader.read_history_record(history_file)
+
+    validation_engine = ValidationEngine(rules)
+    validation_results = {}
+    seen_ids = set()
+
+    for main in main_records:
+        if strict and main.id not in supplements:
+            validation_results[main.id] = (
+                False,
+                "严格模式: 缺少补充记录",
+                {}
+            )
+            seen_ids.add(main.id)
+            continue
+
+        is_valid, error_msg, hist_diff = validation_engine.validate_main_record(
+            main, supplements, seen_ids, history_data
+        )
+        validation_results[main.id] = (is_valid, error_msg, hist_diff)
+        seen_ids.add(main.id)
+
+    grader = TeaGrader(criteria, use_actual_values=use_actual)
+    result = grader.grade_records(
+        main_records, supplements, validation_results,
+        initial_bad_rows=bad_rows
+    )
+
+    _print_summary(result, dry_run)
+    _print_bad_rows_preview(result)
+    _print_diff_preview(result)
+
+    if result.bad_records:
+        console.print("\n[bold yellow]坏行记录可使用以下命令复核:[/bold yellow]")
+        for r in result.bad_records[:5]:
+            console.print(f"  tea-grading review --record-id {r.main_record.id} --output-dir {output_dir}")
+
+    exporter = ResultExporter(output_dir, dry_run=dry_run)
+    exported_files = exporter.export_all(result)
+
+    if not dry_run:
+        for r in result.bad_records:
+            exporter.generate_review_link(r.main_record.id)
+
+    console.print("\n[bold green]处理完成[/bold green]")
+    if not dry_run:
+        console.print("[dim]导出文件:[/dim]")
+        for name, path in exported_files.items():
+            console.print(f"  [dim]{name}: {path}[/dim]")
+
+    return result
+
+
+@cli.command()
+@click.option('--record-id', 'record_id', required=True, help='待复核的记录编号')
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+def review(record_id, output_dir):
+    """复核坏行记录"""
+
+    review_files = list(Path(output_dir).glob(f'review_{record_id}_*.json'))
+
+    if not review_files:
+        console.print(f"[red]未找到记录 {record_id} 的复核信息[/red]")
+        console.print("[dim]请先运行 tea-grading run 生成复核文件[/dim]")
+        sys.exit(1)
+
+    latest_review = sorted(review_files)[-1]
+    with open(latest_review, 'r', encoding='utf-8') as f:
+        review_data = json.load(f)
+
+    console.print(Panel(f"复核记录: {record_id}", style="bold cyan"))
+
+    table = Table(show_header=True, header_style="bold cyan")
+    table.add_column("字段")
+    table.add_column("值")
+    for key, value in review_data.items():
+        if key == '相关文件':
+            value = '\n'.join(f"  {k}: {v}" for k, v in value.items())
+        table.add_row(key, str(value))
+    console.print(table)
+
+    bad_file = Path(output_dir) / f"坏行记录_*.csv"
+    bad_files = list(Path(output_dir).glob(f"坏行记录_*.csv"))
+    if bad_files:
+        console.print(f"\n[bold]坏行记录文件:[/bold]")
+        for bf in bad_files:
+            console.print(f"  {bf}")
+
+    return review_data
+
+
+@cli.command()
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+def history_check(output_dir):
+    """检查历史回放差异"""
+
+### tea_grading_cli/exporter.py
+import os
+import json
+import pandas as pd
+from typing import List, Dict, Any
+from pathlib import Path
+from datetime import datetime
+from .models import GradedRecord, ProcessingResult, GradeLevel
+
+
+class ResultExporter:
+    def __init__(self, output_dir: str, dry_run: bool = False):
+        self.output_dir = output_dir
+        self.dry_run = dry_run
+        self.timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        self.exported_files = {}
+
+        if not dry_run:
+            os.makedirs(output_dir, exist_ok=True)
+
+    def _get_filename(self, prefix: str, suffix: str = 'csv') -> str:
+        filename = f"{prefix}_{self.timestamp}.{suffix}"
+        return os.path.join(self.output_dir, filename)
+
+    def _to_dict(self, graded: GradedRecord, include_bad_info: bool = False) -> Dict[str, Any]:
+        data = {
+            '记录编号': graded.main_record.id,
+            '供应商': graded.main_record.supplier_name,
+            '茶叶品种': graded.main_record.tea_variety,
+            '采摘日期': graded.main_record.harvest_date,
+            '数量(kg)': graded.main_record.quantity,
+            '原始单价(元/kg)': graded.main_record.unit_price,
+            '调整后单价(元/kg)': graded.adjusted_price,
+            '结算金额(元)': graded.total_amount,
+            '最终等级': graded.final_grade.value,
+            '最终水分(%)': graded.final_moisture,
+            '最终完整度(%)': graded.final_integrity,
+            '最终嫩度(%)': graded.final_tenderness,
+            '定级说明': graded.grade_reason,
+            '备注': graded.main_record.remark
+        }
+
+        if graded.supplement:
+            data.update({
+                '质检员': graded.supplement.inspector,
+                '检测时间': graded.supplement.inspection_time,
+                '采样照片': graded.supplement.sampling_photo,
+                '检测备注': graded.supplement.inspection_remark
+            })
+
+        if include_bad_info and graded.is_bad:
+            data['坏行原因'] = graded.bad_reason or ''
+
+        if graded.diff_fields:
+            diff_desc = []
+            for field, diff in graded.diff_fields.items():
+                if '主清单' in diff:
+                    diff_desc.append(f"{field}: 主清单={diff['主清单']}, 实际={diff['实际检测']}, 差值={diff['差值']}")
+                elif 'history' in diff:
+                    diff_desc.append(f"{field}: 历史={diff['history']}, 当前={diff['current']}, 差异={diff['diff']}")
+            data['差异说明'] = '; '.join(diff_desc)
+
+        return data
+
+    def export_success_result(self, records: List[GradedRecord]) -> str:
+        file_path = self._get_filename('定级成功结果')
+        self.exported_files['success_result'] = file_path
+
+        if self.dry_run:
+            print(f"[DRY-RUN] 将导出 {len(records)} 条成功记录到: {file_path}")
+            return file_path
+
+        data = [self._to_dict(r) for r in records if not r.is_bad]
+        df = pd.DataFrame(data)
+        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+        print(f"✓ 成功结果已导出: {file_path} (共 {len(data)} 条)")
+        return file_path
+
+    def export_bad_records(self, records: List[GradedRecord]) -> str:
+        file_path = self._get_filename('坏行记录')
+        self.exported_files['bad_records'] = file_path
+
+        if self.dry_run:
+            print(f"[DRY-RUN] 将导出 {len(records)} 条坏行记录到: {file_path}")
+            return file_path
+
+        data = [self._to_dict(r, include_bad_info=True) for r in records if r.is_bad]
+        df = pd.DataFrame(data)
+        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+        print(f"✗ 坏行记录已导出: {file_path} (共 {len(data)} 条)")
+        return file_path
+
+    def export_diff_table(self, records: List[GradedRecord]) -> str:
+        file_path = self._get_filename('差异表')
+        self.exported_files['diff_table'] = file_path
+
+        diff_records = [r for r in records if r.diff_fields]
+
+        if self.dry_run:
+            print(f"[DRY-RUN] 将导出 {len(diff_records)} 条差异记录到: {file_path}")
+            return file_path
+
+        if not diff_records:
+            print(f"ℹ 没有检测到差异记录，跳过差异表导出")
+            return ''
+
+        data = []
+        for r in diff_records:
+            base = {
+                '记录编号': r.main_record.id,
+                '供应商': r.main_record.supplier_name,
+                '茶叶品种': r.main_record.tea_variety,
+                '最终等级': r.final_grade.value,
+            }
+            for field, diff in r.diff_fields.items():
+                row = base.copy()
+                row['差异字段'] = field
+                if '主清单' in diff:
+                    row['主清单值'] = diff['主清单']
+                    row['实际检测值'] = diff['实际检测']
+                    row['差值'] = diff['差值']
+                elif 'history' in diff:
+                    row['历史值'] = diff['history']
+                    row['当前值'] = diff['current']
+                    row['差异值'] = diff['diff']
+                data.append(row)
+
+        df = pd.DataFrame(data)
+        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+        print(f"△ 差异表已导出: {file_path} (共 {len(data)} 条差异项)")
+        return file_path
+
+    def export_operation_log(self, logs: List[Dict[str, Any]]) -> str:
+        file_path = self._get_filename('操作日志', suffix='log')
+        self.exported_files['operation_log'] = file_path
+
+        if self.dry_run:
+            print(f"[DRY-RUN] 将导出 {len(logs)} 条操作日志到: {file_path}")
+            return file_path
+
+        with open(file_path, 'w', encoding='utf-8') as f:
+            for log in logs:
+                level = log.get('level', 'INFO')
+                time = log.get('time', '')
+                record_id = log.get('record_id', '')
+                action = log.get('action', '')
+                reason = log.get('reason', '')
+                
+                extra = []
+                for key, value in log.items():
+                    if key not in ['time', 'level', 'record_id', 'action', 'reason']:
+                        extra.append(f"{key}={value}")
+                extra_str = f" [{', '.join(extra)}]" if extra else ""
+                
+                f.write(f"[{time}] [{level}] [{record_id}] {action}{extra_str}")
+                if reason:
+                    f.write(f" - {reason}")
+                f.write("\n")
+
+        print(f"📋 操作日志已导出: {file_path} (共 {len(logs)} 条)")
+        return file_path
+
+    def export_summary_json(self, result: ProcessingResult) -> str:
+        file_path = self._get_filename('处理汇总', suffix='json')
+        self.exported_files['summary'] = file_path
+
+        summary = {
+            '处理时间': result.process_time.strftime('%Y-%m-%d %H:%M:%S'),
+            '成功记录数': result.success_count,
+            '坏行记录数': result.bad_count,
+            '总记录数': result.success_count + result.bad_count,
+            '总结算金额(元)': round(result.total_amount, 2),
+            '导出文件': self.exported_files,
+            '等级分布': {}
+        }
+
+        all_records = result.graded_records + result.bad_records
+        for grade in GradeLevel:
+            count = sum(1 for r in all_records if r.final_grade == grade)
+            if count > 0:
+                summary['等级分布'][grade.value] = count
+
+        if self.dry_run:
+            print(f"[DRY-RUN] 将导出处理汇总到: {file_path}")
+            print(f"[DRY-RUN] 汇总信息: {json.dumps(summary, ensure_ascii=False, indent=2)}")
+            return file_path
+
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
+
+        print(f"📊 处理汇总已导出: {file_path}")
+        return file_path
+
+    def export_all(self, result: ProcessingResult) -> Dict[str, str]:
+        all_records = result.graded_records + result.bad_records
+
+        self.export_success_result(result.graded_records)
+        self.export_bad_records(result.bad_records)
+        self.export_diff_table(all_records)
+        self.export_operation_log(result.operation_log)
+        self.export_summary_json(result)
+
+        return self.exported_files
+
+    def generate_review_link(self, record_id: str) -> str:
+        review_file = os.path.join(self.output_dir, f'review_{record_id}_{self.timestamp}.json')
+        self.exported_files[f'review_{record_id}'] = review_file
+
+        if self.dry_run:
+            return f"[DRY-RUN] 复核入口: {review_file}"
+
+        review_info = {
+            '记录编号': record_id,
+            '复核创建时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            '状态': '待复核',
+            '操作入口': f'使用命令: tea-grading review --record-id {record_id} --output-dir {self.output_dir}',
+            '相关文件': self.exported_files
+        }
+
+        with open(review_file, 'w', encoding='utf-8') as f:
+            json.dump(review_info, f, ensure_ascii=False, indent=2)
+
+        return f"复核入口文件: {review_file}"
+
+### tea_grading_cli/grader.py
+from typing import List, Dict, Optional
+from datetime import datetime
+from .models import (
+    MainRecord, SupplementRecord, GradingCriteria, GradedRecord, 
+    ProcessingResult, GradeLevel, BadRowReason
+)
+
+
+class TeaGrader:
+    def __init__(self, criteria: List[GradingCriteria], use_actual_values: bool = True):
+        self.criteria = sorted(criteria, key=lambda x: [
+            x.min_integrity, x.min_tenderness
+        ], reverse=True)
+        self.use_actual_values = use_actual_values
+
+    def _determine_grade(self, moisture: float, integrity: float, tenderness: float) -> tuple:
+        for crit in self.criteria:
+            if (crit.min_moisture <= moisture <= crit.max_moisture and
+                integrity >= crit.min_integrity and
+                tenderness >= crit.min_tenderness):
+                return crit.grade, crit.price_adjustment, (
+                    f"水分{moisture}%在[{crit.min_moisture}, {crit.max_moisture}]范围内, "
+                    f"完整度{integrity}%≥{crit.min_integrity}%, "
+                    f"嫩度{tenderness}%≥{crit.min_tenderness}%"
+                )
+        
+        return GradeLevel.REJECT, 0.0, (
+            f"未达到任何合格等级标准: 水分={moisture}%, 完整度={integrity}%, 嫩度={tenderness}%"
+        )
+
+    def _get_actual_values(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> tuple:
+        if self.use_actual_values and supplement:
+            return (
+                supplement.actual_moisture,
+                supplement.actual_integrity,
+                supplement.actual_tenderness
+            )
+        return (
+            main.moisture_content,
+            main.leaf_integrity,
+            main.tenderness
+        )
+
+    def _calculate_diff(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> Dict[str, Dict[str, float]]:
+        diff_fields = {}
+        if supplement:
+            fields = [
+                ('moisture_content', 'actual_moisture', '水分'),
+                ('leaf_integrity', 'actual_integrity', '完整度'),
+                ('tenderness', 'actual_tenderness', '嫩度')
+            ]
+            for main_field, supp_field, label in fields:
+                main_val = getattr(main, main_field)
+                supp_val = getattr(supplement, supp_field)
+                if abs(main_val - supp_val) > 0.001:
+                    diff_fields[label] = {
+                        '主清单': main_val,
+                        '实际检测': supp_val,
+                        '差值': round(supp_val - main_val, 4)
+                    }
+        return diff_fields
+
+    def grade_records(self, 
+                     main_records: List[MainRecord],
+                     supplements: Dict[str, SupplementRecord],
+                     validation_results: Dict[str, tuple],
+                     initial_bad_rows: List[Dict] = None,
+                     operation_log: List[Dict] = None
+                     ) -> ProcessingResult:
+        
+        result = ProcessingResult()
+        result.process_time = datetime.now()
+        seen_ids = set()
+
+        if operation_log:
+            result.operation_log.extend(operation_log)
+
+        if initial_bad_rows:
+            for bad_row in initial_bad_rows:
+                fake_main = MainRecord(
+                    id=str(bad_row['raw_data'].get('id', f"BAD{len(result.bad_records)+1}")),
+                    supplier_name=str(bad_row['raw_data'].get('supplier_name', '')),
+                    tea_variety=str(bad_row['raw_data'].get('tea_variety', '')),
+                    harvest_date=str(bad_row['raw_data'].get('harvest_date', '')),
+                    quantity=float(bad_row['raw_data'].get('quantity', 0) or 0),
+                    unit_price=float(bad_row['raw_data'].get('unit_price', 0) or 0),
+                    moisture_content=float(bad_row['raw_data'].get('moisture_content', 0) or 0),
+                    leaf_integrity=float(bad_row['raw_data'].get('leaf_integrity', 0) or 0),
+                    tenderness=float(bad_row['raw_data'].get('tenderness', 0) or 0),
+                    color=str(bad_row['raw_data'].get('color', '')),
+                    raw_data=bad_row['raw_data']
+                )
+                graded = GradedRecord(
+                    main_record=fake_main,
+                    supplement=None,
+                    final_grade=GradeLevel.REJECT,
+                    final_moisture=fake_main.moisture_content,
+                    final_integrity=fake_main.leaf_integrity,
+                    final_tenderness=fake_main.tenderness,
+                    adjusted_price=0,
+                    total_amount=0,
+                    grade_reason=bad_row['reason'],
+                    is_bad=True,
+                    bad_reason=bad_row['reason'],
+                    diff_fields={}
+                )
+                result.bad_records.append(graded)
+                result.bad_count += 1
+
+                result.operation_log.append({
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'level': 'ERROR',
+                    'record_id': fake_main.id,
+                    'action': '坏行隔离',
+                    'reason': bad_row['reason'],
+                    'row_number': bad_row.get('row_number', 'N/A')
+                })
+
+        for main in main_records:
+            if main.id in seen_ids:
+                continue
+            seen_ids.add(main.id)
+
+            is_valid, error_msg, hist_diff = validation_results.get(main.id, (True, None, {}))
+            supplement = supplements.get(main.id)
+
+            if not is_valid:
+                moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+                graded = GradedRecord(
+                    main_record=main,
+                    supplement=supplement,
+                    final_grade=GradeLevel.REJECT,
+                    final_moisture=moisture,
+                    final_integrity=integrity,
+                    final_tenderness=tenderness,
+                    adjusted_price=0,
+                    total_amount=0,
+                    grade_reason=error_msg or "校验失败",
+                    is_bad=True,
+                    bad_reason=error_msg,
+                    diff_fields=hist_diff
+                )
+                result.bad_records.append(graded)
+                result.bad_count += 1
+
+                result.operation_log.append({
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'level': 'ERROR',
+                    'record_id': main.id,
+                    'action': '校验失败',
+                    'reason': error_msg,
+                    'supplier': main.supplier_name
+                })
+                continue
+
+            moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+            grade, price_adj, reason = self._determine_grade(moisture, integrity, tenderness)
+            adjusted_price = main.unit_price * (1 + price_adj)
+            total_amount = main.quantity * adjusted_price
+
+            diff_fields = self._calculate_diff(main, supplement)
+            diff_fields.update(hist_diff)
+
+            graded = GradedRecord(
+                main_record=main,
+                supplement=supplement,
+                final_grade=grade,
+                final_moisture=moisture,
+                final_integrity=integrity,
+                final_tenderness=tenderness,
+                adjusted_price=round(adjusted_price, 2),
+                total_amount=round(total_amount, 2),
+                grade_reason=reason,
+                is_bad=(grade == GradeLevel.REJECT),
+                bad_reason=None if grade != GradeLevel.REJECT else reason,
+                diff_fields=diff_fields
+            )
+
+            if grade == GradeLevel.REJECT:
+                result.bad_records.append(graded)
+                result.bad_count += 1
+                log_level = 'WARN'
+                log_action = '定级为不合格'
+            else:
+                result.graded_records.append(graded)
+                result.success_count += 1
+                result.total_amount += total_amount
+                log_level = 'INFO'
+                log_action = '定级成功'
+
+            result.operation_log.append({
+                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'level': log_level,
+                'record_id': main.id,
+                'action': log_action,
+                'grade': grade.value,
+                'supplier': main.supplier_name,
+                'variety': main.tea_variety,
+                'quantity': main.quantity,
+                'adjusted_price': round(adjusted_price, 2),
+                'total_amount': round(total_amount, 2),
+                'has_diff': len(diff_fields) > 0
+            })
+
+        result.operation_log.append({
+            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'level': 'INFO',
+            'record_id': 'SUMMARY',
+            'action': '处理完成',
+            'success_count': result.success_count,
+            'bad_count': result.bad_count,
+            'total_amount': round(result.total_amount, 2),
+            'process_time': result.process_time.strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+        return result
+
+### tea_grading_cli/models.py
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional, Any
+from datetime import datetime
+from enum import Enum
+
+
+class GradeLevel(str, Enum):
+    SPECIAL = "特级"
+    GRADE1 = "一级"
+    GRADE2 = "二级"
+    GRADE3 = "三级"
+    REJECT = "不合格"
+
+
+class BadRowReason(str, Enum):
+    MISSING_FIELD = "字段缺失"
+    INVALID_FORMAT = "格式错误"
+    OUT_OF_RANGE = "超出阈值"
+    DUPLICATE_ID = "重复编号"
+    NO_SUPPLEMENT = "无补充记录"
+    RULE_VIOLATION = "规则违反"
+    HISTORY_MISMATCH = "历史数据不符"
+
+
+@dataclass
+class MainRecord:
+    id: str
+    supplier_name: str
+    tea_variety: str
+    harvest_date: str
+    quantity: float
+    unit_price: float
+    moisture_content: float
+    leaf_integrity: float
+    tenderness: float
+    color: str
+    remark: str = ""
+    raw_data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class SupplementRecord:
+    id: str
+    main_id: str
+    inspector: str
+    inspection_time: str
+    actual_moisture: float
+    actual_integrity: float
+    actual_tenderness: float
+    sampling_photo: str = ""
+    inspection_remark: str = ""
+    raw_data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ValidationRule:
+    field_name: str
+    rule_type: str
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
+    allowed_values: Optional[List[str]] = None
+    required: bool = True
+    description: str = ""
+    severity: str = "error"
+
+
+@dataclass
+class GradingCriteria:
+    grade: GradeLevel
+    min_moisture: float
+    max_moisture: float
+    min_integrity: float
+    min_tenderness: float
+    price_adjustment: float
+
+
+@dataclass
+class GradedRecord:
+    main_record: MainRecord
+    supplement: Optional[SupplementRecord]
+    final_grade: GradeLevel
+    final_moisture: float
+    final_integrity: float
+    final_tenderness: float
+    adjusted_price: float
+    total_amount: float
+    grade_reason: str
+    is_bad: bool = False
+    bad_reason: Optional[str] = None
+    diff_fields: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+
+
+@dataclass
+class ProcessingResult:
+    success_count: int = 0
+    bad_count: int = 0
+    total_amount: float = 0.0
+    graded_records: List[GradedRecord] = field(default_factory=list)
+    bad_records: List[GradedRecord] = field(default_factory=list)
+    operation_log: List[Dict[str, Any]] = field(default_factory=list)
+    process_time: datetime = field(default_factory=datetime.now)
+
+### tea_grading_cli/reader.py
+import os
+import json
+import pandas as pd
+from typing import List, Dict, Tuple, Any
+from pathlib import Path
+from .models import MainRecord, SupplementRecord, ValidationRule, GradingCriteria, GradeLevel
+
+
+class DataReader:
+    @staticmethod
+    def _read_file(file_path: str) -> pd.DataFrame:
+        path = Path(file_path)
+        if not path.exists():
+            raise FileNotFoundError(f"文件不存在: {file_path}")
+        
+        suffix = path.suffix.lower()
+        if suffix == '.csv':
+            return pd.read_csv(file_path, dtype=str).fillna('')
+        elif suffix in ['.xlsx', '.xls']:
+            return pd.read_excel(file_path, dtype=str).fillna('')
+        elif suffix == '.json':
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return pd.DataFrame(data) if isinstance(data, list) else pd.DataFrame([data])
+        else:
+            raise ValueError(f"不支持的文件格式: {suffix}")
+
+    @staticmethod
+    def read_main_list(file_path: str) -> Tuple[List[MainRecord], List[Dict[str, Any]]]:
+        df = DataReader._read_file(file_path)
+        records = []
+        bad_rows = []
+        
+        required_cols = ['id', 'supplier_name', 'tea_variety', 'harvest_date', 
+                        'quantity', 'unit_price', 'moisture_content', 
+                        'leaf_integrity', 'tenderness', 'color']
+        
+        for idx, row in df.iterrows():
+            row_num = idx + 2
+            raw_data = row.to_dict()
+            
+            missing_fields = [col for col in required_cols if not str(row.get(col, '')).strip()]
+            if missing_fields:
+                bad_rows.append({
+                    'row_number': row_num,
+                    'raw_data': raw_data,
+                    'reason': f"缺少必填字段: {', '.join(missing_fields)}"
+                })
+                continue
+            
+            try:
+                record = MainRecord(
+                    id=str(row['id']).strip(),
+                    supplier_name=str(row['supplier_name']).strip(),
+                    tea_variety=str(row['tea_variety']).strip(),
+                    harvest_date=str(row['harvest_date']).strip(),
+                    quantity=float(row['quantity']),
+                    unit_price=float(row['unit_price']),
+                    moisture_content=float(row['moisture_content']),
+                    leaf_integrity=float(row['leaf_integrity']),
+                    tenderness=float(row['tenderness']),
+                    color=str(row['color']).strip(),
+                    remark=str(row.get('remark', '')).strip(),
+                    raw_data=raw_data
+                )
+                records.append(record)
+            except (ValueError, KeyError) as e:
+                bad_rows.append({
+                    'row_number': row_num,
+                    'raw_data': raw_data,
+                    'reason': f"数据格式错误: {str(e)}"
+                })
+        
+        return records, bad_rows
+
+    @staticmethod
+    def read_supplement(file_path: str) -> Dict[str, SupplementRecord]:
+        df = DataReader._read_file(file_path)
+        supplements = {}
+        
+        for idx, row in df.iterrows():
+            raw_data = row.to_dict()
+            try:
+                main_id = str(row['main_id']).strip()
+                supplement = SupplementRecord(
+                    id=str(row.get('id', f"S{idx+1}")).strip(),
+                    main_id=main_id,
+                    inspector=str(row['inspector']).strip(),
+                    inspection_time=str(row['inspection_time']).strip(),
+                    actual_moisture=float(row['actual_moisture']),
+                    actual_integrity=float(row['actual_integrity']),
+                    actual_tenderness=float(row['actual_tenderness']),
+                    sampling_photo=str(row.get('sampling_photo', '')).strip(),
+                    inspection_remark=str(row.get('inspection_remark', '')).strip(),
+                    raw_data=raw_data
+                )
+                supplements[main_id] = supplement
+            except (ValueError, KeyError):
+                continue
+        
+        return supplements
+
+    @staticmethod
+    def read_validation_rules(file_path: str) -> List[ValidationRule]:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        rules_data = data.get('validation_rules', []) if isinstance(data, dict) else data
+        rules = []
+        
+        for rule_data in rules_data:
+            rule = ValidationRule(
+                field_name=rule_data['field_name'],
+                rule_type=rule_data['rule_type'],
+                min_value=rule_data.get('min_value'),
+                max_value=rule_data.get('max_value'),
+                allowed_values=rule_data.get('allowed_values'),
+                required=rule_data.get('required', True),
+                description=rule_data.get('description', ''),
+                severity=rule_data.get('severity', 'error')
+            )
+            rules.append(rule)
+        
+        return rules
+
+    @staticmethod
+    def read_grading_criteria(file_path: str) -> List[GradingCriteria]:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        criteria_data = data.get('grading_criteria', []) if isinstance(data, dict) else data
+        criteria_list = []
+        
+        for crit_data in criteria_data:
+            criteria = GradingCriteria(
+                grade=GradeLevel(crit_data['grade']),
+                min_moisture=float(crit_data['min_moisture']),
+                max_moisture=float(crit_data['max_moisture']),
+                min_integrity=float(crit_data['min_integrity']),
+                min_tenderness=float(crit_data['min_tenderness']),
+                price_adjustment=float(crit_data.get('price_adjustment', 0))
+            )
+            criteria_list.append(criteria)
+        
+        return criteria_list
+
+    @staticmethod
+    def read_history_record(file_path: str) -> Dict[str, Dict[str, Any]]:
+        df = DataReader._read_file(file_path)
+        history = {}
+        
+        for _, row in df.iterrows():
+            main_id = str(row.get('main_id', row.get('id', ''))).strip()
+            if main_id:
+                history[main_id] = row.to_dict()
+        
+        return history
+
+### tea_grading_cli/validator.py
+from typing import List, Dict, Tuple, Any, Optional
+from datetime import datetime
+from .models import MainRecord, SupplementRecord, ValidationRule, BadRowReason
+
+
+class ValidationEngine:
+    def __init__(self, rules: List[ValidationRule]):
+        self.rules = rules
+
+    def validate_main_record(self, record: MainRecord, 
+                           supplements: Dict[str, SupplementRecord],
+                           seen_ids: set,
+                           history_data: Optional[Dict[str, Dict[str, Any]]] = None
+                           ) -> Tuple[bool, Optional[str], Dict[str, Dict[str, Any]]]:
+        errors = []
+        diff_fields = {}
+
+        if record.id in seen_ids:
+            return False, f"{BadRowReason.DUPLICATE_ID.value}: {record.id}", diff_fields
+
+        if record.id not in supplements:
+            errors.append(f"{BadRowReason.NO_SUPPLEMENT.value}: 缺少质检补充记录")
+
+        for rule in self.rules:
+            field_value = getattr(record, rule.field_name, None)
+            
+            if field_value is None or (isinstance(field_value, str) and not field_value.strip()):
+                if rule.required:
+                    errors.append(f"{BadRowReason.MISSING_FIELD.value}: {rule.field_name}")
+                continue
+
+            if rule.rule_type == 'range':
+                if not isinstance(field_value, (int, float)):
+                    try:
+                        field_value = float(field_value)
+                    except ValueError:
+                        errors.append(f"{BadRowReason.INVALID_FORMAT.value}: {rule.field_name} 应为数字")
+                        continue
+                
+                if rule.min_value is not None and field_value < rule.min_value:
+                    errors.append(f"{BadRowReason.OUT_OF_RANGE.value}: {rule.field_name}={field_value} 低于最小值 {rule.min_value}")
+                if rule.max_value is not None and field_value > rule.max_value:
+                    errors.append(f"{BadRowReason.OUT_OF_RANGE.value}: {rule.field_name}={field_value} 高于最大值 {rule.max_value}")
+
+            elif rule.rule_type == 'enum':
+                if rule.allowed_values and field_value not in rule.allowed_values:
+                    errors.append(f"{BadRowReason.RULE_VIOLATION.value}: {rule.field_name}='{field_value}' 不在允许值列表 {rule.allowed_values}")
+
+            elif rule.rule_type == 'date':
+                try:
+                    datetime.strptime(str(field_value), '%Y-%m-%d')
+                except ValueError:
+                    try:
+                        datetime.strptime(str(field_value), '%Y/%m/%d')
+                    except ValueError:
+                        errors.append(f"{BadRowReason.INVALID_FORMAT.value}: {rule.field_name} 日期格式错误，应为YYYY-MM-DD")
+
+        if history_data and record.id in history_data:
+            hist = history_data[record.id]
+            for field in ['moisture_content', 'leaf_integrity', 'tenderness', 'quantity']:
+                if field in hist:
+                    try:
+                        hist_val = float(hist[field])
+                        curr_val = float(getattr(record, field))
+                        if abs(curr_val - hist_val) > 0.01:
+                            diff_fields[field] = {
+                                'history': hist_val,
+                                'current': curr_val,
+                                'diff': round(curr_val - hist_val, 4)
+                            }
+                    except (ValueError, TypeError):
+                        continue
+
+        return len(errors) == 0, "; ".join(errors) if errors else None, diff_fields
+
+    def validate_parameters(self, main_file: str, supplement_file: str, 
+                           rules_file: str, output_dir: str) -> List[str]:
+        import os
+        errors = []
+
+        if not main_file:
+            errors.append("主清单文件路径不能为空")
+        elif not os.path.exists(main_file):
+            errors.append(f"主清单文件不存在: {main_file}")
+
+        if not supplement_file:
+            errors.append("补充表文件路径不能为空")
+        elif not os.path.exists(supplement_file):
+            errors.append(f"补充表文件不存在: {supplement_file}")
+
+        if not rules_file:
+            errors.append("校验规则文件路径不能为空")
+        elif not os.path.exists(rules_file):
+            errors.append(f"校验规则文件不存在: {rules_file}")
+
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+
+        return errors
+
+codex
+从代码看核心入口是 `tea-grading` 的 Click CLI，测试数据覆盖合规、超阈值、缺少补充、历史回放等场景。我会先跑不落盘的真实入口验证，再针对测试声称的场景查是否存在逻辑缺口。
+exec
+/bin/zsh -lc "sed -n '1,260p' tea_grading_cli/cli.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+import os
+import sys
+import json
+from datetime import datetime
+from pathlib import Path
+
+import click
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
+from .reader import DataReader
+from .validator import ValidationEngine
+from .grader import TeaGrader
+from .exporter import ResultExporter
+from .models import GradeLevel, ProcessingResult
+
+console = Console()
+
+
+def _print_summary(result: ProcessingResult, dry_run: bool):
+    mode = "[yellow]DRY-RUN[/yellow] " if dry_run else ""
+    console.print(Panel(
+        f"{mode}处理完成",
+        style="bold green" if result.bad_count == 0 else "bold yellow"
+    ))
+
+    table = Table(title=f"{mode}处理汇总", show_header=True, header_style="bold cyan")
+    table.add_column("指标", style="dim")
+    table.add_column("值", justify="right")
+    table.add_row("总记录数", str(result.success_count + result.bad_count))
+    table.add_row("成功记录数", str(result.success_count), style="green")
+    table.add_row("坏行记录数", str(result.bad_count), style="red" if result.bad_count > 0 else "green")
+    table.add_row("总结算金额(元)", f"{result.total_amount:,.2f}")
+    console.print(table)
+
+    if result.graded_records or result.bad_records:
+        grade_dist = {}
+        for r in result.graded_records:
+            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+        for r in result.bad_records:
+            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+
+        gt = Table(title="等级分布", show_header=True, header_style="bold cyan")
+        gt.add_column("等级")
+        gt.add_column("数量", justify="right")
+        for grade in GradeLevel:
+            cnt = grade_dist.get(grade.value, 0)
+            if cnt:
+                style = "red" if grade == GradeLevel.REJECT else None
+                gt.add_row(grade.value, str(cnt), style=style)
+        console.print(gt)
+
+
+def _print_bad_rows_preview(result: ProcessingResult, limit: int = 10):
+    if not result.bad_records:
+        return
+    table = Table(title="坏行预览", show_header=True, header_style="bold red")
+    table.add_column("记录编号")
+    table.add_column("供应商")
+    table.add_column("坏行原因")
+    for r in result.bad_records[:limit]:
+        table.add_row(r.main_record.id, r.main_record.supplier_name, r.bad_reason or "")
+    if len(result.bad_records) > limit:
+        table.add_row("...", f"(共 {len(result.bad_records)} 条)", "")
+    console.print(table)
+
+
+def _print_diff_preview(result: ProcessingResult, limit: int = 10):
+    all_records = result.graded_records + result.bad_records
+    diff_records = [r for r in all_records if r.diff_fields]
+    if not diff_records:
+        return
+    table = Table(title="差异预览", show_header=True, header_style="bold yellow")
+    table.add_column("记录编号")
+    table.add_column("差异字段")
+    table.add_column("说明")
+    count = 0
+    for r in diff_records:
+        for field, diff in r.diff_fields.items():
+            if count >= limit:
+                break
+            if '主清单' in diff:
+                desc = f"主清单={diff['主清单']}, 实际={diff['实际检测']}, 差值={diff['差值']}"
+            elif 'history' in diff:
+                desc = f"历史={diff['history']}, 当前={diff['current']}, 差异={diff['diff']}"
+            else:
+                desc = str(diff)
+            table.add_row(r.main_record.id, field, desc)
+            count += 1
+    if len(diff_records) > limit:
+        table.add_row("...", "", f"(共 {count} 项差异)")
+    console.print(table)
+
+
+@click.group()
+@click.version_option(version="1.0.0", prog_name="tea-grading")
+def cli():
+    """茶叶鲜叶收购定级CLI工具"""
+    pass
+
+
+@cli.command()
+@click.option('--main', 'main_file', required=True, help='主清单文件路径 (CSV/XLSX/JSON)')
+@click.option('--supplement', 'supplement_file', required=True, help='补充表文件路径 (CSV/XLSX/JSON)')
+@click.option('--rules', 'rules_file', required=True, help='校验规则文件路径 (JSON)')
+@click.option('--criteria', 'criteria_file', required=True, help='定级标准文件路径 (JSON)')
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录 (默认: ./output)')
+@click.option('--dry-run', is_flag=True, default=False, help='仅预览，不输出正式结果文件')
+@click.option('--history', 'history_file', default=None, help='历史记录文件路径 (用于历史回放比对)')
+@click.option('--use-actual/--no-use-actual', default=True, help='是否使用补充表实际检测值定级 (默认: 使用)')
+@click.option('--strict', is_flag=True, default=False, help='严格模式：缺少补充记录的行标记为坏行')
+def run(main_file, supplement_file, rules_file, criteria_file, output_dir,
+        dry_run, history_file, use_actual, strict):
+    """执行茶叶鲜叶收购定级全流程"""
+
+    console.print(Panel("茶叶鲜叶收购定级", style="bold cyan"))
+
+    validation_engine_for_params = ValidationEngine([])
+    param_errors = validation_engine_for_params.validate_parameters(
+        main_file, supplement_file, rules_file, output_dir if not dry_run else output_dir
+    )
+    if not os.path.exists(criteria_file):
+        param_errors.append(f"定级标准文件不存在: {criteria_file}")
+    if param_errors:
+        for err in param_errors:
+            console.print(f"[red]参数错误: {err}[/red]")
+        sys.exit(1)
+
+    console.print(f"[dim]主清单: {main_file}[/dim]")
+    console.print(f"[dim]补充表: {supplement_file}[/dim]")
+    console.print(f"[dim]校验规则: {rules_file}[/dim]")
+    console.print(f"[dim]定级标准: {criteria_file}[/dim]")
+    if history_file:
+        console.print(f"[dim]历史记录: {history_file}[/dim]")
+    if dry_run:
+        console.print("[yellow]DRY-RUN 模式: 仅预览，不输出正式结果[/yellow]")
+
+    main_records, bad_rows = DataReader.read_main_list(main_file)
+    supplements = DataReader.read_supplement(supplement_file)
+    rules = DataReader.read_validation_rules(rules_file)
+    criteria = DataReader.read_grading_criteria(criteria_file)
+
+    history_data = {}
+    if history_file:
+        history_data = DataReader.read_history_record(history_file)
+
+    validation_engine = ValidationEngine(rules)
+    validation_results = {}
+    seen_ids = set()
+
+    for main in main_records:
+        if strict and main.id not in supplements:
+            validation_results[main.id] = (
+                False,
+                "严格模式: 缺少补充记录",
+                {}
+            )
+            seen_ids.add(main.id)
+            continue
+
+        is_valid, error_msg, hist_diff = validation_engine.validate_main_record(
+            main, supplements, seen_ids, history_data
+        )
+        validation_results[main.id] = (is_valid, error_msg, hist_diff)
+        seen_ids.add(main.id)
+
+    grader = TeaGrader(criteria, use_actual_values=use_actual)
+    result = grader.grade_records(
+        main_records, supplements, validation_results,
+        initial_bad_rows=bad_rows
+    )
+
+    _print_summary(result, dry_run)
+    _print_bad_rows_preview(result)
+    _print_diff_preview(result)
+
+    if result.bad_records:
+        console.print("\n[bold yellow]坏行记录可使用以下命令复核:[/bold yellow]")
+        for r in result.bad_records[:5]:
+            console.print(f"  tea-grading review --record-id {r.main_record.id} --output-dir {output_dir}")
+
+    exporter = ResultExporter(output_dir, dry_run=dry_run)
+    exported_files = exporter.export_all(result)
+
+    if not dry_run:
+        for r in result.bad_records:
+            exporter.generate_review_link(r.main_record.id)
+
+    console.print("\n[bold green]处理完成[/bold green]")
+    if not dry_run:
+        console.print("[dim]导出文件:[/dim]")
+        for name, path in exported_files.items():
+            console.print(f"  [dim]{name}: {path}[/dim]")
+
+    return result
+
+
+@cli.command()
+@click.option('--record-id', 'record_id', required=True, help='待复核的记录编号')
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+def review(record_id, output_dir):
+    """复核坏行记录"""
+
+    review_files = list(Path(output_dir).glob(f'review_{record_id}_*.json'))
+
+    if not review_files:
+        console.print(f"[red]未找到记录 {record_id} 的复核信息[/red]")
+        console.print("[dim]请先运行 tea-grading run 生成复核文件[/dim]")
+        sys.exit(1)
+
+    latest_review = sorted(review_files)[-1]
+    with open(latest_review, 'r', encoding='utf-8') as f:
+        review_data = json.load(f)
+
+    console.print(Panel(f"复核记录: {record_id}", style="bold cyan"))
+
+    table = Table(show_header=True, header_style="bold cyan")
+    table.add_column("字段")
+    table.add_column("值")
+    for key, value in review_data.items():
+        if key == '相关文件':
+            value = '\n'.join(f"  {k}: {v}" for k, v in value.items())
+        table.add_row(key, str(value))
+    console.print(table)
+
+    bad_file = Path(output_dir) / f"坏行记录_*.csv"
+    bad_files = list(Path(output_dir).glob(f"坏行记录_*.csv"))
+    if bad_files:
+        console.print(f"\n[bold]坏行记录文件:[/bold]")
+        for bf in bad_files:
+            console.print(f"  {bf}")
+
+    return review_data
+
+
+@cli.command()
+@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+def history_check(output_dir):
+    """检查历史回放差异"""
+
+    diff_files = list(Path(output_dir).glob('差异表_*.csv'))
+    if not diff_files:
+        console.print("[yellow]未找到差异表文件[/yellow]")
+        return
+
+    import pandas as pd
+    latest_diff = sorted(diff_files)[-1]
+    df = pd.read_csv(latest_diff)
+
+    console.print(Panel("历史差异检查", style="bold cyan"))
+    console.print(f"[dim]差异表: {latest_diff}[/dim]")
+    console.print(f"[dim]共 {len(df)} 条差异记录[/dim]")
+
+    if len(df) > 0:
+        table = Table(show_header=True, header_style="bold yellow")
+        for col in df.columns:
+            table.add_column(col)
+        for _, row in df.head(20).iterrows():
+            table.add_row(*[str(v) for v in row.values])
+
+exec
+/bin/zsh -lc "sed -n '1,260p' tea_grading_cli/grader.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+from typing import List, Dict, Optional
+from datetime import datetime
+from .models import (
+    MainRecord, SupplementRecord, GradingCriteria, GradedRecord, 
+    ProcessingResult, GradeLevel, BadRowReason
+)
+
+
+class TeaGrader:
+    def __init__(self, criteria: List[GradingCriteria], use_actual_values: bool = True):
+        self.criteria = sorted(criteria, key=lambda x: [
+            x.min_integrity, x.min_tenderness
+        ], reverse=True)
+        self.use_actual_values = use_actual_values
+
+    def _determine_grade(self, moisture: float, integrity: float, tenderness: float) -> tuple:
+        for crit in self.criteria:
+            if (crit.min_moisture <= moisture <= crit.max_moisture and
+                integrity >= crit.min_integrity and
+                tenderness >= crit.min_tenderness):
+                return crit.grade, crit.price_adjustment, (
+                    f"水分{moisture}%在[{crit.min_moisture}, {crit.max_moisture}]范围内, "
+                    f"完整度{integrity}%≥{crit.min_integrity}%, "
+                    f"嫩度{tenderness}%≥{crit.min_tenderness}%"
+                )
+        
+        return GradeLevel.REJECT, 0.0, (
+            f"未达到任何合格等级标准: 水分={moisture}%, 完整度={integrity}%, 嫩度={tenderness}%"
+        )
+
+    def _get_actual_values(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> tuple:
+        if self.use_actual_values and supplement:
+            return (
+                supplement.actual_moisture,
+                supplement.actual_integrity,
+                supplement.actual_tenderness
+            )
+        return (
+            main.moisture_content,
+            main.leaf_integrity,
+            main.tenderness
+        )
+
+    def _calculate_diff(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> Dict[str, Dict[str, float]]:
+        diff_fields = {}
+        if supplement:
+            fields = [
+                ('moisture_content', 'actual_moisture', '水分'),
+                ('leaf_integrity', 'actual_integrity', '完整度'),
+                ('tenderness', 'actual_tenderness', '嫩度')
+            ]
+            for main_field, supp_field, label in fields:
+                main_val = getattr(main, main_field)
+                supp_val = getattr(supplement, supp_field)
+                if abs(main_val - supp_val) > 0.001:
+                    diff_fields[label] = {
+                        '主清单': main_val,
+                        '实际检测': supp_val,
+                        '差值': round(supp_val - main_val, 4)
+                    }
+        return diff_fields
+
+    def grade_records(self, 
+                     main_records: List[MainRecord],
+                     supplements: Dict[str, SupplementRecord],
+                     validation_results: Dict[str, tuple],
+                     initial_bad_rows: List[Dict] = None,
+                     operation_log: List[Dict] = None
+                     ) -> ProcessingResult:
+        
+        result = ProcessingResult()
+        result.process_time = datetime.now()
+        seen_ids = set()
+
+        if operation_log:
+            result.operation_log.extend(operation_log)
+
+        if initial_bad_rows:
+            for bad_row in initial_bad_rows:
+                fake_main = MainRecord(
+                    id=str(bad_row['raw_data'].get('id', f"BAD{len(result.bad_records)+1}")),
+                    supplier_name=str(bad_row['raw_data'].get('supplier_name', '')),
+                    tea_variety=str(bad_row['raw_data'].get('tea_variety', '')),
+                    harvest_date=str(bad_row['raw_data'].get('harvest_date', '')),
+                    quantity=float(bad_row['raw_data'].get('quantity', 0) or 0),
+                    unit_price=float(bad_row['raw_data'].get('unit_price', 0) or 0),
+                    moisture_content=float(bad_row['raw_data'].get('moisture_content', 0) or 0),
+                    leaf_integrity=float(bad_row['raw_data'].get('leaf_integrity', 0) or 0),
+                    tenderness=float(bad_row['raw_data'].get('tenderness', 0) or 0),
+                    color=str(bad_row['raw_data'].get('color', '')),
+                    raw_data=bad_row['raw_data']
+                )
+                graded = GradedRecord(
+                    main_record=fake_main,
+                    supplement=None,
+                    final_grade=GradeLevel.REJECT,
+                    final_moisture=fake_main.moisture_content,
+                    final_integrity=fake_main.leaf_integrity,
+                    final_tenderness=fake_main.tenderness,
+                    adjusted_price=0,
+                    total_amount=0,
+                    grade_reason=bad_row['reason'],
+                    is_bad=True,
+                    bad_reason=bad_row['reason'],
+                    diff_fields={}
+                )
+                result.bad_records.append(graded)
+                result.bad_count += 1
+
+                result.operation_log.append({
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'level': 'ERROR',
+                    'record_id': fake_main.id,
+                    'action': '坏行隔离',
+                    'reason': bad_row['reason'],
+                    'row_number': bad_row.get('row_number', 'N/A')
+                })
+
+        for main in main_records:
+            if main.id in seen_ids:
+                continue
+            seen_ids.add(main.id)
+
+            is_valid, error_msg, hist_diff = validation_results.get(main.id, (True, None, {}))
+            supplement = supplements.get(main.id)
+
+            if not is_valid:
+                moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+                graded = GradedRecord(
+                    main_record=main,
+                    supplement=supplement,
+                    final_grade=GradeLevel.REJECT,
+                    final_moisture=moisture,
+                    final_integrity=integrity,
+                    final_tenderness=tenderness,
+                    adjusted_price=0,
+                    total_amount=0,
+                    grade_reason=error_msg or "校验失败",
+                    is_bad=True,
+                    bad_reason=error_msg,
+                    diff_fields=hist_diff
+                )
+                result.bad_records.append(graded)
+                result.bad_count += 1
+
+                result.operation_log.append({
+                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'level': 'ERROR',
+                    'record_id': main.id,
+                    'action': '校验失败',
+                    'reason': error_msg,
+                    'supplier': main.supplier_name
+                })
+                continue
+
+            moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+            grade, price_adj, reason = self._determine_grade(moisture, integrity, tenderness)
+            adjusted_price = main.unit_price * (1 + price_adj)
+            total_amount = main.quantity * adjusted_price
+
+            diff_fields = self._calculate_diff(main, supplement)
+            diff_fields.update(hist_diff)
+
+            graded = GradedRecord(
+                main_record=main,
+                supplement=supplement,
+                final_grade=grade,
+                final_moisture=moisture,
+                final_integrity=integrity,
+                final_tenderness=tenderness,
+                adjusted_price=round(adjusted_price, 2),
+                total_amount=round(total_amount, 2),
+                grade_reason=reason,
+                is_bad=(grade == GradeLevel.REJECT),
+                bad_reason=None if grade != GradeLevel.REJECT else reason,
+                diff_fields=diff_fields
+            )
+
+            if grade == GradeLevel.REJECT:
+                result.bad_records.append(graded)
+                result.bad_count += 1
+                log_level = 'WARN'
+                log_action = '定级为不合格'
+            else:
+                result.graded_records.append(graded)
+                result.success_count += 1
+                result.total_amount += total_amount
+                log_level = 'INFO'
+                log_action = '定级成功'
+
+            result.operation_log.append({
+                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'level': log_level,
+                'record_id': main.id,
+                'action': log_action,
+                'grade': grade.value,
+                'supplier': main.supplier_name,
+                'variety': main.tea_variety,
+                'quantity': main.quantity,
+                'adjusted_price': round(adjusted_price, 2),
+                'total_amount': round(total_amount, 2),
+                'has_diff': len(diff_fields) > 0
+            })
+
+        result.operation_log.append({
+            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'level': 'INFO',
+            'record_id': 'SUMMARY',
+            'action': '处理完成',
+            'success_count': result.success_count,
+            'bad_count': result.bad_count,
+            'total_amount': round(result.total_amount, 2),
+            'process_time': result.process_time.strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+        return result
+
+exec
+/bin/zsh -lc "sed -n '260,620p' tests/test_acceptance.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+class MissingMaterialSampleTest(TestCase):
+    """材料缺失样例：缺少补充记录、字段缺失"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'missing_material')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_cli_run_missing_material(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+
+    def test_missing_supplement_detected(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(m, supplements, seen)
+            if m.id == 'M002':
+                self.assertFalse(is_valid, "M002缺少补充记录应校验失败")
+                self.assertIn('补充', err or '')
+            seen.add(m.id)
+
+    def test_missing_fields_isolated_as_bad_rows(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        self.assertTrue(len(bad_rows) > 0, "缺失字段的行应被读为坏行")
+
+        bad_row_ids = [br['raw_data'].get('id', '') for br in bad_rows]
+        self.assertTrue(any('M003' in str(bid) for bid in bad_row_ids),
+                        "M003字段缺失应被隔离")
+
+    def test_strict_mode_flags_missing_supplement(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--strict',
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+
+    def test_review_entry_for_bad_rows(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        review_files = list(Path(self.output_dir).glob('review_*.json'))
+        self.assertTrue(len(review_files) > 0, "应为坏行记录生成复核入口")
+
+    def test_review_command_works(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+        review_files = list(Path(self.output_dir).glob('review_*.json'))
+        if review_files:
+            record_id = review_files[0].stem.split('_')[1]
+            result = runner.invoke(cli, [
+                'review',
+                '--record-id', record_id,
+                '--output-dir', self.output_dir,
+            ])
+            self.assertEqual(result.exit_code, 0, msg=result.output)
+            self.assertIn(record_id, result.output)
+
+
+class HistoryReplaySampleTest(TestCase):
+    """历史回放样例：与历史数据比对差异"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'history_replay')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+        self.history_file = os.path.join(self.scenario_dir, 'history.csv')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_cli_run_with_history(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--history', self.history_file,
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+
+    def test_history_diff_detected(self):
+        main_records, bad_rows = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+        history_data = DataReader.read_history_record(self.history_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        val_results = {}
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(
+                m, supplements, seen, history_data
+            )
+            val_results[m.id] = (is_valid, err, diff)
+            seen.add(m.id)
+
+        r002_diff = val_results.get('R002', (True, None, {}))[2]
+        self.assertTrue(len(r002_diff) > 0, f"R002应与历史有差异: {r002_diff}")
+
+    def test_diff_table_exported(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--history', self.history_file,
+        ])
+        diff_files = list(Path(self.output_dir).glob('差异表_*.csv'))
+        self.assertTrue(len(diff_files) > 0, "有差异时应导出差异表")
+        df = pd.read_csv(diff_files[0])
+        self.assertTrue(len(df) > 0, "差异表应有内容")
+
+    def test_no_history_diff_for_stable_record(self):
+        main_records, _ = DataReader.read_main_list(self.main_file)
+        supplements = DataReader.read_supplement(self.supplement_file)
+        rules = DataReader.read_validation_rules(self.rules_file)
+        history_data = DataReader.read_history_record(self.history_file)
+
+        validation_engine = ValidationEngine(rules)
+        seen = set()
+        val_results = {}
+        for m in main_records:
+            is_valid, err, diff = validation_engine.validate_main_record(
+                m, supplements, seen, history_data
+            )
+            val_results[m.id] = (is_valid, err, diff)
+            seen.add(m.id)
+
+        r001_diff = val_results.get('R001', (True, None, {}))[2]
+        self.assertEqual(len(r001_diff), 0, f"R001与历史一致，不应有差异: {r001_diff}")
+
+    def test_history_check_command(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--history', self.history_file,
+        ])
+        result = runner.invoke(cli, [
+            'history-check',
+            '--output-dir', self.output_dir,
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+        self.assertIn('差异', result.output)
+
+
+class DryRunTest(TestCase):
+    """Dry-run 模式测试"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'compliant')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_dry_run_no_output_files(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--dry-run',
+        ])
+        self.assertEqual(result.exit_code, 0, msg=result.output)
+        self.assertIn('DRY-RUN', result.output)
+
+        csv_files = list(Path(self.output_dir).glob('*.csv'))
+        json_files = list(Path(self.output_dir).glob('*.json'))
+        log_files = list(Path(self.output_dir).glob('*.log'))
+        all_files = csv_files + json_files + log_files
+        self.assertEqual(len(all_files), 0,
+                         f"DRY-RUN模式不应生成结果文件，但发现: {all_files}")
+
+    def test_dry_run_still_shows_preview(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+            '--dry-run',
+        ])
+        self.assertIn('DRY-RUN', result.output)
+        self.assertIn('处理汇总', result.output)
+
+
+class ParameterValidationTest(TestCase):
+    """参数校验测试"""
+
+    def test_missing_main_file(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, [
+            'run',
+            '--main', '/nonexistent/main.csv',
+            '--supplement', '/nonexistent/supp.csv',
+            '--rules', '/nonexistent/rules.json',
+            '--criteria', '/nonexistent/criteria.json',
+        ])
+        self.assertNotEqual(result.exit_code, 0, "缺少文件应导致非零退出码")
+
+    def test_no_args_shows_error(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, ['run'])
+        self.assertNotEqual(result.exit_code, 0, "无参数应显示错误")
+
+    def test_valid_parameters_pass(self):
+        scenario_dir = os.path.join(DATA_DIR, 'compliant')
+        output_dir = tempfile.mkdtemp()
+        try:
+            runner = CliRunner()
+            result = runner.invoke(cli, [
+                'run',
+                '--main', os.path.join(scenario_dir, 'main_list.csv'),
+                '--supplement', os.path.join(scenario_dir, 'supplement.csv'),
+                '--rules', os.path.join(scenario_dir, 'validation_rules.json'),
+                '--criteria', os.path.join(scenario_dir, 'grading_criteria.json'),
+                '--output-dir', output_dir,
+            ])
+            self.assertEqual(result.exit_code, 0, msg=result.output)
+        finally:
+            shutil.rmtree(output_dir, ignore_errors=True)
+
+
+class ExportCorrespondenceTest(TestCase):
+    """导出文件对应性测试：坏行隔离、结果文件、复核入口应一一对应"""
+
+    def setUp(self):
+        self.scenario_dir = os.path.join(DATA_DIR, 'missing_material')
+        self.output_dir = tempfile.mkdtemp()
+        self.main_file = os.path.join(self.scenario_dir, 'main_list.csv')
+        self.supplement_file = os.path.join(self.scenario_dir, 'supplement.csv')
+        self.rules_file = os.path.join(self.scenario_dir, 'validation_rules.json')
+        self.criteria_file = os.path.join(self.scenario_dir, 'grading_criteria.json')
+
+    def tearDown(self):
+        shutil.rmtree(self.output_dir, ignore_errors=True)
+
+    def test_bad_row_ids_match_review_files(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+
+        bad_files = list(Path(self.output_dir).glob('坏行记录_*.csv'))
+        if bad_files:
+            df = pd.read_csv(bad_files[0])
+            bad_ids = set(df['记录编号'].tolist()) if '记录编号' in df.columns else set()
+        else:
+            bad_ids = set()
+
+        review_files = list(Path(self.output_dir).glob('review_*.json'))
+        review_ids = set()
+        for rf in review_files:
+            with open(rf, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            review_ids.add(data.get('记录编号', ''))
+
+        self.assertTrue(bad_ids.issubset(review_ids) or len(bad_ids) == 0,
+                        f"坏行记录 {bad_ids} 应有对应复核文件 {review_ids}")
+
+    def test_bad_row_file_matches_bad_count_in_summary(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+
+        summary_files = list(Path(self.output_dir).glob('处理汇总_*.json'))
+        if summary_files:
+            with open(summary_files[0], 'r', encoding='utf-8') as f:
+                summary = json.load(f)
+            bad_count = summary.get('坏行记录数', 0)
+
+            bad_files = list(Path(self.output_dir).glob('坏行记录_*.csv'))
+            if bad_files:
+                df = pd.read_csv(bad_files[0])
+                self.assertEqual(len(df), bad_count,
+                                 f"坏行文件行数({len(df)})应与汇总坏行数({bad_count})一致")
+
+    def test_operation_log_covers_all_records(self):
+        runner = CliRunner()
+        runner.invoke(cli, [
+            'run',
+            '--main', self.main_file,
+            '--supplement', self.supplement_file,
+            '--rules', self.rules_file,
+            '--criteria', self.criteria_file,
+            '--output-dir', self.output_dir,
+        ])
+
+        log_files = list(Path(self.output_dir).glob('操作日志_*.log'))
+
+exec
+/bin/zsh -lc 'python -m pytest -q -p no:cacheprovider' in /Users/bill/Documents/solo/workspaces/yzz00186
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+exec
+/bin/zsh -lc 'python -m tea_grading_cli.cli --help' in /Users/bill/Documents/solo/workspaces/yzz00186
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+codex
+本机 `python` 命令不存在，这不是项目本身的失败点；我会改用 `python3` 继续验证。代码里已经看到一个潜在问题：参数校验即使在 dry-run 也会调用 `os.makedirs(output_dir)`，但如果目录已存在则不影响本次只读验证。
+exec
+/bin/zsh -lc "sed -n '620,980p' tests/test_acceptance.py" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+        log_files = list(Path(self.output_dir).glob('操作日志_*.log'))
+        self.assertTrue(len(log_files) > 0, "应生成操作日志")
+
+        with open(log_files[0], 'r', encoding='utf-8') as f:
+            log_content = f.read()
+
+        self.assertIn('SUMMARY', log_content, "操作日志应包含汇总条目")
+
+exec
+/bin/zsh -lc 'python3 --version && python3 -m pytest -q -p no:cacheprovider' in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc 'python3 -m tea_grading_cli.cli --help' in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc 'python3 -m tea_grading_cli.cli run --main tests/data/compliant/main_list.csv --supplement tests/data/compliant/supplement.csv --rules tests/data/compliant/validation_rules.json --criteria tests/data/compliant/grading_criteria.json --output-dir output --dry-run' in /Users/bill/Documents/solo/workspaces/yzz00186
+ exited 1 in 229ms:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pytest/__main__.py", line 9, in <module>
+    raise SystemExit(pytest.console_main())
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 201, in console_main
+    code = main()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 156, in main
+    config = _prepareconfig(args, plugins)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 342, in _prepareconfig
+    config = pluginmanager.hook.pytest_cmdline_parse(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/helpconfig.py", line 112, in pytest_cmdline_parse
+    config = yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1146, in pytest_cmdline_parse
+    self.parse(args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1527, in parse
+    self._preparse(args, addopts=addopts)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1431, in _preparse
+    self.hook.pytest_load_initial_conftests(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/warnings.py", line 129, in pytest_load_initial_conftests
+    return (yield)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 116, in _multicall
+    next(function_gen)  # first yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 170, in pytest_load_initial_conftests
+    capman.start_global_capturing()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 773, in start_global_capturing
+    self._global_capturing = _get_multicapture(self._method)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 714, in _get_multicapture
+    return MultiCapture(in_=FDCapture(0), out=FDCapture(1), err=FDCapture(2))
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 493, in __init__
+    TemporaryFile(buffering=0),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 581, in TemporaryFile
+    prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 118, in _sanitize_params
+    dir = gettempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 287, in gettempdir
+    tempdir = _get_default_tempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 219, in _get_default_tempdir
+    raise FileNotFoundError(_errno.ENOENT,
+FileNotFoundError: [Errno 2] No usable temporary directory found in ['/var/folders/jn/d_ttb_pn6j55lr85szdw4_1r0000gn/T/', '/tmp', '/var/tmp', '/usr/tmp', '/Users/bill/Documents/solo/workspaces/yzz00186']
+
+ succeeded in 592ms:
+Usage: python -m tea_grading_cli.cli [OPTIONS] COMMAND [ARGS]...
+
+  茶叶鲜叶收购定级CLI工具
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  history-check  检查历史回放差异
+  review         复核坏行记录
+  run            执行茶叶鲜叶收购定级全流程
+
+ succeeded in 612ms:
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ 茶叶鲜叶收购定级                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+主清单: tests/data/compliant/main_list.csv
+补充表: tests/data/compliant/supplement.csv
+校验规则: tests/data/compliant/validation_rules.json
+定级标准: tests/data/compliant/grading_criteria.json
+DRY-RUN 模式: 仅预览，不输出正式结果
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ DRY-RUN 处理完成                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+       DRY-RUN 处理汇总       
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ 指标           ┃        值 ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ 总记录数       │         5 │
+│ 成功记录数     │         5 │
+│ 坏行记录数     │         0 │
+│ 总结算金额(元) │ 58,702.00 │
+└────────────────┴───────────┘
+   等级分布    
+┏━━━━━━┳━━━━━━┓
+┃ 等级 ┃ 数量 ┃
+┡━━━━━━╇━━━━━━┩
+│ 特级 │    1 │
+│ 一级 │    2 │
+│ 二级 │    1 │
+│ 三级 │    1 │
+└──────┴──────┘
+                         差异预览                          
+┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 差异字段 ┃ 说明                              ┃
+┡━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ T001     │ 水分     │ 主清单=5.2, 实际=5.1, 差值=-0.1   │
+│ T001     │ 完整度   │ 主清单=92.0, 实际=91.5, 差值=-0.5 │
+│ T001     │ 嫩度     │ 主清单=88.0, 实际=87.8, 差值=-0.2 │
+│ T002     │ 水分     │ 主清单=6.0, 实际=6.2, 差值=0.2    │
+│ T002     │ 完整度   │ 主清单=85.0, 实际=84.3, 差值=-0.7 │
+│ T002     │ 嫩度     │ 主清单=80.0, 实际=79.5, 差值=-0.5 │
+│ T003     │ 水分     │ 主清单=5.8, 实际=5.9, 差值=0.1    │
+│ T003     │ 完整度   │ 主清单=78.0, 实际=77.8, 差值=-0.2 │
+│ T003     │ 嫩度     │ 主清单=72.0, 实际=71.6, 差值=-0.4 │
+│ T004     │ 水分     │ 主清单=4.5, 实际=4.6, 差值=0.1    │
+└──────────┴──────────┴───────────────────────────────────┘
+[DRY-RUN] 将导出 5 条成功记录到: output/定级成功结果_20260602_082325.csv
+[DRY-RUN] 将导出 0 条坏行记录到: output/坏行记录_20260602_082325.csv
+[DRY-RUN] 将导出 5 条差异记录到: output/差异表_20260602_082325.csv
+[DRY-RUN] 将导出 6 条操作日志到: output/操作日志_20260602_082325.log
+[DRY-RUN] 将导出处理汇总到: output/处理汇总_20260602_082325.json
+[DRY-RUN] 汇总信息: {
+  "处理时间": "2026-06-02 08:23:25",
+  "成功记录数": 5,
+  "坏行记录数": 0,
+  "总记录数": 5,
+  "总结算金额(元)": 58702.0,
+  "导出文件": {
+    "success_result": "output/定级成功结果_20260602_082325.csv",
+    "bad_records": "output/坏行记录_20260602_082325.csv",
+    "diff_table": "output/差异表_20260602_082325.csv",
+    "operation_log": "output/操作日志_20260602_082325.log",
+    "summary": "output/处理汇总_20260602_082325.json"
+  },
+  "等级分布": {
+    "特级": 1,
+    "一级": 2,
+    "二级": 1,
+    "三级": 1
+  }
+}
+
+处理完成
+
+codex
+`python3 -m tea_grading_cli.cli --help` 和合规样例 dry-run 可以跑通，说明入口本身存在且核心流程可被调用。完整 pytest 因当前只读沙箱没有可用临时目录而无法启动，这属于质检环境限制；我会改为用代码审查和入口 dry-run 结果判断功能完成度。
+exec
+/bin/zsh -lc "for d in tests/data/*; do printf '\\n### %s main\\n' \""'$d"; sed -n '"'1,20p' \""'$d/main_list.csv"; printf '"'### supplement\\n'; sed -n '1,20p' \""'$d/supplement.csv"; printf '"'### rules\\n'; sed -n '1,220p' \""'$d/validation_rules.json"; printf '"'### criteria\\n'; sed -n '1,220p' \""'$d/grading_criteria.json"; if [ -f "$d/history.csv" ]; then printf '"'### history\\n'; sed -n '1,20p' \""'$d/history.csv"; fi; done' in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+
+### tests/data/compliant main
+id,supplier_name,tea_variety,harvest_date,quantity,unit_price,moisture_content,leaf_integrity,tenderness,color,remark
+T001,张三茶场,龙井43,2025-04-10,150.5,80.0,5.2,92.0,88.0,嫩绿,
+T002,李四茶园,福鼎大白,2025-04-11,200.0,65.0,6.0,85.0,80.0,翠绿,品质优良
+T003,王五基地,铁观音,2025-04-12,180.0,70.0,5.8,78.0,72.0,深绿,
+T004,赵六山庄,碧螺春,2025-04-13,120.0,90.0,4.5,95.0,93.0,嫩绿,特级品质
+T005,孙七农场,毛蟹,2025-04-14,160.0,55.0,7.0,70.0,65.0,绿,
+### supplement
+id,main_id,inspector,inspection_time,actual_moisture,actual_integrity,actual_tenderness,sampling_photo,inspection_remark
+S001,T001,质检员A,2025-04-10 14:30:00,5.1,91.5,87.8,photo_T001.jpg,合格
+S002,T002,质检员B,2025-04-11 10:00:00,6.2,84.3,79.5,photo_T002.jpg,微偏
+S003,T003,质检员A,2025-04-12 09:15:00,5.9,77.8,71.6,photo_T003.jpg,
+S004,T004,质检员C,2025-04-13 16:00:00,4.6,94.8,92.5,photo_T004.jpg,特级确认
+S005,T005,质检员B,2025-04-14 11:30:00,7.2,69.5,64.0,photo_T005.jpg,嫩度偏低
+### rules
+{
+  "validation_rules": [
+    {
+      "field_name": "moisture_content",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 15,
+      "required": true,
+      "description": "水分含量0-15%",
+      "severity": "error"
+    },
+    {
+      "field_name": "leaf_integrity",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "叶片完整度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "tenderness",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "嫩度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "quantity",
+      "rule_type": "range",
+      "min_value": 0.1,
+      "max_value": 10000,
+      "required": true,
+      "description": "数量0.1-10000kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "unit_price",
+      "rule_type": "range",
+      "min_value": 1,
+      "max_value": 500,
+      "required": true,
+      "description": "单价1-500元/kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "tea_variety",
+      "rule_type": "enum",
+      "allowed_values": ["龙井43", "福鼎大白", "铁观音", "碧螺春", "毛蟹", "黄金桂", "本山", "大叶种"],
+      "required": true,
+      "description": "允许的茶叶品种",
+      "severity": "error"
+    },
+    {
+      "field_name": "harvest_date",
+      "rule_type": "date",
+      "required": true,
+      "description": "采摘日期格式",
+      "severity": "error"
+    }
+  ]
+}
+### criteria
+{
+  "grading_criteria": [
+    {
+      "grade": "特级",
+      "min_moisture": 0,
+      "max_moisture": 5.0,
+      "min_integrity": 90,
+      "min_tenderness": 85,
+      "price_adjustment": 0.20
+    },
+    {
+      "grade": "一级",
+      "min_moisture": 0,
+      "max_moisture": 7.0,
+      "min_integrity": 80,
+      "min_tenderness": 75,
+      "price_adjustment": 0.05
+    },
+    {
+      "grade": "二级",
+      "min_moisture": 0,
+      "max_moisture": 9.0,
+      "min_integrity": 70,
+      "min_tenderness": 60,
+      "price_adjustment": -0.05
+    },
+    {
+      "grade": "三级",
+      "min_moisture": 0,
+      "max_moisture": 12.0,
+      "min_integrity": 55,
+      "min_tenderness": 45,
+      "price_adjustment": -0.15
+    }
+  ]
+}
+
+### tests/data/history_replay main
+id,supplier_name,tea_variety,harvest_date,quantity,unit_price,moisture_content,leaf_integrity,tenderness,color,remark
+R001,稳定茶场,龙井43,2025-04-10,150.5,80.0,5.2,92.0,88.0,嫩绿,与历史一致
+R002,波动茶园,福鼎大白,2025-04-11,210.0,65.0,6.0,85.0,80.0,翠绿,数量和水分变化
+R003,降级基地,铁观音,2025-04-12,180.0,70.0,8.5,78.0,72.0,深绿,水分升高
+### supplement
+id,main_id,inspector,inspection_time,actual_moisture,actual_integrity,actual_tenderness,sampling_photo,inspection_remark
+S001,R001,质检员A,2025-04-10 14:30:00,5.1,91.5,87.8,photo_R001.jpg,合格
+S002,R002,质检员B,2025-04-11 10:00:00,6.5,83.0,78.0,photo_R002.jpg,水分偏高
+S003,R003,质检员A,2025-04-12 09:15:00,8.8,76.0,70.0,photo_R003.jpg,降级风险
+### rules
+{
+  "validation_rules": [
+    {
+      "field_name": "moisture_content",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 15,
+      "required": true,
+      "description": "水分含量0-15%",
+      "severity": "error"
+    },
+    {
+      "field_name": "leaf_integrity",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "叶片完整度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "tenderness",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "嫩度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "quantity",
+      "rule_type": "range",
+      "min_value": 0.1,
+      "max_value": 10000,
+      "required": true,
+      "description": "数量0.1-10000kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "unit_price",
+      "rule_type": "range",
+      "min_value": 1,
+      "max_value": 500,
+      "required": true,
+      "description": "单价1-500元/kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "tea_variety",
+      "rule_type": "enum",
+      "allowed_values": ["龙井43", "福鼎大白", "铁观音", "碧螺春", "毛蟹", "黄金桂", "本山", "大叶种"],
+      "required": true,
+      "description": "允许的茶叶品种",
+      "severity": "error"
+    },
+    {
+      "field_name": "harvest_date",
+      "rule_type": "date",
+      "required": true,
+      "description": "采摘日期格式",
+      "severity": "error"
+    }
+  ]
+}
+### criteria
+{
+  "grading_criteria": [
+    {
+      "grade": "特级",
+      "min_moisture": 0,
+      "max_moisture": 5.0,
+      "min_integrity": 90,
+      "min_tenderness": 85,
+      "price_adjustment": 0.20
+    },
+    {
+      "grade": "一级",
+      "min_moisture": 0,
+      "max_moisture": 7.0,
+      "min_integrity": 80,
+      "min_tenderness": 75,
+      "price_adjustment": 0.05
+    },
+    {
+      "grade": "二级",
+      "min_moisture": 0,
+      "max_moisture": 9.0,
+      "min_integrity": 70,
+      "min_tenderness": 60,
+      "price_adjustment": -0.05
+    },
+    {
+      "grade": "三级",
+      "min_moisture": 0,
+      "max_moisture": 12.0,
+      "min_integrity": 55,
+      "min_tenderness": 45,
+      "price_adjustment": -0.15
+    }
+  ]
+}
+### history
+main_id,id,supplier_name,tea_variety,harvest_date,quantity,unit_price,moisture_content,leaf_integrity,tenderness,color,remark
+R001,T-H001,稳定茶场,龙井43,2025-03-10,150.5,80.0,5.2,92.0,88.0,嫩绿,历史同期
+R002,T-H002,波动茶园,福鼎大白,2025-03-11,200.0,65.0,5.5,86.0,82.0,翠绿,上次收购
+R003,T-H003,降级基地,铁观音,2025-03-12,180.0,70.0,5.8,80.0,75.0,深绿,上次一级
+
+### tests/data/missing_material main
+id,supplier_name,tea_variety,harvest_date,quantity,unit_price,moisture_content,leaf_integrity,tenderness,color,remark
+M001,缺失茶场,龙井43,2025-04-10,150.5,80.0,5.2,92.0,88.0,嫩绿,有补充
+M002,无补茶园,福鼎大白,2025-04-11,200.0,65.0,6.0,85.0,80.0,翠绿,无补充记录
+M003,,,,,80.0,4.5,95.0,93.0,嫩绿,大部分字段缺失
+M004,缺字段农场,铁观音,2025-04-12,180.0,70.0,,,78.0,深绿,水分和完整度缺失
+### supplement
+id,main_id,inspector,inspection_time,actual_moisture,actual_integrity,actual_tenderness,sampling_photo,inspection_remark
+S001,M001,质检员A,2025-04-10 14:30:00,5.1,91.5,87.8,photo_M001.jpg,合格
+### rules
+{
+  "validation_rules": [
+    {
+      "field_name": "moisture_content",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 15,
+      "required": true,
+      "description": "水分含量0-15%",
+      "severity": "error"
+    },
+    {
+      "field_name": "leaf_integrity",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "叶片完整度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "tenderness",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "嫩度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "quantity",
+      "rule_type": "range",
+      "min_value": 0.1,
+      "max_value": 10000,
+      "required": true,
+      "description": "数量0.1-10000kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "unit_price",
+      "rule_type": "range",
+      "min_value": 1,
+      "max_value": 500,
+      "required": true,
+      "description": "单价1-500元/kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "tea_variety",
+      "rule_type": "enum",
+      "allowed_values": ["龙井43", "福鼎大白", "铁观音", "碧螺春", "毛蟹", "黄金桂", "本山", "大叶种"],
+      "required": true,
+      "description": "允许的茶叶品种",
+      "severity": "error"
+    },
+    {
+      "field_name": "harvest_date",
+      "rule_type": "date",
+      "required": true,
+      "description": "采摘日期格式",
+      "severity": "error"
+    }
+  ]
+}
+### criteria
+{
+  "grading_criteria": [
+    {
+      "grade": "特级",
+      "min_moisture": 0,
+      "max_moisture": 5.0,
+      "min_integrity": 90,
+      "min_tenderness": 85,
+      "price_adjustment": 0.20
+    },
+    {
+      "grade": "一级",
+      "min_moisture": 0,
+      "max_moisture": 7.0,
+      "min_integrity": 80,
+      "min_tenderness": 75,
+      "price_adjustment": 0.05
+    },
+    {
+      "grade": "二级",
+      "min_moisture": 0,
+      "max_moisture": 9.0,
+      "min_integrity": 70,
+      "min_tenderness": 60,
+      "price_adjustment": -0.05
+    },
+    {
+      "grade": "三级",
+      "min_moisture": 0,
+      "max_moisture": 12.0,
+      "min_integrity": 55,
+      "min_tenderness": 45,
+      "price_adjustment": -0.15
+    }
+  ]
+}
+
+### tests/data/over_threshold main
+id,supplier_name,tea_variety,harvest_date,quantity,unit_price,moisture_content,leaf_integrity,tenderness,color,remark
+H001,高温茶场,龙井43,2025-04-10,100.0,80.0,16.5,92.0,88.0,嫩绿,水分超标
+H002,低质茶园,福鼎大白,2025-04-11,200.0,65.0,6.0,40.0,35.0,枯黄,完整度和嫩度极低
+H003,超价茶庄,铁观音,2025-04-12,180.0,600.0,5.8,78.0,72.0,深绿,单价超标
+H004,负量农场,碧螺春,2025-04-13,-10.0,90.0,4.5,95.0,93.0,嫩绿,数量为负
+### supplement
+id,main_id,inspector,inspection_time,actual_moisture,actual_integrity,actual_tenderness,sampling_photo,inspection_remark
+S001,H001,质检员A,2025-04-10 14:30:00,17.0,91.0,87.0,photo_H001.jpg,水分超标
+S002,H002,质检员B,2025-04-11 10:00:00,6.5,38.0,33.0,photo_H002.jpg,品质差
+S003,H003,质检员A,2025-04-12 09:15:00,6.0,77.0,71.0,photo_H003.jpg,单价过高
+S004,H004,质检员C,2025-04-13 16:00:00,4.5,94.0,92.0,photo_H004.jpg,数量异常
+### rules
+{
+  "validation_rules": [
+    {
+      "field_name": "moisture_content",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 15,
+      "required": true,
+      "description": "水分含量0-15%",
+      "severity": "error"
+    },
+    {
+      "field_name": "leaf_integrity",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "叶片完整度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "tenderness",
+      "rule_type": "range",
+      "min_value": 0,
+      "max_value": 100,
+      "required": true,
+      "description": "嫩度0-100%",
+      "severity": "error"
+    },
+    {
+      "field_name": "quantity",
+      "rule_type": "range",
+      "min_value": 0.1,
+      "max_value": 10000,
+      "required": true,
+      "description": "数量0.1-10000kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "unit_price",
+      "rule_type": "range",
+      "min_value": 1,
+      "max_value": 500,
+      "required": true,
+      "description": "单价1-500元/kg",
+      "severity": "error"
+    },
+    {
+      "field_name": "tea_variety",
+      "rule_type": "enum",
+      "allowed_values": ["龙井43", "福鼎大白", "铁观音", "碧螺春", "毛蟹", "黄金桂", "本山", "大叶种"],
+      "required": true,
+      "description": "允许的茶叶品种",
+      "severity": "error"
+    },
+    {
+      "field_name": "harvest_date",
+      "rule_type": "date",
+      "required": true,
+      "description": "采摘日期格式",
+      "severity": "error"
+    }
+  ]
+}
+### criteria
+{
+  "grading_criteria": [
+    {
+      "grade": "特级",
+      "min_moisture": 0,
+      "max_moisture": 5.0,
+      "min_integrity": 90,
+      "min_tenderness": 85,
+      "price_adjustment": 0.20
+    },
+    {
+      "grade": "一级",
+      "min_moisture": 0,
+      "max_moisture": 7.0,
+      "min_integrity": 80,
+      "min_tenderness": 75,
+      "price_adjustment": 0.05
+    },
+    {
+      "grade": "二级",
+      "min_moisture": 0,
+      "max_moisture": 9.0,
+      "min_integrity": 70,
+      "min_tenderness": 60,
+      "price_adjustment": -0.05
+    },
+    {
+      "grade": "三级",
+      "min_moisture": 0,
+      "max_moisture": 12.0,
+      "min_integrity": 55,
+      "min_tenderness": 45,
+      "price_adjustment": -0.15
+    }
+  ]
+}
+
+exec
+/bin/zsh -lc 'python3 setup.py --name && python3 setup.py --version' in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc 'python3 -m tea_grading_cli.cli run --main tests/data/missing_material/main_list.csv --supplement tests/data/missing_material/supplement.csv --rules tests/data/missing_material/validation_rules.json --criteria tests/data/missing_material/grading_criteria.json --output-dir output --dry-run' in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc 'python3 -m tea_grading_cli.cli run --main tests/data/history_replay/main_list.csv --supplement tests/data/history_replay/supplement.csv --rules tests/data/history_replay/validation_rules.json --criteria tests/data/history_replay/grading_criteria.json --history tests/data/history_replay/history.csv --output-dir output --dry-run' in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 345ms:
+tea-grading-cli
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-qCVfRfHY' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-R2qjA2Od' (errno=Operation not permitted)
+1.0.0
+
+ succeeded in 386ms:
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ 茶叶鲜叶收购定级                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+主清单: tests/data/missing_material/main_list.csv
+补充表: tests/data/missing_material/supplement.csv
+校验规则: tests/data/missing_material/validation_rules.json
+定级标准: tests/data/missing_material/grading_criteria.json
+DRY-RUN 模式: 仅预览，不输出正式结果
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ DRY-RUN 处理完成                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+       DRY-RUN 处理汇总       
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ 指标           ┃        值 ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ 总记录数       │         4 │
+│ 成功记录数     │         1 │
+│ 坏行记录数     │         3 │
+│ 总结算金额(元) │ 12,642.00 │
+└────────────────┴───────────┘
+    等级分布     
+┏━━━━━━━━┳━━━━━━┓
+┃ 等级   ┃ 数量 ┃
+┡━━━━━━━━╇━━━━━━┩
+│ 一级   │    1 │
+│ 不合格 │    3 │
+└────────┴──────┘
+                                    坏行预览                                    
+┏━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 供应商     ┃ 坏行原因                                             ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ M003     │            │ 缺少必填字段: supplier_name, tea_variety,            │
+│          │            │ harvest_date, quantity                               │
+│ M004     │ 缺字段农场 │ 缺少必填字段: moisture_content, leaf_integrity       │
+│ M002     │ 无补茶园   │ 无补充记录: 缺少质检补充记录                         │
+└──────────┴────────────┴──────────────────────────────────────────────────────┘
+                         差异预览                          
+┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 差异字段 ┃ 说明                              ┃
+┡━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ M001     │ 水分     │ 主清单=5.2, 实际=5.1, 差值=-0.1   │
+│ M001     │ 完整度   │ 主清单=92.0, 实际=91.5, 差值=-0.5 │
+│ M001     │ 嫩度     │ 主清单=88.0, 实际=87.8, 差值=-0.2 │
+└──────────┴──────────┴───────────────────────────────────┘
+
+坏行记录可使用以下命令复核:
+  tea-grading review --record-id M003 --output-dir output
+  tea-grading review --record-id M004 --output-dir output
+  tea-grading review --record-id M002 --output-dir output
+[DRY-RUN] 将导出 1 条成功记录到: output/定级成功结果_20260602_082343.csv
+[DRY-RUN] 将导出 3 条坏行记录到: output/坏行记录_20260602_082343.csv
+[DRY-RUN] 将导出 1 条差异记录到: output/差异表_20260602_082343.csv
+[DRY-RUN] 将导出 5 条操作日志到: output/操作日志_20260602_082343.log
+[DRY-RUN] 将导出处理汇总到: output/处理汇总_20260602_082343.json
+[DRY-RUN] 汇总信息: {
+  "处理时间": "2026-06-02 08:23:43",
+  "成功记录数": 1,
+  "坏行记录数": 3,
+  "总记录数": 4,
+  "总结算金额(元)": 12642.0,
+  "导出文件": {
+    "success_result": "output/定级成功结果_20260602_082343.csv",
+    "bad_records": "output/坏行记录_20260602_082343.csv",
+    "diff_table": "output/差异表_20260602_082343.csv",
+    "operation_log": "output/操作日志_20260602_082343.log",
+    "summary": "output/处理汇总_20260602_082343.json"
+  },
+  "等级分布": {
+    "一级": 1,
+    "不合格": 3
+  }
+}
+
+处理完成
+
+ succeeded in 381ms:
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ 茶叶鲜叶收购定级                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+主清单: tests/data/history_replay/main_list.csv
+补充表: tests/data/history_replay/supplement.csv
+校验规则: tests/data/history_replay/validation_rules.json
+定级标准: tests/data/history_replay/grading_criteria.json
+历史记录: tests/data/history_replay/history.csv
+DRY-RUN 模式: 仅预览，不输出正式结果
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ DRY-RUN 处理完成                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+       DRY-RUN 处理汇总       
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ 指标           ┃        值 ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ 总记录数       │         3 │
+│ 成功记录数     │         3 │
+│ 坏行记录数     │         0 │
+│ 总结算金额(元) │ 38,944.50 │
+└────────────────┴───────────┘
+   等级分布    
+┏━━━━━━┳━━━━━━┓
+┃ 等级 ┃ 数量 ┃
+┡━━━━━━╇━━━━━━┩
+│ 一级 │    2 │
+│ 二级 │    1 │
+└──────┴──────┘
+                             差异预览                              
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 差异字段         ┃ 说明                              ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ R001     │ 水分             │ 主清单=5.2, 实际=5.1, 差值=-0.1   │
+│ R001     │ 完整度           │ 主清单=92.0, 实际=91.5, 差值=-0.5 │
+│ R001     │ 嫩度             │ 主清单=88.0, 实际=87.8, 差值=-0.2 │
+│ R002     │ 水分             │ 主清单=6.0, 实际=6.5, 差值=0.5    │
+│ R002     │ 完整度           │ 主清单=85.0, 实际=83.0, 差值=-2.0 │
+│ R002     │ 嫩度             │ 主清单=80.0, 实际=78.0, 差值=-2.0 │
+│ R002     │ moisture_content │ 历史=5.5, 当前=6.0, 差异=0.5      │
+│ R002     │ leaf_integrity   │ 历史=86.0, 当前=85.0, 差异=-1.0   │
+│ R002     │ tenderness       │ 历史=82.0, 当前=80.0, 差异=-2.0   │
+│ R002     │ quantity         │ 历史=200.0, 当前=210.0, 差异=10.0 │
+└──────────┴──────────────────┴───────────────────────────────────┘
+[DRY-RUN] 将导出 3 条成功记录到: output/定级成功结果_20260602_082343.csv
+[DRY-RUN] 将导出 0 条坏行记录到: output/坏行记录_20260602_082343.csv
+[DRY-RUN] 将导出 3 条差异记录到: output/差异表_20260602_082343.csv
+[DRY-RUN] 将导出 4 条操作日志到: output/操作日志_20260602_082343.log
+[DRY-RUN] 将导出处理汇总到: output/处理汇总_20260602_082343.json
+[DRY-RUN] 汇总信息: {
+  "处理时间": "2026-06-02 08:23:43",
+  "成功记录数": 3,
+  "坏行记录数": 0,
+  "总记录数": 3,
+  "总结算金额(元)": 38944.5,
+  "导出文件": {
+    "success_result": "output/定级成功结果_20260602_082343.csv",
+    "bad_records": "output/坏行记录_20260602_082343.csv",
+    "diff_table": "output/差异表_20260602_082343.csv",
+    "operation_log": "output/操作日志_20260602_082343.log",
+    "summary": "output/处理汇总_20260602_082343.json"
+  },
+  "等级分布": {
+    "一级": 2,
+    "二级": 1
+  }
+}
+
+处理完成
+
+codex
+合规、缺失材料、历史回放三个核心样例的 dry-run 都能完成，并展示坏行、差异、汇总等信息。接下来我会补跑超阈值样例和依赖导入，重点确认是否有入口或业务阻断。
+exec
+/bin/zsh -lc "nl -ba tea_grading_cli/cli.py | sed -n '1,260p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc "nl -ba tea_grading_cli/validator.py | sed -n '1,220p' && nl -ba tea_grading_cli/grader.py | sed -n '1,240p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+     1	import os
+     2	import sys
+     3	import json
+     4	from datetime import datetime
+     5	from pathlib import Path
+     6	
+     7	import click
+     8	from rich.console import Console
+     9	from rich.table import Table
+    10	from rich.panel import Panel
+    11	
+    12	from .reader import DataReader
+    13	from .validator import ValidationEngine
+    14	from .grader import TeaGrader
+    15	from .exporter import ResultExporter
+    16	from .models import GradeLevel, ProcessingResult
+    17	
+    18	console = Console()
+    19	
+    20	
+    21	def _print_summary(result: ProcessingResult, dry_run: bool):
+    22	    mode = "[yellow]DRY-RUN[/yellow] " if dry_run else ""
+    23	    console.print(Panel(
+    24	        f"{mode}处理完成",
+    25	        style="bold green" if result.bad_count == 0 else "bold yellow"
+    26	    ))
+    27	
+    28	    table = Table(title=f"{mode}处理汇总", show_header=True, header_style="bold cyan")
+    29	    table.add_column("指标", style="dim")
+    30	    table.add_column("值", justify="right")
+    31	    table.add_row("总记录数", str(result.success_count + result.bad_count))
+    32	    table.add_row("成功记录数", str(result.success_count), style="green")
+    33	    table.add_row("坏行记录数", str(result.bad_count), style="red" if result.bad_count > 0 else "green")
+    34	    table.add_row("总结算金额(元)", f"{result.total_amount:,.2f}")
+    35	    console.print(table)
+    36	
+    37	    if result.graded_records or result.bad_records:
+    38	        grade_dist = {}
+    39	        for r in result.graded_records:
+    40	            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+    41	        for r in result.bad_records:
+    42	            grade_dist[r.final_grade.value] = grade_dist.get(r.final_grade.value, 0) + 1
+    43	
+    44	        gt = Table(title="等级分布", show_header=True, header_style="bold cyan")
+    45	        gt.add_column("等级")
+    46	        gt.add_column("数量", justify="right")
+    47	        for grade in GradeLevel:
+    48	            cnt = grade_dist.get(grade.value, 0)
+    49	            if cnt:
+    50	                style = "red" if grade == GradeLevel.REJECT else None
+    51	                gt.add_row(grade.value, str(cnt), style=style)
+    52	        console.print(gt)
+    53	
+    54	
+    55	def _print_bad_rows_preview(result: ProcessingResult, limit: int = 10):
+    56	    if not result.bad_records:
+    57	        return
+    58	    table = Table(title="坏行预览", show_header=True, header_style="bold red")
+    59	    table.add_column("记录编号")
+    60	    table.add_column("供应商")
+    61	    table.add_column("坏行原因")
+    62	    for r in result.bad_records[:limit]:
+    63	        table.add_row(r.main_record.id, r.main_record.supplier_name, r.bad_reason or "")
+    64	    if len(result.bad_records) > limit:
+    65	        table.add_row("...", f"(共 {len(result.bad_records)} 条)", "")
+    66	    console.print(table)
+    67	
+    68	
+    69	def _print_diff_preview(result: ProcessingResult, limit: int = 10):
+    70	    all_records = result.graded_records + result.bad_records
+    71	    diff_records = [r for r in all_records if r.diff_fields]
+    72	    if not diff_records:
+    73	        return
+    74	    table = Table(title="差异预览", show_header=True, header_style="bold yellow")
+    75	    table.add_column("记录编号")
+    76	    table.add_column("差异字段")
+    77	    table.add_column("说明")
+    78	    count = 0
+    79	    for r in diff_records:
+    80	        for field, diff in r.diff_fields.items():
+    81	            if count >= limit:
+    82	                break
+    83	            if '主清单' in diff:
+    84	                desc = f"主清单={diff['主清单']}, 实际={diff['实际检测']}, 差值={diff['差值']}"
+    85	            elif 'history' in diff:
+    86	                desc = f"历史={diff['history']}, 当前={diff['current']}, 差异={diff['diff']}"
+    87	            else:
+    88	                desc = str(diff)
+    89	            table.add_row(r.main_record.id, field, desc)
+    90	            count += 1
+    91	    if len(diff_records) > limit:
+    92	        table.add_row("...", "", f"(共 {count} 项差异)")
+    93	    console.print(table)
+    94	
+    95	
+    96	@click.group()
+    97	@click.version_option(version="1.0.0", prog_name="tea-grading")
+    98	def cli():
+    99	    """茶叶鲜叶收购定级CLI工具"""
+   100	    pass
+   101	
+   102	
+   103	@cli.command()
+   104	@click.option('--main', 'main_file', required=True, help='主清单文件路径 (CSV/XLSX/JSON)')
+   105	@click.option('--supplement', 'supplement_file', required=True, help='补充表文件路径 (CSV/XLSX/JSON)')
+   106	@click.option('--rules', 'rules_file', required=True, help='校验规则文件路径 (JSON)')
+   107	@click.option('--criteria', 'criteria_file', required=True, help='定级标准文件路径 (JSON)')
+   108	@click.option('--output-dir', 'output_dir', default='./output', help='输出目录 (默认: ./output)')
+   109	@click.option('--dry-run', is_flag=True, default=False, help='仅预览，不输出正式结果文件')
+   110	@click.option('--history', 'history_file', default=None, help='历史记录文件路径 (用于历史回放比对)')
+   111	@click.option('--use-actual/--no-use-actual', default=True, help='是否使用补充表实际检测值定级 (默认: 使用)')
+   112	@click.option('--strict', is_flag=True, default=False, help='严格模式：缺少补充记录的行标记为坏行')
+   113	def run(main_file, supplement_file, rules_file, criteria_file, output_dir,
+   114	        dry_run, history_file, use_actual, strict):
+   115	    """执行茶叶鲜叶收购定级全流程"""
+   116	
+   117	    console.print(Panel("茶叶鲜叶收购定级", style="bold cyan"))
+   118	
+   119	    validation_engine_for_params = ValidationEngine([])
+   120	    param_errors = validation_engine_for_params.validate_parameters(
+   121	        main_file, supplement_file, rules_file, output_dir if not dry_run else output_dir
+   122	    )
+   123	    if not os.path.exists(criteria_file):
+   124	        param_errors.append(f"定级标准文件不存在: {criteria_file}")
+   125	    if param_errors:
+   126	        for err in param_errors:
+   127	            console.print(f"[red]参数错误: {err}[/red]")
+   128	        sys.exit(1)
+   129	
+   130	    console.print(f"[dim]主清单: {main_file}[/dim]")
+   131	    console.print(f"[dim]补充表: {supplement_file}[/dim]")
+   132	    console.print(f"[dim]校验规则: {rules_file}[/dim]")
+   133	    console.print(f"[dim]定级标准: {criteria_file}[/dim]")
+   134	    if history_file:
+   135	        console.print(f"[dim]历史记录: {history_file}[/dim]")
+   136	    if dry_run:
+   137	        console.print("[yellow]DRY-RUN 模式: 仅预览，不输出正式结果[/yellow]")
+   138	
+   139	    main_records, bad_rows = DataReader.read_main_list(main_file)
+   140	    supplements = DataReader.read_supplement(supplement_file)
+   141	    rules = DataReader.read_validation_rules(rules_file)
+   142	    criteria = DataReader.read_grading_criteria(criteria_file)
+   143	
+   144	    history_data = {}
+   145	    if history_file:
+   146	        history_data = DataReader.read_history_record(history_file)
+   147	
+   148	    validation_engine = ValidationEngine(rules)
+   149	    validation_results = {}
+   150	    seen_ids = set()
+   151	
+   152	    for main in main_records:
+   153	        if strict and main.id not in supplements:
+   154	            validation_results[main.id] = (
+   155	                False,
+   156	                "严格模式: 缺少补充记录",
+   157	                {}
+   158	            )
+   159	            seen_ids.add(main.id)
+   160	            continue
+   161	
+   162	        is_valid, error_msg, hist_diff = validation_engine.validate_main_record(
+   163	            main, supplements, seen_ids, history_data
+   164	        )
+   165	        validation_results[main.id] = (is_valid, error_msg, hist_diff)
+   166	        seen_ids.add(main.id)
+   167	
+   168	    grader = TeaGrader(criteria, use_actual_values=use_actual)
+   169	    result = grader.grade_records(
+   170	        main_records, supplements, validation_results,
+   171	        initial_bad_rows=bad_rows
+   172	    )
+   173	
+   174	    _print_summary(result, dry_run)
+   175	    _print_bad_rows_preview(result)
+   176	    _print_diff_preview(result)
+   177	
+   178	    if result.bad_records:
+   179	        console.print("\n[bold yellow]坏行记录可使用以下命令复核:[/bold yellow]")
+   180	        for r in result.bad_records[:5]:
+   181	            console.print(f"  tea-grading review --record-id {r.main_record.id} --output-dir {output_dir}")
+   182	
+   183	    exporter = ResultExporter(output_dir, dry_run=dry_run)
+   184	    exported_files = exporter.export_all(result)
+   185	
+   186	    if not dry_run:
+   187	        for r in result.bad_records:
+   188	            exporter.generate_review_link(r.main_record.id)
+   189	
+   190	    console.print("\n[bold green]处理完成[/bold green]")
+   191	    if not dry_run:
+   192	        console.print("[dim]导出文件:[/dim]")
+   193	        for name, path in exported_files.items():
+   194	            console.print(f"  [dim]{name}: {path}[/dim]")
+   195	
+   196	    return result
+   197	
+   198	
+   199	@cli.command()
+   200	@click.option('--record-id', 'record_id', required=True, help='待复核的记录编号')
+   201	@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+   202	def review(record_id, output_dir):
+   203	    """复核坏行记录"""
+   204	
+   205	    review_files = list(Path(output_dir).glob(f'review_{record_id}_*.json'))
+   206	
+   207	    if not review_files:
+   208	        console.print(f"[red]未找到记录 {record_id} 的复核信息[/red]")
+   209	        console.print("[dim]请先运行 tea-grading run 生成复核文件[/dim]")
+   210	        sys.exit(1)
+   211	
+   212	    latest_review = sorted(review_files)[-1]
+   213	    with open(latest_review, 'r', encoding='utf-8') as f:
+   214	        review_data = json.load(f)
+   215	
+   216	    console.print(Panel(f"复核记录: {record_id}", style="bold cyan"))
+   217	
+   218	    table = Table(show_header=True, header_style="bold cyan")
+   219	    table.add_column("字段")
+   220	    table.add_column("值")
+   221	    for key, value in review_data.items():
+   222	        if key == '相关文件':
+   223	            value = '\n'.join(f"  {k}: {v}" for k, v in value.items())
+   224	        table.add_row(key, str(value))
+   225	    console.print(table)
+   226	
+   227	    bad_file = Path(output_dir) / f"坏行记录_*.csv"
+   228	    bad_files = list(Path(output_dir).glob(f"坏行记录_*.csv"))
+   229	    if bad_files:
+   230	        console.print(f"\n[bold]坏行记录文件:[/bold]")
+   231	        for bf in bad_files:
+   232	            console.print(f"  {bf}")
+   233	
+   234	    return review_data
+   235	
+   236	
+   237	@cli.command()
+   238	@click.option('--output-dir', 'output_dir', default='./output', help='输出目录')
+   239	def history_check(output_dir):
+   240	    """检查历史回放差异"""
+   241	
+   242	    diff_files = list(Path(output_dir).glob('差异表_*.csv'))
+   243	    if not diff_files:
+   244	        console.print("[yellow]未找到差异表文件[/yellow]")
+   245	        return
+   246	
+   247	    import pandas as pd
+   248	    latest_diff = sorted(diff_files)[-1]
+   249	    df = pd.read_csv(latest_diff)
+   250	
+   251	    console.print(Panel("历史差异检查", style="bold cyan"))
+   252	    console.print(f"[dim]差异表: {latest_diff}[/dim]")
+   253	    console.print(f"[dim]共 {len(df)} 条差异记录[/dim]")
+   254	
+   255	    if len(df) > 0:
+   256	        table = Table(show_header=True, header_style="bold yellow")
+   257	        for col in df.columns:
+   258	            table.add_column(col)
+   259	        for _, row in df.head(20).iterrows():
+   260	            table.add_row(*[str(v) for v in row.values])
+
+ succeeded in 0ms:
+     1	from typing import List, Dict, Tuple, Any, Optional
+     2	from datetime import datetime
+     3	from .models import MainRecord, SupplementRecord, ValidationRule, BadRowReason
+     4	
+     5	
+     6	class ValidationEngine:
+     7	    def __init__(self, rules: List[ValidationRule]):
+     8	        self.rules = rules
+     9	
+    10	    def validate_main_record(self, record: MainRecord, 
+    11	                           supplements: Dict[str, SupplementRecord],
+    12	                           seen_ids: set,
+    13	                           history_data: Optional[Dict[str, Dict[str, Any]]] = None
+    14	                           ) -> Tuple[bool, Optional[str], Dict[str, Dict[str, Any]]]:
+    15	        errors = []
+    16	        diff_fields = {}
+    17	
+    18	        if record.id in seen_ids:
+    19	            return False, f"{BadRowReason.DUPLICATE_ID.value}: {record.id}", diff_fields
+    20	
+    21	        if record.id not in supplements:
+    22	            errors.append(f"{BadRowReason.NO_SUPPLEMENT.value}: 缺少质检补充记录")
+    23	
+    24	        for rule in self.rules:
+    25	            field_value = getattr(record, rule.field_name, None)
+    26	            
+    27	            if field_value is None or (isinstance(field_value, str) and not field_value.strip()):
+    28	                if rule.required:
+    29	                    errors.append(f"{BadRowReason.MISSING_FIELD.value}: {rule.field_name}")
+    30	                continue
+    31	
+    32	            if rule.rule_type == 'range':
+    33	                if not isinstance(field_value, (int, float)):
+    34	                    try:
+    35	                        field_value = float(field_value)
+    36	                    except ValueError:
+    37	                        errors.append(f"{BadRowReason.INVALID_FORMAT.value}: {rule.field_name} 应为数字")
+    38	                        continue
+    39	                
+    40	                if rule.min_value is not None and field_value < rule.min_value:
+    41	                    errors.append(f"{BadRowReason.OUT_OF_RANGE.value}: {rule.field_name}={field_value} 低于最小值 {rule.min_value}")
+    42	                if rule.max_value is not None and field_value > rule.max_value:
+    43	                    errors.append(f"{BadRowReason.OUT_OF_RANGE.value}: {rule.field_name}={field_value} 高于最大值 {rule.max_value}")
+    44	
+    45	            elif rule.rule_type == 'enum':
+    46	                if rule.allowed_values and field_value not in rule.allowed_values:
+    47	                    errors.append(f"{BadRowReason.RULE_VIOLATION.value}: {rule.field_name}='{field_value}' 不在允许值列表 {rule.allowed_values}")
+    48	
+    49	            elif rule.rule_type == 'date':
+    50	                try:
+    51	                    datetime.strptime(str(field_value), '%Y-%m-%d')
+    52	                except ValueError:
+    53	                    try:
+    54	                        datetime.strptime(str(field_value), '%Y/%m/%d')
+    55	                    except ValueError:
+    56	                        errors.append(f"{BadRowReason.INVALID_FORMAT.value}: {rule.field_name} 日期格式错误，应为YYYY-MM-DD")
+    57	
+    58	        if history_data and record.id in history_data:
+    59	            hist = history_data[record.id]
+    60	            for field in ['moisture_content', 'leaf_integrity', 'tenderness', 'quantity']:
+    61	                if field in hist:
+    62	                    try:
+    63	                        hist_val = float(hist[field])
+    64	                        curr_val = float(getattr(record, field))
+    65	                        if abs(curr_val - hist_val) > 0.01:
+    66	                            diff_fields[field] = {
+    67	                                'history': hist_val,
+    68	                                'current': curr_val,
+    69	                                'diff': round(curr_val - hist_val, 4)
+    70	                            }
+    71	                    except (ValueError, TypeError):
+    72	                        continue
+    73	
+    74	        return len(errors) == 0, "; ".join(errors) if errors else None, diff_fields
+    75	
+    76	    def validate_parameters(self, main_file: str, supplement_file: str, 
+    77	                           rules_file: str, output_dir: str) -> List[str]:
+    78	        import os
+    79	        errors = []
+    80	
+    81	        if not main_file:
+    82	            errors.append("主清单文件路径不能为空")
+    83	        elif not os.path.exists(main_file):
+    84	            errors.append(f"主清单文件不存在: {main_file}")
+    85	
+    86	        if not supplement_file:
+    87	            errors.append("补充表文件路径不能为空")
+    88	        elif not os.path.exists(supplement_file):
+    89	            errors.append(f"补充表文件不存在: {supplement_file}")
+    90	
+    91	        if not rules_file:
+    92	            errors.append("校验规则文件路径不能为空")
+    93	        elif not os.path.exists(rules_file):
+    94	            errors.append(f"校验规则文件不存在: {rules_file}")
+    95	
+    96	        if output_dir:
+    97	            os.makedirs(output_dir, exist_ok=True)
+    98	
+    99	        return errors
+     1	from typing import List, Dict, Optional
+     2	from datetime import datetime
+     3	from .models import (
+     4	    MainRecord, SupplementRecord, GradingCriteria, GradedRecord, 
+     5	    ProcessingResult, GradeLevel, BadRowReason
+     6	)
+     7	
+     8	
+     9	class TeaGrader:
+    10	    def __init__(self, criteria: List[GradingCriteria], use_actual_values: bool = True):
+    11	        self.criteria = sorted(criteria, key=lambda x: [
+    12	            x.min_integrity, x.min_tenderness
+    13	        ], reverse=True)
+    14	        self.use_actual_values = use_actual_values
+    15	
+    16	    def _determine_grade(self, moisture: float, integrity: float, tenderness: float) -> tuple:
+    17	        for crit in self.criteria:
+    18	            if (crit.min_moisture <= moisture <= crit.max_moisture and
+    19	                integrity >= crit.min_integrity and
+    20	                tenderness >= crit.min_tenderness):
+    21	                return crit.grade, crit.price_adjustment, (
+    22	                    f"水分{moisture}%在[{crit.min_moisture}, {crit.max_moisture}]范围内, "
+    23	                    f"完整度{integrity}%≥{crit.min_integrity}%, "
+    24	                    f"嫩度{tenderness}%≥{crit.min_tenderness}%"
+    25	                )
+    26	        
+    27	        return GradeLevel.REJECT, 0.0, (
+    28	            f"未达到任何合格等级标准: 水分={moisture}%, 完整度={integrity}%, 嫩度={tenderness}%"
+    29	        )
+    30	
+    31	    def _get_actual_values(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> tuple:
+    32	        if self.use_actual_values and supplement:
+    33	            return (
+    34	                supplement.actual_moisture,
+    35	                supplement.actual_integrity,
+    36	                supplement.actual_tenderness
+    37	            )
+    38	        return (
+    39	            main.moisture_content,
+    40	            main.leaf_integrity,
+    41	            main.tenderness
+    42	        )
+    43	
+    44	    def _calculate_diff(self, main: MainRecord, supplement: Optional[SupplementRecord]) -> Dict[str, Dict[str, float]]:
+    45	        diff_fields = {}
+    46	        if supplement:
+    47	            fields = [
+    48	                ('moisture_content', 'actual_moisture', '水分'),
+    49	                ('leaf_integrity', 'actual_integrity', '完整度'),
+    50	                ('tenderness', 'actual_tenderness', '嫩度')
+    51	            ]
+    52	            for main_field, supp_field, label in fields:
+    53	                main_val = getattr(main, main_field)
+    54	                supp_val = getattr(supplement, supp_field)
+    55	                if abs(main_val - supp_val) > 0.001:
+    56	                    diff_fields[label] = {
+    57	                        '主清单': main_val,
+    58	                        '实际检测': supp_val,
+    59	                        '差值': round(supp_val - main_val, 4)
+    60	                    }
+    61	        return diff_fields
+    62	
+    63	    def grade_records(self, 
+    64	                     main_records: List[MainRecord],
+    65	                     supplements: Dict[str, SupplementRecord],
+    66	                     validation_results: Dict[str, tuple],
+    67	                     initial_bad_rows: List[Dict] = None,
+    68	                     operation_log: List[Dict] = None
+    69	                     ) -> ProcessingResult:
+    70	        
+    71	        result = ProcessingResult()
+    72	        result.process_time = datetime.now()
+    73	        seen_ids = set()
+    74	
+    75	        if operation_log:
+    76	            result.operation_log.extend(operation_log)
+    77	
+    78	        if initial_bad_rows:
+    79	            for bad_row in initial_bad_rows:
+    80	                fake_main = MainRecord(
+    81	                    id=str(bad_row['raw_data'].get('id', f"BAD{len(result.bad_records)+1}")),
+    82	                    supplier_name=str(bad_row['raw_data'].get('supplier_name', '')),
+    83	                    tea_variety=str(bad_row['raw_data'].get('tea_variety', '')),
+    84	                    harvest_date=str(bad_row['raw_data'].get('harvest_date', '')),
+    85	                    quantity=float(bad_row['raw_data'].get('quantity', 0) or 0),
+    86	                    unit_price=float(bad_row['raw_data'].get('unit_price', 0) or 0),
+    87	                    moisture_content=float(bad_row['raw_data'].get('moisture_content', 0) or 0),
+    88	                    leaf_integrity=float(bad_row['raw_data'].get('leaf_integrity', 0) or 0),
+    89	                    tenderness=float(bad_row['raw_data'].get('tenderness', 0) or 0),
+    90	                    color=str(bad_row['raw_data'].get('color', '')),
+    91	                    raw_data=bad_row['raw_data']
+    92	                )
+    93	                graded = GradedRecord(
+    94	                    main_record=fake_main,
+    95	                    supplement=None,
+    96	                    final_grade=GradeLevel.REJECT,
+    97	                    final_moisture=fake_main.moisture_content,
+    98	                    final_integrity=fake_main.leaf_integrity,
+    99	                    final_tenderness=fake_main.tenderness,
+   100	                    adjusted_price=0,
+   101	                    total_amount=0,
+   102	                    grade_reason=bad_row['reason'],
+   103	                    is_bad=True,
+   104	                    bad_reason=bad_row['reason'],
+   105	                    diff_fields={}
+   106	                )
+   107	                result.bad_records.append(graded)
+   108	                result.bad_count += 1
+   109	
+   110	                result.operation_log.append({
+   111	                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   112	                    'level': 'ERROR',
+   113	                    'record_id': fake_main.id,
+   114	                    'action': '坏行隔离',
+   115	                    'reason': bad_row['reason'],
+   116	                    'row_number': bad_row.get('row_number', 'N/A')
+   117	                })
+   118	
+   119	        for main in main_records:
+   120	            if main.id in seen_ids:
+   121	                continue
+   122	            seen_ids.add(main.id)
+   123	
+   124	            is_valid, error_msg, hist_diff = validation_results.get(main.id, (True, None, {}))
+   125	            supplement = supplements.get(main.id)
+   126	
+   127	            if not is_valid:
+   128	                moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+   129	                graded = GradedRecord(
+   130	                    main_record=main,
+   131	                    supplement=supplement,
+   132	                    final_grade=GradeLevel.REJECT,
+   133	                    final_moisture=moisture,
+   134	                    final_integrity=integrity,
+   135	                    final_tenderness=tenderness,
+   136	                    adjusted_price=0,
+   137	                    total_amount=0,
+   138	                    grade_reason=error_msg or "校验失败",
+   139	                    is_bad=True,
+   140	                    bad_reason=error_msg,
+   141	                    diff_fields=hist_diff
+   142	                )
+   143	                result.bad_records.append(graded)
+   144	                result.bad_count += 1
+   145	
+   146	                result.operation_log.append({
+   147	                    'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   148	                    'level': 'ERROR',
+   149	                    'record_id': main.id,
+   150	                    'action': '校验失败',
+   151	                    'reason': error_msg,
+   152	                    'supplier': main.supplier_name
+   153	                })
+   154	                continue
+   155	
+   156	            moisture, integrity, tenderness = self._get_actual_values(main, supplement)
+   157	            grade, price_adj, reason = self._determine_grade(moisture, integrity, tenderness)
+   158	            adjusted_price = main.unit_price * (1 + price_adj)
+   159	            total_amount = main.quantity * adjusted_price
+   160	
+   161	            diff_fields = self._calculate_diff(main, supplement)
+   162	            diff_fields.update(hist_diff)
+   163	
+   164	            graded = GradedRecord(
+   165	                main_record=main,
+   166	                supplement=supplement,
+   167	                final_grade=grade,
+   168	                final_moisture=moisture,
+   169	                final_integrity=integrity,
+   170	                final_tenderness=tenderness,
+   171	                adjusted_price=round(adjusted_price, 2),
+   172	                total_amount=round(total_amount, 2),
+   173	                grade_reason=reason,
+   174	                is_bad=(grade == GradeLevel.REJECT),
+   175	                bad_reason=None if grade != GradeLevel.REJECT else reason,
+   176	                diff_fields=diff_fields
+   177	            )
+   178	
+   179	            if grade == GradeLevel.REJECT:
+   180	                result.bad_records.append(graded)
+   181	                result.bad_count += 1
+   182	                log_level = 'WARN'
+   183	                log_action = '定级为不合格'
+   184	            else:
+   185	                result.graded_records.append(graded)
+   186	                result.success_count += 1
+   187	                result.total_amount += total_amount
+   188	                log_level = 'INFO'
+   189	                log_action = '定级成功'
+   190	
+   191	            result.operation_log.append({
+   192	                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   193	                'level': log_level,
+   194	                'record_id': main.id,
+   195	                'action': log_action,
+   196	                'grade': grade.value,
+   197	                'supplier': main.supplier_name,
+   198	                'variety': main.tea_variety,
+   199	                'quantity': main.quantity,
+   200	                'adjusted_price': round(adjusted_price, 2),
+   201	                'total_amount': round(total_amount, 2),
+   202	                'has_diff': len(diff_fields) > 0
+   203	            })
+   204	
+   205	        result.operation_log.append({
+   206	            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   207	            'level': 'INFO',
+   208	            'record_id': 'SUMMARY',
+   209	            'action': '处理完成',
+   210	            'success_count': result.success_count,
+   211	            'bad_count': result.bad_count,
+   212	            'total_amount': round(result.total_amount, 2),
+   213	            'process_time': result.process_time.strftime('%Y-%m-%d %H:%M:%S')
+   214	        })
+   215	
+   216	        return result
+
+exec
+/bin/zsh -lc "python3 -c \"import click,pandas,openpyxl,jsonschema,rich; print('deps import ok')\"" in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc 'python3 -m tea_grading_cli.cli run --main tests/data/over_threshold/main_list.csv --supplement tests/data/over_threshold/supplement.csv --rules tests/data/over_threshold/validation_rules.json --criteria tests/data/over_threshold/grading_criteria.json --output-dir output --dry-run' in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 364ms:
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ 茶叶鲜叶收购定级                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+主清单: tests/data/over_threshold/main_list.csv
+补充表: tests/data/over_threshold/supplement.csv
+校验规则: tests/data/over_threshold/validation_rules.json
+定级标准: tests/data/over_threshold/grading_criteria.json
+DRY-RUN 模式: 仅预览，不输出正式结果
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ DRY-RUN 处理完成                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+    DRY-RUN 处理汇总     
+┏━━━━━━━━━━━━━━━━┳━━━━━━┓
+┃ 指标           ┃   值 ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━┩
+│ 总记录数       │    4 │
+│ 成功记录数     │    0 │
+│ 坏行记录数     │    4 │
+│ 总结算金额(元) │ 0.00 │
+└────────────────┴──────┘
+    等级分布     
+┏━━━━━━━━┳━━━━━━┓
+┃ 等级   ┃ 数量 ┃
+┡━━━━━━━━╇━━━━━━┩
+│ 不合格 │    4 │
+└────────┴──────┘
+                                    坏行预览                                    
+┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 供应商   ┃ 坏行原因                                               ┃
+┡━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ H001     │ 高温茶场 │ 超出阈值: moisture_content=16.5 高于最大值 15          │
+│ H002     │ 低质茶园 │ 未达到任何合格等级标准: 水分=6.5%, 完整度=38.0%,       │
+│          │          │ 嫩度=33.0%                                             │
+│ H003     │ 超价茶庄 │ 超出阈值: unit_price=600.0 高于最大值 500              │
+│ H004     │ 负量农场 │ 超出阈值: quantity=-10.0 低于最小值 0.1                │
+└──────────┴──────────┴────────────────────────────────────────────────────────┘
+                         差异预览                          
+┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ 记录编号 ┃ 差异字段 ┃ 说明                              ┃
+┡━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ H002     │ 水分     │ 主清单=6.0, 实际=6.5, 差值=0.5    │
+│ H002     │ 完整度   │ 主清单=40.0, 实际=38.0, 差值=-2.0 │
+│ H002     │ 嫩度     │ 主清单=35.0, 实际=33.0, 差值=-2.0 │
+└──────────┴──────────┴───────────────────────────────────┘
+
+坏行记录可使用以下命令复核:
+  tea-grading review --record-id H001 --output-dir output
+  tea-grading review --record-id H002 --output-dir output
+  tea-grading review --record-id H003 --output-dir output
+  tea-grading review --record-id H004 --output-dir output
+[DRY-RUN] 将导出 0 条成功记录到: output/定级成功结果_20260602_082355.csv
+[DRY-RUN] 将导出 4 条坏行记录到: output/坏行记录_20260602_082355.csv
+[DRY-RUN] 将导出 1 条差异记录到: output/差异表_20260602_082355.csv
+[DRY-RUN] 将导出 5 条操作日志到: output/操作日志_20260602_082355.log
+[DRY-RUN] 将导出处理汇总到: output/处理汇总_20260602_082355.json
+[DRY-RUN] 汇总信息: {
+  "处理时间": "2026-06-02 08:23:55",
+  "成功记录数": 0,
+  "坏行记录数": 4,
+  "总记录数": 4,
+  "总结算金额(元)": 0.0,
+  "导出文件": {
+    "success_result": "output/定级成功结果_20260602_082355.csv",
+    "bad_records": "output/坏行记录_20260602_082355.csv",
+    "diff_table": "output/差异表_20260602_082355.csv",
+    "operation_log": "output/操作日志_20260602_082355.log",
+    "summary": "output/处理汇总_20260602_082355.json"
+  },
+  "等级分布": {
+    "不合格": 4
+  }
+}
+
+处理完成
+
+ exited 1 in 451ms:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'jsonschema'
+
+codex
+依赖清单里 `jsonschema` 当前环境未安装，但源码没有实际 import 它；安装场景会由 `requirements.txt`/`setup.py` 拉取，因此它不是运行阻断。超阈值样例也能 dry-run 跑通并正确隔离 4 条坏行。
+exec
+/bin/zsh -lc "nl -ba tea_grading_cli/cli.py | sed -n '260,360p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+   260	            table.add_row(*[str(v) for v in row.values])
+   261	        console.print(table)
+   262	
+   263	
+   264	def main():
+   265	    cli()
+   266	
+   267	
+   268	if __name__ == '__main__':
+   269	    main()
+
+exec
+/bin/zsh -lc "nl -ba setup.py requirements.txt tea_grading_cli/reader.py tea_grading_cli/exporter.py | sed -n '1,340p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+usage: nl [-p] [-b type] [-d delim] [-f type] [-h type] [-i incr] [-l num]
+          [-n format] [-s sep] [-v startnum] [-w width] [file]
+
+exec
+/bin/zsh -lc 'python3 -m pip --version' in /Users/bill/Documents/solo/workspaces/yzz00186
+exec
+/bin/zsh -lc "python3 -c \"import click,pandas,openpyxl,rich; print('runtime deps used by CLI ok')\"" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 171ms:
+pip 26.0.1 from /Users/bill/Library/Python/3.9/lib/python/site-packages/pip (python 3.9)
+
+ succeeded in 402ms:
+runtime deps used by CLI ok
+
+exec
+/bin/zsh -lc "nl -ba setup.py | sed -n '1,120p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+     1	from setuptools import setup, find_packages
+     2	
+     3	setup(
+     4	    name="tea-grading-cli",
+     5	    version="1.0.0",
+     6	    description="茶叶鲜叶收购定级CLI工具",
+     7	    packages=find_packages(),
+     8	    include_package_data=True,
+     9	    install_requires=[
+    10	        "click>=8.1.0",
+    11	        "pandas>=2.0.0",
+    12	        "openpyxl>=3.1.0",
+    13	        "jsonschema>=4.17.0",
+    14	        "rich>=13.0.0",
+    15	    ],
+    16	    entry_points={
+    17	        "console_scripts": [
+    18	            "tea-grading=tea_grading_cli.cli:cli",
+    19	        ],
+    20	    },
+    21	    python_requires=">=3.8",
+    22	)
+
+exec
+/bin/zsh -lc "nl -ba requirements.txt | sed -n '1,80p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+     1	click>=8.1.0
+     2	pandas>=2.0.0
+     3	openpyxl>=3.1.0
+     4	jsonschema>=4.17.0
+     5	rich>=13.0.0
+
+exec
+/bin/zsh -lc "nl -ba tea_grading_cli/reader.py | sed -n '1,220p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+     1	import os
+     2	import json
+     3	import pandas as pd
+     4	from typing import List, Dict, Tuple, Any
+     5	from pathlib import Path
+     6	from .models import MainRecord, SupplementRecord, ValidationRule, GradingCriteria, GradeLevel
+     7	
+     8	
+     9	class DataReader:
+    10	    @staticmethod
+    11	    def _read_file(file_path: str) -> pd.DataFrame:
+    12	        path = Path(file_path)
+    13	        if not path.exists():
+    14	            raise FileNotFoundError(f"文件不存在: {file_path}")
+    15	        
+    16	        suffix = path.suffix.lower()
+    17	        if suffix == '.csv':
+    18	            return pd.read_csv(file_path, dtype=str).fillna('')
+    19	        elif suffix in ['.xlsx', '.xls']:
+    20	            return pd.read_excel(file_path, dtype=str).fillna('')
+    21	        elif suffix == '.json':
+    22	            with open(file_path, 'r', encoding='utf-8') as f:
+    23	                data = json.load(f)
+    24	            return pd.DataFrame(data) if isinstance(data, list) else pd.DataFrame([data])
+    25	        else:
+    26	            raise ValueError(f"不支持的文件格式: {suffix}")
+    27	
+    28	    @staticmethod
+    29	    def read_main_list(file_path: str) -> Tuple[List[MainRecord], List[Dict[str, Any]]]:
+    30	        df = DataReader._read_file(file_path)
+    31	        records = []
+    32	        bad_rows = []
+    33	        
+    34	        required_cols = ['id', 'supplier_name', 'tea_variety', 'harvest_date', 
+    35	                        'quantity', 'unit_price', 'moisture_content', 
+    36	                        'leaf_integrity', 'tenderness', 'color']
+    37	        
+    38	        for idx, row in df.iterrows():
+    39	            row_num = idx + 2
+    40	            raw_data = row.to_dict()
+    41	            
+    42	            missing_fields = [col for col in required_cols if not str(row.get(col, '')).strip()]
+    43	            if missing_fields:
+    44	                bad_rows.append({
+    45	                    'row_number': row_num,
+    46	                    'raw_data': raw_data,
+    47	                    'reason': f"缺少必填字段: {', '.join(missing_fields)}"
+    48	                })
+    49	                continue
+    50	            
+    51	            try:
+    52	                record = MainRecord(
+    53	                    id=str(row['id']).strip(),
+    54	                    supplier_name=str(row['supplier_name']).strip(),
+    55	                    tea_variety=str(row['tea_variety']).strip(),
+    56	                    harvest_date=str(row['harvest_date']).strip(),
+    57	                    quantity=float(row['quantity']),
+    58	                    unit_price=float(row['unit_price']),
+    59	                    moisture_content=float(row['moisture_content']),
+    60	                    leaf_integrity=float(row['leaf_integrity']),
+    61	                    tenderness=float(row['tenderness']),
+    62	                    color=str(row['color']).strip(),
+    63	                    remark=str(row.get('remark', '')).strip(),
+    64	                    raw_data=raw_data
+    65	                )
+    66	                records.append(record)
+    67	            except (ValueError, KeyError) as e:
+    68	                bad_rows.append({
+    69	                    'row_number': row_num,
+    70	                    'raw_data': raw_data,
+    71	                    'reason': f"数据格式错误: {str(e)}"
+    72	                })
+    73	        
+    74	        return records, bad_rows
+    75	
+    76	    @staticmethod
+    77	    def read_supplement(file_path: str) -> Dict[str, SupplementRecord]:
+    78	        df = DataReader._read_file(file_path)
+    79	        supplements = {}
+    80	        
+    81	        for idx, row in df.iterrows():
+    82	            raw_data = row.to_dict()
+    83	            try:
+    84	                main_id = str(row['main_id']).strip()
+    85	                supplement = SupplementRecord(
+    86	                    id=str(row.get('id', f"S{idx+1}")).strip(),
+    87	                    main_id=main_id,
+    88	                    inspector=str(row['inspector']).strip(),
+    89	                    inspection_time=str(row['inspection_time']).strip(),
+    90	                    actual_moisture=float(row['actual_moisture']),
+    91	                    actual_integrity=float(row['actual_integrity']),
+    92	                    actual_tenderness=float(row['actual_tenderness']),
+    93	                    sampling_photo=str(row.get('sampling_photo', '')).strip(),
+    94	                    inspection_remark=str(row.get('inspection_remark', '')).strip(),
+    95	                    raw_data=raw_data
+    96	                )
+    97	                supplements[main_id] = supplement
+    98	            except (ValueError, KeyError):
+    99	                continue
+   100	        
+   101	        return supplements
+   102	
+   103	    @staticmethod
+   104	    def read_validation_rules(file_path: str) -> List[ValidationRule]:
+   105	        with open(file_path, 'r', encoding='utf-8') as f:
+   106	            data = json.load(f)
+   107	        
+   108	        rules_data = data.get('validation_rules', []) if isinstance(data, dict) else data
+   109	        rules = []
+   110	        
+   111	        for rule_data in rules_data:
+   112	            rule = ValidationRule(
+   113	                field_name=rule_data['field_name'],
+   114	                rule_type=rule_data['rule_type'],
+   115	                min_value=rule_data.get('min_value'),
+   116	                max_value=rule_data.get('max_value'),
+   117	                allowed_values=rule_data.get('allowed_values'),
+   118	                required=rule_data.get('required', True),
+   119	                description=rule_data.get('description', ''),
+   120	                severity=rule_data.get('severity', 'error')
+   121	            )
+   122	            rules.append(rule)
+   123	        
+   124	        return rules
+   125	
+   126	    @staticmethod
+   127	    def read_grading_criteria(file_path: str) -> List[GradingCriteria]:
+   128	        with open(file_path, 'r', encoding='utf-8') as f:
+   129	            data = json.load(f)
+   130	        
+   131	        criteria_data = data.get('grading_criteria', []) if isinstance(data, dict) else data
+   132	        criteria_list = []
+   133	        
+   134	        for crit_data in criteria_data:
+   135	            criteria = GradingCriteria(
+   136	                grade=GradeLevel(crit_data['grade']),
+   137	                min_moisture=float(crit_data['min_moisture']),
+   138	                max_moisture=float(crit_data['max_moisture']),
+   139	                min_integrity=float(crit_data['min_integrity']),
+   140	                min_tenderness=float(crit_data['min_tenderness']),
+   141	                price_adjustment=float(crit_data.get('price_adjustment', 0))
+   142	            )
+   143	            criteria_list.append(criteria)
+   144	        
+   145	        return criteria_list
+   146	
+   147	    @staticmethod
+   148	    def read_history_record(file_path: str) -> Dict[str, Dict[str, Any]]:
+   149	        df = DataReader._read_file(file_path)
+   150	        history = {}
+   151	        
+   152	        for _, row in df.iterrows():
+   153	            main_id = str(row.get('main_id', row.get('id', ''))).strip()
+   154	            if main_id:
+   155	                history[main_id] = row.to_dict()
+   156	        
+   157	        return history
+
+exec
+/bin/zsh -lc "nl -ba tea_grading_cli/exporter.py | sed -n '1,260p'" in /Users/bill/Documents/solo/workspaces/yzz00186
+ succeeded in 0ms:
+     1	import os
+     2	import json
+     3	import pandas as pd
+     4	from typing import List, Dict, Any
+     5	from pathlib import Path
+     6	from datetime import datetime
+     7	from .models import GradedRecord, ProcessingResult, GradeLevel
+     8	
+     9	
+    10	class ResultExporter:
+    11	    def __init__(self, output_dir: str, dry_run: bool = False):
+    12	        self.output_dir = output_dir
+    13	        self.dry_run = dry_run
+    14	        self.timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    15	        self.exported_files = {}
+    16	
+    17	        if not dry_run:
+    18	            os.makedirs(output_dir, exist_ok=True)
+    19	
+    20	    def _get_filename(self, prefix: str, suffix: str = 'csv') -> str:
+    21	        filename = f"{prefix}_{self.timestamp}.{suffix}"
+    22	        return os.path.join(self.output_dir, filename)
+    23	
+    24	    def _to_dict(self, graded: GradedRecord, include_bad_info: bool = False) -> Dict[str, Any]:
+    25	        data = {
+    26	            '记录编号': graded.main_record.id,
+    27	            '供应商': graded.main_record.supplier_name,
+    28	            '茶叶品种': graded.main_record.tea_variety,
+    29	            '采摘日期': graded.main_record.harvest_date,
+    30	            '数量(kg)': graded.main_record.quantity,
+    31	            '原始单价(元/kg)': graded.main_record.unit_price,
+    32	            '调整后单价(元/kg)': graded.adjusted_price,
+    33	            '结算金额(元)': graded.total_amount,
+    34	            '最终等级': graded.final_grade.value,
+    35	            '最终水分(%)': graded.final_moisture,
+    36	            '最终完整度(%)': graded.final_integrity,
+    37	            '最终嫩度(%)': graded.final_tenderness,
+    38	            '定级说明': graded.grade_reason,
+    39	            '备注': graded.main_record.remark
+    40	        }
+    41	
+    42	        if graded.supplement:
+    43	            data.update({
+    44	                '质检员': graded.supplement.inspector,
+    45	                '检测时间': graded.supplement.inspection_time,
+    46	                '采样照片': graded.supplement.sampling_photo,
+    47	                '检测备注': graded.supplement.inspection_remark
+    48	            })
+    49	
+    50	        if include_bad_info and graded.is_bad:
+    51	            data['坏行原因'] = graded.bad_reason or ''
+    52	
+    53	        if graded.diff_fields:
+    54	            diff_desc = []
+    55	            for field, diff in graded.diff_fields.items():
+    56	                if '主清单' in diff:
+    57	                    diff_desc.append(f"{field}: 主清单={diff['主清单']}, 实际={diff['实际检测']}, 差值={diff['差值']}")
+    58	                elif 'history' in diff:
+    59	                    diff_desc.append(f"{field}: 历史={diff['history']}, 当前={diff['current']}, 差异={diff['diff']}")
+    60	            data['差异说明'] = '; '.join(diff_desc)
+    61	
+    62	        return data
+    63	
+    64	    def export_success_result(self, records: List[GradedRecord]) -> str:
+    65	        file_path = self._get_filename('定级成功结果')
+    66	        self.exported_files['success_result'] = file_path
+    67	
+    68	        if self.dry_run:
+    69	            print(f"[DRY-RUN] 将导出 {len(records)} 条成功记录到: {file_path}")
+    70	            return file_path
+    71	
+    72	        data = [self._to_dict(r) for r in records if not r.is_bad]
+    73	        df = pd.DataFrame(data)
+    74	        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+    75	        print(f"✓ 成功结果已导出: {file_path} (共 {len(data)} 条)")
+    76	        return file_path
+    77	
+    78	    def export_bad_records(self, records: List[GradedRecord]) -> str:
+    79	        file_path = self._get_filename('坏行记录')
+    80	        self.exported_files['bad_records'] = file_path
+    81	
+    82	        if self.dry_run:
+    83	            print(f"[DRY-RUN] 将导出 {len(records)} 条坏行记录到: {file_path}")
+    84	            return file_path
+    85	
+    86	        data = [self._to_dict(r, include_bad_info=True) for r in records if r.is_bad]
+    87	        df = pd.DataFrame(data)
+    88	        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+    89	        print(f"✗ 坏行记录已导出: {file_path} (共 {len(data)} 条)")
+    90	        return file_path
+    91	
+    92	    def export_diff_table(self, records: List[GradedRecord]) -> str:
+    93	        file_path = self._get_filename('差异表')
+    94	        self.exported_files['diff_table'] = file_path
+    95	
+    96	        diff_records = [r for r in records if r.diff_fields]
+    97	
+    98	        if self.dry_run:
+    99	            print(f"[DRY-RUN] 将导出 {len(diff_records)} 条差异记录到: {file_path}")
+   100	            return file_path
+   101	
+   102	        if not diff_records:
+   103	            print(f"ℹ 没有检测到差异记录，跳过差异表导出")
+   104	            return ''
+   105	
+   106	        data = []
+   107	        for r in diff_records:
+   108	            base = {
+   109	                '记录编号': r.main_record.id,
+   110	                '供应商': r.main_record.supplier_name,
+   111	                '茶叶品种': r.main_record.tea_variety,
+   112	                '最终等级': r.final_grade.value,
+   113	            }
+   114	            for field, diff in r.diff_fields.items():
+   115	                row = base.copy()
+   116	                row['差异字段'] = field
+   117	                if '主清单' in diff:
+   118	                    row['主清单值'] = diff['主清单']
+   119	                    row['实际检测值'] = diff['实际检测']
+   120	                    row['差值'] = diff['差值']
+   121	                elif 'history' in diff:
+   122	                    row['历史值'] = diff['history']
+   123	                    row['当前值'] = diff['current']
+   124	                    row['差异值'] = diff['diff']
+   125	                data.append(row)
+   126	
+   127	        df = pd.DataFrame(data)
+   128	        df.to_csv(file_path, index=False, encoding='utf-8-sig')
+   129	        print(f"△ 差异表已导出: {file_path} (共 {len(data)} 条差异项)")
+   130	        return file_path
+   131	
+   132	    def export_operation_log(self, logs: List[Dict[str, Any]]) -> str:
+   133	        file_path = self._get_filename('操作日志', suffix='log')
+   134	        self.exported_files['operation_log'] = file_path
+   135	
+   136	        if self.dry_run:
+   137	            print(f"[DRY-RUN] 将导出 {len(logs)} 条操作日志到: {file_path}")
+   138	            return file_path
+   139	
+   140	        with open(file_path, 'w', encoding='utf-8') as f:
+   141	            for log in logs:
+   142	                level = log.get('level', 'INFO')
+   143	                time = log.get('time', '')
+   144	                record_id = log.get('record_id', '')
+   145	                action = log.get('action', '')
+   146	                reason = log.get('reason', '')
+   147	                
+   148	                extra = []
+   149	                for key, value in log.items():
+   150	                    if key not in ['time', 'level', 'record_id', 'action', 'reason']:
+   151	                        extra.append(f"{key}={value}")
+   152	                extra_str = f" [{', '.join(extra)}]" if extra else ""
+   153	                
+   154	                f.write(f"[{time}] [{level}] [{record_id}] {action}{extra_str}")
+   155	                if reason:
+   156	                    f.write(f" - {reason}")
+   157	                f.write("\n")
+   158	
+   159	        print(f"📋 操作日志已导出: {file_path} (共 {len(logs)} 条)")
+   160	        return file_path
+   161	
+   162	    def export_summary_json(self, result: ProcessingResult) -> str:
+   163	        file_path = self._get_filename('处理汇总', suffix='json')
+   164	        self.exported_files['summary'] = file_path
+   165	
+   166	        summary = {
+   167	            '处理时间': result.process_time.strftime('%Y-%m-%d %H:%M:%S'),
+   168	            '成功记录数': result.success_count,
+   169	            '坏行记录数': result.bad_count,
+   170	            '总记录数': result.success_count + result.bad_count,
+   171	            '总结算金额(元)': round(result.total_amount, 2),
+   172	            '导出文件': self.exported_files,
+   173	            '等级分布': {}
+   174	        }
+   175	
+   176	        all_records = result.graded_records + result.bad_records
+   177	        for grade in GradeLevel:
+   178	            count = sum(1 for r in all_records if r.final_grade == grade)
+   179	            if count > 0:
+   180	                summary['等级分布'][grade.value] = count
+   181	
+   182	        if self.dry_run:
+   183	            print(f"[DRY-RUN] 将导出处理汇总到: {file_path}")
+   184	            print(f"[DRY-RUN] 汇总信息: {json.dumps(summary, ensure_ascii=False, indent=2)}")
+   185	            return file_path
+   186	
+   187	        with open(file_path, 'w', encoding='utf-8') as f:
+   188	            json.dump(summary, f, ensure_ascii=False, indent=2)
+   189	
+   190	        print(f"📊 处理汇总已导出: {file_path}")
+   191	        return file_path
+   192	
+   193	    def export_all(self, result: ProcessingResult) -> Dict[str, str]:
+   194	        all_records = result.graded_records + result.bad_records
+   195	
+   196	        self.export_success_result(result.graded_records)
+   197	        self.export_bad_records(result.bad_records)
+   198	        self.export_diff_table(all_records)
+   199	        self.export_operation_log(result.operation_log)
+   200	        self.export_summary_json(result)
+   201	
+   202	        return self.exported_files
+   203	
+   204	    def generate_review_link(self, record_id: str) -> str:
+   205	        review_file = os.path.join(self.output_dir, f'review_{record_id}_{self.timestamp}.json')
+   206	        self.exported_files[f'review_{record_id}'] = review_file
+   207	
+   208	        if self.dry_run:
+   209	            return f"[DRY-RUN] 复核入口: {review_file}"
+   210	
+   211	        review_info = {
+   212	            '记录编号': record_id,
+   213	            '复核创建时间': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+   214	            '状态': '待复核',
+   215	            '操作入口': f'使用命令: tea-grading review --record-id {record_id} --output-dir {self.output_dir}',
+   216	            '相关文件': self.exported_files
+   217	        }
+   218	
+   219	        with open(review_file, 'w', encoding='utf-8') as f:
+   220	            json.dump(review_info, f, ensure_ascii=False, indent=2)
+   221	
+   222	        return f"复核入口文件: {review_file}"
+
+codex
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `setup.py:16` 定义了 `tea-grading=tea_grading_cli.cli:cli` 控制台入口，`requirements.txt` 和 `setup.py` 均列出运行依赖。
+  - `python3 -m tea_grading_cli.cli --help` 可正常显示 `run`、`review`、`history-check` 命令。
+  - 使用项目内真实样例执行 `run --dry-run`，合规、超阈值、缺失材料、历史回放场景均能跑通；输出包含处理汇总、等级分布、坏行预览、差异预览。
+  - `tea_grading_cli/reader.py` 支持 CSV/XLSX/JSON 读取，`validator.py` 覆盖必填、范围、枚举、日期、重复/缺补充记录校验，`grader.py` 完成定级和金额计算，`exporter.py` 负责成功结果、坏行、差异、日志、汇总和复核入口导出。
+- 阻断问题: 无。完整 pytest 因当前只读沙箱无可用临时目录无法启动，不作为项目自身阻断；核心 CLI 入口已用 dry-run 验证。
+- 建议:
+  - 可补充 README，说明安装方式、示例命令、输入字段格式和输出文件含义，便于交付验收。
+  - `jsonschema` 当前列为依赖但源码未使用，可后续清理或真正用于规则 schema 校验。
+tokens used
+69,500

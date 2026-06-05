@@ -1,0 +1,8 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因:
+- 主要证据: `pyproject.toml` 已声明可安装的 Python 包与控制台入口 `house-verification = house_verification.cli:main`，且 `src/house_verification_cli.egg-info/entry_points.txt` 与之一致；`python -m house_verification.cli --help` 可正常启动并显示 `verify/list-rules/gen-mapping` 三个真实入口；`list-rules` 可列出 13 条内置校验规则；用 `examples/sample_houses.csv` 配合 `examples/field_mapping.json` 跑通了核心链路，`VerificationPipeline` 在内存模式下处理了 15 条样例数据，结果为 9 条正常、6 条异常，说明读入、映射、校验和分流逻辑是通的。
+- 阻断问题: 无
+- 建议: 如后续要补齐更完整的文件格式覆盖，建议明确是否真的需要 `.xls` 支持；如果需要，再补对应依赖和测试。

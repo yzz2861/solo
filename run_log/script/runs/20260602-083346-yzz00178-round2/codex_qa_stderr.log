@@ -1,0 +1,3323 @@
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00178
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019e85cc-101e-7fc1-9b9c-44a0e11c0b79
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00178
+当前轮次: 第二轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00178
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+codex
+我会按“solo质检”的口径只做验证和判断，不改文件、不提交。先确认项目结构、真实入口和原始任务线索，再实际跑安装/启动或测试命令来判断是否阻断。
+exec
+/bin/zsh -lc "rg --files -g '"'!*node_modules*'"' -g '"'!*.png'"' -g '"'!*.jpg'"' -g '"'!*.jpeg'"' -g '"'!*.gif'"' -g '"'!*.webp'"'" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+tests/test_compensation_api.py
+tests/__init__.py
+requirements.txt
+app/services/storage.py
+app/services/processor.py
+app/services/rule_engine.py
+app/services/__init__.py
+app/services/validator.py
+app/main.py
+app/models/schemas.py
+app/models/__init__.py
+app/utils/trace_id_generator.py
+app/utils/__init__.py
+app/__init__.py
+
+exec
+/bin/zsh -lc "find .. -maxdepth 3 -iname '*solo*' -o -iname 'SKILL.md'" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+../yzz00048/node_modules/vite-plugin-trae-solo-badge
+../yzz00038/node_modules/vite-plugin-trae-solo-badge
+../yzz00032/node_modules/vite-plugin-trae-solo-badge
+
+codex
+这里没有自动暴露“solo质检”技能，也没在相邻工作区发现对应 `SKILL.md`，我继续按你给出的质检规则执行。当前项目看起来是一个 Python API 服务，没有 README，下一步读入口、依赖、测试和业务实现。
+exec
+/bin/zsh -lc "sed -n '1,220p' tests/test_compensation_api.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+import pytest
+import warnings
+from datetime import datetime, timedelta
+from fastapi.testclient import TestClient
+import sys
+import os
+
+warnings.filterwarnings("ignore", message="The 'app' shortcut is now deprecated")
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from app.main import app
+from app.models.schemas import (
+    SourceChannel, ProcessAction, ProcessStatus, FailureCategory,
+    CompensationRequest, DetailItem
+)
+from app.services.storage import storage
+from app.utils.trace_id_generator import TraceIdGenerator
+
+client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def clear_storage():
+    """每个测试前清空存储"""
+    storage.clear_all()
+    yield
+    storage.clear_all()
+
+
+def create_detail_item(
+    detail_id="DTL001",
+    powerbank_sn="PB12345678",
+    user_id="USR001",
+    claim_amount=99.0,
+    compensation_amount=None,
+    material_list=None,
+    required_materials=None,
+    loss_time=None,
+    device_model=None,
+    loss_location=None
+):
+    """创建明细项辅助函数"""
+    if loss_time is None:
+        loss_time = datetime.now() - timedelta(days=7)
+    if material_list is None:
+        material_list = ["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+    if required_materials is None:
+        required_materials = ["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+
+    return DetailItem(
+        detail_id=detail_id,
+        powerbank_sn=powerbank_sn,
+        user_id=user_id,
+        loss_time=loss_time,
+        claim_amount=claim_amount,
+        compensation_amount=compensation_amount,
+        material_list=material_list,
+        required_materials=required_materials,
+        device_model=device_model,
+        loss_location=loss_location
+    )
+
+
+class TestComplianceCases:
+    """合规样例测试"""
+
+    def test_normal_compliant_case_single_item(self):
+        """测试：单条明细合规样例 - 可办理"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=99.0,
+            compensation_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101001",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail],
+            operator_id="OPR001"
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.PROCESSABLE.value
+        assert data["processable_count"] == 1
+        assert data["total_count"] == 1
+        assert data["failed_count"] == 0
+        assert data["need_supplement_count"] == 0
+        assert data["locked_count"] == 0
+        assert data["review_count"] == 0
+        assert len(data["processable_details"]) == 1
+        assert len(data["failure_details"]) == 0
+        assert TraceIdGenerator.validate(data["trace_id"])
+
+    def test_compliant_case_multiple_items(self):
+        """测试：多条明细合规样例 - 全部可办理"""
+        details = [
+            create_detail_item(detail_id="DTL001", claim_amount=50.0),
+            create_detail_item(detail_id="DTL002", powerbank_sn="PB87654321", claim_amount=100.0, user_id="USR002"),
+            create_detail_item(detail_id="DTL003", powerbank_sn="CH11223344", claim_amount=80.0, user_id="USR003"),
+        ]
+        request = CompensationRequest(
+            batch_no="BATCH20240101002",
+            source_channel=SourceChannel.OFFLINE_STORE,
+            process_action=ProcessAction.SUBMIT,
+            details=details
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.PROCESSABLE.value
+        assert data["processable_count"] == 3
+        assert data["total_count"] == 3
+        assert data["failed_count"] == 0
+
+
+class TestThresholdCases:
+    """超阈值样例测试"""
+
+    def test_high_amount_threshold(self):
+        """测试：单台赔付超过200元 - 需人工复核（独立分流）"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=299.0,
+            compensation_amount=299.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101003",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        assert data["review_count"] == 1
+        assert data["review_details"][0]["detail_id"] == "DTL001"
+        assert data["manual_review_count"] >= 1
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_AMT_001" in rule_codes
+        assert "超过阈值" in data["review_details"][0]["review_reason"]
+
+    def test_max_claim_amount_boundary(self):
+        """测试：索赔金额边界值 - 刚好等于阈值10000元"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=10000.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101004",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+
+    def test_exceed_max_claim_amount(self):
+        """测试：索赔金额超过最大限额 - 10001元"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=10001.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101005",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.FAILED.value
+        failure = data["failure_details"][0]
+        assert failure["failure_code"] == "VLD_AMT_002"
+        assert "超过最大限额" in failure["failure_message"]
+        assert data["validation_error_count"] >= 1
+
+    def test_frequent_loss_user(self):
+        """测试：用户90天内遗失超过3次 - 需人工复核"""
+        user_id = "USR_FREQ"
+        for i in range(3):
+            storage.record_user_loss(
+                user_id=user_id,
+                loss_time=datetime.now() - timedelta(days=30 - i * 5),
+                compensation_amount=99.0
+
+exec
+/bin/zsh -lc 'find . -maxdepth 3 -type f | sort' in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+./.pytest_cache/.gitignore
+./.pytest_cache/CACHEDIR.TAG
+./.pytest_cache/README.md
+./app/__init__.py
+./app/main.py
+./app/models/__init__.py
+./app/models/schemas.py
+./app/services/__init__.py
+./app/services/processor.py
+./app/services/rule_engine.py
+./app/services/storage.py
+./app/services/validator.py
+./app/utils/__init__.py
+./app/utils/trace_id_generator.py
+./requirements.txt
+./tests/__init__.py
+./tests/test_compensation_api.py
+
+exec
+/bin/zsh -lc 'ls -la' in /Users/bill/Documents/solo/workspaces/yzz00178
+exec
+/bin/zsh -lc "sed -n '1,240p' app/main.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+total 8
+drwxr-xr-x@  6 bill  staff   192 Jun  2 06:31 .
+drwxr-xr-x  58 bill  staff  1856 Jun  2 05:30 ..
+drwxr-xr-x@  6 bill  staff   192 Jun  2 06:31 .pytest_cache
+drwxr-xr-x@  7 bill  staff   224 Jun  2 06:05 app
+-rw-r--r--@  1 bill  staff   117 Jun  2 08:35 requirements.txt
+drwxr-xr-x@  4 bill  staff   128 Jun  2 06:21 tests
+
+ succeeded in 0ms:
+from typing import List, Optional
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.models.schemas import (
+    CompensationRequest, CompensationResponse,
+    ProcessStatus, FailureCategory, ReviewInfo
+)
+from app.services.processor import processor
+from app.services.rule_engine import rule_engine
+from app.services.storage import storage
+from app.utils.trace_id_generator import TraceIdGenerator
+
+app = FastAPI(
+    title="共享充电宝遗失赔付API",
+    description="围绕业务人员围绕共享充电宝遗失赔付完成数据校验、状态分流和后续闭环设计接口",
+    version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/", tags=["健康检查"])
+async def root():
+    """根路径，健康检查"""
+    return {
+        "status": "ok",
+        "service": "共享充电宝遗失赔付API",
+        "version": "1.0.0",
+        "trace_id_example": TraceIdGenerator.generate()
+    }
+
+
+@app.get("/health", tags=["健康检查"])
+async def health_check():
+    """健康检查"""
+    stats = storage.get_statistics()
+    return {
+        "status": "healthy",
+        "statistics": stats
+    }
+
+
+@app.post("/api/compensation/process", response_model=CompensationResponse, tags=["赔付处理"])
+async def process_compensation(request: CompensationRequest):
+    """处理共享充电宝遗失赔付请求
+
+    接收批次号、明细项、来源渠道、处理动作和复核意见，返回可办理、需补充、已锁定和失败解释。
+
+    - **规则命中**：自动检测业务规则并返回具体命中的规则信息
+    - **人工复核**：对于需要人工介入的申请，明确标注并给出处理建议
+    - **重复提交**：检测重复批次和重复明细项，防止重复处理
+    """
+    try:
+        response = processor.process(request)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"服务端错误: {str(e)}")
+
+
+@app.get("/api/compensation/replay/{trace_id}", tags=["历史回放"])
+async def replay_compensation(trace_id: str):
+    """根据可追溯编号回放历史处理记录
+
+    用于查询历史处理结果，支持问题排查和审计追溯。
+    """
+    result = processor.replay(trace_id)
+    if not result:
+        raise HTTPException(status_code=404, detail=f"未找到追溯编号为{trace_id}的处理记录")
+    return result
+
+
+@app.get("/api/compensation/history", tags=["历史查询"])
+async def get_compensation_history(
+    batch_no: Optional[str] = Query(None, description="批次号"),
+    trace_id: Optional[str] = Query(None, description="可追溯编号")
+):
+    """查询赔付处理历史
+
+    支持按批次号或追溯编号查询处理历史记录。
+    """
+    if not batch_no and not trace_id:
+        raise HTTPException(status_code=400, detail="请至少提供batch_no或trace_id中的一个参数")
+
+    history = processor.get_history(batch_no=batch_no, trace_id=trace_id)
+    return {
+        "count": len(history),
+        "records": history
+    }
+
+
+@app.get("/api/rules", tags=["规则管理"])
+async def get_all_rules():
+    """获取所有业务规则"""
+    return {
+        "rules": rule_engine.get_all_rules()
+    }
+
+
+@app.post("/api/rules/{rule_id}/enable", tags=["规则管理"])
+async def enable_rule(rule_id: str):
+    """启用指定规则"""
+    rule_engine.enable_rule(rule_id)
+    return {"status": "success", "message": f"规则{rule_id}已启用"}
+
+
+@app.post("/api/rules/{rule_id}/disable", tags=["规则管理"])
+async def disable_rule(rule_id: str):
+    """禁用指定规则"""
+    rule_engine.disable_rule(rule_id)
+    return {"status": "success", "message": f"规则{rule_id}已禁用"}
+
+
+@app.get("/api/status/definitions", tags=["状态定义"])
+async def get_status_definitions():
+    """获取所有状态和错误码定义"""
+    return {
+        "process_status": {
+            s.name: s.value for s in ProcessStatus
+        },
+        "failure_category": {
+            c.name: c.value for c in FailureCategory
+        },
+        "status_explanations": {
+            "PROCESSABLE": "可办理：所有校验通过，可以正常办理赔付",
+            "NEED_SUPPLEMENT": "需补充：材料不完整，需要补充后再办理",
+            "LOCKED": "已锁定：命中风控规则（如黑名单），需人工介入审核",
+            "MANUAL_REVIEW": "需人工复核：命中需审核类规则，等待审核人员处理",
+            "FAILED": "失败：请求校验不通过或命中拒绝规则"
+        },
+        "failure_category_explanations": {
+            "RULE_HIT": "规则命中：自动拒绝/锁定类规则（如黑名单），不予赔付",
+            "MANUAL_REVIEW": "人工复核：需人工审核类规则，待审核",
+            "DUPLICATE_SUBMIT": "重复提交：批次或明细项已处理过",
+            "VALIDATION_ERROR": "校验错误：参数不合法",
+            "SYSTEM_ERROR": "系统错误：服务端异常"
+        }
+    }
+
+
+@app.post("/api/admin/blacklist/add", tags=["管理接口"])
+async def add_to_blacklist(user_id: str = Query(..., description="用户ID")):
+    """添加用户到黑名单"""
+    storage.add_to_blacklist(user_id)
+    return {"status": "success", "message": f"用户{user_id}已加入黑名单"}
+
+
+@app.post("/api/admin/blacklist/remove", tags=["管理接口"])
+async def remove_from_blacklist(user_id: str = Query(..., description="用户ID")):
+    """从黑名单移除用户"""
+    storage.remove_from_blacklist(user_id)
+    return {"status": "success", "message": f"用户{user_id}已从黑名单移除"}
+
+
+@app.post("/api/admin/high-risk/model/add", tags=["管理接口"])
+async def add_high_risk_model(model: str = Query(..., description="设备型号")):
+    """添加高风险设备型号"""
+    storage.add_high_risk_model(model)
+    return {"status": "success", "message": f"设备型号{model}已加入高风险列表"}
+
+
+@app.post("/api/admin/high-risk/location/add", tags=["管理接口"])
+async def add_high_risk_location(location: str = Query(..., description="地点名称")):
+    """添加高风险地区"""
+    storage.add_high_risk_location(location)
+    return {"status": "success", "message": f"地点{location}已加入高风险列表"}
+
+
+@app.post("/api/admin/clear", tags=["管理接口"])
+async def clear_all_data():
+    """清空所有数据（用于测试）"""
+    storage.clear_all()
+    return {"status": "success", "message": "所有数据已清空"}
+
+
+@app.get("/api/admin/statistics", tags=["管理接口"])
+async def get_statistics():
+    """获取系统统计信息"""
+    return storage.get_statistics()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+exec
+/bin/zsh -lc "sed -n '1,160p' requirements.txt" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+fastapi>=0.104.1,<0.110.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+pytest>=7.4.3
+httpx>=0.25.2,<0.28.0
+python-dateutil>=2.8.2
+
+codex
+入口和依赖已经能定位：`app/main.py` 暴露 FastAPI，`requirements.txt` 有运行依赖。接下来我会检查模型、规则引擎和处理流程，再跑项目自带测试/基础启动验证，看是否有真实链路失败。
+exec
+/bin/zsh -lc "sed -n '1,260p' app/models/schemas.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+from enum import Enum
+from typing import List, Optional, Dict, Any
+from datetime import datetime
+from pydantic import BaseModel, Field, field_validator
+
+
+class SourceChannel(str, Enum):
+    """来源渠道"""
+    ONLINE_APP = "ONLINE_APP"
+    OFFLINE_STORE = "OFFLINE_STORE"
+    CUSTOMER_SERVICE = "CUSTOMER_SERVICE"
+    THIRD_PARTY = "THIRD_PARTY"
+
+
+class ProcessAction(str, Enum):
+    """处理动作"""
+    SUBMIT = "SUBMIT"
+    REVIEW = "REVIEW"
+    APPROVE = "APPROVE"
+    REJECT = "REJECT"
+    SUPPLEMENT = "SUPPLEMENT"
+    LOCK = "LOCK"
+
+
+class ProcessStatus(str, Enum):
+    """处理状态"""
+    PROCESSABLE = "PROCESSABLE"
+    NEED_SUPPLEMENT = "NEED_SUPPLEMENT"
+    LOCKED = "LOCKED"
+    MANUAL_REVIEW = "MANUAL_REVIEW"
+    FAILED = "FAILED"
+
+
+class FailureCategory(str, Enum):
+    """失败分类"""
+    RULE_HIT = "RULE_HIT"
+    MANUAL_REVIEW = "MANUAL_REVIEW"
+    DUPLICATE_SUBMIT = "DUPLICATE_SUBMIT"
+    VALIDATION_ERROR = "VALIDATION_ERROR"
+    SYSTEM_ERROR = "SYSTEM_ERROR"
+
+
+class DetailItem(BaseModel):
+    """明细项"""
+    detail_id: str = Field(..., description="明细项唯一ID")
+    powerbank_sn: str = Field(..., description="充电宝序列号")
+    user_id: str = Field(..., description="用户ID")
+    loss_time: datetime = Field(..., description="遗失时间")
+    claim_amount: float = Field(..., description="索赔金额", gt=0)
+    compensation_amount: Optional[float] = Field(None, description="赔付金额", ge=0)
+    material_list: List[str] = Field(default_factory=list, description="已提交材料清单")
+    required_materials: List[str] = Field(default_factory=list, description="应提交材料清单")
+    device_model: Optional[str] = Field(None, description="设备型号")
+    loss_location: Optional[str] = Field(None, description="遗失地点")
+    extra: Optional[Dict[str, Any]] = Field(default=None, description="扩展字段")
+
+
+class CompensationRequest(BaseModel):
+    """赔付请求"""
+    batch_no: str = Field(..., description="批次号", min_length=8, max_length=32)
+    source_channel: SourceChannel = Field(..., description="来源渠道")
+    process_action: ProcessAction = Field(..., description="处理动作")
+    review_opinion: Optional[str] = Field(None, description="复核意见", max_length=500)
+    details: List[DetailItem] = Field(..., description="明细项列表", min_length=1)
+    operator_id: Optional[str] = Field(None, description="操作人ID")
+    request_time: Optional[datetime] = Field(default_factory=datetime.now, description="请求时间")
+
+    @field_validator('batch_no')
+    def validate_batch_no(cls, v):
+        if not v.replace('_', '').replace('-', '').isalnum():
+            raise ValueError("批次号只能包含字母、数字、下划线和连字符")
+        return v
+
+
+class FailureDetail(BaseModel):
+    """失败详情"""
+    detail_id: Optional[str] = Field(None, description="关联明细项ID")
+    failure_category: FailureCategory = Field(..., description="失败分类")
+    failure_code: str = Field(..., description="失败代码")
+    failure_message: str = Field(..., description="失败描述")
+    rule_id: Optional[str] = Field(None, description="命中规则ID")
+    rule_name: Optional[str] = Field(None, description="命中规则名称")
+    suggestion: Optional[str] = Field(None, description="处理建议")
+
+
+class SupplementInfo(BaseModel):
+    """需补充信息"""
+    detail_id: str = Field(..., description="关联明细项ID")
+    missing_materials: List[str] = Field(..., description="缺失材料清单")
+    supplement_deadline: Optional[datetime] = Field(None, description="补充截止时间")
+
+
+class ReviewInfo(BaseModel):
+    """人工复核信息"""
+    detail_id: str = Field(..., description="关联明细项ID")
+    review_reason: str = Field(..., description="复核原因")
+    review_rules: List[FailureDetail] = Field(..., description="触发复核的规则列表")
+
+
+class CompensationResponse(BaseModel):
+    """赔付响应"""
+    trace_id: str = Field(..., description="可追溯编号")
+    batch_no: str = Field(..., description="批次号")
+    process_status: ProcessStatus = Field(..., description="处理状态")
+    processable_count: int = Field(0, description="可办理数量")
+    need_supplement_count: int = Field(0, description="需补充数量")
+    locked_count: int = Field(0, description="已锁定数量")
+    review_count: int = Field(0, description="需人工复核数量")
+    failed_count: int = Field(0, description="失败数量")
+    total_count: int = Field(..., description="总数量")
+    rule_hit_count: int = Field(0, description="规则命中数量")
+    manual_review_count: int = Field(0, description="人工复核数量")
+    duplicate_submit_count: int = Field(0, description="重复提交数量")
+    validation_error_count: int = Field(0, description="校验错误数量")
+    processable_details: List[DetailItem] = Field(default_factory=list, description="可办理明细")
+    need_supplement_details: List[SupplementInfo] = Field(default_factory=list, description="需补充明细")
+    locked_details: List[DetailItem] = Field(default_factory=list, description="已锁定明细")
+    review_details: List[ReviewInfo] = Field(default_factory=list, description="需人工复核明细")
+    failure_details: List[FailureDetail] = Field(default_factory=list, description="失败详情列表")
+    process_time: datetime = Field(default_factory=datetime.now, description="处理时间")
+    remark: Optional[str] = Field(None, description="备注")
+
+exec
+/bin/zsh -lc "sed -n '1,260p' app/services/validator.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+from typing import List, Tuple, Optional
+from datetime import datetime, timedelta
+from app.models.schemas import (
+    CompensationRequest, DetailItem, FailureDetail,
+    FailureCategory, SourceChannel, ProcessAction
+)
+
+
+class DataValidator:
+    """数据校验服务
+
+    负责请求参数合法性校验，包括：
+    - 必填字段校验
+    - 格式规范校验
+    - 业务逻辑校验
+    - 边界条件校验
+    """
+
+    POWERBANK_SN_PATTERN_PREFIXES = ['PB', 'CH', 'SP']
+    MAX_CLAIM_AMOUNT = 10000.0
+    MAX_SUPPLEMENT_DAYS = 30
+
+    @classmethod
+    def validate_request(cls, request: CompensationRequest) -> List[FailureDetail]:
+        """校验整个请求
+
+        Args:
+            request: 赔付请求
+
+        Returns:
+            校验失败详情列表，空列表表示全部通过
+        """
+        failures = []
+
+        batch_failures = cls._validate_batch(request)
+        failures.extend(batch_failures)
+
+        channel_failures = cls._validate_source_channel(request)
+        failures.extend(channel_failures)
+
+        action_failures = cls._validate_process_action(request)
+        failures.extend(action_failures)
+
+        detail_ids = set()
+        for detail in request.details:
+            detail_failures = cls._validate_detail(detail)
+            failures.extend(detail_failures)
+
+            if detail.detail_id in detail_ids:
+                failures.append(FailureDetail(
+                    detail_id=detail.detail_id,
+                    failure_category=FailureCategory.VALIDATION_ERROR,
+                    failure_code="VLD_DUP_001",
+                    failure_message=f"明细项ID重复: {detail.detail_id}",
+                    suggestion="请检查明细项ID，确保唯一"
+                ))
+            detail_ids.add(detail.detail_id)
+
+        return failures
+
+    @classmethod
+    def _validate_batch(cls, request: CompensationRequest) -> List[FailureDetail]:
+        """校验批次号"""
+        failures = []
+        batch_no = request.batch_no
+
+        if len(batch_no) < 8:
+            failures.append(FailureDetail(
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_BAT_001",
+                failure_message=f"批次号长度不足，当前长度: {len(batch_no)}，最小长度: 8",
+                suggestion="请输入不少于8位的批次号"
+            ))
+
+        if len(batch_no) > 32:
+            failures.append(FailureDetail(
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_BAT_002",
+                failure_message=f"批次号长度超限，当前长度: {len(batch_no)}，最大长度: 32",
+                suggestion="请输入不超过32位的批次号"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_source_channel(cls, request: CompensationRequest) -> List[FailureDetail]:
+        """校验来源渠道"""
+        failures = []
+
+        valid_channels = [e.value for e in SourceChannel]
+        if request.source_channel.value not in valid_channels:
+            failures.append(FailureDetail(
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_CHN_001",
+                failure_message=f"无效的来源渠道: {request.source_channel}",
+                suggestion=f"请选择有效的来源渠道: {', '.join(valid_channels)}"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_process_action(cls, request: CompensationRequest) -> List[FailureDetail]:
+        """校验处理动作"""
+        failures = []
+
+        valid_actions = [e.value for e in ProcessAction]
+        if request.process_action.value not in valid_actions:
+            failures.append(FailureDetail(
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_ACT_001",
+                failure_message=f"无效的处理动作: {request.process_action}",
+                suggestion=f"请选择有效的处理动作: {', '.join(valid_actions)}"
+            ))
+
+        if request.process_action in [ProcessAction.APPROVE, ProcessAction.REJECT, ProcessAction.REVIEW]:
+            if not request.review_opinion or len(request.review_opinion.strip()) == 0:
+                failures.append(FailureDetail(
+                    failure_category=FailureCategory.VALIDATION_ERROR,
+                    failure_code="VLD_ACT_002",
+                    failure_message=f"处理动作为{request.process_action.value}时，复核意见不能为空",
+                    suggestion="请填写复核意见后再提交"
+                ))
+
+        return failures
+
+    @classmethod
+    def _validate_detail(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验单个明细项"""
+        failures = []
+
+        id_failures = cls._validate_detail_id(detail)
+        failures.extend(id_failures)
+
+        sn_failures = cls._validate_powerbank_sn(detail)
+        failures.extend(sn_failures)
+
+        user_failures = cls._validate_user_id(detail)
+        failures.extend(user_failures)
+
+        time_failures = cls._validate_loss_time(detail)
+        failures.extend(time_failures)
+
+        amount_failures = cls._validate_amounts(detail)
+        failures.extend(amount_failures)
+
+        return failures
+
+    @classmethod
+    def _validate_detail_id(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验明细项ID"""
+        failures = []
+
+        if not detail.detail_id or len(detail.detail_id.strip()) == 0:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_DTL_001",
+                failure_message="明细项ID不能为空",
+                suggestion="请填写明细项ID"
+            ))
+        elif len(detail.detail_id) > 64:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_DTL_002",
+                failure_message=f"明细项ID长度超限: {len(detail.detail_id)}，最大长度: 64",
+                suggestion="明细项ID请控制在64字符以内"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_powerbank_sn(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验充电宝序列号"""
+        failures = []
+        sn = detail.powerbank_sn
+
+        if not sn or len(sn.strip()) == 0:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_001",
+                failure_message="充电宝序列号不能为空",
+                suggestion="请填写充电宝序列号"
+            ))
+            return failures
+
+        valid_prefix = False
+        for prefix in cls.POWERBANK_SN_PATTERN_PREFIXES:
+            if sn.startswith(prefix):
+                valid_prefix = True
+                break
+
+        if not valid_prefix:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_002",
+                failure_message=f"充电宝序列号格式错误: {sn}，应以{', '.join(cls.POWERBANK_SN_PATTERN_PREFIXES)}开头",
+                suggestion="请检查充电宝序列号格式"
+            ))
+
+        if len(sn) < 8:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_003",
+                failure_message=f"充电宝序列号长度不足: {len(sn)}，最小长度: 8",
+                suggestion="请输入完整的充电宝序列号"
+            ))
+
+        if len(sn) > 32:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_004",
+                failure_message=f"充电宝序列号长度超限: {len(sn)}，最大长度: 32",
+                suggestion="请检查充电宝序列号是否正确"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_user_id(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验用户ID"""
+        failures = []
+
+        if not detail.user_id or len(detail.user_id.strip()) == 0:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_USR_001",
+                failure_message="用户ID不能为空",
+                suggestion="请填写用户ID"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_loss_time(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验遗失时间"""
+        failures = []
+        loss_time = detail.loss_time
+
+        if not loss_time:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_LTM_001",
+                failure_message="遗失时间不能为空",
+                suggestion="请填写遗失时间"
+            ))
+            return failures
+
+        now = datetime.now()
+
+        if loss_time > now:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+
+exec
+/bin/zsh -lc "sed -n '1,280p' app/services/storage.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+from typing import Dict, List, Optional, Set, Tuple
+from datetime import datetime
+from collections import defaultdict
+
+
+class InMemoryStorage:
+    """内存存储
+
+    用于存储：
+    - 已处理的批次号（防重复提交）
+    - 已处理的明细项ID（防重复处理）
+    - 用户历史遗失记录
+    - 设备历史遗失记录
+    - 处理历史记录（用于历史回放）
+    """
+
+    def __init__(self):
+        self._processed_batches: Dict[str, datetime] = {}
+        self._processed_details: Dict[str, datetime] = {}
+        self._user_loss_history: Dict[str, Dict] = defaultdict(lambda: {
+            'count_90d': 0,
+            'total_compensation': 0,
+            'loss_records': []
+        })
+        self._device_loss_history: Dict[str, Dict] = defaultdict(lambda: {
+            'last_loss_time': None,
+            'loss_count': 0
+        })
+        self._user_blacklist: Set[str] = set()
+        self._high_risk_models: Set[str] = set()
+        self._high_risk_locations: Set[str] = set()
+        self._process_history: List[Dict] = []
+        self._batch_processing_status: Dict[str, str] = {}
+
+    def is_batch_processed(self, batch_no: str) -> bool:
+        """检查批次是否已处理"""
+        return batch_no in self._processed_batches
+
+    def mark_batch_processed(self, batch_no: str, status: str = 'COMPLETED'):
+        """标记批次为已处理"""
+        self._processed_batches[batch_no] = datetime.now()
+        self._batch_processing_status[batch_no] = status
+
+    def get_batch_status(self, batch_no: str) -> Optional[str]:
+        """获取批次处理状态"""
+        return self._batch_processing_status.get(batch_no)
+
+    def get_batch_process_time(self, batch_no: str) -> Optional[datetime]:
+        """获取批次处理时间"""
+        return self._processed_batches.get(batch_no)
+
+    def is_detail_processed(self, detail_id: str) -> bool:
+        """检查明细项是否已处理"""
+        return detail_id in self._processed_details
+
+    def mark_detail_processed(self, detail_id: str):
+        """标记明细项为已处理"""
+        self._processed_details[detail_id] = datetime.now()
+
+    def record_user_loss(self, user_id: str, loss_time: datetime, compensation_amount: float):
+        """记录用户遗失记录"""
+        history = self._user_loss_history[user_id]
+        history['count_90d'] += 1
+        history['total_compensation'] += compensation_amount or 0
+        history['loss_records'].append({
+            'loss_time': loss_time,
+            'compensation_amount': compensation_amount
+        })
+        self._cleanup_old_user_records(user_id)
+
+    def _cleanup_old_user_records(self, user_id: str):
+        """清理超过90天的用户记录"""
+        history = self._user_loss_history[user_id]
+        now = datetime.now()
+        recent_records = []
+        count_90d = 0
+
+        for record in history['loss_records']:
+            days_diff = (now - record['loss_time']).days
+            if days_diff <= 90:
+                recent_records.append(record)
+                count_90d += 1
+
+        history['loss_records'] = recent_records
+        history['count_90d'] = count_90d
+
+    def record_device_loss(self, powerbank_sn: str, loss_time: datetime):
+        """记录设备遗失记录"""
+        history = self._device_loss_history[powerbank_sn]
+        history['last_loss_time'] = loss_time
+        history['loss_count'] += 1
+
+    def get_user_history(self, user_id: str) -> Dict:
+        """获取用户历史记录"""
+        return self._user_loss_history.get(user_id, {
+            'count_90d': 0,
+            'total_compensation': 0,
+            'loss_records': []
+        })
+
+    def get_device_history(self, powerbank_sn: str) -> Dict:
+        """获取设备历史记录"""
+        return self._device_loss_history.get(powerbank_sn, {
+            'last_loss_time': None,
+            'loss_count': 0
+        })
+
+    def add_to_blacklist(self, user_id: str):
+        """添加用户到黑名单"""
+        self._user_blacklist.add(user_id)
+
+    def remove_from_blacklist(self, user_id: str):
+        """从黑名单移除用户"""
+        self._user_blacklist.discard(user_id)
+
+    def is_user_blacklisted(self, user_id: str) -> bool:
+        """检查用户是否在黑名单"""
+        return user_id in self._user_blacklist
+
+    def add_high_risk_model(self, model: str):
+        """添加高风险设备型号"""
+        self._high_risk_models.add(model)
+
+    def remove_high_risk_model(self, model: str):
+        """移除高风险设备型号"""
+        self._high_risk_models.discard(model)
+
+    def add_high_risk_location(self, location: str):
+        """添加高风险地区"""
+        self._high_risk_locations.add(location)
+
+    def remove_high_risk_location(self, location: str):
+        """移除高风险地区"""
+        self._high_risk_locations.discard(location)
+
+    def get_context_data(self) -> Dict:
+        """获取规则引擎需要的上下文数据"""
+        return {
+            'user_loss_history': dict(self._user_loss_history),
+            'device_loss_history': dict(self._device_loss_history),
+            'user_blacklist': list(self._user_blacklist),
+            'high_risk_models': list(self._high_risk_models),
+            'high_risk_locations': list(self._high_risk_locations)
+        }
+
+    def record_process_history(self, trace_id: str, batch_no: str, request_data: Dict, response_data: Dict):
+        """记录处理历史（用于历史回放）"""
+        self._process_history.append({
+            'trace_id': trace_id,
+            'batch_no': batch_no,
+            'request': request_data,
+            'response': response_data,
+            'process_time': datetime.now()
+        })
+
+    def get_process_history(self, batch_no: str = None, trace_id: str = None) -> List[Dict]:
+        """查询处理历史"""
+        results = self._process_history
+
+        if batch_no:
+            results = [h for h in results if h['batch_no'] == batch_no]
+
+        if trace_id:
+            results = [h for h in results if h['trace_id'] == trace_id]
+
+        return sorted(results, key=lambda x: x['process_time'], reverse=True)
+
+    def clear_all(self):
+        """清空所有数据（用于测试）"""
+        self._processed_batches.clear()
+        self._processed_details.clear()
+        self._user_loss_history.clear()
+        self._device_loss_history.clear()
+        self._user_blacklist.clear()
+        self._high_risk_models.clear()
+        self._high_risk_locations.clear()
+        self._process_history.clear()
+        self._batch_processing_status.clear()
+
+    def get_statistics(self) -> Dict:
+        """获取统计信息"""
+        return {
+            'processed_batches': len(self._processed_batches),
+            'processed_details': len(self._processed_details),
+            'users_with_history': len(self._user_loss_history),
+            'devices_with_history': len(self._device_loss_history),
+            'blacklist_users': len(self._user_blacklist),
+            'high_risk_models': len(self._high_risk_models),
+            'high_risk_locations': len(self._high_risk_locations),
+            'process_history_records': len(self._process_history)
+        }
+
+
+storage = InMemoryStorage()
+
+exec
+/bin/zsh -lc "sed -n '1,320p' app/services/rule_engine.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+from typing import List, Dict, Optional, Callable, Tuple
+from datetime import datetime, timedelta
+from app.models.schemas import (
+    DetailItem, FailureDetail, FailureCategory, SourceChannel
+)
+
+
+class Rule:
+    """规则定义"""
+
+    def __init__(
+        self,
+        rule_id: str,
+        rule_name: str,
+        rule_type: str,
+        check_func: Callable,
+        failure_code: str,
+        failure_message: str,
+        suggestion: str,
+        priority: int = 0,
+        enabled: bool = True
+    ):
+        self.rule_id = rule_id
+        self.rule_name = rule_name
+        self.rule_type = rule_type
+        self.check_func = check_func
+        self.failure_code = failure_code
+        self.failure_message = failure_message
+        self.suggestion = suggestion
+        self.priority = priority
+        self.enabled = enabled
+
+    def check(self, detail: DetailItem, context: Dict = None) -> Optional[FailureDetail]:
+        """执行规则检查"""
+        if not self.enabled:
+            return None
+
+        context = context or {}
+        is_violated = self.check_func(detail, context)
+
+        if is_violated:
+            return FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.RULE_HIT,
+                failure_code=self.failure_code,
+                failure_message=self.failure_message,
+                rule_id=self.rule_id,
+                rule_name=self.rule_name,
+                suggestion=self.suggestion
+            )
+
+        return None
+
+
+class RuleEngine:
+    """规则引擎
+
+    负责业务规则判断和阈值检测，包括：
+    - 赔付金额阈值规则
+    - 用户历史赔付规则
+    - 黑名单规则
+    - 高风险设备规则
+    - 高风险地区规则
+    - 频繁申请规则
+    - 人工复核规则
+    """
+
+    def __init__(self):
+        self._rules: List[Rule] = []
+        self._init_default_rules()
+
+    def _init_default_rules(self):
+        """初始化默认规则"""
+
+        def check_amount_threshold(detail, context):
+            """金额阈值规则：单台赔付超过200元需人工复核"""
+            threshold = context.get('high_amount_threshold', 200.0)
+            claim_amount = detail.compensation_amount or detail.claim_amount
+            return claim_amount > threshold
+
+        def check_frequent_loss(detail, context):
+            """频繁遗失规则：用户90天内遗失超过3次"""
+            user_loss_history = context.get('user_loss_history', {})
+            user_id = detail.user_id
+            loss_count = user_loss_history.get(user_id, {}).get('count_90d', 0)
+            return loss_count >= 3
+
+        def check_blacklist_user(detail, context):
+            """黑名单规则：用户在黑名单中"""
+            blacklist = context.get('user_blacklist', [])
+            return detail.user_id in blacklist
+
+        def check_high_risk_device(detail, context):
+            """高风险设备规则：设备型号存在异常高遗失率"""
+            high_risk_models = context.get('high_risk_models', [])
+            return detail.device_model in high_risk_models
+
+        def check_high_risk_location(detail, context):
+            """高风险地区规则：遗失地点为高风险区域"""
+            high_risk_locations = context.get('high_risk_locations', [])
+            return detail.loss_location in high_risk_locations
+
+        def check_total_compensation(detail, context):
+            """累计赔付规则：用户累计赔付超过500元"""
+            user_loss_history = context.get('user_loss_history', {})
+            user_id = detail.user_id
+            total_comp = user_loss_history.get(user_id, {}).get('total_compensation', 0)
+            current_amount = detail.compensation_amount or detail.claim_amount
+            return (total_comp + current_amount) > 500
+
+        def check_same_device_loss(detail, context):
+            """同设备重复遗失规则：同一设备180天内重复遗失"""
+            device_loss_history = context.get('device_loss_history', {})
+            sn = detail.powerbank_sn
+            last_loss_time = device_loss_history.get(sn, {}).get('last_loss_time')
+            if last_loss_time:
+                if isinstance(last_loss_time, str):
+                    last_loss_time = datetime.fromisoformat(last_loss_time.replace('Z', '+00:00'))
+                days_diff = (detail.loss_time - last_loss_time).days
+                return days_diff <= 180
+            return False
+
+        def check_manual_review_required(detail, context):
+            """人工复核规则：来自第三方渠道且金额超过100元"""
+            source_channel = context.get('source_channel')
+            amount = detail.compensation_amount or detail.claim_amount
+            return source_channel == SourceChannel.THIRD_PARTY and amount > 100
+
+        self._rules = [
+            Rule(
+                rule_id="RULE_AMT_001",
+                rule_name="高额赔付复核规则",
+                rule_type="AMOUNT",
+                check_func=check_amount_threshold,
+                failure_code="RUL_AMT_001",
+                failure_message="单台赔付金额超过阈值，需人工复核",
+                suggestion="请人工复核该笔申请的合理性",
+                priority=10,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_FRQ_001",
+                rule_name="频繁遗失规则",
+                rule_type="FREQUENCY",
+                check_func=check_frequent_loss,
+                failure_code="RUL_FRQ_001",
+                failure_message="用户90天内遗失次数超过阈值",
+                suggestion="请核实用户遗失情况的真实性",
+                priority=20,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_BLK_001",
+                rule_name="用户黑名单规则",
+                rule_type="BLACKLIST",
+                check_func=check_blacklist_user,
+                failure_code="RUL_BLK_001",
+                failure_message="用户在黑名单中，不予赔付",
+                suggestion="该用户存在恶意索赔记录，请直接拒赔",
+                priority=100,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_DEV_001",
+                rule_name="高风险设备规则",
+                rule_type="DEVICE",
+                check_func=check_high_risk_device,
+                failure_code="RUL_DEV_001",
+                failure_message="该设备型号存在异常高遗失率",
+                suggestion="请核实设备是否存在质量问题",
+                priority=30,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_LOC_001",
+                rule_name="高风险地区规则",
+                rule_type="LOCATION",
+                check_func=check_high_risk_location,
+                failure_code="RUL_LOC_001",
+                failure_message="遗失地点为高风险区域",
+                suggestion="请核实该地点遗失情况，必要时联系用户确认",
+                priority=40,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_TOT_001",
+                rule_name="累计赔付超限规则",
+                rule_type="AMOUNT",
+                check_func=check_total_compensation,
+                failure_code="RUL_TOT_001",
+                failure_message="用户累计赔付金额超过阈值",
+                suggestion="请核实用户累计赔付情况，评估是否继续赔付",
+                priority=15,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_DUP_001",
+                rule_name="同设备重复遗失规则",
+                rule_type="FREQUENCY",
+                check_func=check_same_device_loss,
+                failure_code="RUL_DUP_001",
+                failure_message="该设备180天内存在重复遗失记录",
+                suggestion="请核实是否为同一设备重复遗失，是否存在欺诈",
+                priority=25,
+                enabled=True
+            ),
+            Rule(
+                rule_id="RULE_MNL_001",
+                rule_name="第三方渠道复核规则",
+                rule_type="MANUAL",
+                check_func=check_manual_review_required,
+                failure_code="RUL_MNL_001",
+                failure_message="第三方渠道且金额超过100元，需人工复核",
+                suggestion="请人工复核第三方渠道提交的申请",
+                priority=50,
+                enabled=True
+            )
+        ]
+
+        self._rules.sort(key=lambda r: r.priority, reverse=True)
+
+    def add_rule(self, rule: Rule):
+        """添加规则"""
+        self._rules.append(rule)
+        self._rules.sort(key=lambda r: r.priority, reverse=True)
+
+    def enable_rule(self, rule_id: str):
+        """启用规则"""
+        for rule in self._rules:
+            if rule.rule_id == rule_id:
+                rule.enabled = True
+                break
+
+    def disable_rule(self, rule_id: str):
+        """禁用规则"""
+        for rule in self._rules:
+            if rule.rule_id == rule_id:
+                rule.enabled = False
+                break
+
+    def check_detail(
+        self,
+        detail: DetailItem,
+        context: Dict = None,
+        stop_on_first_hit: bool = False
+    ) -> Tuple[List[FailureDetail], List[FailureDetail]]:
+        """检查单条明细项的规则
+
+        Args:
+            detail: 明细项
+            context: 上下文数据（用户历史、黑名单等）
+            stop_on_first_hit: 是否在命中第一条规则后停止
+
+        Returns:
+            (需锁定的规则, 需人工复核的规则)
+        """
+        context = context or {}
+        locked_rules: List[FailureDetail] = []
+        review_rules: List[FailureDetail] = []
+
+        for rule in self._rules:
+            result = rule.check(detail, context)
+            if result:
+                if rule.rule_type == 'BLACKLIST':
+                    locked_rules.append(result)
+                else:
+                    result.failure_category = FailureCategory.MANUAL_REVIEW
+                    review_rules.append(result)
+
+                if stop_on_first_hit:
+                    break
+
+        return locked_rules, review_rules
+
+    def check_details(
+        self,
+        details: List[DetailItem],
+        context: Dict = None
+    ) -> Dict[str, Dict]:
+        """批量检查明细项
+
+        Args:
+            details: 明细项列表
+            context: 上下文数据
+
+        Returns:
+            检查结果字典，key为detail_id
+        """
+        results = {}
+        for detail in details:
+            locked, review = self.check_detail(detail, context)
+            results[detail.detail_id] = {
+                'locked_rules': locked,
+                'review_rules': review,
+                'should_lock': len(locked) > 0,
+                'should_review': len(review) > 0 and len(locked) == 0
+            }
+        return results
+
+    def get_all_rules(self) -> List[Dict]:
+        """获取所有规则信息"""
+        return [
+            {
+                'rule_id': r.rule_id,
+                'rule_name': r.rule_name,
+                'rule_type': r.rule_type,
+                'failure_code': r.failure_code,
+                'priority': r.priority,
+                'enabled': r.enabled
+            }
+            for r in self._rules
+        ]
+
+
+rule_engine = RuleEngine()
+
+exec
+/bin/zsh -lc "sed -n '1,300p' app/services/processor.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+from typing import List, Dict, Tuple, Optional
+from datetime import datetime, timedelta
+import json
+
+from app.models.schemas import (
+    CompensationRequest, CompensationResponse,
+    DetailItem, FailureDetail, SupplementInfo, ReviewInfo,
+    ProcessStatus, FailureCategory, ProcessAction
+)
+from app.services.validator import DataValidator
+from app.services.rule_engine import rule_engine
+from app.services.storage import storage
+from app.utils.trace_id_generator import TraceIdGenerator
+
+
+class CompensationProcessor:
+    """赔付业务处理器
+
+    负责核心业务流程：
+    1. 重复提交检测
+    2. 数据校验
+    3. 规则引擎检查
+    4. 状态分流（可办理、需补充、已锁定、需人工复核、失败）
+    5. 后续闭环处理
+    """
+
+    @classmethod
+    def process(cls, request: CompensationRequest) -> CompensationResponse:
+        """处理赔付请求
+
+        Args:
+            request: 赔付请求
+
+        Returns:
+            赔付响应
+        """
+        trace_id = TraceIdGenerator.generate(
+            batch_no=request.batch_no,
+            user_id=request.operator_id
+        )
+
+        try:
+            response = cls._process_internal(request, trace_id)
+
+            request_dict = json.loads(request.model_dump_json())
+            response_dict = json.loads(response.model_dump_json())
+            storage.record_process_history(trace_id, request.batch_no, request_dict, response_dict)
+
+            return response
+
+        except Exception as e:
+            return CompensationResponse(
+                trace_id=trace_id,
+                batch_no=request.batch_no,
+                process_status=ProcessStatus.FAILED,
+                total_count=len(request.details),
+                failed_count=len(request.details),
+                failure_details=[
+                    FailureDetail(
+                        failure_category=FailureCategory.SYSTEM_ERROR,
+                        failure_code="SYS_ERR_001",
+                        failure_message=f"系统处理异常: {str(e)}",
+                        suggestion="请联系技术支持或稍后重试"
+                    )
+                ]
+            )
+
+    @classmethod
+    def _process_internal(
+        cls,
+        request: CompensationRequest,
+        trace_id: str
+    ) -> CompensationResponse:
+        """内部处理逻辑
+
+        分流规则：
+        - 重复提交 → 直接返回 FAILED + DUPLICATE_SUBMIT
+        - 校验错误 → FAILED + VALIDATION_ERROR（按明细项分流）
+        - 规则命中(锁定类如黑名单) → LOCKED + RULE_HIT
+        - 材料缺失 → NEED_SUPPLEMENT
+        - 需人工复核 → MANUAL_REVIEW（独立分流，不混入 failure_details）
+        - 全部通过 → PROCESSABLE
+        """
+
+        total_count = len(request.details)
+        processable_details: List[DetailItem] = []
+        need_supplement_details: List[SupplementInfo] = []
+        locked_details: List[DetailItem] = []
+        review_details: List[ReviewInfo] = []
+        validation_failures: List[FailureDetail] = []
+        locked_failures: List[FailureDetail] = []
+
+        if request.process_action != ProcessAction.SUPPLEMENT:
+            duplicate_check_result = cls._check_duplicate_submit(request)
+            if duplicate_check_result:
+                return CompensationResponse(
+                    trace_id=trace_id,
+                    batch_no=request.batch_no,
+                    process_status=ProcessStatus.FAILED,
+                    total_count=total_count,
+                    failed_count=total_count,
+                    duplicate_submit_count=total_count,
+                    failure_details=[duplicate_check_result]
+                )
+
+        all_validation_failures = DataValidator.validate_request(request)
+        if all_validation_failures:
+            has_critical_errors = any(
+                f.detail_id is None and f.failure_category == FailureCategory.VALIDATION_ERROR
+                for f in all_validation_failures
+            )
+
+            if has_critical_errors:
+                return CompensationResponse(
+                    trace_id=trace_id,
+                    batch_no=request.batch_no,
+                    process_status=ProcessStatus.FAILED,
+                    total_count=total_count,
+                    failed_count=total_count,
+                    validation_error_count=len(all_validation_failures),
+                    failure_details=all_validation_failures
+                )
+
+        valid_detail_ids = {d.detail_id for d in request.details}
+        all_validation_failures = [
+            f for f in all_validation_failures
+            if f.detail_id is None or f.detail_id in valid_detail_ids
+        ]
+
+        context = storage.get_context_data()
+        context['source_channel'] = request.source_channel
+        context['process_action'] = request.process_action
+        context['review_opinion'] = request.review_opinion
+
+        rule_results = rule_engine.check_details(request.details, context)
+
+        for detail in request.details:
+            detail_validation_failures = [
+                f for f in all_validation_failures if f.detail_id == detail.detail_id
+            ]
+
+            if detail_validation_failures:
+                validation_failures.extend(detail_validation_failures)
+                continue
+
+            rule_result = rule_results.get(detail.detail_id, {})
+            locked_rules = rule_result.get('locked_rules', [])
+            review_rules = rule_result.get('review_rules', [])
+
+            if locked_rules:
+                locked_failures.extend(locked_rules)
+                locked_details.append(detail)
+                continue
+
+            missing_materials = DataValidator.check_missing_materials(detail)
+            if missing_materials:
+                supplement_deadline = datetime.now() + timedelta(days=DataValidator.MAX_SUPPLEMENT_DAYS)
+                need_supplement_details.append(SupplementInfo(
+                    detail_id=detail.detail_id,
+                    missing_materials=missing_materials,
+                    supplement_deadline=supplement_deadline
+                ))
+                continue
+
+            if review_rules:
+                reason_parts = [f"{r.rule_name or r.failure_code}: {r.failure_message}" for r in review_rules]
+                review_details.append(ReviewInfo(
+                    detail_id=detail.detail_id,
+                    review_reason="；".join(reason_parts),
+                    review_rules=review_rules
+                ))
+                continue
+
+            processable_details.append(detail)
+
+        for detail in processable_details:
+            storage.mark_detail_processed(detail.detail_id)
+            comp_amount = detail.compensation_amount or detail.claim_amount
+            storage.record_user_loss(detail.user_id, detail.loss_time, comp_amount)
+            storage.record_device_loss(detail.powerbank_sn, detail.loss_time)
+
+        if processable_details or locked_details or need_supplement_details or review_details:
+            storage.mark_batch_processed(request.batch_no)
+
+        all_failures = validation_failures + locked_failures
+
+        rule_hit_count = len(locked_failures)
+        manual_review_count = sum(len(r.review_rules) for r in review_details)
+        dup_count = 0
+        val_err_count = len(validation_failures)
+
+        process_status = cls._determine_process_status(
+            processable_count=len(processable_details),
+            need_supplement_count=len(need_supplement_details),
+            locked_count=len(locked_details),
+            review_count=len(review_details),
+            failed_count=len(all_failures)
+        )
+
+        response = CompensationResponse(
+            trace_id=trace_id,
+            batch_no=request.batch_no,
+            process_status=process_status,
+            processable_count=len(processable_details),
+            need_supplement_count=len(need_supplement_details),
+            locked_count=len(locked_details),
+            review_count=len(review_details),
+            failed_count=len(all_failures),
+            total_count=total_count,
+            rule_hit_count=rule_hit_count,
+            manual_review_count=manual_review_count,
+            duplicate_submit_count=dup_count,
+            validation_error_count=val_err_count,
+            processable_details=processable_details,
+            need_supplement_details=need_supplement_details,
+            locked_details=locked_details,
+            review_details=review_details,
+            failure_details=all_failures
+        )
+
+        cls._add_remark(request, response)
+
+        return response
+
+    @classmethod
+    def _check_duplicate_submit(cls, request: CompensationRequest) -> Optional[FailureDetail]:
+        """检查重复提交"""
+
+        if request.process_action == ProcessAction.SUPPLEMENT:
+            return None
+
+        if storage.is_batch_processed(request.batch_no):
+            process_time = storage.get_batch_process_time(request.batch_no)
+            batch_status = storage.get_batch_status(request.batch_no)
+
+            time_str = process_time.strftime("%Y-%m-%d %H:%M:%S") if process_time else "未知"
+
+            return FailureDetail(
+                failure_category=FailureCategory.DUPLICATE_SUBMIT,
+                failure_code="DUP_BAT_001",
+                failure_message=f"批次号[{request.batch_no}]已在{time_str}处理过，当前状态: {batch_status}",
+                suggestion="请勿重复提交同一批次，如需补充材料请使用SUPPLEMENT动作"
+            )
+
+        duplicate_details = []
+        for detail in request.details:
+            if storage.is_detail_processed(detail.detail_id):
+                duplicate_details.append(detail.detail_id)
+
+        if duplicate_details:
+            return FailureDetail(
+                failure_category=FailureCategory.DUPLICATE_SUBMIT,
+                failure_code="DUP_DTL_001",
+                failure_message=f"以下明细项ID已处理过: {', '.join(duplicate_details)}",
+                suggestion="请检查明细项ID，请勿重复处理同一明细项"
+            )
+
+        return None
+
+    @classmethod
+    def _determine_process_status(
+        cls,
+        processable_count: int,
+        need_supplement_count: int,
+        locked_count: int,
+        review_count: int,
+        failed_count: int
+    ) -> ProcessStatus:
+        """确定整体处理状态
+
+        优先级：PROCESSABLE > LOCKED > MANUAL_REVIEW > NEED_SUPPLEMENT > FAILED
+        只要有可办理项就优先标记为 PROCESSABLE，让调用方关注可处理的部分
+        """
+
+        if processable_count > 0 and need_supplement_count == 0 and locked_count == 0 and review_count == 0 and failed_count == 0:
+            return ProcessStatus.PROCESSABLE
+
+        if locked_count > 0 and processable_count == 0 and need_supplement_count == 0 and review_count == 0 and failed_count == locked_count:
+            return ProcessStatus.LOCKED
+
+        if review_count > 0 and processable_count == 0 and need_supplement_count == 0 and locked_count == 0 and failed_count == 0:
+            return ProcessStatus.MANUAL_REVIEW
+
+        if need_supplement_count > 0 and processable_count == 0 and locked_count == 0 and review_count == 0 and failed_count == 0:
+            return ProcessStatus.NEED_SUPPLEMENT
+
+        if failed_count > 0 and processable_count == 0 and need_supplement_count == 0 and locked_count == 0 and review_count == 0:
+            return ProcessStatus.FAILED
+
+        if processable_count > 0:
+            return ProcessStatus.PROCESSABLE
+
+        if locked_count > 0:
+            return ProcessStatus.LOCKED
+
+        if review_count > 0:
+            return ProcessStatus.MANUAL_REVIEW
+
+        if need_supplement_count > 0:
+            return ProcessStatus.NEED_SUPPLEMENT
+
+codex
+代码实现覆盖了赔付分流、规则命中、补材料、历史回放和管理接口。现在需要看完整测试断言和处理器末尾，避免只被已有样例“带过”，同时用真实命令验证依赖环境。
+exec
+/bin/zsh -lc "sed -n '300,520p' app/services/processor.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+            return ProcessStatus.NEED_SUPPLEMENT
+
+        return ProcessStatus.FAILED
+
+    @classmethod
+    def _add_remark(cls, request: CompensationRequest, response: CompensationResponse):
+        """添加备注信息"""
+        remarks = []
+
+        if request.review_opinion:
+            remarks.append(f"复核意见: {request.review_opinion}")
+
+        if request.operator_id:
+            remarks.append(f"操作人: {request.operator_id}")
+
+        if response.processable_count > 0:
+            remarks.append(f"可办理{response.processable_count}项，将自动完成赔付流程")
+
+        if response.need_supplement_count > 0:
+            remarks.append(f"需补充{response.need_supplement_count}项，请在规定时间内补充材料")
+
+        if response.locked_count > 0:
+            remarks.append(f"已锁定{response.locked_count}项，需风控部门介入处理")
+
+        if response.review_count > 0:
+            remarks.append(f"需人工复核{response.review_count}项，等待审核人员处理")
+
+        if response.failed_count > 0:
+            remarks.append(f"校验/规则拦截{response.failed_count}项")
+
+        if response.rule_hit_count > 0:
+            remarks.append(f"规则命中{response.rule_hit_count}项（锁定类）")
+
+        if response.manual_review_count > 0:
+            remarks.append(f"触发人工复核规则{response.manual_review_count}条")
+
+        if response.duplicate_submit_count > 0:
+            remarks.append(f"重复提交{response.duplicate_submit_count}项")
+
+        if response.validation_error_count > 0:
+            remarks.append(f"数据校验失败{response.validation_error_count}项")
+
+        if remarks:
+            response.remark = "；".join(remarks)
+
+    @classmethod
+    def replay(cls, trace_id: str) -> Optional[Dict]:
+        """历史回放
+
+        Args:
+            trace_id: 可追溯编号
+
+        Returns:
+            历史处理记录
+        """
+        history = storage.get_process_history(trace_id=trace_id)
+        return history[0] if history else None
+
+    @classmethod
+    def get_history(cls, batch_no: str = None, trace_id: str = None) -> List[Dict]:
+        """获取处理历史"""
+        return storage.get_process_history(batch_no=batch_no, trace_id=trace_id)
+
+
+processor = CompensationProcessor()
+
+exec
+/bin/zsh -lc "sed -n '200,420p' app/services/validator.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+                suggestion="请检查充电宝序列号格式"
+            ))
+
+        if len(sn) < 8:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_003",
+                failure_message=f"充电宝序列号长度不足: {len(sn)}，最小长度: 8",
+                suggestion="请输入完整的充电宝序列号"
+            ))
+
+        if len(sn) > 32:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_SN_004",
+                failure_message=f"充电宝序列号长度超限: {len(sn)}，最大长度: 32",
+                suggestion="请检查充电宝序列号是否正确"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_user_id(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验用户ID"""
+        failures = []
+
+        if not detail.user_id or len(detail.user_id.strip()) == 0:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_USR_001",
+                failure_message="用户ID不能为空",
+                suggestion="请填写用户ID"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_loss_time(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验遗失时间"""
+        failures = []
+        loss_time = detail.loss_time
+
+        if not loss_time:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_LTM_001",
+                failure_message="遗失时间不能为空",
+                suggestion="请填写遗失时间"
+            ))
+            return failures
+
+        now = datetime.now()
+
+        if loss_time > now:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_LTM_002",
+                failure_message=f"遗失时间不能晚于当前时间: {loss_time.strftime('%Y-%m-%d %H:%M:%S')}",
+                suggestion="请检查遗失时间是否正确"
+            ))
+
+        earliest_allowed = now - timedelta(days=365)
+        if loss_time < earliest_allowed:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_LTM_003",
+                failure_message=f"遗失时间超出追溯期限: {loss_time.strftime('%Y-%m-%d %H:%M:%S')}，仅支持1年内的遗失申请",
+                suggestion="遗失时间超过1年的申请需走特殊审批流程"
+            ))
+
+        return failures
+
+    @classmethod
+    def _validate_amounts(cls, detail: DetailItem) -> List[FailureDetail]:
+        """校验金额"""
+        failures = []
+
+        if detail.claim_amount <= 0:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_AMT_001",
+                failure_message=f"索赔金额必须大于0，当前值: {detail.claim_amount}",
+                suggestion="请填写正确的索赔金额"
+            ))
+
+        if detail.claim_amount > cls.MAX_CLAIM_AMOUNT:
+            failures.append(FailureDetail(
+                detail_id=detail.detail_id,
+                failure_category=FailureCategory.VALIDATION_ERROR,
+                failure_code="VLD_AMT_002",
+                failure_message=f"索赔金额超过最大限额: {detail.claim_amount}，最大限额: {cls.MAX_CLAIM_AMOUNT}",
+                suggestion="超过限额的申请需走特殊审批流程"
+            ))
+
+        if detail.compensation_amount is not None:
+            if detail.compensation_amount < 0:
+                failures.append(FailureDetail(
+                    detail_id=detail.detail_id,
+                    failure_category=FailureCategory.VALIDATION_ERROR,
+                    failure_code="VLD_AMT_003",
+                    failure_message=f"赔付金额不能为负数: {detail.compensation_amount}",
+                    suggestion="请填写正确的赔付金额"
+                ))
+
+            if detail.compensation_amount > detail.claim_amount:
+                failures.append(FailureDetail(
+                    detail_id=detail.detail_id,
+                    failure_category=FailureCategory.VALIDATION_ERROR,
+                    failure_code="VLD_AMT_004",
+                    failure_message=f"赔付金额不能大于索赔金额: {detail.compensation_amount} > {detail.claim_amount}",
+                    suggestion="赔付金额应小于或等于索赔金额"
+                ))
+
+        return failures
+
+    @classmethod
+    def check_missing_materials(cls, detail: DetailItem) -> List[str]:
+        """检查缺失的材料
+
+        Args:
+            detail: 明细项
+
+        Returns:
+            缺失的材料清单
+        """
+        if not detail.required_materials:
+            return []
+
+        submitted = set(m.strip().upper() for m in detail.material_list)
+        required = set(m.strip().upper() for m in detail.required_materials)
+
+        missing = required - submitted
+        return list(missing)
+
+exec
+/bin/zsh -lc "sed -n '220,520p' tests/test_compensation_api.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+                compensation_amount=99.0
+            )
+
+        detail = create_detail_item(
+            detail_id="DTL001",
+            user_id=user_id,
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101006",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_FRQ_001" in rule_codes
+
+    def test_total_compensation_exceed(self):
+        """测试：用户累计赔付超过500元 - 需人工复核"""
+        user_id = "USR_TOTAL"
+        storage.record_user_loss(
+            user_id=user_id,
+            loss_time=datetime.now() - timedelta(days=30),
+            compensation_amount=450.0
+        )
+
+        detail = create_detail_item(
+            detail_id="DTL001",
+            user_id=user_id,
+            claim_amount=100.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101007",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_TOT_001" in rule_codes
+
+
+class TestMaterialMissingCases:
+    """材料缺失样例测试"""
+
+    def test_single_missing_material(self):
+        """测试：单种材料缺失 - 需补充"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            material_list=["ID_CARD", "PURCHASE_PROOF"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101008",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.NEED_SUPPLEMENT.value
+        assert data["need_supplement_count"] == 1
+        assert len(data["need_supplement_details"]) == 1
+        supplement = data["need_supplement_details"][0]
+        assert supplement["detail_id"] == "DTL001"
+        assert "LOSS_REPORT" in [m.upper() for m in supplement["missing_materials"]]
+        assert "supplement_deadline" in supplement
+
+    def test_multiple_missing_materials(self):
+        """测试：多种材料缺失 - 需补充"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            material_list=["ID_CARD"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101009",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.NEED_SUPPLEMENT.value
+        supplement = data["need_supplement_details"][0]
+        assert len(supplement["missing_materials"]) == 2
+
+    def test_no_materials_at_all(self):
+        """测试：完全没有材料 - 需补充"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            material_list=[],
+            required_materials=["ID_CARD", "PURCHASE_PROOF"]
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101010",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.NEED_SUPPLEMENT.value
+
+
+class TestHistoryReplayCases:
+    """历史回放样例测试"""
+
+    def test_replay_by_trace_id(self):
+        """测试：根据追溯编号回放历史"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101011",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        process_response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+        process_data = process_response.json()
+        trace_id = process_data["trace_id"]
+
+        replay_response = client.get(f"/api/compensation/replay/{trace_id}")
+
+        assert replay_response.status_code == 200
+        replay_data = replay_response.json()
+        assert replay_data["trace_id"] == trace_id
+        assert replay_data["batch_no"] == "BATCH20240101011"
+        assert "request" in replay_data
+        assert "response" in replay_data
+
+    def test_replay_not_found(self):
+        """测试：追溯编号不存在"""
+        response = client.get("/api/compensation/replay/CP-CMP-20240101000000-NOTEXIST-0000")
+        assert response.status_code == 404
+
+    def test_query_history_by_batch_no(self):
+        """测试：按批次号查询历史"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101012",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        history_response = client.get(
+            "/api/compensation/history",
+            params={"batch_no": "BATCH20240101012"}
+        )
+
+        assert history_response.status_code == 200
+        history_data = history_response.json()
+        assert history_data["count"] >= 1
+        assert history_data["records"][0]["batch_no"] == "BATCH20240101012"
+
+
+class TestBoundaryCases:
+    """边界条件测试"""
+
+    def test_loss_time_future(self):
+        """测试：遗失时间为未来时间 - 校验失败"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            loss_time=datetime.now() + timedelta(days=1)
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101013",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_LTM_002" in failure_codes
+
+    def test_loss_time_too_old(self):
+        """测试：遗失时间超过1年 - 校验失败"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            loss_time=datetime.now() - timedelta(days=366)
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101014",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_LTM_003" in failure_codes
+
+    def test_batch_no_too_short(self):
+        """测试：批次号长度不足 - 校验失败（绕过 Pydantic 直接发 JSON）"""
+        detail = create_detail_item(detail_id="DTL001")
+        payload = {
+            "batch_no": "BAT001",
+            "source_channel": "ONLINE_APP",
+            "process_action": "SUBMIT",
+            "details": [detail.model_dump(mode='json')]
+        }
+
+        response = client.post(
+            "/api/compensation/process",
+            json=payload
+        )
+
+        assert response.status_code == 422
+
+    def test_invalid_powerbank_sn(self):
+        """测试：充电宝序列号格式错误 - 校验失败"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            powerbank_sn="INVALID123"
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101015",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_SN_002" in failure_codes
+
+    def test_compensation_exceeds_claim(self):
+        """测试：赔付金额大于索赔金额 - 校验失败"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=100.0,
+            compensation_amount=150.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101016",
+
+exec
+/bin/zsh -lc "sed -n '1,160p' app/utils/trace_id_generator.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+import uuid
+import time
+import hashlib
+from datetime import datetime
+
+
+class TraceIdGenerator:
+    """可追溯编号生成器
+
+    编号格式: CP-{业务标识}-{时间戳}-{哈希片段}-{随机序列}
+    示例: CP-CMP-20240101120000-ABCD1234-E5F6
+    """
+
+    BUSINESS_PREFIX = "CP"
+    MODULE_CODE = "CMP"
+
+    @classmethod
+    def generate(cls, batch_no: str = None, user_id: str = None) -> str:
+        """生成可追溯编号
+
+        Args:
+            batch_no: 批次号（可选，用于生成关联哈希）
+            user_id: 用户ID（可选，用于生成关联哈希）
+
+        Returns:
+            可追溯编号字符串
+        """
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        millis = int(time.time() * 1000) % 1000
+
+        hash_source = f"{timestamp}{millis}{batch_no or ''}{user_id or ''}{uuid.uuid4().hex}"
+        hash_obj = hashlib.md5(hash_source.encode())
+        hash_hex = hash_obj.hexdigest().upper()
+
+        hash_segment = hash_hex[:8]
+        random_segment = hash_hex[8:12]
+
+        trace_id = f"{cls.BUSINESS_PREFIX}-{cls.MODULE_CODE}-{timestamp}-{hash_segment}-{random_segment}"
+
+        return trace_id
+
+    @classmethod
+    def parse_trace_id(cls, trace_id: str) -> dict:
+        """解析可追溯编号
+
+        Args:
+            trace_id: 可追溯编号
+
+        Returns:
+            解析后的信息字典
+        """
+        try:
+            parts = trace_id.split("-")
+            if len(parts) != 5:
+                raise ValueError("无效的追溯编号格式")
+
+            business_prefix, module_code, timestamp, hash_segment, random_segment = parts
+
+            dt = datetime.strptime(timestamp, "%Y%m%d%H%M%S")
+
+            return {
+                "business_prefix": business_prefix,
+                "module_code": module_code,
+                "timestamp": timestamp,
+                "datetime": dt,
+                "hash_segment": hash_segment,
+                "random_segment": random_segment,
+                "is_valid": business_prefix == cls.BUSINESS_PREFIX and module_code == cls.MODULE_CODE
+            }
+        except Exception as e:
+            return {
+                "trace_id": trace_id,
+                "is_valid": False,
+                "error": str(e)
+            }
+
+    @classmethod
+    def validate(cls, trace_id: str) -> bool:
+        """验证追溯编号是否有效
+
+        Args:
+            trace_id: 可追溯编号
+
+        Returns:
+            是否有效
+        """
+        parsed = cls.parse_trace_id(trace_id)
+        return parsed.get("is_valid", False)
+
+exec
+/bin/zsh -lc "sed -n '520,900p' tests/test_compensation_api.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+            batch_no="BATCH20240101016",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_AMT_004" in failure_codes
+
+    def test_duplicate_detail_ids(self):
+        """测试：明细项ID重复 - 校验失败"""
+        detail1 = create_detail_item(detail_id="DTL001")
+        detail2 = create_detail_item(detail_id="DTL001", powerbank_sn="PB87654321", user_id="USR002")
+        request = CompensationRequest(
+            batch_no="BATCH20240101017",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail1, detail2]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_DUP_001" in failure_codes
+
+
+class TestFailureHintCases:
+    """失败提示测试 - 规则命中(锁定)与人工复核严格分离"""
+
+    def test_blacklist_user(self):
+        """测试：黑名单用户 - 已锁定（规则命中，非人工复核）"""
+        storage.add_to_blacklist("USR_BLACK")
+        detail = create_detail_item(
+            detail_id="DTL001",
+            user_id="USR_BLACK",
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101018",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["process_status"] == ProcessStatus.LOCKED.value
+        assert data["locked_count"] == 1
+        assert data["review_count"] == 0
+        assert len(data["failure_details"]) == 1
+        failure = data["failure_details"][0]
+        assert failure["failure_category"] == FailureCategory.RULE_HIT.value
+        assert failure["failure_code"] == "RUL_BLK_001"
+        assert "黑名单" in failure["failure_message"]
+        assert "恶意索赔" in failure["suggestion"]
+        assert data["rule_hit_count"] == 1
+        assert data["manual_review_count"] == 0
+
+    def test_high_risk_device(self):
+        """测试：高风险设备型号 - 需人工复核（非锁定）"""
+        storage.add_high_risk_model("MODEL_X")
+        detail = create_detail_item(
+            detail_id="DTL001",
+            device_model="MODEL_X",
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101019",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        assert data["review_count"] == 1
+        assert data["locked_count"] == 0
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_DEV_001" in rule_codes
+
+    def test_high_risk_location(self):
+        """测试：高风险地区 - 需人工复核"""
+        storage.add_high_risk_location("火车站A区")
+        detail = create_detail_item(
+            detail_id="DTL001",
+            loss_location="火车站A区",
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101020",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_LOC_001" in rule_codes
+
+    def test_same_device_duplicate_loss(self):
+        """测试：同一设备180天内重复遗失 - 需人工复核"""
+        sn = "PB12345678"
+        storage.record_device_loss(
+            powerbank_sn=sn,
+            loss_time=datetime.now() - timedelta(days=90)
+        )
+
+        detail = create_detail_item(
+            detail_id="DTL001",
+            powerbank_sn=sn,
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101021",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_DUP_001" in rule_codes
+
+    def test_third_party_high_amount(self):
+        """测试：第三方渠道且金额超过100元 - 需人工复核"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=150.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101022",
+            source_channel=SourceChannel.THIRD_PARTY,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        review_rules = data["review_details"][0]["review_rules"]
+        rule_codes = [r["failure_code"] for r in review_rules]
+        assert "RUL_MNL_001" in rule_codes
+
+
+class TestDuplicateProcessingCases:
+    """重复处理测试"""
+
+    def test_duplicate_batch_no(self):
+        """测试：重复提交同一批次号 - 重复提交（独立分类，非笼统失败）"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101023",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        first_response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+        assert first_response.status_code == 200
+        first_data = first_response.json()
+        assert first_data["process_status"] == ProcessStatus.PROCESSABLE.value
+
+        second_response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert second_response.status_code == 200
+        second_data = second_response.json()
+
+        assert second_data["process_status"] == ProcessStatus.FAILED.value
+        assert second_data["failed_count"] == 1
+        assert second_data["duplicate_submit_count"] == 1
+        assert second_data["rule_hit_count"] == 0
+        assert second_data["manual_review_count"] == 0
+        assert second_data["validation_error_count"] == 0
+        failure = second_data["failure_details"][0]
+        assert failure["failure_category"] == FailureCategory.DUPLICATE_SUBMIT.value
+        assert failure["failure_code"] == "DUP_BAT_001"
+        assert "已在" in failure["failure_message"]
+        assert "重复提交" in failure["suggestion"]
+
+    def test_supplement_action_allows_duplicate_batch(self):
+        """测试：SUPPLEMENT动作允许重复批次号（闭环补充）"""
+        detail = create_detail_item(detail_id="DTL_SUP_001", powerbank_sn="PB99999999")
+        request = CompensationRequest(
+            batch_no="BATCH20240101024",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        first_response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+        assert first_response.status_code == 200
+
+        supplement_detail = create_detail_item(
+            detail_id="DTL_SUP_002",
+            powerbank_sn="PB88888888",
+            user_id="USR002",
+            material_list=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        supplement_request = CompensationRequest(
+            batch_no="BATCH20240101024",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUPPLEMENT,
+            details=[supplement_detail]
+        )
+
+        supplement_response = client.post(
+            "/api/compensation/process",
+            json=supplement_request.model_dump(mode='json')
+        )
+
+        assert supplement_response.status_code == 200
+        data = supplement_response.json()
+        assert data["process_status"] == ProcessStatus.PROCESSABLE.value
+
+    def test_duplicate_detail_id(self):
+        """测试：重复处理同一明细项ID - 重复提交"""
+        detail1 = create_detail_item(detail_id="DTL001")
+        request1 = CompensationRequest(
+            batch_no="BATCH20240101025",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail1]
+        )
+
+        first_response = client.post(
+            "/api/compensation/process",
+            json=request1.model_dump(mode='json')
+        )
+        assert first_response.status_code == 200
+
+        detail2 = create_detail_item(detail_id="DTL001")
+        request2 = CompensationRequest(
+            batch_no="BATCH20240101026",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail2]
+        )
+
+        second_response = client.post(
+            "/api/compensation/process",
+            json=request2.model_dump(mode='json')
+        )
+
+        assert second_response.status_code == 200
+        data = second_response.json()
+
+        assert data["process_status"] == ProcessStatus.FAILED.value
+        failure = data["failure_details"][0]
+        assert failure["failure_category"] == FailureCategory.DUPLICATE_SUBMIT.value
+        assert failure["failure_code"] == "DUP_DTL_001"
+
+
+class TestTraceableIdCases:
+    """可追溯编号测试"""
+
+    def test_trace_id_format(self):
+        """测试：追溯编号格式正确性"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101027",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        trace_id = data["trace_id"]
+
+        parts = trace_id.split("-")
+        assert len(parts) == 5
+        assert parts[0] == "CP"
+        assert parts[1] == "CMP"
+        assert len(parts[2]) == 14
+        assert len(parts[3]) == 8
+        assert len(parts[4]) == 4
+
+    def test_trace_id_uniqueness(self):
+        """测试：追溯编号唯一性"""
+        trace_ids = set()
+        for i in range(10):
+            detail = create_detail_item(detail_id=f"DTL{i:03d}")
+            request = CompensationRequest(
+                batch_no=f"BATCH20240101{i:03d}",
+                source_channel=SourceChannel.ONLINE_APP,
+                process_action=ProcessAction.SUBMIT,
+                details=[detail]
+            )
+            response = client.post(
+                "/api/compensation/process",
+                json=request.model_dump(mode='json')
+            )
+            data = response.json()
+            trace_id = data["trace_id"]
+            assert trace_id not in trace_ids
+            trace_ids.add(trace_id)
+
+        assert len(trace_ids) == 10
+
+    def test_trace_id_parse(self):
+        """测试：追溯编号解析功能"""
+        trace_id = TraceIdGenerator.generate(batch_no="TEST001", user_id="USR001")
+        parsed = TraceIdGenerator.parse_trace_id(trace_id)
+
+        assert parsed["is_valid"] == True
+        assert parsed["business_prefix"] == "CP"
+        assert parsed["module_code"] == "CMP"
+        assert "datetime" in parsed
+
+
+class TestReviewOpinionCases:
+    """复核意见测试"""
+
+    def test_approve_without_opinion(self):
+        """测试：APPROVE动作无复核意见 - 校验失败"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101028",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.APPROVE,
+
+exec
+/bin/zsh -lc 'python --version' in /Users/bill/Documents/solo/workspaces/yzz00178
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+exec
+/bin/zsh -lc 'python -m pytest -q' in /Users/bill/Documents/solo/workspaces/yzz00178
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+codex
+`python` 命令本身不存在，这属于环境命令名问题；我会用常见的 `python3` 继续验证。若项目只说明 `python` 才能跑，这会是说明问题，但当前没有 README，按实际可运行入口判断。
+exec
+/bin/zsh -lc 'python3 --version' in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-q7BDZxXi' (errno=Operation not permitted)
+python3: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+python3: error: couldn't create cache file '/tmp/xcrun_db-RFtzvp24' (errno=Operation not permitted)
+Python 3.9.6
+
+exec
+/bin/zsh -lc "sed -n '900,1250p' tests/test_compensation_api.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+            process_action=ProcessAction.APPROVE,
+            review_opinion=None,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_ACT_002" in failure_codes
+
+    def test_reject_without_opinion(self):
+        """测试：REJECT动作无复核意见 - 校验失败"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101029",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.REJECT,
+            review_opinion=None,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        failure_codes = [f["failure_code"] for f in data["failure_details"]]
+        assert "VLD_ACT_002" in failure_codes
+
+    def test_review_with_opinion(self):
+        """测试：REVIEW动作带复核意见 - 成功"""
+        detail = create_detail_item(detail_id="DTL001")
+        request = CompensationRequest(
+            batch_no="BATCH20240101030",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.REVIEW,
+            review_opinion="经审核，情况属实，同意赔付",
+            details=[detail],
+            operator_id="OPR001"
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.PROCESSABLE.value
+        assert "复核意见" in data["remark"]
+        assert "操作人" in data["remark"]
+
+
+class TestMixedCases:
+    """混合场景测试"""
+
+    def test_mixed_processable_and_supplement(self):
+        """测试：同一批次包含可办理和需补充的明细项"""
+        detail1 = create_detail_item(
+            detail_id="DTL001",
+            material_list=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        detail2 = create_detail_item(
+            detail_id="DTL002",
+            powerbank_sn="PB87654321",
+            user_id="USR002",
+            material_list=["ID_CARD"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        request = CompensationRequest(
+            batch_no="BATCH20240101031",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail1, detail2]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.PROCESSABLE.value
+        assert data["processable_count"] == 1
+        assert data["need_supplement_count"] == 1
+        assert data["total_count"] == 2
+
+    def test_mixed_all_statuses(self):
+        """测试：同一批次包含所有状态的明细项"""
+        detail1 = create_detail_item(
+            detail_id="DTL001",
+            claim_amount=99.0
+        )
+        detail2 = create_detail_item(
+            detail_id="DTL002",
+            powerbank_sn="PB87654321",
+            user_id="USR002",
+            material_list=["ID_CARD"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        detail3 = create_detail_item(
+            detail_id="DTL003",
+            powerbank_sn="CH11223344",
+            user_id="USR003",
+            claim_amount=99.0
+        )
+        storage.add_to_blacklist("USR003")
+
+        request = CompensationRequest(
+            batch_no="BATCH20240101032",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail1, detail2, detail3]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["processable_count"] == 1
+        assert data["need_supplement_count"] == 1
+        assert data["locked_count"] == 1
+        assert data["total_count"] == 3
+
+
+class TestCategorySeparation:
+    """分类分离验证：规则命中/人工复核/重复提交/校验错误严格分开"""
+
+    def test_rule_hit_not_mixed_with_manual_review(self):
+        """测试：规则命中（锁定类）不与人工复核混淆"""
+        storage.add_to_blacklist("USR_BLK")
+        detail = create_detail_item(detail_id="DTL001", user_id="USR_BLK", claim_amount=99.0)
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_001",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.LOCKED.value
+        assert data["locked_count"] == 1
+        assert data["review_count"] == 0
+        assert data["rule_hit_count"] == 1
+        assert data["manual_review_count"] == 0
+        assert data["duplicate_submit_count"] == 0
+        assert data["validation_error_count"] == 0
+        assert all(f["failure_category"] == FailureCategory.RULE_HIT.value for f in data["failure_details"])
+
+    def test_manual_review_not_mixed_with_rule_hit(self):
+        """测试：人工复核不与规则命中（锁定类）混淆"""
+        storage.add_high_risk_location("高危区域X")
+        detail = create_detail_item(
+            detail_id="DTL001",
+            loss_location="高危区域X",
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_002",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.MANUAL_REVIEW.value
+        assert data["review_count"] == 1
+        assert data["locked_count"] == 0
+        assert data["manual_review_count"] >= 1
+        assert data["rule_hit_count"] == 0
+        assert len(data["review_details"]) == 1
+        assert len(data["failure_details"]) == 0
+
+    def test_duplicate_not_mixed_with_validation_error(self):
+        """测试：重复提交不与校验错误混淆"""
+        detail = create_detail_item(detail_id="DTL_DUP_001")
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_003",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        first = client.post("/api/compensation/process", json=request.model_dump(mode='json'))
+        assert first.json()["process_status"] == ProcessStatus.PROCESSABLE.value
+
+        second = client.post("/api/compensation/process", json=request.model_dump(mode='json'))
+        data = second.json()
+        assert data["process_status"] == ProcessStatus.FAILED.value
+        assert data["duplicate_submit_count"] == 1
+        assert data["validation_error_count"] == 0
+        assert data["rule_hit_count"] == 0
+        assert data["manual_review_count"] == 0
+        assert all(f["failure_category"] == FailureCategory.DUPLICATE_SUBMIT.value for f in data["failure_details"])
+
+    def test_validation_error_not_mixed_with_others(self):
+        """测试：校验错误不与其他分类混淆"""
+        detail = create_detail_item(
+            detail_id="DTL001",
+            powerbank_sn="INVALID123"
+        )
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_004",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+        assert data["process_status"] == ProcessStatus.FAILED.value
+        assert data["validation_error_count"] >= 1
+        assert data["duplicate_submit_count"] == 0
+        assert data["rule_hit_count"] == 0
+        assert data["manual_review_count"] == 0
+        assert all(f["failure_category"] == FailureCategory.VALIDATION_ERROR.value for f in data["failure_details"])
+
+    def test_locked_and_review_in_same_batch(self):
+        """测试：同批次中黑名单用户（锁定）+ 高风险设备（复核）分流正确"""
+        storage.add_to_blacklist("USR_BLK")
+        storage.add_high_risk_model("MODEL_BAD")
+
+        detail_locked = create_detail_item(
+            detail_id="DTL_LOCKED",
+            user_id="USR_BLK",
+            claim_amount=99.0
+        )
+        detail_review = create_detail_item(
+            detail_id="DTL_REVIEW",
+            powerbank_sn="PB87654321",
+            user_id="USR_NORM",
+            device_model="MODEL_BAD",
+            claim_amount=99.0
+        )
+
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_005",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail_locked, detail_review]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+        assert data["locked_count"] == 1
+        assert data["review_count"] == 1
+        assert data["processable_count"] == 0
+
+        locked_failure = [f for f in data["failure_details"] if f["failure_category"] == FailureCategory.RULE_HIT.value]
+        assert len(locked_failure) == 1
+        assert locked_failure[0]["failure_code"] == "RUL_BLK_001"
+
+        assert len(data["review_details"]) == 1
+        assert data["review_details"][0]["detail_id"] == "DTL_REVIEW"
+        review_rule_codes = [r["failure_code"] for r in data["review_details"][0]["review_rules"]]
+        assert "RUL_DEV_001" in review_rule_codes
+
+    def test_all_four_categories_in_one_batch(self):
+        """测试：同批次同时出现四种分类 - 各自独立计数"""
+        storage.add_to_blacklist("USR_BLK")
+
+        detail_valid = create_detail_item(
+            detail_id="DTL_OK",
+            powerbank_sn="PB11111111",
+            user_id="USR_OK",
+            claim_amount=50.0,
+            compensation_amount=50.0
+        )
+        detail_locked = create_detail_item(
+            detail_id="DTL_LOCKED",
+            powerbank_sn="PB22222222",
+            user_id="USR_BLK",
+            claim_amount=99.0
+        )
+        detail_supplement = create_detail_item(
+            detail_id="DTL_SUP",
+            powerbank_sn="PB33333333",
+            user_id="USR_SUP",
+            material_list=["ID_CARD"],
+            required_materials=["ID_CARD", "PURCHASE_PROOF", "LOSS_REPORT"]
+        )
+        detail_review = create_detail_item(
+            detail_id="DTL_REV",
+            powerbank_sn="PB44444444",
+            user_id="USR_REV",
+            claim_amount=299.0,
+            compensation_amount=299.0
+        )
+        detail_validation_error = create_detail_item(
+            detail_id="DTL_ERR",
+            powerbank_sn="INVALID",
+            user_id="USR_ERR",
+            claim_amount=99.0
+        )
+
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_006",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail_valid, detail_locked, detail_supplement, detail_review, detail_validation_error]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+
+        assert data["processable_count"] == 1
+        assert data["locked_count"] == 1
+        assert data["need_supplement_count"] == 1
+        assert data["review_count"] == 1
+        assert data["failed_count"] >= 2
+
+        assert data["rule_hit_count"] == 1
+        assert data["manual_review_count"] >= 1
+        assert data["validation_error_count"] >= 1
+
+        categories_in_failures = {f["failure_category"] for f in data["failure_details"]}
+        assert FailureCategory.RULE_HIT.value in categories_in_failures
+
+exec
+/bin/zsh -lc 'python3 -m pytest -q' in /Users/bill/Documents/solo/workspaces/yzz00178
+ exited 1 in 269ms:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pytest/__main__.py", line 9, in <module>
+    raise SystemExit(pytest.console_main())
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 201, in console_main
+    code = main()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 156, in main
+    config = _prepareconfig(args, plugins)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 342, in _prepareconfig
+    config = pluginmanager.hook.pytest_cmdline_parse(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/helpconfig.py", line 112, in pytest_cmdline_parse
+    config = yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1146, in pytest_cmdline_parse
+    self.parse(args)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1527, in parse
+    self._preparse(args, addopts=addopts)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/config/__init__.py", line 1431, in _preparse
+    self.hook.pytest_load_initial_conftests(
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 167, in _multicall
+    raise exception
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 139, in _multicall
+    teardown.throw(exception)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/warnings.py", line 129, in pytest_load_initial_conftests
+    return (yield)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pluggy/_callers.py", line 116, in _multicall
+    next(function_gen)  # first yield
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 170, in pytest_load_initial_conftests
+    capman.start_global_capturing()
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 773, in start_global_capturing
+    self._global_capturing = _get_multicapture(self._method)
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 714, in _get_multicapture
+    return MultiCapture(in_=FDCapture(0), out=FDCapture(1), err=FDCapture(2))
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/capture.py", line 493, in __init__
+    TemporaryFile(buffering=0),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 581, in TemporaryFile
+    prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 118, in _sanitize_params
+    dir = gettempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 287, in gettempdir
+    tempdir = _get_default_tempdir()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/tempfile.py", line 219, in _get_default_tempdir
+    raise FileNotFoundError(_errno.ENOENT,
+FileNotFoundError: [Errno 2] No usable temporary directory found in ['/var/folders/jn/d_ttb_pn6j55lr85szdw4_1r0000gn/T/', '/tmp', '/var/tmp', '/usr/tmp', '/Users/bill/Documents/solo/workspaces/yzz00178']
+
+codex
+自带测试现在没跑起来的直接原因是当前只读沙箱没有可用临时目录，pytest 在创建捕获临时文件时失败；这不是项目代码的业务失败。我会继续用只读方式做导入、接口调用和逻辑走查，必要时禁用 pytest 捕获看能否绕过临时目录限制。
+exec
+/bin/zsh -lc "sed -n '1250,1500p' tests/test_compensation_api.py" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+        assert FailureCategory.RULE_HIT.value in categories_in_failures
+        assert FailureCategory.VALIDATION_ERROR.value in categories_in_failures
+        assert FailureCategory.DUPLICATE_SUBMIT.value not in categories_in_failures
+
+    def test_review_detail_contains_reason_and_rules(self):
+        """测试：review_details 包含完整的复核原因和触发规则"""
+        storage.add_high_risk_model("MODEL_Z")
+        detail = create_detail_item(
+            detail_id="DTL001",
+            device_model="MODEL_Z",
+            claim_amount=99.0
+        )
+        request = CompensationRequest(
+            batch_no="BATCH_SEP_007",
+            source_channel=SourceChannel.ONLINE_APP,
+            process_action=ProcessAction.SUBMIT,
+            details=[detail]
+        )
+
+        response = client.post(
+            "/api/compensation/process",
+            json=request.model_dump(mode='json')
+        )
+
+        data = response.json()
+        assert data["review_count"] == 1
+        review = data["review_details"][0]
+        assert review["detail_id"] == "DTL001"
+        assert "review_reason" in review
+        assert len(review["review_reason"]) > 0
+        assert len(review["review_rules"]) >= 1
+        assert review["review_rules"][0]["failure_code"] == "RUL_DEV_001"
+
+
+class TestStatusDefinitions:
+    """状态定义接口测试"""
+
+    def test_status_definitions_include_manual_review(self):
+        """测试：状态定义接口包含 MANUAL_REVIEW"""
+        response = client.get("/api/status/definitions")
+        assert response.status_code == 200
+        data = response.json()
+        assert "MANUAL_REVIEW" in data["process_status"]
+        assert "MANUAL_REVIEW" in data["status_explanations"]
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
+
+exec
+/bin/zsh -lc 'python3 -m pytest -q -s' in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 1129ms:
+...........................................
+=============================== warnings summary ===============================
+../../../../Library/Python/3.9/lib/python/site-packages/_pytest/cacheprovider.py:475
+  /Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/cacheprovider.py:475: PytestCacheWarning: cache could not write path /Users/bill/Documents/solo/workspaces/yzz00178/.pytest_cache/v/cache/nodeids: [Errno 1] Operation not permitted: '/Users/bill/Documents/solo/workspaces/yzz00178/.pytest_cache/v/cache/nodeids'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+../../../../Library/Python/3.9/lib/python/site-packages/_pytest/cacheprovider.py:429
+  /Users/bill/Library/Python/3.9/lib/python/site-packages/_pytest/cacheprovider.py:429: PytestCacheWarning: cache could not write path /Users/bill/Documents/solo/workspaces/yzz00178/.pytest_cache/v/cache/lastfailed: [Errno 1] Operation not permitted: '/Users/bill/Documents/solo/workspaces/yzz00178/.pytest_cache/v/cache/lastfailed'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+43 passed, 2 warnings in 0.86s
+
+codex
+`python3 -m pytest -q -s` 已经跑通，43 个测试全部通过；只读环境导致 pytest 缓存写入告警，不影响测试结果。最后再做一次不用临时文件的应用导入和核心接口调用，确认真实入口可体验。
+exec
+/bin/zsh -lc "find . -maxdepth 3 -type f \\( -iname 'README*' -o -iname 'package.json' -o -iname 'pyproject.toml' -o -iname 'setup.py' -o -iname 'Dockerfile' -o -iname 'uv.lock' -o -iname 'poetry.lock' \\) -print" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 0ms:
+./.pytest_cache/README.md
+
+exec
+/bin/zsh -lc 'python3 -c "from app.main import app; print(app.title); print(len(app.routes))"' in /Users/bill/Documents/solo/workspaces/yzz00178
+exec
+/bin/zsh -lc "python3 -c \"from fastapi.testclient import TestClient; from app.main import app; c=TestClient(app); print(c.get('/health').status_code, c.get('/health').json()['status']); payload={'batch_no':'BATCHQC001','source_channel':'ONLINE_APP','process_action':'SUBMIT','details':[{'detail_id':'DTLQC001','powerbank_sn':'PB12345678','user_id':'USRQC001','loss_time':'2026-05-20T10:00:00','claim_amount':99,'compensation_amount':99,'material_list':['ID_CARD','PURCHASE_PROOF','LOSS_REPORT'],'required_materials':['ID_CARD','PURCHASE_PROOF','LOSS_REPORT']}]}; r=c.post('/api/compensation/process', json=payload); print(r.status_code, r.json()['process_status'], r.json()['processable_count'])\"" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 516ms:
+共享充电宝遗失赔付API
+19
+
+ succeeded in 591ms:
+200 healthy
+200 PROCESSABLE 1
+
+codex
+核心入口验证通过：应用能导入，FastAPI 路由存在，`/health` 和赔付处理主接口都返回 200。项目根目录没有 README，按你的规则这不是不通过原因，因为已有 `requirements.txt`、`app/main.py` 和测试入口可验证。
+exec
+/bin/zsh -lc 'python3 -m pip check' in /Users/bill/Documents/solo/workspaces/yzz00178
+exec
+/bin/zsh -lc "python3 -c \"from app.services.processor import processor; from app.models.schemas import CompensationRequest, DetailItem, SourceChannel, ProcessAction; from datetime import datetime; req=CompensationRequest(batch_no='BATCHQC002',source_channel=SourceChannel.ONLINE_APP,process_action=ProcessAction.SUBMIT,details=[DetailItem(detail_id='DTLQC002',powerbank_sn='PB12345678',user_id='USRQC002',loss_time=datetime(2026,5,20,10,0,0),claim_amount=299,compensation_amount=299,material_list=['ID_CARD','PURCHASE_PROOF','LOSS_REPORT'],required_materials=['ID_CARD','PURCHASE_PROOF','LOSS_REPORT'])]); res=processor.process(req); print(res.process_status.value, res.review_count, res.review_details[0].review_rules[0].failure_code)\"" in /Users/bill/Documents/solo/workspaces/yzz00178
+exec
+/bin/zsh -lc "python3 -c \"import fastapi, uvicorn, pydantic, pytest, httpx, dateutil; print('deps-ok')\"" in /Users/bill/Documents/solo/workspaces/yzz00178
+ succeeded in 316ms:
+MANUAL_REVIEW 1 RUL_AMT_001
+
+ exited 1 in 774ms:
+WARNING: The directory '/Users/bill/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+pydantic-settings 2.5.2 has requirement pydantic>=2.7.0, but you have pydantic 2.6.1.
+
+ succeeded in 956ms:
+deps-ok
+
+codex
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `python3 -m pytest -q -s` 执行通过：43 passed。只读环境导致 `.pytest_cache` 写入告警，不影响测试结果。
+  - `app/main.py` 可导入，FastAPI 应用标题为“共享充电宝遗失赔付API”，存在 19 条路由。
+  - 核心接口验证通过：`/health` 返回 `200 healthy`；`/api/compensation/process` 合规赔付请求返回 `200 PROCESSABLE`。
+  - 人工复核路径验证通过：高额赔付请求返回 `MANUAL_REVIEW`，命中 `RUL_AMT_001`。
+  - 实现覆盖批次号、明细项、来源渠道、处理动作、复核意见、规则命中、需补充、已锁定、失败解释、历史回放等核心流程。
+- 阻断问题:
+  - 未发现阻断性问题。
+- 建议:
+  - 可补充项目级 README，说明使用 `python3 -m uvicorn app.main:app --reload` 启动和 `python3 -m pytest -q -s` 测试，降低验收成本。
+tokens used
+52,223

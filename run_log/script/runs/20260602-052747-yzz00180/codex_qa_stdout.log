@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目实现了 FastAPI 入口和配额批次处理主流程，但重复请求稳定性存在缺陷：`app/services.py:138` 查询已存在批次明细时没有 `order_by`，同一 `batch_no` 第二次返回的 `details` 顺序可能与首次处理顺序不同；我用内存 SQLite 直接调用 `QuotaService.process_batch` 验证混合明细后，重复响应出现明细顺序变化，影响原始提示词“重复请求要保持稳定结论”的 API 回执稳定性。此外，`app/rules.py:113` 对 `storage/api_calls` 触发的 `needs_supplement` 返回 `failure_reason=None`，无法解释需补充原因，响应解释信息不完整。
+- 主要证据:
+  - `app/main.py` 存在真实 API 入口：`POST /api/v1/quota/batch`、`GET /api/v1/quota/batch/{batch_no}`、`GET /api/v1/quota/audit/{batch_no}`。
+  - `requirements.txt` 存在依赖声明；当前环境未按该版本安装，`TestClient(app)` 报 `TypeError: __init__() got an unexpected keyword argument 'app'`，完整 pytest 受本次只读沙箱临时目录限制未能执行。
+  - 直接服务层验证显示正常/需补充/锁定可分流，但重复批次响应明细顺序不稳定。
+- 阻断问题:
+  - 重复请求返回不稳定，违反核心幂等/稳定结论要求。
+  - 需补充状态缺少具体补充原因说明。
+- 建议:
+  - 在 `app/services.py` 的 `_build_response` 查询中按创建顺序或固定字段排序。
+  - 为 `needs_supplement` 补充明确 `failure_reason`。
+  - 按 `requirements.txt` 建独立环境后重新运行 `python3 -m pytest -q`。

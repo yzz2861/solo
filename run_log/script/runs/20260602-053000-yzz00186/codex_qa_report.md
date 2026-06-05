@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `setup.py:16` 定义了 `tea-grading=tea_grading_cli.cli:cli` 控制台入口，`requirements.txt` 和 `setup.py` 均列出运行依赖。
+  - `python3 -m tea_grading_cli.cli --help` 可正常显示 `run`、`review`、`history-check` 命令。
+  - 使用项目内真实样例执行 `run --dry-run`，合规、超阈值、缺失材料、历史回放场景均能跑通；输出包含处理汇总、等级分布、坏行预览、差异预览。
+  - `tea_grading_cli/reader.py` 支持 CSV/XLSX/JSON 读取，`validator.py` 覆盖必填、范围、枚举、日期、重复/缺补充记录校验，`grader.py` 完成定级和金额计算，`exporter.py` 负责成功结果、坏行、差异、日志、汇总和复核入口导出。
+- 阻断问题: 无。完整 pytest 因当前只读沙箱无可用临时目录无法启动，不作为项目自身阻断；核心 CLI 入口已用 dry-run 验证。
+- 建议:
+  - 可补充 README，说明安装方式、示例命令、输入字段格式和输出文件含义，便于交付验收。
+  - `jsonschema` 当前列为依赖但源码未使用，可后续清理或真正用于规则 schema 校验。

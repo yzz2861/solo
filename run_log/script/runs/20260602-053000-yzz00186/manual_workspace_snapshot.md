@@ -1,0 +1,35 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/lastfailed
+- .pytest_cache/v/cache/nodeids
+- requirements.txt
+- setup.py
+- tea_grading_cli/__init__.py
+- tea_grading_cli/cli.py
+- tea_grading_cli/exporter.py
+- tea_grading_cli/grader.py
+- tea_grading_cli/models.py
+- tea_grading_cli/reader.py
+- tea_grading_cli/validator.py
+- tests/__init__.py
+- tests/data/compliant/grading_criteria.json
+- tests/data/compliant/main_list.csv
+- tests/data/compliant/supplement.csv
+- tests/data/compliant/validation_rules.json
+- tests/data/history_replay/grading_criteria.json
+- tests/data/history_replay/history.csv
+- tests/data/history_replay/main_list.csv
+- tests/data/history_replay/supplement.csv
+- tests/data/history_replay/validation_rules.json
+- tests/data/missing_material/grading_criteria.json
+- tests/data/missing_material/main_list.csv
+- tests/data/missing_material/supplement.csv
+- tests/data/missing_material/validation_rules.json
+- tests/data/over_threshold/grading_criteria.json
+- tests/data/over_threshold/main_list.csv
+- tests/data/over_threshold/supplement.csv
+- tests/data/over_threshold/validation_rules.json
+- tests/test_acceptance.py

@@ -1,0 +1,20 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目依赖已安装，`npm ls --depth=0` 正常，但核心运行链路不可用。`npm run build -- --noEmit` 和 `npm run dev` 都因 TypeScript 编译错误失败：`src/routes/api.ts:58` 将 `(string | undefined)[]` 传给要求 `string[]` 的 `saveProcessedResults`，服务无法启动，`/api/health` 也无法连接。`package.json:10` 的默认测试脚本指向不存在的 `src/test.ts`，`npm test` 直接报模块缺失；同时没有 `dist/server.js`，`npm start` 生产入口也不可用。这些问题阻断了保险理赔材料分拣 API 的安装后运行和核心流程体验。
+- 主要证据:
+  - `npm ls --depth=0` 通过，依赖存在。
+  - `npm run build -- --noEmit` 失败，报错位置为 `src/routes/api.ts:58`。
+  - `npm run dev` 同样因上述 TS2345 编译错误失败，服务未启动。
+  - `curl http://localhost:3000/api/health` 无法连接。
+  - `npm test` 失败，`package.json:10` 指向不存在的 `src/test.ts`。
+  - `dist/server.js` 不存在，`package.json:8` 的 `npm start` 入口不可用。
+- 阻断问题:
+  - TypeScript 编译失败导致开发服务、生产构建和 API 核心流程无法运行。
+  - 默认测试入口配置错误。
+  - 复核入口生成也疑似不一致：`src/utils/fileManager.ts:148` 返回 `/api/recheck/{businessNo}`，但实际复核接口 `src/routes/api.ts:123` 需要 `auditId`。
+- 建议:
+  - 修正 `src/routes/api.ts:45-58` 的错误数组类型，确保始终返回字符串。
+  - 将 `package.json` 的 `test` 指向真实存在的验收脚本或补齐 `src/test.ts`。
+  - 构建生成 `dist/server.js` 后验证 `npm start`、`npm run dev`、健康检查和单笔/批量分拣接口。

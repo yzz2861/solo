@@ -1,0 +1,3050 @@
+OpenAI Codex v0.133.0
+--------
+workdir: /Users/bill/Documents/solo/workspaces/yzz00179
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019e85c4-cb43-7713-bbaa-de1d98579b59
+--------
+user
+你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
+
+项目 ID: yzz00179
+当前轮次: 第一轮
+工作目录: /Users/bill/Documents/solo/workspaces/yzz00179
+
+请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
+1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
+2. 主要功能是否和提示词一致。
+3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
+4. 给出明确结论：通过 / 不通过。
+
+README 规则：
+- README 是验证线索，不是硬性验收项。
+- 如果项目没有 README，不要把“没有 README”本身作为质检不合格、任务未完成或不通过的原因。
+- 只有当原始提示词明确要求 README/文档，或缺少 README 的同时也找不到任何可运行入口、命令、页面、脚本或包配置，才可以说明这影响验证。
+- 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
+
+满意度规则：
+- 不要替用户判断“产物及过程是否满意”。
+- 不要输出“产物及过程是否满意”字段。
+- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+
+任务类型规则：
+- 必须输出“任务类型”字段。
+- 按当前轮次用户目标判断，而不是机械沿用第一轮。第二轮如果是在修第一轮错误，通常是“Bug修复”；如果是在补充第一轮显性缺失功能或强相关未完成功能，通常是“Feature迭代”。
+- 可选值只使用：Bug修复、0-1代码生成、Feature迭代、代码理解、代码重构、代码测试。
+
+路径规则：
+- “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
+
+输出格式：
+# Codex 质检报告
+- 结论: 通过/不通过
+- 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
+- 任务是否完成: 完成了任务/未完成任务
+- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 主要证据:
+- 阻断问题:
+- 建议:
+
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+codex
+我没有在已加载技能列表里看到“solo质检”技能文件，因此按你给出的 solo 质检口径执行：只读检查、不改文件、不提交。先梳理项目入口、依赖和实际可运行链路。
+exec
+/bin/zsh -lc "pwd && rg --files -g '"'!*node_modules*'"' -g '"'!*.png'"' -g '"'!*.jpg'"' -g '"'!*.jpeg'"' -g '"'!*.gif'"' -g '"'!*.webp'"'" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+/Users/bill/Documents/solo/workspaces/yzz00179
+src/house_verification/pipeline.py
+src/house_verification/utils.py
+src/house_verification/cli.py
+src/house_verification/reader.py
+src/house_verification/__init__.py
+src/house_verification/exporter.py
+src/house_verification/models.py
+src/house_verification/validator.py
+src/house_verification_cli.egg-info/dependency_links.txt
+src/house_verification_cli.egg-info/top_level.txt
+src/house_verification_cli.egg-info/requires.txt
+src/house_verification_cli.egg-info/entry_points.txt
+src/house_verification_cli.egg-info/SOURCES.txt
+src/house_verification_cli.egg-info/PKG-INFO
+examples/field_mapping.json
+examples/sample_houses.csv
+pyproject.toml
+requirements.txt
+
+exec
+/bin/zsh -lc 'ls -la' in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+total 16
+drwxr-xr-x@  6 bill  staff   192 Jun  2 08:21 .
+drwxr-xr-x  58 bill  staff  1856 Jun  2 05:30 ..
+drwxr-xr-x@  4 bill  staff   128 Jun  2 05:31 examples
+-rw-r--r--@  1 bill  staff   479 Jun  2 05:28 pyproject.toml
+-rw-r--r--@  1 bill  staff    82 Jun  2 05:28 requirements.txt
+drwxr-xr-x@  4 bill  staff   128 Jun  2 05:32 src
+
+exec
+/bin/zsh -lc "find .. -maxdepth 2 -iname '*prompt*' -o -iname '*task*' -o -iname '*readme*'" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+../yzz00048/README.md
+../yzz00046/README.md
+../yzz00041/README.md
+../yzz00031/README.md
+../yzz00038/README.md
+../yzz00181/README.md
+../yzz00032/README.md
+../yzz00035/README.md
+
+codex
+当前项目没有 README，但有 `pyproject.toml`、`requirements.txt`、Python 包源码和示例数据。接下来我会读入口、依赖声明和核心流程，再用项目自带示例尝试真实运行。
+exec
+/bin/zsh -lc "sed -n '1,220p' pyproject.toml" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "house-verification-cli"
+version = "0.1.0"
+description = "房产中介房源验真CLI工具"
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.0.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "pydantic>=2.0.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.scripts]
+house-verification = "house_verification.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+exec
+/bin/zsh -lc "sed -n '1,220p' requirements.txt" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+click>=8.0.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+pydantic>=2.0.0
+python-dateutil>=2.8.0
+
+exec
+/bin/zsh -lc "sed -n '1,260p' src/house_verification/cli.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+import click
+import sys
+import json
+from pathlib import Path
+from .pipeline import VerificationPipeline
+from .__init__ import __version__
+
+
+@click.group()
+@click.version_option(__version__, prog_name="house-verification")
+def main():
+    """房产中介房源验真CLI工具
+    
+    用于房产中介房源的数据校验、状态分流和后续闭环处理。
+    支持多文件输入、字段映射、日期范围过滤和多格式导出。
+    """
+    pass
+
+
+@main.command()
+@click.argument("input_files", nargs=-1, type=click.Path(exists=True), required=True)
+@click.option("--mapping", "-m", type=click.Path(exists=True), help="字段映射配置文件(JSON/CSV)")
+@click.option("--start-date", "-s", help="开始日期 (YYYY-MM-DD)")
+@click.option("--end-date", "-e", help="结束日期 (YYYY-MM-DD)")
+@click.option("--output", "-o", default="./output", help="输出目录 (默认: ./output)")
+@click.option("--format", "-f", "export_format", default="csv", 
+              type=click.Choice(["csv", "excel", "json"], case_sensitive=False),
+              help="导出格式 (默认: csv)")
+@click.option("--quiet", "-q", is_flag=True, help="静默模式，减少输出")
+def verify(input_files, mapping, start_date, end_date, output, export_format, quiet):
+    """执行房源验真流程
+    
+    INPUT_FILES: 一个或多个输入文件路径 (支持CSV/Excel/JSON)
+    """
+    try:
+        if not quiet:
+            click.echo("=" * 60)
+            click.echo("房产中介房源验真CLI工具")
+            click.echo("=" * 60)
+            click.echo(f"输入文件: {len(input_files)} 个")
+            for f in input_files:
+                click.echo(f"  - {Path(f).name}")
+            if mapping:
+                click.echo(f"字段映射: {Path(mapping).name}")
+            if start_date or end_date:
+                click.echo(f"日期范围: {start_date or '无'} ~ {end_date or '无'}")
+            click.echo(f"导出格式: {export_format.upper()}")
+            click.echo(f"输出目录: {output}")
+            click.echo("-" * 60)
+        
+        pipeline = VerificationPipeline(
+            input_files=list(input_files),
+            mapping_file=mapping,
+            start_date=start_date,
+            end_date=end_date,
+            output_dir=output,
+            export_format=export_format
+        )
+        
+        with click.progressbar(length=100, label="处理中", show_eta=False) as bar:
+            bar.update(20)
+            result = pipeline.run()
+            bar.update(80)
+        
+        if not quiet:
+            click.echo()
+            click.echo("处理完成!")
+            click.echo("-" * 60)
+            click.echo(f"总记录数: {result['total_records']}")
+            click.echo()
+            click.echo("导出文件:")
+            for category, file_path in result["exported_files"].items():
+                category_name = {
+                    "normal": "正常记录",
+                    "abnormal": "异常记录",
+                    "pending": "待复核记录",
+                    "summary": "汇总报告"
+                }.get(category, category)
+                click.echo(f"  [{category_name}] {file_path}")
+        
+        sys.exit(0)
+        
+    except FileNotFoundError as e:
+        click.echo(f"错误: 文件未找到 - {str(e)}", err=True)
+        sys.exit(1)
+    except ValueError as e:
+        click.echo(f"错误: 参数错误 - {str(e)}", err=True)
+        sys.exit(1)
+    except RuntimeError as e:
+        click.echo(f"错误: 运行时错误 - {str(e)}", err=True)
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"错误: 未知错误 - {str(e)}", err=True)
+        click.echo("请检查输入文件格式和配置是否正确", err=True)
+        sys.exit(1)
+
+
+@main.command(name="list-rules")
+def list_rules():
+    """列出所有内置校验规则"""
+    from .validator import ValidationEngine
+    
+    validator = ValidationEngine()
+    rules = validator.rules
+    
+    click.echo("=" * 60)
+    click.echo("内置校验规则列表")
+    click.echo("=" * 60)
+    
+    for i, rule in enumerate(rules, 1):
+        click.echo()
+        click.echo(f"{i}. {rule.name}")
+        click.echo(f"   字段: {rule.field}")
+        click.echo(f"   类型: {rule.rule_type}")
+        click.echo(f"   风险: {rule.risk_level}")
+        if rule.parameters:
+            click.echo(f"   参数: {json.dumps(rule.parameters, ensure_ascii=False)}")
+    
+    click.echo()
+    click.echo("=" * 60)
+
+
+@main.command(name="gen-mapping")
+@click.option("--output", "-o", default="field_mapping.json", help="输出文件路径")
+@click.option("--format", "-f", "mapping_format", default="json", 
+              type=click.Choice(["json", "csv"], case_sensitive=False),
+              help="映射文件格式 (默认: json)")
+def gen_mapping(output, mapping_format):
+    """生成示例字段映射配置文件"""
+    example_mapping = [
+        {
+            "target_field": "house_id",
+            "source_field": "房源编号",
+            "transform": None
+        },
+        {
+            "target_field": "house_title",
+            "source_field": "房源标题",
+            "transform": "strip"
+        },
+        {
+            "target_field": "price",
+            "source_field": "价格",
+            "transform": "float"
+        },
+        {
+            "target_field": "area",
+            "source_field": "面积",
+            "transform": "float"
+        },
+        {
+            "target_field": "location",
+            "source_field": "位置",
+            "transform": None
+        },
+        {
+            "target_field": "rooms",
+            "source_field": "室",
+            "transform": "int"
+        },
+        {
+            "target_field": "halls",
+            "source_field": "厅",
+            "transform": "int"
+        },
+        {
+            "target_field": "floor",
+            "source_field": "楼层",
+            "transform": None
+        },
+        {
+            "target_field": "orientation",
+            "source_field": "朝向",
+            "transform": None
+        },
+        {
+            "target_field": "decoration",
+            "source_field": "装修",
+            "transform": None
+        },
+        {
+            "target_field": "publish_date",
+            "source_field": "发布日期",
+            "transform": "date"
+        },
+        {
+            "target_field": "agent_name",
+            "source_field": "中介姓名",
+            "transform": None
+        },
+        {
+            "target_field": "agent_phone",
+            "source_field": "中介电话",
+            "transform": "phone"
+        }
+    ]
+    
+    if mapping_format == "json":
+        with open(output, "w", encoding="utf-8") as f:
+            json.dump(example_mapping, f, ensure_ascii=False, indent=2)
+    else:
+        import csv
+        with open(output, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["target_field", "source_field", "transform"])
+            writer.writeheader()
+            writer.writerows(example_mapping)
+    
+    click.echo(f"示例字段映射文件已生成: {output}")
+
+
+if __name__ == "__main__":
+    main()
+
+exec
+/bin/zsh -lc "sed -n '1,260p' src/house_verification/pipeline.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+from typing import List, Dict, Any, Optional
+from datetime import datetime
+from .models import HouseRecord, RecordStatus, RiskLevel
+from .reader import DataReader, load_field_mapping
+from .validator import ValidationEngine, DuplicateChecker
+from .exporter import DataExporter
+from .utils import generate_trace_id, parse_date, parse_float, parse_int, parse_phone, is_in_date_range
+
+
+class VerificationPipeline:
+    def __init__(self, 
+                 input_files: List[str],
+                 mapping_file: Optional[str] = None,
+                 start_date: Optional[str] = None,
+                 end_date: Optional[str] = None,
+                 output_dir: str = "./output",
+                 export_format: str = "csv"):
+        self.input_files = input_files
+        self.mapping_file = mapping_file
+        self.start_date = parse_date(start_date) if start_date else None
+        self.end_date = parse_date(end_date) if end_date else None
+        self.output_dir = output_dir
+        self.export_format = export_format
+        
+        self.field_mappings = load_field_mapping(mapping_file) if mapping_file else []
+        self.reader = DataReader(self.field_mappings)
+        self.validator = ValidationEngine()
+        self.duplicate_checker = DuplicateChecker()
+        self.exporter = DataExporter(output_dir, export_format)
+        
+        self.records: List[HouseRecord] = []
+    
+    def run(self) -> Dict[str, Any]:
+        all_raw_records = []
+        
+        for file_path in self.input_files:
+            try:
+                raw_records = self.reader.read_file(file_path)
+                all_raw_records.extend(raw_records)
+            except Exception as e:
+                raise RuntimeError(f"读取文件 {file_path} 失败: {str(e)}")
+        
+        for raw_record in all_raw_records:
+            house_record = self._process_raw_record(raw_record)
+            self.records.append(house_record)
+        
+        for record in self.records:
+            is_dup, dup_msg = self.duplicate_checker.check_duplicate(record)
+            if is_dup:
+                record.error_messages.append(f"[高风险] {dup_msg}")
+                record.status = RecordStatus.ABNORMAL
+                record.risk_level = RiskLevel.HIGH
+        
+        export_results = self.exporter.export(self.records)
+        
+        return {
+            "total_records": len(self.records),
+            "exported_files": export_results,
+        }
+    
+    def _process_raw_record(self, raw_record: Dict[str, Any]) -> HouseRecord:
+        source_file = raw_record.get("_source_file", "unknown")
+        source_line = raw_record.get("_source_line", 0)
+        
+        original_data = {k: v for k, v in raw_record.items() if not k.startswith("_")}
+        
+        mapped_data = self.reader.apply_mapping(raw_record)
+        
+        trace_id = generate_trace_id(source_file, source_line, original_data)
+        
+        publish_date = parse_date(mapped_data.get("publish_date", ""))
+        
+        if not is_in_date_range(publish_date, self.start_date, self.end_date):
+            house_record = HouseRecord(
+                trace_id=trace_id,
+                source_file=source_file,
+                source_line=source_line,
+                original_data=original_data,
+                status=RecordStatus.ABNORMAL,
+                risk_level=RiskLevel.UNDETERMINED,
+                error_messages=["[高风险] 发布日期不在指定范围内"]
+            )
+            return house_record
+        
+        house_record = HouseRecord(
+            trace_id=trace_id,
+            source_file=source_file,
+            source_line=source_line,
+            original_data=original_data,
+            house_id=str(mapped_data.get("house_id", "")).strip(),
+            house_title=str(mapped_data.get("house_title", "")).strip(),
+            price=parse_float(mapped_data.get("price")),
+            area=parse_float(mapped_data.get("area")),
+            location=str(mapped_data.get("location", "")).strip(),
+            rooms=parse_int(mapped_data.get("rooms")),
+            halls=parse_int(mapped_data.get("halls")),
+            floor=str(mapped_data.get("floor", "")).strip(),
+            orientation=str(mapped_data.get("orientation", "")).strip(),
+            decoration=str(mapped_data.get("decoration", "")).strip(),
+            publish_date=publish_date,
+            agent_name=str(mapped_data.get("agent_name", "")).strip(),
+            agent_phone=parse_phone(mapped_data.get("agent_phone")),
+        )
+        
+        house_record = self.validator.validate_record(house_record)
+        
+        return house_record
+
+codex
+已确认这是一个 Python CLI 项目，入口脚本声明为 `house-verification = house_verification.cli:main`。我会重点验证安装/导入、CLI 命令和示例验真链路是否能跑通，并对照代码行为判断核心功能完成度。
+exec
+/bin/zsh -lc "sed -n '1,280p' src/house_verification/reader.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+import os
+import json
+import pandas as pd
+from pathlib import Path
+from typing import List, Dict, Any, Tuple
+from .models import FieldMapping
+from .utils import parse_date, parse_float, parse_int, parse_phone
+
+
+class DataReader:
+    def __init__(self, field_mappings: List[FieldMapping] = None):
+        self.field_mappings = field_mappings or []
+    
+    def read_file(self, file_path: str) -> List[Dict[str, Any]]:
+        path = Path(file_path)
+        if not path.exists():
+            raise FileNotFoundError(f"文件不存在: {file_path}")
+        
+        suffix = path.suffix.lower()
+        
+        if suffix == ".csv":
+            return self._read_csv(file_path)
+        elif suffix in [".xlsx", ".xls"]:
+            return self._read_excel(file_path)
+        elif suffix == ".json":
+            return self._read_json(file_path)
+        else:
+            raise ValueError(f"不支持的文件格式: {suffix}")
+    
+    def _read_csv(self, file_path: str) -> List[Dict[str, Any]]:
+        df = pd.read_csv(file_path, dtype=str, keep_default_na=False)
+        records = []
+        for idx, row in df.iterrows():
+            records.append({
+                "_source_line": idx + 2,
+                "_source_file": file_path,
+                **row.to_dict()
+            })
+        return records
+    
+    def _read_excel(self, file_path: str) -> List[Dict[str, Any]]:
+        df = pd.read_excel(file_path, dtype=str, keep_default_na=False)
+        records = []
+        for idx, row in df.iterrows():
+            records.append({
+                "_source_line": idx + 2,
+                "_source_file": file_path,
+                **row.to_dict()
+            })
+        return records
+    
+    def _read_json(self, file_path: str) -> List[Dict[str, Any]]:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        if isinstance(data, dict):
+            data = [data]
+        elif not isinstance(data, list):
+            raise ValueError("JSON文件格式错误，必须是数组或对象")
+        
+        records = []
+        for idx, item in enumerate(data):
+            records.append({
+                "_source_line": idx + 1,
+                "_source_file": file_path,
+                **item
+            })
+        return records
+    
+    def apply_mapping(self, record: Dict[str, Any]) -> Dict[str, Any]:
+        if not self.field_mappings:
+            return record
+        
+        mapped = {}
+        for mapping in self.field_mappings:
+            source_val = record.get(mapping.source_field, "")
+            if mapping.transform:
+                source_val = self._apply_transform(source_val, mapping.transform)
+            mapped[mapping.target_field] = source_val
+        
+        return mapped
+    
+    def _apply_transform(self, value: Any, transform: str) -> Any:
+        transforms = {
+            "date": lambda v: parse_date(v),
+            "float": lambda v: parse_float(v),
+            "int": lambda v: parse_int(v),
+            "phone": lambda v: parse_phone(v),
+            "strip": lambda v: str(v).strip() if v else "",
+            "upper": lambda v: str(v).upper() if v else "",
+            "lower": lambda v: str(v).lower() if v else "",
+        }
+        
+        if transform in transforms:
+            return transforms[transform](value)
+        return value
+
+
+def load_field_mapping(mapping_file: str) -> List[FieldMapping]:
+    path = Path(mapping_file)
+    if not path.exists():
+        raise FileNotFoundError(f"字段映射文件不存在: {mapping_file}")
+    
+    if path.suffix == ".json":
+        with open(path, "r", encoding="utf-8") as f:
+            mappings_data = json.load(f)
+    elif path.suffix in [".csv"]:
+        df = pd.read_csv(path)
+        mappings_data = df.to_dict("records")
+    else:
+        raise ValueError(f"不支持的映射文件格式: {path.suffix}")
+    
+    return [FieldMapping(**m) for m in mappings_data]
+
+exec
+/bin/zsh -lc "sed -n '1,320p' src/house_verification/validator.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+import re
+from typing import List, Dict, Any, Tuple
+from datetime import datetime
+from .models import HouseRecord, RiskLevel, RecordStatus, ValidationRule
+from .utils import parse_date, parse_float, parse_int, parse_phone
+
+
+class ValidationEngine:
+    def __init__(self, custom_rules: List[ValidationRule] = None):
+        self.rules = self._get_default_rules()
+        if custom_rules:
+            self.rules.extend(custom_rules)
+    
+    def _get_default_rules(self) -> List[ValidationRule]:
+        return [
+            ValidationRule(
+                name="必填房源编号",
+                field="house_id",
+                rule_type="required",
+                risk_level=RiskLevel.HIGH,
+                error_message="房源编号为必填项"
+            ),
+            ValidationRule(
+                name="必填房源标题",
+                field="house_title",
+                rule_type="required",
+                risk_level=RiskLevel.MEDIUM,
+                error_message="房源标题为必填项"
+            ),
+            ValidationRule(
+                name="必填价格",
+                field="price",
+                rule_type="required",
+                risk_level=RiskLevel.HIGH,
+                error_message="价格为必填项"
+            ),
+            ValidationRule(
+                name="价格范围校验",
+                field="price",
+                rule_type="range",
+                parameters={"min": 1, "max": 100000},
+                risk_level=RiskLevel.HIGH,
+                error_message="价格应在1-100000万元之间"
+            ),
+            ValidationRule(
+                name="必填面积",
+                field="area",
+                rule_type="required",
+                risk_level=RiskLevel.HIGH,
+                error_message="面积为必填项"
+            ),
+            ValidationRule(
+                name="面积范围校验",
+                field="area",
+                rule_type="range",
+                parameters={"min": 5, "max": 2000},
+                risk_level=RiskLevel.MEDIUM,
+                error_message="面积应在5-2000平方米之间"
+            ),
+            ValidationRule(
+                name="必填位置",
+                field="location",
+                rule_type="required",
+                risk_level=RiskLevel.MEDIUM,
+                error_message="位置为必填项"
+            ),
+            ValidationRule(
+                name="室数范围校验",
+                field="rooms",
+                rule_type="range",
+                parameters={"min": 0, "max": 20},
+                risk_level=RiskLevel.LOW,
+                error_message="室数应在0-20之间"
+            ),
+            ValidationRule(
+                name="厅数范围校验",
+                field="halls",
+                rule_type="range",
+                parameters={"min": 0, "max": 10},
+                risk_level=RiskLevel.LOW,
+                error_message="厅数应在0-10之间"
+            ),
+            ValidationRule(
+                name="单价异常检测",
+                field="price_area_ratio",
+                rule_type="ratio_check",
+                parameters={"min": 0.1, "max": 50},
+                risk_level=RiskLevel.MEDIUM,
+                error_message="单价异常，可能存在虚假信息"
+            ),
+            ValidationRule(
+                name="必填中介姓名",
+                field="agent_name",
+                rule_type="required",
+                risk_level=RiskLevel.MEDIUM,
+                error_message="中介姓名为必填项"
+            ),
+            ValidationRule(
+                name="中介电话格式校验",
+                field="agent_phone",
+                rule_type="phone",
+                risk_level=RiskLevel.MEDIUM,
+                error_message="中介电话格式不正确"
+            ),
+            ValidationRule(
+                name="发布日期有效性",
+                field="publish_date",
+                rule_type="date_valid",
+                risk_level=RiskLevel.LOW,
+                error_message="发布日期无效或超出合理范围"
+            ),
+        ]
+    
+    def validate_record(self, record: HouseRecord) -> HouseRecord:
+        errors = []
+        warnings = []
+        risk_scores = {
+            RiskLevel.LOW: 0,
+            RiskLevel.MEDIUM: 0,
+            RiskLevel.HIGH: 0,
+            RiskLevel.UNDETERMINED: 0,
+        }
+        
+        record_dict = record.model_dump()
+        
+        for rule in self.rules:
+            is_valid, message = self._apply_rule(rule, record_dict)
+            if not is_valid:
+                if rule.risk_level in [RiskLevel.HIGH, RiskLevel.MEDIUM]:
+                    errors.append(f"[{rule.risk_level}] {message}")
+                else:
+                    warnings.append(f"[{rule.risk_level}] {message}")
+                risk_scores[rule.risk_level] += 1
+        
+        record.error_messages = errors
+        record.warning_messages = warnings
+        
+        if errors:
+            record.status = RecordStatus.ABNORMAL
+        elif warnings and len(warnings) >= 3:
+            record.status = RecordStatus.PENDING
+        else:
+            record.status = RecordStatus.NORMAL
+        
+        record.risk_level = self._calculate_risk_level(risk_scores)
+        
+        return record
+    
+    def _apply_rule(self, rule: ValidationRule, record: Dict[str, Any]) -> Tuple[bool, str]:
+        field_value = record.get(rule.field)
+        
+        if rule.rule_type == "required":
+            if field_value is None or field_value == "" or (isinstance(field_value, str) and field_value.strip() == ""):
+                return False, rule.error_message
+        
+        elif rule.rule_type == "range":
+            if field_value is not None and field_value != "":
+                try:
+                    val = float(field_value)
+                    min_val = rule.parameters.get("min", float("-inf"))
+                    max_val = rule.parameters.get("max", float("inf"))
+                    if val < min_val or val > max_val:
+                        return False, f"{rule.error_message} (当前值: {val})"
+                except (ValueError, TypeError):
+                    return False, f"{rule.error_message} (无法解析数值)"
+        
+        elif rule.rule_type == "phone":
+            if field_value:
+                phone = re.sub(r"[^\d]", "", str(field_value))
+                if not (len(phone) == 11 and phone.startswith("1")) and len(phone) != 8:
+                    return False, f"{rule.error_message} (当前值: {field_value})"
+        
+        elif rule.rule_type == "date_valid":
+            if field_value:
+                try:
+                    date_val = parse_date(field_value) if not isinstance(field_value, datetime) else field_value
+                    if date_val:
+                        if date_val.year < 2000 or date_val > datetime.now():
+                            return False, f"{rule.error_message} (当前值: {date_val})"
+                except:
+                    return False, f"{rule.error_message} (无法解析日期)"
+        
+        elif rule.rule_type == "ratio_check":
+            price = record.get("price")
+            area = record.get("area")
+            if price and area and float(area) > 0:
+                ratio = float(price) / float(area)
+                min_ratio = rule.parameters.get("min", 0)
+                max_ratio = rule.parameters.get("max", float("inf"))
+                if ratio < min_ratio or ratio > max_ratio:
+                    return False, f"{rule.error_message} (单价: {ratio:.2f}万元/㎡)"
+        
+        return True, ""
+    
+    def _calculate_risk_level(self, risk_scores: Dict[RiskLevel, int]) -> RiskLevel:
+        if risk_scores[RiskLevel.HIGH] > 0:
+            return RiskLevel.HIGH
+        elif risk_scores[RiskLevel.MEDIUM] >= 2:
+            return RiskLevel.HIGH
+        elif risk_scores[RiskLevel.MEDIUM] == 1:
+            return RiskLevel.MEDIUM
+        elif risk_scores[RiskLevel.LOW] >= 3:
+            return RiskLevel.MEDIUM
+        elif risk_scores[RiskLevel.LOW] > 0:
+            return RiskLevel.LOW
+        else:
+            return RiskLevel.LOW
+
+
+class DuplicateChecker:
+    def __init__(self):
+        self.seen_records = {}
+    
+    def check_duplicate(self, record: HouseRecord) -> Tuple[bool, str]:
+        key_fields = []
+        
+        if record.house_id:
+            key_fields.append(f"id:{record.house_id}")
+        
+        if record.price and record.area and record.location:
+            key_fields.append(f"sig:{record.price}-{record.area}-{record.location}")
+        
+        for key in key_fields:
+            if key in self.seen_records:
+                return True, f"重复记录，与 {self.seen_records[key]} 重复"
+            self.seen_records[key] = record.trace_id
+        
+        return False, ""
+
+exec
+/bin/zsh -lc "sed -n '1,280p' src/house_verification/models.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+from enum import Enum
+from typing import Optional, Dict, Any
+from pydantic import BaseModel, Field
+from datetime import datetime
+
+
+class RiskLevel(str, Enum):
+    LOW = "低风险"
+    MEDIUM = "中风险"
+    HIGH = "高风险"
+    UNDETERMINED = "无法判定"
+
+
+class RecordStatus(str, Enum):
+    NORMAL = "正常"
+    ABNORMAL = "异常"
+    PENDING = "待复核"
+
+
+class HouseRecord(BaseModel):
+    trace_id: str = Field(description="可追溯编号")
+    source_file: str = Field(description="来源文件")
+    source_line: int = Field(description="来源行号")
+    original_data: Dict[str, Any] = Field(description="原始数据")
+    
+    house_id: Optional[str] = Field(None, description="房源编号")
+    house_title: Optional[str] = Field(None, description="房源标题")
+    price: Optional[float] = Field(None, description="价格(万元)")
+    area: Optional[float] = Field(None, description="面积(平方米)")
+    location: Optional[str] = Field(None, description="位置")
+    rooms: Optional[int] = Field(None, description="室数")
+    halls: Optional[int] = Field(None, description="厅数")
+    floor: Optional[str] = Field(None, description="楼层")
+    orientation: Optional[str] = Field(None, description="朝向")
+    decoration: Optional[str] = Field(None, description="装修")
+    publish_date: Optional[datetime] = Field(None, description="发布日期")
+    agent_name: Optional[str] = Field(None, description="中介姓名")
+    agent_phone: Optional[str] = Field(None, description="中介电话")
+    
+    status: RecordStatus = Field(RecordStatus.NORMAL, description="记录状态")
+    risk_level: RiskLevel = Field(RiskLevel.LOW, description="风险等级")
+    error_messages: list = Field(default_factory=list, description="错误信息")
+    warning_messages: list = Field(default_factory=list, description="警告信息")
+
+
+class ValidationRule(BaseModel):
+    name: str
+    field: str
+    rule_type: str
+    parameters: Dict[str, Any] = Field(default_factory=dict)
+    risk_level: RiskLevel = Field(RiskLevel.MEDIUM)
+    error_message: str
+
+
+class FieldMapping(BaseModel):
+    target_field: str
+    source_field: str
+    transform: Optional[str] = None
+
+exec
+/bin/zsh -lc "sed -n '1,280p' src/house_verification/exporter.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+import os
+import json
+import csv
+from pathlib import Path
+from typing import List, Dict, Any
+import pandas as pd
+from .models import HouseRecord, RecordStatus
+
+
+class DataExporter:
+    def __init__(self, output_dir: str, format: str = "csv"):
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.format = format.lower()
+    
+    def export(self, records: List[HouseRecord]) -> Dict[str, str]:
+        normal_records = [r for r in records if r.status == RecordStatus.NORMAL]
+        abnormal_records = [r for r in records if r.status == RecordStatus.ABNORMAL]
+        pending_records = [r for r in records if r.status == RecordStatus.PENDING]
+        
+        results = {}
+        
+        if normal_records:
+            results["normal"] = self._export_category(normal_records, "normal")
+        if abnormal_records:
+            results["abnormal"] = self._export_category(abnormal_records, "abnormal")
+        if pending_records:
+            results["pending"] = self._export_category(pending_records, "pending")
+        
+        summary = self._generate_summary(records, normal_records, abnormal_records, pending_records)
+        summary_path = self.output_dir / "summary.json"
+        with open(summary_path, "w", encoding="utf-8") as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
+        results["summary"] = str(summary_path)
+        
+        return results
+    
+    def _export_category(self, records: List[HouseRecord], category: str) -> str:
+        if self.format == "csv":
+            return self._export_csv(records, category)
+        elif self.format == "excel" or self.format == "xlsx":
+            return self._export_excel(records, category)
+        elif self.format == "json":
+            return self._export_json(records, category)
+        else:
+            raise ValueError(f"不支持的导出格式: {self.format}")
+    
+    def _export_csv(self, records: List[HouseRecord], category: str) -> str:
+        file_path = self.output_dir / f"{category}_records.csv"
+        
+        rows = []
+        for record in records:
+            row = self._record_to_row(record)
+            rows.append(row)
+        
+        if rows:
+            df = pd.DataFrame(rows)
+            df.to_csv(file_path, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_ALL)
+        
+        return str(file_path)
+    
+    def _export_excel(self, records: List[HouseRecord], category: str) -> str:
+        file_path = self.output_dir / f"{category}_records.xlsx"
+        
+        rows = []
+        for record in records:
+            row = self._record_to_row(record)
+            rows.append(row)
+        
+        if rows:
+            df = pd.DataFrame(rows)
+            df.to_excel(file_path, index=False, engine="openpyxl")
+        
+        return str(file_path)
+    
+    def _export_json(self, records: List[HouseRecord], category: str) -> str:
+        file_path = self.output_dir / f"{category}_records.json"
+        
+        data = []
+        for record in records:
+            record_dict = record.model_dump()
+            if record_dict.get("publish_date"):
+                record_dict["publish_date"] = record_dict["publish_date"].isoformat() if hasattr(record_dict["publish_date"], "isoformat") else str(record_dict["publish_date"])
+            data.append(record_dict)
+        
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2, default=str)
+        
+        return str(file_path)
+    
+    def _record_to_row(self, record: HouseRecord) -> Dict[str, Any]:
+        record_dict = record.model_dump()
+        
+        row = {
+            "可追溯编号": record.trace_id,
+            "来源文件": record.source_file,
+            "来源行号": record.source_line,
+            "房源编号": record.house_id,
+            "房源标题": record.house_title,
+            "价格(万元)": record.price,
+            "面积(平方米)": record.area,
+            "位置": record.location,
+            "室数": record.rooms,
+            "厅数": record.halls,
+            "楼层": record.floor,
+            "朝向": record.orientation,
+            "装修": record.decoration,
+            "发布日期": record.publish_date.isoformat() if record.publish_date else "",
+            "中介姓名": record.agent_name,
+            "中介电话": record.agent_phone,
+            "记录状态": record.status,
+            "风险等级": record.risk_level,
+            "错误信息": " | ".join(record.error_messages) if record.error_messages else "",
+            "警告信息": " | ".join(record.warning_messages) if record.warning_messages else "",
+        }
+        
+        return row
+    
+    def _generate_summary(self, all_records: List[HouseRecord], 
+                          normal: List[HouseRecord], 
+                          abnormal: List[HouseRecord], 
+                          pending: List[HouseRecord]) -> Dict[str, Any]:
+        risk_distribution = {
+            "低风险": len([r for r in all_records if r.risk_level == "低风险"]),
+            "中风险": len([r for r in all_records if r.risk_level == "中风险"]),
+            "高风险": len([r for r in all_records if r.risk_level == "高风险"]),
+            "无法判定": len([r for r in all_records if r.risk_level == "无法判定"]),
+        }
+        
+        return {
+            "总记录数": len(all_records),
+            "正常记录数": len(normal),
+            "异常记录数": len(abnormal),
+            "待复核记录数": len(pending),
+            "风险分布": risk_distribution,
+            "导出格式": self.format,
+            "导出时间": pd.Timestamp.now().isoformat(),
+        }
+
+codex
+核心代码覆盖了读取 CSV/Excel/JSON、字段映射、校验、重复检查和导出，但我看到字段映射转换可能会把日期提前转成 `datetime`。需要实际跑示例确认这一点是否会阻断主流程。
+exec
+/bin/zsh -lc "sed -n '1,120p' src/house_verification/__init__.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+__version__ = "0.1.0"
+
+exec
+/bin/zsh -lc "sed -n '1,280p' src/house_verification/utils.py" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+import hashlib
+import re
+from datetime import datetime
+from typing import Any, Optional
+from urllib.parse import quote
+
+
+def generate_trace_id(source_file: str, source_line: int, data: dict) -> str:
+    source_name = source_file.split("/")[-1] if "/" in source_file else source_file
+    data_str = str(sorted(data.items())) if data else ""
+    hash_input = f"{source_name}:{source_line}:{data_str}"
+    hash_val = hashlib.md5(hash_input.encode("utf-8")).hexdigest()[:8]
+    timestamp = datetime.now().strftime("%Y%m%d%H%M")
+    return f"HV-{timestamp}-{hash_val.upper()}"
+
+
+def parse_date(value: Any) -> Optional[datetime]:
+    if value is None or value == "":
+        return None
+    if isinstance(value, datetime):
+        return value
+    
+    date_str = str(value).strip()
+    date_formats = [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%Y-%m-%d",
+        "%Y/%m/%d %H:%M:%S",
+        "%Y/%m/%d",
+        "%Y年%m月%d日",
+        "%Y%m%d",
+    ]
+    
+    for fmt in date_formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def parse_float(value: Any) -> Optional[float]:
+    if value is None or value == "":
+        return None
+    try:
+        cleaned = str(value).replace(",", "").replace(" ", "")
+        cleaned = re.sub(r"[^\d.-]", "", cleaned)
+        return float(cleaned)
+    except (ValueError, TypeError):
+        return None
+
+
+def parse_int(value: Any) -> Optional[int]:
+    float_val = parse_float(value)
+    return int(float_val) if float_val is not None else None
+
+
+def parse_phone(value: Any) -> Optional[str]:
+    if value is None or value == "":
+        return None
+    phone = re.sub(r"[^\d]", "", str(value))
+    if len(phone) == 11 and phone.startswith("1"):
+        return phone
+    if len(phone) == 8:
+        return phone
+    return str(value)
+
+
+def is_in_date_range(date_val: Optional[datetime], start_date: Optional[datetime], end_date: Optional[datetime]) -> bool:
+    if date_val is None:
+        return True
+    if start_date and date_val < start_date:
+        return False
+    if end_date and date_val > end_date:
+        return False
+    return True
+
+exec
+/bin/zsh -lc "sed -n '1,220p' examples/field_mapping.json" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+[
+    {
+        "target_field": "house_id",
+        "source_field": "房源编号",
+        "transform": null
+    },
+    {
+        "target_field": "house_title",
+        "source_field": "房源标题",
+        "transform": "strip"
+    },
+    {
+        "target_field": "price",
+        "source_field": "价格",
+        "transform": "float"
+    },
+    {
+        "target_field": "area",
+        "source_field": "面积",
+        "transform": "float"
+    },
+    {
+        "target_field": "location",
+        "source_field": "位置",
+        "transform": null
+    },
+    {
+        "target_field": "rooms",
+        "source_field": "室",
+        "transform": "int"
+    },
+    {
+        "target_field": "halls",
+        "source_field": "厅",
+        "transform": "int"
+    },
+    {
+        "target_field": "floor",
+        "source_field": "楼层",
+        "transform": null
+    },
+    {
+        "target_field": "orientation",
+        "source_field": "朝向",
+        "transform": null
+    },
+    {
+        "target_field": "decoration",
+        "source_field": "装修",
+        "transform": null
+    },
+    {
+        "target_field": "publish_date",
+        "source_field": "发布日期",
+        "transform": "date"
+    },
+    {
+        "target_field": "agent_name",
+        "source_field": "中介姓名",
+        "transform": null
+    },
+    {
+        "target_field": "agent_phone",
+        "source_field": "中介电话",
+        "transform": "phone"
+    }
+]
+
+exec
+/bin/zsh -lc "sed -n '1,80p' examples/sample_houses.csv" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+房源编号,房源标题,价格,面积,位置,室,厅,楼层,朝向,装修,发布日期,中介姓名,中介电话
+HS001,朝阳区国贸精装两居室,580,89,朝阳区国贸,2,1,中层/28层,南北,精装,2024-01-15,张三,13800138001
+HS002,海淀区中关村学区房,850,120,海淀区中关村,3,2,高层/18层,东南,简装,2024-02-20,李四,13900139002
+HS003,西城区金融街豪宅,2500,200,西城区金融街,4,3,低层/10层,南北,豪装,2024-03-10,王五,13700137003
+HS004,丰台区丽泽商务区一居室,320,55,丰台区丽泽,1,1,中层/25层,南,精装,2024-01-25,赵六,13600136004
+HS005,东城区东直门复式,1200,150,东城区东直门,3,2,顶层/15层,南北,精装,2024-02-28,钱七,13500135005
+HS006,,450,90,朝阳区望京,2,1,中层/20层,东西,简装,2024-03-05,孙八,13400134006
+HS007,昌平区回龙观大三居,,110,昌平区回龙观,3,1,低层/6层,南北,简装,2024-01-18,周九,13300133007
+HS008,通州区梨园低价房,50,5000,通州区梨园,2,1,中层/18层,南,毛坯,2024-02-10,吴十,13200132008
+HS009,顺义区天竺别墅,3500,300,顺义区天竺,5,3,独栋,南北,豪装,2024-03-15,郑十一,13100131009
+HS010,大兴区亦庄刚需房,280,75,大兴区亦庄,2,1,高层/22层,东南,精装,2024-02-05,,13000130010
+HS011,房山区长阳两居室,180,85,房山区长阳,2,1,中层/15层,南北,简装,2024-01-30,冯十二,
+HS012,朝阳区国贸精装两居室,580,89,朝阳区国贸,2,1,中层/28层,南北,精装,2024-01-15,张三,13800138001
+HS013,怀柔区雁栖湖度假房,450,120,怀柔区雁栖湖,3,2,低层/5层,南北,精装,2023-12-01,陈十三,12900129013
+HS014,平谷区平谷城区一居,80,45,平谷区平谷,1,1,中层/12层,南,简装,2024-04-01,褚十四,12800128014
+HS015,门头沟永定镇新房,200,80,门头沟永定,2,1,高层/20层,南北,毛坯,2024-03-20,卫十五,12700127015
+
+exec
+/bin/zsh -lc 'python3 --version && python3 -m pip show click pandas openpyxl pydantic python-dateutil' in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 363ms:
+WARNING: The directory '/Users/bill/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Name: click
+Version: 8.1.8
+Summary: Composable command line interface toolkit
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Requires: 
+Required-by: attendance-cluster, demurrage-checker, Flask, house-verification-cli, invoice-mismatch-checker, toll-vehicle-audit, typer, uvicorn
+---
+Name: pandas
+Version: 2.3.3
+Summary: Powerful data structures for data analysis, time series, and statistics
+Home-page: https://pandas.pydata.org
+Author: 
+Author-email: The Pandas Development Team <pandas-dev@python.org>
+License: BSD 3-Clause License
+         
+         Copyright (c) 2008-2011, AQR Capital Management, LLC, Lambda Foundry, Inc. and PyData Development Team
+         All rights reserved.
+         
+         Copyright (c) 2011-2023, Open source contributors.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         
+         * Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+         
+         * Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+         
+         * Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+         AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+         IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+         DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+         FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+         DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+         SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+         CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+         OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+         OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+         Copyright (c) 2010-2019 Keith Goodman
+         Copyright (c) 2019 Bottleneck Developers
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         
+             * Redistributions of source code must retain the above copyright notice,
+               this list of conditions and the following disclaimer.
+         
+             * Redistributions in binary form must reproduce the above copyright
+               notice, this list of conditions and the following disclaimer in the
+               documentation and/or other materials provided with the distribution.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+         AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+         IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+         ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+         LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+         CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+         SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+         INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+         CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+         ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+         POSSIBILITY OF SUCH DAMAGE.Copyright 2017- Paul Ganssle <paul@ganssle.io>
+         Copyright 2017- dateutil contributors (see AUTHORS file)
+         
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+         
+                http://www.apache.org/licenses/LICENSE-2.0
+         
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+         
+         The above license applies to all contributions after 2017-12-01, as well as
+         all contributions that have been re-licensed (see AUTHORS file for the list of
+         contributors who have re-licensed their code).
+         --------------------------------------------------------------------------------
+         dateutil - Extensions to the standard Python datetime module.
+         
+         Copyright (c) 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
+         Copyright (c) 2012-2014 - Tomi Pieviläinen <tomi.pievilainen@iki.fi>
+         Copyright (c) 2014-2016 - Yaron de Leeuw <me@jarondl.net>
+         Copyright (c) 2015-     - Paul Ganssle <paul@ganssle.io>
+         Copyright (c) 2015-     - dateutil contributors (see AUTHORS file)
+         
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         
+             * Redistributions of source code must retain the above copyright notice,
+               this list of conditions and the following disclaimer.
+             * Redistributions in binary form must reproduce the above copyright notice,
+               this list of conditions and the following disclaimer in the documentation
+               and/or other materials provided with the distribution.
+             * Neither the name of the copyright holder nor the names of its
+               contributors may be used to endorse or promote products derived from
+               this software without specific prior written permission.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+         "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+         LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+         A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+         CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+         EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+         PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+         PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+         LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+         NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+         SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+         
+         The above BSD License Applies to all code, even that also covered by Apache 2.0.# MIT License
+         
+         Copyright (c) 2019 Hadley Wickham; RStudio; and Evan Miller
+         
+         Permission is hereby granted, free of charge, to any person obtaining a copy
+         of this software and associated documentation files (the "Software"), to deal
+         in the Software without restriction, including without limitation the rights
+         to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+         copies of the Software, and to permit persons to whom the Software is
+         furnished to do so, subject to the following conditions:
+         
+         The above copyright notice and this permission notice shall be included in all
+         copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         SOFTWARE.
+         Based on http://opensource.org/licenses/MIT
+         
+         This is a template. Complete and ship as file LICENSE the following 2
+         lines (only)
+         
+         YEAR:
+         COPYRIGHT HOLDER:
+         
+         and specify as
+         
+         License: MIT + file LICENSE
+         
+         Copyright (c) <YEAR>, <COPYRIGHT HOLDER>
+         
+         Permission is hereby granted, free of charge, to any person obtaining
+         a copy of this software and associated documentation files (the
+         "Software"), to deal in the Software without restriction, including
+         without limitation the rights to use, copy, modify, merge, publish,
+         distribute, sublicense, and/or sell copies of the Software, and to
+         permit persons to whom the Software is furnished to do so, subject to
+         the following conditions:
+         
+         The above copyright notice and this permission notice shall be
+         included in all copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+         NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+         LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+         OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+         WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+         The MIT License
+         
+         Copyright (c) 2008-     Attractive Chaos <attractor@live.co.uk>
+         
+         Permission is hereby granted, free of charge, to any person obtaining
+         a copy of this software and associated documentation files (the
+         "Software"), to deal in the Software without restriction, including
+         without limitation the rights to use, copy, modify, merge, publish,
+         distribute, sublicense, and/or sell copies of the Software, and to
+         permit persons to whom the Software is furnished to do so, subject to
+         the following conditions:
+         
+         The above copyright notice and this permission notice shall be
+         included in all copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+         NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+         BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+         ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+         CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         SOFTWARE.musl as a whole is licensed under the following standard MIT license:
+         
+         ----------------------------------------------------------------------
+         Copyright © 2005-2020 Rich Felker, et al.
+         
+         Permission is hereby granted, free of charge, to any person obtaining
+         a copy of this software and associated documentation files (the
+         "Software"), to deal in the Software without restriction, including
+         without limitation the rights to use, copy, modify, merge, publish,
+         distribute, sublicense, and/or sell copies of the Software, and to
+         permit persons to whom the Software is furnished to do so, subject to
+         the following conditions:
+         
+         The above copyright notice and this permission notice shall be
+         included in all copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+         IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+         CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+         TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+         SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+         ----------------------------------------------------------------------
+         
+         Authors/contributors include:
+         
+         A. Wilcox
+         Ada Worcester
+         Alex Dowad
+         Alex Suykov
+         Alexander Monakov
+         Andre McCurdy
+         Andrew Kelley
+         Anthony G. Basile
+         Aric Belsito
+         Arvid Picciani
+         Bartosz Brachaczek
+         Benjamin Peterson
+         Bobby Bingham
+         Boris Brezillon
+         Brent Cook
+         Chris Spiegel
+         Clément Vasseur
+         Daniel Micay
+         Daniel Sabogal
+         Daurnimator
+         David Carlier
+         David Edelsohn
+         Denys Vlasenko
+         Dmitry Ivanov
+         Dmitry V. Levin
+         Drew DeVault
+         Emil Renner Berthing
+         Fangrui Song
+         Felix Fietkau
+         Felix Janda
+         Gianluca Anzolin
+         Hauke Mehrtens
+         He X
+         Hiltjo Posthuma
+         Isaac Dunham
+         Jaydeep Patil
+         Jens Gustedt
+         Jeremy Huntwork
+         Jo-Philipp Wich
+         Joakim Sindholt
+         John Spencer
+         Julien Ramseier
+         Justin Cormack
+         Kaarle Ritvanen
+         Khem Raj
+         Kylie McClain
+         Leah Neukirchen
+         Luca Barbato
+         Luka Perkov
+         M Farkas-Dyck (Strake)
+         Mahesh Bodapati
+         Markus Wichmann
+         Masanori Ogino
+         Michael Clark
+         Michael Forney
+         Mikhail Kremnyov
+         Natanael Copa
+         Nicholas J. Kain
+         orc
+         Pascal Cuoq
+         Patrick Oppenlander
+         Petr Hosek
+         Petr Skocik
+         Pierre Carrier
+         Reini Urban
+         Rich Felker
+         Richard Pennington
+         Ryan Fairfax
+         Samuel Holland
+         Segev Finer
+         Shiz
+         sin
+         Solar Designer
+         Stefan Kristiansson
+         Stefan O'Rear
+         Szabolcs Nagy
+         Timo Teräs
+         Trutz Behn
+         Valentin Ochs
+         Will Dietz
+         William Haddon
+         William Pitcock
+         
+         Portions of this software are derived from third-party works licensed
+         under terms compatible with the above MIT license:
+         
+         The TRE regular expression implementation (src/regex/reg* and
+         src/regex/tre*) is Copyright © 2001-2008 Ville Laurikari and licensed
+         under a 2-clause BSD license (license text in the source files). The
+         included version has been heavily modified by Rich Felker in 2012, in
+         the interests of size, simplicity, and namespace cleanliness.
+         
+         Much of the math library code (src/math/* and src/complex/*) is
+         Copyright © 1993,2004 Sun Microsystems or
+         Copyright © 2003-2011 David Schultz or
+         Copyright © 2003-2009 Steven G. Kargl or
+         Copyright © 2003-2009 Bruce D. Evans or
+         Copyright © 2008 Stephen L. Moshier or
+         Copyright © 2017-2018 Arm Limited
+         and labelled as such in comments in the individual source files. All
+         have been licensed under extremely permissive terms.
+         
+         The ARM memcpy code (src/string/arm/memcpy.S) is Copyright © 2008
+         The Android Open Source Project and is licensed under a two-clause BSD
+         license. It was taken from Bionic libc, used on Android.
+         
+         The AArch64 memcpy and memset code (src/string/aarch64/*) are
+         Copyright © 1999-2019, Arm Limited.
+         
+         The implementation of DES for crypt (src/crypt/crypt_des.c) is
+         Copyright © 1994 David Burren. It is licensed under a BSD license.
+         
+         The implementation of blowfish crypt (src/crypt/crypt_blowfish.c) was
+         originally written by Solar Designer and placed into the public
+         domain. The code also comes with a fallback permissive license for use
+         in jurisdictions that may not recognize the public domain.
+         
+         The smoothsort implementation (src/stdlib/qsort.c) is Copyright © 2011
+         Valentin Ochs and is licensed under an MIT-style license.
+         
+         The x86_64 port was written by Nicholas J. Kain and is licensed under
+         the standard MIT terms.
+         
+         The mips and microblaze ports were originally written by Richard
+         Pennington for use in the ellcc project. The original code was adapted
+         by Rich Felker for build system and code conventions during upstream
+         integration. It is licensed under the standard MIT terms.
+         
+         The mips64 port was contributed by Imagination Technologies and is
+         licensed under the standard MIT terms.
+         
+         The powerpc port was also originally written by Richard Pennington,
+         and later supplemented and integrated by John Spencer. It is licensed
+         under the standard MIT terms.
+         
+         All other files which have no copyright comments are original works
+         produced specifically for use as part of this library, written either
+         by Rich Felker, the main author of the library, or by one or more
+         contibutors listed above. Details on authorship of individual files
+         can be found in the git version control history of the project. The
+         omission of copyright and license comments in each file is in the
+         interest of source tree size.
+         
+         In addition, permission is hereby granted for all public header files
+         (include/* and arch/*/bits/*) and crt files intended to be linked into
+         applications (crt/*, ldso/dlstart.c, and arch/*/crt_arch.h) to omit
+         the copyright notice and permission notice otherwise required by the
+         license, and to use these files without any requirement of
+         attribution. These files include substantial contributions from:
+         
+         Bobby Bingham
+         John Spencer
+         Nicholas J. Kain
+         Rich Felker
+         Richard Pennington
+         Stefan Kristiansson
+         Szabolcs Nagy
+         
+         all of whom have explicitly granted such permission.
+         
+         This file previously contained text expressing a belief that most of
+         the files covered by the above exception were sufficiently trivial not
+         to be subject to copyright, resulting in confusion over whether it
+         negated the permissions granted in the license. In the spirit of
+         permissive licensing, and of not having licensing issues being an
+         obstacle to adoption, that text has been removed.Copyright (c) 2005-2023, NumPy Developers.
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are
+         met:
+         
+             * Redistributions of source code must retain the above copyright
+                notice, this list of conditions and the following disclaimer.
+         
+             * Redistributions in binary form must reproduce the above
+                copyright notice, this list of conditions and the following
+                disclaimer in the documentation and/or other materials provided
+                with the distribution.
+         
+             * Neither the name of the NumPy Developers nor the names of any
+                contributors may be used to endorse or promote products derived
+                from this software without specific prior written permission.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+         "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+         LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+         A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+         OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+         SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+         LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+         DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+         THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+         (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+         OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                                          Apache License
+                                    Version 2.0, January 2004
+                                 http://www.apache.org/licenses/
+         
+            TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+         
+            1. Definitions.
+         
+               "License" shall mean the terms and conditions for use, reproduction,
+               and distribution as defined by Sections 1 through 9 of this document.
+         
+               "Licensor" shall mean the copyright owner or entity authorized by
+               the copyright owner that is granting the License.
+         
+               "Legal Entity" shall mean the union of the acting entity and all
+               other entities that control, are controlled by, or are under common
+               control with that entity. For the purposes of this definition,
+               "control" means (i) the power, direct or indirect, to cause the
+               direction or management of such entity, whether by contract or
+               otherwise, or (ii) ownership of fifty percent (50%) or more of the
+               outstanding shares, or (iii) beneficial ownership of such entity.
+         
+               "You" (or "Your") shall mean an individual or Legal Entity
+               exercising permissions granted by this License.
+         
+               "Source" form shall mean the preferred form for making modifications,
+               including but not limited to software source code, documentation
+               source, and configuration files.
+         
+               "Object" form shall mean any form resulting from mechanical
+               transformation or translation of a Source form, including but
+               not limited to compiled object code, generated documentation,
+               and conversions to other media types.
+         
+               "Work" shall mean the work of authorship, whether in Source or
+               Object form, made available under the License, as indicated by a
+               copyright notice that is included in or attached to the work
+               (an example is provided in the Appendix below).
+         
+               "Derivative Works" shall mean any work, whether in Source or Object
+               form, that is based on (or derived from) the Work and for which the
+               editorial revisions, annotations, elaborations, or other modifications
+               represent, as a whole, an original work of authorship. For the purposes
+               of this License, Derivative Works shall not include works that remain
+               separable from, or merely link (or bind by name) to the interfaces of,
+               the Work and Derivative Works thereof.
+         
+               "Contribution" shall mean any work of authorship, including
+               the original version of the Work and any modifications or additions
+               to that Work or Derivative Works thereof, that is intentionally
+               submitted to Licensor for inclusion in the Work by the copyright owner
+               or by an individual or Legal Entity authorized to submit on behalf of
+               the copyright owner. For the purposes of this definition, "submitted"
+               means any form of electronic, verbal, or written communication sent
+               to the Licensor or its representatives, including but not limited to
+               communication on electronic mailing lists, source code control systems,
+               and issue tracking systems that are managed by, or on behalf of, the
+               Licensor for the purpose of discussing and improving the Work, but
+               excluding communication that is conspicuously marked or otherwise
+               designated in writing by the copyright owner as "Not a Contribution."
+         
+               "Contributor" shall mean Licensor and any individual or Legal Entity
+               on behalf of whom a Contribution has been received by Licensor and
+               subsequently incorporated within the Work.
+         
+            2. Grant of Copyright License. Subject to the terms and conditions of
+               this License, each Contributor hereby grants to You a perpetual,
+               worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+               copyright license to reproduce, prepare Derivative Works of,
+               publicly display, publicly perform, sublicense, and distribute the
+               Work and such Derivative Works in Source or Object form.
+         
+            3. Grant of Patent License. Subject to the terms and conditions of
+               this License, each Contributor hereby grants to You a perpetual,
+               worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+               (except as stated in this section) patent license to make, have made,
+               use, offer to sell, sell, import, and otherwise transfer the Work,
+               where such license applies only to those patent claims licensable
+               by such Contributor that are necessarily infringed by their
+               Contribution(s) alone or by combination of their Contribution(s)
+               with the Work to which such Contribution(s) was submitted. If You
+               institute patent litigation against any entity (including a
+               cross-claim or counterclaim in a lawsuit) alleging that the Work
+               or a Contribution incorporated within the Work constitutes direct
+               or contributory patent infringement, then any patent licenses
+               granted to You under this License for that Work shall terminate
+               as of the date such litigation is filed.
+         
+            4. Redistribution. You may reproduce and distribute copies of the
+               Work or Derivative Works thereof in any medium, with or without
+               modifications, and in Source or Object form, provided that You
+               meet the following conditions:
+         
+               (a) You must give any other recipients of the Work or
+                   Derivative Works a copy of this License; and
+         
+               (b) You must cause any modified files to carry prominent notices
+                   stating that You changed the files; and
+         
+               (c) You must retain, in the Source form of any Derivative Works
+                   that You distribute, all copyright, patent, trademark, and
+                   attribution notices from the Source form of the Work,
+                   excluding those notices that do not pertain to any part of
+                   the Derivative Works; and
+         
+               (d) If the Work includes a "NOTICE" text file as part of its
+                   distribution, then any Derivative Works that You distribute must
+                   include a readable copy of the attribution notices contained
+                   within such NOTICE file, excluding those notices that do not
+                   pertain to any part of the Derivative Works, in at least one
+                   of the following places: within a NOTICE text file distributed
+                   as part of the Derivative Works; within the Source form or
+                   documentation, if provided along with the Derivative Works; or,
+                   within a display generated by the Derivative Works, if and
+                   wherever such third-party notices normally appear. The contents
+                   of the NOTICE file are for informational purposes only and
+                   do not modify the License. You may add Your own attribution
+                   notices within Derivative Works that You distribute, alongside
+                   or as an addendum to the NOTICE text from the Work, provided
+                   that such additional attribution notices cannot be construed
+                   as modifying the License.
+         
+               You may add Your own copyright statement to Your modifications and
+               may provide additional or different license terms and conditions
+               for use, reproduction, or distribution of Your modifications, or
+               for any such Derivative Works as a whole, provided Your use,
+               reproduction, and distribution of the Work otherwise complies with
+               the conditions stated in this License.
+         
+            5. Submission of Contributions. Unless You explicitly state otherwise,
+               any Contribution intentionally submitted for inclusion in the Work
+               by You to the Licensor shall be under the terms and conditions of
+               this License, without any additional terms or conditions.
+               Notwithstanding the above, nothing herein shall supersede or modify
+               the terms of any separate license agreement you may have executed
+               with Licensor regarding such Contributions.
+         
+            6. Trademarks. This License does not grant permission to use the trade
+               names, trademarks, service marks, or product names of the Licensor,
+               except as required for reasonable and customary use in describing the
+               origin of the Work and reproducing the content of the NOTICE file.
+         
+            7. Disclaimer of Warranty. Unless required by applicable law or
+               agreed to in writing, Licensor provides the Work (and each
+               Contributor provides its Contributions) on an "AS IS" BASIS,
+               WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+               implied, including, without limitation, any warranties or conditions
+               of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+               PARTICULAR PURPOSE. You are solely responsible for determining the
+               appropriateness of using or redistributing the Work and assume any
+               risks associated with Your exercise of permissions under this License.
+         
+            8. Limitation of Liability. In no event and under no legal theory,
+               whether in tort (including negligence), contract, or otherwise,
+               unless required by applicable law (such as deliberate and grossly
+               negligent acts) or agreed to in writing, shall any Contributor be
+               liable to You for damages, including any direct, indirect, special,
+               incidental, or consequential damages of any character arising as a
+               result of this License or out of the use or inability to use the
+               Work (including but not limited to damages for loss of goodwill,
+               work stoppage, computer failure or malfunction, or any and all
+               other commercial damages or losses), even if such Contributor
+               has been advised of the possibility of such damages.
+         
+            9. Accepting Warranty or Additional Liability. While redistributing
+               the Work or Derivative Works thereof, You may choose to offer,
+               and charge a fee for, acceptance of support, warranty, indemnity,
+               or other liability obligations and/or rights consistent with this
+               License. However, in accepting such obligations, You may act only
+               on Your own behalf and on Your sole responsibility, not on behalf
+               of any other Contributor, and only if You agree to indemnify,
+               defend, and hold each Contributor harmless for any liability
+               incurred by, or claims asserted against, such Contributor by reason
+               of your accepting any such warranty or additional liability.
+         
+            END OF TERMS AND CONDITIONS
+         
+         
+         Copyright (c) Donald Stufft and individual contributors.
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         
+             1. Redistributions of source code must retain the above copyright notice,
+                this list of conditions and the following disclaimer.
+         
+             2. Redistributions in binary form must reproduce the above copyright
+                notice, this list of conditions and the following disclaimer in the
+                documentation and/or other materials provided with the distribution.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+         ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+         WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+         DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+         FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+         DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+         SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+         CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+         OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+         OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.A. HISTORY OF THE SOFTWARE
+         ==========================
+         
+         Python was created in the early 1990s by Guido van Rossum at Stichting
+         Mathematisch Centrum (CWI, see https://www.cwi.nl) in the Netherlands
+         as a successor of a language called ABC.  Guido remains Python's
+         principal author, although it includes many contributions from others.
+         
+         In 1995, Guido continued his work on Python at the Corporation for
+         National Research Initiatives (CNRI, see https://www.cnri.reston.va.us)
+         in Reston, Virginia where he released several versions of the
+         software.
+         
+         In May 2000, Guido and the Python core development team moved to
+         BeOpen.com to form the BeOpen PythonLabs team.  In October of the same
+         year, the PythonLabs team moved to Digital Creations, which became
+         Zope Corporation.  In 2001, the Python Software Foundation (PSF, see
+         https://www.python.org/psf/) was formed, a non-profit organization
+         created specifically to own Python-related Intellectual Property.
+         Zope Corporation was a sponsoring member of the PSF.
+         
+         All Python releases are Open Source (see https://opensource.org for
+         the Open Source Definition).  Historically, most, but not all, Python
+         releases have also been GPL-compatible; the table below summarizes
+         the various releases.
+         
+             Release         Derived     Year        Owner       GPL-
+                             from                                compatible? (1)
+         
+             0.9.0 thru 1.2              1991-1995   CWI         yes
+             1.3 thru 1.5.2  1.2         1995-1999   CNRI        yes
+             1.6             1.5.2       2000        CNRI        no
+             2.0             1.6         2000        BeOpen.com  no
+             1.6.1           1.6         2001        CNRI        yes (2)
+             2.1             2.0+1.6.1   2001        PSF         no
+             2.0.1           2.0+1.6.1   2001        PSF         yes
+             2.1.1           2.1+2.0.1   2001        PSF         yes
+             2.1.2           2.1.1       2002        PSF         yes
+             2.1.3           2.1.2       2002        PSF         yes
+             2.2 and above   2.1.1       2001-now    PSF         yes
+         
+         Footnotes:
+         
+         (1) GPL-compatible doesn't mean that we're distributing Python under
+             the GPL.  All Python licenses, unlike the GPL, let you distribute
+             a modified version without making your changes open source.  The
+             GPL-compatible licenses make it possible to combine Python with
+             other software that is released under the GPL; the others don't.
+         
+         (2) According to Richard Stallman, 1.6.1 is not GPL-compatible,
+             because its license has a choice of law clause.  According to
+             CNRI, however, Stallman's lawyer has told CNRI's lawyer that 1.6.1
+             is "not incompatible" with the GPL.
+         
+         Thanks to the many outside volunteers who have worked under Guido's
+         direction to make these releases possible.
+         
+         
+         B. TERMS AND CONDITIONS FOR ACCESSING OR OTHERWISE USING PYTHON
+         ===============================================================
+         
+         Python software and documentation are licensed under the
+         Python Software Foundation License Version 2.
+         
+         Starting with Python 3.8.6, examples, recipes, and other code in
+         the documentation are dual licensed under the PSF License Version 2
+         and the Zero-Clause BSD license.
+         
+         Some software incorporated into Python is under different licenses.
+         The licenses are listed with code falling under that license.
+         
+         
+         PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
+         --------------------------------------------
+         
+         1. This LICENSE AGREEMENT is between the Python Software Foundation
+         ("PSF"), and the Individual or Organization ("Licensee") accessing and
+         otherwise using this software ("Python") in source or binary form and
+         its associated documentation.
+         
+         2. Subject to the terms and conditions of this License Agreement, PSF hereby
+         grants Licensee a nonexclusive, royalty-free, world-wide license to reproduce,
+         analyze, test, perform and/or display publicly, prepare derivative works,
+         distribute, and otherwise use Python alone or in any derivative version,
+         provided, however, that PSF's License Agreement and PSF's notice of copyright,
+         i.e., "Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+         2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Python Software Foundation;
+         All Rights Reserved" are retained in Python alone or in any derivative version
+         prepared by Licensee.
+         
+         3. In the event Licensee prepares a derivative work that is based on
+         or incorporates Python or any part thereof, and wants to make
+         the derivative work available to others as provided herein, then
+         Licensee hereby agrees to include in any such work a brief summary of
+         the changes made to Python.
+         
+         4. PSF is making Python available to Licensee on an "AS IS"
+         basis.  PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+         IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND
+         DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
+         FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT
+         INFRINGE ANY THIRD PARTY RIGHTS.
+         
+         5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON
+         FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS
+         A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON,
+         OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
+         
+         6. This License Agreement will automatically terminate upon a material
+         breach of its terms and conditions.
+         
+         7. Nothing in this License Agreement shall be deemed to create any
+         relationship of agency, partnership, or joint venture between PSF and
+         Licensee.  This License Agreement does not grant permission to use PSF
+         trademarks or trade name in a trademark sense to endorse or promote
+         products or services of Licensee, or any third party.
+         
+         8. By copying, installing or otherwise using Python, Licensee
+         agrees to be bound by the terms and conditions of this License
+         Agreement.
+         
+         
+         BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
+         -------------------------------------------
+         
+         BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
+         
+         1. This LICENSE AGREEMENT is between BeOpen.com ("BeOpen"), having an
+         office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the
+         Individual or Organization ("Licensee") accessing and otherwise using
+         this software in source or binary form and its associated
+         documentation ("the Software").
+         
+         2. Subject to the terms and conditions of this BeOpen Python License
+         Agreement, BeOpen hereby grants Licensee a non-exclusive,
+         royalty-free, world-wide license to reproduce, analyze, test, perform
+         and/or display publicly, prepare derivative works, distribute, and
+         otherwise use the Software alone or in any derivative version,
+         provided, however, that the BeOpen Python License is retained in the
+         Software, alone or in any derivative version prepared by Licensee.
+         
+         3. BeOpen is making the Software available to Licensee on an "AS IS"
+         basis.  BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+         IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND
+         DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
+         FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT
+         INFRINGE ANY THIRD PARTY RIGHTS.
+         
+         4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE
+         SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS
+         AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY
+         DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
+         
+         5. This License Agreement will automatically terminate upon a material
+         breach of its terms and conditions.
+         
+         6. This License Agreement shall be governed by and interpreted in all
+         respects by the law of the State of California, excluding conflict of
+         law provisions.  Nothing in this License Agreement shall be deemed to
+         create any relationship of agency, partnership, or joint venture
+         between BeOpen and Licensee.  This License Agreement does not grant
+         permission to use BeOpen trademarks or trade names in a trademark
+         sense to endorse or promote products or services of Licensee, or any
+         third party.  As an exception, the "BeOpen Python" logos available at
+         http://www.pythonlabs.com/logos.html may be used according to the
+         permissions granted on that web page.
+         
+         7. By copying, installing or otherwise using the software, Licensee
+         agrees to be bound by the terms and conditions of this License
+         Agreement.
+         
+         
+         CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1
+         ---------------------------------------
+         
+         1. This LICENSE AGREEMENT is between the Corporation for National
+         Research Initiatives, having an office at 1895 Preston White Drive,
+         Reston, VA 20191 ("CNRI"), and the Individual or Organization
+         ("Licensee") accessing and otherwise using Python 1.6.1 software in
+         source or binary form and its associated documentation.
+         
+         2. Subject to the terms and conditions of this License Agreement, CNRI
+         hereby grants Licensee a nonexclusive, royalty-free, world-wide
+         license to reproduce, analyze, test, perform and/or display publicly,
+         prepare derivative works, distribute, and otherwise use Python 1.6.1
+         alone or in any derivative version, provided, however, that CNRI's
+         License Agreement and CNRI's notice of copyright, i.e., "Copyright (c)
+         1995-2001 Corporation for National Research Initiatives; All Rights
+         Reserved" are retained in Python 1.6.1 alone or in any derivative
+         version prepared by Licensee.  Alternately, in lieu of CNRI's License
+         Agreement, Licensee may substitute the following text (omitting the
+         quotes): "Python 1.6.1 is made available subject to the terms and
+         conditions in CNRI's License Agreement.  This Agreement together with
+         Python 1.6.1 may be located on the internet using the following
+         unique, persistent identifier (known as a handle): 1895.22/1013.  This
+         Agreement may also be obtained from a proxy server on the internet
+         using the following URL: http://hdl.handle.net/1895.22/1013".
+         
+         3. In the event Licensee prepares a derivative work that is based on
+         or incorporates Python 1.6.1 or any part thereof, and wants to make
+         the derivative work available to others as provided herein, then
+         Licensee hereby agrees to include in any such work a brief summary of
+         the changes made to Python 1.6.1.
+         
+         4. CNRI is making Python 1.6.1 available to Licensee on an "AS IS"
+         basis.  CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+         IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND
+         DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
+         FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6.1 WILL NOT
+         INFRINGE ANY THIRD PARTY RIGHTS.
+         
+         5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON
+         1.6.1 FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS
+         A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON 1.6.1,
+         OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
+         
+         6. This License Agreement will automatically terminate upon a material
+         breach of its terms and conditions.
+         
+         7. This License Agreement shall be governed by the federal
+         intellectual property law of the United States, including without
+         limitation the federal copyright law, and, to the extent such
+         U.S. federal law does not apply, by the law of the Commonwealth of
+         Virginia, excluding Virginia's conflict of law provisions.
+         Notwithstanding the foregoing, with regard to derivative works based
+         on Python 1.6.1 that incorporate non-separable material that was
+         previously distributed under the GNU General Public License (GPL), the
+         law of the Commonwealth of Virginia shall govern this License
+         Agreement only as to issues arising under or with respect to
+         Paragraphs 4, 5, and 7 of this License Agreement.  Nothing in this
+         License Agreement shall be deemed to create any relationship of
+         agency, partnership, or joint venture between CNRI and Licensee.  This
+         License Agreement does not grant permission to use CNRI trademarks or
+         trade name in a trademark sense to endorse or promote products or
+         services of Licensee, or any third party.
+         
+         8. By clicking on the "ACCEPT" button where indicated, or by copying,
+         installing or otherwise using Python 1.6.1, Licensee agrees to be
+         bound by the terms and conditions of this License Agreement.
+         
+                 ACCEPT
+         
+         
+         CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
+         --------------------------------------------------
+         
+         Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,
+         The Netherlands.  All rights reserved.
+         
+         Permission to use, copy, modify, and distribute this software and its
+         documentation for any purpose and without fee is hereby granted,
+         provided that the above copyright notice appear in all copies and that
+         both that copyright notice and this permission notice appear in
+         supporting documentation, and that the name of Stichting Mathematisch
+         Centrum or CWI not be used in advertising or publicity pertaining to
+         distribution of the software without specific, written prior
+         permission.
+         
+         STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO
+         THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+         FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE
+         FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+         WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+         ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+         OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+         
+         ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION
+         ----------------------------------------------------------------------
+         
+         Permission to use, copy, modify, and/or distribute this software for any
+         purpose with or without fee is hereby granted.
+         
+         THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+         REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+         AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+         INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+         LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+         OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+         PERFORMANCE OF THIS SOFTWARE.
+         Copyright (c) 2014, Al Sweigart
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         
+         * Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+         
+         * Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+         
+         * Neither the name of the {organization} nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+         AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+         IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+         DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+         FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+         DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+         SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+         CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+         OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+         OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.Copyright (c) 2017 Anthony Sottile
+         
+         Permission is hereby granted, free of charge, to any person obtaining a copy
+         of this software and associated documentation files (the "Software"), to deal
+         in the Software without restriction, including without limitation the rights
+         to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+         copies of the Software, and to permit persons to whom the Software is
+         furnished to do so, subject to the following conditions:
+         
+         The above copyright notice and this permission notice shall be included in
+         all copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+         THE SOFTWARE.Copyright (c) 2015-2019 Jared Hobbs
+         
+         Permission is hereby granted, free of charge, to any person obtaining a copy of
+         this software and associated documentation files (the "Software"), to deal in
+         the Software without restriction, including without limitation the rights to
+         use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+         of the Software, and to permit persons to whom the Software is furnished to do
+         so, subject to the following conditions:
+         
+         The above copyright notice and this permission notice shall be included in all
+         copies or substantial portions of the Software.
+         
+         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         SOFTWARE.Developed by ESN, an Electronic Arts Inc. studio.
+         Copyright (c) 2014, Electronic Arts Inc.
+         All rights reserved.
+         
+         Redistribution and use in source and binary forms, with or without
+         modification, are permitted provided that the following conditions are met:
+         * Redistributions of source code must retain the above copyright
+         notice, this list of conditions and the following disclaimer.
+         * Redistributions in binary form must reproduce the above copyright
+         notice, this list of conditions and the following disclaimer in the
+         documentation and/or other materials provided with the distribution.
+         * Neither the name of ESN, Electronic Arts Inc. nor the
+         names of its contributors may be used to endorse or promote products
+         derived from this software without specific prior written permission.
+         
+         THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+         ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+         WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+         DISCLAIMED. IN NO EVENT SHALL ELECTRONIC ARTS INC. BE LIABLE
+         FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+         (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+         LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+         ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+         (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+         SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+         
+         ----
+         
+         Portions of code from MODP_ASCII - Ascii transformations (upper/lower, etc)
+         https://github.com/client9/stringencoders
+         
+           Copyright 2005, 2006, 2007
+           Nick Galbreath -- nickg [at] modp [dot] com
+           All rights reserved.
+         
+           Redistribution and use in source and binary forms, with or without
+           modification, are permitted provided that the following conditions are
+           met:
+         
+             Redistributions of source code must retain the above copyright
+             notice, this list of conditions and the following disclaimer.
+         
+             Redistributions in binary form must reproduce the above copyright
+             notice, this list of conditions and the following disclaimer in the
+             documentation and/or other materials provided with the distribution.
+         
+             Neither the name of the modp.com nor the names of its
+             contributors may be used to endorse or promote products derived from
+             this software without specific prior written permission.
+         
+           THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+           "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+           LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+           A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+           OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+           SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+           LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+           DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+           THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+           (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+           OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+         
+           This is the standard "new" BSD license:
+           http://www.opensource.org/licenses/bsd-license.php
+         
+         https://github.com/client9/stringencoders/blob/cfd5c1507325ae497ea9bacdacba12c0ffd79d30/COPYING
+         
+         ----
+         
+         Numeric decoder derived from from TCL library
+         https://opensource.apple.com/source/tcl/tcl-14/tcl/license.terms
+          * Copyright (c) 1988-1993 The Regents of the University of California.
+          * Copyright (c) 1994 Sun Microsystems, Inc.
+         
+           This software is copyrighted by the Regents of the University of
+           California, Sun Microsystems, Inc., Scriptics Corporation, ActiveState
+           Corporation and other parties.  The following terms apply to all files
+           associated with the software unless explicitly disclaimed in
+           individual files.
+         
+           The authors hereby grant permission to use, copy, modify, distribute,
+           and license this software and its documentation for any purpose, provided
+           that existing copyright notices are retained in all copies and that this
+           notice is included verbatim in any distributions. No written agreement,
+           license, or royalty fee is required for any of the authorized uses.
+           Modifications to this software may be copyrighted by their authors
+           and need not follow the licensing terms described here, provided that
+           the new terms are clearly indicated on the first page of each file where
+           they apply.
+         
+           IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY PARTY
+           FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+           ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION, OR ANY
+           DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE
+           POSSIBILITY OF SUCH DAMAGE.
+         
+           THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
+           INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+           FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  THIS SOFTWARE
+           IS PROVIDED ON AN "AS IS" BASIS, AND THE AUTHORS AND DISTRIBUTORS HAVE
+           NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+           MODIFICATIONS.
+         
+           GOVERNMENT USE: If you are acquiring this software on behalf of the
+           U.S. government, the Government shall have only "Restricted Rights"
+           in the software and related documentation as defined in the Federal
+           Acquisition Regulations (FARs) in Clause 52.227.19 (c) (2).  If you
+           are acquiring the software on behalf of the Department of Defense, the
+           software shall be classified as "Commercial Computer Software" and the
+           Government shall have only "Restricted Rights" as defined in Clause
+           252.227-7013 (c) (1) of DFARs.  Notwithstanding the foregoing, the
+           authors grant the U.S. Government and others acting in its behalf
+           permission to use and distribute the software in accordance with the
+           terms specified in this license.Apache License
+         Version 2.0, January 2004
+         http://www.apache.org/licenses/
+         
+         TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+         
+         1. Definitions.
+         
+         "License" shall mean the terms and conditions for use, reproduction, and
+         distribution as defined by Sections 1 through 9 of this document.
+         
+         "Licensor" shall mean the copyright owner or entity authorized by the copyright
+         owner that is granting the License.
+         
+         "Legal Entity" shall mean the union of the acting entity and all other entities
+         that control, are controlled by, or are under common control with that entity.
+         For the purposes of this definition, "control" means (i) the power, direct or
+         indirect, to cause the direction or management of such entity, whether by
+         contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the
+         outstanding shares, or (iii) beneficial ownership of such entity.
+         
+         "You" (or "Your") shall mean an individual or Legal Entity exercising
+         permissions granted by this License.
+         
+         "Source" form shall mean the preferred form for making modifications, including
+         but not limited to software source code, documentation source, and configuration
+         files.
+         
+         "Object" form shall mean any form resulting from mechanical transformation or
+         translation of a Source form, including but not limited to compiled object code,
+         generated documentation, and conversions to other media types.
+         
+         "Work" shall mean the work of authorship, whether in Source or Object form, made
+         available under the License, as indicated by a copyright notice that is included
+         in or attached to the work (an example is provided in the Appendix below).
+         
+         "Derivative Works" shall mean any work, whether in Source or Object form, that
+         is based on (or derived from) the Work and for which the editorial revisions,
+         annotations, elaborations, or other modifications represent, as a whole, an
+         original work of authorship. For the purposes of this License, Derivative Works
+         shall not include works that remain separable from, or merely link (or bind by
+         name) to the interfaces of, the Work and Derivative Works thereof.
+         
+         "Contribution" shall mean any work of authorship, including the original version
+         of the Work and any modifications or additions to that Work or Derivative Works
+         thereof, that is intentionally submitted to Licensor for inclusion in the Work
+         by the copyright owner or by an individual or Legal Entity authorized to submit
+         on behalf of the copyright owner. For the purposes of this definition,
+         "submitted" means any form of electronic, verbal, or written communication sent
+         to the Licensor or its representatives, including but not limited to
+         communication on electronic mailing lists, source code control systems, and
+         issue tracking systems that are managed by, or on behalf of, the Licensor for
+         the purpose of discussing and improving the Work, but excluding communication
+         that is conspicuously marked or otherwise designated in writing by the copyright
+         owner as "Not a Contribution."
+         
+         "Contributor" shall mean Licensor and any individual or Legal Entity on behalf
+         of whom a Contribution has been received by Licensor and subsequently
+         incorporated within the Work.
+         
+         2. Grant of Copyright License.
+         
+         Subject to the terms and conditions of this License, each Contributor hereby
+         grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free,
+         irrevocable copyright license to reproduce, prepare Derivative Works of,
+         publicly display, publicly perform, sublicense, and distribute the Work and such
+         Derivative Works in Source or Object form.
+         
+         3. Grant of Patent License.
+         
+         Subject to the terms and conditions of this License, each Contributor hereby
+         grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free,
+         irrevocable (except as stated in this section) patent license to make, have
+         made, use, offer to sell, sell, import, and otherwise transfer the Work, where
+         such license applies only to those patent claims licensable by such Contributor
+         that are necessarily infringed by their Contribution(s) alone or by combination
+         of their Contribution(s) with the Work to which such Contribution(s) was
+         submitted. If You institute patent litigation against any entity (including a
+         cross-claim or counterclaim in a lawsuit) alleging that the Work or a
+         Contribution incorporated within the Work constitutes direct or contributory
+         patent infringement, then any patent licenses granted to You under this License
+         for that Work shall terminate as of the date such litigation is filed.
+         
+         4. Redistribution.
+         
+         You may reproduce and distribute copies of the Work or Derivative Works thereof
+         in any medium, with or without modifications, and in Source or Object form,
+         provided that You meet the following conditions:
+         
+         You must give any other recipients of the Work or Derivative Works a copy of
+         this License; and
+         You must cause any modified files to carry prominent notices stating that You
+         changed the files; and
+         You must retain, in the Source form of any Derivative Works that You distribute,
+         all copyright, patent, trademark, and attribution notices from the Source form
+         of the Work, excluding those notices that do not pertain to any part of the
+         Derivative Works; and
+         If the Work includes a "NOTICE" text file as part of its distribution, then any
+         Derivative Works that You distribute must include a readable copy of the
+         attribution notices contained within such NOTICE file, excluding those notices
+         that do not pertain to any part of the Derivative Works, in at least one of the
+         following places: within a NOTICE text file distributed as part of the
+         Derivative Works; within the Source form or documentation, if provided along
+         with the Derivative Works; or, within a display generated by the Derivative
+         Works, if and wherever such third-party notices normally appear. The contents of
+         the NOTICE file are for informational purposes only and do not modify the
+         License. You may add Your own attribution notices within Derivative Works that
+         You distribute, alongside or as an addendum to the NOTICE text from the Work,
+         provided that such additional attribution notices cannot be construed as
+         modifying the License.
+         You may add Your own copyright statement to Your modifications and may provide
+         additional or different license terms and conditions for use, reproduction, or
+         distribution of Your modifications, or for any such Derivative Works as a whole,
+         provided Your use, reproduction, and distribution of the Work otherwise complies
+         with the conditions stated in this License.
+         
+         5. Submission of Contributions.
+         
+         Unless You explicitly state otherwise, any Contribution intentionally submitted
+         for inclusion in the Work by You to the Licensor shall be under the terms and
+         conditions of this License, without any additional terms or conditions.
+         Notwithstanding the above, nothing herein shall supersede or modify the terms of
+         any separate license agreement you may have executed with Licensor regarding
+         such Contributions.
+         
+         6. Trademarks.
+         
+         This License does not grant permission to use the trade names, trademarks,
+         service marks, or product names of the Licensor, except as required for
+         reasonable and customary use in describing the origin of the Work and
+         reproducing the content of the NOTICE file.
+         
+         7. Disclaimer of Warranty.
+         
+         Unless required by applicable law or agreed to in writing, Licensor provides the
+         Work (and each Contributor provides its Contributions) on an "AS IS" BASIS,
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied,
+         including, without limitation, any warranties or conditions of TITLE,
+         NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are
+         solely responsible for determining the appropriateness of using or
+         redistributing the Work and assume any risks associated with Your exercise of
+         permissions under this License.
+         
+         8. Limitation of Liability.
+         
+         In no event and under no legal theory, whether in tort (including negligence),
+         contract, or otherwise, unless required by applicable law (such as deliberate
+         and grossly negligent acts) or agreed to in writing, shall any Contributor be
+         liable to You for damages, including any direct, indirect, special, incidental,
+         or consequential damages of any character arising as a result of this License or
+         out of the use or inability to use the Work (including but not limited to
+         damages for loss of goodwill, work stoppage, computer failure or malfunction, or
+         any and all other commercial damages or losses), even if such Contributor has
+         been advised of the possibility of such damages.
+         
+         9. Accepting Warranty or Additional Liability.
+         
+         While redistributing the Work or Derivative Works thereof, You may choose to
+         offer, and charge a fee for, acceptance of support, warranty, indemnity, or
+         other liability obligations and/or rights consistent with this License. However,
+         in accepting such obligations, You may act only on Your own behalf and on Your
+         sole responsibility, not on behalf of any other Contributor, and only if You
+         agree to indemnify, defend, and hold each Contributor harmless for any liability
+         incurred by, or claims asserted against, such Contributor by reason of your
+         accepting any such warranty or additional liability.
+         
+         END OF TERMS AND CONDITIONS
+         
+         APPENDIX: How to apply the Apache License to your work
+         
+         To apply the Apache License to your work, attach the following boilerplate
+         notice, with the fields enclosed by brackets "[]" replaced with your own
+         identifying information. (Don't include the brackets!) The text should be
+         enclosed in the appropriate comment syntax for the file format. We also
+         recommend that a file or class name and description of purpose be included on
+         the same "printed page" as the copyright notice for easier identification within
+         third-party archives.
+         
+            Copyright [yyyy] [name of copyright owner]
+         
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+         
+              http://www.apache.org/licenses/LICENSE-2.0
+         
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Requires: numpy, python-dateutil, pytz, tzdata
+Required-by: attendance-cluster, house-verification-cli, invoice-mismatch-checker, toll-vehicle-audit
+---
+Name: openpyxl
+Version: 3.1.2
+Summary: A Python library to read/write Excel 2010 xlsx/xlsm files
+Home-page: https://openpyxl.readthedocs.io
+Author: See AUTHORS
+Author-email: charlie.clark@clark-consulting.eu
+License: MIT
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Requires: et-xmlfile
+Required-by: attendance-cluster, house-verification-cli, invoice-mismatch-checker, toll-vehicle-audit
+---
+Name: pydantic
+Version: 2.6.1
+Summary: Data validation using Python type hints
+Home-page: https://github.com/pydantic/pydantic
+Author: 
+Author-email: Samuel Colvin <s@muelcolvin.com>, Eric Jolibois <em.jolibois@gmail.com>, Hasan Ramezani <hasan.r67@gmail.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Terrence Dorsey <terry@pydantic.dev>, David Montague <david@pydantic.dev>, Serge Matveenko <lig@countzero.co>, Marcelo Trylesinski <marcelotryle@gmail.com>, Sydney Runkle <sydneymarierunkle@gmail.com>, David Hewitt <mail@davidhewitt.io>
+License: 
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Requires: annotated-types, pydantic-core, typing-extensions
+Required-by: demurrage-checker, fastapi, house-verification-cli, pydantic-settings, teacher-allowance-api, used-car-dispute-api, wms-mismatch
+---
+Name: python-dateutil
+Version: 2.9.0.post0
+Summary: Extensions to the standard Python datetime module
+Home-page: https://github.com/dateutil/dateutil
+Author: Gustavo Niemeyer
+Author-email: gustavo@niemeyer.net
+License: Dual License
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Requires: six
+Required-by: demurrage-checker, house-verification-cli, matplotlib, pandas
+
+codex
+示例映射中的日期转换不会阻断，因为 `parse_date()` 对 `datetime` 是幂等处理。由于质检要求不修改文件，我不会让完整导出流程落盘；会用只读方式验证导入、CLI 帮助、规则列表，并用内存方式执行读取/映射/校验/分流逻辑。
+exec
+/bin/zsh -lc 'PYTHONPATH=src python3 -m house_verification.cli --help' in /Users/bill/Documents/solo/workspaces/yzz00179
+exec
+/bin/zsh -lc 'PYTHONPATH=src python3 -m house_verification.cli list-rules' in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 844ms:
+============================================================
+内置校验规则列表
+============================================================
+
+1. 必填房源编号
+   字段: house_id
+   类型: required
+   风险: 高风险
+
+2. 必填房源标题
+   字段: house_title
+   类型: required
+   风险: 中风险
+
+3. 必填价格
+   字段: price
+   类型: required
+   风险: 高风险
+
+4. 价格范围校验
+   字段: price
+   类型: range
+   风险: 高风险
+   参数: {"min": 1, "max": 100000}
+
+5. 必填面积
+   字段: area
+   类型: required
+   风险: 高风险
+
+6. 面积范围校验
+   字段: area
+   类型: range
+   风险: 中风险
+   参数: {"min": 5, "max": 2000}
+
+7. 必填位置
+   字段: location
+   类型: required
+   风险: 中风险
+
+8. 室数范围校验
+   字段: rooms
+   类型: range
+   风险: 低风险
+   参数: {"min": 0, "max": 20}
+
+9. 厅数范围校验
+   字段: halls
+   类型: range
+   风险: 低风险
+   参数: {"min": 0, "max": 10}
+
+10. 单价异常检测
+   字段: price_area_ratio
+   类型: ratio_check
+   风险: 中风险
+   参数: {"min": 0.1, "max": 50}
+
+11. 必填中介姓名
+   字段: agent_name
+   类型: required
+   风险: 中风险
+
+12. 中介电话格式校验
+   字段: agent_phone
+   类型: phone
+   风险: 中风险
+
+13. 发布日期有效性
+   字段: publish_date
+   类型: date_valid
+   风险: 低风险
+
+============================================================
+
+ succeeded in 865ms:
+Usage: python -m house_verification.cli [OPTIONS] COMMAND [ARGS]...
+
+  房产中介房源验真CLI工具
+
+  用于房产中介房源的数据校验、状态分流和后续闭环处理。 支持多文件输入、字段映射、日期范围过滤和多格式导出。
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  gen-mapping  生成示例字段映射配置文件
+  list-rules   列出所有内置校验规则
+  verify       执行房源验真流程 INPUT_FILES: 一个或多个输入文件路径 (支持CSV/Excel/JSON)
+
+codex
+CLI 帮助和规则列表可以正常执行。内存链路测试里 shell 的 here-doc 因当前只读沙箱无法创建临时文件失败，这不是项目代码错误；我改用 `python -c` 单行脚本继续验证核心处理逻辑。
+exec
+/bin/zsh -lc "PYTHONPATH=src python3 -c \"from house_verification.reader import DataReader, load_field_mapping; from house_verification.validator import ValidationEngine, DuplicateChecker; from house_verification.pipeline import VerificationPipeline; m=load_field_mapping('examples/field_mapping.json'); r=DataReader(m); raw=r.read_file('examples/sample_houses.csv'); p=VerificationPipeline.__new__(VerificationPipeline); p.reader=r; p.validator=ValidationEngine(); p.duplicate_checker=DuplicateChecker(); p.start_date=None; p.end_date=None; records=[]; [records.append(VerificationPipeline._process_raw_record(p,item)) for item in raw]; print('raw_records', len(raw)); print('processed', len(records)); print('normal', sum(str(x.status)=='RecordStatus.NORMAL' or x.status=='正常' for x in records)); print('abnormal', sum(str(x.status)=='RecordStatus.ABNORMAL' or x.status=='异常' for x in records)); print('pending', sum(str(x.status)=='RecordStatus.PENDING' or x.status=='待复核' for x in records)); print('first', records[0].house_id, records[0].status, records[0].risk_level); print('errors_sample', [(x.house_id, x.error_messages[:2]) for x in records if x.error_messages][:5])\"" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 359ms:
+raw_records 15
+processed 15
+normal 11
+abnormal 4
+pending 0
+first HS001 RecordStatus.NORMAL RiskLevel.LOW
+errors_sample [('HS006', ['[中风险] 房源标题为必填项']), ('HS007', ['[高风险] 价格为必填项']), ('HS008', ['[中风险] 面积应在5-2000平方米之间 (当前值: 5000.0)', '[中风险] 单价异常，可能存在虚假信息 (单价: 0.01万元/㎡)']), ('HS010', ['[中风险] 中介姓名为必填项'])]
+
+codex
+内存处理能读入并校验 15 条示例记录，基本分流有效。我还需要补测重复房源检测和导出器的格式生成逻辑，不过导出落盘本身会受“不可修改文件”的质检约束限制，不能在本轮实际创建输出文件。
+exec
+/bin/zsh -lc "PYTHONPATH=src python3 -c \"from house_verification.exporter import DataExporter; from house_verification.models import HouseRecord; e=DataExporter.__new__(DataExporter); rec=HouseRecord(trace_id='T1', source_file='sample.csv', source_line=2, original_data={}, house_id='H1', house_title='t', price=100, area=50, location='x'); print(e._record_to_row(rec)); print(e._generate_summary([rec],[rec],[],[]))\"" in /Users/bill/Documents/solo/workspaces/yzz00179
+exec
+/bin/zsh -lc 'PYTHONPATH=src python3 -c "import house_verification; from house_verification.cli import main; print(house_verification.__version__); print(main.name)"' in /Users/bill/Documents/solo/workspaces/yzz00179
+ exited 1 in 357ms:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Users/bill/Documents/solo/workspaces/yzz00179/src/house_verification/exporter.py", line 136, in _generate_summary
+    "导出格式": self.format,
+AttributeError: 'DataExporter' object has no attribute 'format'
+{'可追溯编号': 'T1', '来源文件': 'sample.csv', '来源行号': 2, '房源编号': 'H1', '房源标题': 't', '价格(万元)': 100.0, '面积(平方米)': 50.0, '位置': 'x', '室数': None, '厅数': None, '楼层': None, '朝向': None, '装修': None, '发布日期': '', '中介姓名': None, '中介电话': None, '记录状态': <RecordStatus.NORMAL: '正常'>, '风险等级': <RiskLevel.LOW: '低风险'>, '错误信息': '', '警告信息': ''}
+
+ succeeded in 375ms:
+0.1.0
+main
+
+codex
+刚才两条补测命令本身写法不严谨：一条是 `python -c` 换行转义造成语法错误，另一条绕过构造器时漏设了 `format` 属性。它们不是项目失败证据，我会用修正后的只读脚本重跑。
+exec
+/bin/zsh -lc 'PYTHONPATH=src python3 -c $'"'from house_verification.reader import DataReader, load_field_mapping\\nfrom house_verification.validator import ValidationEngine, DuplicateChecker\\nfrom house_verification.pipeline import VerificationPipeline\\nfrom house_verification.models import RecordStatus, RiskLevel\\nm=load_field_mapping(\"examples/field_mapping.json\")\\nr=DataReader(m)\\nraw=r.read_file(\"examples/sample_houses.csv\")\\np=VerificationPipeline.__new__(VerificationPipeline)\\np.reader=r\\np.validator=ValidationEngine()\\np.duplicate_checker=DuplicateChecker()\\np.start_date=None\\np.end_date=None\\nrecords=[]\\nduplicates=[]\\nfor item in raw:\\n    rec=VerificationPipeline._process_raw_record(p,item)\\n    is_dup,msg=p.duplicate_checker.check_duplicate(rec)\\n    if is_dup:\\n        rec.error_messages.append(\"[高风险] \"+msg)\\n        rec.status=RecordStatus.ABNORMAL\\n        rec.risk_level=RiskLevel.HIGH\\n        duplicates.append((rec.house_id,msg))\\n    records.append(rec)\\nprint(\"normal\", sum(x.status==RecordStatus.NORMAL for x in records))\\nprint(\"abnormal\", sum(x.status==RecordStatus.ABNORMAL for x in records))\\nprint(\"pending\", sum(x.status==RecordStatus.PENDING for x in records))\\nprint(\"duplicates\", duplicates)'" in /Users/bill/Documents/solo/workspaces/yzz00179
+exec
+/bin/zsh -lc "PYTHONPATH=src python3 -c \"from house_verification.exporter import DataExporter; from house_verification.models import HouseRecord; e=DataExporter.__new__(DataExporter); e.format='csv'; rec=HouseRecord(trace_id='T1', source_file='sample.csv', source_line=2, original_data={}, house_id='H1', house_title='t', price=100, area=50, location='x'); print(e._record_to_row(rec)); print(e._generate_summary([rec],[rec],[],[]))\"" in /Users/bill/Documents/solo/workspaces/yzz00179
+exec
+/bin/zsh -lc "python3 -m pip show house-verification-cli | sed -n '1,80p'" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 433ms:
+normal 10
+abnormal 5
+pending 0
+duplicates [('HS012', '重复记录，与 HV-202606020842-C0FBB6F3 重复')]
+
+ succeeded in 326ms:
+WARNING: The directory '/Users/bill/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Name: house-verification-cli
+Version: 0.1.0
+Summary: 房产中介房源验真CLI工具
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /Users/bill/Library/Python/3.9/lib/python/site-packages
+Editable project location: /Users/bill/Documents/solo/workspaces/yzz00179
+Requires: click, openpyxl, pandas, pydantic, python-dateutil
+Required-by: 
+
+ succeeded in 416ms:
+{'可追溯编号': 'T1', '来源文件': 'sample.csv', '来源行号': 2, '房源编号': 'H1', '房源标题': 't', '价格(万元)': 100.0, '面积(平方米)': 50.0, '位置': 'x', '室数': None, '厅数': None, '楼层': None, '朝向': None, '装修': None, '发布日期': '', '中介姓名': None, '中介电话': None, '记录状态': <RecordStatus.NORMAL: '正常'>, '风险等级': <RiskLevel.LOW: '低风险'>, '错误信息': '', '警告信息': ''}
+{'总记录数': 1, '正常记录数': 1, '异常记录数': 0, '待复核记录数': 0, '风险分布': {'低风险': 1, '中风险': 0, '高风险': 0, '无法判定': 0}, '导出格式': 'csv', '导出时间': '2026-06-02T08:42:27.006894'}
+
+codex
+重复检测也能识别示例里的重复房源，导出行和汇总结构可生成。最后我检查安装后的控制台入口是否可用，避免只验证了源码路径。
+exec
+/bin/zsh -lc 'house-verification --help' in /Users/bill/Documents/solo/workspaces/yzz00179
+ exited 127 in 0ms:
+zsh:1: command not found: house-verification
+
+exec
+/bin/zsh -lc 'house-verification --version' in /Users/bill/Documents/solo/workspaces/yzz00179
+ exited 127 in 0ms:
+zsh:1: command not found: house-verification
+
+exec
+/bin/zsh -lc "nl -ba pyproject.toml | sed -n '1,80p'; nl -ba src/house_verification/cli.py | sed -n '1,220p'; nl -ba src/house_verification/pipeline.py | sed -n '1,180p'" in /Users/bill/Documents/solo/workspaces/yzz00179
+ succeeded in 0ms:
+     1	[build-system]
+     2	requires = ["setuptools>=61.0"]
+     3	build-backend = "setuptools.build_meta"
+     4	
+     5	[project]
+     6	name = "house-verification-cli"
+     7	version = "0.1.0"
+     8	description = "房产中介房源验真CLI工具"
+     9	requires-python = ">=3.9"
+    10	dependencies = [
+    11	    "click>=8.0.0",
+    12	    "pandas>=2.0.0",
+    13	    "openpyxl>=3.1.0",
+    14	    "pydantic>=2.0.0",
+    15	    "python-dateutil>=2.8.0",
+    16	]
+    17	
+    18	[project.scripts]
+    19	house-verification = "house_verification.cli:main"
+    20	
+    21	[tool.setuptools.packages.find]
+    22	where = ["src"]
+     1	import click
+     2	import sys
+     3	import json
+     4	from pathlib import Path
+     5	from .pipeline import VerificationPipeline
+     6	from .__init__ import __version__
+     7	
+     8	
+     9	@click.group()
+    10	@click.version_option(__version__, prog_name="house-verification")
+    11	def main():
+    12	    """房产中介房源验真CLI工具
+    13	    
+    14	    用于房产中介房源的数据校验、状态分流和后续闭环处理。
+    15	    支持多文件输入、字段映射、日期范围过滤和多格式导出。
+    16	    """
+    17	    pass
+    18	
+    19	
+    20	@main.command()
+    21	@click.argument("input_files", nargs=-1, type=click.Path(exists=True), required=True)
+    22	@click.option("--mapping", "-m", type=click.Path(exists=True), help="字段映射配置文件(JSON/CSV)")
+    23	@click.option("--start-date", "-s", help="开始日期 (YYYY-MM-DD)")
+    24	@click.option("--end-date", "-e", help="结束日期 (YYYY-MM-DD)")
+    25	@click.option("--output", "-o", default="./output", help="输出目录 (默认: ./output)")
+    26	@click.option("--format", "-f", "export_format", default="csv", 
+    27	              type=click.Choice(["csv", "excel", "json"], case_sensitive=False),
+    28	              help="导出格式 (默认: csv)")
+    29	@click.option("--quiet", "-q", is_flag=True, help="静默模式，减少输出")
+    30	def verify(input_files, mapping, start_date, end_date, output, export_format, quiet):
+    31	    """执行房源验真流程
+    32	    
+    33	    INPUT_FILES: 一个或多个输入文件路径 (支持CSV/Excel/JSON)
+    34	    """
+    35	    try:
+    36	        if not quiet:
+    37	            click.echo("=" * 60)
+    38	            click.echo("房产中介房源验真CLI工具")
+    39	            click.echo("=" * 60)
+    40	            click.echo(f"输入文件: {len(input_files)} 个")
+    41	            for f in input_files:
+    42	                click.echo(f"  - {Path(f).name}")
+    43	            if mapping:
+    44	                click.echo(f"字段映射: {Path(mapping).name}")
+    45	            if start_date or end_date:
+    46	                click.echo(f"日期范围: {start_date or '无'} ~ {end_date or '无'}")
+    47	            click.echo(f"导出格式: {export_format.upper()}")
+    48	            click.echo(f"输出目录: {output}")
+    49	            click.echo("-" * 60)
+    50	        
+    51	        pipeline = VerificationPipeline(
+    52	            input_files=list(input_files),
+    53	            mapping_file=mapping,
+    54	            start_date=start_date,
+    55	            end_date=end_date,
+    56	            output_dir=output,
+    57	            export_format=export_format
+    58	        )
+    59	        
+    60	        with click.progressbar(length=100, label="处理中", show_eta=False) as bar:
+    61	            bar.update(20)
+    62	            result = pipeline.run()
+    63	            bar.update(80)
+    64	        
+    65	        if not quiet:
+    66	            click.echo()
+    67	            click.echo("处理完成!")
+    68	            click.echo("-" * 60)
+    69	            click.echo(f"总记录数: {result['total_records']}")
+    70	            click.echo()
+    71	            click.echo("导出文件:")
+    72	            for category, file_path in result["exported_files"].items():
+    73	                category_name = {
+    74	                    "normal": "正常记录",
+    75	                    "abnormal": "异常记录",
+    76	                    "pending": "待复核记录",
+    77	                    "summary": "汇总报告"
+    78	                }.get(category, category)
+    79	                click.echo(f"  [{category_name}] {file_path}")
+    80	        
+    81	        sys.exit(0)
+    82	        
+    83	    except FileNotFoundError as e:
+    84	        click.echo(f"错误: 文件未找到 - {str(e)}", err=True)
+    85	        sys.exit(1)
+    86	    except ValueError as e:
+    87	        click.echo(f"错误: 参数错误 - {str(e)}", err=True)
+    88	        sys.exit(1)
+    89	    except RuntimeError as e:
+    90	        click.echo(f"错误: 运行时错误 - {str(e)}", err=True)
+    91	        sys.exit(1)
+    92	    except Exception as e:
+    93	        click.echo(f"错误: 未知错误 - {str(e)}", err=True)
+    94	        click.echo("请检查输入文件格式和配置是否正确", err=True)
+    95	        sys.exit(1)
+    96	
+    97	
+    98	@main.command(name="list-rules")
+    99	def list_rules():
+   100	    """列出所有内置校验规则"""
+   101	    from .validator import ValidationEngine
+   102	    
+   103	    validator = ValidationEngine()
+   104	    rules = validator.rules
+   105	    
+   106	    click.echo("=" * 60)
+   107	    click.echo("内置校验规则列表")
+   108	    click.echo("=" * 60)
+   109	    
+   110	    for i, rule in enumerate(rules, 1):
+   111	        click.echo()
+   112	        click.echo(f"{i}. {rule.name}")
+   113	        click.echo(f"   字段: {rule.field}")
+   114	        click.echo(f"   类型: {rule.rule_type}")
+   115	        click.echo(f"   风险: {rule.risk_level}")
+   116	        if rule.parameters:
+   117	            click.echo(f"   参数: {json.dumps(rule.parameters, ensure_ascii=False)}")
+   118	    
+   119	    click.echo()
+   120	    click.echo("=" * 60)
+   121	
+   122	
+   123	@main.command(name="gen-mapping")
+   124	@click.option("--output", "-o", default="field_mapping.json", help="输出文件路径")
+   125	@click.option("--format", "-f", "mapping_format", default="json", 
+   126	              type=click.Choice(["json", "csv"], case_sensitive=False),
+   127	              help="映射文件格式 (默认: json)")
+   128	def gen_mapping(output, mapping_format):
+   129	    """生成示例字段映射配置文件"""
+   130	    example_mapping = [
+   131	        {
+   132	            "target_field": "house_id",
+   133	            "source_field": "房源编号",
+   134	            "transform": None
+   135	        },
+   136	        {
+   137	            "target_field": "house_title",
+   138	            "source_field": "房源标题",
+   139	            "transform": "strip"
+   140	        },
+   141	        {
+   142	            "target_field": "price",
+   143	            "source_field": "价格",
+   144	            "transform": "float"
+   145	        },
+   146	        {
+   147	            "target_field": "area",
+   148	            "source_field": "面积",
+   149	            "transform": "float"
+   150	        },
+   151	        {
+   152	            "target_field": "location",
+   153	            "source_field": "位置",
+   154	            "transform": None
+   155	        },
+   156	        {
+   157	            "target_field": "rooms",
+   158	            "source_field": "室",
+   159	            "transform": "int"
+   160	        },
+   161	        {
+   162	            "target_field": "halls",
+   163	            "source_field": "厅",
+   164	            "transform": "int"
+   165	        },
+   166	        {
+   167	            "target_field": "floor",
+   168	            "source_field": "楼层",
+   169	            "transform": None
+   170	        },
+   171	        {
+   172	            "target_field": "orientation",
+   173	            "source_field": "朝向",
+   174	            "transform": None
+   175	        },
+   176	        {
+   177	            "target_field": "decoration",
+   178	            "source_field": "装修",
+   179	            "transform": None
+   180	        },
+   181	        {
+   182	            "target_field": "publish_date",
+   183	            "source_field": "发布日期",
+   184	            "transform": "date"
+   185	        },
+   186	        {
+   187	            "target_field": "agent_name",
+   188	            "source_field": "中介姓名",
+   189	            "transform": None
+   190	        },
+   191	        {
+   192	            "target_field": "agent_phone",
+   193	            "source_field": "中介电话",
+   194	            "transform": "phone"
+   195	        }
+   196	    ]
+   197	    
+   198	    if mapping_format == "json":
+   199	        with open(output, "w", encoding="utf-8") as f:
+   200	            json.dump(example_mapping, f, ensure_ascii=False, indent=2)
+   201	    else:
+   202	        import csv
+   203	        with open(output, "w", encoding="utf-8-sig", newline="") as f:
+   204	            writer = csv.DictWriter(f, fieldnames=["target_field", "source_field", "transform"])
+   205	            writer.writeheader()
+   206	            writer.writerows(example_mapping)
+   207	    
+   208	    click.echo(f"示例字段映射文件已生成: {output}")
+   209	
+   210	
+   211	if __name__ == "__main__":
+   212	    main()
+     1	from typing import List, Dict, Any, Optional
+     2	from datetime import datetime
+     3	from .models import HouseRecord, RecordStatus, RiskLevel
+     4	from .reader import DataReader, load_field_mapping
+     5	from .validator import ValidationEngine, DuplicateChecker
+     6	from .exporter import DataExporter
+     7	from .utils import generate_trace_id, parse_date, parse_float, parse_int, parse_phone, is_in_date_range
+     8	
+     9	
+    10	class VerificationPipeline:
+    11	    def __init__(self, 
+    12	                 input_files: List[str],
+    13	                 mapping_file: Optional[str] = None,
+    14	                 start_date: Optional[str] = None,
+    15	                 end_date: Optional[str] = None,
+    16	                 output_dir: str = "./output",
+    17	                 export_format: str = "csv"):
+    18	        self.input_files = input_files
+    19	        self.mapping_file = mapping_file
+    20	        self.start_date = parse_date(start_date) if start_date else None
+    21	        self.end_date = parse_date(end_date) if end_date else None
+    22	        self.output_dir = output_dir
+    23	        self.export_format = export_format
+    24	        
+    25	        self.field_mappings = load_field_mapping(mapping_file) if mapping_file else []
+    26	        self.reader = DataReader(self.field_mappings)
+    27	        self.validator = ValidationEngine()
+    28	        self.duplicate_checker = DuplicateChecker()
+    29	        self.exporter = DataExporter(output_dir, export_format)
+    30	        
+    31	        self.records: List[HouseRecord] = []
+    32	    
+    33	    def run(self) -> Dict[str, Any]:
+    34	        all_raw_records = []
+    35	        
+    36	        for file_path in self.input_files:
+    37	            try:
+    38	                raw_records = self.reader.read_file(file_path)
+    39	                all_raw_records.extend(raw_records)
+    40	            except Exception as e:
+    41	                raise RuntimeError(f"读取文件 {file_path} 失败: {str(e)}")
+    42	        
+    43	        for raw_record in all_raw_records:
+    44	            house_record = self._process_raw_record(raw_record)
+    45	            self.records.append(house_record)
+    46	        
+    47	        for record in self.records:
+    48	            is_dup, dup_msg = self.duplicate_checker.check_duplicate(record)
+    49	            if is_dup:
+    50	                record.error_messages.append(f"[高风险] {dup_msg}")
+    51	                record.status = RecordStatus.ABNORMAL
+    52	                record.risk_level = RiskLevel.HIGH
+    53	        
+    54	        export_results = self.exporter.export(self.records)
+    55	        
+    56	        return {
+    57	            "total_records": len(self.records),
+    58	            "exported_files": export_results,
+    59	        }
+    60	    
+    61	    def _process_raw_record(self, raw_record: Dict[str, Any]) -> HouseRecord:
+    62	        source_file = raw_record.get("_source_file", "unknown")
+    63	        source_line = raw_record.get("_source_line", 0)
+    64	        
+    65	        original_data = {k: v for k, v in raw_record.items() if not k.startswith("_")}
+    66	        
+    67	        mapped_data = self.reader.apply_mapping(raw_record)
+    68	        
+    69	        trace_id = generate_trace_id(source_file, source_line, original_data)
+    70	        
+    71	        publish_date = parse_date(mapped_data.get("publish_date", ""))
+    72	        
+    73	        if not is_in_date_range(publish_date, self.start_date, self.end_date):
+    74	            house_record = HouseRecord(
+    75	                trace_id=trace_id,
+    76	                source_file=source_file,
+    77	                source_line=source_line,
+    78	                original_data=original_data,
+    79	                status=RecordStatus.ABNORMAL,
+    80	                risk_level=RiskLevel.UNDETERMINED,
+    81	                error_messages=["[高风险] 发布日期不在指定范围内"]
+    82	            )
+    83	            return house_record
+    84	        
+    85	        house_record = HouseRecord(
+    86	            trace_id=trace_id,
+    87	            source_file=source_file,
+    88	            source_line=source_line,
+    89	            original_data=original_data,
+    90	            house_id=str(mapped_data.get("house_id", "")).strip(),
+    91	            house_title=str(mapped_data.get("house_title", "")).strip(),
+    92	            price=parse_float(mapped_data.get("price")),
+    93	            area=parse_float(mapped_data.get("area")),
+    94	            location=str(mapped_data.get("location", "")).strip(),
+    95	            rooms=parse_int(mapped_data.get("rooms")),
+    96	            halls=parse_int(mapped_data.get("halls")),
+    97	            floor=str(mapped_data.get("floor", "")).strip(),
+    98	            orientation=str(mapped_data.get("orientation", "")).strip(),
+    99	            decoration=str(mapped_data.get("decoration", "")).strip(),
+   100	            publish_date=publish_date,
+   101	            agent_name=str(mapped_data.get("agent_name", "")).strip(),
+   102	            agent_phone=parse_phone(mapped_data.get("agent_phone")),
+   103	        )
+   104	        
+   105	        house_record = self.validator.validate_record(house_record)
+   106	        
+   107	        return house_record
+
+codex
+控制台脚本名当前 shell 中不可直接找到，但包是以 editable 形式安装在该工作区，源码入口 `python -m house_verification.cli` 可用；这更像用户 PATH 环境未包含 Python 用户脚本目录，不构成项目代码的阻断证据。质检结论可以收敛了。
+codex
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml` 声明了依赖和 CLI 入口 `house-verification = house_verification.cli:main`。
+  - `PYTHONPATH=src python3 -m house_verification.cli --help` 可正常显示 `verify`、`list-rules`、`gen-mapping` 命令。
+  - `list-rules` 可正常列出 13 条内置校验规则。
+  - 使用 `examples/sample_houses.csv` 和 `examples/field_mapping.json` 做内存链路验证，15 条记录可读取、映射、校验、分流；结果为正常 10 条、异常 5 条，并识别到重复房源 `HS012`。
+  - 导出器的记录行转换和汇总结构可正常生成。
+- 阻断问题: 无
+- 建议:
+  - 补充 README，写明推荐运行方式、示例命令和输出目录。
+  - 当前 shell 中 `house-verification` 命令不在 PATH，可在文档中补充 `python -m house_verification.cli` 作为备用入口。
+tokens used
+48,925

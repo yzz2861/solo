@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml` 声明了依赖和 CLI 入口 `house-verification = house_verification.cli:main`。
+  - `PYTHONPATH=src python3 -m house_verification.cli --help` 可正常显示 `verify`、`list-rules`、`gen-mapping` 命令。
+  - `list-rules` 可正常列出 13 条内置校验规则。
+  - 使用 `examples/sample_houses.csv` 和 `examples/field_mapping.json` 做内存链路验证，15 条记录可读取、映射、校验、分流；结果为正常 10 条、异常 5 条，并识别到重复房源 `HS012`。
+  - 导出器的记录行转换和汇总结构可正常生成。
+- 阻断问题: 无
+- 建议:
+  - 补充 README，写明推荐运行方式、示例命令和输出目录。
+  - 当前 shell 中 `house-verification` 命令不在 PATH，可在文档中补充 `python -m house_verification.cli` 作为备用入口。

@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 虽然 `app/main.py` 可导入，ASGI 方式访问 `/health` 与 `/api/compensation/process` 能返回 200，核心赔付处理路径也能得到 `PROCESSABLE` 结果；但项目自带测试入口不可用。`tests/test_compensation_api.py:17` 使用 `TestClient(app)`，在当前由 `requirements.txt:5` 允许安装的 `httpx 0.28.1` 环境下收集阶段直接报 `TypeError: __init__() got an unexpected keyword argument 'app'`。这说明依赖范围未约束导致真实验证链路失效，用户无法按项目内测试入口确认赔付校验、状态分流、历史回放等核心流程是否稳定。
+- 主要证据:
+  - `python3 -c "from app.main import app; ..."` 成功，路由包含 `/api/compensation/process`、`/api/compensation/replay/{trace_id}`、`/api/rules` 等。
+  - ASGI 方式请求 `/health` 返回 `200`；提交合规赔付请求返回 `200 PROCESSABLE`，历史回放返回 `200`。
+  - `python3 -m pytest -q -s -p no:cacheprovider` 在收集 `tests/test_compensation_api.py` 时失败。
+  - 当前版本组合为 `fastapi 0.109.2`、`starlette 0.36.3`、`httpx 0.28.1`，而 `requirements.txt` 对 `httpx` 仅声明 `>=0.25.2`。
+- 阻断问题:
+  - 自带测试入口因依赖兼容问题无法运行，阻断项目验收验证。
+- 建议:
+  - 约束兼容依赖版本，例如固定 `httpx<0.28`，或升级 FastAPI/Starlette 到兼容当前 `httpx` 的组合。
+  - 修复后重新运行完整测试，重点覆盖赔付处理、材料补充、锁定、人工复核、重复提交和历史回放。
