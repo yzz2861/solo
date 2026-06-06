@@ -1,0 +1,23 @@
+{
+  "name": "campus-card-anomaly-api",
+  "version": "1.0.0",
+  "description": "校园一卡通异常消费API - 对象、规则、状态、记录四层架构",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --config jest.config.js",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": ["campus-card", "anomaly-detection", "api"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
