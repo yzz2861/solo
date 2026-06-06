@@ -1,0 +1,41 @@
+{
+  "rules": [
+    {
+      "rule_type": "same_institution",
+      "description": "同一单位回避",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "rule_type": "co_author",
+      "description": "共同作者回避（近5年）",
+      "enabled": true,
+      "params": {
+        "lookback_years": 5
+      }
+    },
+    {
+      "rule_type": "supervisor",
+      "description": "师生关系回避",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "rule_type": "recent_collaboration",
+      "description": "近期合作回避（近3年）",
+      "enabled": false,
+      "params": {
+        "lookback_years": 3
+      }
+    },
+    {
+      "rule_type": "custom",
+      "description": "自定义冲突规则 - 项目合作",
+      "enabled": false,
+      "params": {
+        "field": "project_code",
+        "value": "PRJ2024"
+      }
+    }
+  ]
+}

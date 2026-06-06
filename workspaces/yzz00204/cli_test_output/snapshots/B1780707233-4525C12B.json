@@ -1,0 +1,117 @@
+{
+  "batch_info": {
+    "batch_id": "B1780707233-4525C12B",
+    "command": "validate",
+    "start_time": 1780707233.5013278,
+    "end_time": 1780707233.502209,
+    "status": "validated",
+    "input_file": "examples/papers_partial_failure.csv",
+    "rules_file": "",
+    "snapshot_file": "",
+    "output_dir": "cli_test_output",
+    "total_count": 14,
+    "success_count": 0,
+    "failed_count": 0,
+    "bad_count": 4,
+    "manual_review_count": 0
+  },
+  "assignments": [],
+  "bad_records": [
+    {
+      "source_file": "papers_partial_failure.csv",
+      "source_line": 7,
+      "raw_data": {
+        "paper_id": "",
+        "title": "无ID论文测试",
+        "author_name": "佚名",
+        "author_institution": "未知大学",
+        "author_email": "test@test.com",
+        "keywords": "测试",
+        "abstract": "这是一篇没有ID的论文",
+        "supervisor": "",
+        "co_authors": ""
+      },
+      "errors": [
+        "paper_id不能为空"
+      ]
+    },
+    {
+      "source_file": "papers_partial_failure.csv",
+      "source_line": 8,
+      "raw_data": {
+        "paper_id": "P007",
+        "title": "",
+        "author_name": "无标题论文",
+        "author_institution": "测试大学",
+        "author_email": "test2@test.com",
+        "keywords": "测试",
+        "abstract": "这是一篇没有标题的论文",
+        "supervisor": "",
+        "co_authors": ""
+      },
+      "errors": [
+        "title不能为空"
+      ]
+    },
+    {
+      "source_file": "papers_partial_failure.csv",
+      "source_line": 9,
+      "raw_data": {
+        "paper_id": "P008",
+        "title": "缺少作者论文",
+        "author_name": "",
+        "author_institution": "测试大学",
+        "author_email": "test3@test.com",
+        "keywords": "测试",
+        "abstract": "这是一篇缺少作者的论文",
+        "supervisor": "",
+        "co_authors": ""
+      },
+      "errors": [
+        "author_name不能为空"
+      ]
+    },
+    {
+      "source_file": "papers_partial_failure.csv",
+      "source_line": 10,
+      "raw_data": {
+        "paper_id": "P009",
+        "title": "缺少单位论文",
+        "author_name": "测试作者",
+        "author_institution": "",
+        "author_email": "test4@test.com",
+        "keywords": "测试",
+        "abstract": "这是一篇缺少单位的论文",
+        "supervisor": "",
+        "co_authors": ""
+      },
+      "errors": [
+        "author_institution不能为空"
+      ]
+    }
+  ],
+  "diff_records": [],
+  "logs": [
+    "[2026-06-06 08:53:53] [INFO] 批次 B1780707233-4525C12B 开始校验",
+    "[2026-06-06 08:53:53] [INFO] 论文清单: examples/papers_partial_failure.csv",
+    "[2026-06-06 08:53:53] [INFO] 评审人清单: examples/reviewers.csv",
+    "[2026-06-06 08:53:53] [INFO] 规则配置: 默认规则",
+    "[2026-06-06 08:53:53] [INFO] 开始校验论文清单: examples/papers_partial_failure.csv",
+    "[2026-06-06 08:53:53] [INFO] 读取论文记录 10 条，字段 9 个",
+    "[2026-06-06 08:53:53] [INFO] 论文校验完成: 有效 6 条，坏行 4 条",
+    "[2026-06-06 08:53:53] [WARN] 坏行 (第7行): paper_id不能为空",
+    "[2026-06-06 08:53:53] [WARN] 坏行 (第8行): title不能为空",
+    "[2026-06-06 08:53:53] [WARN] 坏行 (第9行): author_name不能为空",
+    "[2026-06-06 08:53:53] [WARN] 坏行 (第10行): author_institution不能为空",
+    "[2026-06-06 08:53:53] [INFO] 开始校验评审人清单: examples/reviewers.csv",
+    "[2026-06-06 08:53:53] [INFO] 读取评审人记录 8 条，字段 5 个",
+    "[2026-06-06 08:53:53] [INFO] 评审人校验完成: 有效 8 条，坏行 0 条",
+    "[2026-06-06 08:53:53] [INFO] 加载冲突规则 3 条:",
+    "[2026-06-06 08:53:53] [INFO]   - same_institution: 同一单位回避",
+    "[2026-06-06 08:53:53] [INFO]   - co_author: 共同作者回避",
+    "[2026-06-06 08:53:53] [INFO]   - supervisor: 师生关系回避",
+    "[2026-06-06 08:53:53] [INFO] 校验完成: 有效论文 6 条，有效评审人 8 条，坏行 4 条"
+  ],
+  "snapshot_version": "1.0",
+  "snapshot_time": "2026-06-06T08:53:53.502699"
+}
