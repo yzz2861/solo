@@ -1,0 +1,15 @@
+{
+  "name": "vpn-remote-login-api",
+  "version": "1.0.0",
+  "description": "VPN异地登录API - 数据校验、状态分流与闭环处理",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node test/acceptance-test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}
