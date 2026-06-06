@@ -1,8 +1,35 @@
 import os
 import csv
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+from datetime import date
 from .models import SourceRecord
+
+
+def filter_sources_by_date(sources, mapper, date_start, date_end):
+    if not date_start and not date_end:
+        return list(sources)
+    from .validator import DataValidator
+    filtered = []
+    for src in sources:
+        mapped = mapper.map_record(src)
+        date_str = mapped.get("inbound_date")
+        if not date_str:
+            filtered.append(src)
+            continue
+        try:
+            d = DataValidator._parse_date(str(date_str).strip())
+            if d is None:
+                filtered.append(src)
+                continue
+            if date_start and d < date_start:
+                continue
+            if date_end and d > date_end:
+                continue
+            filtered.append(src)
+        except Exception:
+            filtered.append(src)
+    return filtered
 
 
 def read_source_files(file_paths: List[str]) -> List[SourceRecord]:

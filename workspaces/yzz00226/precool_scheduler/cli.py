@@ -4,7 +4,7 @@ from datetime import datetime
 
 import click
 
-from .io_utils import read_source_files
+from .io_utils import read_source_files, filter_sources_by_date
 from .mapper import FieldMapper, load_mapping_from_file
 from .validator import DataValidator
 from .scheduler import PrecoolScheduler, compute_idempotency_key, generate_batch_id
@@ -31,11 +31,13 @@ def _get_mapper(mapping_file):
     return FieldMapper()
 
 
-def _print_validation_summary(result, sources_count):
+def _print_validation_summary(result, sources_count, filtered_count=None):
     click.echo("=" * 60)
     click.echo("  校验结果汇总")
     click.echo("=" * 60)
     click.echo(f"  输入记录数:    {sources_count}")
+    if filtered_count is not None and filtered_count != sources_count:
+        click.echo(f"  日期过滤后:    {filtered_count}")
     click.echo(f"  通过校验:      {result.pass_count}")
     click.echo(f"  异常记录:      {result.exception_count}")
     click.echo(f"  待人工复核:    {result.review_count}")
@@ -93,10 +95,13 @@ def validate(files, mapping, date_start, date_end, output, fmt, no_idempotent):
         sources = read_source_files(list(files))
         mapper = _get_mapper(mapping)
         batch_id = generate_batch_id()
-        validator = DataValidator(mapper, batch_id)
-        result = validator.validate(sources)
 
-        _print_validation_summary(result, len(sources))
+        filtered = filter_sources_by_date(sources, mapper, date_start, date_end)
+
+        validator = DataValidator(mapper, batch_id)
+        result = validator.validate(filtered)
+
+        _print_validation_summary(result, len(sources), len(filtered))
         _print_detailed_exceptions(result)
         _print_review_entries(result)
 
