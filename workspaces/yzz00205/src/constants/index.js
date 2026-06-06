@@ -10,6 +10,7 @@ const BUSINESS_STATUS = {
 const RISK_TAGS = {
   NORMAL: 'normal',
   MISSING_FIELDS: 'missing_fields',
+  INVALID_PARAM: 'invalid_param',
   RULE_CONFLICT: 'rule_conflict',
   DUPLICATE_PROCESSING: 'duplicate_processing',
   MANUAL_REVIEW: 'manual_review',

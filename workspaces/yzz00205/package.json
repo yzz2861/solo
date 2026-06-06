@@ -5,7 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "dev": "node --watch src/app.js",
+    "test": "node test/unit.test.js",
+    "test:integration": "node test/api.test.js"
   },
   "dependencies": {
     "express": "^4.19.2",

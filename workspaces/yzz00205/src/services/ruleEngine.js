@@ -34,6 +34,11 @@ function calculateSubsidy(objectStatus, ruleVersion, timeWindow) {
   }
 
   const { category, isRemote = false, hasDifficulty = false } = objectStatus
+
+  if (!validateObjectCategory(category)) {
+    throw new Error(ERROR_CODES.PARAM_INVALID)
+  }
+
   const baseAmount = standards[category] || 0
 
   let amount = baseAmount
@@ -130,6 +135,39 @@ function checkMissingFields(objectStatus, timeWindow) {
   return missing
 }
 
+function checkInvalidParams(objectStatus, ruleVersion) {
+  const invalid = []
+
+  if (objectStatus.category && !validateObjectCategory(objectStatus.category)) {
+    invalid.push({
+      field: 'objectStatus.category',
+      value: objectStatus.category,
+      description: `案件类别不合法，有效值为 ${OBJECT_CATEGORIES.join('、')}`,
+      validValues: OBJECT_CATEGORIES
+    })
+  }
+
+  if (objectStatus.isRemote !== undefined && typeof objectStatus.isRemote !== 'boolean') {
+    invalid.push({
+      field: 'objectStatus.isRemote',
+      value: objectStatus.isRemote,
+      description: '是否偏远地区必须为布尔值',
+      validType: 'boolean'
+    })
+  }
+
+  if (objectStatus.hasDifficulty !== undefined && typeof objectStatus.hasDifficulty !== 'boolean') {
+    invalid.push({
+      field: 'objectStatus.hasDifficulty',
+      value: objectStatus.hasDifficulty,
+      description: '是否疑难案件必须为布尔值',
+      validType: 'boolean'
+    })
+  }
+
+  return invalid
+}
+
 function processSubsidyRules(params) {
   const { businessNo, objectStatus, timeWindow, ruleVersion, operator } = params
 
@@ -141,6 +179,7 @@ function processSubsidyRules(params) {
     ruleHits: [],
     conflicts: [],
     missingFields: [],
+    invalidParams: [],
     isDuplicate: false,
     previousRecord: null,
     conclusion: CONCLUSION_TYPES.PASS,
@@ -163,6 +202,19 @@ function processSubsidyRules(params) {
     result.riskTags.push(RISK_TAGS.MISSING_FIELDS)
     result.conclusion = CONCLUSION_TYPES.PENDING
     result.nextAction = NEXT_ACTIONS.SUPPLEMENT_INFO
+  }
+
+  result.invalidParams = checkInvalidParams(objectStatus, ruleVersion)
+  if (result.invalidParams.length > 0) {
+    result.riskTags.push(RISK_TAGS.INVALID_PARAM)
+    result.conclusion = CONCLUSION_TYPES.FAIL
+    result.nextAction = NEXT_ACTIONS.REJECT
+    result.error = {
+      code: ERROR_CODES.PARAM_INVALID,
+      message: '存在无效参数',
+      details: result.invalidParams
+    }
+    return result
   }
 
   result.isDuplicate = checkDuplicate(businessNo)
@@ -246,6 +298,7 @@ module.exports = {
   calculateSubsidy,
   checkRuleConflicts,
   checkMissingFields,
+  checkInvalidParams,
   processSubsidyRules,
   markProcessed
 }

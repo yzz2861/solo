@@ -18,6 +18,12 @@ const EXPLANATIONS = {
     impact: '无法完成完整的补贴核算，可能导致核算结果不准确。',
     suggestion: '请补充缺失的字段信息后重新提交。'
   },
+  [RISK_TAGS.INVALID_PARAM]: {
+    title: '参数无效',
+    description: '提交的业务数据中存在取值无效的参数。',
+    impact: '参数不符合规则体系要求，无法进行正常核算。',
+    suggestion: '请修正无效参数的取值后重新提交。'
+  },
   [RISK_TAGS.RULE_CONFLICT]: {
     title: '规则冲突',
     description: '业务数据同时命中多条存在冲突的规则。',
@@ -188,7 +194,7 @@ function explainError(errorCode) {
 }
 
 function generateExceptionReport(ruleResult) {
-  const { riskTags, nextAction, conclusion, missingFields, conflicts, isDuplicate, previousRecord, calculation, error } = ruleResult
+  const { riskTags, nextAction, conclusion, missingFields, invalidParams, conflicts, isDuplicate, previousRecord, calculation, error } = ruleResult
 
   return {
     summary: {
@@ -200,6 +206,7 @@ function generateExceptionReport(ruleResult) {
     nextActionDetail: explainNextAction(nextAction),
     conclusionDetail: explainConclusion(conclusion),
     missingFieldDetails: missingFields || [],
+    invalidParamDetails: invalidParams || [],
     conflictDetails: conflicts || [],
     duplicateInfo: isDuplicate ? {
       isDuplicate: true,
@@ -212,7 +219,8 @@ function generateExceptionReport(ruleResult) {
 }
 
 function getTaskStatus(businessNo, auditRecord) {
-  const { status, nextAction, conclusion, riskTags, createdAt, operator } = auditRecord
+  const { status, conclusion, riskTags, createdAt, operator, outputData } = auditRecord
+  const nextAction = auditRecord.nextAction || (outputData && outputData.nextAction)
 
   return {
     businessNo,
