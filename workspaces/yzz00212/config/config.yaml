@@ -1,0 +1,97 @@
+time_window:
+  window_size_minutes: 60
+  slide_step_minutes: 30
+  start_time: "2024-01-01 00:00:00"
+  end_time: "2024-01-02 00:00:00"
+
+group_dimensions:
+  - tunnel_id
+  - direction
+  - lighting_zone
+
+thresholds:
+  brightness:
+    unit: "lux"
+    low: 150
+    medium: 100
+    high: 50
+    unit_deviation_low: 0.1
+    unit_deviation_medium: 0.2
+    unit_deviation_high: 0.3
+  power:
+    unit: "W"
+    low: 500
+    medium: 300
+    high: 100
+    unit_deviation_low: 0.15
+    unit_deviation_medium: 0.25
+    unit_deviation_high: 0.4
+  failure_rate:
+    unit: "%"
+    low: 1.0
+    medium: 5.0
+    high: 10.0
+  flicker_count:
+    unit: "次/小时"
+    low: 3
+    medium: 10
+    high: 30
+
+bad_data_rules:
+  missing_fields:
+    - timestamp
+    - tunnel_id
+    - device_id
+    - brightness
+  value_ranges:
+    brightness: [0, 10000]
+    power: [0, 5000]
+    temperature: [-40, 100]
+  duplicate_keys:
+    - timestamp
+    - device_id
+
+risk_levels:
+  - low
+  - medium
+  - high
+  - undetermined
+
+risk_rules:
+  high_risk_conditions:
+    - "brightness < thresholds.brightness.high"
+    - "power < thresholds.power.high"
+    - "failure_rate > thresholds.failure_rate.high"
+    - "flicker_count > thresholds.flicker_count.high"
+  medium_risk_conditions:
+    - "brightness < thresholds.brightness.medium and brightness >= thresholds.brightness.high"
+    - "power < thresholds.power.medium and power >= thresholds.power.high"
+    - "failure_rate > thresholds.failure_rate.medium and failure_rate <= thresholds.failure_rate.high"
+    - "flicker_count > thresholds.flicker_count.medium and flicker_count <= thresholds.flicker_count.high"
+  low_risk_conditions:
+    - "brightness >= thresholds.brightness.medium"
+    - "power >= thresholds.power.medium"
+    - "failure_rate <= thresholds.failure_rate.medium"
+    - "flicker_count <= thresholds.flicker_count.medium"
+
+baseline:
+  compare_metrics:
+    - brightness_mean
+    - brightness_std
+    - power_mean
+    - failure_rate
+  deviation_threshold_warning: 0.15
+  deviation_threshold_critical: 0.3
+
+output:
+  formats:
+    - report_csv
+    - bad_data_csv
+    - result_json
+    - review_csv
+  report_filename: "group_report.csv"
+  bad_data_filename: "bad_data_list.csv"
+  result_json_filename: "inspection_results.json"
+  review_filename: "manual_review_list.csv"
+  include_history_trace: true
+  include_reasoning: true

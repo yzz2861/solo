@@ -1,0 +1,8 @@
+﻿power,temperature,lighting_zone,flicker_count,brightness,tunnel_id,timestamp,direction,status,device_id,坏数据原因,坏数据数量,来源文件,原始索引
+445.5,25.0,入口区,0.0,178.2,T001,2024-01-01T10:00:00,东向,normal,L-001,重复记录: 2024-01-01T10:00:00|L-001,1,inspection_log_02.csv,36
+450.0,25.0,入口区,0.0,180.0,,2024-01-01T11:00:00,东向,normal,L-001,缺失字段: tunnel_id,1,inspection_log_02.csv,37
+400.0,24.0,入口区,0.0,160.0,T001,2024-01-01T11:05:00,东向,normal,,缺失字段: device_id,1,inspection_log_02.csv,38
+10000.0,200.0,中部区,0.0,15000.0,T001,2024-01-01T11:10:00,东向,normal,L-003,brightness 超出范围: 15000.0 (范围: 0-10000); power 超出范围: 10000.0 (范围: 0-5000); temperature 超出范围: 200.0 (范围: -40-100),3,inspection_log_02.csv,39
+-100.0,-50.0,中部区,0.0,-50.0,T001,2024-01-01T11:15:00,东向,normal,L-004,brightness 超出范围: -50.0 (范围: 0-10000); power 超出范围: -100.0 (范围: 0-5000); temperature 超出范围: -50.0 (范围: -40-100),3,inspection_log_02.csv,40
+def,ghi,出口区,jkl,abc,T001,2024-01-01T11:20:00,东向,normal,L-005,brightness 非数值: abc; power 非数值: def; temperature 非数值: ghi,3,inspection_log_02.csv,41
+400.0,24.0,出口区,0.0,150.0,T001,invalid_timestamp,东向,normal,L-006,无效时间戳: invalid_timestamp,1,inspection_log_02.csv,42
