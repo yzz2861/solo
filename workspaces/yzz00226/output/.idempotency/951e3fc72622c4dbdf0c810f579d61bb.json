@@ -1,0 +1,49 @@
+{
+  "batch_id": "BATCH-20260606-140242",
+  "idempotency_key": "951e3fc72622c4dbdf0c810f579d61bb",
+  "is_cached": false,
+  "passed": [
+    {
+      "record_id": "REC-BATCH-20260606-140242-46f845a0136e19f3",
+      "batch_id": "BATCH-20260606-140242",
+      "source_file": "single_success.csv",
+      "row_number": 2,
+      "source_row_hash": "46f845a0136e19f3",
+      "product_name": "红富士苹果",
+      "product_type": "水果",
+      "quantity": 500.0,
+      "unit": "kg",
+      "inbound_date": "2026-06-10",
+      "target_temp": 2.0,
+      "current_temp": 25.0,
+      "precool_hours": 20.28,
+      "precool_start": "2026-06-10T00:00:00",
+      "precool_end": "2026-06-10T20:16:48",
+      "precool_room": "A-05",
+      "status": "scheduled",
+      "review_required": true,
+      "review_reason": "温差超过20℃，需人工确认预冷方案",
+      "errors": []
+    }
+  ],
+  "exceptions": [],
+  "summary": {
+    "batch_id": "BATCH-20260606-140242",
+    "generated_at": "2026-06-06T14:02:42.226664",
+    "source_files": [
+      "single_success.csv"
+    ],
+    "date_range_start": "",
+    "date_range_end": "",
+    "total_records": 1,
+    "passed_records": 1,
+    "exception_records": 0,
+    "review_records": 1,
+    "precool_rooms": [
+      "A-05"
+    ],
+    "total_precool_hours": 20.28,
+    "idempotency_key": "951e3fc72622c4dbdf0c810f579d61bb"
+  },
+  "message": "排程生成完成"
+}
