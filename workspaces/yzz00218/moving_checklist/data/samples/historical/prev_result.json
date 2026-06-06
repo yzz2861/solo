@@ -1,0 +1,144 @@
+{
+  "batch_no": "B20250601120000ABC123",
+  "source": "深圳-南山仓",
+  "process_time": "2025-06-01T12:00:00.000000",
+  "total_count": 5,
+  "passed_count": 5,
+  "failed_count": 0,
+  "passed_items": [
+    {
+      "item_id": "ITEM001",
+      "name": "沙发",
+      "category": "家具",
+      "quantity": 1,
+      "weight_kg": 80.0,
+      "volume_cbm": 2.0,
+      "value": 3000.0,
+      "fragile": false,
+      "need_packing": true,
+      "special_handling": "",
+      "source": "深圳-南山仓",
+      "remark": "v1版本数据",
+      "trace_id": "A1B2C3D4E5F60001",
+      "batch_no": "B20250601120000ABC123"
+    },
+    {
+      "item_id": "ITEM002",
+      "name": "餐桌",
+      "category": "家具",
+      "quantity": 1,
+      "weight_kg": 50.0,
+      "volume_cbm": 1.0,
+      "value": 2000.0,
+      "fragile": false,
+      "need_packing": true,
+      "special_handling": "",
+      "source": "深圳-南山仓",
+      "remark": "v1版本数据",
+      "trace_id": "A1B2C3D4E5F60002",
+      "batch_no": "B20250601120000ABC123"
+    },
+    {
+      "item_id": "ITEM003",
+      "name": "电视",
+      "category": "电器",
+      "quantity": 1,
+      "weight_kg": 20.0,
+      "volume_cbm": 0.5,
+      "value": 4000.0,
+      "fragile": false,
+      "need_packing": true,
+      "special_handling": "",
+      "source": "深圳-南山仓",
+      "remark": "v1版本数据 - 未标记易碎（会有警告）",
+      "trace_id": "A1B2C3D4E5F60003",
+      "batch_no": "B20250601120000ABC123"
+    },
+    {
+      "item_id": "ITEM004",
+      "name": "衣柜",
+      "category": "家具",
+      "quantity": 1,
+      "weight_kg": 120.0,
+      "volume_cbm": 3.0,
+      "value": 5000.0,
+      "fragile": false,
+      "need_packing": true,
+      "special_handling": "需拆卸",
+      "source": "深圳-南山仓",
+      "remark": "v1版本数据",
+      "trace_id": "A1B2C3D4E5F60004",
+      "batch_no": "B20250601120000ABC123"
+    },
+    {
+      "item_id": "ITEM005",
+      "name": "书箱",
+      "category": "书籍",
+      "quantity": 5,
+      "weight_kg": 20.0,
+      "volume_cbm": 0.3,
+      "value": 1500.0,
+      "fragile": false,
+      "need_packing": true,
+      "special_handling": "",
+      "source": "深圳-南山仓",
+      "remark": "v1版本数据",
+      "trace_id": "A1B2C3D4E5F60005",
+      "batch_no": "B20250601120000ABC123"
+    }
+  ],
+  "failed_items": [],
+  "issues": [
+    {
+      "item_id": "ITEM003",
+      "trace_id": "A1B2C3D4E5F60003",
+      "rule_id": "R011",
+      "rule_name": "易碎品标记校验",
+      "field": "fragile",
+      "actual_value": false,
+      "expected_value": true,
+      "severity": "warning",
+      "description": "品类 '电器' 建议标记为易碎品",
+      "batch_no": "B20250601120000ABC123",
+      "source": "深圳-南山仓"
+    }
+  ],
+  "summary": {
+    "total_items": 5,
+    "total_quantity": 9,
+    "total_weight_kg": 290.0,
+    "total_volume_cbm": 6.8,
+    "total_value": 15500.0,
+    "fragile_items": 0,
+    "need_packing_items": 5,
+    "category_stats": {
+      "家具": {
+        "count": 3,
+        "weight": 250.0,
+        "volume": 6.0,
+        "value": 10000.0
+      },
+      "电器": {
+        "count": 1,
+        "weight": 20.0,
+        "volume": 0.5,
+        "value": 4000.0
+      },
+      "书籍": {
+        "count": 5,
+        "weight": 20.0,
+        "volume": 0.3,
+        "value": 1500.0
+      }
+    },
+    "error_count": 0,
+    "warning_count": 1,
+    "_meta": {
+      "items_hash": "abc123def4567890abc123def4567890abc123def4567890abc123def4567890",
+      "config_hash": "123abc456def7890123abc456def7890123abc456def7890123abc456def7890",
+      "filters_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source": "深圳-南山仓"
+    }
+  },
+  "previous_batch_no": ""
+}
