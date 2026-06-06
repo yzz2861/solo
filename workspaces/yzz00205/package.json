@@ -1,0 +1,16 @@
+{
+  "name": "legal-aid-subsidy-api",
+  "version": "1.0.0",
+  "description": "法援案件补贴核算API - 规则判断、异常解释与处理留痕一体化",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "uuid": "^9.0.1",
+    "dayjs": "^1.11.11",
+    "lodash": "^4.17.21"
+  }
+}
