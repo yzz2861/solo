@@ -1,0 +1,35 @@
+{
+  "priority": {
+    "P0": {"name": "紧急", "level": 0, "description": "生产系统故障，业务中断"},
+    "P1": {"name": "高", "level": 1, "description": "核心功能严重影响"},
+    "P2": {"name": "中", "level": 2, "description": "一般功能问题"},
+    "P3": {"name": "低", "level": 3, "description": "建议或咨询"}
+  },
+  "order_type": {
+    "INC": {"name": "故障单", "category": "incident"},
+    "REQ": {"name": "请求单", "category": "request"},
+    "CHG": {"name": "变更单", "category": "change"},
+    "PRB": {"name": "问题单", "category": "problem"}
+  },
+  "status": {
+    "NEW": {"name": "新建", "phase": "open"},
+    "ASSIGNED": {"name": "已分配", "phase": "open"},
+    "IN_PROGRESS": {"name": "处理中", "phase": "open"},
+    "PENDING": {"name": "待确认", "phase": "open"},
+    "RESOLVED": {"name": "已解决", "phase": "closed"},
+    "CLOSED": {"name": "已关闭", "phase": "closed"},
+    "CANCELLED": {"name": "已取消", "phase": "closed"}
+  },
+  "department": {
+    "D001": {"name": "研发部", "manager": "张三"},
+    "D002": {"name": "运维部", "manager": "李四"},
+    "D003": {"name": "客服部", "manager": "王五"},
+    "D004": {"name": "测试部", "manager": "赵六"}
+  },
+  "risk_level": {
+    "NORMAL": {"name": "正常", "color": "green"},
+    "WARNING": {"name": "预警", "color": "yellow"},
+    "OVERDUE": {"name": "逾期", "color": "orange"},
+    "SEVERE": {"name": "严重逾期", "color": "red"}
+  }
+}

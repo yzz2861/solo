@@ -1,0 +1,33 @@
+order_id,issue_type,field,description,severity
+WO0002,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0003,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0003,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0008,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0009,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0012,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0012,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0013,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0014,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0016,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0018,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0018,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0021,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0031,MISSING_FIELD,create_time,缺失必填字段: create_time,HIGH
+WO0031,MISSING_FIELD,status,缺失必填字段: status,HIGH
+WO0031,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0032,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0032,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0033,MISSING_FIELD,create_time,缺失必填字段: create_time,HIGH
+WO0033,MISSING_FIELD,status,缺失必填字段: status,HIGH
+WO0035,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0035,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0036,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0036,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0036,DUPLICATE_ORDER,duplicate,与工单 WO0035 疑似重复: 标题/时间/类型高度相似 (得分:4),LOW
+WO0037,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0038,RULE_CONFLICT,sla_rule,"匹配到 3 条规则: ['R003', 'R010', 'R011']",MEDIUM
+WO0038,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0041,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: OVERDUE,MEDIUM
+WO0042,SLA_OVERDUE,overall_risk,工单SLA逾期，风险等级: SEVERE,HIGH
+WO0043,DUPLICATE_ORDER,duplicate,与工单 WO0001 疑似重复: 标题/时间/类型高度相似 (得分:7),LOW
+WO0045,DUPLICATE_ORDER,duplicate,与工单 WO0015 疑似重复: 标题/时间/类型高度相似 (得分:4),LOW

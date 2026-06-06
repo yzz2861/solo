@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "time_window": {
+    "unit": "hour",
+    "business_hours": {
+      "enabled": false,
+      "work_start": "09:00",
+      "work_end": "18:00",
+      "work_days": [1, 2, 3, 4, 5]
+    }
+  },
+  "sla_rules": [
+    {
+      "rule_id": "R001",
+      "rule_name": "紧急故障响应SLA",
+      "priority": "P0",
+      "order_type": "INC",
+      "response_sla_hours": 0.5,
+      "resolve_sla_hours": 4,
+      "warning_threshold": 0.8,
+      "description": "P0故障单0.5小时响应，4小时解决"
+    },
+    {
+      "rule_id": "R002",
+      "rule_name": "高级故障响应SLA",
+      "priority": "P1",
+      "order_type": "INC",
+      "response_sla_hours": 2,
+      "resolve_sla_hours": 24,
+      "warning_threshold": 0.8,
+      "description": "P1故障单2小时响应，24小时解决"
+    },
+    {
+      "rule_id": "R003",
+      "rule_name": "中级故障响应SLA",
+      "priority": "P2",
+      "order_type": "INC",
+      "response_sla_hours": 8,
+      "resolve_sla_hours": 72,
+      "warning_threshold": 0.8,
+      "description": "P2故障单8小时响应，72小时解决"
+    },
+    {
+      "rule_id": "R004",
+      "rule_name": "低级故障响应SLA",
+      "priority": "P3",
+      "order_type": "INC",
+      "response_sla_hours": 24,
+      "resolve_sla_hours": 168,
+      "warning_threshold": 0.8,
+      "description": "P3故障单24小时响应，168小时解决"
+    },
+    {
+      "rule_id": "R005",
+      "rule_name": "服务请求SLA",
+      "priority": "P2",
+      "order_type": "REQ",
+      "response_sla_hours": 4,
+      "resolve_sla_hours": 48,
+      "warning_threshold": 0.75,
+      "description": "P2请求单4小时响应，48小时解决"
+    },
+    {
+      "rule_id": "R006",
+      "rule_name": "变更单SLA",
+      "priority": "P1",
+      "order_type": "CHG",
+      "response_sla_hours": 4,
+      "resolve_sla_hours": 72,
+      "warning_threshold": 0.8,
+      "description": "P1变更单4小时响应，72小时解决"
+    },
+    {
+      "rule_id": "R007",
+      "rule_name": "问题单SLA",
+      "priority": "P2",
+      "order_type": "PRB",
+      "response_sla_hours": 2,
+      "resolve_sla_hours": 120,
+      "warning_threshold": 0.8,
+      "description": "P2问题单2小时响应，120小时解决"
+    },
+    {
+      "rule_id": "R008",
+      "rule_name": "P3服务请求SLA",
+      "priority": "P3",
+      "order_type": "REQ",
+      "response_sla_hours": 24,
+      "resolve_sla_hours": 96,
+      "warning_threshold": 0.75,
+      "description": "P3请求单24小时响应，96小时解决"
+    },
+    {
+      "rule_id": "R009",
+      "rule_name": "P0变更单SLA",
+      "priority": "P0",
+      "order_type": "CHG",
+      "response_sla_hours": 1,
+      "resolve_sla_hours": 24,
+      "warning_threshold": 0.8,
+      "description": "P0变更单1小时响应，24小时解决（紧急变更）"
+    },
+    {
+      "rule_id": "R010",
+      "rule_name": "中级故障响应SLA-严格版",
+      "priority": "P2",
+      "order_type": "INC",
+      "response_sla_hours": 4,
+      "resolve_sla_hours": 48,
+      "warning_threshold": 0.7,
+      "description": "P2故障单严格版：4小时响应，48小时解决（与R003冲突，用于测试规则冲突场景）"
+    },
+    {
+      "rule_id": "R011",
+      "rule_name": "P2故障单VIP版",
+      "priority": "P2",
+      "order_type": "INC",
+      "response_sla_hours": 2,
+      "resolve_sla_hours": 24,
+      "warning_threshold": 0.6,
+      "description": "P2故障单VIP客户版：2小时响应，24小时解决（与R003、R010冲突）"
+    }
+  ],
+  "group_dimensions": ["priority", "order_type", "department", "assignee"],
+  "default_sla": {
+    "response_sla_hours": 24,
+    "resolve_sla_hours": 168,
+    "warning_threshold": 0.8,
+    "rule_id": "DEFAULT",
+    "rule_name": "默认SLA规则",
+    "description": "未匹配到具体规则时使用默认值"
+  }
+}

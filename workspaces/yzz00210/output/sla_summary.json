@@ -1,0 +1,171 @@
+{
+  "report_time": "2026-06-06 08:44:39",
+  "stats_period": {
+    "start": "2026-06-01 00:00:00",
+    "end": "2026-06-06 23:59:59"
+  },
+  "total_orders": 41,
+  "all_orders_count": 45,
+  "out_of_window_count": 4,
+  "risk_distribution": {
+    "NORMAL": 23,
+    "WARNING": 3,
+    "OVERDUE": 8,
+    "SEVERE": 7,
+    "UNKNOWN": 0
+  },
+  "priority_distribution": {
+    "P0": 8,
+    "P1": 10,
+    "P2": 15,
+    "P3": 8
+  },
+  "type_distribution": {
+    "INC": 21,
+    "REQ": 11,
+    "CHG": 5,
+    "PRB": 4
+  },
+  "department_distribution": {
+    "D002": 10,
+    "D001": 12,
+    "D003": 11,
+    "D004": 7,
+    "": 1
+  },
+  "status_distribution": {
+    "CLOSED": 23,
+    "IN_PROGRESS": 10,
+    "NEW": 4,
+    "ASSIGNED": 2,
+    "PENDING": 1,
+    "UNKNOWN": 1
+  },
+  "kpi": {
+    "overdue_rate": 36.59,
+    "warning_rate": 7.32,
+    "normal_rate": 56.1,
+    "avg_response_sla_ratio_pct": 98.31,
+    "avg_resolve_sla_ratio_pct": 123.65
+  },
+  "group_by_priority": {
+    "P0": {
+      "count": 8,
+      "risk_distribution": {
+        "WARNING": 2,
+        "SEVERE": 2,
+        "NORMAL": 2,
+        "OVERDUE": 2
+      },
+      "overdue_count": 4
+    },
+    "P1": {
+      "count": 10,
+      "risk_distribution": {
+        "OVERDUE": 1,
+        "NORMAL": 7,
+        "SEVERE": 1,
+        "WARNING": 1
+      },
+      "overdue_count": 2
+    },
+    "P2": {
+      "count": 15,
+      "risk_distribution": {
+        "SEVERE": 4,
+        "NORMAL": 7,
+        "OVERDUE": 4
+      },
+      "overdue_count": 8
+    },
+    "P3": {
+      "count": 8,
+      "risk_distribution": {
+        "NORMAL": 7,
+        "OVERDUE": 1
+      },
+      "overdue_count": 1
+    }
+  },
+  "group_by_type": {
+    "INC": {
+      "count": 21,
+      "risk_distribution": {
+        "WARNING": 3,
+        "OVERDUE": 7,
+        "SEVERE": 6,
+        "NORMAL": 5
+      },
+      "overdue_count": 13
+    },
+    "REQ": {
+      "count": 11,
+      "risk_distribution": {
+        "NORMAL": 10,
+        "SEVERE": 1
+      },
+      "overdue_count": 1
+    },
+    "CHG": {
+      "count": 5,
+      "risk_distribution": {
+        "NORMAL": 5
+      },
+      "overdue_count": 0
+    },
+    "PRB": {
+      "count": 4,
+      "risk_distribution": {
+        "NORMAL": 3,
+        "OVERDUE": 1
+      },
+      "overdue_count": 1
+    }
+  },
+  "group_by_department": {
+    "D002": {
+      "count": 10,
+      "risk_distribution": {
+        "WARNING": 3,
+        "NORMAL": 6,
+        "SEVERE": 1
+      },
+      "overdue_count": 1
+    },
+    "D001": {
+      "count": 12,
+      "risk_distribution": {
+        "OVERDUE": 5,
+        "NORMAL": 4,
+        "SEVERE": 3
+      },
+      "overdue_count": 8
+    },
+    "D003": {
+      "count": 11,
+      "risk_distribution": {
+        "SEVERE": 3,
+        "NORMAL": 7,
+        "OVERDUE": 1
+      },
+      "overdue_count": 4
+    },
+    "D004": {
+      "count": 7,
+      "risk_distribution": {
+        "NORMAL": 6,
+        "OVERDUE": 1
+      },
+      "overdue_count": 1
+    },
+    "": {
+      "count": 1,
+      "risk_distribution": {
+        "OVERDUE": 1
+      },
+      "overdue_count": 1
+    }
+  },
+  "issue_count": 32,
+  "duplicate_count": 3
+}
