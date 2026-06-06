@@ -7,6 +7,12 @@ class RiskEngine:
         self.config = config
         self.thresholds = config.get('thresholds', {})
         self.risk_levels = config.get('risk_levels', ['low', 'medium', 'high', 'undetermined'])
+        self.data_adequacy = config.get('data_adequacy', {
+            'min_record_count': 2,
+            'min_device_count': 1,
+            'required_metrics': ['brightness_mean'],
+            'min_required_metrics_count': 1
+        })
 
     def evaluate_group(self, group_data: Dict[str, Any],
                        baseline_comparison: Optional[Dict[str, Any]] = None,
@@ -14,48 +20,61 @@ class RiskEngine:
         metrics = group_data.get('metrics', {})
         group_info = group_data.get('group_info', {})
         group_key = group_data.get('group_key', 'unknown')
+        record_count = group_data.get('record_count', 0)
+        device_count = group_data.get('device_count', 0)
 
         risk_details = []
         overall_risk = 'undetermined'
         confidence = 0.0
 
-        brightness_risk = self._evaluate_brightness(metrics)
-        if brightness_risk:
-            risk_details.append(brightness_risk)
-
-        power_risk = self._evaluate_power(metrics)
-        if power_risk:
-            risk_details.append(power_risk)
-
-        failure_risk = self._evaluate_failure_rate(metrics)
-        if failure_risk:
-            risk_details.append(failure_risk)
-
-        flicker_risk = self._evaluate_flicker(metrics)
-        if flicker_risk:
-            risk_details.append(flicker_risk)
-
-        if baseline_comparison and baseline_comparison.get('has_baseline'):
-            baseline_risk = self._evaluate_baseline_deviation(baseline_comparison)
-            if baseline_risk:
-                risk_details.append(baseline_risk)
-
-        if history_trace:
-            trend_risk = self._evaluate_trend(history_trace)
-            if trend_risk:
-                risk_details.append(trend_risk)
-
-        if not risk_details:
-            overall_risk = 'low'
-            confidence = 0.8
+        adequacy_result = self._check_data_adequacy(record_count, device_count, metrics)
+        if not adequacy_result['adequate']:
+            overall_risk = 'undetermined'
+            confidence = 0.2
             risk_details.append({
-                'metric': 'overall',
-                'risk_level': 'low',
-                'reason': '所有指标均在正常范围内',
-                'evidence': {}
+                'metric': 'data_adequacy',
+                'risk_level': 'undetermined',
+                'reason': '数据不足，无法判定风险等级',
+                'evidence': adequacy_result
             })
         else:
-            overall_risk, confidence = self._combine_risks(risk_details)
+            brightness_risk = self._evaluate_brightness(metrics)
+            if brightness_risk:
+                risk_details.append(brightness_risk)
+
+            power_risk = self._evaluate_power(metrics)
+            if power_risk:
+                risk_details.append(power_risk)
+
+            failure_risk = self._evaluate_failure_rate(metrics)
+            if failure_risk:
+                risk_details.append(failure_risk)
+
+            flicker_risk = self._evaluate_flicker(metrics)
+            if flicker_risk:
+                risk_details.append(flicker_risk)
+
+            if baseline_comparison and baseline_comparison.get('has_baseline'):
+                baseline_risk = self._evaluate_baseline_deviation(baseline_comparison)
+                if baseline_risk:
+                    risk_details.append(baseline_risk)
+
+            if history_trace:
+                trend_risk = self._evaluate_trend(history_trace)
+                if trend_risk:
+                    risk_details.append(trend_risk)
+
+            if not risk_details:
+                overall_risk = 'low'
+                confidence = 0.8
+                risk_details.append({
+                    'metric': 'overall',
+                    'risk_level': 'low',
+                    'reason': '所有指标均在正常范围内',
+                    'evidence': {}
+                })
+            else:
+                overall_risk, confidence = self._combine_risks(risk_details)
 
         reasons = self._generate_reasons(risk_details, overall_risk)
 
@@ -64,8 +83,8 @@ class RiskEngine:
         return {
             'group_key': group_key,
             'group_info': group_info,
-            'record_count': group_data.get('record_count', 0),
-            'device_count': group_data.get('device_count', 0),
+            'record_count': record_count,
+            'device_count': device_count,
             'risk_level': overall_risk,
             'risk_level_cn': self._risk_level_cn(overall_risk),
             'confidence': confidence,
@@ -74,7 +93,46 @@ class RiskEngine:
             'threshold_hits': threshold_hits,
             'metrics': metrics,
             'baseline_comparison': baseline_comparison,
+            'data_adequacy': adequacy_result,
             'evaluation_time': datetime.now().isoformat()
+        }
+
+    def _check_data_adequacy(self, record_count: int, device_count: int,
+                             metrics: Dict[str, Any]) -> Dict[str, Any]:
+        issues = []
+        min_records = self.data_adequacy.get('min_record_count', 2)
+        min_devices = self.data_adequacy.get('min_device_count', 1)
+        required_metrics = self.data_adequacy.get('required_metrics', ['brightness_mean'])
+        min_required = self.data_adequacy.get('min_required_metrics_count', 1)
+
+        if record_count < min_records:
+            issues.append(f"记录数不足: {record_count} (最低要求: {min_records})")
+
+        if device_count < min_devices:
+            issues.append(f"设备数不足: {device_count} (最低要求: {min_devices})")
+
+        available_required = 0
+        missing_metrics = []
+        for metric in required_metrics:
+            if metrics.get(metric) is not None:
+                available_required += 1
+            else:
+                missing_metrics.append(metric)
+
+        if available_required < min_required:
+            issues.append(
+                f"关键指标不足: {available_required}/{min_required} (缺失: {', '.join(missing_metrics)})"
+            )
+
+        adequate = len(issues) == 0
+
+        return {
+            'adequate': adequate,
+            'issues': issues,
+            'record_count': record_count,
+            'device_count': device_count,
+            'available_metrics_count': available_required,
+            'min_required_metrics_count': min_required
         }
 
     def _evaluate_brightness(self, metrics: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -398,11 +456,14 @@ class RiskEngine:
         reasons = []
 
         for detail in risk_details:
-            if detail.get('risk_level') in ['high', 'medium']:
+            if detail.get('risk_level') in ['high', 'medium', 'undetermined']:
                 reasons.append(detail.get('reason', ''))
 
         if not reasons and overall_risk == 'low':
             reasons.append("各项指标均在正常范围内")
+
+        if overall_risk == 'undetermined' and not reasons:
+            reasons.append("数据不足，无法判定风险等级")
 
         return reasons
 
@@ -579,6 +640,56 @@ class RiskEngine:
                 summary['low_risk'] += 1
             else:
                 summary['undetermined'] += 1
+
+            if self.needs_manual_review(result):
+                summary['needs_review'] += 1
+                summary['needs_review_groups'].append(group_key)
+
+        return summary
+
+    def get_all_groups_summary(self, all_results: Dict[str, Any]) -> Dict[str, Any]:
+        latest_per_group = {}
+        for window_key, window_data in sorted(all_results.items()):
+            group_results = window_data.get('group_results', {})
+            window_start = window_data.get('window_info', {}).get('window_start', '')
+            for group_key, result in group_results.items():
+                if group_key not in latest_per_group:
+                    latest_per_group[group_key] = result
+                else:
+                    existing = latest_per_group[group_key]
+                    existing_start = existing.get('evaluation_time', '')
+                    current_start = result.get('evaluation_time', '')
+                    if current_start > existing_start:
+                        latest_per_group[group_key] = result
+
+        summary = {
+            'total_groups': len(latest_per_group),
+            'high_risk': 0,
+            'medium_risk': 0,
+            'low_risk': 0,
+            'undetermined': 0,
+            'needs_review': 0,
+            'high_risk_groups': [],
+            'medium_risk_groups': [],
+            'low_risk_groups': [],
+            'undetermined_groups': [],
+            'needs_review_groups': []
+        }
+
+        for group_key, result in latest_per_group.items():
+            level = result.get('risk_level', 'undetermined')
+            if level == 'high':
+                summary['high_risk'] += 1
+                summary['high_risk_groups'].append(group_key)
+            elif level == 'medium':
+                summary['medium_risk'] += 1
+                summary['medium_risk_groups'].append(group_key)
+            elif level == 'low':
+                summary['low_risk'] += 1
+                summary['low_risk_groups'].append(group_key)
+            else:
+                summary['undetermined'] += 1
+                summary['undetermined_groups'].append(group_key)
 
             if self.needs_manual_review(result):
                 summary['needs_review'] += 1

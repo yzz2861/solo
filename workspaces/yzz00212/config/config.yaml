@@ -57,6 +57,13 @@ risk_levels:
   - high
   - undetermined
 
+data_adequacy:
+  min_record_count: 2
+  min_device_count: 1
+  required_metrics:
+    - brightness_mean
+  min_required_metrics_count: 1
+
 risk_rules:
   high_risk_conditions:
     - "brightness < thresholds.brightness.high"

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-06-06T13:27:07.622349",
+    "generated_at": "2026-06-06T22:25:03.792219",
     "config_summary": {
       "time_window": {
         "window_size_minutes": 60,
@@ -49,25 +49,30 @@
     {
       "filename": "inspection_log_01.csv",
       "record_count": 24,
-      "load_time": "2026-06-06T13:27:07.614483"
+      "load_time": "2026-06-06T22:25:03.776982"
     },
     {
       "filename": "inspection_log_02.csv",
       "record_count": 19,
-      "load_time": "2026-06-06T13:27:07.615416"
+      "load_time": "2026-06-06T22:25:03.778877"
     },
     {
       "filename": "inspection_log_03.json",
       "record_count": 10,
-      "load_time": "2026-06-06T13:27:07.615528"
+      "load_time": "2026-06-06T22:25:03.779593"
+    },
+    {
+      "filename": "inspection_log_04.csv",
+      "record_count": 22,
+      "load_time": "2026-06-06T22:25:03.780270"
     }
   ],
   "data_cleaning_stats": {
-    "total": 53,
-    "valid": 46,
-    "invalid": 7,
-    "missing_field": 2,
-    "out_of_range": 9,
+    "total": 75,
+    "valid": 66,
+    "invalid": 9,
+    "missing_field": 4,
+    "out_of_range": 12,
     "duplicate": 1,
     "invalid_timestamp": 1
   },
@@ -334,6 +339,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -361,6 +368,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -608,6 +623,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -636,6 +653,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -885,6 +910,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -935,6 +962,14 @@
               "level": "high",
               "max_deviation": 40.666666666666664
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -1199,6 +1234,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -1226,6 +1263,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -1473,6 +1518,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -1501,6 +1548,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -1750,6 +1805,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -1800,6 +1857,14 @@
               "level": "high",
               "max_deviation": 40.666666666666664
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -2047,6 +2112,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -2074,6 +2141,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -2321,6 +2396,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -2359,6 +2436,14 @@
               "level": "high",
               "max_deviation": 6.807947510154614
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -2606,6 +2691,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -2633,6 +2720,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -2897,6 +2992,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -2924,6 +3021,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -3171,6 +3276,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -3209,6 +3316,14 @@
               "level": "high",
               "max_deviation": 6.807947510154614
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -3456,6 +3571,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -3483,6 +3600,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -3730,6 +3855,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -3757,6 +3884,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -3953,6 +4088,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -3980,6 +4117,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -4176,6 +4321,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -4203,6 +4350,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -4416,6 +4571,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -4443,6 +4600,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -4639,6 +4804,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -4666,6 +4833,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -4862,6 +5037,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -4889,6 +5066,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -5085,6 +5270,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -5112,6 +5299,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -5308,6 +5503,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -5359,6 +5556,14 @@
               "level": "high",
               "max_deviation": 61.5
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -5555,6 +5760,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -5582,6 +5789,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -5795,6 +6010,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -5822,6 +6039,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -6069,6 +6294,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -6120,6 +6347,14 @@
               "level": "high",
               "max_deviation": 61.5
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -6369,6 +6604,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -6419,6 +6656,14 @@
               "level": "high",
               "max_deviation": 40.666666666666664
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -6666,6 +6911,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -6693,6 +6940,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -6889,6 +7144,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -6940,6 +7197,14 @@
               "level": "high",
               "max_deviation": 61.5
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -7136,6 +7401,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -7163,6 +7430,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -7376,6 +7651,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -7403,6 +7680,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -7650,6 +7935,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -7701,6 +7988,14 @@
               "level": "high",
               "max_deviation": 61.5
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -7950,6 +8245,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -8000,6 +8297,14 @@
               "level": "high",
               "max_deviation": 40.666666666666664
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -8247,6 +8552,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -8274,6 +8581,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -8521,6 +8836,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -8559,6 +8876,14 @@
               "level": "high",
               "max_deviation": 6.9195959492893335
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -8806,6 +9131,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -8833,6 +9160,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -9097,6 +9432,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -9124,6 +9461,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -9371,6 +9716,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -9409,6 +9756,14 @@
               "level": "high",
               "max_deviation": 6.9195959492893335
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -9656,6 +10011,8 @@
             "direction": "西向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -9683,6 +10040,14 @@
               "level": "high",
               "max_deviation": 1.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -9963,6 +10328,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -9986,6 +10353,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -10094,6 +10469,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "medium",
           "risk_level_cn": "中风险",
           "confidence": 0.8,
@@ -10122,6 +10499,14 @@
               "threshold": 10,
               "value": 12.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -10231,6 +10616,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -10254,6 +10641,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -10379,6 +10774,8 @@
             "direction": "东向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -10402,6 +10799,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -10510,6 +10915,8 @@
             "direction": "东向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "medium",
           "risk_level_cn": "中风险",
           "confidence": 0.8,
@@ -10538,6 +10945,14 @@
               "threshold": 10,
               "value": 12.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -10647,6 +11062,8 @@
             "direction": "东向",
             "lighting_zone": "出口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -10670,6 +11087,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -10778,6 +11203,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -10801,6 +11228,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -10909,6 +11344,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -10948,6 +11385,14 @@
               "threshold": 30,
               "value": 45.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -11074,6 +11519,8 @@
             "direction": "西向",
             "lighting_zone": "入口区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "low",
           "risk_level_cn": "低风险",
           "confidence": 0.9,
@@ -11097,6 +11544,14 @@
             "各项指标均在正常范围内"
           ],
           "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
           "risk_details": [
             {
               "metric": "brightness",
@@ -11205,6 +11660,8 @@
             "direction": "西向",
             "lighting_zone": "中部区"
           },
+          "record_count": 2,
+          "device_count": 2,
           "risk_level": "high",
           "risk_level_cn": "高风险",
           "confidence": 0.9,
@@ -11244,6 +11701,14 @@
               "threshold": 30,
               "value": 45.0
             }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
           },
           "risk_details": [
             {
@@ -11368,81 +11833,3322 @@
       "window_info": {
         "window_start": "2024-01-01T13:30:00",
         "window_end": "2024-01-01T14:30:00",
-        "group_count": 0
+        "group_count": 3
       },
       "risk_summary": {
-        "total": 0,
+        "total": 3,
         "high": 0,
         "medium": 0,
         "low": 0,
-        "undetermined": 0,
-        "needs_review": 0
+        "undetermined": 3,
+        "needs_review": 3
       },
-      "groups": {}
+      "groups": {
+        "T004|东向|入口区": {
+          "group_key": "T004|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 160.5,
+            "brightness_min": 160.5,
+            "brightness_max": 160.5,
+            "brightness_std": 0.0,
+            "brightness_median": 160.5,
+            "power_mean": 420.3,
+            "power_min": 420.3,
+            "power_max": 420.3,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 25.0,
+            "temperature_max": 25.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 160.5,
+                "brightness_min": 160.5,
+                "brightness_max": 160.5,
+                "brightness_std": 0.0,
+                "brightness_median": 160.5,
+                "power_mean": 420.3,
+                "power_min": 420.3,
+                "power_max": 420.3,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 160.5,
+                "brightness_min": 160.5,
+                "brightness_max": 160.5,
+                "brightness_std": 0.0,
+                "brightness_median": 160.5,
+                "power_mean": 420.3,
+                "power_min": 420.3,
+                "power_max": 420.3,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            }
+          ]
+        },
+        "T004|东向|中部区": {
+          "group_key": "T004|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 80.0,
+            "brightness_min": 80.0,
+            "brightness_max": 80.0,
+            "brightness_std": 0.0,
+            "brightness_median": 80.0,
+            "power_mean": 180.5,
+            "power_min": 180.5,
+            "power_max": 180.5,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 8.0,
+            "temperature_mean": 23.0,
+            "temperature_max": 23.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "medium",
+              "threshold": 100,
+              "value": 80.0
+            },
+            "power": {
+              "level": "medium",
+              "threshold": 300,
+              "value": 180.5
+            }
+          },
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 80.0,
+                "brightness_min": 80.0,
+                "brightness_max": 80.0,
+                "brightness_std": 0.0,
+                "brightness_median": 80.0,
+                "power_mean": 180.5,
+                "power_min": 180.5,
+                "power_max": 180.5,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 8.0,
+                "temperature_mean": 23.0,
+                "temperature_max": 23.0
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 80.0,
+                "brightness_min": 80.0,
+                "brightness_max": 80.0,
+                "brightness_std": 0.0,
+                "brightness_median": 80.0,
+                "power_mean": 180.5,
+                "power_min": 180.5,
+                "power_max": 180.5,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 8.0,
+                "temperature_mean": 23.0,
+                "temperature_max": 23.0
+              }
+            }
+          ]
+        },
+        "T004|东向|出口区": {
+          "group_key": "T004|东向|出口区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 25.5,
+            "brightness_min": 25.5,
+            "brightness_max": 25.5,
+            "brightness_std": 0.0,
+            "brightness_median": 25.5,
+            "power_mean": 45.2,
+            "power_min": 45.2,
+            "power_max": 45.2,
+            "power_std": 0.0,
+            "failure_count": 1,
+            "failure_rate": 100.0,
+            "flicker_count": 40.0,
+            "temperature_mean": 20.5,
+            "temperature_max": 20.5
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "high",
+              "threshold": 50,
+              "value": 25.5
+            },
+            "power": {
+              "level": "high",
+              "threshold": 100,
+              "value": 45.2
+            },
+            "failure_rate": {
+              "level": "high",
+              "threshold": 10.0,
+              "value": 100.0
+            },
+            "flicker_count": {
+              "level": "high",
+              "threshold": 30,
+              "value": 40.0
+            }
+          },
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 25.5,
+                "brightness_min": 25.5,
+                "brightness_max": 25.5,
+                "brightness_std": 0.0,
+                "brightness_median": 25.5,
+                "power_mean": 45.2,
+                "power_min": 45.2,
+                "power_max": 45.2,
+                "power_std": 0.0,
+                "failure_count": 1,
+                "failure_rate": 100.0,
+                "flicker_count": 40.0,
+                "temperature_mean": 20.5,
+                "temperature_max": 20.5
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 25.5,
+                "brightness_min": 25.5,
+                "brightness_max": 25.5,
+                "brightness_std": 0.0,
+                "brightness_median": 25.5,
+                "power_mean": 45.2,
+                "power_min": 45.2,
+                "power_max": 45.2,
+                "power_std": 0.0,
+                "failure_count": 1,
+                "failure_rate": 100.0,
+                "flicker_count": 40.0,
+                "temperature_mean": 20.5,
+                "temperature_max": 20.5
+              }
+            }
+          ]
+        }
+      }
     },
     "20240101_1400_20240101_1500": {
       "window_info": {
         "window_start": "2024-01-01T14:00:00",
         "window_end": "2024-01-01T15:00:00",
-        "group_count": 0
+        "group_count": 6
       },
       "risk_summary": {
-        "total": 0,
+        "total": 6,
         "high": 0,
-        "medium": 0,
-        "low": 0,
-        "undetermined": 0,
-        "needs_review": 0
+        "medium": 1,
+        "low": 1,
+        "undetermined": 4,
+        "needs_review": 5
       },
-      "groups": {}
+      "groups": {
+        "T004|东向|入口区": {
+          "group_key": "T004|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 160.5,
+            "brightness_min": 160.5,
+            "brightness_max": 160.5,
+            "brightness_std": 0.0,
+            "brightness_median": 160.5,
+            "power_mean": 420.3,
+            "power_min": 420.3,
+            "power_max": 420.3,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 25.0,
+            "temperature_max": 25.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 160.5,
+                "brightness_min": 160.5,
+                "brightness_max": 160.5,
+                "brightness_std": 0.0,
+                "brightness_median": 160.5,
+                "power_mean": 420.3,
+                "power_min": 420.3,
+                "power_max": 420.3,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 160.5,
+                "brightness_min": 160.5,
+                "brightness_max": 160.5,
+                "brightness_std": 0.0,
+                "brightness_median": 160.5,
+                "power_mean": 420.3,
+                "power_min": 420.3,
+                "power_max": 420.3,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            }
+          ]
+        },
+        "T004|东向|中部区": {
+          "group_key": "T004|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 80.0,
+            "brightness_min": 80.0,
+            "brightness_max": 80.0,
+            "brightness_std": 0.0,
+            "brightness_median": 80.0,
+            "power_mean": 180.5,
+            "power_min": 180.5,
+            "power_max": 180.5,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 8.0,
+            "temperature_mean": 23.0,
+            "temperature_max": 23.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "medium",
+              "threshold": 100,
+              "value": 80.0
+            },
+            "power": {
+              "level": "medium",
+              "threshold": 300,
+              "value": 180.5
+            }
+          },
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 80.0,
+                "brightness_min": 80.0,
+                "brightness_max": 80.0,
+                "brightness_std": 0.0,
+                "brightness_median": 80.0,
+                "power_mean": 180.5,
+                "power_min": 180.5,
+                "power_max": 180.5,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 8.0,
+                "temperature_mean": 23.0,
+                "temperature_max": 23.0
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 80.0,
+                "brightness_min": 80.0,
+                "brightness_max": 80.0,
+                "brightness_std": 0.0,
+                "brightness_median": 80.0,
+                "power_mean": 180.5,
+                "power_min": 180.5,
+                "power_max": 180.5,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 8.0,
+                "temperature_mean": 23.0,
+                "temperature_max": 23.0
+              }
+            }
+          ]
+        },
+        "T004|东向|出口区": {
+          "group_key": "T004|东向|出口区",
+          "group_info": {
+            "tunnel_id": "T004",
+            "direction": "东向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 25.5,
+            "brightness_min": 25.5,
+            "brightness_max": 25.5,
+            "brightness_std": 0.0,
+            "brightness_median": 25.5,
+            "power_mean": 45.2,
+            "power_min": 45.2,
+            "power_max": 45.2,
+            "power_std": 0.0,
+            "failure_count": 1,
+            "failure_rate": 100.0,
+            "flicker_count": 40.0,
+            "temperature_mean": 20.5,
+            "temperature_max": 20.5
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "high",
+              "threshold": 50,
+              "value": 25.5
+            },
+            "power": {
+              "level": "high",
+              "threshold": 100,
+              "value": 45.2
+            },
+            "failure_rate": {
+              "level": "high",
+              "threshold": 10.0,
+              "value": 100.0
+            },
+            "flicker_count": {
+              "level": "high",
+              "threshold": 30,
+              "value": 40.0
+            }
+          },
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1330_20240101_1430",
+              "window_start": "2024-01-01T13:30:00",
+              "window_end": "2024-01-01T14:30:00",
+              "metrics": {
+                "brightness_mean": 25.5,
+                "brightness_min": 25.5,
+                "brightness_max": 25.5,
+                "brightness_std": 0.0,
+                "brightness_median": 25.5,
+                "power_mean": 45.2,
+                "power_min": 45.2,
+                "power_max": 45.2,
+                "power_std": 0.0,
+                "failure_count": 1,
+                "failure_rate": 100.0,
+                "flicker_count": 40.0,
+                "temperature_mean": 20.5,
+                "temperature_max": 20.5
+              }
+            },
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 25.5,
+                "brightness_min": 25.5,
+                "brightness_max": 25.5,
+                "brightness_std": 0.0,
+                "brightness_median": 25.5,
+                "power_mean": 45.2,
+                "power_min": 45.2,
+                "power_max": 45.2,
+                "power_std": 0.0,
+                "failure_count": 1,
+                "failure_rate": 100.0,
+                "flicker_count": 40.0,
+                "temperature_mean": 20.5,
+                "temperature_max": 20.5
+              }
+            }
+          ]
+        },
+        "T005|东向|入口区": {
+          "group_key": "T005|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 1,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 173.5,
+            "brightness_min": 172.0,
+            "brightness_max": 175.0,
+            "brightness_std": 2.1213203435596424,
+            "brightness_median": 173.5,
+            "power_mean": 457.5,
+            "power_min": 455.0,
+            "power_max": 460.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 25.9,
+            "temperature_max": 26.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 173.5 lux 正常",
+              "evidence": {
+                "value": 173.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 457.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 457.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 457.5,
+                "power_min": 455.0,
+                "power_max": 460.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 457.5,
+                "power_min": 455.0,
+                "power_max": 460.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            }
+          ]
+        },
+        "T005|东向|中部区": {
+          "group_key": "T005|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "medium",
+          "risk_level_cn": "中风险",
+          "confidence": 0.8,
+          "metrics": {
+            "brightness_mean": 97.75,
+            "brightness_min": 65.0,
+            "brightness_max": 130.5,
+            "brightness_std": 46.31549416771886,
+            "brightness_median": 97.75,
+            "power_mean": 220.25,
+            "power_min": 120.5,
+            "power_max": 320.0,
+            "power_std": 141.06780284671623,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 25.0,
+            "temperature_mean": 23.25,
+            "temperature_max": 24.5
+          },
+          "reasons": [
+            "平均亮度 97.8 lux 低于中风险阈值 100 lux",
+            "平均功率 220.2 W 低于中风险阈值 300 W",
+            "闪烁次数 25.0 次/小时 超过中风险阈值 10 次"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "medium",
+              "threshold": 100,
+              "value": 97.75
+            },
+            "power": {
+              "level": "medium",
+              "threshold": 300,
+              "value": 220.25
+            },
+            "flicker_count": {
+              "level": "medium",
+              "threshold": 10,
+              "value": 25.0
+            }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "medium",
+              "reason": "平均亮度 97.8 lux 低于中风险阈值 100 lux",
+              "evidence": {
+                "value": 97.75,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "medium",
+              "reason": "平均功率 220.2 W 低于中风险阈值 300 W",
+              "evidence": {
+                "value": 220.25,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "medium",
+              "reason": "闪烁次数 25.0 次/小时 超过中风险阈值 10 次",
+              "evidence": {
+                "value": 25.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 97.75,
+                "brightness_min": 65.0,
+                "brightness_max": 130.5,
+                "brightness_std": 46.31549416771886,
+                "brightness_median": 97.75,
+                "power_mean": 220.25,
+                "power_min": 120.5,
+                "power_max": 320.0,
+                "power_std": 141.06780284671623,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 25.0,
+                "temperature_mean": 23.25,
+                "temperature_max": 24.5
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 97.75,
+                "brightness_min": 65.0,
+                "brightness_max": 130.5,
+                "brightness_std": 46.31549416771886,
+                "brightness_median": 97.75,
+                "power_mean": 220.25,
+                "power_min": 120.5,
+                "power_max": 320.0,
+                "power_std": 141.06780284671623,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 25.0,
+                "temperature_mean": 23.25,
+                "temperature_max": 24.5
+              }
+            }
+          ]
+        },
+        "T005|西向|出口区": {
+          "group_key": "T005|西向|出口区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "西向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 150.0,
+            "brightness_min": 150.0,
+            "brightness_max": 150.0,
+            "brightness_std": 0.0,
+            "brightness_median": 150.0,
+            "power_mean": 400.0,
+            "power_min": 400.0,
+            "power_max": 400.0,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 25.0,
+            "temperature_max": 25.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 150.0,
+                "brightness_min": 150.0,
+                "brightness_max": 150.0,
+                "brightness_std": 0.0,
+                "brightness_median": 150.0,
+                "power_mean": 400.0,
+                "power_min": 400.0,
+                "power_max": 400.0,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 150.0,
+                "brightness_min": 150.0,
+                "brightness_max": 150.0,
+                "brightness_std": 0.0,
+                "brightness_median": 150.0,
+                "power_mean": 400.0,
+                "power_min": 400.0,
+                "power_max": 400.0,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            }
+          ]
+        }
+      }
     },
     "20240101_1430_20240101_1530": {
       "window_info": {
         "window_start": "2024-01-01T14:30:00",
         "window_end": "2024-01-01T15:30:00",
-        "group_count": 0
+        "group_count": 6
       },
       "risk_summary": {
-        "total": 0,
+        "total": 6,
         "high": 0,
-        "medium": 0,
-        "low": 0,
-        "undetermined": 0,
-        "needs_review": 0
+        "medium": 1,
+        "low": 4,
+        "undetermined": 1,
+        "needs_review": 2
       },
-      "groups": {}
+      "groups": {
+        "T005|东向|入口区": {
+          "group_key": "T005|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 1,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 173.5,
+            "brightness_min": 172.0,
+            "brightness_max": 175.0,
+            "brightness_std": 2.1213203435596424,
+            "brightness_median": 173.5,
+            "power_mean": 457.5,
+            "power_min": 455.0,
+            "power_max": 460.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 25.9,
+            "temperature_max": 26.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 173.5 lux 正常",
+              "evidence": {
+                "value": 173.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 457.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 457.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 457.5,
+                "power_min": 455.0,
+                "power_max": 460.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 457.5,
+                "power_min": 455.0,
+                "power_max": 460.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            }
+          ]
+        },
+        "T005|东向|中部区": {
+          "group_key": "T005|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "medium",
+          "risk_level_cn": "中风险",
+          "confidence": 0.8,
+          "metrics": {
+            "brightness_mean": 97.75,
+            "brightness_min": 65.0,
+            "brightness_max": 130.5,
+            "brightness_std": 46.31549416771886,
+            "brightness_median": 97.75,
+            "power_mean": 220.25,
+            "power_min": 120.5,
+            "power_max": 320.0,
+            "power_std": 141.06780284671623,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 25.0,
+            "temperature_mean": 23.25,
+            "temperature_max": 24.5
+          },
+          "reasons": [
+            "平均亮度 97.8 lux 低于中风险阈值 100 lux",
+            "平均功率 220.2 W 低于中风险阈值 300 W",
+            "闪烁次数 25.0 次/小时 超过中风险阈值 10 次"
+          ],
+          "threshold_hits": {
+            "brightness": {
+              "level": "medium",
+              "threshold": 100,
+              "value": 97.75
+            },
+            "power": {
+              "level": "medium",
+              "threshold": 300,
+              "value": 220.25
+            },
+            "flicker_count": {
+              "level": "medium",
+              "threshold": 10,
+              "value": 25.0
+            }
+          },
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "medium",
+              "reason": "平均亮度 97.8 lux 低于中风险阈值 100 lux",
+              "evidence": {
+                "value": 97.75,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "medium",
+              "reason": "平均功率 220.2 W 低于中风险阈值 300 W",
+              "evidence": {
+                "value": 220.25,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "medium",
+              "reason": "闪烁次数 25.0 次/小时 超过中风险阈值 10 次",
+              "evidence": {
+                "value": 25.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 97.75,
+                "brightness_min": 65.0,
+                "brightness_max": 130.5,
+                "brightness_std": 46.31549416771886,
+                "brightness_median": 97.75,
+                "power_mean": 220.25,
+                "power_min": 120.5,
+                "power_max": 320.0,
+                "power_std": 141.06780284671623,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 25.0,
+                "temperature_mean": 23.25,
+                "temperature_max": 24.5
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 97.75,
+                "brightness_min": 65.0,
+                "brightness_max": 130.5,
+                "brightness_std": 46.31549416771886,
+                "brightness_median": 97.75,
+                "power_mean": 220.25,
+                "power_min": 120.5,
+                "power_max": 320.0,
+                "power_std": 141.06780284671623,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 25.0,
+                "temperature_mean": 23.25,
+                "temperature_max": 24.5
+              }
+            }
+          ]
+        },
+        "T005|西向|出口区": {
+          "group_key": "T005|西向|出口区",
+          "group_info": {
+            "tunnel_id": "T005",
+            "direction": "西向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 1,
+          "device_count": 1,
+          "risk_level": "undetermined",
+          "risk_level_cn": "无法判定",
+          "confidence": 0.2,
+          "metrics": {
+            "brightness_mean": 150.0,
+            "brightness_min": 150.0,
+            "brightness_max": 150.0,
+            "brightness_std": 0.0,
+            "brightness_median": 150.0,
+            "power_mean": 400.0,
+            "power_min": 400.0,
+            "power_max": 400.0,
+            "power_std": 0.0,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 25.0,
+            "temperature_max": 25.0
+          },
+          "reasons": [
+            "数据不足，无法判定风险等级"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": false,
+            "issues": [
+              "记录数不足: 1 (最低要求: 2)"
+            ],
+            "record_count": 1,
+            "device_count": 1,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "data_adequacy",
+              "risk_level": "undetermined",
+              "reason": "数据不足，无法判定风险等级",
+              "evidence": {
+                "adequate": false,
+                "issues": [
+                  "记录数不足: 1 (最低要求: 2)"
+                ],
+                "record_count": 1,
+                "device_count": 1,
+                "available_metrics_count": 1,
+                "min_required_metrics_count": 1
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1400_20240101_1500",
+              "window_start": "2024-01-01T14:00:00",
+              "window_end": "2024-01-01T15:00:00",
+              "metrics": {
+                "brightness_mean": 150.0,
+                "brightness_min": 150.0,
+                "brightness_max": 150.0,
+                "brightness_std": 0.0,
+                "brightness_median": 150.0,
+                "power_mean": 400.0,
+                "power_min": 400.0,
+                "power_max": 400.0,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            },
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 150.0,
+                "brightness_min": 150.0,
+                "brightness_max": 150.0,
+                "brightness_std": 0.0,
+                "brightness_median": 150.0,
+                "power_mean": 400.0,
+                "power_min": 400.0,
+                "power_max": 400.0,
+                "power_std": 0.0,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 25.0,
+                "temperature_max": 25.0
+              }
+            }
+          ]
+        },
+        "T006|东向|入口区": {
+          "group_key": "T006|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 197.5,
+            "brightness_min": 195.0,
+            "brightness_max": 200.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 197.5,
+            "power_mean": 515.0,
+            "power_min": 510.0,
+            "power_max": 520.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.9,
+            "temperature_max": 27.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 197.5 lux 正常",
+              "evidence": {
+                "value": 197.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 515.0 W 正常",
+              "evidence": {
+                "value": 515.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 197.5,
+                "brightness_min": 195.0,
+                "brightness_max": 200.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 197.5,
+                "power_mean": 515.0,
+                "power_min": 510.0,
+                "power_max": 520.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 197.5,
+                "brightness_min": 195.0,
+                "brightness_max": 200.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 197.5,
+                "power_mean": 515.0,
+                "power_min": 510.0,
+                "power_max": 520.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            }
+          ]
+        },
+        "T006|东向|中部区": {
+          "group_key": "T006|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 207.5,
+            "brightness_min": 205.0,
+            "brightness_max": 210.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 207.5,
+            "power_mean": 545.0,
+            "power_min": 540.0,
+            "power_max": 550.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 27.35,
+            "temperature_max": 27.5
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 207.5 lux 正常",
+              "evidence": {
+                "value": 207.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 545.0 W 正常",
+              "evidence": {
+                "value": 545.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 207.5,
+                "brightness_min": 205.0,
+                "brightness_max": 210.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 207.5,
+                "power_mean": 545.0,
+                "power_min": 540.0,
+                "power_max": 550.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 27.35,
+                "temperature_max": 27.5
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 207.5,
+                "brightness_min": 205.0,
+                "brightness_max": 210.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 207.5,
+                "power_mean": 545.0,
+                "power_min": 540.0,
+                "power_max": 550.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 27.35,
+                "temperature_max": 27.5
+              }
+            }
+          ]
+        },
+        "T006|东向|出口区": {
+          "group_key": "T006|东向|出口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 182.5,
+            "brightness_min": 180.0,
+            "brightness_max": 185.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 182.5,
+            "power_mean": 485.0,
+            "power_min": 480.0,
+            "power_max": 490.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 26.35,
+            "temperature_max": 26.5
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 182.5 lux 正常",
+              "evidence": {
+                "value": 182.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 485.0 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 485.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 182.5,
+                "brightness_min": 180.0,
+                "brightness_max": 185.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 182.5,
+                "power_mean": 485.0,
+                "power_min": 480.0,
+                "power_max": 490.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 26.35,
+                "temperature_max": 26.5
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 182.5,
+                "brightness_min": 180.0,
+                "brightness_max": 185.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 182.5,
+                "power_mean": 485.0,
+                "power_min": 480.0,
+                "power_max": 490.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 26.35,
+                "temperature_max": 26.5
+              }
+            }
+          ]
+        }
+      }
     },
     "20240101_1500_20240101_1600": {
       "window_info": {
         "window_start": "2024-01-01T15:00:00",
         "window_end": "2024-01-01T16:00:00",
-        "group_count": 0
+        "group_count": 6
       },
       "risk_summary": {
-        "total": 0,
+        "total": 6,
         "high": 0,
         "medium": 0,
-        "low": 0,
+        "low": 6,
         "undetermined": 0,
         "needs_review": 0
       },
-      "groups": {}
+      "groups": {
+        "T006|东向|入口区": {
+          "group_key": "T006|东向|入口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 197.5,
+            "brightness_min": 195.0,
+            "brightness_max": 200.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 197.5,
+            "power_mean": 515.0,
+            "power_min": 510.0,
+            "power_max": 520.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.9,
+            "temperature_max": 27.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 197.5 lux 正常",
+              "evidence": {
+                "value": 197.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 515.0 W 正常",
+              "evidence": {
+                "value": 515.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 197.5,
+                "brightness_min": 195.0,
+                "brightness_max": 200.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 197.5,
+                "power_mean": 515.0,
+                "power_min": 510.0,
+                "power_max": 520.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 197.5,
+                "brightness_min": 195.0,
+                "brightness_max": 200.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 197.5,
+                "power_mean": 515.0,
+                "power_min": 510.0,
+                "power_max": 520.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            }
+          ]
+        },
+        "T006|东向|中部区": {
+          "group_key": "T006|东向|中部区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 207.5,
+            "brightness_min": 205.0,
+            "brightness_max": 210.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 207.5,
+            "power_mean": 545.0,
+            "power_min": 540.0,
+            "power_max": 550.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 27.35,
+            "temperature_max": 27.5
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 207.5 lux 正常",
+              "evidence": {
+                "value": 207.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 545.0 W 正常",
+              "evidence": {
+                "value": 545.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 207.5,
+                "brightness_min": 205.0,
+                "brightness_max": 210.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 207.5,
+                "power_mean": 545.0,
+                "power_min": 540.0,
+                "power_max": 550.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 27.35,
+                "temperature_max": 27.5
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 207.5,
+                "brightness_min": 205.0,
+                "brightness_max": 210.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 207.5,
+                "power_mean": 545.0,
+                "power_min": 540.0,
+                "power_max": 550.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 27.35,
+                "temperature_max": 27.5
+              }
+            }
+          ]
+        },
+        "T006|东向|出口区": {
+          "group_key": "T006|东向|出口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "东向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 182.5,
+            "brightness_min": 180.0,
+            "brightness_max": 185.0,
+            "brightness_std": 3.5355339059327378,
+            "brightness_median": 182.5,
+            "power_mean": 485.0,
+            "power_min": 480.0,
+            "power_max": 490.0,
+            "power_std": 7.0710678118654755,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 26.35,
+            "temperature_max": 26.5
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 182.5 lux 正常",
+              "evidence": {
+                "value": 182.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 485.0 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 485.0,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1430_20240101_1530",
+              "window_start": "2024-01-01T14:30:00",
+              "window_end": "2024-01-01T15:30:00",
+              "metrics": {
+                "brightness_mean": 182.5,
+                "brightness_min": 180.0,
+                "brightness_max": 185.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 182.5,
+                "power_mean": 485.0,
+                "power_min": 480.0,
+                "power_max": 490.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 26.35,
+                "temperature_max": 26.5
+              }
+            },
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 182.5,
+                "brightness_min": 180.0,
+                "brightness_max": 185.0,
+                "brightness_std": 3.5355339059327378,
+                "brightness_median": 182.5,
+                "power_mean": 485.0,
+                "power_min": 480.0,
+                "power_max": 490.0,
+                "power_std": 7.0710678118654755,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 26.35,
+                "temperature_max": 26.5
+              }
+            }
+          ]
+        },
+        "T006|西向|入口区": {
+          "group_key": "T006|西向|入口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 189.0,
+            "brightness_min": 188.0,
+            "brightness_max": 190.0,
+            "brightness_std": 1.4142135623730951,
+            "brightness_median": 189.0,
+            "power_mean": 497.5,
+            "power_min": 495.0,
+            "power_max": 500.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.65,
+            "temperature_max": 26.8
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 189.0 lux 正常",
+              "evidence": {
+                "value": 189.0,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 497.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 497.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 189.0,
+                "brightness_min": 188.0,
+                "brightness_max": 190.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 189.0,
+                "power_mean": 497.5,
+                "power_min": 495.0,
+                "power_max": 500.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.65,
+                "temperature_max": 26.8
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 189.0,
+                "brightness_min": 188.0,
+                "brightness_max": 190.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 189.0,
+                "power_mean": 497.5,
+                "power_min": 495.0,
+                "power_max": 500.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.65,
+                "temperature_max": 26.8
+              }
+            }
+          ]
+        },
+        "T006|西向|中部区": {
+          "group_key": "T006|西向|中部区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 199.0,
+            "brightness_min": 198.0,
+            "brightness_max": 200.0,
+            "brightness_std": 1.4142135623730951,
+            "brightness_median": 199.0,
+            "power_mean": 527.5,
+            "power_min": 525.0,
+            "power_max": 530.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.9,
+            "temperature_max": 27.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 199.0 lux 正常",
+              "evidence": {
+                "value": 199.0,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 527.5 W 正常",
+              "evidence": {
+                "value": 527.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 199.0,
+                "brightness_min": 198.0,
+                "brightness_max": 200.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 199.0,
+                "power_mean": 527.5,
+                "power_min": 525.0,
+                "power_max": 530.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 199.0,
+                "brightness_min": 198.0,
+                "brightness_max": 200.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 199.0,
+                "power_mean": 527.5,
+                "power_min": 525.0,
+                "power_max": 530.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            }
+          ]
+        },
+        "T006|西向|出口区": {
+          "group_key": "T006|西向|出口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 173.5,
+            "brightness_min": 172.0,
+            "brightness_max": 175.0,
+            "brightness_std": 2.1213203435596424,
+            "brightness_median": 173.5,
+            "power_mean": 462.5,
+            "power_min": 460.0,
+            "power_max": 465.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 25.9,
+            "temperature_max": 26.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 173.5 lux 正常",
+              "evidence": {
+                "value": 173.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 462.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 462.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 462.5,
+                "power_min": 460.0,
+                "power_max": 465.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 462.5,
+                "power_min": 460.0,
+                "power_max": 465.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            }
+          ]
+        }
+      }
     },
     "20240101_1530_20240101_1630": {
       "window_info": {
         "window_start": "2024-01-01T15:30:00",
         "window_end": "2024-01-01T16:30:00",
-        "group_count": 0
+        "group_count": 3
       },
       "risk_summary": {
-        "total": 0,
+        "total": 3,
         "high": 0,
         "medium": 0,
-        "low": 0,
+        "low": 3,
         "undetermined": 0,
         "needs_review": 0
       },
-      "groups": {}
+      "groups": {
+        "T006|西向|入口区": {
+          "group_key": "T006|西向|入口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "入口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 189.0,
+            "brightness_min": 188.0,
+            "brightness_max": 190.0,
+            "brightness_std": 1.4142135623730951,
+            "brightness_median": 189.0,
+            "power_mean": 497.5,
+            "power_min": 495.0,
+            "power_max": 500.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.65,
+            "temperature_max": 26.8
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 189.0 lux 正常",
+              "evidence": {
+                "value": 189.0,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 497.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 497.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 189.0,
+                "brightness_min": 188.0,
+                "brightness_max": 190.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 189.0,
+                "power_mean": 497.5,
+                "power_min": 495.0,
+                "power_max": 500.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.65,
+                "temperature_max": 26.8
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 189.0,
+                "brightness_min": 188.0,
+                "brightness_max": 190.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 189.0,
+                "power_mean": 497.5,
+                "power_min": 495.0,
+                "power_max": 500.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.65,
+                "temperature_max": 26.8
+              }
+            }
+          ]
+        },
+        "T006|西向|中部区": {
+          "group_key": "T006|西向|中部区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "中部区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 199.0,
+            "brightness_min": 198.0,
+            "brightness_max": 200.0,
+            "brightness_std": 1.4142135623730951,
+            "brightness_median": 199.0,
+            "power_mean": 527.5,
+            "power_min": 525.0,
+            "power_max": 530.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 0.0,
+            "temperature_mean": 26.9,
+            "temperature_max": 27.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 199.0 lux 正常",
+              "evidence": {
+                "value": 199.0,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 527.5 W 正常",
+              "evidence": {
+                "value": 527.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 0.0 次/小时 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 199.0,
+                "brightness_min": 198.0,
+                "brightness_max": 200.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 199.0,
+                "power_mean": 527.5,
+                "power_min": 525.0,
+                "power_max": 530.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 199.0,
+                "brightness_min": 198.0,
+                "brightness_max": 200.0,
+                "brightness_std": 1.4142135623730951,
+                "brightness_median": 199.0,
+                "power_mean": 527.5,
+                "power_min": 525.0,
+                "power_max": 530.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 0.0,
+                "temperature_mean": 26.9,
+                "temperature_max": 27.0
+              }
+            }
+          ]
+        },
+        "T006|西向|出口区": {
+          "group_key": "T006|西向|出口区",
+          "group_info": {
+            "tunnel_id": "T006",
+            "direction": "西向",
+            "lighting_zone": "出口区"
+          },
+          "record_count": 2,
+          "device_count": 2,
+          "risk_level": "low",
+          "risk_level_cn": "低风险",
+          "confidence": 0.9,
+          "metrics": {
+            "brightness_mean": 173.5,
+            "brightness_min": 172.0,
+            "brightness_max": 175.0,
+            "brightness_std": 2.1213203435596424,
+            "brightness_median": 173.5,
+            "power_mean": 462.5,
+            "power_min": 460.0,
+            "power_max": 465.0,
+            "power_std": 3.5355339059327378,
+            "failure_count": 0,
+            "failure_rate": 0.0,
+            "flicker_count": 1.0,
+            "temperature_mean": 25.9,
+            "temperature_max": 26.0
+          },
+          "reasons": [
+            "各项指标均在正常范围内"
+          ],
+          "threshold_hits": {},
+          "data_adequacy": {
+            "adequate": true,
+            "issues": [],
+            "record_count": 2,
+            "device_count": 2,
+            "available_metrics_count": 1,
+            "min_required_metrics_count": 1
+          },
+          "risk_details": [
+            {
+              "metric": "brightness",
+              "risk_level": "low",
+              "reason": "平均亮度 173.5 lux 正常",
+              "evidence": {
+                "value": 173.5,
+                "unit": "lux",
+                "threshold_low": 150,
+                "threshold_medium": 100,
+                "threshold_high": 50
+              }
+            },
+            {
+              "metric": "power",
+              "risk_level": "low",
+              "reason": "平均功率 462.5 W 接近低风险阈值 500 W",
+              "evidence": {
+                "value": 462.5,
+                "unit": "W",
+                "threshold_low": 500,
+                "threshold_medium": 300,
+                "threshold_high": 100
+              }
+            },
+            {
+              "metric": "failure_rate",
+              "risk_level": "low",
+              "reason": "故障率 0.00% 正常",
+              "evidence": {
+                "value": 0.0,
+                "unit": "%",
+                "threshold_low": 1.0,
+                "threshold_medium": 5.0,
+                "threshold_high": 10.0
+              }
+            },
+            {
+              "metric": "flicker_count",
+              "risk_level": "low",
+              "reason": "闪烁次数 1.0 次/小时 正常",
+              "evidence": {
+                "value": 1.0,
+                "unit": "次/小时",
+                "threshold_low": 3,
+                "threshold_medium": 10,
+                "threshold_high": 30
+              }
+            }
+          ],
+          "baseline_comparison": {
+            "has_baseline": false,
+            "deviations": {},
+            "deviation_level": "no_baseline",
+            "details": []
+          },
+          "history_trace": [
+            {
+              "window_key": "20240101_1500_20240101_1600",
+              "window_start": "2024-01-01T15:00:00",
+              "window_end": "2024-01-01T16:00:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 462.5,
+                "power_min": 460.0,
+                "power_max": 465.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            },
+            {
+              "window_key": "20240101_1530_20240101_1630",
+              "window_start": "2024-01-01T15:30:00",
+              "window_end": "2024-01-01T16:30:00",
+              "metrics": {
+                "brightness_mean": 173.5,
+                "brightness_min": 172.0,
+                "brightness_max": 175.0,
+                "brightness_std": 2.1213203435596424,
+                "brightness_median": 173.5,
+                "power_mean": 462.5,
+                "power_min": 460.0,
+                "power_max": 465.0,
+                "power_std": 3.5355339059327378,
+                "failure_count": 0,
+                "failure_rate": 0.0,
+                "flicker_count": 1.0,
+                "temperature_mean": 25.9,
+                "temperature_max": 26.0
+              }
+            }
+          ]
+        }
+      }
     },
     "20240101_1600_20240101_1700": {
       "window_info": {
@@ -11686,18 +15392,68 @@
     }
   },
   "final_summary": {
-    "total_groups": 2,
-    "high_risk": 1,
-    "medium_risk": 0,
-    "low_risk": 1,
-    "undetermined": 0,
-    "needs_review": 1,
+    "total_groups": 29,
+    "high_risk": 13,
+    "medium_risk": 2,
+    "low_risk": 10,
+    "undetermined": 4,
+    "needs_review": 18,
     "high_risk_groups": [
+      "T001|东向|入口区",
+      "T001|东向|中部区",
+      "T001|东向|出口区",
+      "T001|西向|入口区",
+      "T001|西向|中部区",
+      "T001|西向|出口区",
+      "T002|东向|入口区",
+      "T002|东向|中部区",
+      "T002|东向|出口区",
+      "T002|西向|入口区",
+      "T002|西向|中部区",
+      "T002|西向|出口区",
       "T003|西向|中部区"
     ],
-    "medium_risk_groups": [],
+    "medium_risk_groups": [
+      "T003|东向|中部区",
+      "T005|东向|中部区"
+    ],
+    "low_risk_groups": [
+      "T003|东向|入口区",
+      "T003|东向|出口区",
+      "T003|西向|入口区",
+      "T005|东向|入口区",
+      "T006|东向|入口区",
+      "T006|东向|中部区",
+      "T006|东向|出口区",
+      "T006|西向|入口区",
+      "T006|西向|中部区",
+      "T006|西向|出口区"
+    ],
+    "undetermined_groups": [
+      "T004|东向|入口区",
+      "T004|东向|中部区",
+      "T004|东向|出口区",
+      "T005|西向|出口区"
+    ],
     "needs_review_groups": [
-      "T003|西向|中部区"
+      "T001|东向|入口区",
+      "T001|东向|中部区",
+      "T001|东向|出口区",
+      "T001|西向|入口区",
+      "T001|西向|中部区",
+      "T001|西向|出口区",
+      "T002|东向|入口区",
+      "T002|东向|中部区",
+      "T002|东向|出口区",
+      "T002|西向|入口区",
+      "T002|西向|中部区",
+      "T002|西向|出口区",
+      "T003|西向|中部区",
+      "T004|东向|入口区",
+      "T004|东向|中部区",
+      "T004|东向|出口区",
+      "T005|东向|中部区",
+      "T005|西向|出口区"
     ]
   }
 }

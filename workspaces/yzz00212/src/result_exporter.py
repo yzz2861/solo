@@ -1,7 +1,7 @@
 import csv
 import json
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from datetime import datetime
 
 
@@ -45,15 +45,12 @@ class ResultExporter:
         rows = []
         headers = self._get_report_headers()
 
-        latest_window_key = self._get_latest_non_empty_window(all_results)
+        latest_per_group = self._get_latest_per_group(all_results)
 
-        if latest_window_key:
-            window_data = all_results[latest_window_key]
-            group_results = window_data.get('group_results', {})
-
-            for group_key, result in sorted(group_results.items()):
-                row = self._build_report_row(result, window_data, history_traces)
-                rows.append(row)
+        for group_key in sorted(latest_per_group.keys()):
+            result, window_data = latest_per_group[group_key]
+            row = self._build_report_row(result, window_data, history_traces)
+            rows.append(row)
 
         with open(filepath, 'w', encoding='utf-8-sig', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=headers)
@@ -203,12 +200,15 @@ class ResultExporter:
                 group_output = {
                     'group_key': group_key,
                     'group_info': result.get('group_info', {}),
+                    'record_count': result.get('record_count', 0),
+                    'device_count': result.get('device_count', 0),
                     'risk_level': result.get('risk_level'),
                     'risk_level_cn': result.get('risk_level_cn'),
                     'confidence': result.get('confidence'),
                     'metrics': result.get('metrics', {}),
                     'reasons': result.get('reasons', []),
-                    'threshold_hits': result.get('threshold_hits', {})
+                    'threshold_hits': result.get('threshold_hits', {}),
+                    'data_adequacy': result.get('data_adequacy', {})
                 }
 
                 if self.include_reasoning:
@@ -236,15 +236,13 @@ class ResultExporter:
         risk_engine = RiskEngine(self.config)
 
         review_items = []
-        latest_window_key = self._get_latest_non_empty_window(all_results)
+        latest_per_group = self._get_latest_per_group(all_results)
 
-        if latest_window_key:
-            window_data = all_results[latest_window_key]
-            group_results = window_data.get('group_results', {})
+        for group_key, (result, window_data) in latest_per_group.items():
+            if risk_engine.needs_manual_review(result):
+                review_items.append(self._build_review_row(result, window_data))
 
-            for group_key, result in group_results.items():
-                if risk_engine.needs_manual_review(result):
-                    review_items.append(self._build_review_row(result, window_data))
+        review_items.sort(key=lambda x: (x.get('风险等级', ''), x.get('tunnel_id', '')))
 
         headers = self._get_review_headers()
 
@@ -328,6 +326,21 @@ class ResultExporter:
                 latest_window_key = window_key
         return latest_window_key
 
+    def _get_latest_per_group(self, all_results: Dict[str, Any]) -> Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]]:
+        latest_per_group = {}
+        for window_key, window_data in sorted(all_results.items()):
+            group_results = window_data.get('group_results', {})
+            window_start = window_data.get('window_info', {}).get('window_start', '')
+            for group_key, result in group_results.items():
+                if group_key not in latest_per_group:
+                    latest_per_group[group_key] = (result, window_data)
+                else:
+                    existing_result, existing_window = latest_per_group[group_key]
+                    existing_start = existing_window.get('window_info', {}).get('window_start', '')
+                    if window_start > existing_start:
+                        latest_per_group[group_key] = (result, window_data)
+        return latest_per_group
+
     def _get_config_summary(self) -> Dict[str, Any]:
         return {
             'time_window': {
@@ -341,4 +354,4 @@ class ResultExporter:
     def _get_final_summary(self, all_results: Dict[str, Any]) -> Dict[str, Any]:
         from .risk_engine import RiskEngine
         risk_engine = RiskEngine(self.config)
-        return risk_engine.get_final_summary(all_results)
+        return risk_engine.get_all_groups_summary(all_results)

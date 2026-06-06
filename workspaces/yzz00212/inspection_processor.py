@@ -134,7 +134,7 @@ def main():
         window_results, baseline_manager, aggregator
     )
 
-    final_summary = risk_engine.get_final_summary(all_results)
+    final_summary = risk_engine.get_all_groups_summary(all_results)
     print(f"  - 总组数: {final_summary.get('total_groups', 0)}")
     print(f"  - 高风险: {final_summary.get('high_risk', 0)}")
     print(f"  - 中风险: {final_summary.get('medium_risk', 0)}")
