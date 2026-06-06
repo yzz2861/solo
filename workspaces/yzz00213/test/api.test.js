@@ -1,12 +1,8 @@
 const http = require('http');
+const { startServerWithFallback } = require('../src/app');
 
-const BASE_OPTIONS = {
-  hostname: 'localhost',
-  port: 3000,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
+let server = null;
+let BASE_OPTIONS = null;
 
 function httpRequest(path, method, body) {
   return new Promise((resolve, reject) => {
@@ -45,7 +41,26 @@ async function runTests() {
   console.log('='.repeat(60));
   console.log();
 
+  console.log('▶ 正在启动测试服务...');
+  try {
+    const result = await startServerWithFallback(3000, '127.0.0.1');
+    server = result.server;
+    BASE_OPTIONS = {
+      hostname: result.host,
+      port: result.port,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    console.log(`  测试服务已启动: http://${result.host}:${result.port}`);
+    console.log();
+  } catch (err) {
+    console.error('  ✗ 测试服务启动失败:', err.message);
+    process.exit(1);
+  }
+
   const testResults = [];
+  let testStatusCheckRecordId = null;
 
   try {
     console.log('【场景1】正常记录 - 油耗正常');
@@ -86,6 +101,7 @@ async function runTests() {
 
     console.log('【场景7】状态查询');
     const statusResult = await testStatusCheck();
+    testStatusCheckRecordId = statusResult.recordId;
     testResults.push({ name: '状态查询', passed: statusResult.passed, detail: statusResult.detail });
     console.log(statusResult.passed ? '  ✓ 通过' : '  ✗ 失败');
     console.log();
@@ -103,9 +119,15 @@ async function runTests() {
     console.log();
 
     console.log('【场景10】历史轨迹');
-    const trajectoryResult = await testTrajectory();
+    const trajectoryResult = await testTrajectory(testStatusCheckRecordId);
     testResults.push({ name: '历史轨迹', passed: trajectoryResult.passed, detail: trajectoryResult.detail });
     console.log(trajectoryResult.passed ? '  ✓ 通过' : '  ✗ 失败');
+    console.log();
+
+    console.log('【场景11】健康检查接口');
+    const healthResult = await testHealthCheck();
+    testResults.push({ name: '健康检查', passed: healthResult.passed, detail: healthResult.detail });
+    console.log(healthResult.passed ? '  ✓ 通过' : '  ✗ 失败');
     console.log();
 
   } catch (error) {
@@ -123,6 +145,46 @@ async function runTests() {
     console.log(`  ${icon} ${result.name}: ${result.detail}`);
   }
   console.log('='.repeat(60));
+
+  if (server) {
+    server.close();
+  }
+
+  const allPassed = passedCount === testResults.length;
+  process.exit(allPassed ? 0 : 1);
+}
+
+async function testHealthCheck() {
+  return new Promise((resolve) => {
+    const options = {
+      ...BASE_OPTIONS,
+      path: '/health',
+      method: 'GET'
+    };
+
+    const req = http.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          const ok = json.status === 'OK' && json.service === 'sanitation-vehicle-fuel-api';
+          resolve({
+            passed: ok,
+            detail: ok ? `服务:${json.service}, 版本:${json.version}` : '健康检查返回异常'
+          });
+        } catch (e) {
+          resolve({ passed: false, detail: '响应解析失败' });
+        }
+      });
+    });
+
+    req.on('error', (e) => {
+      resolve({ passed: false, detail: e.message });
+    });
+
+    req.end();
+  });
 }
 
 async function testNormalRecord() {
@@ -439,8 +501,6 @@ async function testBatchProcess() {
   }
 }
 
-let testStatusCheckRecordId = null;
-
 async function testStatusCheck() {
   const records = [{
     masterData: { vehicleId: 'VS001', vehiclePlate: '京G00001', vehicleType: '洒水车' },
@@ -460,7 +520,6 @@ async function testStatusCheck() {
     const createData = await httpRequest('/batch/process', 'POST', { batchNo: 'TEST-STATUS-001', records, thresholdConfig });
 
     const recordId = createData.data.results[0].recordId;
-    testStatusCheckRecordId = recordId;
     const auditNo = createData.data.results[0].auditNo;
 
     const statusData = await httpRequest(`/record/${recordId}/status`, 'GET');
@@ -472,12 +531,13 @@ async function testStatusCheck() {
     const passed = statusOk && auditOk;
     return {
       passed,
+      recordId,
       detail: passed
         ? `记录ID查询:${recordId.substring(0, 8)}..., 审计号:${auditNo}`
         : `状态查询:${statusOk}, 审计号查询:${auditOk}`
     };
   } catch (error) {
-    return { passed: false, detail: error.message };
+    return { passed: false, recordId: null, detail: error.message };
   }
 }
 
@@ -544,13 +604,13 @@ async function testExport() {
   }
 }
 
-async function testTrajectory() {
+async function testTrajectory(recordId) {
   try {
-    if (!testStatusCheckRecordId) {
+    if (!recordId) {
       return { passed: false, detail: '缺少测试记录ID' };
     }
 
-    const data = await httpRequest(`/record/${testStatusCheckRecordId}/trajectory`, 'GET');
+    const data = await httpRequest(`/record/${recordId}/trajectory`, 'GET');
 
     const hasTimeline = data.success && data.timeline && data.timeline.length > 0;
     const hasTraceId = data.timeline && data.timeline[0]?.traceId;
