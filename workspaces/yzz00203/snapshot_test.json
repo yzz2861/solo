@@ -1,0 +1,206 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-06-06 00:54:20",
+  "batches": [
+    {
+      "batchId": "BATCH-20260606-0BD2197E",
+      "sourceFile": "test_records",
+      "processedAt": "2026-06-06 00:54:04",
+      "recordCount": 9,
+      "normalCount": 5,
+      "abnormalCount": 3,
+      "pendingCount": 1
+    },
+    {
+      "batchId": "BATCH-20260606-6CA2DDE3",
+      "sourceFile": "test_records_batch2",
+      "processedAt": "2026-06-06 00:54:20",
+      "recordCount": 3,
+      "normalCount": 1,
+      "abnormalCount": 2,
+      "pendingCount": 0
+    }
+  ],
+  "records": {
+    "dedupe:T001|2026-06-01": {
+      "recordKey": "dedupe:T001|2026-06-01",
+      "recordId": "REC-1F589E5F37B6",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "normal",
+          "totalScore": 95,
+          "rawTotalScore": 95,
+          "reason": "评分正常",
+          "sourceRow": 2,
+          "processedAt": "2026-06-06 00:54:04"
+        },
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "normal",
+          "totalScore": 95,
+          "rawTotalScore": 95,
+          "reason": "评分正常",
+          "sourceRow": 10,
+          "processedAt": "2026-06-06 00:54:04"
+        },
+        {
+          "batchId": "BATCH-20260606-6CA2DDE3",
+          "status": "abnormal",
+          "totalScore": 95,
+          "rawTotalScore": 95,
+          "reason": "重复记录，已在历史批次中处理过",
+          "sourceRow": 2,
+          "processedAt": "2026-06-06 00:54:20"
+        }
+      ]
+    },
+    "dedupe:T002|2026-06-01": {
+      "recordKey": "dedupe:T002|2026-06-01",
+      "recordId": "REC-4B291ED94DCA",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "normal",
+          "totalScore": 77,
+          "rawTotalScore": 77,
+          "reason": "评分正常",
+          "sourceRow": 3,
+          "processedAt": "2026-06-06 00:54:04"
+        },
+        {
+          "batchId": "BATCH-20260606-6CA2DDE3",
+          "status": "abnormal",
+          "totalScore": 77,
+          "rawTotalScore": 77,
+          "reason": "重复记录，已在历史批次中处理过",
+          "sourceRow": 4,
+          "processedAt": "2026-06-06 00:54:20"
+        }
+      ]
+    },
+    "dedupe:T003|2026-06-01": {
+      "recordKey": "dedupe:T003|2026-06-01",
+      "recordId": "REC-CED11FF03192",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "normal",
+          "totalScore": 32,
+          "rawTotalScore": 32,
+          "reason": "评分未达标",
+          "sourceRow": 4,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T004|2026-06-01": {
+      "recordKey": "dedupe:T004|2026-06-01",
+      "recordId": "REC-79398E976051",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "abnormal",
+          "totalScore": 90,
+          "rawTotalScore": 90,
+          "reason": "缺少必填字段: inspector",
+          "sourceRow": 5,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T005|2026-06-02": {
+      "recordKey": "dedupe:T005|2026-06-02",
+      "recordId": "REC-6F3D697D2AA2",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "pending",
+          "totalScore": 55,
+          "rawTotalScore": 110,
+          "reason": "规则冲突/异常待复核: 地面清洁度: 得分 30 超过上限 25; 墙面清洁度: 得分 25 超过上限 20; 总分 110 超过配置上限 100（规则冲突）",
+          "sourceRow": 6,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T006|2026-06-02": {
+      "recordKey": "dedupe:T006|2026-06-02",
+      "recordId": "REC-AF5BC2C93B85",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "abnormal",
+          "totalScore": 68,
+          "rawTotalScore": 68,
+          "reason": "规则校验不通过: 异味情况: 值 \"超级臭\" 不在可选范围 [无异味, 轻微异味, 较重异味, 严重异味] 内",
+          "sourceRow": 7,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T007|2026-06-02": {
+      "recordKey": "dedupe:T007|2026-06-02",
+      "recordId": "REC-FCF9BD32BA86",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "normal",
+          "totalScore": 100,
+          "rawTotalScore": 100,
+          "reason": "评分正常",
+          "sourceRow": 8,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T008|": {
+      "recordKey": "dedupe:T008|",
+      "recordId": "REC-F9375FC339AA",
+      "firstBatch": "BATCH-20260606-0BD2197E",
+      "firstProcessedAt": "2026-06-06 00:54:04",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-0BD2197E",
+          "status": "abnormal",
+          "totalScore": 65,
+          "rawTotalScore": 65,
+          "reason": "缺少必填字段: check_date",
+          "sourceRow": 9,
+          "processedAt": "2026-06-06 00:54:04"
+        }
+      ]
+    },
+    "dedupe:T009|2026-06-03": {
+      "recordKey": "dedupe:T009|2026-06-03",
+      "recordId": "REC-2286B805872A",
+      "firstBatch": "BATCH-20260606-6CA2DDE3",
+      "firstProcessedAt": "2026-06-06 00:54:20",
+      "batches": [
+        {
+          "batchId": "BATCH-20260606-6CA2DDE3",
+          "status": "normal",
+          "totalScore": 98,
+          "rawTotalScore": 98,
+          "reason": "评分正常",
+          "sourceRow": 3,
+          "processedAt": "2026-06-06 00:54:20"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "version": "1.0",
+  "description": "公厕保洁评分规则配置",
+  "requiredFields": ["toilet_id", "check_date", "inspector"],
+  "totalMaxScore": 100,
+  "passScore": 60,
+  "scoreRules": [
+    {
+      "field": "floor_clean",
+      "name": "地面清洁度",
+      "type": "number",
+      "maxScore": 25,
+      "minScore": 0
+    },
+    {
+      "field": "wall_clean",
+      "name": "墙面清洁度",
+      "type": "number",
+      "maxScore": 20,
+      "minScore": 0
+    },
+    {
+      "field": "smell",
+      "name": "异味情况",
+      "type": "enum",
+      "options": ["无异味", "轻微异味", "较重异味", "严重异味"],
+      "scores": {
+        "无异味": 20,
+        "轻微异味": 12,
+        "较重异味": 5,
+        "严重异味": 0
+      }
+    },
+    {
+      "field": "supplies",
+      "name": "用品配备",
+      "type": "enum",
+      "options": ["齐全", "部分缺失", "严重缺失"],
+      "scores": {
+        "齐全": 15,
+        "部分缺失": 8,
+        "严重缺失": 0
+      }
+    },
+    {
+      "field": "equipment_ok",
+      "name": "设施完好",
+      "type": "boolean",
+      "trueScore": 20,
+      "falseScore": 0
+    }
+  ]
+}

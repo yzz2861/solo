@@ -1,0 +1,21 @@
+{
+  "name": "toilet-cleanliness-cli",
+  "version": "1.0.0",
+  "description": "公厕保洁评分CLI - 规则判断、异常解释和处理留痕",
+  "main": "src/processor.js",
+  "bin": {
+    "toilet-score": "./bin/score.js"
+  },
+  "scripts": {
+    "start": "node bin/score.js",
+    "test": "node test/run-test.js"
+  },
+  "keywords": ["toilet", "cleanliness", "cli", "scoring"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "csv-parse": "^5.5.3",
+    "csv-stringify": "^6.4.5"
+  }
+}
