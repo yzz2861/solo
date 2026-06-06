@@ -1,0 +1,35 @@
+batch_id: "BATCH-2026-001"
+source_name: "实验室气瓶巡检系统"
+
+time_range:
+  start_date: "2026-01-01"
+  end_date: "2026-12-31"
+  check_date: "2026-06-06"
+
+risk_levels:
+  high_risk_days: 30
+  medium_risk_days: 90
+  low_risk_days: 180
+
+group_dimensions:
+  - "实验室"
+  - "责任人"
+  - "气瓶类型"
+
+deduplication_keys:
+  - "气瓶编号"
+
+required_fields:
+  - "气瓶编号"
+  - "到期日期"
+  - "实验室"
+
+input_files:
+  cylinder_data: "data/cylinder_data.csv"
+  responsibility_map: "data/responsibility_map.csv"
+
+output_files:
+  detail_report: "output/明细表.csv"
+  summary_report: "output/汇总报告.csv"
+  problem_list: "output/问题清单.csv"
+  text_summary: "output/文本摘要.txt"
