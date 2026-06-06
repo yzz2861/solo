@@ -25,7 +25,7 @@ function processEvidence(req, res) {
   }
 
   const itemResults = items.map(item => {
-    const existingRecord = null;
+    const existingRecord = getItemRecord(item.itemId);
     return routeStatus(item, action, reviewOpinion, existingRecord);
   });
 

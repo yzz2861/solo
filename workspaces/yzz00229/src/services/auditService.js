@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const { RULE_VERSION } = require('../config/constants');
+const { RULE_VERSION, STATUS } = require('../config/constants');
 
 const batchStore = new Map();
 const auditLogs = [];
@@ -39,20 +39,48 @@ function saveBatchResult(batchNo, operator, sourceChannel, action, reviewOpinion
   const processTime = new Date().toISOString();
 
   const enrichedItems = itemResults.map(item => {
-    const itemTraceId = generateTraceId('ITEM');
+    const existingItem = itemStore.get(item.itemId);
+
+    if (existingItem && existingItem.status === STATUS.LOCKED) {
+      return {
+        ...item,
+        traceId: existingItem.traceId,
+        processTime: existingItem.processTime,
+        originalBatchNo: existingItem.batchNo,
+        isLockedReuse: true,
+        lockedHint: `该明细已在批次 ${existingItem.batchNo} 中锁定，保持原结论`
+      };
+    }
+
+    const itemTraceId = existingItem ? existingItem.traceId : generateTraceId('ITEM');
+    const history = existingItem ? [...(existingItem.history || [])] : [];
+
+    if (existingItem && existingItem.status !== item.status) {
+      history.push({
+        oldStatus: existingItem.status,
+        newStatus: item.status,
+        operator,
+        reason: action,
+        fromBatch: existingItem.batchNo,
+        timestamp: processTime
+      });
+    }
+
     const enriched = {
+      ...item,
+      traceId: itemTraceId,
+      processTime: processTime,
+      batchNo: batchNo,
+      history: history
+    };
+
+    itemStore.set(item.itemId, enriched);
+
+    return {
       ...item,
       traceId: itemTraceId,
       processTime: processTime
     };
-
-    itemStore.set(item.itemId, {
-      ...enriched,
-      batchNo: batchNo,
-      history: []
-    });
-
-    return enriched;
   });
 
   const batchRecord = {

@@ -8,7 +8,8 @@ const {
   generateTraceId,
   getAuditLogs,
   getBatchCount,
-  getItemCount
+  getItemCount,
+  getItemRecord
 } = require('../src/services/auditService');
 const { STATUS, RISK_LEVEL, RULE_VERSION } = require('../src/config/constants');
 
@@ -445,6 +446,75 @@ describe('五、重复处理测试 (幂等性)', () => {
       assert.strictEqual(result.items[0].riskLevel, firstResult.items[0].riskLevel, `第${i+1}次查询风险等级应一致`);
       assert.strictEqual(result.traceId, firstResult.traceId, `第${i+1}次查询追溯号应一致`);
     }
+  });
+
+  test('已锁定明细 - 换批次号提交仍保持锁定状态', () => {
+    const itemId = 'LOCKED-CROSS-BATCH-001';
+    const firstBatchNo = 'BATCH-LOCKED-FIRST-001';
+    const secondBatchNo = 'BATCH-LOCKED-SECOND-001';
+
+    const item = {
+      itemId: itemId,
+      occupationDuration: '2小时',
+      locationType: '消防车通道',
+      locationDetail: '主通道位置描述',
+      occurTime: new Date().toISOString(),
+      evidenceImages: ['img1.jpg', 'img2.jpg'],
+      description: '详细的描述内容信息',
+      hazardLevel: '严重'
+    };
+
+    const firstResult = saveBatchResult(firstBatchNo, '操作员G', '现场执法', '复核通过', '情况属实',
+      [routeStatus(item, '复核通过', '情况属实', null)]
+    );
+    assert.strictEqual(firstResult.items[0].status, STATUS.LOCKED, '首次复核通过应为已锁定');
+    const firstTraceId = firstResult.items[0].traceId;
+
+    const secondResult = saveBatchResult(secondBatchNo, '操作员H', '群众举报', '初次提交', null,
+      [routeStatus(item, '初次提交', null, getItemRecord(itemId))]
+    );
+
+    assert.strictEqual(secondResult.items[0].status, STATUS.LOCKED, '换批次提交已锁定明细仍应为已锁定');
+    assert.strictEqual(secondResult.items[0].traceId, firstTraceId, '锁定明细的追溯号应保持不变');
+    assert.strictEqual(secondResult.items[0].isLockedReuse, true, '应标记为锁定复用');
+    assert.ok(secondResult.items[0].lockedHint, '应有锁定提示信息');
+    assert.strictEqual(secondResult.items[0].originalBatchNo, firstBatchNo, '应标记原始批次号');
+  });
+
+  test('未锁定明细 - 换批次可正常更新状态', () => {
+    const itemId = 'UNLOCKED-CROSS-BATCH-001';
+    const firstBatchNo = 'BATCH-UNLOCKED-FIRST-001';
+    const secondBatchNo = 'BATCH-UNLOCKED-SECOND-001';
+
+    const basicItem = {
+      itemId: itemId,
+      locationDetail: '位置描述',
+      occurTime: new Date().toISOString()
+    };
+
+    const fullItem = {
+      itemId: itemId,
+      occupationDuration: '30分钟',
+      locationType: '疏散走道',
+      locationDetail: '详细位置描述',
+      occurTime: new Date().toISOString(),
+      evidenceImages: ['img1.jpg', 'img2.jpg'],
+      description: '非常详细的描述内容信息，包含具体情况',
+      hazardLevel: '较重'
+    };
+
+    const firstResult = saveBatchResult(firstBatchNo, '操作员I', '视频巡检', '初次提交', null,
+      [routeStatus(basicItem, '初次提交', null, null)]
+    );
+    assert.strictEqual(firstResult.items[0].status, STATUS.SUPPLEMENT, '首次应为需补充');
+    const firstTraceId = firstResult.items[0].traceId;
+
+    const secondResult = saveBatchResult(secondBatchNo, '操作员J', '现场执法', '补充材料', null,
+      [routeStatus(fullItem, '补充材料', null, getItemRecord(itemId))]
+    );
+
+    assert.strictEqual(secondResult.items[0].status, STATUS.PROCESSABLE, '补充材料后应为可办理');
+    assert.strictEqual(secondResult.items[0].traceId, firstTraceId, '同一明细追溯号应保持不变');
   });
 });
 
