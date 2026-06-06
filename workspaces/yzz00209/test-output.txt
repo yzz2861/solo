@@ -1,0 +1,83 @@
+
+> voting-qualification-api@1.0.0 test
+> jest --coverage
+
+FAIL __tests__/qualification.test.ts
+  ● Test suite failed to run
+
+    [96m__tests__/qualification.test.ts[0m:[93m9[0m:[93m8[0m - [91merror[0m[90m TS2307: [0mCannot find module '../services/qualificationService' or its corresponding type declarations.
+
+    [7m9[0m } from '../services/qualificationService';
+    [7m [0m [91m       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m10[0m:[93m46[0m - [91merror[0m[90m TS2307: [0mCannot find module '../store/datastore' or its corresponding type declarations.
+
+    [7m10[0m import { resetStore, seedDefaultRules } from '../store/datastore';
+    [7m  [0m [91m                                             ~~~~~~~~~~~~~~~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m11[0m:[93m51[0m - [91merror[0m[90m TS2307: [0mCannot find module '../layers/status' or its corresponding type declarations.
+
+    [7m11[0m import { ObjectStatus, QualificationStatus } from '../layers/status';
+    [7m  [0m [91m                                                  ~~~~~~~~~~~~~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m12[0m:[93m28[0m - [91merror[0m[90m TS2307: [0mCannot find module '../layers/object' or its corresponding type declarations.
+
+    [7m12[0m import { ObjectType } from '../layers/object';
+    [7m  [0m [91m                           ~~~~~~~~~~~~~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m13[0m:[93m27[0m - [91merror[0m[90m TS2307: [0mCannot find module '../layers/rule' or its corresponding type declarations.
+
+    [7m13[0m import { RiskLevel } from '../layers/rule';
+    [7m  [0m [91m                          ~~~~~~~~~~~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m159[0m:[93m37[0m - [91merror[0m[90m TS7006: [0mParameter 'detail' implicitly has an 'any' type.
+
+    [7m159[0m       result.ruleHitDetails.forEach(detail => {
+    [7m   [0m [91m                                    ~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m360[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'r' implicitly has an 'any' type.
+
+    [7m360[0m       const timeRule = result.ruleHitDetails.find(r => r.ruleType === 'time_window');
+    [7m   [0m [91m                                                  ~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m393[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'r' implicitly has an 'any' type.
+
+    [7m393[0m       const timeRule = result.ruleHitDetails.find(r => r.ruleType === 'time_window');
+    [7m   [0m [91m                                                  ~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m420[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'r' implicitly has an 'any' type.
+
+    [7m420[0m       const areaRule = result.ruleHitDetails.find(r => r.ruleType === 'property_area');
+    [7m   [0m [91m                                                  ~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m450[0m:[93m37[0m - [91merror[0m[90m TS7006: [0mParameter 'reason' implicitly has an 'any' type.
+
+    [7m450[0m       result.failureReasons.forEach(reason => {
+    [7m   [0m [91m                                    ~~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m462[0m:[93m33[0m - [91merror[0m[90m TS7006: [0mParameter 'error' implicitly has an 'any' type.
+
+    [7m462[0m       validation.errors.forEach(error => {
+    [7m   [0m [91m                                ~~~~~[0m
+    [96m__tests__/qualification.test.ts[0m:[93m977[0m:[93m37[0m - [91merror[0m[90m TS7006: [0mParameter 'detail' implicitly has an 'any' type.
+
+    [7m977[0m       result.ruleHitDetails.forEach(detail => {
+    [7m   [0m [91m                                    ~~~~~~[0m
+
+Failed to collect coverage from /Users/bill/Documents/solo/workspaces/yzz00209/src/services/qualificationService.ts
+ERROR: [96msrc/services/qualificationService.ts[0m:[93m25[0m:[93m8[0m - [91merror[0m[90m TS2307: [0mCannot find module './ruleEngine' or its corresponding type declarations.
+
+[7m25[0m } from './ruleEngine';
+[7m  [0m [91m       ~~~~~~~~~~~~~~[0m
+STACK: 
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+All files       |       0 |        0 |       0 |       0 |                   
+ engine         |       0 |        0 |       0 |       0 |                   
+  ruleEngine.ts |       0 |        0 |       0 |       0 | 2-270             
+ layers         |       0 |        0 |       0 |       0 |                   
+  object.ts     |       0 |        0 |       0 |       0 | 1-5               
+  record.ts     |       0 |        0 |       0 |       0 | 4-18              
+  rule.ts       |       0 |        0 |       0 |       0 | 1-14              
+  status.ts     |       0 |        0 |       0 |       0 | 3-17              
+ routes         |       0 |        0 |       0 |       0 |                   
+  api.ts        |       0 |        0 |       0 |       0 | 1-196             
+ store          |       0 |        0 |       0 |       0 |                   
+  datastore.ts  |       0 |        0 |       0 |       0 | 1-193             
+----------------|---------|----------|---------|---------|-------------------
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        12.287 s
+Ran all test suites.
