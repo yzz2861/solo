@@ -1,0 +1,29 @@
+station_capacity:
+  low: 20
+  medium: 50
+
+occupancy_rate:
+  medium: 0.7
+  high: 0.9
+
+required_fields:
+  - bike_id
+  - station_id
+  - station_name
+  - parking_count
+  - capacity
+  - last_update
+
+numeric_fields:
+  - parking_count
+  - capacity
+  - longitude
+  - latitude
+
+diff_fields:
+  - station_id
+  - station_name
+  - parking_count
+  - capacity
+  - longitude
+  - latitude
