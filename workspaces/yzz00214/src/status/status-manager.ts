@@ -98,12 +98,22 @@ export class StatusManager {
       };
     }
 
-    if (hasCriticalMissing) {
+    const materialIncomplete = !materialComplete || hasCriticalMissing;
+
+    if (materialIncomplete) {
+      const reasons: string[] = [];
+      if (hasCriticalMissing) {
+        reasons.push('缺少必备佐证材料');
+      } else if (!materialComplete) {
+        reasons.push('佐证材料不完整');
+      }
+
       return {
-        targetStatus: 'supplement_required',
-        statusLabel: TASK_STATUS_LABELS['supplement_required'],
-        statusReason: '缺少必备佐证材料',
-        requireReview: false,
+        targetStatus: 'under_review',
+        statusLabel: TASK_STATUS_LABELS['under_review'],
+        statusReason: `${reasons.join('，')}，需人工复核`,
+        requireReview: true,
+        reviewReason: '材料不完整或缺材料，不允许直接通过，需人工复核确认',
         canDirectApprove: false
       };
     }
@@ -120,15 +130,6 @@ export class StatusManager {
     }
 
     if (riskLevel === 'medium') {
-      if (!materialComplete) {
-        return {
-          targetStatus: 'supplement_required',
-          statusLabel: TASK_STATUS_LABELS['supplement_required'],
-          statusReason: '材料不完整，需补充后再办理',
-          requireReview: false,
-          canDirectApprove: false
-        };
-      }
       return {
         targetStatus: 'under_review',
         statusLabel: TASK_STATUS_LABELS['under_review'],
@@ -140,15 +141,6 @@ export class StatusManager {
     }
 
     if (riskLevel === 'low') {
-      if (!materialComplete) {
-        return {
-          targetStatus: 'supplement_required',
-          statusLabel: TASK_STATUS_LABELS['supplement_required'],
-          statusReason: '材料不完整，需补充后再办理',
-          requireReview: false,
-          canDirectApprove: false
-        };
-      }
       return {
         targetStatus: 'processable',
         statusLabel: TASK_STATUS_LABELS['processable'],

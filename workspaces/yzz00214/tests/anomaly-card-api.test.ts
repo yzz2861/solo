@@ -136,7 +136,7 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
       expect(result.statusReason).toBeTruthy();
     });
 
-    it('中风险但材料不齐应输出"需补充"状态', () => {
+    it('中风险且材料不齐应进入复核，不允许直接通过', () => {
       const masterData = createBaseMasterData();
       const application = createBaseApplication('stolen_card');
       const materials = createVerifiedMaterials(['police_report']);
@@ -154,11 +154,13 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
 
       const result = api.processApplication(input);
 
-      expect(result.taskStatus).toBe('supplement_required');
-      expect(result.taskStatusLabel).toBe('需补充');
-      expect(result.needSupplement).toBe(true);
+      expect(result.taskStatus).toBe('under_review');
+      expect(result.taskStatusLabel).toBe('复核中');
+      expect(result.needReview).toBe(true);
+      expect(result.canHandle).toBe(false);
       expect(result.materialStatus.complete).toBe(false);
       expect(result.materialStatus.missingTypes.length).toBeGreaterThan(0);
+      expect(result.reviewReason).toContain('材料');
     });
   });
 
@@ -276,7 +278,7 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
       expect(result.needReview).toBe(true);
     });
 
-    it('缺少关键材料应输出"需补充"状态，并有失败解释', () => {
+    it('缺少关键材料应进入复核，不允许直接通过', () => {
       const masterData = createBaseMasterData();
       const application = createBaseApplication('stolen_card');
       const materials = createVerifiedMaterials(['screenshot']);
@@ -294,10 +296,14 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
 
       const result = api.processApplication(input);
 
-      expect(result.taskStatus).toBe('supplement_required');
-      expect(result.needSupplement).toBe(true);
+      expect(result.taskStatus).toBe('under_review');
+      expect(result.taskStatusLabel).toBe('复核中');
+      expect(result.needReview).toBe(true);
+      expect(result.canHandle).toBe(false);
       expect(result.materialStatus.missingTypes).toContain('police_report');
       expect(result.materialStatus.missingTypes).toContain('identity_proof');
+      expect(result.reviewReason).toContain('材料');
+      expect(result.reviewReason).toContain('不允许直接通过');
     });
 
     it('历史异常记录较多且未解决会增加风险分', () => {
@@ -418,7 +424,7 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
       expect(result.isLocked).toBe(false);
     });
 
-    it('高风险或缺材料时必须进入复核，不允许直接通过', () => {
+    it('高风险时必须进入复核，不允许直接通过', () => {
       const masterData = createBaseMasterData();
       const application = createBaseApplication('stolen_card');
       const materials = createVerifiedMaterials(['police_report', 'identity_proof']);
@@ -438,8 +444,48 @@ describe('校园一卡通异常消费API - 四层架构测试', () => {
 
       expect(result.canHandle).toBe(false);
       expect(result.needReview).toBe(true);
-      expect(result.taskStatus).not.toBe('processable');
+      expect(result.taskStatus).toBe('under_review');
+      expect(result.reviewReason).toContain('高风险');
+      expect(result.reviewReason).toContain('不允许直接通过');
+    });
+
+    it('缺材料时必须进入复核，不允许直接通过', () => {
+      const masterData = createBaseMasterData();
+      const application = createBaseApplication('stolen_card');
+      const materials = createVerifiedMaterials(['screenshot']);
+      const historicalData = createBaseHistoricalData({ anomalyCount: 0 });
+      const transactions = createLowRiskTransactions();
+
+      const input: AnomalyDetectionInput = {
+        masterData,
+        application,
+        materials,
+        historicalData,
+        transactions,
+        thresholdConfig: getDefaultThreshold()
+      };
+
+      const result = api.processApplication(input);
+
+      expect(result.canHandle).toBe(false);
+      expect(result.needReview).toBe(true);
+      expect(result.taskStatus).toBe('under_review');
       expect(result.reviewReason).toBeTruthy();
+      expect(result.materialStatus.complete).toBe(false);
+    });
+
+    it('需补充状态可通过状态转换从复核中转出（保留已有功能）', () => {
+      const { StatusManager } = require('../src/status');
+      const statusManager = new StatusManager('under_review');
+
+      expect(statusManager.getCurrentStatus()).toBe('under_review');
+
+      const transitionResult = statusManager.transition('reject', '复核后需补充材料');
+
+      expect(transitionResult.success).toBe(true);
+      expect(transitionResult.toStatus).toBe('supplement_required');
+      expect(statusManager.getCurrentStatus()).toBe('supplement_required');
+      expect(statusManager.getCurrentStatusLabel()).toBe('需补充');
     });
   });
 });
