@@ -1,0 +1,6 @@
+audit_number,blade_id,application_id,business_conclusion,risk_label,next_action,risk_score,review_required,missing_evidence_types,defect_assessment,process_time,row_number,error_message
+INS-20260606125610-1512861D,BLD-2024001,APP-20260601-A001,pass,low_risk,direct_pass,30.0,False,[],crack缺陷轻微，风险评分30.0，常规处理即可,2026-06-06 12:56:10,1,
+INS-20260606125610-AFC6F6D2,BLD-2024002,APP-20260602-A002,review_required,high_risk,schedule_repair,100.0,True,[],crack缺陷严重，风险评分100.0，达到高风险阈值,2026-06-06 12:56:10,2,
+INS-20260606125610-6B8B0E63,BLD-2024003,APP-20260603-A003,review_required,missing_material,supplement_material,20.0,True,['report'],surface_damage缺陷轻微，风险评分20.0，常规处理即可,2026-06-06 12:56:10,3,
+INS-20260606125610-B6724EAB,BLD-2024004,APP-20260401-A004,reject,no_risk,reject_and_archive,0.0,False,[],数据校验不通过，未进行风险评估,2026-06-06 12:56:10,4,申请已超过有效期（30天），申请日期为2026-04-07
+INS-20260606125610-F04E4454,BAD-BLADE-ID,BAD-APP-ID,reject,no_risk,reject_and_archive,0.0,False,[],数据校验不通过，未进行风险评估,2026-06-06 12:56:10,5,叶片编号格式错误: BAD-BLADE-ID，应为BLD-开头加6位以上大写字母数字; 申请编号格式错误: BAD-APP-ID，应为APP-YYYYMMDD-序号格式
