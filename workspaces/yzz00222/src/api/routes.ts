@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { dispatchService } from '../services/dispatchService';
 import { ExportService } from '../records/exportService';
-import { DispatchResult, ProcessAction } from '../objects/types';
+import { DispatchResult, ProcessAction, RiskLevel } from '../objects/types';
 import { PilotEntity } from '../objects/entities';
 
 const router = express.Router();
@@ -99,7 +99,7 @@ router.get('/dispatch/export/:batchNo', (req: Request, res: Response) => {
         shipName: '',
         status: item.currentStatus,
         reasons: item.records.map(r => r.remark || ''),
-        riskLevel: 'LOW',
+        riskLevel: RiskLevel.LOW,
         reviewRequired: false,
         canDirectApprove: true
       })),
