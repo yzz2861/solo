@@ -220,6 +220,9 @@ def verify_consistency(results: dict) -> bool:
     test_5_passed = verify_sample_categories(validation_results)
     all_passed = all_passed and test_5_passed
 
+    test_6_passed = verify_close_loop_idempotency(triage, validation_results)
+    all_passed = all_passed and test_6_passed
+
     print("\n" + "-" * 60)
     if all_passed:
         print("✅ 所有一致性验证通过")
@@ -483,6 +486,71 @@ def verify_sample_categories(validation_results: dict) -> bool:
         for rid in mixed_samples
     ):
         print(f"  ✅ {len(mixed_samples)} 条混合范例全部正确（待审核状态）")
+
+    return passed
+
+
+def verify_close_loop_idempotency(
+    triage: TriageManager, validation_results: dict
+) -> bool:
+    print("\n【验证6】闭环操作幂等性与状态正确性")
+    passed = True
+
+    over_threshold_ids = [
+        rid for rid, r in validation_results.items()
+        if r.status == CalibrationStatus.OVER_THRESHOLD
+    ]
+    compliant_ids = [
+        rid for rid, r in validation_results.items()
+        if r.status == CalibrationStatus.COMPLIANT
+    ]
+
+    if over_threshold_ids:
+        test_id = over_threshold_ids[0]
+        first_result = triage.close_loop(test_id, "测试整改完成", "测试员")
+        second_result = triage.close_loop(test_id, "再次尝试闭环", "测试员")
+
+        if not first_result:
+            print(f"  ❌ 首次闭环应返回成功但返回失败")
+            passed = False
+        if second_result:
+            print(f"  ❌ 重复闭环应返回失败但返回成功")
+            passed = False
+        if first_result and not second_result:
+            print(f"  ✅ 重复调用 close_loop 返回正确（首次成功，二次失败）")
+
+        history = triage.get_history(test_id)
+        if len(history) != 1:
+            print(
+                f"  ❌ 历史记录应为1条但有{len(history)}条，重复添加了历史记录"
+            )
+            passed = False
+        else:
+            print(f"  ✅ 历史记录正确，仅添加1条闭环记录")
+
+        triage_groups = triage.triage_by_status()
+        closed_loop_count = len(triage_groups.get(CalibrationStatus.CLOSED_LOOP.value, []))
+        if closed_loop_count < 1:
+            print(f"  ❌ 已闭环分组中无记录")
+            passed = False
+        else:
+            print(f"  ✅ 已闭环分组中记录数正确: {closed_loop_count} 条")
+
+    if compliant_ids:
+        test_id = compliant_ids[0]
+        result = triage.close_loop(test_id, "尝试对合规记录闭环", "测试员")
+        if result:
+            print(f"  ❌ 对合规记录执行闭环应返回失败但返回成功")
+            passed = False
+        else:
+            print(f"  ✅ 对合规记录执行闭环正确返回失败")
+
+    nonexistent_result = triage.close_loop("NONEXISTENT", "测试", "测试员")
+    if nonexistent_result:
+        print(f"  ❌ 对不存在的记录闭环应返回失败但返回成功")
+        passed = False
+    else:
+        print(f"  ✅ 对不存在的记录闭环正确返回失败")
 
     return passed
 

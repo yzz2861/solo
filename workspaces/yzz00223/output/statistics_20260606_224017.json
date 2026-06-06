@@ -1,0 +1,98 @@
+{
+  "summary": {
+    "total_records": 20,
+    "compliant_count": 10,
+    "over_threshold_count": 5,
+    "missing_material_count": 3,
+    "pending_count": 2,
+    "closed_loop_count": 0,
+    "compliance_rate": 50.0,
+    "time_range": {
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    }
+  },
+  "group_statistics": {
+    "station": {
+      "丰台区文化中心微站(ST009)": 2,
+      "东城区文化馆微站(ST002)": 2,
+      "西城区少年宫微站(ST004)": 3,
+      "朝阳区体育馆微站(ST006)": 2,
+      "海淀区科技馆微站(ST007)": 2,
+      "石景山区图书馆微站(ST010)": 2,
+      "西城区图书馆微站(ST003)": 2,
+      "东城区第一小学微站(ST001)": 4,
+      "海淀区美术馆微站(ST008)": 1
+    },
+    "region": {
+      "丰台区": 2,
+      "东城区": 6,
+      "西城区": 5,
+      "朝阳区": 2,
+      "海淀区": 3,
+      "石景山区": 2
+    },
+    "department": {
+      "监测一科": 6,
+      "监测二科": 6,
+      "设备运维科": 4,
+      "质量控制科": 4
+    }
+  },
+  "trend_points": [
+    {
+      "time_label": "2026-05",
+      "total_count": 20,
+      "compliant_count": 10,
+      "over_threshold_count": 5,
+      "missing_material_count": 3,
+      "pending_count": 2
+    },
+    {
+      "time_label": "2026-05",
+      "total_count": 0,
+      "compliant_count": 0,
+      "over_threshold_count": 0,
+      "missing_material_count": 0,
+      "pending_count": 0
+    }
+  ],
+  "top_abnormal_stations": [
+    {
+      "station_id": "ST002",
+      "station_name": "东城区文化馆微站",
+      "abnormal_count": 2,
+      "total_count": 2,
+      "abnormal_rate": 100.0
+    },
+    {
+      "station_id": "ST004",
+      "station_name": "西城区少年宫微站",
+      "abnormal_count": 2,
+      "total_count": 3,
+      "abnormal_rate": 66.67
+    },
+    {
+      "station_id": "ST001",
+      "station_name": "东城区第一小学微站",
+      "abnormal_count": 2,
+      "total_count": 4,
+      "abnormal_rate": 50.0
+    },
+    {
+      "station_id": "ST009",
+      "station_name": "丰台区文化中心微站",
+      "abnormal_count": 1,
+      "total_count": 2,
+      "abnormal_rate": 50.0
+    },
+    {
+      "station_id": "ST006",
+      "station_name": "朝阳区体育馆微站",
+      "abnormal_count": 1,
+      "total_count": 2,
+      "abnormal_rate": 50.0
+    }
+  ],
+  "export_time": "2026-06-06 22:40:17"
+}

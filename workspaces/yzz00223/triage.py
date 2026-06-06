@@ -90,7 +90,11 @@ class TriageManager:
     def close_loop(self, record_id: str, resolution: str, closed_by: str) -> bool:
         if record_id not in self.validation_results:
             return False
+        if record_id in self.closed_loop_records:
+            return False
         result = self.validation_results[record_id]
+        if result.status == CalibrationStatus.COMPLIANT:
+            return False
         close_time = datetime.now()
         self.closed_loop_records[record_id] = {
             "record_id": record_id,
