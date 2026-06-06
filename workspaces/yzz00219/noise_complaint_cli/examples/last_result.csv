@@ -1,0 +1,4 @@
+merge_id,complaint_count,merged_complaint_ids,first_complaint_time,last_complaint_time,complainant,phone,address,complaint_content,noise_type,source,risk_level,risk_level_label,risk_score,risk_reasons,trace_ids,batch_no,source_system
+MERGE_旧_001,2,TS20240601001; TS20240601002,2024-06-01 08:30:00,2024-06-01 10:15:00,张三; 李四,13800138001; 13900139002,北京市朝阳区阳光小区3号楼2单元,旧数据内容,装修噪声,12345热线,low,低风险,1,重复投诉(2次),TRACEOLD001; TRACEOLD002,BATCHOLD001,decoration_noise_complaint
+MERGE_旧_002,1,TS20240603002,2024-06-03 07:00:00,2024-06-03 07:00:00,周九,13300133007,北京市丰台区家园小区1号楼,早上7点就开始装修了，违反规定时间,装修噪声,12345热线,medium,中风险,4,含中风险关键词: 早; 装修/施工类重复投诉,TRACEOLD003,BATCHOLD001,decoration_noise_complaint
+MERGE_旧_003,1,TS20240607001,2024-06-07 09:00:00,2024-06-07 09:00:00,老用户,13800138111,北京市东城区某街道,将被移除的记录,装修噪声,12345热线,low,低风险,0,信息不足，无法判定,TRACEOLD004,BATCHOLD001,decoration_noise_complaint

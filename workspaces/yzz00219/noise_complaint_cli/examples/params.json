@@ -1,0 +1,34 @@
+{
+  "output": {
+    "output_dir": "./output",
+    "success_file": "success_result.csv",
+    "bad_rows_file": "bad_rows.csv",
+    "diff_file": "diff_result.csv",
+    "log_file": "operation.log",
+    "encoding": "utf-8-sig"
+  },
+  "merge": {
+    "same_address_distance_threshold": 50,
+    "same_complainant_merge": true,
+    "time_window_hours": 72,
+    "risk_score_low_max": 3,
+    "risk_score_medium_max": 7,
+    "high_risk_keywords": [
+      "夜间施工",
+      "凌晨",
+      "严重扰民",
+      "多次投诉",
+      "孕妇",
+      "老人",
+      "婴儿",
+      "学生备考"
+    ],
+    "medium_risk_keywords": [
+      "午休",
+      "周末",
+      "节假日",
+      "持续",
+      "反复"
+    ]
+  }
+}

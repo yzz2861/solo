@@ -1,0 +1,12 @@
+﻿merge_id,complaint_count,merged_complaint_ids,first_complaint_time,last_complaint_time,complainant,phone,address,complaint_content,noise_type,source,risk_level,risk_level_label,risk_score,risk_reasons,trace_ids,batch_no,source_system
+MERGE北京市朝阳区阳光小区3##2##_0_3,3,TS20240601001; TS20240601002; TS20240603001,2024-06-01 08:30:00,2024-06-03 15:30:00,孙八; 李四; 张三,13800138001; 13900139002; 13400134006,北京市朝阳区阳光小区3号楼2单元,"早上8点就开始装修，电钻声音很大，影响休息
+---
+楼上装修电钻声音太吵了，老人在家受不了
+---
+又是装修的声音，连续好几天了",装修噪声,12345热线; APP,medium,中风险,7,投诉频次较高(3次); 含高风险关键词: 老人; 装修/施工类重复投诉,TRACE9C38AE91CCD3; TRACEF27D01B7E894; TRACE0F5A56562BCB,BATCHTEST002,decoration_noise_complaint
+MERGE北京市海淀区幸福里5##1##_1_2,2,TS20240601003; TS20240604001,2024-06-01 14:00:00,2024-06-04 10:00:00,王五; 吴十,13200132008; 13700137003,北京市海淀区幸福里5号楼1单元,"午休时间还在施工，电钻和敲击声不断
+---
+周末还在装修，电钻声不断，多次投诉没用",装修噪声,12345热线; 微信公众号,medium,中风险,7,重复投诉(2次); 含高风险关键词: 多次投诉; 含中风险关键词: 午休; 含中风险关键词: 周末; 装修/施工类重复投诉,TRACED9727B6661F5; TRACED633F942678D,BATCHTEST002,decoration_noise_complaint
+MERGE北京市朝阳区阳光小区5##3##_2_1,1,TS20240602001,2024-06-02 22:30:00,2024-06-02 22:30:00,赵六,13600136004,北京市朝阳区阳光小区5号楼3单元,夜间还在施工，严重扰民，家里有孕妇,装修噪声,12345热线,medium,中风险,6,含高风险关键词: 严重扰民; 含高风险关键词: 孕妇,TRACEC190449DACE3,BATCHTEST002,decoration_noise_complaint
+MERGE北京市朝阳区阳光小区5##3##_3_1,1,TS20240605001,2024-06-05 23:00:00,2024-06-05 23:00:00,郑十一,13100131009,北京市朝阳区阳光小区5号楼3单元,凌晨了还在施工，严重扰民，报警了都没用,装修噪声,110转办,medium,中风险,6,含高风险关键词: 凌晨; 含高风险关键词: 严重扰民,TRACE7C6C2A2E0612,BATCHTEST002,decoration_noise_complaint
+MERGE北京市西城区和平里8##_single_TS20240602002_1,1,TS20240602002,2024-06-02 09:00:00,2024-06-02 09:00:00,钱七,13500135005,北京市西城区和平里8号楼,早上开始装修，声音特别大，影响孩子上网课,施工噪声,12345热线,undetermined,无法判定,0,信息不足，无法判定风险等级,TRACEF66C68730C23,BATCHTEST002,decoration_noise_complaint
