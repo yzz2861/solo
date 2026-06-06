@@ -1,22 +1,30 @@
 [
   {
-    "record_id": "C001",
-    "patient_id": "P2024001",
-    "patient_name": "张某某",
-    "admission_no": "ZY20240001",
-    "exam_time": "2024-06-01 09:30:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
+    "record_id": "O001",
+    "patient_id": "P2024011",
+    "patient_name": "钱某某",
+    "admission_no": "ZY20240011",
+    "exam_time": "2024-06-04 08:30:00",
+    "risk_tags": [
+      "减速过多",
+      "胎心基线异常",
+      "重度变异减速",
+      "胎心基线过高"
+    ],
+    "risk_level": "critical",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 胎心基线异常; 胎心基线过高; 减速过多; 重度变异减速",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
     "supplement_info": {
-      "maternal_age": 28,
-      "gestational_weeks": 39.5,
-      "high_risk_factors": [],
-      "delivery_outcome": "顺产",
-      "apgar_score": 9
+      "maternal_age": 35,
+      "gestational_weeks": 41.5,
+      "high_risk_factors": [
+        "高龄产妇",
+        "妊娠糖尿病"
+      ],
+      "delivery_outcome": "剖宫产",
+      "apgar_score": 7
     },
     "validation_results": [
       {
@@ -26,7 +34,7 @@
         "risk_level": "critical",
         "message": "字段存在",
         "field_name": "record_id",
-        "actual_value": "C001"
+        "actual_value": "O001"
       },
       {
         "rule_id": "R002",
@@ -35,7 +43,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_id",
-        "actual_value": "P2024001"
+        "actual_value": "P2024011"
       },
       {
         "rule_id": "R003",
@@ -44,7 +52,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_name",
-        "actual_value": "张某某"
+        "actual_value": "钱某某"
       },
       {
         "rule_id": "R004",
@@ -53,7 +61,7 @@
         "risk_level": "medium",
         "message": "字段存在",
         "field_name": "admission_no",
-        "actual_value": "ZY20240001"
+        "actual_value": "ZY20240011"
       },
       {
         "rule_id": "R005",
@@ -62,34 +70,34 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "exam_time",
-        "actual_value": "2024-06-01 09:30:00"
+        "actual_value": "2024-06-04 08:30:00"
       },
       {
         "rule_id": "R006",
         "rule_name": "胎心基线异常",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "fhr_baseline=142.0 正常",
+        "message": "检测到胎心基线异常: fhr_baseline=172.0 (阈值: [110.0, 160.0])",
         "field_name": "fhr_baseline",
-        "actual_value": 142.0
+        "actual_value": 172.0
       },
       {
         "rule_id": "R007",
         "rule_name": "胎心基线过低",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=142.0 正常",
+        "message": "fhr_baseline=172.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 142.0
+        "actual_value": 172.0
       },
       {
         "rule_id": "R008",
         "rule_name": "胎心基线过高",
-        "passed": true,
+        "passed": false,
         "risk_level": "critical",
-        "message": "fhr_baseline=142.0 正常",
+        "message": "检测到胎心基线过高: fhr_baseline=172.0 (阈值: 160.0)",
         "field_name": "fhr_baseline",
-        "actual_value": 142.0
+        "actual_value": 172.0
       },
       {
         "rule_id": "R009",
@@ -114,18 +122,18 @@
         "rule_name": "加速不足",
         "passed": true,
         "risk_level": "medium",
-        "message": "acceleration_count=5 正常",
+        "message": "acceleration_count=2 正常",
         "field_name": "acceleration_count",
-        "actual_value": 5
+        "actual_value": 2
       },
       {
         "rule_id": "R012",
         "rule_name": "减速过多",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "deceleration_count=0 正常",
+        "message": "检测到减速过多: deceleration_count=3 (阈值: 2)",
         "field_name": "deceleration_count",
-        "actual_value": 0
+        "actual_value": 3
       },
       {
         "rule_id": "R013",
@@ -139,11 +147,11 @@
       {
         "rule_id": "R014",
         "rule_name": "重度变异减速",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
+        "message": "检测到重度变异减速: variable_deceleration=True",
         "field_name": "variable_deceleration",
-        "actual_value": false
+        "actual_value": true
       },
       {
         "rule_id": "R015",
@@ -168,39 +176,51 @@
         "rule_name": "Apgar评分低",
         "passed": true,
         "risk_level": "high",
-        "message": "apgar_score=9 正常",
+        "message": "apgar_score=7 正常",
         "field_name": "apgar_score",
-        "actual_value": 9
+        "actual_value": 7
       },
       {
         "rule_id": "R018",
         "rule_name": "孕周异常",
         "passed": true,
         "risk_level": "medium",
-        "message": "gestational_weeks=39.5 正常",
+        "message": "gestational_weeks=41.5 正常",
         "field_name": "gestational_weeks",
-        "actual_value": 39.5
+        "actual_value": 41.5
       }
     ]
   },
   {
-    "record_id": "C002",
-    "patient_id": "P2024002",
-    "patient_name": "王某某",
-    "admission_no": "ZY20240002",
-    "exam_time": "2024-06-01 10:15:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
+    "record_id": "O002",
+    "patient_id": "P2024012",
+    "patient_name": "冯某某",
+    "admission_no": "ZY20240012",
+    "exam_time": "2024-06-04 09:45:00",
+    "risk_tags": [
+      "胎心基线异常",
+      "加速不足",
+      "晚期减速",
+      "重度变异减速",
+      "Apgar评分低",
+      "减速过多",
+      "孕周异常",
+      "胎心基线过低"
+    ],
+    "risk_level": "critical",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 胎心基线异常; 胎心基线过低; 减速过多; 晚期减速; 重度变异减速; Apgar评分低",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
     "supplement_info": {
-      "maternal_age": 31,
-      "gestational_weeks": 40.2,
-      "high_risk_factors": [],
-      "delivery_outcome": "顺产",
-      "apgar_score": 10
+      "maternal_age": 38,
+      "gestational_weeks": 35.2,
+      "high_risk_factors": [
+        "高龄产妇",
+        "妊娠期高血压"
+      ],
+      "delivery_outcome": "紧急剖宫产",
+      "apgar_score": 5
     },
     "validation_results": [
       {
@@ -210,7 +230,7 @@
         "risk_level": "critical",
         "message": "字段存在",
         "field_name": "record_id",
-        "actual_value": "C002"
+        "actual_value": "O002"
       },
       {
         "rule_id": "R002",
@@ -219,7 +239,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_id",
-        "actual_value": "P2024002"
+        "actual_value": "P2024012"
       },
       {
         "rule_id": "R003",
@@ -228,7 +248,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_name",
-        "actual_value": "王某某"
+        "actual_value": "冯某某"
       },
       {
         "rule_id": "R004",
@@ -237,7 +257,7 @@
         "risk_level": "medium",
         "message": "字段存在",
         "field_name": "admission_no",
-        "actual_value": "ZY20240002"
+        "actual_value": "ZY20240012"
       },
       {
         "rule_id": "R005",
@@ -246,88 +266,88 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "exam_time",
-        "actual_value": "2024-06-01 10:15:00"
+        "actual_value": "2024-06-04 09:45:00"
       },
       {
         "rule_id": "R006",
         "rule_name": "胎心基线异常",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "fhr_baseline=135.0 正常",
+        "message": "检测到胎心基线异常: fhr_baseline=105.0 (阈值: [110.0, 160.0])",
         "field_name": "fhr_baseline",
-        "actual_value": 135.0
+        "actual_value": 105.0
       },
       {
         "rule_id": "R007",
         "rule_name": "胎心基线过低",
-        "passed": true,
+        "passed": false,
         "risk_level": "critical",
-        "message": "fhr_baseline=135.0 正常",
+        "message": "检测到胎心基线过低: fhr_baseline=105.0 (阈值: 110.0)",
         "field_name": "fhr_baseline",
-        "actual_value": 135.0
+        "actual_value": 105.0
       },
       {
         "rule_id": "R008",
         "rule_name": "胎心基线过高",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=135.0 正常",
+        "message": "fhr_baseline=105.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 135.0
+        "actual_value": 105.0
       },
       {
         "rule_id": "R009",
         "rule_name": "胎心变异类型无效",
         "passed": true,
         "risk_level": "medium",
-        "message": "fhr_variability=中等 正常",
+        "message": "fhr_variability=减少 正常",
         "field_name": "fhr_variability",
-        "actual_value": "中等"
+        "actual_value": "减少"
       },
       {
         "rule_id": "R010",
         "rule_name": "变异消失",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_variability=中等 正常",
+        "message": "fhr_variability=减少 正常",
         "field_name": "fhr_variability",
-        "actual_value": "中等"
+        "actual_value": "减少"
       },
       {
         "rule_id": "R011",
         "rule_name": "加速不足",
-        "passed": true,
+        "passed": false,
         "risk_level": "medium",
-        "message": "acceleration_count=4 正常",
+        "message": "检测到加速不足: acceleration_count=1 (阈值: 2)",
         "field_name": "acceleration_count",
+        "actual_value": 1
+      },
+      {
+        "rule_id": "R012",
+        "rule_name": "减速过多",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到减速过多: deceleration_count=4 (阈值: 2)",
+        "field_name": "deceleration_count",
         "actual_value": 4
       },
       {
-        "rule_id": "R012",
-        "rule_name": "减速过多",
-        "passed": true,
-        "risk_level": "high",
-        "message": "deceleration_count=0 正常",
-        "field_name": "deceleration_count",
-        "actual_value": 0
-      },
-      {
         "rule_id": "R013",
         "rule_name": "晚期减速",
-        "passed": true,
+        "passed": false,
         "risk_level": "critical",
-        "message": "late_deceleration=False 正常",
+        "message": "检测到晚期减速: late_deceleration=True",
         "field_name": "late_deceleration",
-        "actual_value": false
+        "actual_value": true
       },
       {
         "rule_id": "R014",
         "rule_name": "重度变异减速",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
+        "message": "检测到重度变异减速: variable_deceleration=True",
         "field_name": "variable_deceleration",
-        "actual_value": false
+        "actual_value": true
       },
       {
         "rule_id": "R015",
@@ -350,38 +370,234 @@
       {
         "rule_id": "R017",
         "rule_name": "Apgar评分低",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "apgar_score=10 正常",
+        "message": "检测到Apgar评分低: apgar_score=5 (阈值: 7)",
         "field_name": "apgar_score",
-        "actual_value": 10
+        "actual_value": 5
       },
       {
         "rule_id": "R018",
         "rule_name": "孕周异常",
-        "passed": true,
+        "passed": false,
         "risk_level": "medium",
-        "message": "gestational_weeks=40.2 正常",
+        "message": "检测到孕周异常: gestational_weeks=35.2 (阈值: [37.0, 42.0])",
         "field_name": "gestational_weeks",
-        "actual_value": 40.2
+        "actual_value": 35.2
       }
     ]
   },
   {
-    "record_id": "C003",
-    "patient_id": "P2024003",
-    "patient_name": "李某某",
-    "admission_no": "ZY20240003",
-    "exam_time": "2024-06-01 11:00:00",
+    "record_id": "O003",
+    "patient_id": "P2024013",
+    "patient_name": "陈某某",
+    "admission_no": "ZY20240013",
+    "exam_time": "2024-06-04 11:15:00",
+    "risk_tags": [
+      "胎心基线异常",
+      "加速不足",
+      "晚期减速",
+      "重度变异减速",
+      "Apgar评分低",
+      "减速过多",
+      "胎心基线过高",
+      "孕周异常"
+    ],
+    "risk_level": "critical",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 胎心基线异常; 胎心基线过高; 减速过多; 晚期减速; 重度变异减速; Apgar评分低",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
+    "supplement_info": {
+      "maternal_age": 42,
+      "gestational_weeks": 33.0,
+      "high_risk_factors": [
+        "高龄产妇",
+        "前置胎盘"
+      ],
+      "delivery_outcome": "紧急剖宫产",
+      "apgar_score": 3
+    },
+    "validation_results": [
+      {
+        "rule_id": "R001",
+        "rule_name": "记录ID缺失",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "字段存在",
+        "field_name": "record_id",
+        "actual_value": "O003"
+      },
+      {
+        "rule_id": "R002",
+        "rule_name": "患者ID缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_id",
+        "actual_value": "P2024013"
+      },
+      {
+        "rule_id": "R003",
+        "rule_name": "患者姓名缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_name",
+        "actual_value": "陈某某"
+      },
+      {
+        "rule_id": "R004",
+        "rule_name": "住院号缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "字段存在",
+        "field_name": "admission_no",
+        "actual_value": "ZY20240013"
+      },
+      {
+        "rule_id": "R005",
+        "rule_name": "检查时间缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "exam_time",
+        "actual_value": "2024-06-04 11:15:00"
+      },
+      {
+        "rule_id": "R006",
+        "rule_name": "胎心基线异常",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到胎心基线异常: fhr_baseline=168.0 (阈值: [110.0, 160.0])",
+        "field_name": "fhr_baseline",
+        "actual_value": 168.0
+      },
+      {
+        "rule_id": "R007",
+        "rule_name": "胎心基线过低",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "fhr_baseline=168.0 正常",
+        "field_name": "fhr_baseline",
+        "actual_value": 168.0
+      },
+      {
+        "rule_id": "R008",
+        "rule_name": "胎心基线过高",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到胎心基线过高: fhr_baseline=168.0 (阈值: 160.0)",
+        "field_name": "fhr_baseline",
+        "actual_value": 168.0
+      },
+      {
+        "rule_id": "R009",
+        "rule_name": "胎心变异类型无效",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "fhr_variability=减少 正常",
+        "field_name": "fhr_variability",
+        "actual_value": "减少"
+      },
+      {
+        "rule_id": "R010",
+        "rule_name": "变异消失",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "fhr_variability=减少 正常",
+        "field_name": "fhr_variability",
+        "actual_value": "减少"
+      },
+      {
+        "rule_id": "R011",
+        "rule_name": "加速不足",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到加速不足: acceleration_count=0 (阈值: 2)",
+        "field_name": "acceleration_count",
+        "actual_value": 0
+      },
+      {
+        "rule_id": "R012",
+        "rule_name": "减速过多",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到减速过多: deceleration_count=5 (阈值: 2)",
+        "field_name": "deceleration_count",
+        "actual_value": 5
+      },
+      {
+        "rule_id": "R013",
+        "rule_name": "晚期减速",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到晚期减速: late_deceleration=True",
+        "field_name": "late_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R014",
+        "rule_name": "重度变异减速",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到重度变异减速: variable_deceleration=True",
+        "field_name": "variable_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R015",
+        "rule_name": "监护时长不足",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "duration_minutes=30.0 正常",
+        "field_name": "duration_minutes",
+        "actual_value": 30.0
+      },
+      {
+        "rule_id": "R016",
+        "rule_name": "补充表缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "has_supplement=True 正常",
+        "field_name": "has_supplement",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R017",
+        "rule_name": "Apgar评分低",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到Apgar评分低: apgar_score=3 (阈值: 7)",
+        "field_name": "apgar_score",
+        "actual_value": 3
+      },
+      {
+        "rule_id": "R018",
+        "rule_name": "孕周异常",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到孕周异常: gestational_weeks=33.0 (阈值: [37.0, 42.0])",
+        "field_name": "gestational_weeks",
+        "actual_value": 33.0
+      }
+    ]
+  },
+  {
+    "record_id": "O004",
+    "patient_id": "P2024014",
+    "patient_name": "褚某某",
+    "admission_no": "ZY20240014",
+    "exam_time": "2024-06-04 14:00:00",
     "risk_tags": [],
     "risk_level": "normal",
     "needs_review": false,
     "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
     "supplement_info": {
-      "maternal_age": 27,
-      "gestational_weeks": 38.3,
+      "maternal_age": 29,
+      "gestational_weeks": 40.0,
       "high_risk_factors": [],
       "delivery_outcome": "顺产",
       "apgar_score": 9
@@ -394,7 +610,7 @@
         "risk_level": "critical",
         "message": "字段存在",
         "field_name": "record_id",
-        "actual_value": "C003"
+        "actual_value": "O004"
       },
       {
         "rule_id": "R002",
@@ -403,7 +619,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_id",
-        "actual_value": "P2024003"
+        "actual_value": "P2024014"
       },
       {
         "rule_id": "R003",
@@ -412,7 +628,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_name",
-        "actual_value": "李某某"
+        "actual_value": "褚某某"
       },
       {
         "rule_id": "R004",
@@ -421,7 +637,7 @@
         "risk_level": "medium",
         "message": "字段存在",
         "field_name": "admission_no",
-        "actual_value": "ZY20240003"
+        "actual_value": "ZY20240014"
       },
       {
         "rule_id": "R005",
@@ -430,34 +646,34 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "exam_time",
-        "actual_value": "2024-06-01 11:00:00"
+        "actual_value": "2024-06-04 14:00:00"
       },
       {
         "rule_id": "R006",
         "rule_name": "胎心基线异常",
         "passed": true,
         "risk_level": "high",
-        "message": "fhr_baseline=148.0 正常",
+        "message": "fhr_baseline=158.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 148.0
+        "actual_value": 158.0
       },
       {
         "rule_id": "R007",
         "rule_name": "胎心基线过低",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=148.0 正常",
+        "message": "fhr_baseline=158.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 148.0
+        "actual_value": 158.0
       },
       {
         "rule_id": "R008",
         "rule_name": "胎心基线过高",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=148.0 正常",
+        "message": "fhr_baseline=158.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 148.0
+        "actual_value": 158.0
       },
       {
         "rule_id": "R009",
@@ -482,9 +698,9 @@
         "rule_name": "加速不足",
         "passed": true,
         "risk_level": "medium",
-        "message": "acceleration_count=6 正常",
+        "message": "acceleration_count=3 正常",
         "field_name": "acceleration_count",
-        "actual_value": 6
+        "actual_value": 3
       },
       {
         "rule_id": "R012",
@@ -545,29 +761,226 @@
         "rule_name": "孕周异常",
         "passed": true,
         "risk_level": "medium",
-        "message": "gestational_weeks=38.3 正常",
+        "message": "gestational_weeks=40.0 正常",
         "field_name": "gestational_weeks",
-        "actual_value": 38.3
+        "actual_value": 40.0
       }
     ]
   },
   {
-    "record_id": "C004",
-    "patient_id": "P2024004",
-    "patient_name": "赵某某",
-    "admission_no": "ZY20240004",
-    "exam_time": "2024-06-02 08:45:00",
+    "record_id": "O005",
+    "patient_id": "P2024015",
+    "patient_name": "卫某某",
+    "admission_no": "ZY20240015",
+    "exam_time": "2024-06-04 15:30:00",
+    "risk_tags": [
+      "胎心基线异常",
+      "变异消失",
+      "加速不足",
+      "晚期减速",
+      "重度变异减速",
+      "Apgar评分低",
+      "减速过多",
+      "孕周异常",
+      "胎心基线过低"
+    ],
+    "risk_level": "critical",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 胎心基线异常; 胎心基线过低; 变异消失; 减速过多; 晚期减速; 重度变异减速; Apgar评分低",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
+    "supplement_info": {
+      "maternal_age": 36,
+      "gestational_weeks": 36.8,
+      "high_risk_factors": [
+        "高龄产妇",
+        "胎膜早破"
+      ],
+      "delivery_outcome": "紧急剖宫产",
+      "apgar_score": 4
+    },
+    "validation_results": [
+      {
+        "rule_id": "R001",
+        "rule_name": "记录ID缺失",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "字段存在",
+        "field_name": "record_id",
+        "actual_value": "O005"
+      },
+      {
+        "rule_id": "R002",
+        "rule_name": "患者ID缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_id",
+        "actual_value": "P2024015"
+      },
+      {
+        "rule_id": "R003",
+        "rule_name": "患者姓名缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_name",
+        "actual_value": "卫某某"
+      },
+      {
+        "rule_id": "R004",
+        "rule_name": "住院号缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "字段存在",
+        "field_name": "admission_no",
+        "actual_value": "ZY20240015"
+      },
+      {
+        "rule_id": "R005",
+        "rule_name": "检查时间缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "exam_time",
+        "actual_value": "2024-06-04 15:30:00"
+      },
+      {
+        "rule_id": "R006",
+        "rule_name": "胎心基线异常",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到胎心基线异常: fhr_baseline=100.0 (阈值: [110.0, 160.0])",
+        "field_name": "fhr_baseline",
+        "actual_value": 100.0
+      },
+      {
+        "rule_id": "R007",
+        "rule_name": "胎心基线过低",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到胎心基线过低: fhr_baseline=100.0 (阈值: 110.0)",
+        "field_name": "fhr_baseline",
+        "actual_value": 100.0
+      },
+      {
+        "rule_id": "R008",
+        "rule_name": "胎心基线过高",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "fhr_baseline=100.0 正常",
+        "field_name": "fhr_baseline",
+        "actual_value": 100.0
+      },
+      {
+        "rule_id": "R009",
+        "rule_name": "胎心变异类型无效",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "fhr_variability=消失 正常",
+        "field_name": "fhr_variability",
+        "actual_value": "消失"
+      },
+      {
+        "rule_id": "R010",
+        "rule_name": "变异消失",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到变异消失: fhr_variability=消失",
+        "field_name": "fhr_variability",
+        "actual_value": "消失"
+      },
+      {
+        "rule_id": "R011",
+        "rule_name": "加速不足",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到加速不足: acceleration_count=0 (阈值: 2)",
+        "field_name": "acceleration_count",
+        "actual_value": 0
+      },
+      {
+        "rule_id": "R012",
+        "rule_name": "减速过多",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到减速过多: deceleration_count=6 (阈值: 2)",
+        "field_name": "deceleration_count",
+        "actual_value": 6
+      },
+      {
+        "rule_id": "R013",
+        "rule_name": "晚期减速",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到晚期减速: late_deceleration=True",
+        "field_name": "late_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R014",
+        "rule_name": "重度变异减速",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到重度变异减速: variable_deceleration=True",
+        "field_name": "variable_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R015",
+        "rule_name": "监护时长不足",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "duration_minutes=25.0 正常",
+        "field_name": "duration_minutes",
+        "actual_value": 25.0
+      },
+      {
+        "rule_id": "R016",
+        "rule_name": "补充表缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "has_supplement=True 正常",
+        "field_name": "has_supplement",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R017",
+        "rule_name": "Apgar评分低",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到Apgar评分低: apgar_score=4 (阈值: 7)",
+        "field_name": "apgar_score",
+        "actual_value": 4
+      },
+      {
+        "rule_id": "R018",
+        "rule_name": "孕周异常",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到孕周异常: gestational_weeks=36.8 (阈值: [37.0, 42.0])",
+        "field_name": "gestational_weeks",
+        "actual_value": 36.8
+      }
+    ]
+  },
+  {
+    "record_id": "O006",
+    "patient_id": "P2024016",
+    "patient_name": "蒋某某",
+    "admission_no": "ZY20240016",
+    "exam_time": "2024-06-05 09:00:00",
     "risk_tags": [],
     "risk_level": "normal",
     "needs_review": false,
     "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
     "supplement_info": {
-      "maternal_age": 33,
-      "gestational_weeks": 41.0,
+      "maternal_age": 31,
+      "gestational_weeks": 39.3,
       "high_risk_factors": [],
-      "delivery_outcome": "剖宫产",
+      "delivery_outcome": "顺产",
       "apgar_score": 8
     },
     "validation_results": [
@@ -578,7 +991,7 @@
         "risk_level": "critical",
         "message": "字段存在",
         "field_name": "record_id",
-        "actual_value": "C004"
+        "actual_value": "O006"
       },
       {
         "rule_id": "R002",
@@ -587,7 +1000,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_id",
-        "actual_value": "P2024004"
+        "actual_value": "P2024016"
       },
       {
         "rule_id": "R003",
@@ -596,7 +1009,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_name",
-        "actual_value": "赵某某"
+        "actual_value": "蒋某某"
       },
       {
         "rule_id": "R004",
@@ -605,7 +1018,7 @@
         "risk_level": "medium",
         "message": "字段存在",
         "field_name": "admission_no",
-        "actual_value": "ZY20240004"
+        "actual_value": "ZY20240016"
       },
       {
         "rule_id": "R005",
@@ -614,34 +1027,34 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "exam_time",
-        "actual_value": "2024-06-02 08:45:00"
+        "actual_value": "2024-06-05 09:00:00"
       },
       {
         "rule_id": "R006",
         "rule_name": "胎心基线异常",
         "passed": true,
         "risk_level": "high",
-        "message": "fhr_baseline=138.0 正常",
+        "message": "fhr_baseline=145.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 138.0
+        "actual_value": 145.0
       },
       {
         "rule_id": "R007",
         "rule_name": "胎心基线过低",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=138.0 正常",
+        "message": "fhr_baseline=145.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 138.0
+        "actual_value": 145.0
       },
       {
         "rule_id": "R008",
         "rule_name": "胎心基线过高",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=138.0 正常",
+        "message": "fhr_baseline=145.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 138.0
+        "actual_value": 145.0
       },
       {
         "rule_id": "R009",
@@ -666,18 +1079,18 @@
         "rule_name": "加速不足",
         "passed": true,
         "risk_level": "medium",
-        "message": "acceleration_count=3 正常",
+        "message": "acceleration_count=2 正常",
         "field_name": "acceleration_count",
-        "actual_value": 3
+        "actual_value": 2
       },
       {
         "rule_id": "R012",
         "rule_name": "减速过多",
         "passed": true,
         "risk_level": "high",
-        "message": "deceleration_count=0 正常",
+        "message": "deceleration_count=2 正常",
         "field_name": "deceleration_count",
-        "actual_value": 0
+        "actual_value": 2
       },
       {
         "rule_id": "R013",
@@ -729,581 +1142,33 @@
         "rule_name": "孕周异常",
         "passed": true,
         "risk_level": "medium",
-        "message": "gestational_weeks=41.0 正常",
+        "message": "gestational_weeks=39.3 正常",
         "field_name": "gestational_weeks",
-        "actual_value": 41.0
+        "actual_value": 39.3
       }
     ]
   },
   {
-    "record_id": "C005",
-    "patient_id": "P2024005",
-    "patient_name": "孙某某",
-    "admission_no": "ZY20240005",
-    "exam_time": "2024-06-02 14:20:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
+    "record_id": "O007",
+    "patient_id": "P2024017",
+    "patient_name": "沈某某",
+    "admission_no": "ZY20240017",
+    "exam_time": "2024-06-05 10:30:00",
+    "risk_tags": [
+      "减速过多",
+      "加速不足",
+      "重度变异减速"
+    ],
+    "risk_level": "high",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 减速过多; 重度变异减速",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
     "supplement_info": {
-      "maternal_age": 26,
-      "gestational_weeks": 39.1,
-      "high_risk_factors": [],
-      "delivery_outcome": "顺产",
-      "apgar_score": 10
-    },
-    "validation_results": [
-      {
-        "rule_id": "R001",
-        "rule_name": "记录ID缺失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "字段存在",
-        "field_name": "record_id",
-        "actual_value": "C005"
-      },
-      {
-        "rule_id": "R002",
-        "rule_name": "患者ID缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_id",
-        "actual_value": "P2024005"
-      },
-      {
-        "rule_id": "R003",
-        "rule_name": "患者姓名缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_name",
-        "actual_value": "孙某某"
-      },
-      {
-        "rule_id": "R004",
-        "rule_name": "住院号缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "字段存在",
-        "field_name": "admission_no",
-        "actual_value": "ZY20240005"
-      },
-      {
-        "rule_id": "R005",
-        "rule_name": "检查时间缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "exam_time",
-        "actual_value": "2024-06-02 14:20:00"
-      },
-      {
-        "rule_id": "R006",
-        "rule_name": "胎心基线异常",
-        "passed": true,
-        "risk_level": "high",
-        "message": "fhr_baseline=145.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 145.0
-      },
-      {
-        "rule_id": "R007",
-        "rule_name": "胎心基线过低",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=145.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 145.0
-      },
-      {
-        "rule_id": "R008",
-        "rule_name": "胎心基线过高",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=145.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 145.0
-      },
-      {
-        "rule_id": "R009",
-        "rule_name": "胎心变异类型无效",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "fhr_variability=增加 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "增加"
-      },
-      {
-        "rule_id": "R010",
-        "rule_name": "变异消失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_variability=增加 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "增加"
-      },
-      {
-        "rule_id": "R011",
-        "rule_name": "加速不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "acceleration_count=7 正常",
-        "field_name": "acceleration_count",
-        "actual_value": 7
-      },
-      {
-        "rule_id": "R012",
-        "rule_name": "减速过多",
-        "passed": true,
-        "risk_level": "high",
-        "message": "deceleration_count=0 正常",
-        "field_name": "deceleration_count",
-        "actual_value": 0
-      },
-      {
-        "rule_id": "R013",
-        "rule_name": "晚期减速",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "late_deceleration=False 正常",
-        "field_name": "late_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R014",
-        "rule_name": "重度变异减速",
-        "passed": true,
-        "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
-        "field_name": "variable_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R015",
-        "rule_name": "监护时长不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "duration_minutes=30.0 正常",
-        "field_name": "duration_minutes",
-        "actual_value": 30.0
-      },
-      {
-        "rule_id": "R016",
-        "rule_name": "补充表缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "has_supplement=True 正常",
-        "field_name": "has_supplement",
-        "actual_value": true
-      },
-      {
-        "rule_id": "R017",
-        "rule_name": "Apgar评分低",
-        "passed": true,
-        "risk_level": "high",
-        "message": "apgar_score=10 正常",
-        "field_name": "apgar_score",
-        "actual_value": 10
-      },
-      {
-        "rule_id": "R018",
-        "rule_name": "孕周异常",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "gestational_weeks=39.1 正常",
-        "field_name": "gestational_weeks",
-        "actual_value": 39.1
-      }
-    ]
-  },
-  {
-    "record_id": "C006",
-    "patient_id": "P2024006",
-    "patient_name": "周某某",
-    "admission_no": "ZY20240006",
-    "exam_time": "2024-06-02 16:00:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
-    "supplement_info": {
-      "maternal_age": 29,
-      "gestational_weeks": 40.5,
-      "high_risk_factors": [],
-      "delivery_outcome": "顺产",
-      "apgar_score": 9
-    },
-    "validation_results": [
-      {
-        "rule_id": "R001",
-        "rule_name": "记录ID缺失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "字段存在",
-        "field_name": "record_id",
-        "actual_value": "C006"
-      },
-      {
-        "rule_id": "R002",
-        "rule_name": "患者ID缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_id",
-        "actual_value": "P2024006"
-      },
-      {
-        "rule_id": "R003",
-        "rule_name": "患者姓名缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_name",
-        "actual_value": "周某某"
-      },
-      {
-        "rule_id": "R004",
-        "rule_name": "住院号缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "字段存在",
-        "field_name": "admission_no",
-        "actual_value": "ZY20240006"
-      },
-      {
-        "rule_id": "R005",
-        "rule_name": "检查时间缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "exam_time",
-        "actual_value": "2024-06-02 16:00:00"
-      },
-      {
-        "rule_id": "R006",
-        "rule_name": "胎心基线异常",
-        "passed": true,
-        "risk_level": "high",
-        "message": "fhr_baseline=132.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 132.0
-      },
-      {
-        "rule_id": "R007",
-        "rule_name": "胎心基线过低",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=132.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 132.0
-      },
-      {
-        "rule_id": "R008",
-        "rule_name": "胎心基线过高",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=132.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 132.0
-      },
-      {
-        "rule_id": "R009",
-        "rule_name": "胎心变异类型无效",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "fhr_variability=中等 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "中等"
-      },
-      {
-        "rule_id": "R010",
-        "rule_name": "变异消失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_variability=中等 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "中等"
-      },
-      {
-        "rule_id": "R011",
-        "rule_name": "加速不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "acceleration_count=4 正常",
-        "field_name": "acceleration_count",
-        "actual_value": 4
-      },
-      {
-        "rule_id": "R012",
-        "rule_name": "减速过多",
-        "passed": true,
-        "risk_level": "high",
-        "message": "deceleration_count=1 正常",
-        "field_name": "deceleration_count",
-        "actual_value": 1
-      },
-      {
-        "rule_id": "R013",
-        "rule_name": "晚期减速",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "late_deceleration=False 正常",
-        "field_name": "late_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R014",
-        "rule_name": "重度变异减速",
-        "passed": true,
-        "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
-        "field_name": "variable_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R015",
-        "rule_name": "监护时长不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "duration_minutes=30.0 正常",
-        "field_name": "duration_minutes",
-        "actual_value": 30.0
-      },
-      {
-        "rule_id": "R016",
-        "rule_name": "补充表缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "has_supplement=True 正常",
-        "field_name": "has_supplement",
-        "actual_value": true
-      },
-      {
-        "rule_id": "R017",
-        "rule_name": "Apgar评分低",
-        "passed": true,
-        "risk_level": "high",
-        "message": "apgar_score=9 正常",
-        "field_name": "apgar_score",
-        "actual_value": 9
-      },
-      {
-        "rule_id": "R018",
-        "rule_name": "孕周异常",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "gestational_weeks=40.5 正常",
-        "field_name": "gestational_weeks",
-        "actual_value": 40.5
-      }
-    ]
-  },
-  {
-    "record_id": "C007",
-    "patient_id": "P2024007",
-    "patient_name": "吴某某",
-    "admission_no": "ZY20240007",
-    "exam_time": "2024-06-03 09:00:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
-    "supplement_info": {
-      "maternal_age": 30,
-      "gestational_weeks": 38.7,
-      "high_risk_factors": [],
-      "delivery_outcome": "顺产",
-      "apgar_score": 9
-    },
-    "validation_results": [
-      {
-        "rule_id": "R001",
-        "rule_name": "记录ID缺失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "字段存在",
-        "field_name": "record_id",
-        "actual_value": "C007"
-      },
-      {
-        "rule_id": "R002",
-        "rule_name": "患者ID缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_id",
-        "actual_value": "P2024007"
-      },
-      {
-        "rule_id": "R003",
-        "rule_name": "患者姓名缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "patient_name",
-        "actual_value": "吴某某"
-      },
-      {
-        "rule_id": "R004",
-        "rule_name": "住院号缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "字段存在",
-        "field_name": "admission_no",
-        "actual_value": "ZY20240007"
-      },
-      {
-        "rule_id": "R005",
-        "rule_name": "检查时间缺失",
-        "passed": true,
-        "risk_level": "high",
-        "message": "字段存在",
-        "field_name": "exam_time",
-        "actual_value": "2024-06-03 09:00:00"
-      },
-      {
-        "rule_id": "R006",
-        "rule_name": "胎心基线异常",
-        "passed": true,
-        "risk_level": "high",
-        "message": "fhr_baseline=140.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 140.0
-      },
-      {
-        "rule_id": "R007",
-        "rule_name": "胎心基线过低",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=140.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 140.0
-      },
-      {
-        "rule_id": "R008",
-        "rule_name": "胎心基线过高",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_baseline=140.0 正常",
-        "field_name": "fhr_baseline",
-        "actual_value": 140.0
-      },
-      {
-        "rule_id": "R009",
-        "rule_name": "胎心变异类型无效",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "fhr_variability=中等 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "中等"
-      },
-      {
-        "rule_id": "R010",
-        "rule_name": "变异消失",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "fhr_variability=中等 正常",
-        "field_name": "fhr_variability",
-        "actual_value": "中等"
-      },
-      {
-        "rule_id": "R011",
-        "rule_name": "加速不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "acceleration_count=5 正常",
-        "field_name": "acceleration_count",
-        "actual_value": 5
-      },
-      {
-        "rule_id": "R012",
-        "rule_name": "减速过多",
-        "passed": true,
-        "risk_level": "high",
-        "message": "deceleration_count=0 正常",
-        "field_name": "deceleration_count",
-        "actual_value": 0
-      },
-      {
-        "rule_id": "R013",
-        "rule_name": "晚期减速",
-        "passed": true,
-        "risk_level": "critical",
-        "message": "late_deceleration=False 正常",
-        "field_name": "late_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R014",
-        "rule_name": "重度变异减速",
-        "passed": true,
-        "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
-        "field_name": "variable_deceleration",
-        "actual_value": false
-      },
-      {
-        "rule_id": "R015",
-        "rule_name": "监护时长不足",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "duration_minutes=30.0 正常",
-        "field_name": "duration_minutes",
-        "actual_value": 30.0
-      },
-      {
-        "rule_id": "R016",
-        "rule_name": "补充表缺失",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "has_supplement=True 正常",
-        "field_name": "has_supplement",
-        "actual_value": true
-      },
-      {
-        "rule_id": "R017",
-        "rule_name": "Apgar评分低",
-        "passed": true,
-        "risk_level": "high",
-        "message": "apgar_score=9 正常",
-        "field_name": "apgar_score",
-        "actual_value": 9
-      },
-      {
-        "rule_id": "R018",
-        "rule_name": "孕周异常",
-        "passed": true,
-        "risk_level": "medium",
-        "message": "gestational_weeks=38.7 正常",
-        "field_name": "gestational_weeks",
-        "actual_value": 38.7
-      }
-    ]
-  },
-  {
-    "record_id": "C008",
-    "patient_id": "P2024008",
-    "patient_name": "郑某某",
-    "admission_no": "ZY20240008",
-    "exam_time": "2024-06-03 10:30:00",
-    "risk_tags": [],
-    "risk_level": "normal",
-    "needs_review": false,
-    "review_reason": "",
-    "batch_id": "FHR-20260606140626",
-    "source_identifier": "合规样例",
-    "supplement_info": {
-      "maternal_age": 32,
-      "gestational_weeks": 39.8,
+      "maternal_age": 27,
+      "gestational_weeks": 37.5,
       "high_risk_factors": [
-        "高龄产妇"
+        "脐带绕颈"
       ],
       "delivery_outcome": "剖宫产",
       "apgar_score": 8
@@ -1316,7 +1181,7 @@
         "risk_level": "critical",
         "message": "字段存在",
         "field_name": "record_id",
-        "actual_value": "C008"
+        "actual_value": "O007"
       },
       {
         "rule_id": "R002",
@@ -1325,7 +1190,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_id",
-        "actual_value": "P2024008"
+        "actual_value": "P2024017"
       },
       {
         "rule_id": "R003",
@@ -1334,7 +1199,7 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "patient_name",
-        "actual_value": "郑某某"
+        "actual_value": "沈某某"
       },
       {
         "rule_id": "R004",
@@ -1343,7 +1208,7 @@
         "risk_level": "medium",
         "message": "字段存在",
         "field_name": "admission_no",
-        "actual_value": "ZY20240008"
+        "actual_value": "ZY20240017"
       },
       {
         "rule_id": "R005",
@@ -1352,70 +1217,70 @@
         "risk_level": "high",
         "message": "字段存在",
         "field_name": "exam_time",
-        "actual_value": "2024-06-03 10:30:00"
+        "actual_value": "2024-06-05 10:30:00"
       },
       {
         "rule_id": "R006",
         "rule_name": "胎心基线异常",
         "passed": true,
         "risk_level": "high",
-        "message": "fhr_baseline=150.0 正常",
+        "message": "fhr_baseline=125.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 150.0
+        "actual_value": 125.0
       },
       {
         "rule_id": "R007",
         "rule_name": "胎心基线过低",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=150.0 正常",
+        "message": "fhr_baseline=125.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 150.0
+        "actual_value": 125.0
       },
       {
         "rule_id": "R008",
         "rule_name": "胎心基线过高",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_baseline=150.0 正常",
+        "message": "fhr_baseline=125.0 正常",
         "field_name": "fhr_baseline",
-        "actual_value": 150.0
+        "actual_value": 125.0
       },
       {
         "rule_id": "R009",
         "rule_name": "胎心变异类型无效",
         "passed": true,
         "risk_level": "medium",
-        "message": "fhr_variability=中等 正常",
+        "message": "fhr_variability=减少 正常",
         "field_name": "fhr_variability",
-        "actual_value": "中等"
+        "actual_value": "减少"
       },
       {
         "rule_id": "R010",
         "rule_name": "变异消失",
         "passed": true,
         "risk_level": "critical",
-        "message": "fhr_variability=中等 正常",
+        "message": "fhr_variability=减少 正常",
         "field_name": "fhr_variability",
-        "actual_value": "中等"
+        "actual_value": "减少"
       },
       {
         "rule_id": "R011",
         "rule_name": "加速不足",
-        "passed": true,
+        "passed": false,
         "risk_level": "medium",
-        "message": "acceleration_count=3 正常",
+        "message": "检测到加速不足: acceleration_count=1 (阈值: 2)",
         "field_name": "acceleration_count",
-        "actual_value": 3
+        "actual_value": 1
       },
       {
         "rule_id": "R012",
         "rule_name": "减速过多",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "deceleration_count=0 正常",
+        "message": "检测到减速过多: deceleration_count=3 (阈值: 2)",
         "field_name": "deceleration_count",
-        "actual_value": 0
+        "actual_value": 3
       },
       {
         "rule_id": "R013",
@@ -1429,20 +1294,20 @@
       {
         "rule_id": "R014",
         "rule_name": "重度变异减速",
-        "passed": true,
+        "passed": false,
         "risk_level": "high",
-        "message": "variable_deceleration=False 正常",
+        "message": "检测到重度变异减速: variable_deceleration=True",
         "field_name": "variable_deceleration",
-        "actual_value": false
+        "actual_value": true
       },
       {
         "rule_id": "R015",
         "rule_name": "监护时长不足",
         "passed": true,
         "risk_level": "medium",
-        "message": "duration_minutes=30.0 正常",
+        "message": "duration_minutes=20.0 正常",
         "field_name": "duration_minutes",
-        "actual_value": 30.0
+        "actual_value": 20.0
       },
       {
         "rule_id": "R016",
@@ -1467,9 +1332,207 @@
         "rule_name": "孕周异常",
         "passed": true,
         "risk_level": "medium",
-        "message": "gestational_weeks=39.8 正常",
+        "message": "gestational_weeks=37.5 正常",
         "field_name": "gestational_weeks",
-        "actual_value": 39.8
+        "actual_value": 37.5
+      }
+    ]
+  },
+  {
+    "record_id": "O008",
+    "patient_id": "P2024018",
+    "patient_name": "韩某某",
+    "admission_no": "ZY20240018",
+    "exam_time": "2024-06-05 14:20:00",
+    "risk_tags": [
+      "胎心基线异常",
+      "变异消失",
+      "加速不足",
+      "晚期减速",
+      "重度变异减速",
+      "Apgar评分低",
+      "减速过多",
+      "胎心基线过高",
+      "孕周异常"
+    ],
+    "risk_level": "critical",
+    "needs_review": true,
+    "review_reason": "高风险规则未通过: 胎心基线异常; 胎心基线过高; 变异消失; 减速过多; 晚期减速; 重度变异减速; Apgar评分低",
+    "batch_id": "FHR-20260606225341",
+    "source_identifier": "超阈值样例",
+    "supplement_info": {
+      "maternal_age": 40,
+      "gestational_weeks": 34.5,
+      "high_risk_factors": [
+        "高龄产妇",
+        "妊娠高血压",
+        "先兆子痫"
+      ],
+      "delivery_outcome": "紧急剖宫产",
+      "apgar_score": 2
+    },
+    "validation_results": [
+      {
+        "rule_id": "R001",
+        "rule_name": "记录ID缺失",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "字段存在",
+        "field_name": "record_id",
+        "actual_value": "O008"
+      },
+      {
+        "rule_id": "R002",
+        "rule_name": "患者ID缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_id",
+        "actual_value": "P2024018"
+      },
+      {
+        "rule_id": "R003",
+        "rule_name": "患者姓名缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "patient_name",
+        "actual_value": "韩某某"
+      },
+      {
+        "rule_id": "R004",
+        "rule_name": "住院号缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "字段存在",
+        "field_name": "admission_no",
+        "actual_value": "ZY20240018"
+      },
+      {
+        "rule_id": "R005",
+        "rule_name": "检查时间缺失",
+        "passed": true,
+        "risk_level": "high",
+        "message": "字段存在",
+        "field_name": "exam_time",
+        "actual_value": "2024-06-05 14:20:00"
+      },
+      {
+        "rule_id": "R006",
+        "rule_name": "胎心基线异常",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到胎心基线异常: fhr_baseline=180.0 (阈值: [110.0, 160.0])",
+        "field_name": "fhr_baseline",
+        "actual_value": 180.0
+      },
+      {
+        "rule_id": "R007",
+        "rule_name": "胎心基线过低",
+        "passed": true,
+        "risk_level": "critical",
+        "message": "fhr_baseline=180.0 正常",
+        "field_name": "fhr_baseline",
+        "actual_value": 180.0
+      },
+      {
+        "rule_id": "R008",
+        "rule_name": "胎心基线过高",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到胎心基线过高: fhr_baseline=180.0 (阈值: 160.0)",
+        "field_name": "fhr_baseline",
+        "actual_value": 180.0
+      },
+      {
+        "rule_id": "R009",
+        "rule_name": "胎心变异类型无效",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "fhr_variability=消失 正常",
+        "field_name": "fhr_variability",
+        "actual_value": "消失"
+      },
+      {
+        "rule_id": "R010",
+        "rule_name": "变异消失",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到变异消失: fhr_variability=消失",
+        "field_name": "fhr_variability",
+        "actual_value": "消失"
+      },
+      {
+        "rule_id": "R011",
+        "rule_name": "加速不足",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到加速不足: acceleration_count=0 (阈值: 2)",
+        "field_name": "acceleration_count",
+        "actual_value": 0
+      },
+      {
+        "rule_id": "R012",
+        "rule_name": "减速过多",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到减速过多: deceleration_count=7 (阈值: 2)",
+        "field_name": "deceleration_count",
+        "actual_value": 7
+      },
+      {
+        "rule_id": "R013",
+        "rule_name": "晚期减速",
+        "passed": false,
+        "risk_level": "critical",
+        "message": "检测到晚期减速: late_deceleration=True",
+        "field_name": "late_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R014",
+        "rule_name": "重度变异减速",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到重度变异减速: variable_deceleration=True",
+        "field_name": "variable_deceleration",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R015",
+        "rule_name": "监护时长不足",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "duration_minutes=30.0 正常",
+        "field_name": "duration_minutes",
+        "actual_value": 30.0
+      },
+      {
+        "rule_id": "R016",
+        "rule_name": "补充表缺失",
+        "passed": true,
+        "risk_level": "medium",
+        "message": "has_supplement=True 正常",
+        "field_name": "has_supplement",
+        "actual_value": true
+      },
+      {
+        "rule_id": "R017",
+        "rule_name": "Apgar评分低",
+        "passed": false,
+        "risk_level": "high",
+        "message": "检测到Apgar评分低: apgar_score=2 (阈值: 7)",
+        "field_name": "apgar_score",
+        "actual_value": 2
+      },
+      {
+        "rule_id": "R018",
+        "rule_name": "孕周异常",
+        "passed": false,
+        "risk_level": "medium",
+        "message": "检测到孕周异常: gestational_weeks=34.5 (阈值: [37.0, 42.0])",
+        "field_name": "gestational_weeks",
+        "actual_value": 34.5
       }
     ]
   }

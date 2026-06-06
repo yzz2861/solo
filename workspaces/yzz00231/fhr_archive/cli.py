@@ -173,16 +173,21 @@ def _process(args, generate_output: bool = True):
 
         fmt = getattr(args, "format", "csv")
 
+        generator.save_details_json(details, os.path.join(out_detail_dir, f"{batch_id}_details.json"))
+        generator.save_review_csv(review_items, os.path.join(out_review_dir, f"{batch_id}_review.csv"))
+        generator.save_summary_json(summary, os.path.join(out_summary_dir, f"{batch_id}_summary.json"))
+        logger.info("已生成权威存档 (JSON明细 + CSV复核 + JSON摘要)")
+
         if fmt in ("csv", "both"):
             generator.save_details_csv(details, os.path.join(out_detail_dir, f"{batch_id}_details.csv"))
-            generator.save_review_csv(review_items, os.path.join(out_review_dir, f"{batch_id}_review.csv"))
-            logger.info("已生成CSV格式明细和复核列表")
+            logger.info("已生成CSV格式明细")
 
-        if fmt in ("json", "both"):
-            generator.save_details_json(details, os.path.join(out_detail_dir, f"{batch_id}_details.json"))
+        if fmt == "json":
             logger.info("已生成JSON格式明细")
+        elif fmt == "both":
+            generator.save_details_csv(details, os.path.join(out_detail_dir, f"{batch_id}_details.csv"))
+            logger.info("已生成CSV+JSON双格式明细")
 
-        generator.save_summary_json(summary, os.path.join(out_summary_dir, f"{batch_id}_summary.json"))
         logger.info("已生成摘要文件")
 
         input_files = [args.main]
@@ -213,8 +218,9 @@ def _process(args, generate_output: bool = True):
 
 def _load_existing_results(output_dir: str, batch_id: str):
     summary_path = os.path.join(output_dir, "summary", f"{batch_id}_summary.json")
-    detail_path = os.path.join(output_dir, "details", f"{batch_id}_details.json")
-    review_path = os.path.join(output_dir, "review", f"{batch_id}_review.csv")
+    detail_json_path = os.path.join(output_dir, "details", f"{batch_id}_details.json")
+    detail_csv_path = os.path.join(output_dir, "details", f"{batch_id}_details.csv")
+    review_csv_path = os.path.join(output_dir, "review", f"{batch_id}_review.csv")
 
     summary = None
     details = []
@@ -227,8 +233,8 @@ def _load_existing_results(output_dir: str, batch_id: str):
             from .models import ArchiveSummary
             summary = ArchiveSummary(**data)
 
-    if os.path.exists(detail_path):
-        with open(detail_path, "r", encoding="utf-8") as f:
+    if os.path.exists(detail_json_path):
+        with open(detail_json_path, "r", encoding="utf-8") as f:
             import json
             data = json.load(f)
             from .models import DetailRecord, ValidationResult, ReviewItem
@@ -255,6 +261,70 @@ def _load_existing_results(output_dir: str, batch_id: str):
                 )
                 for d in details if d.needs_review
             ]
+    elif os.path.exists(detail_csv_path):
+        import csv
+        from .models import DetailRecord, ReviewItem
+        with open(detail_csv_path, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                risk_tags = []
+                if row.get("风险标签"):
+                    risk_tags = [t.strip() for t in row["风险标签"].split(";") if t.strip()]
+                detail = DetailRecord(
+                    record_id=row.get("记录ID", ""),
+                    patient_id=row.get("患者ID", ""),
+                    patient_name=row.get("患者姓名", ""),
+                    admission_no=row.get("住院号", ""),
+                    exam_time=row.get("检查时间", ""),
+                    risk_tags=risk_tags,
+                    risk_level=row.get("风险等级", "normal"),
+                    needs_review=row.get("是否需复核", "") == "是",
+                    review_reason=row.get("复核原因", ""),
+                    batch_id=row.get("批次ID", batch_id),
+                    source_identifier=row.get("来源标识", ""),
+                    supplement_info={
+                        "maternal_age": row.get("孕妇年龄") or None,
+                        "gestational_weeks": row.get("孕周") or None,
+                        "high_risk_factors": [x.strip() for x in (row.get("高危因素") or "").split(";") if x.strip()],
+                        "delivery_outcome": row.get("分娩结局") or None,
+                        "apgar_score": row.get("Apgar评分") or None,
+                    },
+                )
+                details.append(detail)
+
+            review_items = [
+                ReviewItem(
+                    record_id=d.record_id,
+                    patient_name=d.patient_name,
+                    exam_time=d.exam_time,
+                    risk_level=d.risk_level,
+                    review_reason=d.review_reason,
+                    risk_tags=d.risk_tags,
+                    batch_id=d.batch_id,
+                    source_identifier=d.source_identifier,
+                )
+                for d in details if d.needs_review
+            ]
+
+    if not review_items and os.path.exists(review_csv_path):
+        import csv
+        from .models import ReviewItem
+        with open(review_csv_path, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                risk_tags = []
+                if row.get("风险标签"):
+                    risk_tags = [t.strip() for t in row["风险标签"].split(";") if t.strip()]
+                review_items.append(ReviewItem(
+                    record_id=row.get("记录ID", ""),
+                    patient_name=row.get("患者姓名", ""),
+                    exam_time=row.get("检查时间", ""),
+                    risk_level=row.get("风险等级", "high"),
+                    review_reason=row.get("复核原因", ""),
+                    risk_tags=risk_tags,
+                    batch_id=row.get("批次ID", batch_id),
+                    source_identifier=row.get("来源标识", ""),
+                ))
 
     return {
         "summary": summary,
