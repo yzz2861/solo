@@ -1,0 +1,325 @@
+{
+  "batch": {
+    "batch_id": "BATCH202606061342151D3FE2E3",
+    "batch_time": "2026-06-06 13:42:15",
+    "params_hash": "6c78a2a3811c",
+    "ledger_hash": "7166c6cafea9",
+    "filter_hash": "99914b932bd3",
+    "source": {
+      "source_file": "tests/test_data/ledger_conflict_duplicate.csv",
+      "source_system": "TEST_SYS",
+      "load_time": "2026-06-06 13:42:15",
+      "source_hash": "8239f6199e2b"
+    },
+    "task_status": "completed",
+    "operator": "conflict_test"
+  },
+  "total_records": 8,
+  "valid_records": 4,
+  "invalid_records": 2,
+  "total_materials": 17,
+  "material_items": [
+    {
+      "record_id": "REC003",
+      "material_name": "身份证明原件",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "户口本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "遗嘱草本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "财产证明材料",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "婚姻状况证明",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "身份证明原件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "户口本",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "委托书草本",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "受托人的身份证明复印件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "房产证原件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "购房合同",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC021",
+      "material_name": "婚姻状况证明",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC023",
+      "material_name": "身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC023",
+      "material_name": "出生医学证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC023",
+      "material_name": "父母身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC023",
+      "material_name": "户口本",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC023",
+      "material_name": "父母结婚证",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    }
+  ],
+  "review_items": [
+    {
+      "record_id": "REC001",
+      "issue_type": "duplicate_record",
+      "issue_detail": "记录ID重复，存在多条相同ID的记录",
+      "severity": "error",
+      "field_name": "record_id",
+      "suggestion": "请核实并去重，确保每条记录有唯一ID"
+    },
+    {
+      "record_id": "REC024",
+      "issue_type": "duplicate_record",
+      "issue_detail": "记录ID重复，存在多条相同ID的记录",
+      "severity": "error",
+      "field_name": "record_id",
+      "suggestion": "请核实并去重，确保每条记录有唯一ID"
+    },
+    {
+      "record_id": "REC001",
+      "issue_type": "multiple_rules_match",
+      "issue_detail": "匹配到多条规则: 委托公证-房产委托, 委托公证-基础材料 (规则ID: R002, R001)",
+      "severity": "warning",
+      "field_name": "notary_type",
+      "suggestion": "请确认规则优先级设置是否正确，或调整规则条件避免冲突"
+    },
+    {
+      "record_id": "REC021",
+      "issue_type": "multiple_rules_match",
+      "issue_detail": "匹配到多条规则: 委托公证-房产委托, 委托公证-基础材料 (规则ID: R002, R001)",
+      "severity": "warning",
+      "field_name": "notary_type",
+      "suggestion": "请确认规则优先级设置是否正确，或调整规则条件避免冲突"
+    },
+    {
+      "record_id": "REC022",
+      "issue_type": "no_rule_match",
+      "issue_detail": "未匹配到任何材料规则",
+      "severity": "warning",
+      "field_name": "notary_type",
+      "suggestion": "请检查业务类型和公证类型配置，是否需要新增规则"
+    },
+    {
+      "record_id": "REC023",
+      "issue_type": "invalid_amount",
+      "issue_detail": "金额为负数: -500",
+      "severity": "warning",
+      "field_name": "amount",
+      "suggestion": "请核核实金额是否正确"
+    },
+    {
+      "record_id": "REC001",
+      "issue_type": "multiple_rules_match",
+      "issue_detail": "匹配到多条规则: 委托公证-房产委托, 委托公证-基础材料 (规则ID: R002, R001)",
+      "severity": "warning",
+      "field_name": "notary_type",
+      "suggestion": "请确认规则优先级设置是否正确，或调整规则条件避免冲突"
+    }
+  ],
+  "summary_stats": {
+    "total_records": 8,
+    "valid_records": 4,
+    "invalid_records": 2,
+    "total_materials": 17,
+    "review_issues": 7,
+    "issue_types": {
+      "duplicate_record": 2,
+      "multiple_rules_match": 3,
+      "no_rule_match": 1,
+      "invalid_amount": 1
+    },
+    "material_by_rule": {
+      "遗嘱公证": 5,
+      "委托公证-房产委托": 7,
+      "出生公证": 5
+    },
+    "batch_id": "BATCH202606061342151D3FE2E3",
+    "batch_time": "2026-06-06 13:42:15",
+    "task_status": "completed"
+  },
+  "idempotency_key": "7166c6cafea9_6c78a2a3811c_99914b932bd3",
+  "is_idempotent_replay": false,
+  "record_data": {
+    "REC001": {
+      "record_id": "REC001",
+      "customer_name": "张三",
+      "id_card": "110101199001011234",
+      "business_type": "委托公证",
+      "notary_type": "房产委托",
+      "amount": 500000,
+      "status": "已受理",
+      "apply_date": "2024-01-15",
+      "source_system": "业务系统A"
+    },
+    "REC003": {
+      "record_id": "REC003",
+      "customer_name": "王五",
+      "id_card": "440101197808089012",
+      "business_type": "遗嘱公证",
+      "notary_type": "",
+      "amount": 800000,
+      "status": "已受理",
+      "apply_date": "2024-01-17",
+      "source_system": "业务系统B"
+    },
+    "REC021": {
+      "record_id": "REC021",
+      "customer_name": "陈冲突",
+      "id_card": "330101198007077777",
+      "business_type": "委托公证",
+      "notary_type": "房产委托",
+      "amount": 600000,
+      "status": "待审核",
+      "apply_date": "2024-02-01",
+      "source_system": "业务系统A"
+    },
+    "REC022": {
+      "record_id": "REC022",
+      "customer_name": "刘未匹配",
+      "id_card": "120101199506068888",
+      "business_type": "涉外公证",
+      "notary_type": "未婚公证",
+      "amount": 1000,
+      "status": "已受理",
+      "apply_date": "2024-02-02",
+      "source_system": "业务系统B"
+    },
+    "REC023": {
+      "record_id": "REC023",
+      "customer_name": "负金额",
+      "id_card": "370101199111116666",
+      "business_type": "出生公证",
+      "notary_type": "",
+      "amount": -500,
+      "status": "已完成",
+      "apply_date": "2024-02-03",
+      "source_system": "业务系统A"
+    },
+    "REC024": {
+      "record_id": "REC024",
+      "customer_name": "重复ID测试2",
+      "id_card": "110101199001015555",
+      "business_type": "学历公证",
+      "notary_type": "",
+      "amount": 250000,
+      "status": "待审核",
+      "apply_date": "2024-02-04",
+      "source_system": "业务系统B"
+    }
+  }
+}

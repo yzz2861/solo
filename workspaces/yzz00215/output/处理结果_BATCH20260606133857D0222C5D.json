@@ -1,0 +1,609 @@
+{
+  "batch": {
+    "batch_id": "BATCH20260606133857D0222C5D",
+    "batch_time": "2026-06-06 13:38:57",
+    "params_hash": "6c78a2a3811c",
+    "ledger_hash": "8e815d7956c2",
+    "filter_hash": "99914b932bd3",
+    "source": {
+      "source_file": "tests/test_data/ledger_normal.csv",
+      "source_system": "BUS_SYS",
+      "load_time": "2026-06-06 13:38:57",
+      "source_hash": "c31dad122e87"
+    },
+    "task_status": "completed",
+    "operator": "admin"
+  },
+  "total_records": 10,
+  "valid_records": 10,
+  "invalid_records": 0,
+  "total_materials": 49,
+  "material_items": [
+    {
+      "record_id": "REC001",
+      "material_name": "身份证明原件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "户口本",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "委托书草本",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "受托人的身份证明复印件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "房产证原件",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "购房合同",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC001",
+      "material_name": "婚姻状况证明",
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC002",
+      "material_name": "被继承人死亡证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC002",
+      "material_name": "继承人身份证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC002",
+      "material_name": "亲属关系证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC002",
+      "material_name": "遗产证明材料",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC002",
+      "material_name": "遗嘱（如有）",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "身份证明原件",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "户口本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "遗嘱草本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "财产证明材料",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC003",
+      "material_name": "婚姻状况证明",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC004",
+      "material_name": "身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC004",
+      "material_name": "出生医学证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC004",
+      "material_name": "父母身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC004",
+      "material_name": "户口本",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC004",
+      "material_name": "父母结婚证",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC005",
+      "material_name": "身份证明",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC005",
+      "material_name": "学历证书原件",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC005",
+      "material_name": "学位证书原件",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC005",
+      "material_name": "成绩单",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC006",
+      "material_name": "身份证明原件",
+      "rule_id": "R001",
+      "rule_name": "委托公证-基础材料",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC006",
+      "material_name": "户口本",
+      "rule_id": "R001",
+      "rule_name": "委托公证-基础材料",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC006",
+      "material_name": "委托书草本",
+      "rule_id": "R001",
+      "rule_name": "委托公证-基础材料",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC006",
+      "material_name": "受托人的身份证明复印件",
+      "rule_id": "R001",
+      "rule_name": "委托公证-基础材料",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC007",
+      "material_name": "被继承人死亡证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC007",
+      "material_name": "继承人身份证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC007",
+      "material_name": "亲属关系证明",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC007",
+      "material_name": "遗产证明材料",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC007",
+      "material_name": "遗嘱（如有）",
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC008",
+      "material_name": "身份证明原件",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC008",
+      "material_name": "户口本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC008",
+      "material_name": "遗嘱草本",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC008",
+      "material_name": "财产证明材料",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC008",
+      "material_name": "婚姻状况证明",
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC009",
+      "material_name": "身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC009",
+      "material_name": "出生医学证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC009",
+      "material_name": "父母身份证明",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC009",
+      "material_name": "户口本",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC009",
+      "material_name": "父母结婚证",
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC010",
+      "material_name": "身份证明",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC010",
+      "material_name": "学历证书原件",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC010",
+      "material_name": "学位证书原件",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "record_id": "REC010",
+      "material_name": "成绩单",
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "required": true,
+      "status": "pending",
+      "notes": ""
+    }
+  ],
+  "review_items": [
+    {
+      "record_id": "REC001",
+      "issue_type": "multiple_rules_match",
+      "issue_detail": "匹配到多条规则: 委托公证-房产委托, 委托公证-基础材料 (规则ID: R002, R001)",
+      "severity": "warning",
+      "field_name": "notary_type",
+      "suggestion": "请确认规则优先级设置是否正确，或调整规则条件避免冲突"
+    }
+  ],
+  "summary_stats": {
+    "total_records": 10,
+    "valid_records": 10,
+    "invalid_records": 0,
+    "total_materials": 49,
+    "review_issues": 1,
+    "issue_types": {
+      "multiple_rules_match": 1
+    },
+    "material_by_rule": {
+      "委托公证-房产委托": 7,
+      "继承公证": 10,
+      "遗嘱公证": 10,
+      "出生公证": 10,
+      "学历公证": 8,
+      "委托公证-基础材料": 4
+    },
+    "batch_id": "BATCH20260606133857D0222C5D",
+    "batch_time": "2026-06-06 13:38:57",
+    "task_status": "completed"
+  },
+  "idempotency_key": "8e815d7956c2_6c78a2a3811c_99914b932bd3",
+  "is_idempotent_replay": false,
+  "record_data": {
+    "REC001": {
+      "record_id": "REC001",
+      "customer_name": "张三",
+      "id_card": "110101199001011234",
+      "business_type": "委托公证",
+      "notary_type": "房产委托",
+      "amount": 500000,
+      "status": "已受理",
+      "apply_date": "2024-01-15",
+      "source_system": "业务系统A"
+    },
+    "REC002": {
+      "record_id": "REC002",
+      "customer_name": "李四",
+      "id_card": "310101198505055678",
+      "business_type": "继承公证",
+      "notary_type": "",
+      "amount": 1200000,
+      "status": "待审核",
+      "apply_date": "2024-01-16",
+      "source_system": "业务系统A"
+    },
+    "REC003": {
+      "record_id": "REC003",
+      "customer_name": "王五",
+      "id_card": "440101197808089012",
+      "business_type": "遗嘱公证",
+      "notary_type": "",
+      "amount": 800000,
+      "status": "已受理",
+      "apply_date": "2024-01-17",
+      "source_system": "业务系统B"
+    },
+    "REC004": {
+      "record_id": "REC004",
+      "customer_name": "赵六",
+      "id_card": "320101199212123456",
+      "business_type": "出生公证",
+      "notary_type": "",
+      "amount": 500,
+      "status": "已完成",
+      "apply_date": "2024-01-18",
+      "source_system": "业务系统A"
+    },
+    "REC005": {
+      "record_id": "REC005",
+      "customer_name": "钱七",
+      "id_card": "510101198803037890",
+      "business_type": "学历公证",
+      "notary_type": "",
+      "amount": 2000,
+      "status": "已受理",
+      "apply_date": "2024-01-19",
+      "source_system": "业务系统B"
+    },
+    "REC006": {
+      "record_id": "REC006",
+      "customer_name": "孙八",
+      "id_card": "120101199506061234",
+      "business_type": "委托公证",
+      "notary_type": "一般委托",
+      "amount": 100000,
+      "status": "待审核",
+      "apply_date": "2024-01-20",
+      "source_system": "业务系统A"
+    },
+    "REC007": {
+      "record_id": "REC007",
+      "customer_name": "周九",
+      "id_card": "330101198007075678",
+      "business_type": "继承公证",
+      "notary_type": "",
+      "amount": 3000000,
+      "status": "已受理",
+      "apply_date": "2024-01-21",
+      "source_system": "业务系统B"
+    },
+    "REC008": {
+      "record_id": "REC008",
+      "customer_name": "吴十",
+      "id_card": "370101199111119012",
+      "business_type": "遗嘱公证",
+      "notary_type": "",
+      "amount": 1500000,
+      "status": "待审核",
+      "apply_date": "2024-01-22",
+      "source_system": "业务系统A"
+    },
+    "REC009": {
+      "record_id": "REC009",
+      "customer_name": "郑十一",
+      "id_card": "420101198704043456",
+      "business_type": "出生公证",
+      "notary_type": "",
+      "amount": 300,
+      "status": "已完成",
+      "apply_date": "2024-01-23",
+      "source_system": "业务系统B"
+    },
+    "REC010": {
+      "record_id": "REC010",
+      "customer_name": "王十二",
+      "id_card": "610101199309097890",
+      "business_type": "学历公证",
+      "notary_type": "",
+      "amount": 1500,
+      "status": "已受理",
+      "apply_date": "2024-01-24",
+      "source_system": "业务系统A"
+    }
+  }
+}

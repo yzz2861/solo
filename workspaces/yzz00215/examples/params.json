@@ -1,0 +1,115 @@
+{
+  "config_name": "公证材料清单配置_v1.0",
+  "material_rules": [
+    {
+      "rule_id": "R001",
+      "rule_name": "委托公证-基础材料",
+      "business_type": "委托公证",
+      "notary_type": "",
+      "materials": [
+        "身份证明原件",
+        "户口本",
+        "委托书草本",
+        "受托人的身份证明复印件"
+      ],
+      "conditions": {},
+      "priority": 10,
+      "description": "所有委托公证通用的基础材料"
+    },
+    {
+      "rule_id": "R002",
+      "rule_name": "委托公证-房产委托",
+      "business_type": "委托公证",
+      "notary_type": "房产委托",
+      "materials": [
+        "身份证明原件",
+        "户口本",
+        "委托书草本",
+        "受托人的身份证明复印件",
+        "房产证原件",
+        "购房合同",
+        "婚姻状况证明"
+      ],
+      "conditions": {},
+      "priority": 20,
+      "description": "房产委托公证专项材料"
+    },
+    {
+      "rule_id": "R003",
+      "rule_name": "继承公证",
+      "business_type": "继承公证",
+      "notary_type": "",
+      "materials": [
+        "被继承人死亡证明",
+        "继承人身份证明",
+        "亲属关系证明",
+        "遗产证明材料",
+        "遗嘱（如有）"
+      ],
+      "conditions": {},
+      "priority": 10,
+      "description": "继承公证基础材料"
+    },
+    {
+      "rule_id": "R004",
+      "rule_name": "遗嘱公证",
+      "business_type": "遗嘱公证",
+      "notary_type": "",
+      "materials": [
+        "身份证明原件",
+        "户口本",
+        "遗嘱草本",
+        "财产证明材料",
+        "婚姻状况证明"
+      ],
+      "conditions": {},
+      "priority": 10,
+      "description": "遗嘱公证基础材料"
+    },
+    {
+      "rule_id": "R005",
+      "rule_name": "出生公证",
+      "business_type": "出生公证",
+      "notary_type": "",
+      "materials": [
+        "身份证明",
+        "出生医学证明",
+        "父母身份证明",
+        "户口本",
+        "父母结婚证"
+      ],
+      "conditions": {},
+      "priority": 10,
+      "description": "出生公证基础材料"
+    },
+    {
+      "rule_id": "R006",
+      "rule_name": "学历公证",
+      "business_type": "学历公证",
+      "notary_type": "",
+      "materials": [
+        "身份证明",
+        "学历证书原件",
+        "学位证书原件",
+        "成绩单"
+      ],
+      "conditions": {},
+      "priority": 10,
+      "description": "学历公证基础材料"
+    }
+  ],
+  "required_fields": [
+    "amount"
+  ],
+  "filters": [],
+  "output_config": {
+    "export_excel": true,
+    "export_report": true,
+    "include_batch_info": true
+  },
+  "extra": {
+    "version": "1.0.0",
+    "department": "公证部",
+    "review_required": true
+  }
+}
