@@ -1,0 +1,15 @@
+{
+  "name": "pressure-ulcer-assessment-api",
+  "version": "1.0.0",
+  "description": "住院压疮风险评估API - 数据校验、状态分流与闭环管理",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node tests/acceptance.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}
