@@ -352,6 +352,88 @@ def test_6_data_traceability():
     print("✅ 场景6测试通过 - 数据溯源完整")
 
 
+def test_7_no_manual_review_all_failed():
+    """场景7: 关闭人工复核且全部失败 - 状态应为failed，退出码非0"""
+    print_section("场景7: 关闭人工复核 - 全部失败验证")
+
+    paper_file = os.path.join(EXAMPLES_DIR, "papers_manual_review.csv")
+    reviewer_file = os.path.join(EXAMPLES_DIR, "reviewers_manual_review.csv")
+    rules_file = os.path.join(EXAMPLES_DIR, "rules.json")
+    output_dir = os.path.join(OUTPUT_DIR, "scenario7")
+
+    result = run_generate_command(
+        paper_file=paper_file,
+        reviewer_file=reviewer_file,
+        rules_file=rules_file,
+        output_dir=output_dir,
+        per_paper_count=3,
+        allow_manual_review=False,
+    )
+
+    files = export_results(result, output_dir)
+    summary = export_summary(result)
+
+    print(f"批次ID: {summary['batch_id']}")
+    print(f"状态: {summary['status']}")
+    print(f"总论文数: {summary['total_count']}")
+    print(f"成功分配: {summary['success_count']} 篇")
+    print(f"失败: {summary['failed_count']} 篇")
+    print(f"待人工复核: {summary['manual_review_count']} 篇")
+    print(f"分配记录总数: {summary['assignments_count']} 条")
+
+    assert summary["status"] == "failed", f"关闭人工复核且全部失败时状态应为failed，实际为{summary['status']}"
+    assert summary["success_count"] == 0, "全部失败时成功数应为0"
+    assert summary["failed_count"] == summary["total_count"], "全部失败时失败数应等于总论文数"
+    assert summary["manual_review_count"] == 0, "关闭人工复核时待复核数应为0"
+    assert summary["assignments_count"] == 0, "全部失败时分配记录数应为0"
+
+    print("✅ 场景7测试通过 - 关闭人工复核全部失败状态正确")
+
+
+def test_8_manual_review_count_accuracy():
+    """场景8: 人工复核论文数准确性验证 - 应按论文数统计而非记录数//每篇数"""
+    print_section("场景8: 人工复核论文数准确性验证")
+
+    paper_file = os.path.join(EXAMPLES_DIR, "papers_manual_review.csv")
+    reviewer_file = os.path.join(EXAMPLES_DIR, "reviewers_manual_review.csv")
+    rules_file = os.path.join(EXAMPLES_DIR, "rules.json")
+    output_dir = os.path.join(OUTPUT_DIR, "scenario8")
+
+    result = run_generate_command(
+        paper_file=paper_file,
+        reviewer_file=reviewer_file,
+        rules_file=rules_file,
+        output_dir=output_dir,
+        per_paper_count=3,
+        allow_manual_review=True,
+    )
+
+    summary = export_summary(result)
+
+    print(f"批次ID: {summary['batch_id']}")
+    print(f"状态: {summary['status']}")
+    print(f"总论文数: {summary['total_count']}")
+    print(f"待人工复核论文数: {summary['manual_review_count']}")
+    print(f"分配记录总数: {summary['assignments_count']}")
+
+    manual_paper_ids = set(a.paper_id for a in result.assignments if a.status.value == "manual_review")
+    print(f"实际待复核的论文ID数: {len(manual_paper_ids)}")
+    print(f"待复核的论文ID: {sorted(manual_paper_ids)}")
+
+    assert summary["manual_review_count"] == len(manual_paper_ids), (
+        f"manual_review_count统计错误: 报表显示{summary['manual_review_count']}篇，"
+        f"实际有{len(manual_paper_ids)}篇不同的论文"
+    )
+    assert summary["manual_review_count"] == 3, (
+        f"预期3篇论文待复核，实际{summary['manual_review_count']}篇"
+    )
+    assert summary["status"] != "success", (
+        "有论文待人工复核时，状态不应为success"
+    )
+
+    print("✅ 场景8测试通过 - 人工复核论文数统计准确")
+
+
 def main():
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
@@ -366,6 +448,8 @@ def main():
         test_4_repeat_submission_idempotency()
         test_5_summary_and_replay()
         test_6_data_traceability()
+        test_7_no_manual_review_all_failed()
+        test_8_manual_review_count_accuracy()
 
         print_section("所有测试通过 ✅")
         return 0

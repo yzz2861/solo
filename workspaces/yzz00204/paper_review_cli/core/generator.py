@@ -174,25 +174,48 @@ def run_generate_command(paper_file: str, reviewer_file: str, rules_file: str,
             allow_manual_review=allow_manual_review,
         )
 
-        success_count = sum(1 for a in assignments if a.status == RecordStatus.SUCCESS)
-        manual_count = sum(1 for a in assignments if a.status == RecordStatus.MANUAL_REVIEW)
+        success_paper_ids = set(a.paper_id for a in assignments if a.status == RecordStatus.SUCCESS)
+        manual_paper_ids = set(a.paper_id for a in assignments if a.status == RecordStatus.MANUAL_REVIEW)
+        failed_paper_ids = set()
+        for paper in papers:
+            if paper.paper_id not in success_paper_ids and paper.paper_id not in manual_paper_ids:
+                failed_paper_ids.add(paper.paper_id)
+
         bad_count = len(paper_bad) + len(reviewer_bad)
+        success_paper_count = len(success_paper_ids)
+        manual_paper_count = len(manual_paper_ids)
+        failed_paper_count = len(failed_paper_ids)
 
         result.assignments = assignments
         batch.total_count = len(papers)
-        batch.success_count = success_count // per_paper_count if per_paper_count > 0 else 0
-        batch.manual_review_count = manual_count // per_paper_count if per_paper_count > 0 else 0
+        batch.success_count = success_paper_count
+        batch.manual_review_count = manual_paper_count
+        batch.failed_count = failed_paper_count
         batch.bad_count = bad_count
         batch.end_time = time.time()
 
-        if bad_count > 0 and success_count > 0:
+        has_bad = bad_count > 0
+        all_success = success_paper_count == len(papers) and not has_bad
+        any_success = success_paper_count > 0
+        all_failed = success_paper_count == 0 and manual_paper_count == 0 and len(papers) > 0
+        all_manual = success_paper_count == 0 and manual_paper_count > 0 and failed_paper_count == 0
+
+        if all_success:
+            batch.status = TaskStatus.SUCCESS
+        elif any_success:
             batch.status = TaskStatus.PARTIAL_SUCCESS
-        elif bad_count > 0 and success_count == 0:
+        elif all_manual:
+            batch.status = TaskStatus.MANUAL_REVIEW
+        elif all_failed:
+            batch.status = TaskStatus.FAILED
+        elif has_bad and len(papers) == 0:
             batch.status = TaskStatus.FAILED
         else:
-            batch.status = TaskStatus.SUCCESS
+            batch.status = TaskStatus.PARTIAL_SUCCESS if has_bad else TaskStatus.SUCCESS
 
-        result.add_log("info", f"分配完成: 总论文 {len(papers)} 篇，成功 {batch.success_count} 篇，待复核 {batch.manual_review_count} 篇，坏行 {bad_count} 条")
+        result.add_log("info", f"分配完成: 总论文 {len(papers)} 篇，成功 {success_paper_count} 篇，待复核 {manual_paper_count} 篇，失败 {failed_paper_count} 篇，坏行 {bad_count} 条")
+        if failed_paper_count > 0:
+            result.add_log("warn", f"有 {failed_paper_count} 篇论文未能分配到足够评审人")
 
     except Exception as e:
         batch.status = TaskStatus.FAILED

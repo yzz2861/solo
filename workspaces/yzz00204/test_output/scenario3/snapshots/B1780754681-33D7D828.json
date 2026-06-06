@@ -1,0 +1,114 @@
+{
+  "batch_info": {
+    "batch_id": "B1780754681-33D7D828",
+    "command": "generate",
+    "start_time": 1780754681.720795,
+    "end_time": 1780754681.72116,
+    "status": "manual_review",
+    "input_file": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_manual_review.csv",
+    "rules_file": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/rules.json",
+    "snapshot_file": "",
+    "output_dir": "/Users/bill/Documents/solo/workspaces/yzz00204/test_output/scenario3",
+    "total_count": 3,
+    "success_count": 0,
+    "failed_count": 0,
+    "bad_count": 0,
+    "manual_review_count": 3
+  },
+  "assignments": [
+    {
+      "paper_id": "P001",
+      "reviewer_id": "R001",
+      "reviewer_name": "王教授",
+      "reviewer_institution": "清华大学",
+      "conflicts": [
+        "same_institution",
+        "supervisor"
+      ],
+      "status": "manual_review",
+      "error_message": "冲突类型: same_institution, supervisor",
+      "batch_id": "B1780754681-33D7D828",
+      "source_file": "papers_manual_review.csv",
+      "source_line": 2
+    },
+    {
+      "paper_id": "P001",
+      "reviewer_id": "R002",
+      "reviewer_name": "李教授",
+      "reviewer_institution": "清华大学",
+      "conflicts": [
+        "same_institution"
+      ],
+      "status": "manual_review",
+      "error_message": "冲突类型: same_institution",
+      "batch_id": "B1780754681-33D7D828",
+      "source_file": "papers_manual_review.csv",
+      "source_line": 2
+    },
+    {
+      "paper_id": "P002",
+      "reviewer_id": "R001",
+      "reviewer_name": "王教授",
+      "reviewer_institution": "清华大学",
+      "conflicts": [
+        "same_institution"
+      ],
+      "status": "manual_review",
+      "error_message": "冲突类型: same_institution",
+      "batch_id": "B1780754681-33D7D828",
+      "source_file": "papers_manual_review.csv",
+      "source_line": 3
+    },
+    {
+      "paper_id": "P002",
+      "reviewer_id": "R002",
+      "reviewer_name": "李教授",
+      "reviewer_institution": "清华大学",
+      "conflicts": [
+        "same_institution",
+        "supervisor"
+      ],
+      "status": "manual_review",
+      "error_message": "冲突类型: same_institution, supervisor",
+      "batch_id": "B1780754681-33D7D828",
+      "source_file": "papers_manual_review.csv",
+      "source_line": 3
+    },
+    {
+      "paper_id": "P003",
+      "reviewer_id": "R003",
+      "reviewer_name": "陈教授",
+      "reviewer_institution": "复旦大学",
+      "conflicts": [
+        "same_institution"
+      ],
+      "status": "manual_review",
+      "error_message": "冲突类型: same_institution",
+      "batch_id": "B1780754681-33D7D828",
+      "source_file": "papers_manual_review.csv",
+      "source_line": 4
+    }
+  ],
+  "bad_records": [],
+  "diff_records": [],
+  "logs": [
+    "[2026-06-06 22:04:41] [INFO] 批次 B1780754681-33D7D828 开始生成分配",
+    "[2026-06-06 22:04:41] [INFO] 论文清单: /Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_manual_review.csv",
+    "[2026-06-06 22:04:41] [INFO] 评审人清单: /Users/bill/Documents/solo/workspaces/yzz00204/examples/reviewers_manual_review.csv",
+    "[2026-06-06 22:04:41] [INFO] 每篇论文分配 3 位评审人",
+    "[2026-06-06 22:04:41] [INFO] 人工复核: 开启",
+    "[2026-06-06 22:04:41] [INFO] 开始校验论文清单: /Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_manual_review.csv",
+    "[2026-06-06 22:04:41] [INFO] 读取论文记录 3 条，字段 9 个",
+    "[2026-06-06 22:04:41] [INFO] 论文校验完成: 有效 3 条，坏行 0 条",
+    "[2026-06-06 22:04:41] [INFO] 开始校验评审人清单: /Users/bill/Documents/solo/workspaces/yzz00204/examples/reviewers_manual_review.csv",
+    "[2026-06-06 22:04:41] [INFO] 读取评审人记录 3 条，字段 5 个",
+    "[2026-06-06 22:04:41] [INFO] 评审人校验完成: 有效 3 条，坏行 0 条",
+    "[2026-06-06 22:04:41] [INFO] 加载冲突规则 3 条",
+    "[2026-06-06 22:04:41] [WARN] 论文 P001: 合格评审人不足(1/3)，标记 2 位待人工复核",
+    "[2026-06-06 22:04:41] [WARN] 论文 P002: 合格评审人不足(1/3)，标记 2 位待人工复核",
+    "[2026-06-06 22:04:41] [WARN] 论文 P003: 合格评审人不足(2/3)，标记 1 位待人工复核",
+    "[2026-06-06 22:04:41] [INFO] 分配完成: 总论文 3 篇，成功 0 篇，待复核 3 篇，失败 0 篇，坏行 0 条"
+  ],
+  "snapshot_version": "1.0",
+  "snapshot_time": "2026-06-06T22:04:41.721822"
+}

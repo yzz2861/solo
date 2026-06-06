@@ -65,6 +65,7 @@ def cmd_generate(args):
     print(f"状态: {summary['status']}")
     print(f"总论文数: {summary['total_count']}")
     print(f"成功分配: {summary['success_count']} 篇")
+    print(f"分配失败: {summary['failed_count']} 篇")
     print(f"待人工复核: {summary['manual_review_count']} 篇")
     print(f"坏行: {summary['bad_count']} 条")
     if summary['diff_count']:

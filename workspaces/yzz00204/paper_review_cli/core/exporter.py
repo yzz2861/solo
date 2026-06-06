@@ -59,6 +59,7 @@ def export_summary(result: ProcessResult) -> Dict[str, Any]:
         "status": result.batch.status.value,
         "total_count": result.batch.total_count,
         "success_count": result.batch.success_count,
+        "failed_count": result.batch.failed_count,
         "bad_count": result.batch.bad_count,
         "manual_review_count": result.batch.manual_review_count,
         "diff_count": len(result.diff_records),
