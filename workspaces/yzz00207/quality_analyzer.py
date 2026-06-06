@@ -269,6 +269,8 @@ class ClinkerQualityAnalyzer:
         abnormal_count = 0
         warning_count = 0
         critical_count = 0
+        unknown_count = 0
+        config_missing_samples = 0
 
         numeric_metrics = ['f_cao', 'strength_3d', 'strength_28d', 'specific_surface', 'loss_on_ignition']
         enum_metrics = ['soundness']
@@ -276,6 +278,7 @@ class ClinkerQualityAnalyzer:
         for row in self.valid_data:
             code = row.get('clinker_code', '')
             row_abnormal = False
+            row_has_unknown = False
             row_issues = []
             max_level = 'normal'
 
@@ -283,7 +286,17 @@ class ClinkerQualityAnalyzer:
                 value = row.get(metric, '')
                 level, explanation, diff = self._check_threshold(code, metric, value)
 
-                if level in ('warning', 'critical'):
+                if level == 'unknown':
+                    row_has_unknown = True
+                    unknown_count += 1
+                    row_issues.append({
+                        'metric': metric,
+                        'level': 'unknown',
+                        'value': value,
+                        'explanation': explanation,
+                        'diff': diff
+                    })
+                elif level in ('warning', 'critical'):
                     row_abnormal = True
                     row_issues.append({
                         'metric': metric,
@@ -301,16 +314,26 @@ class ClinkerQualityAnalyzer:
                         if max_level == 'normal':
                             max_level = 'warning'
 
-            if row_abnormal:
+            if row_abnormal or row_has_unknown:
                 abnormal_count += 1
+                if row_has_unknown and not row_abnormal:
+                    config_missing_samples += 1
+                    if max_level == 'normal':
+                        max_level = 'unknown'
+
                 sample = dict(row)
                 sample['_abnormal_level'] = max_level
                 sample['_abnormal_count'] = len(row_issues)
+                sample['_has_config_missing'] = row_has_unknown
                 sample['_abnormal_details'] = row_issues
                 self.abnormal_samples.append(sample)
 
+        if unknown_count > 0:
+            self._log('WARN', '异常检测',
+                      f'检测到 {unknown_count} 项配置缺失，涉及 {config_missing_samples} 条样本，请检查阈值规则配置')
+
         self._log('INFO', '异常检测',
-                  f'异常检测完成，异常样本 {abnormal_count} 条，其中预警 {warning_count} 项，严重 {critical_count} 项')
+                  f'异常检测完成，异常样本 {abnormal_count} 条，其中严重 {critical_count} 项，预警 {warning_count} 项，配置缺失 {unknown_count} 项')
         return True
 
     def calculate_statistics(self):
@@ -366,7 +389,12 @@ class ClinkerQualityAnalyzer:
                     std_dev = variance ** 0.5
 
                     pass_count = 0
-                    code = group_key.split('|')[-1] if 'clinker_code' in self.group_by else list(self.dictionary.keys())[0]
+                    code = None
+                    if 'clinker_code' in self.group_by:
+                        code_idx = self.group_by.index('clinker_code')
+                        code = group_key.split('|')[code_idx]
+                    else:
+                        code = list(self.dictionary.keys())[0] if self.dictionary else ''
                     for v in values:
                         level, _, _ = self._check_threshold(code, metric, str(v))
                         if level == 'normal':
@@ -504,16 +532,18 @@ class ClinkerQualityAnalyzer:
         print("【异常样本详情 - 按严重程度排序】")
         print("-" * 80)
 
+        level_priority = {'critical': 0, 'warning': 1, 'unknown': 2, 'normal': 99}
         sorted_abnormal = sorted(
             self.abnormal_samples,
-            key=lambda x: {'critical': 0, 'warning': 1}.get(x.get('_abnormal_level'), 99)
+            key=lambda x: level_priority.get(x.get('_abnormal_level'), 99)
         )
 
         if not sorted_abnormal:
             print("  暂无异常样本")
         else:
+            level_cn_map = {'critical': '严重', 'warning': '预警', 'unknown': '配置缺失'}
             for i, sample in enumerate(sorted_abnormal[:10], 1):
-                level_cn = {'critical': '严重', 'warning': '预警'}.get(
+                level_cn = level_cn_map.get(
                     sample.get('_abnormal_level', ''), sample.get('_abnormal_level', '')
                 )
                 print(f"\n  [{level_cn}] #{i} 行号:{sample.get('_line_num', '?')} "
@@ -526,7 +556,7 @@ class ClinkerQualityAnalyzer:
                         if issue['metric'] in code_rules:
                             metric_name = code_rules[issue['metric']].get('name', issue['metric'])
                             break
-                    issue_level_cn = {'critical': '严重', 'warning': '预警'}.get(issue['level'], issue['level'])
+                    issue_level_cn = level_cn_map.get(issue['level'], issue['level'])
                     print(f"    - [{issue_level_cn}] {issue['explanation']}")
 
             if len(sorted_abnormal) > 10:
@@ -633,7 +663,8 @@ class ClinkerQualityAnalyzer:
 
                 explanations = []
                 for issue in sample.get('_abnormal_details', []):
-                    level_cn = {'critical': '【严重】', 'warning': '【预警】'}.get(issue['level'], f"【{issue['level']}】")
+                    level_cn_map = {'critical': '【严重】', 'warning': '【预警】', 'unknown': '【配置缺失】'}
+                    level_cn = level_cn_map.get(issue['level'], f"【{issue['level']}】")
                     explanations.append(f"{level_cn}{issue['explanation']}")
                 row.append(' | '.join(explanations))
 
@@ -731,13 +762,16 @@ class ClinkerQualityAnalyzer:
 
             critical_count = sum(1 for s in self.abnormal_samples if s.get('_abnormal_level') == 'critical')
             warning_count = sum(1 for s in self.abnormal_samples if s.get('_abnormal_level') == 'warning')
+            unknown_count = sum(1 for s in self.abnormal_samples if s.get('_abnormal_level') == 'unknown')
 
             if len(self.valid_data) > 0:
-                overall_pass = len(self.valid_data) - len(self.abnormal_samples)
+                quality_issue_count = len(self.abnormal_samples) - unknown_count
+                overall_pass = len(self.valid_data) - quality_issue_count
                 overall_rate = overall_pass / len(self.valid_data) * 100
                 f.write(f"  整体合格率: {overall_rate:.2f}%\n")
                 f.write(f"  严重异常: {critical_count} 条\n")
                 f.write(f"  预警异常: {warning_count} 条\n")
+                f.write(f"  配置缺失: {unknown_count} 条（需补充阈值配置后重新判定）\n")
             f.write("\n")
 
             f.write("三、复核入口\n")
@@ -746,18 +780,38 @@ class ClinkerQualityAnalyzer:
 
             if self.abnormal_samples:
                 f.write("  [异常样本复核]\n")
+                level_priority = {'critical': 0, 'warning': 1, 'unknown': 2, 'normal': 99}
+                level_cn_map = {'critical': '严重', 'warning': '预警', 'unknown': '配置缺失'}
                 sorted_samples = sorted(
                     self.abnormal_samples,
-                    key=lambda x: {'critical': 0, 'warning': 1}.get(x.get('_abnormal_level'), 99)
+                    key=lambda x: level_priority.get(x.get('_abnormal_level'), 99)
                 )
                 for i, sample in enumerate(sorted_samples[:5], 1):
-                    level_cn = {'critical': '严重', 'warning': '预警'}.get(
+                    level_cn = level_cn_map.get(
                         sample.get('_abnormal_level', ''), ''
                     )
                     f.write(f"    {i}. [{level_cn}] {sample.get('timestamp', '')} "
                             f"{sample.get('kiln_id', '')} {sample.get('clinker_code', '')}\n")
                     for issue in sample.get('_abnormal_details', []):
-                        f.write(f"       - {issue['explanation']}\n")
+                        issue_level_cn = level_cn_map.get(issue['level'], issue['level'])
+                        f.write(f"       - [{issue_level_cn}] {issue['explanation']}\n")
+                f.write("\n")
+
+            config_missing_count = sum(
+                1 for s in self.abnormal_samples
+                if any(i.get('level') == 'unknown' for i in s.get('_abnormal_details', []))
+            )
+            if config_missing_count > 0:
+                f.write("  [配置缺失复核]\n")
+                f.write(f"    共 {config_missing_count} 条样本存在阈值配置缺失，请补充配置后重新分析：\n")
+                missing_metrics = defaultdict(set)
+                for sample in self.abnormal_samples:
+                    code = sample.get('clinker_code', '')
+                    for issue in sample.get('_abnormal_details', []):
+                        if issue.get('level') == 'unknown':
+                            missing_metrics[code].add(issue['metric'])
+                for code, metrics in sorted(missing_metrics.items()):
+                    f.write(f"    - {code}: {', '.join(sorted(metrics))}\n")
                 f.write("\n")
 
             if self.bad_rows:

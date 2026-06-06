@@ -21,11 +21,15 @@ class VerificationRunner:
         self.results = []
 
     def run_scenario(self, name, raw_file, dict_file, threshold_file, output_dir,
-                     start_time, end_time, expected_valid, expected_bad, expected_abnormal):
+                     start_time, end_time, expected_valid, expected_bad, expected_abnormal,
+                     group_by=None, expect_config_missing=False, check_pass_rate=None):
         """运行单个测试场景"""
         print(f"\n{'='*70}")
         print(f"【场景验证】{name}")
         print(f"{'='*70}")
+
+        if group_by is None:
+            group_by = ['kiln_id', 'clinker_code']
 
         cmd = [
             sys.executable, self.script_path,
@@ -36,8 +40,8 @@ class VerificationRunner:
             '--start', start_time,
             '--end', end_time,
             '--period', 'day',
-            '--group-by', 'kiln_id', 'clinker_code'
-        ]
+            '--group-by'
+        ] + group_by
 
         print(f"  执行命令: {' '.join(cmd)}")
         print(f"\n  --- 控制台输出 ---")
@@ -98,36 +102,59 @@ class VerificationRunner:
                 print(f"  异常样本数: {abnormal_count} (预期: {expected_abnormal}) {'✓' if abnormal_count == expected_abnormal else '✗ MISMATCH'}")
 
             stats_file = os.path.join(output_dir, 'statistics_result.csv')
+            pass_rate_ok = True
             if os.path.exists(stats_file):
                 with open(stats_file, 'r', encoding='utf-8-sig') as f:
                     reader = csv.DictReader(f)
                     stats_rows = list(reader)
                 print(f"  统计分组数: {len(stats_rows)} 行")
 
+                if check_pass_rate is not None:
+                    for row in stats_rows:
+                        f_cao_pass = float(row.get('f_cao_pass_rate', 0))
+                        if f_cao_pass == 0.0 and check_pass_rate.get('f_cao_nonzero', False):
+                            pass_rate_ok = False
+                            print(f"  ⚠ f_cao 合格率为 0.0，可能存在分组键定位问题")
+                            break
+                    if pass_rate_ok and check_pass_rate.get('f_cao_nonzero', False):
+                        print(f"  ✓ f_cao 合格率正常（非零），分组键定位正确")
+
             summary_file = os.path.join(output_dir, 'analysis_summary.txt')
             has_audit_section = False
             has_explanation = False
+            has_config_missing_section = False
             if os.path.exists(summary_file):
                 with open(summary_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                 has_audit_section = '复核入口' in content
                 has_explanation = '可解释性说明' in content
+                has_config_missing_section = '配置缺失复核' in content
                 print(f"  复核入口: {'✓ 存在' if has_audit_section else '✗ 缺失'}")
                 print(f"  可解释性说明: {'✓ 存在' if has_explanation else '✗ 缺失'}")
+                print(f"  配置缺失复核: {'✓ 存在' if has_config_missing_section else '✗ 缺失'}")
 
             audit_file = os.path.join(output_dir, 'audit_log.csv')
             audit_count = 0
+            has_config_missing_log = False
             if os.path.exists(audit_file):
                 with open(audit_file, 'r', encoding='utf-8-sig') as f:
                     reader = csv.DictReader(f)
-                    audit_count = sum(1 for _ in reader)
+                    rows = list(reader)
+                    audit_count = len(rows)
+                    for r in rows:
+                        if '配置缺失' in r.get('message', ''):
+                            has_config_missing_log = True
+                            break
                 print(f"  操作日志条数: {audit_count} 条")
+                print(f"  配置缺失留痕: {'✓ 存在' if has_config_missing_log else '✗ 缺失'}")
 
             all_pass = (
                 bad_count == expected_bad and
                 abnormal_count == expected_abnormal and
                 has_audit_section and
                 has_explanation and
+                pass_rate_ok and
+                (not expect_config_missing or (has_config_missing_section and has_config_missing_log)) and
                 all(s['exists'] and s['size'] > 0 for s in file_status.values())
             )
 
@@ -141,7 +168,10 @@ class VerificationRunner:
                 'files': file_status,
                 'has_audit': has_audit_section,
                 'has_explanation': has_explanation,
-                'audit_log_count': audit_count
+                'has_config_missing': has_config_missing_section,
+                'has_config_missing_log': has_config_missing_log,
+                'audit_log_count': audit_count,
+                'pass_rate_ok': pass_rate_ok
             }
             self.results.append(scenario_result)
 
@@ -230,7 +260,8 @@ def main():
         end_time='2026-06-05 23:59:59',
         expected_valid=3,
         expected_bad=3,
-        expected_abnormal=1
+        expected_abnormal=2,
+        expect_config_missing=True
     )
 
     runner.run_scenario(
@@ -243,7 +274,23 @@ def main():
         end_time='2026-06-03 23:59:59',
         expected_valid=25,
         expected_bad=0,
-        expected_abnormal=6
+        expected_abnormal=25,
+        expect_config_missing=True
+    )
+
+    runner.run_scenario(
+        name='场景5: 分组维度顺序调换',
+        raw_file='data/raw_data.csv',
+        dict_file='data/dictionary.csv',
+        threshold_file='data/thresholds.json',
+        output_dir='output/verify_scenario5_group_order',
+        start_time='2026-06-01 00:00:00',
+        end_time='2026-06-03 23:59:59',
+        expected_valid=25,
+        expected_bad=0,
+        expected_abnormal=7,
+        group_by=['clinker_code', 'kiln_id'],
+        check_pass_rate={'f_cao_nonzero': True}
     )
 
     all_pass = runner.print_summary()

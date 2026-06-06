@@ -9,7 +9,7 @@
   字典表: data/dictionary.csv
   阈值规则: data/thresholds.json
   统计周期: day
-  分组维度: kiln_id, clinker_code
+  分组维度: clinker_code, kiln_id
   时间范围: 2026-06-01 00:00:00 ~ 2026-06-03 23:59:59
   有效数据: 25 条
   坏行数量: 0 条
@@ -56,17 +56,17 @@
        - [预警] 28天抗压强度=46.8MPa，低于预警下限47.0MPa，低出0.20MPa。28天强度不达标属不合格品，直接影响工程结构安全
 
   [趋势复核]
-    K1|P·C 32.5:
+    P·C 32.5|K1:
       - f_cao下降 20.0%
       - strength_3d上升 13.14%
       - strength_28d上升 7.25%
       - loss_on_ignition下降 18.03%
-    K1|P·O 42.5:
-      - f_cao下降 15.29%
-      - loss_on_ignition下降 13.98%
-    K2|P·II 52.5:
+    P·II 52.5|K2:
       - f_cao下降 21.43%
       - loss_on_ignition下降 17.65%
+    P·O 42.5|K1:
+      - f_cao下降 15.29%
+      - loss_on_ignition下降 13.98%
 
 四、可解释性说明
 ----------------------------------------------------------------------
