@@ -1,0 +1,6 @@
+﻿device_id,device_type,os_version,owner,department,security_level,install_apps,storage_usage,last_check_date,_source_line,_source_file,_risk_labels,_reason,_last_status
+DEV004,iPhone,iOS 15,赵六,财务部,low,微信|QQ|TikTok,90,2026-05-04,5,devices.csv,"系统版本过旧,安全等级不足,存在违规应用,存储使用率过高","os_version not in ['iOS 16', 'iOS 17', 'Android 13', 'Android 14'] (severity=error); security_level == low (severity=error); install_apps contains 微信 (severity=warning); storage_usage out of range [0, 80] (severity=warning)",abnormal
+DEV005,Samsung,Android 12,钱七,人事部,medium,企业微信,75,2026-05-05,6,devices.csv,"系统版本过旧,安全等级中等,存在违规应用","os_version not in ['iOS 16', 'iOS 17', 'Android 13', 'Android 14'] (severity=error); security_level == medium (severity=warning); install_apps contains 微信 (severity=warning)",abnormal
+DEV006,,iOS 16,孙八,研发部,high,企业微信|钉钉,45,2026-05-06,7,devices.csv,缺字段,缺少必填字段: device_type,
+DEV012,iPhone,iOS 16,,研发部,high,企业微信,50,2026-05-12,13,devices.csv,缺字段,缺少必填字段: owner,
+DEV013,Huawei,Android 13,刘十三,研发部,low,QQ|TikTok,95,2026-05-13,14,devices.csv,"安全等级不足,存在违规应用,存储使用率过高","security_level == low (severity=error); install_apps contains QQ (severity=warning); storage_usage out of range [0, 80] (severity=warning)",

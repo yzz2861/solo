@@ -1,0 +1,67 @@
+required_fields:
+  - device_id
+  - device_type
+  - os_version
+  - owner
+  - department
+
+duplicate_keys:
+  - device_id
+
+rules:
+  - field: os_version
+    label: 系统版本过旧
+    mode: not_match
+    condition:
+      - iOS 16
+      - iOS 17
+      - Android 13
+      - Android 14
+    severity: error
+
+  - field: device_type
+    label: 非公司认可品牌
+    mode: not_match
+    condition:
+      - iPhone
+      - Huawei
+      - Xiaomi
+      - OPPO
+      - vivo
+      - Samsung
+    severity: warning
+
+  - field: security_level
+    label: 安全等级不足
+    mode: match
+    condition: low
+    severity: error
+
+  - field: security_level
+    label: 安全等级中等
+    mode: match
+    condition: medium
+    severity: warning
+
+  - field: security_level
+    label: 安全等级高
+    mode: match
+    condition: high
+    severity: info
+
+  - field: install_apps
+    label: 存在违规应用
+    mode: contains
+    condition:
+      - 微信
+      - QQ
+      - TikTok
+    severity: warning
+
+  - field: storage_usage
+    label: 存储使用率过高
+    mode: range
+    condition:
+      min: 0
+      max: 80
+    severity: warning

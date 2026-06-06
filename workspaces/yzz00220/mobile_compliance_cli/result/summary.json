@@ -1,0 +1,24 @@
+{
+  "total": 15,
+  "normal": 0,
+  "abnormal": 5,
+  "review": 10,
+  "missing_field": 2,
+  "duplicate": 1,
+  "risk_labels": {
+    "安全等级高": 7,
+    "存在违规应用": 11,
+    "安全等级中等": 3,
+    "系统版本过旧": 2,
+    "安全等级不足": 2,
+    "存储使用率过高": 3,
+    "缺字段": 2,
+    "非公司认可品牌": 2,
+    "重复": 1
+  },
+  "output_files": {
+    "normal": "result/normal.csv",
+    "abnormal": "result/abnormal.csv",
+    "review": "result/review.csv"
+  }
+}

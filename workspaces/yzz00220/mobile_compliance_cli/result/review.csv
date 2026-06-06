@@ -1,0 +1,11 @@
+﻿device_id,device_type,os_version,owner,department,security_level,install_apps,storage_usage,last_check_date,_source_line,_source_file,_risk_labels,_reason,_last_status
+DEV001,iPhone,iOS 17,张三,研发部,high,企业微信|钉钉,65,2026-05-01,2,devices.csv,"安全等级高,存在违规应用",security_level == high (severity=info); install_apps contains 微信 (severity=warning),
+DEV002,Huawei,Android 14,李四,市场部,high,企业微信,72,2026-05-02,3,devices.csv,"安全等级高,存在违规应用",security_level == high (severity=info); install_apps contains 微信 (severity=warning),
+DEV003,Xiaomi,Android 13,王五,研发部,medium,企业微信|微信,58,2026-05-03,4,devices.csv,"安全等级中等,存在违规应用",security_level == medium (severity=warning); install_apps contains 微信 (severity=warning),
+DEV007,OPPO,Android 14,周九,市场部,high,企业微信,80,2026-05-07,8,devices.csv,"安全等级高,存在违规应用",security_level == high (severity=info); install_apps contains 微信 (severity=warning),
+DEV008,iPhone,iOS 17,吴十,研发部,high,企业微信,60,2026-05-08,9,devices.csv,"安全等级高,存在违规应用",security_level == high (severity=info); install_apps contains 微信 (severity=warning),
+DEV009,vivo,Android 14,郑十一,财务部,high,,55,2026-05-09,10,devices.csv,安全等级高,security_level == high (severity=info),
+DEV010,Unknown,Android 14,王十二,市场部,medium,微信,85,2026-05-10,11,devices.csv,"非公司认可品牌,安全等级中等,存在违规应用,存储使用率过高","device_type not in ['iPhone', 'Huawei', 'Xiaomi', 'OPPO', 'vivo', 'Samsung'] (severity=warning); security_level == medium (severity=warning); install_apps contains 微信 (severity=warning); storage_usage out of range [0, 80] (severity=warning)",
+DEV001,iPhone,iOS 17,张三,研发部,high,企业微信|钉钉,65,2026-05-11,12,devices.csv,重复,重复记录: 键=DEV001,
+DEV014,iPhone,iOS 17,陈十四,人事部,high,企业微信|钉钉,70,2026-05-14,15,devices.csv,"安全等级高,存在违规应用",security_level == high (severity=info); install_apps contains 微信 (severity=warning),
+DEV015,华为,Android 14,杨十五,市场部,high,企业微信,68,2026-05-15,16,devices.csv,"非公司认可品牌,安全等级高,存在违规应用","device_type not in ['iPhone', 'Huawei', 'Xiaomi', 'OPPO', 'vivo', 'Samsung'] (severity=warning); security_level == high (severity=info); install_apps contains 微信 (severity=warning)",
