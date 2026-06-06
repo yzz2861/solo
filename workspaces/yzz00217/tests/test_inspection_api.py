@@ -668,6 +668,76 @@ class TestInspectionService(unittest.TestCase):
         self.assertEqual(pass_count, 1)
         self.assertEqual(review_count, 2)
 
+    def test_each_record_has_own_state_machine(self):
+        input1 = self._make_input(
+            row_number=1,
+            blade_id="BLD-TEST-001",
+            defect_size_mm=5.0,
+        )
+        input2 = self._make_input(
+            row_number=2,
+            blade_id="BLD-TEST-002",
+            defect_size_mm=100.0,
+        )
+
+        sm1 = self.service._create_state_machine_for_record("BLD-TEST-001", "test")
+        sm2 = self.service._create_state_machine_for_record("BLD-TEST-002", "test")
+
+        self.assertIsNot(sm1, sm2)
+        self.assertEqual(sm1.current_status, InspectionStatus.AUTO_INSPECTION)
+        self.assertEqual(sm2.current_status, InspectionStatus.AUTO_INSPECTION)
+
+        sm1.transition_to(
+            InspectionStatus.PENDING_REVIEW,
+            operator="system",
+            blade_id="BLD-TEST-001",
+        )
+        self.assertEqual(sm1.current_status, InspectionStatus.PENDING_REVIEW)
+        self.assertEqual(sm2.current_status, InspectionStatus.AUTO_INSPECTION)
+
+    def test_state_transition_sequence_for_pass(self):
+        sm = self.service._create_state_machine_for_record("BLD-TEST-001", "applicant")
+
+        self.assertEqual(sm.current_status, InspectionStatus.AUTO_INSPECTION)
+        self.assertEqual(len(sm.history), 2)
+        self.assertEqual(sm.history[0].status, InspectionStatus.SUBMITTED)
+        self.assertEqual(sm.history[1].status, InspectionStatus.AUTO_INSPECTION)
+
+        self.assertTrue(sm.can_pass_directly())
+        sm.transition_to(
+            InspectionStatus.COMPLETED,
+            operator="system",
+            remark="通过",
+            blade_id="BLD-TEST-001",
+        )
+        self.assertEqual(sm.current_status, InspectionStatus.COMPLETED)
+        self.assertEqual(len(sm.history), 3)
+
+    def test_state_transition_sequence_for_review(self):
+        sm = self.service._create_state_machine_for_record("BLD-TEST-001", "applicant")
+
+        self.assertEqual(sm.current_status, InspectionStatus.AUTO_INSPECTION)
+        self.assertTrue(sm.can_enter_review())
+
+        sm.transition_to(
+            InspectionStatus.PENDING_REVIEW,
+            operator="system",
+            remark="需复核",
+            blade_id="BLD-TEST-001",
+        )
+        self.assertEqual(sm.current_status, InspectionStatus.PENDING_REVIEW)
+        self.assertTrue(sm.is_in_review())
+
+    def test_state_machine_starts_from_draft_not_shared(self):
+        sm = InspectionStateMachine()
+        self.assertEqual(sm.current_status, InspectionStatus.DRAFT)
+
+        sm2 = InspectionStateMachine()
+        self.assertIsNot(sm, sm2)
+        sm.transition_to(InspectionStatus.SUBMITTED, "test", blade_id="BLD-001")
+        self.assertEqual(sm.current_status, InspectionStatus.SUBMITTED)
+        self.assertEqual(sm2.current_status, InspectionStatus.DRAFT)
+
 
 class TestBadRowIsolation(unittest.TestCase):
     def test_bad_row_record(self):

@@ -46,7 +46,22 @@ class InspectionService:
         self.config = config or load_default_config()
         self.logger = get_logger("inspection-service")
         self.record_manager = AuditRecordManager()
-        self.state_machine = InspectionStateMachine()
+
+    def _create_state_machine_for_record(self, blade_id: str, applicant: str = "system") -> InspectionStateMachine:
+        sm = InspectionStateMachine()
+        sm.transition_to(
+            InspectionStatus.SUBMITTED,
+            operator=applicant,
+            remark="申请提交",
+            blade_id=blade_id,
+        )
+        sm.transition_to(
+            InspectionStatus.AUTO_INSPECTION,
+            operator="system",
+            remark="进入自动巡检",
+            blade_id=blade_id,
+        )
+        return sm
 
     def process_single(self, input_data: InspectionInput) -> InspectionOutput:
         self.logger.info(f"开始处理巡检申请: 行号={input_data.row_number}, 申请={input_data.application.application_id}")
@@ -55,6 +70,10 @@ class InspectionService:
         process_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         blade_id = input_data.master_data.blade_id
         app_id = input_data.application.application_id
+        applicant = input_data.application.applicant
+
+        state_machine = self._create_state_machine_for_record(blade_id, applicant)
+        self.logger.debug(f"  状态机初始化完成，当前状态: {state_machine.current_status.value}")
 
         try:
             is_config_ok, config_errors = check_config_completeness(self.config)
@@ -120,15 +139,38 @@ class InspectionService:
 
             if conclusion == BusinessConclusion.REVIEW_REQUIRED:
                 self.logger.info(f"  -> 判定为需复核，进入人工复核流程")
-                if self.state_machine.can_enter_review():
-                    self.state_machine.transition_to(
+                if state_machine.can_enter_review():
+                    state_machine.transition_to(
                         InspectionStatus.PENDING_REVIEW,
                         operator="system",
                         remark="自动巡检判定需复核",
                         blade_id=blade_id,
                     )
+                    self.logger.debug(f"  状态流转: AUTO_INSPECTION -> PENDING_REVIEW")
+                else:
+                    self.logger.warn(f"  当前状态 {state_machine.current_status.value} 无法进入复核")
             elif conclusion == BusinessConclusion.PASS:
                 self.logger.info(f"  -> 判定为通过")
+                if state_machine.can_pass_directly():
+                    state_machine.transition_to(
+                        InspectionStatus.COMPLETED,
+                        operator="system",
+                        remark="自动巡检通过",
+                        blade_id=blade_id,
+                    )
+                    self.logger.debug(f"  状态流转: AUTO_INSPECTION -> COMPLETED")
+            elif conclusion == BusinessConclusion.REJECT:
+                self.logger.info(f"  -> 判定为拒绝")
+                state_machine.transition_to(
+                    InspectionStatus.COMPLETED,
+                    operator="system",
+                    remark="自动巡检拒绝",
+                    blade_id=blade_id,
+                )
+                self.logger.debug(f"  状态流转: AUTO_INSPECTION -> COMPLETED (rejected)")
+
+            final_status = state_machine.current_status.value
+            self.logger.debug(f"  最终状态: {final_status}")
 
             error_msg = ""
             all_errors = []
@@ -231,7 +273,8 @@ class InspectionService:
         return result_file
 
     def get_review_entry_info(self) -> Dict[str, Any]:
-        return self.state_machine.get_review_entry_point()
+        temp_sm = InspectionStateMachine()
+        return temp_sm.get_review_entry_point()
 
 
 def process_single_inspection(
