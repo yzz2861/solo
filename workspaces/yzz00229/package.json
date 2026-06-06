@@ -1,0 +1,14 @@
+{
+  "name": "fire-passage-evidence-api",
+  "version": "1.0.0",
+  "description": "消防通道占用取证API - 数据校验、状态分流、闭环处理",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node test/run-tests.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}
