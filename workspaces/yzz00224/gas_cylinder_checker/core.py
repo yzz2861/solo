@@ -44,6 +44,44 @@ class ProcessResult:
     dedup_removed: int = 0
 
 
+class RiskClassifier:
+    RISK_HIGH = "高风险"
+    RISK_MEDIUM = "中风险"
+    RISK_LOW = "低风险"
+    RISK_UNKNOWN = "无法判定"
+
+    RISK_LEVEL_ORDER = [RISK_HIGH, RISK_MEDIUM, RISK_LOW, RISK_UNKNOWN]
+
+    def __init__(self, config: Dict):
+        self.high_days = config['risk_levels']['high_risk_days']
+        self.medium_days = config['risk_levels']['medium_risk_days']
+        self.low_days = config['risk_levels']['low_risk_days']
+
+    def classify(self, days_to_expiry: Optional[int]) -> str:
+        if days_to_expiry is None:
+            return self.RISK_UNKNOWN
+
+        if days_to_expiry < 0:
+            return self.RISK_HIGH
+
+        if days_to_expiry <= self.high_days:
+            return self.RISK_HIGH
+        elif days_to_expiry <= self.medium_days:
+            return self.RISK_MEDIUM
+        elif days_to_expiry <= self.low_days:
+            return self.RISK_LOW
+        else:
+            return self.RISK_UNKNOWN
+
+    def get_rule_description(self) -> Dict[str, str]:
+        return {
+            self.RISK_HIGH: f"已过期 或 距离到期 ≤ {self.high_days} 天",
+            self.RISK_MEDIUM: f"{self.high_days} 天 < 距离到期 ≤ {self.medium_days} 天",
+            self.RISK_LOW: f"{self.medium_days} 天 < 距离到期 ≤ {self.low_days} 天",
+            self.RISK_UNKNOWN: f"距离到期 > {self.low_days} 天 或 无法计算"
+        }
+
+
 class ConfigLoader:
     @staticmethod
     def load(config_path: str) -> Dict:
@@ -59,13 +97,16 @@ class DataParser:
         self.required_fields = config['required_fields']
         self.base_dir = base_dir or os.path.dirname(os.path.abspath(__file__))
         self.check_date = datetime.strptime(config['time_range']['check_date'], '%Y-%m-%d').date()
+        self.date_formats = config.get('consistency_rules', {}).get(
+            'parse_date_formats',
+            ['%Y-%m-%d', '%Y/%m/%d', '%Y.%m.%d']
+        )
 
     def parse_date(self, date_str: str) -> Optional[date]:
         if not date_str or not date_str.strip():
             return None
         date_str = date_str.strip()
-        formats = ['%Y-%m-%d', '%Y/%m/%d', '%Y.%m.%d', '%y-%m-%d']
-        for fmt in formats:
+        for fmt in self.date_formats:
             try:
                 return datetime.strptime(date_str, fmt).date()
             except ValueError:
@@ -135,40 +176,51 @@ class DataParser:
 
 
 class DataProcessor:
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict, base_dir: str = None):
         self.config = config
         self.batch_id = config['batch_id']
         self.source_name = config['source_name']
-        self.risk_levels = config['risk_levels']
-        self.dedup_keys = config['deduplication_keys']
+        self.base_dir = base_dir or os.path.dirname(os.path.abspath(__file__))
+
+        dedup_config = config.get('deduplication', {})
+        self.dedup_keys = dedup_config.get('keys', config.get('deduplication_keys', ['气瓶编号']))
+        self.dedup_strategy = dedup_config.get('strategy', 'keep_latest')
+        self.dedup_sort_by = dedup_config.get('sort_by', '采集时间')
+        self.dedup_order = dedup_config.get('order', 'desc')
+
         self.check_date = datetime.strptime(config['time_range']['check_date'], '%Y-%m-%d').date()
         self.time_start = datetime.strptime(config['time_range']['start_date'], '%Y-%m-%d').date()
         self.time_end = datetime.strptime(config['time_range']['end_date'], '%Y-%m-%d').date()
+
+        self.risk_classifier = RiskClassifier(config)
 
     def calculate_days_to_expiry(self, exp_date: date) -> int:
         delta = exp_date - self.check_date
         return delta.days
 
-    def classify_risk(self, days_to_expiry: int) -> str:
-        if days_to_expiry is None:
-            return '无法判定'
-        if days_to_expiry < 0:
-            return '高风险'
-        if days_to_expiry <= self.risk_levels['high_risk_days']:
-            return '高风险'
-        elif days_to_expiry <= self.risk_levels['medium_risk_days']:
-            return '中风险'
-        elif days_to_expiry <= self.risk_levels['low_risk_days']:
-            return '低风险'
-        else:
-            return '低风险'
+    def classify_risk(self, days_to_expiry: Optional[int]) -> str:
+        return self.risk_classifier.classify(days_to_expiry)
+
+    def _sort_records_for_dedup(self, records: List[CylinderRecord]) -> List[CylinderRecord]:
+        sort_field = self.dedup_sort_by
+
+        def sort_key(record):
+            val = getattr(record, sort_field, '')
+            if self.dedup_order == 'desc':
+                return val or ''
+            return val or ''
+
+        sorted_records = sorted(records, key=sort_key, reverse=(self.dedup_order == 'desc'))
+        return sorted_records
 
     def deduplicate(self, records: List[CylinderRecord]) -> Tuple[List[CylinderRecord], int]:
         seen = {}
         unique_records = []
         removed_count = 0
 
-        for record in records:
+        sorted_records = self._sort_records_for_dedup(records)
+
+        for record in sorted_records:
             key_parts = [str(getattr(record, k, '')) for k in self.dedup_keys]
             dedup_key = '|'.join(key_parts)
 

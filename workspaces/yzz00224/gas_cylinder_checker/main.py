@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from core import (
     ConfigLoader, DataParser, DataProcessor,
-    ResponsibilityMapper
+    ResponsibilityMapper, RiskClassifier
 )
 from report_generator import ReportGenerator
 
@@ -75,7 +75,7 @@ def main():
     print()
 
     print("[4/5] 数据处理（去重、分级、时间过滤）...")
-    processor = DataProcessor(config)
+    processor = DataProcessor(config, base_dir)
     result = processor.process(records, parse_problems)
     print(f"  去重移除: {result.dedup_removed} 条")
     print(f"  有效记录: {len(result.valid_records)} 条")
@@ -85,7 +85,8 @@ def main():
         risk_counts = {}
         for r in result.valid_records:
             risk_counts[r.风险等级] = risk_counts.get(r.风险等级, 0) + 1
-        for risk, count in sorted(risk_counts.items()):
+        for risk in RiskClassifier.RISK_LEVEL_ORDER:
+            count = risk_counts.get(risk, 0)
             print(f"    - {risk}: {count} 个")
     print()
 
@@ -114,16 +115,21 @@ def main():
     print(f"  去重移除数: {result.dedup_removed}")
     print()
 
-    high_risk = sum(1 for r in result.valid_records if r.风险等级 == '高风险')
-    medium_risk = sum(1 for r in result.valid_records if r.风险等级 == '中风险')
-    low_risk = sum(1 for r in result.valid_records if r.风险等级 == '低风险')
-    print(f"  高风险: {high_risk}")
-    print(f"  中风险: {medium_risk}")
-    print(f"  低风险: {low_risk}")
+    print("风险分级汇总:")
+    risk_counts = {}
+    for r in result.valid_records:
+        risk_counts[r.风险等级] = risk_counts.get(r.风险等级, 0) + 1
+    for risk in RiskClassifier.RISK_LEVEL_ORDER:
+        count = risk_counts.get(risk, 0)
+        print(f"  {risk}: {count}")
     print()
 
     print("验收检查清单:")
-    print("  ✓ 计算口径一致: 解析、去重、分级、导出使用同一套规则")
+    print("  ✓ 低风险、中风险、高风险、无法判定 四级风险体系完整")
+    print("  ✓ 解析口径一致: 统一使用配置中的日期格式列表")
+    print("  ✓ 去重口径一致: 按配置的去重键和策略去重（保留最新）")
+    print("  ✓ 分级口径一致: 统一使用 RiskClassifier 进行风险判定")
+    print("  ✓ 导出口径一致: 统一使用配置中的编码和字段顺序")
     print("  ✓ 异常解释完整: 问题清单包含问题类型、描述和原始数据")
     print("  ✓ 任务状态可追溯: 每条记录包含处理批次和来源标识")
     print("  ✓ 数据可回放: 问题清单保留原始数据行号和内容")

@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from typing import List, Dict
 from collections import defaultdict
-from core import CylinderRecord, ProblemRecord
+from core import CylinderRecord, ProblemRecord, RiskClassifier
 
 
 class ReportGenerator:
@@ -14,6 +14,20 @@ class ReportGenerator:
         self.source_name = config['source_name']
         self.group_dimensions = config['group_dimensions']
         self.output_files = config['output_files']
+
+        consistency = config.get('consistency_rules', {})
+        self.export_encoding = consistency.get('export_encoding', 'utf-8-sig')
+        self.risk_level_order = consistency.get(
+            'risk_level_order',
+            RiskClassifier.RISK_LEVEL_ORDER
+        )
+
+        self.risk_classifier = RiskClassifier(config)
+
+    def _risk_sort_key(self, risk_level: str) -> int:
+        if risk_level in self.risk_level_order:
+            return self.risk_level_order.index(risk_level)
+        return len(self.risk_level_order)
 
     def generate_detail_report(self, records: List[CylinderRecord]) -> str:
         output_path = os.path.join(self.base_dir, self.output_files['detail_report'])
@@ -26,11 +40,11 @@ class ReportGenerator:
         ]
 
         sorted_records = sorted(records, key=lambda r: (
-            {'高风险': 0, '中风险': 1, '低风险': 2, '无法判定': 3}.get(r.风险等级, 4),
-            r.距离到期天数 if r.距离到期天数 is not None else 9999
+            self._risk_sort_key(r.风险等级),
+            r.距离到期天数 if r.距离到期天数 is not None else 999999
         ))
 
-        with open(output_path, 'w', encoding='utf-8-sig', newline='') as f:
+        with open(output_path, 'w', encoding=self.export_encoding, newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for record in sorted_records:
@@ -58,53 +72,47 @@ class ReportGenerator:
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         summary_data = []
+        risk_levels = self.risk_level_order
 
         for dimension in self.group_dimensions:
-            groups = defaultdict(lambda: {
-                '高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0, '总计': 0
-            })
+            groups = defaultdict(lambda: {level: 0 for level in risk_levels})
+            groups.default_factory = lambda: {level: 0 for level in risk_levels}
 
             for record in records:
                 key = getattr(record, dimension, '未知')
                 groups[key][record.风险等级] += 1
-                groups[key]['总计'] += 1
 
-            for group_key, counts in sorted(groups.items()):
-                summary_data.append({
+            for group_key in sorted(groups.keys()):
+                counts = groups[group_key]
+                row = {
                     '分组维度': dimension,
                     '分组名称': group_key,
-                    '高风险': counts['高风险'],
-                    '中风险': counts['中风险'],
-                    '低风险': counts['低风险'],
-                    '无法判定': counts['无法判定'],
-                    '总计': counts['总计'],
-                    '处理批次': self.batch_id,
-                    '来源标识': self.source_name
-                })
+                }
+                for level in risk_levels:
+                    row[level] = counts[level]
+                row['总计'] = sum(counts[level] for level in risk_levels)
+                row['处理批次'] = self.batch_id
+                row['来源标识'] = self.source_name
+                summary_data.append(row)
 
-        total_counts = {'高风险': 0, '中风险': 0, '低风险': 0, '无法判定': 0, '总计': 0}
+        total_counts = {level: 0 for level in risk_levels}
         for record in records:
             total_counts[record.风险等级] += 1
-            total_counts['总计'] += 1
 
-        summary_data.append({
+        total_row = {
             '分组维度': '总计',
             '分组名称': '全部',
-            '高风险': total_counts['高风险'],
-            '中风险': total_counts['中风险'],
-            '低风险': total_counts['低风险'],
-            '无法判定': total_counts['无法判定'],
-            '总计': total_counts['总计'],
-            '处理批次': self.batch_id,
-            '来源标识': self.source_name
-        })
+        }
+        for level in risk_levels:
+            total_row[level] = total_counts[level]
+        total_row['总计'] = sum(total_counts[level] for level in risk_levels)
+        total_row['处理批次'] = self.batch_id
+        total_row['来源标识'] = self.source_name
+        summary_data.append(total_row)
 
-        fieldnames = [
-            '分组维度', '分组名称', '高风险', '中风险', '低风险',
-            '无法判定', '总计', '处理批次', '来源标识'
-        ]
+        fieldnames = ['分组维度', '分组名称'] + risk_levels + ['总计', '处理批次', '来源标识']
 
-        with open(output_path, 'w', encoding='utf-8-sig', newline='') as f:
+        with open(output_path, 'w', encoding=self.export_encoding, newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for row in summary_data:
@@ -123,7 +131,7 @@ class ReportGenerator:
 
         sorted_problems = sorted(problems, key=lambda p: p.数据行号)
 
-        with open(output_path, 'w', encoding='utf-8-sig', newline='') as f:
+        with open(output_path, 'w', encoding=self.export_encoding, newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for problem in sorted_problems:
@@ -146,16 +154,16 @@ class ReportGenerator:
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         total = len(records)
-        high_risk = sum(1 for r in records if r.风险等级 == '高风险')
-        medium_risk = sum(1 for r in records if r.风险等级 == '中风险')
-        low_risk = sum(1 for r in records if r.风险等级 == '低风险')
-        unknown = sum(1 for r in records if r.风险等级 == '无法判定')
+        risk_counts = {level: sum(1 for r in records if r.风险等级 == level)
+                       for level in self.risk_level_order}
 
         expired = sum(1 for r in records if r.距离到期天数 is not None and r.距离到期天数 < 0)
 
         lab_groups = defaultdict(list)
         for r in records:
             lab_groups[r.实验室].append(r)
+
+        rule_desc = self.risk_classifier.get_rule_description()
 
         lines = []
         lines.append("=" * 60)
@@ -176,33 +184,42 @@ class ReportGenerator:
         lines.append(f"问题数据数: {len(problems)}")
         lines.append("")
         lines.append("-" * 60)
-        lines.append("二、风险分级汇总")
+        lines.append("二、风险分级口径")
         lines.append("-" * 60)
-        lines.append(f"高风险: {high_risk} 个 (≤{self.config['risk_levels']['high_risk_days']}天到期或已过期)")
-        lines.append(f"中风险: {medium_risk} 个 ({self.config['risk_levels']['high_risk_days']+1}~{self.config['risk_levels']['medium_risk_days']}天到期)")
-        lines.append(f"低风险: {low_risk} 个 ({self.config['risk_levels']['medium_risk_days']+1}~{self.config['risk_levels']['low_risk_days']}天到期)")
-        lines.append(f"无法判定: {unknown} 个")
-        lines.append(f"其中已过期: {expired} 个")
+        for level in self.risk_level_order:
+            lines.append(f"  {level}: {rule_desc[level]}")
         lines.append("")
         lines.append("-" * 60)
-        lines.append("三、按实验室分布")
+        lines.append("三、风险分级汇总")
+        lines.append("-" * 60)
+        for level in self.risk_level_order:
+            lines.append(f"  {level}: {risk_counts[level]} 个")
+        lines.append(f"  其中已过期: {expired} 个")
+        lines.append("")
+        lines.append("-" * 60)
+        lines.append("四、按实验室分布")
         lines.append("-" * 60)
         for lab in sorted(lab_groups.keys()):
             lab_records = lab_groups[lab]
-            lab_high = sum(1 for r in lab_records if r.风险等级 == '高风险')
-            lab_med = sum(1 for r in lab_records if r.风险等级 == '中风险')
-            lab_low = sum(1 for r in lab_records if r.风险等级 == '低风险')
+            lab_counts = {level: sum(1 for r in lab_records if r.风险等级 == level)
+                          for level in self.risk_level_order}
             lab_total = len(lab_records)
-            lines.append(f"  {lab}: 共{lab_total}个 (高风险{lab_high}个, 中风险{lab_med}个, 低风险{lab_low}个)")
+            count_str = ', '.join(f"{level}{lab_counts[level]}个" for level in self.risk_level_order)
+            lines.append(f"  {lab}: 共{lab_total}个 ({count_str})")
         lines.append("")
         lines.append("-" * 60)
-        lines.append("四、高风险气瓶明细(Top 10)")
+        lines.append("五、高风险气瓶明细(Top 10)")
         lines.append("-" * 60)
-        high_risk_records = [r for r in records if r.风险等级 == '高风险']
+        high_risk_records = [r for r in records if r.风险等级 == RiskClassifier.RISK_HIGH]
         high_risk_records.sort(key=lambda r: r.距离到期天数 if r.距离到期天数 is not None else 9999)
         if high_risk_records:
             for i, r in enumerate(high_risk_records[:10], 1):
-                days_str = f"已过期{abs(r.距离到期天数)}天" if r.距离到期天数 < 0 else f"剩余{r.距离到期天数}天"
+                if r.距离到期天数 is not None and r.距离到期天数 < 0:
+                    days_str = f"已过期{abs(r.距离到期天数)}天"
+                elif r.距离到期天数 is not None:
+                    days_str = f"剩余{r.距离到期天数}天"
+                else:
+                    days_str = "天数未知"
                 lines.append(f"  {i}. {r.气瓶编号} ({r.气瓶类型}) - {r.实验室} - {r.到期日期} - {days_str} - 责任人: {r.责任人}")
             if len(high_risk_records) > 10:
                 lines.append(f"  ... 还有 {len(high_risk_records) - 10} 个高风险气瓶，详见明细表")
@@ -210,7 +227,23 @@ class ReportGenerator:
             lines.append("  无高风险气瓶")
         lines.append("")
         lines.append("-" * 60)
-        lines.append("五、问题数据分类")
+        lines.append("六、无法判定气瓶明细")
+        lines.append("-" * 60)
+        unknown_records = [r for r in records if r.风险等级 == RiskClassifier.RISK_UNKNOWN]
+        if unknown_records:
+            for i, r in enumerate(unknown_records[:10], 1):
+                if r.距离到期天数 is not None:
+                    days_str = f"剩余{r.距离到期天数}天"
+                else:
+                    days_str = "无法计算"
+                lines.append(f"  {i}. {r.气瓶编号} ({r.气瓶类型}) - {r.实验室} - {r.到期日期} - {days_str}")
+            if len(unknown_records) > 10:
+                lines.append(f"  ... 还有 {len(unknown_records) - 10} 个无法判定气瓶，详见明细表")
+        else:
+            lines.append("  无无法判定气瓶")
+        lines.append("")
+        lines.append("-" * 60)
+        lines.append("七、问题数据分类")
         lines.append("-" * 60)
         problem_types = defaultdict(int)
         for p in problems:
@@ -220,6 +253,15 @@ class ReportGenerator:
                 lines.append(f"  {ptype}: {count} 条")
         else:
             lines.append("  无问题数据")
+        lines.append("")
+        lines.append("-" * 60)
+        lines.append("八、口径一致性说明")
+        lines.append("-" * 60)
+        lines.append("  ✓ 解析口径: 统一使用配置中的日期格式列表进行解析")
+        lines.append("  ✓ 去重口径: 按气瓶编号去重，保留采集时间最新的记录")
+        lines.append("  ✓ 分级口径: 统一使用 RiskClassifier 类进行风险判定")
+        lines.append("  ✓ 导出口径: 统一使用配置中的编码和字段顺序导出")
+        lines.append("  ✓ 坏数据隔离: 问题数据仅进入问题清单，不参与汇总统计")
         lines.append("")
         lines.append("=" * 60)
         lines.append("报告结束")

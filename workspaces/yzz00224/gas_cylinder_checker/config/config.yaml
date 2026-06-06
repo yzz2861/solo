@@ -10,14 +10,23 @@ risk_levels:
   high_risk_days: 30
   medium_risk_days: 90
   low_risk_days: 180
+  rules:
+    high: "距离到期天数 ≤ high_risk_days 或 已过期（天数<0）"
+    medium: "high_risk_days < 距离到期天数 ≤ medium_risk_days"
+    low: "medium_risk_days < 距离到期天数 ≤ low_risk_days"
+    unknown: "距离到期天数 > low_risk_days 或 无法计算"
+
+deduplication:
+  keys:
+    - "气瓶编号"
+  strategy: "keep_latest"
+  sort_by: "采集时间"
+  order: "desc"
 
 group_dimensions:
   - "实验室"
   - "责任人"
   - "气瓶类型"
-
-deduplication_keys:
-  - "气瓶编号"
 
 required_fields:
   - "气瓶编号"
@@ -33,3 +42,15 @@ output_files:
   summary_report: "output/汇总报告.csv"
   problem_list: "output/问题清单.csv"
   text_summary: "output/文本摘要.txt"
+
+consistency_rules:
+  parse_date_formats:
+    - "%Y-%m-%d"
+    - "%Y/%m/%d"
+    - "%Y.%m.%d"
+  export_encoding: "utf-8-sig"
+  risk_level_order:
+    - "高风险"
+    - "中风险"
+    - "低风险"
+    - "无法判定"
