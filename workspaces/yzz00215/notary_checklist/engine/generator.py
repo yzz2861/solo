@@ -33,6 +33,7 @@ class GenerationEngine:
         if previous_result and previous_result.idempotency_key == idempotency_key:
             is_replay = True
             result = previous_result
+            batch.task_status = "completed"
             result.batch = batch
             result.is_idempotent_replay = True
             return result
