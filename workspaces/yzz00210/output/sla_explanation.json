@@ -31,10 +31,14 @@
         "response_sla": 0.5,
         "response_actual": 0.25,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.25小时，SLA 0.5小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 4,
         "resolve_actual": 3.5,
         "resolve_risk": "WARNING",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 3.5小时，SLA 4小时，已达SLA的 87.5%（预警阈值 80.0%）",
         "overall_risk": "WARNING"
       }
@@ -72,10 +76,14 @@
         "response_sla": 2,
         "response_actual": 1.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.5小时，SLA 2小时，仅达SLA的 75.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 31.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 31.0小时，SLA 24小时，已超过SLA的 129.2%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -115,10 +123,14 @@
         "response_sla": 2,
         "response_actual": 4.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 4.0小时，SLA 2小时，已超过SLA的 200.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 24,
         "resolve_actual": 72.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 72.0小时，SLA 24小时，已超过SLA的 300.0%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -156,12 +168,16 @@
         "response_sla": 24,
         "response_actual": 7.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 7.0小时，SLA 24小时，仅达SLA的 29.2%（正常）",
         "resolve_sla": 96,
-        "resolve_actual": null,
-        "resolve_risk": "UNKNOWN",
-        "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
-        "overall_risk": "NORMAL"
+        "resolve_actual": 145.0,
+        "resolve_risk": "OVERDUE",
+        "resolve_time_source": "close_time_fallback",
+        "resolve_time_source_explanation": "无解决时间，使用关闭时间（close_time）作为替代",
+        "resolve_hit_detail": "解决耗时 145.0小时，SLA 96小时，已超过SLA的 151.0%（逾期）",
+        "overall_risk": "OVERDUE"
       }
     }
   },
@@ -197,10 +213,14 @@
         "response_sla": 4,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 4小时，仅达SLA的 25.0%（正常）",
         "resolve_sla": 48,
         "resolve_actual": 23.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 23.0小时，SLA 48小时，仅达SLA的 47.9%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -238,10 +258,14 @@
         "response_sla": 4,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 4小时，仅达SLA的 25.0%（正常）",
         "resolve_sla": 72,
         "resolve_actual": 57.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 57.0小时，SLA 72小时，仅达SLA的 79.2%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -279,12 +303,16 @@
         "response_sla": 2,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 2小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 120,
-        "resolve_actual": null,
-        "resolve_risk": "UNKNOWN",
-        "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
-        "overall_risk": "NORMAL"
+        "resolve_actual": 120.0,
+        "resolve_risk": "OVERDUE",
+        "resolve_time_source": "close_time_fallback",
+        "resolve_time_source_explanation": "无解决时间，使用关闭时间（close_time）作为替代",
+        "resolve_hit_detail": "解决耗时 120.0小时，SLA 120小时，已超过SLA的 100.0%（逾期）",
+        "overall_risk": "OVERDUE"
       }
     }
   },
@@ -320,10 +348,14 @@
         "response_sla": 0.5,
         "response_actual": 1.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 0.5小时，已超过SLA的 200.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 4,
         "resolve_actual": 64.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 64.0小时，SLA 4小时，已超过SLA的 1600.0%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -359,12 +391,16 @@
       },
       "threshold_hit": {
         "response_sla": 2,
-        "response_actual": null,
-        "response_risk": "UNKNOWN",
-        "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
+        "response_actual": 62.0,
+        "response_risk": "SEVERE",
+        "response_time_source": "current_time_unassigned",
+        "response_time_source_explanation": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+        "response_hit_detail": "响应耗时 62.0小时，SLA 2小时，已超过SLA的 3100.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 24,
         "resolve_actual": 62.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 62.0小时，SLA 24小时，已超过SLA的 258.3%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -402,10 +438,14 @@
         "response_sla": 24,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 24小时，仅达SLA的 4.2%（正常）",
         "resolve_sla": 96,
         "resolve_actual": 20.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 20.0小时，SLA 96小时，仅达SLA的 20.8%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -443,10 +483,14 @@
         "response_sla": 1,
         "response_actual": 0.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.5小时，SLA 1小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 12.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 12.0小时，SLA 24小时，仅达SLA的 50.0%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -486,10 +530,14 @@
         "response_sla": 2,
         "response_actual": 9.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 9.0小时，SLA 2小时，已超过SLA的 450.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 24,
         "resolve_actual": 39.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 39.0小时，SLA 24小时，已超过SLA的 162.5%（逾期）",
         "overall_risk": "SEVERE"
       }
@@ -525,11 +573,15 @@
         "response_sla": 24,
         "response_actual": 24.0,
         "response_risk": "OVERDUE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 24.0小时，SLA 24小时，已超过SLA的 100.0%（逾期）",
         "resolve_sla": 168,
-        "resolve_actual": null,
-        "resolve_risk": "UNKNOWN",
-        "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
+        "resolve_actual": 119.0,
+        "resolve_risk": "NORMAL",
+        "resolve_time_source": "close_time_fallback",
+        "resolve_time_source_explanation": "无解决时间，使用关闭时间（close_time）作为替代",
+        "resolve_hit_detail": "解决耗时 119.0小时，SLA 168小时，仅达SLA的 70.8%（正常）",
         "overall_risk": "OVERDUE"
       }
     }
@@ -566,10 +618,14 @@
         "response_sla": 4,
         "response_actual": 20.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 20.0小时，SLA 4小时，已超过SLA的 500.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 48,
         "resolve_actual": 26.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 26.0小时，SLA 48小时，仅达SLA的 54.2%（正常）",
         "overall_risk": "SEVERE"
       }
@@ -607,10 +663,14 @@
         "response_sla": 2,
         "response_actual": 1.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.5小时，SLA 2小时，仅达SLA的 75.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 16.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 16.0小时，SLA 24小时，仅达SLA的 66.7%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -648,10 +708,14 @@
         "response_sla": 0.5,
         "response_actual": 0.17,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.17小时，SLA 0.5小时，仅达SLA的 34.0%（正常）",
         "resolve_sla": 4,
         "resolve_actual": 15.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 15.0小时，SLA 4小时，已超过SLA的 375.0%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -685,12 +749,16 @@
       },
       "threshold_hit": {
         "response_sla": 24,
-        "response_actual": null,
-        "response_risk": "UNKNOWN",
-        "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
+        "response_actual": 14.0,
+        "response_risk": "NORMAL",
+        "response_time_source": "current_time_unassigned",
+        "response_time_source_explanation": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+        "response_hit_detail": "响应耗时 14.0小时，SLA 24小时，仅达SLA的 58.3%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 14.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 14.0小时，SLA 168小时，仅达SLA的 8.3%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -730,12 +798,16 @@
         "response_sla": 2,
         "response_actual": 2.0,
         "response_risk": "OVERDUE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 2.0小时，SLA 2小时，已超过SLA的 100.0%（逾期）",
         "resolve_sla": 24,
-        "resolve_actual": null,
-        "resolve_risk": "UNKNOWN",
-        "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
-        "overall_risk": "OVERDUE"
+        "resolve_actual": 77.0,
+        "resolve_risk": "SEVERE",
+        "resolve_time_source": "close_time_fallback",
+        "resolve_time_source_explanation": "无解决时间，使用关闭时间（close_time）作为替代",
+        "resolve_hit_detail": "解决耗时 77.0小时，SLA 24小时，已超过SLA的 320.8%（严重逾期，超过2倍SLA）",
+        "overall_risk": "SEVERE"
       }
     }
   },
@@ -769,10 +841,14 @@
         "response_sla": 24,
         "response_actual": 2.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 2.0小时，SLA 24小时，仅达SLA的 8.3%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 10.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 10.0小时，SLA 168小时，仅达SLA的 6.0%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -808,14 +884,18 @@
       },
       "threshold_hit": {
         "response_sla": 2,
-        "response_actual": null,
-        "response_risk": "UNKNOWN",
-        "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
+        "response_actual": 8.0,
+        "response_risk": "SEVERE",
+        "response_time_source": "current_time_unassigned",
+        "response_time_source_explanation": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+        "response_hit_detail": "响应耗时 8.0小时，SLA 2小时，已超过SLA的 400.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 120,
         "resolve_actual": 8.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 8.0小时，SLA 120小时，仅达SLA的 6.7%（正常）",
-        "overall_risk": "NORMAL"
+        "overall_risk": "SEVERE"
       }
     }
   },
@@ -851,10 +931,14 @@
         "response_sla": 0.5,
         "response_actual": 0.5,
         "response_risk": "OVERDUE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.5小时，SLA 0.5小时，已超过SLA的 100.0%（逾期）",
         "resolve_sla": 4,
         "resolve_actual": 5.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 5.0小时，SLA 4小时，已超过SLA的 125.0%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -892,10 +976,14 @@
         "response_sla": 2,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 2小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 22.0,
         "resolve_risk": "WARNING",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 22.0小时，SLA 24小时，已达SLA的 91.7%（预警阈值 80.0%）",
         "overall_risk": "WARNING"
       }
@@ -933,10 +1021,14 @@
         "response_sla": 4,
         "response_actual": 1.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.5小时，SLA 4小时，仅达SLA的 37.5%（正常）",
         "resolve_sla": 48,
         "resolve_actual": 23.5,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 23.5小时，SLA 48小时，仅达SLA的 49.0%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -974,10 +1066,14 @@
         "response_sla": 24,
         "response_actual": 18.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 18.5小时，SLA 24小时，仅达SLA的 77.1%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 91.5,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 91.5小时，SLA 168小时，仅达SLA的 54.5%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1015,10 +1111,14 @@
         "response_sla": 4,
         "response_actual": 0.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.5小时，SLA 4小时，仅达SLA的 12.5%（正常）",
         "resolve_sla": 48,
         "resolve_actual": 2.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 2.0小时，SLA 48小时，仅达SLA的 4.2%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1054,10 +1154,14 @@
         "response_sla": 24,
         "response_actual": 0.33,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.33小时，SLA 24小时，仅达SLA的 1.4%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 14.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 14.0小时，SLA 168小时，仅达SLA的 8.3%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1095,10 +1199,14 @@
         "response_sla": 24,
         "response_actual": 3.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 3.5小时，SLA 24小时，仅达SLA的 14.6%（正常）",
         "resolve_sla": 96,
         "resolve_actual": 12.5,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 12.5小时，SLA 96小时，仅达SLA的 13.0%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1136,10 +1244,14 @@
         "response_sla": 2,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 2小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 11.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 11.0小时，SLA 24小时，仅达SLA的 45.8%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1175,10 +1287,14 @@
         "response_sla": 24,
         "response_actual": 1.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.5小时，SLA 24小时，仅达SLA的 6.2%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 9.5,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 9.5小时，SLA 168小时，仅达SLA的 5.7%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1216,10 +1332,14 @@
         "response_sla": 2,
         "response_actual": 1.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.5小时，SLA 2小时，仅达SLA的 75.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 9.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 9.0小时，SLA 24小时，仅达SLA的 37.5%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1259,10 +1379,14 @@
         "response_sla": 2,
         "response_actual": null,
         "response_risk": "UNKNOWN",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
         "resolve_sla": 24,
         "resolve_actual": null,
         "resolve_risk": "UNKNOWN",
+        "resolve_time_source": null,
+        "resolve_time_source_explanation": "无法确定解决时间来源",
         "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
         "overall_risk": "UNKNOWN"
       }
@@ -1302,10 +1426,14 @@
         "response_sla": 2,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 2小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 24.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 24.0小时，SLA 24小时，已超过SLA的 100.0%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -1343,10 +1471,14 @@
         "response_sla": 2,
         "response_actual": null,
         "response_risk": "UNKNOWN",
+        "response_time_source": null,
+        "response_time_source_explanation": "无法确定响应时间来源",
         "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
         "resolve_sla": 24,
         "resolve_actual": null,
         "resolve_risk": "UNKNOWN",
+        "resolve_time_source": null,
+        "resolve_time_source_explanation": "无法确定解决时间来源",
         "resolve_hit_detail": "解决耗时或SLA阈值缺失，无法判断",
         "overall_risk": "UNKNOWN"
       }
@@ -1384,10 +1516,14 @@
         "response_sla": 24,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 24小时，仅达SLA的 4.2%（正常）",
         "resolve_sla": 96,
         "resolve_actual": 25.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 25.0小时，SLA 96小时，仅达SLA的 26.0%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1427,10 +1563,14 @@
         "response_sla": 2,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 2小时，仅达SLA的 50.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 25.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 25.0小时，SLA 24小时，已超过SLA的 104.2%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -1470,10 +1610,14 @@
         "response_sla": 2,
         "response_actual": 0.92,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.92小时，SLA 2小时，仅达SLA的 46.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 24.42,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 24.42小时，SLA 24小时，已超过SLA的 101.8%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -1511,10 +1655,14 @@
         "response_sla": 0.5,
         "response_actual": 2.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 2.0小时，SLA 0.5小时，已超过SLA的 400.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 4,
         "resolve_actual": 232.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 232.0小时，SLA 4小时，已超过SLA的 5800.0%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -1554,10 +1702,14 @@
         "response_sla": 2,
         "response_actual": 16.0,
         "response_risk": "SEVERE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 16.0小时，SLA 2小时，已超过SLA的 800.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 24,
         "resolve_actual": 32.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 32.0小时，SLA 24小时，已超过SLA的 133.3%（逾期）",
         "overall_risk": "SEVERE"
       }
@@ -1595,10 +1747,14 @@
         "response_sla": 24,
         "response_actual": 1.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 1.0小时，SLA 24小时，仅达SLA的 4.2%（正常）",
         "resolve_sla": 96,
         "resolve_actual": 55.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 55.0小时，SLA 96小时，仅达SLA的 57.3%（正常）",
         "overall_risk": "NORMAL"
       }
@@ -1634,14 +1790,18 @@
       },
       "threshold_hit": {
         "response_sla": 4,
-        "response_actual": null,
-        "response_risk": "UNKNOWN",
-        "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
+        "response_actual": 39.0,
+        "response_risk": "SEVERE",
+        "response_time_source": "current_time_unassigned",
+        "response_time_source_explanation": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+        "response_hit_detail": "响应耗时 39.0小时，SLA 4小时，已超过SLA的 975.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 72,
         "resolve_actual": 39.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 39.0小时，SLA 72小时，仅达SLA的 54.2%（正常）",
-        "overall_risk": "NORMAL"
+        "overall_risk": "SEVERE"
       }
     }
   },
@@ -1677,10 +1837,14 @@
         "response_sla": 0.5,
         "response_actual": 0.5,
         "response_risk": "OVERDUE",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.5小时，SLA 0.5小时，已超过SLA的 100.0%（逾期）",
         "resolve_sla": 4,
         "resolve_actual": 5.0,
         "resolve_risk": "OVERDUE",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 5.0小时，SLA 4小时，已超过SLA的 125.0%（逾期）",
         "overall_risk": "OVERDUE"
       }
@@ -1718,10 +1882,14 @@
         "response_sla": 24,
         "response_actual": 7.0,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 7.0小时，SLA 24小时，仅达SLA的 29.2%（正常）",
         "resolve_sla": 168,
         "resolve_actual": 423.0,
         "resolve_risk": "SEVERE",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 423.0小时，SLA 168小时，已超过SLA的 251.8%（严重逾期，超过2倍SLA）",
         "overall_risk": "SEVERE"
       }
@@ -1759,10 +1927,14 @@
         "response_sla": 0.5,
         "response_actual": 0.3,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.3小时，SLA 0.5小时，仅达SLA的 60.0%（正常）",
         "resolve_sla": 4,
         "resolve_actual": 3.63,
         "resolve_risk": "WARNING",
+        "resolve_time_source": "resolve_time",
+        "resolve_time_source_explanation": "使用工单实际解决时间（resolve_time）",
         "resolve_hit_detail": "解决耗时 3.63小时，SLA 4小时，已达SLA的 90.8%（预警阈值 80.0%）",
         "overall_risk": "WARNING"
       }
@@ -1798,14 +1970,18 @@
       },
       "threshold_hit": {
         "response_sla": 4,
-        "response_actual": null,
-        "response_risk": "UNKNOWN",
-        "response_hit_detail": "响应耗时或SLA阈值缺失，无法判断",
+        "response_actual": 14.0,
+        "response_risk": "SEVERE",
+        "response_time_source": "current_time_unassigned",
+        "response_time_source_explanation": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+        "response_hit_detail": "响应耗时 14.0小时，SLA 4小时，已超过SLA的 350.0%（严重逾期，超过2倍SLA）",
         "resolve_sla": 48,
         "resolve_actual": 14.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 14.0小时，SLA 48小时，仅达SLA的 29.2%（正常）",
-        "overall_risk": "NORMAL"
+        "overall_risk": "SEVERE"
       }
     }
   },
@@ -1841,10 +2017,14 @@
         "response_sla": 2,
         "response_actual": 0.5,
         "response_risk": "NORMAL",
+        "response_time_source": "assign_time",
+        "response_time_source_explanation": "使用工单实际分配时间（assign_time）",
         "response_hit_detail": "响应耗时 0.5小时，SLA 2小时，仅达SLA的 25.0%（正常）",
         "resolve_sla": 24,
         "resolve_actual": 16.0,
         "resolve_risk": "NORMAL",
+        "resolve_time_source": "current_time_in_progress",
+        "resolve_time_source_explanation": "工单处理中，使用统计截止时间/当前时间作为计算截止",
         "resolve_hit_detail": "解决耗时 16.0小时，SLA 24小时，仅达SLA的 66.7%（正常）",
         "overall_risk": "NORMAL"
       }

@@ -286,12 +286,74 @@ class SLAProcessor:
         current_time = self._get_current_time()
         status = order.get("status", "")
 
-        result["response_actual_hours"] = self._calculate_duration(create_time, assign_time)
+        closed_statuses = ["RESOLVED", "CLOSED", "CANCELLED"]
+        open_statuses = ["NEW", "ASSIGNED", "IN_PROGRESS", "PENDING"]
+
+        response_end_time = None
+        response_time_source = None
+
+        if assign_time:
+            response_end_time = assign_time
+            response_time_source = "assign_time"
+        elif status in open_statuses:
+            response_end_time = current_time
+            response_time_source = "current_time_unassigned"
+        elif close_time and status in closed_statuses:
+            response_end_time = close_time
+            response_time_source = "close_time_fallback"
+            self.logger.log(
+                order_id,
+                "RESPONSE_TIME_FALLBACK",
+                f"无assign_time，使用close_time作为响应时间的替代",
+                "WARNING"
+            )
+        elif resolve_time and status in closed_statuses:
+            response_end_time = resolve_time
+            response_time_source = "resolve_time_fallback"
+            self.logger.log(
+                order_id,
+                "RESPONSE_TIME_FALLBACK",
+                f"无assign_time，使用resolve_time作为响应时间的替代",
+                "WARNING"
+            )
+
+        if response_end_time:
+            result["response_actual_hours"] = self._calculate_duration(create_time, response_end_time)
+
+        result["response_time_source"] = response_time_source
+
+        resolve_end_time = None
+        resolve_time_source = None
 
         if resolve_time:
-            result["resolve_actual_hours"] = self._calculate_duration(create_time, resolve_time)
-        elif status in ["NEW", "ASSIGNED", "IN_PROGRESS", "PENDING"]:
-            result["resolve_actual_hours"] = self._calculate_duration(create_time, current_time)
+            resolve_end_time = resolve_time
+            resolve_time_source = "resolve_time"
+        elif close_time and status in closed_statuses:
+            resolve_end_time = close_time
+            resolve_time_source = "close_time_fallback"
+            self.logger.log(
+                order_id,
+                "RESOLVE_TIME_FALLBACK",
+                f"无resolve_time，使用close_time作为解决时间的替代",
+                "WARNING"
+            )
+            issue = {
+                "order_id": order_id,
+                "issue_type": "MISSING_RESOLVE_TIME",
+                "field": "resolve_time",
+                "description": "缺少解决时间，使用关闭时间作为替代计算SLA",
+                "severity": "LOW"
+            }
+            result["issues"].append(issue)
+            self.issues.append(issue)
+        elif status in open_statuses:
+            resolve_end_time = current_time
+            resolve_time_source = "current_time_in_progress"
+
+        if resolve_end_time:
+            result["resolve_actual_hours"] = self._calculate_duration(create_time, resolve_end_time)
+
+        result["resolve_time_source"] = resolve_time_source
 
         warning_threshold = selected_rule.get("warning_threshold", 0.8)
 
@@ -323,6 +385,12 @@ class SLAProcessor:
             }
             result["issues"].append(issue)
             self.issues.append(issue)
+            self.logger.log(
+                order_id,
+                "SLA_OVERDUE",
+                f"工单SLA逾期，综合风险等级: {result['overall_risk']}",
+                "WARNING" if result["overall_risk"] == "OVERDUE" else "ERROR"
+            )
 
         self.logger.log(
             order_id,
@@ -349,6 +417,10 @@ class SLAProcessor:
                 "response_sla": result["response_sla_hours"],
                 "response_actual": result["response_actual_hours"],
                 "response_risk": result["response_risk"],
+                "response_time_source": result.get("response_time_source"),
+                "response_time_source_explanation": self._explain_response_time_source(
+                    result.get("response_time_source")
+                ),
                 "response_hit_detail": self._explain_threshold_hit(
                     result["response_actual_hours"],
                     result["response_sla_hours"],
@@ -358,6 +430,10 @@ class SLAProcessor:
                 "resolve_sla": result["resolve_sla_hours"],
                 "resolve_actual": result["resolve_actual_hours"],
                 "resolve_risk": result["resolve_risk"],
+                "resolve_time_source": result.get("resolve_time_source"),
+                "resolve_time_source_explanation": self._explain_resolve_time_source(
+                    result.get("resolve_time_source")
+                ),
                 "resolve_hit_detail": self._explain_threshold_hit(
                     result["resolve_actual_hours"],
                     result["resolve_sla_hours"],
@@ -398,6 +474,25 @@ class SLAProcessor:
             )
         return (f"存在规则冲突，共匹配 {len(matched_rules)} 条: {', '.join(rule_details)}。"
                 f"选用最严格规则 {selected_rule['rule_id']}（解决SLA最短: {selected_rule.get('resolve_sla_hours', 'N/A')}h）")
+
+    def _explain_response_time_source(self, source):
+        """解释响应时间来源"""
+        source_map = {
+            "assign_time": "使用工单实际分配时间（assign_time）",
+            "current_time_unassigned": "工单未分配，使用统计截止时间/当前时间作为响应计算截止",
+            "close_time_fallback": "无分配时间，使用关闭时间（close_time）作为替代",
+            "resolve_time_fallback": "无分配时间，使用解决时间（resolve_time）作为替代"
+        }
+        return source_map.get(source, "无法确定响应时间来源")
+
+    def _explain_resolve_time_source(self, source):
+        """解释解决时间来源"""
+        source_map = {
+            "resolve_time": "使用工单实际解决时间（resolve_time）",
+            "close_time_fallback": "无解决时间，使用关闭时间（close_time）作为替代",
+            "current_time_in_progress": "工单处理中，使用统计截止时间/当前时间作为计算截止"
+        }
+        return source_map.get(source, "无法确定解决时间来源")
 
     def _explain_threshold_hit(self, actual, sla, threshold, metric_name):
         """解释阈值命中"""
@@ -463,8 +558,9 @@ class SLAProcessor:
             "assignee", "create_time", "assign_time", "resolve_time",
             "close_time", "status", "in_stats_window", "selected_rule_id",
             "selected_rule_name", "response_sla_hours", "response_actual_hours",
-            "response_risk", "resolve_sla_hours", "resolve_actual_hours",
-            "resolve_risk", "overall_risk", "is_duplicate", "missing_fields",
+            "response_risk", "response_time_source", "resolve_sla_hours",
+            "resolve_actual_hours", "resolve_risk", "resolve_time_source",
+            "overall_risk", "is_duplicate", "missing_fields",
             "rule_conflict", "explanation_summary"
         ]
 
@@ -491,9 +587,11 @@ class SLAProcessor:
                     "response_sla_hours": order["response_sla_hours"],
                     "response_actual_hours": order["response_actual_hours"],
                     "response_risk": order["response_risk"],
+                    "response_time_source": order.get("response_time_source", ""),
                     "resolve_sla_hours": order["resolve_sla_hours"],
                     "resolve_actual_hours": order["resolve_actual_hours"],
                     "resolve_risk": order["resolve_risk"],
+                    "resolve_time_source": order.get("resolve_time_source", ""),
                     "overall_risk": order["overall_risk"],
                     "is_duplicate": "是" if order["is_duplicate"] else "否",
                     "missing_fields": ",".join(order["missing_fields"]) if order["missing_fields"] else "",
@@ -866,7 +964,10 @@ class SLAResultValidator:
 
         issue_logs = [
             log for log in self.processor.logger.logs
-            if log["action"] in ["FIELD_MISSING", "RULE_CONFLICT", "DUPLICATE_DETECTED", "SLA_OVERDUE"]
+            if log["action"] in [
+                "FIELD_MISSING", "RULE_CONFLICT", "DUPLICATE_DETECTED",
+                "SLA_OVERDUE", "RESOLVE_TIME_FALLBACK", "RESPONSE_TIME_FALLBACK"
+            ]
         ]
 
         passed = len(self.processor.issues) <= len(issue_logs) + len(issue_orders)
