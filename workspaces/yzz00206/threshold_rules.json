@@ -1,0 +1,19 @@
+{
+  "germination_rate": {
+    "excellent": 90,
+    "qualified": 85,
+    "min_acceptable": 70,
+    "max_possible": 100,
+    "min_possible": 0
+  },
+  "seed_count": {
+    "min": 1,
+    "max": 1000,
+    "standard_per_petri": 100
+  },
+  "review_triggers": {
+    "below_qualified": true,
+    "abnormal_count": true,
+    "data_quality_issue": true
+  }
+}
