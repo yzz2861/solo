@@ -1,0 +1,135 @@
+{
+  "version": "1.0",
+  "description": "水泥窑熟料质量阈值规则",
+  "rules": {
+    "P·O 42.5": {
+      "f_cao": {
+        "name": "游离氧化钙",
+        "unit": "%",
+        "warning_upper": 2.0,
+        "critical_upper": 2.5,
+        "explanation": "f-CaO过高会导致水泥安定性不良，产生体积膨胀开裂"
+      },
+      "strength_3d": {
+        "name": "3天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 25.0,
+        "critical_lower": 23.0,
+        "explanation": "3天强度低于下限说明早期水化反应不足，影响施工进度"
+      },
+      "strength_28d": {
+        "name": "28天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 47.0,
+        "critical_lower": 45.0,
+        "explanation": "28天强度不达标属不合格品，直接影响工程结构安全"
+      },
+      "specific_surface": {
+        "name": "比表面积",
+        "unit": "m²/kg",
+        "warning_lower": 350,
+        "critical_lower": 340,
+        "explanation": "比表面积过低说明粉磨细度不够，影响水泥水化速度和强度发展"
+      },
+      "soundness": {
+        "name": "安定性",
+        "unit": "",
+        "allowed_values": ["合格"],
+        "explanation": "安定性不合格为重大质量问题，水泥体积变形不均匀会导致结构破坏"
+      },
+      "loss_on_ignition": {
+        "name": "烧失量",
+        "unit": "%",
+        "warning_upper": 2.5,
+        "critical_upper": 3.0,
+        "explanation": "烧失量过高反映熟料煅烧不充分或混合材掺量异常"
+      }
+    },
+    "P·II 52.5": {
+      "f_cao": {
+        "name": "游离氧化钙",
+        "unit": "%",
+        "warning_upper": 1.5,
+        "critical_upper": 2.0,
+        "explanation": "f-CaO过高会导致水泥安定性不良，产生体积膨胀开裂"
+      },
+      "strength_3d": {
+        "name": "3天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 30.0,
+        "critical_lower": 28.0,
+        "explanation": "3天强度低于下限说明早期水化反应不足，影响施工进度"
+      },
+      "strength_28d": {
+        "name": "28天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 57.0,
+        "critical_lower": 55.0,
+        "explanation": "28天强度不达标属不合格品，直接影响工程结构安全"
+      },
+      "specific_surface": {
+        "name": "比表面积",
+        "unit": "m²/kg",
+        "warning_lower": 370,
+        "critical_lower": 360,
+        "explanation": "比表面积过低说明粉磨细度不够，影响水泥水化速度和强度发展"
+      },
+      "soundness": {
+        "name": "安定性",
+        "unit": "",
+        "allowed_values": ["合格"],
+        "explanation": "安定性不合格为重大质量问题，水泥体积变形不均匀会导致结构破坏"
+      },
+      "loss_on_ignition": {
+        "name": "烧失量",
+        "unit": "%",
+        "warning_upper": 2.0,
+        "critical_upper": 2.5,
+        "explanation": "烧失量过高反映熟料煅烧不充分或混合材掺量异常"
+      }
+    },
+    "P·C 32.5": {
+      "f_cao": {
+        "name": "游离氧化钙",
+        "unit": "%",
+        "warning_upper": 2.8,
+        "critical_upper": 3.5,
+        "explanation": "f-CaO过高会导致水泥安定性不良，产生体积膨胀开裂"
+      },
+      "strength_3d": {
+        "name": "3天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 17.0,
+        "critical_lower": 15.0,
+        "explanation": "3天强度低于下限说明早期水化反应不足，影响施工进度"
+      },
+      "strength_28d": {
+        "name": "28天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 34.0,
+        "critical_lower": 32.0,
+        "explanation": "28天强度不达标属不合格品，直接影响工程结构安全"
+      },
+      "specific_surface": {
+        "name": "比表面积",
+        "unit": "m²/kg",
+        "warning_lower": 320,
+        "critical_lower": 310,
+        "explanation": "比表面积过低说明粉磨细度不够，影响水泥水化速度和强度发展"
+      },
+      "soundness": {
+        "name": "安定性",
+        "unit": "",
+        "allowed_values": ["合格"],
+        "explanation": "安定性不合格为重大质量问题，水泥体积变形不均匀会导致结构破坏"
+      },
+      "loss_on_ignition": {
+        "name": "烧失量",
+        "unit": "%",
+        "warning_upper": 3.2,
+        "critical_upper": 3.8,
+        "explanation": "烧失量过高反映熟料煅烧不充分或混合材掺量异常"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "description": "配置缺失的阈值规则（缺少部分指标）",
+  "rules": {
+    "P·O 42.5": {
+      "f_cao": {
+        "name": "游离氧化钙",
+        "unit": "%",
+        "warning_upper": 2.0,
+        "critical_upper": 2.5,
+        "explanation": "f-CaO过高会导致水泥安定性不良"
+      }
+    },
+    "P·II 52.5": {
+      "strength_28d": {
+        "name": "28天抗压强度",
+        "unit": "MPa",
+        "warning_lower": 57.0,
+        "critical_lower": 55.0,
+        "explanation": "28天强度不达标属不合格品"
+      }
+    }
+  }
+}
