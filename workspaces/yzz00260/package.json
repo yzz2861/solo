@@ -1,0 +1,14 @@
+{
+  "name": "api-gateway-gray-rate-limit",
+  "version": "1.0.0",
+  "description": "API网关灰度限流API - 规则判断、异常解释、处理留痕",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node tests/acceptance.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}
