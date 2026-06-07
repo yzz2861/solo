@@ -1,0 +1,182 @@
+{
+  "report_type": "issue_list",
+  "time_window": "2024-01-01 至 2024-12-31",
+  "total_issues": 7,
+  "high_severity": 5,
+  "warning_severity": 2,
+  "issue_type_breakdown": {
+    "amount_inconsistent": {
+      "count": 1,
+      "high": 1,
+      "warning": 0
+    },
+    "material_missing": {
+      "count": 2,
+      "high": 2,
+      "warning": 0
+    },
+    "processing_overdue": {
+      "count": 2,
+      "high": 2,
+      "warning": 0
+    },
+    "amount_exceed_daily": {
+      "count": 2,
+      "high": 0,
+      "warning": 2
+    }
+  },
+  "issues": [
+    {
+      "record_id": "HD-2024-002",
+      "property_id": "BJ-HD-002",
+      "borrower_name": "钱多多",
+      "branch": "海淀支行",
+      "handler": "吴业务员",
+      "responsible_person": "李经理",
+      "issue_type": "amount_inconsistent",
+      "severity": "high",
+      "description": "注销金额超过抵押金额",
+      "detail": {
+        "type": "amount_inconsistent",
+        "severity": "high",
+        "mortgage_amount": 10000000,
+        "discharge_amount": 12000000,
+        "description": "注销金额超过抵押金额"
+      },
+      "final_status": "reviewing",
+      "deadline": "2024-07-22"
+    },
+    {
+      "record_id": "XC-2024-001",
+      "property_id": "BJ-XC-001",
+      "borrower_name": "周建国",
+      "branch": "西城支行",
+      "handler": "郑业务员",
+      "responsible_person": "王经理",
+      "issue_type": "material_missing",
+      "severity": "high",
+      "description": "缺失 2 项必要材料",
+      "detail": {
+        "type": "material_missing",
+        "severity": "high",
+        "missing_items": [
+          "不动产权属证书",
+          "抵押权消灭的证明材料"
+        ],
+        "missing_optional": [
+          "授权委托书（如有）"
+        ],
+        "description": "缺失 2 项必要材料"
+      },
+      "final_status": "overdue",
+      "deadline": "2024-05-15"
+    },
+    {
+      "record_id": "XC-2024-002",
+      "property_id": "BJ-XC-002",
+      "borrower_name": "吴秀兰",
+      "branch": "西城支行",
+      "handler": "郑业务员",
+      "responsible_person": "王经理",
+      "issue_type": "material_missing",
+      "severity": "high",
+      "description": "缺失 1 项必要材料",
+      "detail": {
+        "type": "material_missing",
+        "severity": "high",
+        "missing_items": [
+          "抵押权消灭的证明材料"
+        ],
+        "missing_optional": [
+          "授权委托书（如有）"
+        ],
+        "description": "缺失 1 项必要材料"
+      },
+      "final_status": "supplement",
+      "deadline": "2024-09-04"
+    },
+    {
+      "record_id": "HD-2024-001",
+      "property_id": "BJ-HD-001",
+      "borrower_name": "孙伟",
+      "branch": "海淀支行",
+      "handler": "周业务员",
+      "responsible_person": "李经理",
+      "issue_type": "processing_overdue",
+      "severity": "high",
+      "description": "待受理超 7 个工作日未处理",
+      "detail": {
+        "type": "processing_overdue",
+        "severity": "high",
+        "deadline_days": 7,
+        "actual_days": 56,
+        "description": "待受理超 7 个工作日未处理"
+      },
+      "final_status": "overdue",
+      "deadline": "2024-04-27"
+    },
+    {
+      "record_id": "XC-2024-001",
+      "property_id": "BJ-XC-001",
+      "borrower_name": "周建国",
+      "branch": "西城支行",
+      "handler": "郑业务员",
+      "responsible_person": "王经理",
+      "issue_type": "processing_overdue",
+      "severity": "high",
+      "description": "待受理超 7 个工作日未处理",
+      "detail": {
+        "type": "processing_overdue",
+        "severity": "high",
+        "deadline_days": 7,
+        "actual_days": 38,
+        "description": "待受理超 7 个工作日未处理"
+      },
+      "final_status": "overdue",
+      "deadline": "2024-05-15"
+    },
+    {
+      "record_id": "HD-2024-001",
+      "property_id": "BJ-HD-001",
+      "borrower_name": "孙伟",
+      "branch": "海淀支行",
+      "handler": "周业务员",
+      "responsible_person": "李经理",
+      "issue_type": "amount_exceed_daily",
+      "severity": "warning",
+      "description": "单笔注销金额超日阈值",
+      "detail": {
+        "type": "amount_exceed_daily",
+        "severity": "warning",
+        "threshold": 8000000,
+        "actual": 9500000,
+        "exceed_by": 1500000,
+        "description": "单笔注销金额超日阈值"
+      },
+      "final_status": "overdue",
+      "deadline": "2024-04-27"
+    },
+    {
+      "record_id": "HD-2024-002",
+      "property_id": "BJ-HD-002",
+      "borrower_name": "钱多多",
+      "branch": "海淀支行",
+      "handler": "吴业务员",
+      "responsible_person": "李经理",
+      "issue_type": "amount_exceed_daily",
+      "severity": "warning",
+      "description": "单笔注销金额超日阈值",
+      "detail": {
+        "type": "amount_exceed_daily",
+        "severity": "warning",
+        "threshold": 8000000,
+        "actual": 12000000,
+        "exceed_by": 4000000,
+        "description": "单笔注销金额超日阈值"
+      },
+      "final_status": "reviewing",
+      "deadline": "2024-07-22"
+    }
+  ]
+}

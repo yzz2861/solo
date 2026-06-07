@@ -1,0 +1,184 @@
+{
+  "report_type": "summary",
+  "time_window": "2024-01-01 至 2024-12-31",
+  "group_dimensions": [
+    "branch",
+    "status"
+  ],
+  "overall": {
+    "total_count": 10,
+    "total_discharge_amount": 42800000.0,
+    "valid_count": 6,
+    "valid_rate": 60.0,
+    "issue_count": 4,
+    "issue_rate": 40.0,
+    "high_risk_count": 3,
+    "high_risk_rate": 30.0,
+    "warning_count": 2,
+    "warning_rate": 20.0,
+    "status_breakdown": {
+      "已注销": 3,
+      "审核中": 2,
+      "已逾期": 2,
+      "待补材料": 1,
+      "待受理": 1,
+      "已驳回": 1
+    }
+  },
+  "group_count": 9,
+  "groups": [
+    {
+      "branch": "朝阳支行",
+      "status": "discharged",
+      "count": 2,
+      "total_discharge_amount": 7300000.0,
+      "valid_count": 2,
+      "valid_rate": 100.0,
+      "issue_count": 0,
+      "issue_rate": 0.0,
+      "high_risk_count": 0,
+      "warning_count": 0,
+      "normal_count": 2,
+      "status_breakdown": {
+        "discharged": 2
+      },
+      "avg_processing_days": 5.0
+    },
+    {
+      "branch": "朝阳支行",
+      "status": "reviewing",
+      "count": 1,
+      "total_discharge_amount": 2000000.0,
+      "valid_count": 1,
+      "valid_rate": 100.0,
+      "issue_count": 0,
+      "issue_rate": 0.0,
+      "high_risk_count": 0,
+      "warning_count": 1,
+      "normal_count": 0,
+      "status_breakdown": {
+        "reviewing": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "海淀支行",
+      "status": "overdue",
+      "count": 1,
+      "total_discharge_amount": 9500000.0,
+      "valid_count": 0,
+      "valid_rate": 0.0,
+      "issue_count": 1,
+      "issue_rate": 100.0,
+      "high_risk_count": 1,
+      "warning_count": 0,
+      "normal_count": 0,
+      "status_breakdown": {
+        "overdue": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "海淀支行",
+      "status": "reviewing",
+      "count": 1,
+      "total_discharge_amount": 12000000.0,
+      "valid_count": 0,
+      "valid_rate": 0.0,
+      "issue_count": 1,
+      "issue_rate": 100.0,
+      "high_risk_count": 1,
+      "warning_count": 0,
+      "normal_count": 0,
+      "status_breakdown": {
+        "reviewing": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "西城支行",
+      "status": "overdue",
+      "count": 1,
+      "total_discharge_amount": 2000000.0,
+      "valid_count": 0,
+      "valid_rate": 0.0,
+      "issue_count": 1,
+      "issue_rate": 100.0,
+      "high_risk_count": 1,
+      "warning_count": 0,
+      "normal_count": 0,
+      "status_breakdown": {
+        "overdue": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "西城支行",
+      "status": "supplement",
+      "count": 1,
+      "total_discharge_amount": 1500000.0,
+      "valid_count": 0,
+      "valid_rate": 0.0,
+      "issue_count": 1,
+      "issue_rate": 100.0,
+      "high_risk_count": 0,
+      "warning_count": 1,
+      "normal_count": 0,
+      "status_breakdown": {
+        "supplement": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "东城支行",
+      "status": "discharged",
+      "count": 1,
+      "total_discharge_amount": 3500000.0,
+      "valid_count": 1,
+      "valid_rate": 100.0,
+      "issue_count": 0,
+      "issue_rate": 0.0,
+      "high_risk_count": 0,
+      "warning_count": 0,
+      "normal_count": 1,
+      "status_breakdown": {
+        "discharged": 1
+      },
+      "avg_processing_days": 5.0
+    },
+    {
+      "branch": "东城支行",
+      "status": "pending",
+      "count": 1,
+      "total_discharge_amount": 4000000.0,
+      "valid_count": 1,
+      "valid_rate": 100.0,
+      "issue_count": 0,
+      "issue_rate": 0.0,
+      "high_risk_count": 0,
+      "warning_count": 0,
+      "normal_count": 1,
+      "status_breakdown": {
+        "pending": 1
+      },
+      "avg_processing_days": null
+    },
+    {
+      "branch": "东城支行",
+      "status": "rejected",
+      "count": 1,
+      "total_discharge_amount": 1000000.0,
+      "valid_count": 1,
+      "valid_rate": 100.0,
+      "issue_count": 0,
+      "issue_rate": 0.0,
+      "high_risk_count": 0,
+      "warning_count": 0,
+      "normal_count": 1,
+      "status_breakdown": {
+        "rejected": 1
+      },
+      "avg_processing_days": null
+    }
+  ]
+}

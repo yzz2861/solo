@@ -1,0 +1,415 @@
+[
+  {
+    "timestamp": "2026-06-07T13:19:15.014248",
+    "record_id": "CY-2024-001",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-03-15, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014540",
+    "record_id": "CY-2024-001",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014594",
+    "record_id": "CY-2024-001",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=2800000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014601",
+    "record_id": "CY-2024-001",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014650",
+    "record_id": "CY-2024-001",
+    "rule": "closure_check",
+    "result": "completed",
+    "detail": "closed in 5 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014729",
+    "record_id": "CY-2024-002",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-06-10, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014752",
+    "record_id": "CY-2024-002",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014774",
+    "record_id": "CY-2024-002",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=2000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014780",
+    "record_id": "CY-2024-002",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014821",
+    "record_id": "CY-2024-002",
+    "rule": "timeliness_check",
+    "result": "approaching_deadline",
+    "detail": "2 days left"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014845",
+    "record_id": "CY-2024-003",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-09-05, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014857",
+    "record_id": "CY-2024-003",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 5 items, missing_optional=[]"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014863",
+    "record_id": "CY-2024-003",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=4500000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014869",
+    "record_id": "CY-2024-003",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014891",
+    "record_id": "CY-2024-003",
+    "rule": "closure_check",
+    "result": "completed",
+    "detail": "closed in 5 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014908",
+    "record_id": "HD-2024-001",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-04-20, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014918",
+    "record_id": "HD-2024-001",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014925",
+    "record_id": "HD-2024-001",
+    "rule": "daily_threshold_check",
+    "result": "exceed",
+    "detail": "actual=9500000, threshold=8000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014928",
+    "record_id": "HD-2024-001",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014948",
+    "record_id": "HD-2024-001",
+    "rule": "timeliness_check",
+    "result": "overdue",
+    "detail": "pending for 56 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014966",
+    "record_id": "HD-2024-002",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-07-15, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014977",
+    "record_id": "HD-2024-002",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014984",
+    "record_id": "HD-2024-002",
+    "rule": "daily_threshold_check",
+    "result": "exceed",
+    "detail": "actual=12000000, threshold=8000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.014990",
+    "record_id": "HD-2024-002",
+    "rule": "amount_consistency_check",
+    "result": "fail",
+    "detail": "discharge=12000000 > mortgage=10000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015007",
+    "record_id": "HD-2024-002",
+    "rule": "timeliness_check",
+    "result": "on_time",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015106",
+    "record_id": "XC-2024-001",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-05-08, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015134",
+    "record_id": "XC-2024-001",
+    "rule": "material_check",
+    "result": "fail",
+    "detail": "missing_mandatory=['不动产权属证书', '抵押权消灭的证明材料'], missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015142",
+    "record_id": "XC-2024-001",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=2000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015145",
+    "record_id": "XC-2024-001",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015174",
+    "record_id": "XC-2024-001",
+    "rule": "timeliness_check",
+    "result": "overdue",
+    "detail": "pending for 38 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015194",
+    "record_id": "XC-2024-002",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-08-20, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015208",
+    "record_id": "XC-2024-002",
+    "rule": "material_check",
+    "result": "fail",
+    "detail": "missing_mandatory=['抵押权消灭的证明材料'], missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015212",
+    "record_id": "XC-2024-002",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=1500000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015214",
+    "record_id": "XC-2024-002",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015270",
+    "record_id": "XC-2024-002",
+    "rule": "supplement_check",
+    "result": "in_progress",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015299",
+    "record_id": "XC-2024-003",
+    "rule": "time_window_check",
+    "result": "out_of_range",
+    "detail": "apply_date=2023-12-10, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015318",
+    "record_id": "XC-2024-003",
+    "rule": "material_check",
+    "result": "fail",
+    "detail": "missing_mandatory=['不动产权属证书', '不动产登记申请书', '抵押权消灭的证明材料'], missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015324",
+    "record_id": "XC-2024-003",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=2500000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015326",
+    "record_id": "XC-2024-003",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015371",
+    "record_id": "XC-2024-003",
+    "rule": "timeliness_check",
+    "result": "overdue",
+    "detail": "pending for 188 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015393",
+    "record_id": "DC-2024-001",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-01-15, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015403",
+    "record_id": "DC-2024-001",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 5 items, missing_optional=[]"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015407",
+    "record_id": "DC-2024-001",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=3500000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015410",
+    "record_id": "DC-2024-001",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015444",
+    "record_id": "DC-2024-001",
+    "rule": "closure_check",
+    "result": "completed",
+    "detail": "closed in 5 days"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015469",
+    "record_id": "DC-2024-002",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-11-25, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015480",
+    "record_id": "DC-2024-002",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015484",
+    "record_id": "DC-2024-002",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=4000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015486",
+    "record_id": "DC-2024-002",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015531",
+    "record_id": "DC-2024-002",
+    "rule": "timeliness_check",
+    "result": "on_time",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015544",
+    "record_id": "DC-2024-003",
+    "rule": "time_window_check",
+    "result": "pass",
+    "detail": "apply_date=2024-10-01, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015553",
+    "record_id": "DC-2024-003",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015556",
+    "record_id": "DC-2024-003",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=1000000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015558",
+    "record_id": "DC-2024-003",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015577",
+    "record_id": "CY-2024-004",
+    "rule": "time_window_check",
+    "result": "out_of_range",
+    "detail": "apply_date=2025-01-10, window=2024-01-01 至 2024-12-31"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015584",
+    "record_id": "CY-2024-004",
+    "rule": "material_check",
+    "result": "pass",
+    "detail": "provided 4 items, missing_optional=['授权委托书（如有）']"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015587",
+    "record_id": "CY-2024-004",
+    "rule": "daily_threshold_check",
+    "result": "pass",
+    "detail": "actual=2200000"
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015589",
+    "record_id": "CY-2024-004",
+    "rule": "amount_consistency_check",
+    "result": "pass",
+    "detail": ""
+  },
+  {
+    "timestamp": "2026-06-07T13:19:15.015603",
+    "record_id": "CY-2024-004",
+    "rule": "timeliness_check",
+    "result": "on_time",
+    "detail": ""
+  }
+]

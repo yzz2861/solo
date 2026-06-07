@@ -1,0 +1,225 @@
+{
+  "HD-2024-001": {
+    "record_id": "HD-2024-001",
+    "borrower_name": "孙伟",
+    "property_id": "BJ-HD-001",
+    "apply_date": "2024-04-20",
+    "original_status": "pending",
+    "original_status_label": "待受理",
+    "final_status": "overdue",
+    "final_status_label": "已逾期",
+    "is_valid": false,
+    "risk_level": "high",
+    "audit_steps": [
+      {
+        "step": 1,
+        "rule": "time_window_check",
+        "result": "pass",
+        "detail": "apply_date=2024-04-20, window=2024-01-01 至 2024-12-31",
+        "timestamp": "2026-06-07T13:19:15.014908"
+      },
+      {
+        "step": 2,
+        "rule": "material_check",
+        "result": "pass",
+        "detail": "provided 4 items, missing_optional=['授权委托书（如有）']",
+        "timestamp": "2026-06-07T13:19:15.014918"
+      },
+      {
+        "step": 3,
+        "rule": "daily_threshold_check",
+        "result": "exceed",
+        "detail": "actual=9500000, threshold=8000000",
+        "timestamp": "2026-06-07T13:19:15.014925"
+      },
+      {
+        "step": 4,
+        "rule": "amount_consistency_check",
+        "result": "pass",
+        "detail": "",
+        "timestamp": "2026-06-07T13:19:15.014928"
+      },
+      {
+        "step": 5,
+        "rule": "timeliness_check",
+        "result": "overdue",
+        "detail": "pending for 56 days",
+        "timestamp": "2026-06-07T13:19:15.014948"
+      }
+    ],
+    "explanations": [
+      "申请日期 2024-04-20 落在统计窗口 2024-01-01 至 2024-12-31 内，纳入统计",
+      "材料完整性校验通过（必选材料齐全，可选材料缺失：授权委托书（如有））",
+      "金额校验：单笔注销金额 9,500,000.00 元 超过日阈值 8,000,000.00 元，超出 1,500,000.00 元",
+      "金额一致性校验通过",
+      "时效校验：已超 7 天办理时限（应于 2024-04-27 前完成），状态置为「已逾期」"
+    ],
+    "issues": [
+      {
+        "type": "amount_exceed_daily",
+        "severity": "warning",
+        "threshold": 8000000,
+        "actual": 9500000,
+        "exceed_by": 1500000,
+        "description": "单笔注销金额超日阈值"
+      },
+      {
+        "type": "processing_overdue",
+        "severity": "high",
+        "deadline_days": 7,
+        "actual_days": 56,
+        "description": "待受理超 7 个工作日未处理"
+      }
+    ]
+  },
+  "HD-2024-002": {
+    "record_id": "HD-2024-002",
+    "borrower_name": "钱多多",
+    "property_id": "BJ-HD-002",
+    "apply_date": "2024-07-15",
+    "original_status": "reviewing",
+    "original_status_label": "审核中",
+    "final_status": "reviewing",
+    "final_status_label": "审核中",
+    "is_valid": false,
+    "risk_level": "high",
+    "audit_steps": [
+      {
+        "step": 1,
+        "rule": "time_window_check",
+        "result": "pass",
+        "detail": "apply_date=2024-07-15, window=2024-01-01 至 2024-12-31",
+        "timestamp": "2026-06-07T13:19:15.014966"
+      },
+      {
+        "step": 2,
+        "rule": "material_check",
+        "result": "pass",
+        "detail": "provided 4 items, missing_optional=['授权委托书（如有）']",
+        "timestamp": "2026-06-07T13:19:15.014977"
+      },
+      {
+        "step": 3,
+        "rule": "daily_threshold_check",
+        "result": "exceed",
+        "detail": "actual=12000000, threshold=8000000",
+        "timestamp": "2026-06-07T13:19:15.014984"
+      },
+      {
+        "step": 4,
+        "rule": "amount_consistency_check",
+        "result": "fail",
+        "detail": "discharge=12000000 > mortgage=10000000",
+        "timestamp": "2026-06-07T13:19:15.014990"
+      },
+      {
+        "step": 5,
+        "rule": "timeliness_check",
+        "result": "on_time",
+        "detail": "",
+        "timestamp": "2026-06-07T13:19:15.015007"
+      }
+    ],
+    "explanations": [
+      "申请日期 2024-07-15 落在统计窗口 2024-01-01 至 2024-12-31 内，纳入统计",
+      "材料完整性校验通过（必选材料齐全，可选材料缺失：授权委托书（如有））",
+      "金额校验：单笔注销金额 12,000,000.00 元 超过日阈值 8,000,000.00 元，超出 4,000,000.00 元",
+      "一致性校验异常：注销金额 12,000,000.00 元 大于抵押金额 10,000,000.00 元",
+      "时效校验：办理中，截止日期 2024-07-22，剩余 37 天"
+    ],
+    "issues": [
+      {
+        "type": "amount_exceed_daily",
+        "severity": "warning",
+        "threshold": 8000000,
+        "actual": 12000000,
+        "exceed_by": 4000000,
+        "description": "单笔注销金额超日阈值"
+      },
+      {
+        "type": "amount_inconsistent",
+        "severity": "high",
+        "mortgage_amount": 10000000,
+        "discharge_amount": 12000000,
+        "description": "注销金额超过抵押金额"
+      }
+    ]
+  },
+  "XC-2024-001": {
+    "record_id": "XC-2024-001",
+    "borrower_name": "周建国",
+    "property_id": "BJ-XC-001",
+    "apply_date": "2024-05-08",
+    "original_status": "pending",
+    "original_status_label": "待受理",
+    "final_status": "overdue",
+    "final_status_label": "已逾期",
+    "is_valid": false,
+    "risk_level": "high",
+    "audit_steps": [
+      {
+        "step": 1,
+        "rule": "time_window_check",
+        "result": "pass",
+        "detail": "apply_date=2024-05-08, window=2024-01-01 至 2024-12-31",
+        "timestamp": "2026-06-07T13:19:15.015106"
+      },
+      {
+        "step": 2,
+        "rule": "material_check",
+        "result": "fail",
+        "detail": "missing_mandatory=['不动产权属证书', '抵押权消灭的证明材料'], missing_optional=['授权委托书（如有）']",
+        "timestamp": "2026-06-07T13:19:15.015134"
+      },
+      {
+        "step": 3,
+        "rule": "daily_threshold_check",
+        "result": "pass",
+        "detail": "actual=2000000",
+        "timestamp": "2026-06-07T13:19:15.015142"
+      },
+      {
+        "step": 4,
+        "rule": "amount_consistency_check",
+        "result": "pass",
+        "detail": "",
+        "timestamp": "2026-06-07T13:19:15.015145"
+      },
+      {
+        "step": 5,
+        "rule": "timeliness_check",
+        "result": "overdue",
+        "detail": "pending for 38 days",
+        "timestamp": "2026-06-07T13:19:15.015174"
+      }
+    ],
+    "explanations": [
+      "申请日期 2024-05-08 落在统计窗口 2024-01-01 至 2024-12-31 内，纳入统计",
+      "材料校验不通过，缺失必选材料：不动产权属证书, 抵押权消灭的证明材料；可选材料缺失：授权委托书（如有）；状态调整为「待补材料」",
+      "金额校验：2,000,000.00 元 ≤ 日阈值 3,000,000.00 元，通过",
+      "金额一致性校验通过",
+      "时效校验：已超 7 天办理时限（应于 2024-05-15 前完成），状态置为「已逾期」"
+    ],
+    "issues": [
+      {
+        "type": "material_missing",
+        "severity": "high",
+        "missing_items": [
+          "不动产权属证书",
+          "抵押权消灭的证明材料"
+        ],
+        "missing_optional": [
+          "授权委托书（如有）"
+        ],
+        "description": "缺失 2 项必要材料"
+      },
+      {
+        "type": "processing_overdue",
+        "severity": "high",
+        "deadline_days": 7,
+        "actual_days": 38,
+        "description": "待受理超 7 个工作日未处理"
+      }
+    ]
+  }
+}
