@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "irrigation-scheduler"
+version = "0.1.0"
+description = "农田灌溉轮灌调度 CLI 工具 - 支持校验、生成、导出和查看摘要"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "PyYAML>=6.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+irrigation = "irrigation_scheduler.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]

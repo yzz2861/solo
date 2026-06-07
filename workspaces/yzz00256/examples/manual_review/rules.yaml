@@ -1,0 +1,22 @@
+# 轮灌规则配置 - 人工复核场景
+# 只覆盖部分作物和片区，其他的进入人工复核
+rules:
+  - group_name: "小麦标准组"
+    max_plots: 10
+    max_area: 500.0
+    max_water: 20000.0
+    duration_hours: 6.0
+    start_date: "2026-06-15"
+    interval_days: 7
+    crop_filter: ["小麦"]
+    district_filter: ["东区", "西区", "南区", "北区"]
+
+  - group_name: "玉米标准组"
+    max_plots: 10
+    max_area: 500.0
+    max_water: 25000.0
+    duration_hours: 8.0
+    start_date: "2026-06-16"
+    interval_days: 10
+    crop_filter: ["玉米"]
+    district_filter: ["东区", "西区", "南区", "北区"]

@@ -1,0 +1,52 @@
+# 轮灌规则配置 - 批量部分失败场景
+# 故意设置较小的限制，让部分地块因超限而失败
+# 不包含水稻和棉花的规则，让这些地块进入复核状态
+rules:
+  - group_name: "小麦东区轮灌A组"
+    max_plots: 3
+    max_area: 150.0
+    max_water: 6000.0
+    max_groups: 1
+    duration_hours: 6.0
+    start_date: "2026-06-10"
+    interval_days: 7
+    crop_filter: ["小麦"]
+    district_filter: ["东区"]
+
+  - group_name: "小麦西区轮灌组"
+    max_plots: 5
+    max_area: 250.0
+    max_water: 10000.0
+    duration_hours: 8.0
+    start_date: "2026-06-11"
+    interval_days: 7
+    crop_filter: ["小麦"]
+    district_filter: ["西区"]
+
+  - group_name: "玉米轮灌组"
+    max_plots: 4
+    max_area: 200.0
+    max_water: 10000.0
+    duration_hours: 7.0
+    start_date: "2026-06-12"
+    interval_days: 10
+    crop_filter: ["玉米"]
+
+  - group_name: "大豆轮灌组"
+    max_plots: 2
+    max_area: 100.0
+    max_water: 4000.0
+    duration_hours: 5.0
+    start_date: "2026-06-13"
+    interval_days: 14
+    crop_filter: ["大豆"]
+
+  - group_name: "小麦南区轮灌组"
+    max_plots: 2
+    max_area: 80.0
+    max_water: 3000.0
+    duration_hours: 4.0
+    start_date: "2026-06-14"
+    interval_days: 7
+    crop_filter: ["小麦"]
+    district_filter: ["南区"]

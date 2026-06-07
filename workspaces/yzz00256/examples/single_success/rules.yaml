@@ -1,0 +1,11 @@
+# 轮灌规则配置 - 单条成功场景
+rules:
+  - group_name: "小麦东区轮灌组"
+    max_plots: 10
+    max_area: 500.0
+    max_water: 20000.0
+    duration_hours: 6.0
+    start_date: "2026-06-10"
+    interval_days: 7
+    crop_filter: ["小麦"]
+    district_filter: ["东区"]
