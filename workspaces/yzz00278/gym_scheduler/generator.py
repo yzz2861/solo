@@ -157,7 +157,7 @@ def generate_schedules(
     existing = store.load_all()
     scheduled_existing = {
         rid: r for rid, r in existing.items()
-        if r.status in (RecordStatus.VALID, RecordStatus.SCHEDULED, RecordStatus.EXPORTED)
+        if r.status in (RecordStatus.SCHEDULED, RecordStatus.EXPORTED)
     }
     diffs = compare_records(valid_records, scheduled_existing)
     diffs = [d for d in diffs if d.diff_type != DiffType.DELETED]
@@ -200,17 +200,32 @@ def import_all_records(
     existing = store.load_all()
     count = 0
     for record in records:
-        if batch_id:
-            record.batch_id = batch_id
-        old_record = existing.get(record.record_id)
-        if old_record is None:
+        if record.record_id not in existing:
+            if batch_id:
+                record.batch_id = batch_id
             existing[record.record_id] = record
             count += 1
-        else:
-            if old_record.status in (RecordStatus.VALID, RecordStatus.SCHEDULED, RecordStatus.EXPORTED):
-                pass
-            else:
-                existing[record.record_id] = record
-                count += 1
     store.save_all(existing)
     return count
+
+
+def _record_content_changed(a: ScheduleRecord, b: ScheduleRecord) -> bool:
+    compare_fields = [
+        "member_name",
+        "member_phone",
+        "coach_name",
+        "course_name",
+        "course_date",
+        "course_time",
+        "duration_minutes",
+    ]
+    for field in compare_fields:
+        a_val = getattr(a, field)
+        b_val = getattr(b, field)
+        if hasattr(a_val, "isoformat"):
+            if a_val.isoformat() != b_val.isoformat():
+                return True
+        else:
+            if a_val != b_val:
+                return True
+    return False

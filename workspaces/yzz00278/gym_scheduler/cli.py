@@ -177,17 +177,25 @@ def generate(files, mapping, start_date, end_date, output_dir, format_type, oper
     invalid_records = get_invalid_records(records)
     review_records = get_review_records(records)
 
+    store = _get_store(output_dir)
+    import_all_records(records, store, batch.batch_id)
+
+    all_records_in_store = store.load_all()
     if skip_review:
-        valid_for_generate = get_valid_records(records) + review_records
-        click.echo(f"⚡ 跳过复核模式: 跳过 {len(review_records)} 条待复核记录将直接生成排期")
+        valid_for_generate = [
+            r for r in all_records_in_store.values()
+            if r.status in (RecordStatus.VALID, RecordStatus.REVIEW)
+        ]
+        click.echo(f"⚡ 跳过复核模式: 将使用 {len(valid_for_generate)} 条记录生成排期（含待复核）")
     else:
-        valid_for_generate = get_valid_records(records)
-        click.echo(f"📌 将使用 {len(valid_for_generate)} 条有效记录生成排期")
+        valid_for_generate = [
+            r for r in all_records_in_store.values()
+            if r.status == RecordStatus.VALID
+        ]
+        click.echo(f"📌 将使用 {len(valid_for_generate)} 条有效记录生成排期（来自历史批次 + 本轮）")
     click.echo("")
 
-    store = _get_store(output_dir)
     diffs, diff_summary = idempotent_generate(valid_for_generate, store, batch.batch_id)
-    import_all_records(records, store, batch.batch_id)
 
     click.echo("🔄 差异对比结果:")
     click.echo(f"  🆕 新增: {diff_summary.get('new', 0)}")
@@ -220,9 +228,11 @@ def generate(files, mapping, start_date, end_date, output_dir, format_type, oper
     bad_file = export_bad_records(invalid_records, output_dir)
     diff_file = export_diff_table(diffs, output_dir, format_type)
 
-    scheduled_records = [d.record for d in diffs if d.diff_type in (DiffType.NEW, DiffType.UPDATED, DiffType.UNCHANGED)
+    all_scheduled = [
+        r for r in store.load_all().values()
+        if r.status in (RecordStatus.SCHEDULED, RecordStatus.EXPORTED)
     ]
-    schedule_file = export_schedules(scheduled_records, output_dir, format_type, prefix="schedules")
+    schedule_file = export_schedules(all_scheduled, output_dir, format_type, prefix="schedules")
 
     log_file = export_operation_log(batch, validation_result, diff_summary, output_dir)
     store.append_batch_log(batch, {

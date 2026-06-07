@@ -1,69 +1,5 @@
 [
   {
-    "record_id": "c5d9306db2bc",
-    "member_name": "张三",
-    "member_phone": "13800138001",
-    "coach_name": "李教练",
-    "course_name": "瑜伽课",
-    "course_date": "2026-06-10",
-    "course_time": "09:00",
-    "duration_minutes": 60,
-    "status": "scheduled",
-    "source_file": "sample_good.csv",
-    "source_row": 2,
-    "batch_id": "20260607133242_9ed85476",
-    "errors": [],
-    "review_comment": ""
-  },
-  {
-    "record_id": "8bd71564d9f0",
-    "member_name": "李四",
-    "member_phone": "13900139002",
-    "coach_name": "王教练",
-    "course_name": "力量训练",
-    "course_date": "2026-06-11",
-    "course_time": "14:00",
-    "duration_minutes": 90,
-    "status": "scheduled",
-    "source_file": "sample_good.csv",
-    "source_row": 3,
-    "batch_id": "20260607133242_9ed85476",
-    "errors": [],
-    "review_comment": ""
-  },
-  {
-    "record_id": "c43e14f8024d",
-    "member_name": "王五",
-    "member_phone": "13700137003",
-    "coach_name": "赵教练",
-    "course_name": "游泳课",
-    "course_date": "2026-06-12",
-    "course_time": "10:30",
-    "duration_minutes": 120,
-    "status": "scheduled",
-    "source_file": "sample_good.csv",
-    "source_row": 4,
-    "batch_id": "20260607133242_9ed85476",
-    "errors": [],
-    "review_comment": ""
-  },
-  {
-    "record_id": "1b9304c3b177",
-    "member_name": "赵六",
-    "member_phone": "13600136004",
-    "coach_name": "李教练",
-    "course_name": "普拉提",
-    "course_date": "2026-06-13",
-    "course_time": "16:00",
-    "duration_minutes": 45,
-    "status": "scheduled",
-    "source_file": "sample_good.csv",
-    "source_row": 5,
-    "batch_id": "20260607133242_9ed85476",
-    "errors": [],
-    "review_comment": ""
-  },
-  {
     "record_id": "0605986666aa",
     "member_name": "钱七",
     "member_phone": "13500135005",
@@ -75,7 +11,7 @@
     "status": "scheduled",
     "source_file": "sample_mixed.csv",
     "source_row": 2,
-    "batch_id": "20260607133242_e5cecd4a",
+    "batch_id": "20260607224340_1757c1c4",
     "errors": [],
     "review_comment": ""
   },
@@ -88,10 +24,10 @@
     "course_date": "2026-06-16",
     "course_time": "15:00",
     "duration_minutes": 60,
-    "status": "valid",
+    "status": "scheduled",
     "source_file": "sample_mixed.csv",
     "source_row": 3,
-    "batch_id": "20260607133242_e5cecd4a",
+    "batch_id": "20260607224340_1e6a4d93",
     "errors": [],
     "review_comment": "电话更正"
   },
@@ -107,7 +43,7 @@
     "status": "invalid",
     "source_file": "sample_mixed.csv",
     "source_row": 4,
-    "batch_id": "20260607133242_e5cecd4a",
+    "batch_id": "20260607224340_1757c1c4",
     "errors": [
       "教练姓名不能为空"
     ],
@@ -122,10 +58,10 @@
     "course_date": "2026-06-18",
     "course_time": "22:00",
     "duration_minutes": 180,
-    "status": "valid",
+    "status": "scheduled",
     "source_file": "sample_mixed.csv",
     "source_row": 5,
-    "batch_id": "20260607133242_e5cecd4a",
+    "batch_id": "20260607224340_1e6a4d93",
     "errors": [],
     "review_comment": "客户确认可上晚课"
   },
@@ -138,13 +74,11 @@
     "course_date": "2026-06-19",
     "course_time": "06:00",
     "duration_minutes": 60,
-    "status": "invalid",
+    "status": "review",
     "source_file": "sample_mixed.csv",
     "source_row": 6,
-    "batch_id": "20260607133242_e5cecd4a",
-    "errors": [
-      "复核驳回: 太早客户不同意"
-    ],
-    "review_comment": "太早客户不同意"
+    "batch_id": "20260607224340_1757c1c4",
+    "errors": [],
+    "review_comment": ""
   }
 ]
