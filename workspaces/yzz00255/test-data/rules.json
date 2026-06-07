@@ -1,0 +1,206 @@
+{
+  "requiredFields": ["id", "title", "content", "receiveTime"],
+  "duplicateCheckFields": ["title", "reporterPhone"],
+  "defaultCategory": "其他诉求",
+  "defaultDepartment": "综合协调部门",
+  "rules": [
+    {
+      "id": "R001",
+      "name": "市政设施类",
+      "priority": 10,
+      "category": "城市管理",
+      "department": "城市管理局",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "路灯"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "井盖"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "市政设施"
+        }
+      ],
+      "description": "涉及路灯、井盖等市政设施的诉求"
+    },
+    {
+      "id": "R002",
+      "name": "交通出行类",
+      "priority": 9,
+      "category": "交通运输",
+      "department": "交通运输局",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "公交"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "地铁"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "交通拥堵"
+        }
+      ],
+      "description": "涉及公共交通、交通出行的诉求"
+    },
+    {
+      "id": "R003",
+      "name": "环境卫生类",
+      "priority": 8,
+      "category": "城市管理",
+      "department": "城市管理局",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "垃圾"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "保洁"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "环境卫生"
+        }
+      ],
+      "description": "涉及垃圾处理、环境卫生的诉求"
+    },
+    {
+      "id": "R004",
+      "name": "教育咨询类",
+      "priority": 7,
+      "category": "教育服务",
+      "department": "教育局",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "入学"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "学区"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "教育"
+        }
+      ],
+      "description": "涉及入学、学区等教育咨询的诉求"
+    },
+    {
+      "id": "R005",
+      "name": "医疗健康类",
+      "priority": 6,
+      "category": "医疗卫生",
+      "department": "卫生健康委员会",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "医院"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "疫苗"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "医疗"
+        }
+      ],
+      "description": "涉及医院、疫苗等医疗健康的诉求"
+    },
+    {
+      "id": "R006",
+      "name": "劳动保障类",
+      "priority": 5,
+      "category": "劳动保障",
+      "department": "人力资源和社会保障局",
+      "matchAll": false,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "工资"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "社保"
+        },
+        {
+          "field": "content",
+          "operator": "contains",
+          "value": "劳动权益"
+        }
+      ],
+      "description": "涉及工资、社保等劳动保障的诉求"
+    },
+    {
+      "id": "R007",
+      "name": "紧急市政类",
+      "priority": 20,
+      "category": "城市管理",
+      "department": "应急管理局",
+      "matchAll": true,
+      "conditions": [
+        {
+          "field": "urgency",
+          "operator": "equals",
+          "value": "紧急"
+        },
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "路灯"
+        }
+      ],
+      "description": "紧急情况下的市政设施问题"
+    },
+    {
+      "id": "R008",
+      "name": "城管-路灯专项",
+      "priority": 15,
+      "category": "城市管理",
+      "department": "城市照明管理处",
+      "matchAll": true,
+      "conditions": [
+        {
+          "field": "title",
+          "operator": "contains",
+          "value": "路灯"
+        },
+        {
+          "field": "source",
+          "operator": "equals",
+          "value": "市长热线"
+        }
+      ],
+      "description": "来自市长热线的路灯专项诉求"
+    }
+  ]
+}
