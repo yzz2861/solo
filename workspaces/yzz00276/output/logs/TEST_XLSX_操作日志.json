@@ -1,0 +1,131 @@
+{
+  "batch_id": "TEST_XLSX",
+  "task_status": "成功",
+  "source_files": [
+    "./examples/formula_sample_1.csv",
+    "./examples/formula_sample_2.csv"
+  ],
+  "dry_run": false,
+  "start_time": "2026-06-07 13:20:16",
+  "end_time": "2026-06-07 13:20:16",
+  "total_rows": 20,
+  "valid_rows": 18,
+  "bad_rows": 2,
+  "banned_found": 6,
+  "entries": [
+    {
+      "timestamp": "2026-06-07 13:20:16.744503",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "任务启动",
+      "detail": "dry_run=False, 格式=excel",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.744521",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "读取字段映射",
+      "detail": "./examples/field_mapping.json",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.744781",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "读取禁用料清单",
+      "detail": "./examples/banned_list.csv",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.753429",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "禁用料清单加载完成",
+      "detail": "共 6 条",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.753485",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "读取原始文件",
+      "detail": "共 2 个文件",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757247",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "文件读取完成",
+      "detail": "有效行 18, 坏行 2",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757266",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "开始禁用料校验",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757759",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "禁用料校验完成",
+      "detail": "命中 6 条",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757782",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "生成差异表",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757810",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "差异表生成完成",
+      "detail": "共 24 条差异记录",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.757815",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "开始导出结果",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.972245",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "导出完成",
+      "detail": "共 4 个文件",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:20:16.972267",
+      "batch_id": "TEST_XLSX",
+      "level": "INFO",
+      "event": "处理完成",
+      "detail": "任务结束",
+      "data": {
+        "task_status": "成功",
+        "total_rows": 20,
+        "valid_rows": 18,
+        "bad_rows": 2,
+        "banned_count": 6,
+        "high_risk": 2,
+        "medium_risk": 2,
+        "low_risk": 14,
+        "unknown_risk": 0
+      }
+    }
+  ]
+}

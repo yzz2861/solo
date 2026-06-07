@@ -1,0 +1,130 @@
+{
+  "batch_id": "TEST002",
+  "task_status": "成功",
+  "source_files": [
+    "./examples/formula_sample_1.csv"
+  ],
+  "dry_run": false,
+  "start_time": "2026-06-07 13:19:40",
+  "end_time": "2026-06-07 13:19:40",
+  "total_rows": 10,
+  "valid_rows": 9,
+  "bad_rows": 1,
+  "banned_found": 3,
+  "entries": [
+    {
+      "timestamp": "2026-06-07 13:19:40.108767",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "任务启动",
+      "detail": "dry_run=False, 格式=csv",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.108782",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "读取字段映射",
+      "detail": "使用默认映射",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.108788",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "读取禁用料清单",
+      "detail": "./examples/banned_list.csv",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.113204",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "禁用料清单加载完成",
+      "detail": "共 6 条",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.113220",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "读取原始文件",
+      "detail": "共 1 个文件",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.116408",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "文件读取完成",
+      "detail": "有效行 9, 坏行 1",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.116437",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "开始禁用料校验",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.117064",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "禁用料校验完成",
+      "detail": "命中 3 条",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.117088",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "生成差异表",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.117107",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "差异表生成完成",
+      "detail": "共 12 条差异记录",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.117113",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "开始导出结果",
+      "detail": "",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.121949",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "导出完成",
+      "detail": "共 4 个文件",
+      "data": {}
+    },
+    {
+      "timestamp": "2026-06-07 13:19:40.121961",
+      "batch_id": "TEST002",
+      "level": "INFO",
+      "event": "处理完成",
+      "detail": "任务结束",
+      "data": {
+        "task_status": "成功",
+        "total_rows": 10,
+        "valid_rows": 9,
+        "bad_rows": 1,
+        "banned_count": 3,
+        "high_risk": 1,
+        "medium_risk": 1,
+        "low_risk": 7,
+        "unknown_risk": 0
+      }
+    }
+  ]
+}
