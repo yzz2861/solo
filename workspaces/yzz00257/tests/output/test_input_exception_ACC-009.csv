@@ -1,0 +1,13 @@
+﻿工单编号,批次号,槽号,废液类型,处理日期,镍离子浓度_mg/L,铬离子浓度_mg/L,pH值,处理方式,操作人员,_source_file,_batch_id,_status,_line_no,_exception_types,_exception_messages,_rule_matches
+WO-20260601-005,BATCH-A005,TANK-005,综合废液,2026-06-01,500,100,7.0,综合处理,钱七,test_input.csv,ACC-009,exception,6,duplicate,重复记录（来源: 历史快照）,R006
+WO-20260601-006,BATCH-A006,TANK-006,含镍废液,2026-06-01,2500,80,5.0,化学沉淀,孙八,test_input.csv,ACC-009,exception,7,rule_conflict,镍离子浓度超过2000mg/L，需特殊处理,R001;R006
+WO-20260601-007,BATCH-A007,TANK-007,含铬废液,2026-06-01,120,650,6.5,电解还原,周九,test_input.csv,ACC-009,exception,8,rule_conflict,铬离子浓度超过500mg/L，需特殊处理,R002;R006
+WO-20260601-008,BATCH-A008,TANK-008,酸性废液,2026-06-01,300,40,1.5,中和处理,吴十,test_input.csv,ACC-009,exception,9,rule_conflict,pH值低于2，超出正常范围,R004;R006
+WO-20260601-009,BATCH-A009,TANK-009,碱性废液,2026-06-01,150,60,11.0,中和处理,郑一,test_input.csv,ACC-009,exception,10,rule_conflict,pH值超过10，超出正常范围,R003;R006
+WO-20260601-010,BATCH-A010,TANK-010,神秘废液,2026-06-01,400,80,7.5,综合处理,王二,test_input.csv,ACC-009,exception,11,rule_conflict,废液类型不在有效清单内,R005;R006
+,BATCH-A011,TANK-011,含镍废液,2026-06-01,800,40,5.5,化学沉淀,李三,test_input.csv,ACC-009,exception,12,missing_field,缺少必填字段: 工单号(工单编号),R006
+WO-20260601-012,,TANK-012,含铬废液,2026-06-01,90,300,6.0,电解还原,张四,test_input.csv,ACC-009,exception,13,missing_field,缺少必填字段: 生产批次(批次号),R006
+WO-20260601-013,BATCH-A013,,酸性废液,2026-06-01,250,25,4.0,中和处理,王五,test_input.csv,ACC-009,exception,14,missing_field,缺少必填字段: 电镀槽编号(槽号),
+WO-20260601-014,BATCH-A001,TANK-001,含镍废液,2026-06-02,1600,60,4.8,化学沉淀,张三,test_input.csv,ACC-009,exception,15,duplicate,重复记录（来源: 本批次）,R006
+WO-20260601-015,BATCH-A015,TANK-015,含镍废液,,900,45,5.2,化学沉淀,赵六,test_input.csv,ACC-009,exception,16,missing_field,缺少必填字段: 处理日期(处理日期),R006
+WO-20260601-017,BATCH-A017,TANK-017,综合废液,2026-06-01,350,70,6.8,综合处理,刘八,test_input.csv,ACC-009,exception,18,duplicate,重复记录（来源: 历史快照）,R006

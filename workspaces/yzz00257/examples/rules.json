@@ -1,0 +1,71 @@
+{
+  "required_fields": [
+    {"name": "工单编号", "description": "工单号"},
+    {"name": "批次号", "description": "生产批次"},
+    {"name": "槽号", "description": "电镀槽编号"},
+    {"name": "废液类型", "description": "废液种类"},
+    {"name": "处理日期", "description": "处理日期"}
+  ],
+  "rules": [
+    {
+      "id": "R001",
+      "name": "镍离子浓度超标",
+      "field": "镍离子浓度_mg/L",
+      "operator": "greater_than",
+      "value": "2000",
+      "action": "reject",
+      "severity": "error",
+      "message": "镍离子浓度超过2000mg/L，需特殊处理"
+    },
+    {
+      "id": "R002",
+      "name": "铬离子浓度超标",
+      "field": "铬离子浓度_mg/L",
+      "operator": "greater_than",
+      "value": "500",
+      "action": "reject",
+      "severity": "error",
+      "message": "铬离子浓度超过500mg/L，需特殊处理"
+    },
+    {
+      "id": "R003",
+      "name": "pH值异常偏高",
+      "field": "pH值",
+      "operator": "greater_than",
+      "value": "10",
+      "action": "reject",
+      "severity": "error",
+      "message": "pH值超过10，超出正常范围"
+    },
+    {
+      "id": "R004",
+      "name": "pH值异常偏低",
+      "field": "pH值",
+      "operator": "less_than",
+      "value": "2",
+      "action": "reject",
+      "severity": "error",
+      "message": "pH值低于2，超出正常范围"
+    },
+    {
+      "id": "R005",
+      "name": "废液类型无效",
+      "field": "废液类型",
+      "operator": "not_in",
+      "value": "含镍废液,含铬废液,酸性废液,碱性废液,综合废液",
+      "action": "reject",
+      "severity": "error",
+      "message": "废液类型不在有效清单内"
+    },
+    {
+      "id": "R006",
+      "name": "槽号格式不规范",
+      "field": "槽号",
+      "operator": "regex",
+      "value": "^TANK-\\d{3}$",
+      "action": "flag",
+      "severity": "warning",
+      "message": "槽号命名建议采用 TANK-XXX 格式"
+    }
+  ]
+}
