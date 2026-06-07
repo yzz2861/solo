@@ -1,0 +1,93 @@
+{
+  "scan_time": "2026-06-07 13:16:10",
+  "config_path": "samples/compliant/config.json",
+  "baseline_path": null,
+  "output_path": "output/compliant",
+  "summary": {
+    "overall_risk_level": "存在风险",
+    "total_groups": 5,
+    "total_vulnerabilities": 10,
+    "total_images": 10,
+    "total_threshold_hits": 4,
+    "threshold_hit_images": 4,
+    "baseline_comparison": "无历史基线数据，跳过基线对比",
+    "new_risks_count": 0,
+    "resolved_risks_count": 0,
+    "persistent_risks_count": 0,
+    "recommendations": [
+      "安排在版本迭代中修复中低危漏洞"
+    ]
+  },
+  "group_dimensions": [
+    "namespace",
+    "severity"
+  ],
+  "group_stats": {
+    "namespace=default | severity=medium": {
+      "group_key": "namespace=default | severity=medium",
+      "total_records": 3,
+      "unique_images": 3,
+      "threshold_hit_count": 3,
+      "threshold_hit_images": 3,
+      "severity_distribution": {
+        "medium": 3
+      }
+    },
+    "namespace=default | severity=low": {
+      "group_key": "namespace=default | severity=low",
+      "total_records": 4,
+      "unique_images": 4,
+      "threshold_hit_count": 0,
+      "threshold_hit_images": 0,
+      "severity_distribution": {
+        "low": 4
+      }
+    },
+    "namespace=frontend | severity=low": {
+      "group_key": "namespace=frontend | severity=low",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 0,
+      "threshold_hit_images": 0,
+      "severity_distribution": {
+        "low": 1
+      }
+    },
+    "namespace=backend | severity=medium": {
+      "group_key": "namespace=backend | severity=medium",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 1,
+      "threshold_hit_images": 1,
+      "severity_distribution": {
+        "medium": 1
+      }
+    },
+    "namespace=infra | severity=low": {
+      "group_key": "namespace=infra | severity=low",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 0,
+      "threshold_hit_images": 0,
+      "severity_distribution": {
+        "low": 1
+      }
+    }
+  },
+  "time_window_explanation": "时间窗口未启用，包含全部记录",
+  "baseline_comparison": {
+    "new_risks": [],
+    "resolved_risks": [],
+    "persistent_risks": [],
+    "explanation": "无历史基线数据，跳过基线对比"
+  },
+  "bad_data_count": 0,
+  "duplicate_count": 0,
+  "trace_ids_sample": [
+    "SCAN-9EEF5795311E",
+    "SCAN-667A13C41D42",
+    "SCAN-A6B6CAC42234",
+    "SCAN-7D20E0E63175",
+    "SCAN-E7BD4A1DAC17"
+  ]
+}

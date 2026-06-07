@@ -1,0 +1,13 @@
+﻿追溯编号,分组,镜像,漏洞ID,严重级别,CVSS分数,阈值命中说明,基线状态,描述,复核状态,复核人,备注
+SCAN-ABC7F97C06F1,namespace=default | severity=critical,registry.example.com/payment/gateway:v3.0.0,CVE-2026-2001,critical,9.8,严重级别 'critical' 且 CVSS=9.8 >= 9.0,无变化,,待复核,,
+SCAN-53CFF5EB5929,namespace=default | severity=critical,registry.example.com/user/profile:v2.0.0,CVE-2026-2004,critical,9.1,严重级别 'critical' 且 CVSS=9.1 >= 9.0,无变化,,待复核,,
+SCAN-C892208E4A26,namespace=default | severity=critical,registry.example.com/data/mongodb:5.0.5,CVE-2026-2010,critical,10.0,严重级别 'critical' 且 CVSS=10.0 >= 9.0,无变化,,待复核,,
+SCAN-1171B5524C1F,namespace=default | severity=high,registry.example.com/payment/gateway:v3.0.0,CVE-2026-2002,high,8.2,严重级别 'high' 且 CVSS=8.2 >= 7.0,无变化,,待复核,,
+SCAN-83DC84A81155,namespace=default | severity=high,registry.example.com/payment/gateway:v3.0.0,CVE-2026-2003,high,7.5,严重级别 'high' 且 CVSS=7.5 >= 7.0,无变化,,待复核,,
+SCAN-4F76EE4A181E,namespace=default | severity=high,registry.example.com/order/service:v1.8.0,CVE-2026-2006,high,7.8,严重级别 'high' 且 CVSS=7.8 >= 7.0,无变化,,待复核,,
+SCAN-32816460EB0D,namespace=default | severity=high,registry.example.com/infra/kafka:2.8.0,CVE-2026-2008,high,7.2,严重级别 'high' 且 CVSS=7.2 >= 7.0,无变化,,待复核,,
+SCAN-4E99481C05FF,namespace=default | severity=medium,registry.example.com/user/profile:v2.0.0,CVE-2026-2005,medium,5.6,严重级别 'medium' 且 CVSS=5.6 >= 4.0,无变化,,待复核,,
+SCAN-A805A1D4A844,namespace=default | severity=medium,registry.example.com/order/service:v1.8.0,CVE-2026-2007,medium,4.9,严重级别 'medium' 且 CVSS=4.9 >= 4.0,无变化,,待复核,,
+SCAN-0E2C475D9348,namespace=payment | severity=high,registry.example.com/payment/gateway:v3.0.0,CVE-2026-2011,high,7.9,严重级别 'high' 且 CVSS=7.9 >= 7.0,无变化,,待复核,,
+SCAN-072C1F06968F,namespace=payment | severity=critical,registry.example.com/payment/gateway:v3.0.0,CVE-2026-2012,critical,9.4,严重级别 'critical' 且 CVSS=9.4 >= 9.0,无变化,,待复核,,
+SCAN-C15D68F865B9,namespace=user | severity=high,registry.example.com/user/profile:v2.0.0,CVE-2026-2013,high,8.5,严重级别 'high' 且 CVSS=8.5 >= 7.0,无变化,,待复核,,

@@ -1,0 +1,140 @@
+{
+  "scan_time": "2026-06-07 13:16:28",
+  "config_path": "samples/historical/config.json",
+  "baseline_path": "baseline/historical_baseline.json",
+  "output_path": "output/historical",
+  "summary": {
+    "overall_risk_level": "高风险",
+    "total_groups": 3,
+    "total_vulnerabilities": 7,
+    "total_images": 6,
+    "total_threshold_hits": 7,
+    "threshold_hit_images": 6,
+    "baseline_comparison": "基线对比完成: 新增 4 项, 已修复 1 项, 持续存在 3 项",
+    "new_risks_count": 4,
+    "resolved_risks_count": 1,
+    "persistent_risks_count": 3,
+    "recommendations": [
+      "立即处置高危漏洞，暂停相关镜像发布",
+      "关注新增风险，评估引入原因",
+      "跟进持续风险，制定修复计划"
+    ]
+  },
+  "group_dimensions": [
+    "namespace",
+    "severity"
+  ],
+  "group_stats": {
+    "namespace=default | severity=high": {
+      "group_key": "namespace=default | severity=high",
+      "total_records": 3,
+      "unique_images": 2,
+      "threshold_hit_count": 3,
+      "threshold_hit_images": 2,
+      "severity_distribution": {
+        "high": 3
+      }
+    },
+    "namespace=default | severity=medium": {
+      "group_key": "namespace=default | severity=medium",
+      "total_records": 2,
+      "unique_images": 2,
+      "threshold_hit_count": 2,
+      "threshold_hit_images": 2,
+      "severity_distribution": {
+        "medium": 2
+      }
+    },
+    "namespace=default | severity=critical": {
+      "group_key": "namespace=default | severity=critical",
+      "total_records": 2,
+      "unique_images": 2,
+      "threshold_hit_count": 2,
+      "threshold_hit_images": 2,
+      "severity_distribution": {
+        "critical": 2
+      }
+    }
+  },
+  "time_window_explanation": "时间窗口过滤 [起始时间: 2026-06-01 00:00:00 | 结束时间: 2026-06-30 23:59:59]，保留 7/7 条记录",
+  "baseline_comparison": {
+    "new_risks": [
+      {
+        "image": "registry.example.com/backend/api-server:v1.6.0",
+        "vulnerability": "CVE-2026-4002",
+        "severity": "critical",
+        "cvss": 9.1,
+        "trace_id": "SCAN-2F1E2B561B7E",
+        "explanation": "基线对比为新增风险: registry.example.com/backend/api-server:v1.6.0 - CVE-2026-4002"
+      },
+      {
+        "image": "registry.example.com/infra/nginx:1.25.0",
+        "vulnerability": "CVE-2026-4003",
+        "severity": "medium",
+        "cvss": 6.2,
+        "trace_id": "SCAN-B9A03D18F01C",
+        "explanation": "基线对比为新增风险: registry.example.com/infra/nginx:1.25.0 - CVE-2026-4003"
+      },
+      {
+        "image": "registry.example.com/data/redis:7.2.0",
+        "vulnerability": "CVE-2026-4004",
+        "severity": "high",
+        "cvss": 7.8,
+        "trace_id": "SCAN-C7C097B4C098",
+        "explanation": "基线对比为新增风险: registry.example.com/data/redis:7.2.0 - CVE-2026-4004"
+      },
+      {
+        "image": "registry.example.com/frontend/web-app:v2.2.0",
+        "vulnerability": "CVE-2026-4001",
+        "severity": "high",
+        "cvss": 8.3,
+        "trace_id": "SCAN-CAE0CCAF527F",
+        "explanation": "基线对比为新增风险: registry.example.com/frontend/web-app:v2.2.0 - CVE-2026-4001"
+      }
+    ],
+    "resolved_risks": [
+      {
+        "image": "registry.example.com/infra/nginx",
+        "vulnerability": "CVE-2026-9012",
+        "severity": "low",
+        "explanation": "基线对比为已修复风险: registry.example.com/infra/nginx - CVE-2026-9012"
+      }
+    ],
+    "persistent_risks": [
+      {
+        "image": "registry.example.com/frontend/web-app:v2.2.0",
+        "vulnerability": "CVE-2026-1234",
+        "severity": "high",
+        "cvss": 7.5,
+        "trace_id": "SCAN-838FB4F5FEE9",
+        "explanation": "基线对比为持续存在风险: registry.example.com/frontend/web-app:v2.2.0 - CVE-2026-1234"
+      },
+      {
+        "image": "registry.example.com/backend/api-server:v1.6.0",
+        "vulnerability": "CVE-2026-5678",
+        "severity": "medium",
+        "cvss": 5.2,
+        "trace_id": "SCAN-DF072ED274CB",
+        "explanation": "基线对比为持续存在风险: registry.example.com/backend/api-server:v1.6.0 - CVE-2026-5678"
+      },
+      {
+        "image": "registry.example.com/data/mysql:8.0.36",
+        "vulnerability": "CVE-2026-3456",
+        "severity": "critical",
+        "cvss": 9.8,
+        "trace_id": "SCAN-3AF3897299F4",
+        "explanation": "基线对比为持续存在风险: registry.example.com/data/mysql:8.0.36 - CVE-2026-3456"
+      }
+    ],
+    "explanation": "基线对比完成: 新增 4 项, 已修复 1 项, 持续存在 3 项"
+  },
+  "bad_data_count": 0,
+  "duplicate_count": 0,
+  "trace_ids_sample": [
+    "SCAN-838FB4F5FEE9",
+    "SCAN-DF072ED274CB",
+    "SCAN-3AF3897299F4",
+    "SCAN-CAE0CCAF527F",
+    "SCAN-2F1E2B561B7E"
+  ]
+}

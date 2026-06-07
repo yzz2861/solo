@@ -1,0 +1,41 @@
+{
+  "description": "超阈值样例配置 - 包含多个高危和严重漏洞",
+  "version": "1.0.0",
+
+  "log_sources": [
+    {
+      "name": "payment_scan",
+      "path": "samples/over_threshold/payment_scan.log",
+      "type": "file"
+    },
+    {
+      "name": "snyk_report",
+      "path": "samples/over_threshold/snyk_report.json",
+      "type": "file"
+    }
+  ],
+
+  "time_window": {
+    "enabled": false
+  },
+
+  "group_by": ["namespace", "severity"],
+
+  "thresholds": [
+    {
+      "level": "critical",
+      "min_cvss": 9.0,
+      "label": "严重"
+    },
+    {
+      "level": "high",
+      "min_cvss": 7.0,
+      "label": "高危"
+    },
+    {
+      "level": "medium",
+      "min_cvss": 4.0,
+      "label": "中危"
+    }
+  ]
+}

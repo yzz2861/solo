@@ -1,0 +1,13 @@
+﻿来源,文件,行号,异常原因,原始内容
+mixed_scan,samples/missing_material/mixed_bad.log,3,无法解析的记录格式,这是一行完全无法解析的坏数据
+mixed_scan,samples/missing_material/mixed_bad.log,5,无法解析的记录格式,invalid_json_no_fields_here
+mixed_scan,samples/missing_material/mixed_bad.log,9,无法解析的记录格式,garbled_数据_乱码@@##$$%^&*()
+mixed_scan,samples/missing_material/mixed_bad.log,11,无法解析的记录格式,"{""invalid_json"
+mixed_scan,samples/missing_material/mixed_bad.log,13,无法解析的记录格式,前后有空格的行
+nonexistent_file,samples/missing_material/this_file_does_not_exist.log,,文件不存在,
+nonexistent_dir,samples/missing_material/nonexistent_dir,,目录不存在,
+duplicate_source,samples/missing_material/mixed_bad.log,3,无法解析的记录格式,这是一行完全无法解析的坏数据
+duplicate_source,samples/missing_material/mixed_bad.log,5,无法解析的记录格式,invalid_json_no_fields_here
+duplicate_source,samples/missing_material/mixed_bad.log,9,无法解析的记录格式,garbled_数据_乱码@@##$$%^&*()
+duplicate_source,samples/missing_material/mixed_bad.log,11,无法解析的记录格式,"{""invalid_json"
+duplicate_source,samples/missing_material/mixed_bad.log,13,无法解析的记录格式,前后有空格的行

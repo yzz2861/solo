@@ -1,0 +1,46 @@
+{
+  "baseline_version": "v20260501",
+  "baseline_date": "2026-05-01",
+  "description": "2026年5月容器镜像安全基线",
+  "risk_items": [
+    {
+      "image": "registry.example.com/frontend/web-app",
+      "tag": "v2.1.0",
+      "vulnerability": "CVE-2026-1234",
+      "severity": "high",
+      "cvss": 7.5,
+      "description": "OpenSSL 缓冲区溢出漏洞"
+    },
+    {
+      "image": "registry.example.com/backend/api-server",
+      "tag": "v1.5.2",
+      "vulnerability": "CVE-2026-5678",
+      "severity": "medium",
+      "cvss": 5.2,
+      "description": "Log4j 远程代码执行"
+    },
+    {
+      "image": "registry.example.com/infra/nginx",
+      "tag": "1.24.0",
+      "vulnerability": "CVE-2026-9012",
+      "severity": "low",
+      "cvss": 2.1,
+      "description": "信息泄露漏洞"
+    },
+    {
+      "image": "registry.example.com/data/mysql",
+      "tag": "8.0.32",
+      "vulnerability": "CVE-2026-3456",
+      "severity": "critical",
+      "cvss": 9.8,
+      "description": "MySQL 权限提升漏洞"
+    }
+  ],
+  "summary": {
+    "total_risks": 4,
+    "critical": 1,
+    "high": 1,
+    "medium": 1,
+    "low": 1
+  }
+}

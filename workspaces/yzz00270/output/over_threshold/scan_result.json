@@ -1,0 +1,113 @@
+{
+  "scan_time": "2026-06-07 13:16:14",
+  "config_path": "samples/over_threshold/config.json",
+  "baseline_path": null,
+  "output_path": "output/over_threshold",
+  "summary": {
+    "overall_risk_level": "高风险",
+    "total_groups": 7,
+    "total_vulnerabilities": 13,
+    "total_images": 12,
+    "total_threshold_hits": 12,
+    "threshold_hit_images": 11,
+    "baseline_comparison": "无历史基线数据，跳过基线对比",
+    "new_risks_count": 0,
+    "resolved_risks_count": 0,
+    "persistent_risks_count": 0,
+    "recommendations": [
+      "立即处置高危漏洞，暂停相关镜像发布"
+    ]
+  },
+  "group_dimensions": [
+    "namespace",
+    "severity"
+  ],
+  "group_stats": {
+    "namespace=default | severity=critical": {
+      "group_key": "namespace=default | severity=critical",
+      "total_records": 3,
+      "unique_images": 3,
+      "threshold_hit_count": 3,
+      "threshold_hit_images": 3,
+      "severity_distribution": {
+        "critical": 3
+      }
+    },
+    "namespace=default | severity=high": {
+      "group_key": "namespace=default | severity=high",
+      "total_records": 4,
+      "unique_images": 3,
+      "threshold_hit_count": 4,
+      "threshold_hit_images": 3,
+      "severity_distribution": {
+        "high": 4
+      }
+    },
+    "namespace=default | severity=medium": {
+      "group_key": "namespace=default | severity=medium",
+      "total_records": 2,
+      "unique_images": 2,
+      "threshold_hit_count": 2,
+      "threshold_hit_images": 2,
+      "severity_distribution": {
+        "medium": 2
+      }
+    },
+    "namespace=default | severity=low": {
+      "group_key": "namespace=default | severity=low",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 0,
+      "threshold_hit_images": 0,
+      "severity_distribution": {
+        "low": 1
+      }
+    },
+    "namespace=payment | severity=high": {
+      "group_key": "namespace=payment | severity=high",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 1,
+      "threshold_hit_images": 1,
+      "severity_distribution": {
+        "high": 1
+      }
+    },
+    "namespace=payment | severity=critical": {
+      "group_key": "namespace=payment | severity=critical",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 1,
+      "threshold_hit_images": 1,
+      "severity_distribution": {
+        "critical": 1
+      }
+    },
+    "namespace=user | severity=high": {
+      "group_key": "namespace=user | severity=high",
+      "total_records": 1,
+      "unique_images": 1,
+      "threshold_hit_count": 1,
+      "threshold_hit_images": 1,
+      "severity_distribution": {
+        "high": 1
+      }
+    }
+  },
+  "time_window_explanation": "时间窗口未启用，包含全部记录",
+  "baseline_comparison": {
+    "new_risks": [],
+    "resolved_risks": [],
+    "persistent_risks": [],
+    "explanation": "无历史基线数据，跳过基线对比"
+  },
+  "bad_data_count": 0,
+  "duplicate_count": 0,
+  "trace_ids_sample": [
+    "SCAN-ABC7F97C06F1",
+    "SCAN-1171B5524C1F",
+    "SCAN-83DC84A81155",
+    "SCAN-53CFF5EB5929",
+    "SCAN-4E99481C05FF"
+  ]
+}

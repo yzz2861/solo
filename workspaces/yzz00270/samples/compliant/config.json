@@ -1,0 +1,44 @@
+{
+  "description": "合规样例配置 - 所有漏洞均低于高危阈值",
+  "version": "1.0.0",
+
+  "log_sources": [
+    {
+      "name": "harbor_scan",
+      "path": "samples/compliant/harbor_scan.log",
+      "type": "file"
+    },
+    {
+      "name": "trivy_report",
+      "path": "samples/compliant/trivy_report.json",
+      "type": "file"
+    }
+  ],
+
+  "time_window": {
+    "enabled": false,
+    "start": "",
+    "end": "",
+    "days": 30
+  },
+
+  "group_by": ["namespace", "severity"],
+
+  "thresholds": [
+    {
+      "level": "critical",
+      "min_cvss": 9.0,
+      "label": "严重"
+    },
+    {
+      "level": "high",
+      "min_cvss": 7.0,
+      "label": "高危"
+    },
+    {
+      "level": "medium",
+      "min_cvss": 4.0,
+      "label": "中危"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+﻿追溯编号,分组,镜像,漏洞ID,严重级别,CVSS分数,阈值命中说明,基线状态,描述,复核状态,复核人,备注
+SCAN-838FB4F5FEE9,namespace=default | severity=high,registry.example.com/frontend/web-app:v2.2.0,CVE-2026-1234,high,7.5,严重级别 'high' 且 CVSS=7.5 >= 7.0,持续,,待复核,,
+SCAN-CAE0CCAF527F,namespace=default | severity=high,registry.example.com/frontend/web-app:v2.2.0,CVE-2026-4001,high,8.3,严重级别 'high' 且 CVSS=8.3 >= 7.0,新增,,待复核,,
+SCAN-C7C097B4C098,namespace=default | severity=high,registry.example.com/data/redis:7.2.0,CVE-2026-4004,high,7.8,严重级别 'high' 且 CVSS=7.8 >= 7.0,新增,,待复核,,
+SCAN-DF072ED274CB,namespace=default | severity=medium,registry.example.com/backend/api-server:v1.6.0,CVE-2026-5678,medium,5.2,严重级别 'medium' 且 CVSS=5.2 >= 4.0,持续,,待复核,,
+SCAN-B9A03D18F01C,namespace=default | severity=medium,registry.example.com/infra/nginx:1.25.0,CVE-2026-4003,medium,6.2,严重级别 'medium' 且 CVSS=6.2 >= 4.0,新增,,待复核,,
+SCAN-3AF3897299F4,namespace=default | severity=critical,registry.example.com/data/mysql:8.0.36,CVE-2026-3456,critical,9.8,严重级别 'critical' 且 CVSS=9.8 >= 9.0,持续,,待复核,,
+SCAN-2F1E2B561B7E,namespace=default | severity=critical,registry.example.com/backend/api-server:v1.6.0,CVE-2026-4002,critical,9.1,严重级别 'critical' 且 CVSS=9.1 >= 9.0,新增,,待复核,,

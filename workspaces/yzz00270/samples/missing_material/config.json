@@ -1,0 +1,51 @@
+{
+  "description": "材料缺失样例配置 - 包含坏数据、不存在的文件、重复记录",
+  "version": "1.0.0",
+
+  "log_sources": [
+    {
+      "name": "mixed_scan",
+      "path": "samples/missing_material/mixed_bad.log",
+      "type": "file"
+    },
+    {
+      "name": "nonexistent_file",
+      "path": "samples/missing_material/this_file_does_not_exist.log",
+      "type": "file"
+    },
+    {
+      "name": "nonexistent_dir",
+      "path": "samples/missing_material/nonexistent_dir",
+      "type": "dir"
+    },
+    {
+      "name": "duplicate_source",
+      "path": "samples/missing_material/mixed_bad.log",
+      "type": "file"
+    }
+  ],
+
+  "time_window": {
+    "enabled": false
+  },
+
+  "group_by": ["namespace", "severity"],
+
+  "thresholds": [
+    {
+      "level": "critical",
+      "min_cvss": 9.0,
+      "label": "严重"
+    },
+    {
+      "level": "high",
+      "min_cvss": 7.0,
+      "label": "高危"
+    },
+    {
+      "level": "medium",
+      "min_cvss": 4.0,
+      "label": "中危"
+    }
+  ]
+}
