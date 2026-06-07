@@ -1,0 +1,30 @@
+{
+  "batch_id": "FINAL_ACCEPTANCE",
+  "total_records": 19,
+  "passed_count": 10,
+  "exception_count": 7,
+  "bad_count": 2,
+  "pass_rate": "52.63%",
+  "exception_breakdown": {
+    "OVER_THRESHOLD": 4,
+    "MISSING_MATERIAL": 3,
+    "DATE_OUT_OF_RANGE": 1,
+    "BAD": 2
+  },
+  "source_files": [
+    "compliant_sample.csv",
+    "over_threshold_sample.csv",
+    "missing_material_sample.csv",
+    "bad_rows_sample.csv"
+  ],
+  "output_files": [
+    "./output/FINAL_ACCEPTANCE_passed.csv",
+    "./output/FINAL_ACCEPTANCE_exceptions.csv",
+    "./output/FINAL_ACCEPTANCE_bad_rows.csv",
+    "./output/FINAL_ACCEPTANCE_summary.json"
+  ],
+  "dry_run": false,
+  "start_time": "2026-06-07 13:32:08",
+  "end_time": "2026-06-07 13:32:08",
+  "duration_seconds": 0.0
+}

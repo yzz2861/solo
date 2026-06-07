@@ -1,0 +1,8 @@
+﻿valve_id,valve_name,operation_type,operation_date,operator,pressure_before,pressure_after,material,location,remark,source_file,batch_id,row_number,status,exception_types,exception_reasons
+V-101,高压主阀,开启,2024-06-05 10:00:00,陈七,0.2,0.85,铸钢,高压站一号,压力异常升高,over_threshold_sample.csv,FINAL_ACCEPTANCE,2,EXCEPTION,OVER_THRESHOLD,压力变化 0.65 MPa 超过阈值 0.5 MPa
+V-102,超压防护阀,关闭,2024-06-05 11:30:00,周八,0.9,0.3,球墨铸铁,高压站二号,紧急降压操作,over_threshold_sample.csv,FINAL_ACCEPTANCE,3,EXCEPTION,OVER_THRESHOLD,压力变化 0.60 MPa 超过阈值 0.5 MPa
+V-103,调压阀B,开启,2024-06-06 09:00:00,吴九,0.45,1.2,铸钢,调压站,压力超阈值,over_threshold_sample.csv,FINAL_ACCEPTANCE,4,EXCEPTION,OVER_THRESHOLD,压力变化 0.75 MPa 超过阈值 0.5 MPa
+V-201,北区总阀,开启,2024-06-10 08:00:00,郑十,0.32,0.35,,北区管网,材料字段缺失,missing_material_sample.csv,FINAL_ACCEPTANCE,2,EXCEPTION,MISSING_MATERIAL,材料字段缺失
+V-203,中区旁路阀,开启,2024-06-11 14:00:00,冯十一,0.28,0.3,,中区管网,材料空白,missing_material_sample.csv,FINAL_ACCEPTANCE,4,EXCEPTION,MISSING_MATERIAL,材料字段缺失
+V-205,西区调压阀,开启,2024-06-12 09:00:00,李四,0.0,0.33,,西区管网,材料和压力都缺失,missing_material_sample.csv,FINAL_ACCEPTANCE,6,EXCEPTION,MISSING_MATERIAL,材料字段缺失
+V-905,超阈值阀,开启,2024-06-21 08:00:00,张三,0.2,0.9,铸铁,测试区,压力超阈值,bad_rows_sample.csv,FINAL_ACCEPTANCE,6,EXCEPTION,"DATE_OUT_OF_RANGE,OVER_THRESHOLD",操作日期 2024-06-21 晚于结束日期 2024-06-20; 压力变化 0.70 MPa 超过阈值 0.5 MPa
