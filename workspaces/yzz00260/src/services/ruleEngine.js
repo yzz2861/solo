@@ -125,6 +125,67 @@ class RuleEngine {
     }
 
     if (rule.requiresManualReview) {
+      if (businessRecord.lastReviewResult === 'APPROVED') {
+        dataStore.incrementRateLimit(
+          businessNo,
+          rule.ruleId,
+          rule.version,
+          windowStart,
+          requestTime
+        );
+
+        return {
+          resultType: ResultType.PROCESSABLE,
+          traceId,
+          businessNo,
+          explanation: {
+            message: '审核通过，可正常办理',
+            ruleId: rule.ruleId,
+            ruleName: rule.name,
+            ruleVersion: rule.version,
+            threshold: rule.threshold,
+            currentCount: rateRecord.count,
+            windowStart,
+            windowEnd,
+            reviewStatus: 'approved',
+            lastReviewTime: businessRecord.lastReviewTime,
+            lastReviewComment: businessRecord.lastReviewComment
+          },
+          businessStatus: businessRecord.status,
+          remainingQuota: rule.threshold - rateRecord.count,
+          reviewInfo: {
+            status: 'approved',
+            reviewedBy: businessRecord.reviewAssignee,
+            reviewTime: businessRecord.lastReviewTime
+          }
+        };
+      }
+
+      if (businessRecord.lastReviewResult === 'REJECTED') {
+        return {
+          resultType: ResultType.FAILED,
+          traceId,
+          businessNo,
+          explanation: {
+            reason: FailureReason.REVIEW_REJECTED,
+            message: '人工审核未通过',
+            detail: businessRecord.lastReviewComment || '审核拒绝，具体原因请咨询审核人员',
+            ruleId: rule.ruleId,
+            ruleName: rule.name,
+            ruleVersion: rule.version,
+            reviewStatus: 'rejected',
+            lastReviewTime: businessRecord.lastReviewTime,
+            lastReviewComment: businessRecord.lastReviewComment
+          },
+          businessStatus: businessRecord.status,
+          reviewInfo: {
+            status: 'rejected',
+            reviewedBy: businessRecord.reviewAssignee,
+            reviewTime: businessRecord.lastReviewTime
+          }
+        };
+      }
+
       const materialCheck = this._checkMaterials(
         providedMaterials || businessRecord.materials,
         rule.reviewRequiredFields

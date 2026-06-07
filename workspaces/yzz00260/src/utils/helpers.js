@@ -68,7 +68,8 @@ const FailureReason = {
   RULE_NOT_FOUND: 'rule_not_found',
   BUSINESS_LOCKED: 'business_locked',
   INVALID_PARAMS: 'invalid_params',
-  HISTORY_PLAYBACK_NOT_ALLOWED: 'history_playback_not_allowed'
+  HISTORY_PLAYBACK_NOT_ALLOWED: 'history_playback_not_allowed',
+  REVIEW_REJECTED: 'review_rejected'
 };
 
 module.exports = {

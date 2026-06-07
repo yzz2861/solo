@@ -506,9 +506,29 @@ test('人工复核 - 审核通过后可正常办理', () => {
 
   assertEqual(reviewResult.code, 200, '审核操作应成功');
   assertEqual(reviewResult.data.reviewResult, 'APPROVED', '审核结果应为通过');
+
+  const afterReviewResult = grayRateLimitService.processRequest({
+    businessNo,
+    objectStatus: 'active',
+    ruleVersion: 'v2.0',
+    operator: 'user001'
+  });
+
+  assertEqual(afterReviewResult.code, 200, '审核通过后状态码应为200');
+  assertEqual(afterReviewResult.data.resultType, 'processable',
+    '审核通过后应为可办理状态');
+  assert(afterReviewResult.data.remainingQuota !== undefined,
+    '应返回剩余配额');
+  assert(afterReviewResult.data.reviewInfo, '应包含审核信息');
+  assertEqual(afterReviewResult.data.reviewInfo.status, 'approved',
+    '审核状态应为 approved');
+  assertEqual(afterReviewResult.data.reviewInfo.reviewedBy, 'reviewer001',
+    '应记录审核人');
+  assertEqual(afterReviewResult.data.explanation.reviewStatus, 'approved',
+    '解释中应包含审核通过状态');
 });
 
-test('人工复核 - 审核拒绝', () => {
+test('人工复核 - 审核拒绝后再次检查返回失败', () => {
   const businessNo = 'BIZ-REVIEW-REJECT-001';
 
   grayRateLimitService.processRequest({
@@ -534,6 +554,22 @@ test('人工复核 - 审核拒绝', () => {
   assertEqual(reviewResult.data.reviewResult, 'REJECTED', '审核结果应为拒绝');
   assert(reviewResult.data.reviewComment, '应有审核意见');
   assert(reviewResult.data.reviewedBy === 'reviewer002', '应记录审核人');
+
+  const afterReviewResult = grayRateLimitService.processRequest({
+    businessNo,
+    objectStatus: 'active',
+    ruleVersion: 'v2.0',
+    operator: 'user001'
+  });
+
+  assertEqual(afterReviewResult.data.resultType, 'failed',
+    '审核拒绝后应为失败状态');
+  assertEqual(afterReviewResult.data.explanation.reason, 'review_rejected',
+    '失败原因应为审核拒绝');
+  assert(afterReviewResult.data.explanation.lastReviewComment,
+    '应返回拒绝原因');
+  assertEqual(afterReviewResult.data.reviewInfo.status, 'rejected',
+    '审核状态应为 rejected');
 });
 
 console.log('\n--- 测试场景 10: 失败提示与原因细分 ---');
