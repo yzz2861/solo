@@ -1,0 +1,32 @@
+{
+  "success": [
+    {
+      "source_id": "E001",
+      "row_hash": "8b923624a9ab07c23454523b7e7c1f0b",
+      "status": "conflict",
+      "risk_label": "中风险",
+      "conflict_with": "therapist:E002",
+      "batch_id": "TEST-EXP-007",
+      "processed_at": "2026-06-07 12:26:09"
+    },
+    {
+      "source_id": "E002",
+      "row_hash": "233d07f8c12bccc0c2f1194937ea47e8",
+      "status": "conflict",
+      "risk_label": "中风险",
+      "conflict_with": "therapist:E001",
+      "batch_id": "TEST-EXP-007",
+      "processed_at": "2026-06-07 12:26:09"
+    }
+  ],
+  "bad_rows": [
+    {
+      "source_id": "E003",
+      "patient_id": "",
+      "patient_name": "王五",
+      "error_message": "patient_id不能为空",
+      "batch_id": "TEST-EXP-007",
+      "source_system": "Manual"
+    }
+  ]
+}
