@@ -1,0 +1,57 @@
+const RULE_VERSION = 'v1.2.0';
+const RULE_VERSION_DATE = '2026-06-01';
+
+const SOURCE_CHANNELS = ['AOC', 'TOWER', 'BRIDGE_TEAM', 'MAINTENANCE'];
+
+const PROCESS_ACTIONS = [
+  'SUBMIT',
+  'REVIEW',
+  'APPROVE',
+  'REJECT',
+  'CLOSE',
+  'REOPEN'
+];
+
+const RISK_LEVELS = {
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW',
+  INFO: 'INFO'
+};
+
+const BUSINESS_CONCLUSIONS = {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  PENDING: 'PENDING',
+  ESCALATE: 'ESCALATE'
+};
+
+const NEXT_ACTIONS = {
+  CONTINUE: '继续靠接作业',
+  HALT: '暂停作业并复核',
+  MANUAL_CHECK: '人工现场确认',
+  ESCALATE: '上报值班经理',
+  MAINTENANCE: '通知设备维护',
+  CLOSE_CASE: '闭环归档'
+};
+
+const BRIDGE_STATUSES = [
+  'IDLE',
+  'APPROACHING',
+  'DOCKING',
+  'DOCKED',
+  'UNDOCKING',
+  'DEPARTED',
+  'FAULT'
+];
+
+module.exports = {
+  RULE_VERSION,
+  RULE_VERSION_DATE,
+  SOURCE_CHANNELS,
+  PROCESS_ACTIONS,
+  RISK_LEVELS,
+  BUSINESS_CONCLUSIONS,
+  NEXT_ACTIONS,
+  BRIDGE_STATUSES
+};
