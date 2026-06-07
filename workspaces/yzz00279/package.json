@@ -1,0 +1,15 @@
+{
+  "name": "house-delivery-rectification-api",
+  "version": "1.0.0",
+  "description": "房屋交付整改闭环API - 数据校验、状态分流和闭环管理",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "uuid": "^9.0.1"
+  }
+}
