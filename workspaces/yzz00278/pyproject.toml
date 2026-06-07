@@ -1,0 +1,22 @@
+[project]
+name = "gym-scheduler"
+version = "1.0.0"
+description = "健身房私教课排期CLI工具"
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.1.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.scripts]
+gym-scheduler = "gym_scheduler.cli:cli"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gym_scheduler*"]
