@@ -23,10 +23,14 @@ class AppointmentRecord:
     status: str = "pending"
 
     def row_hash(self) -> str:
-        """计算行数据的哈希值，用于幂等判断"""
+        """计算行数据的哈希值，用于幂等判断与变更追溯
+        包含源数据所有业务字段，确保任何源数据变更都能被检测到
+        """
         data = (
-            f"{self.patient_id}|{self.therapist_id}|{self.treatment_type}|"
-            f"{self.appointment_date}|{self.start_time}|{self.end_time}|{self.room}"
+            f"{self.source_id}|{self.patient_id}|{self.patient_name}|"
+            f"{self.therapist_id}|{self.therapist_name}|{self.treatment_type}|"
+            f"{self.appointment_date}|{self.start_time}|{self.end_time}|"
+            f"{self.room}|{self.source_system}|{self.status}"
         )
         return hashlib.md5(data.encode("utf-8")).hexdigest()
 

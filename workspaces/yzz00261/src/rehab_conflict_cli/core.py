@@ -38,8 +38,9 @@ class ConflictDetector:
         bad_records: List[Tuple[AppointmentRecord, str]] = []
 
         self._log("INFO", "数据校验", "开始数据完整性校验")
+        allowed_types = self.params.treatment_types if hasattr(self.params, 'treatment_types') and self.params.treatment_types else None
         for record in records:
-            is_valid, error_msg = validate_record(record)
+            is_valid, error_msg = validate_record(record, allowed_types=allowed_types)
             if not is_valid:
                 bad_records.append((record, error_msg))
                 results[record.source_id] = ProcessResult(
@@ -68,14 +69,17 @@ class ConflictDetector:
         self._log("INFO", "数据校验完成",
                   f"有效记录 {len(valid_records)} 条，失败 {len(bad_records)} 条")
 
-        if self.params.check_therapist_conflict:
-            self._detect_therapist_conflicts(valid_records, results)
+        if self.params.check_overlap:
+            if self.params.check_therapist_conflict:
+                self._detect_therapist_conflicts(valid_records, results)
 
-        if self.params.check_room_conflict:
-            self._detect_room_conflicts(valid_records, results)
+            if self.params.check_room_conflict:
+                self._detect_room_conflicts(valid_records, results)
 
-        if self.params.check_patient_conflict:
-            self._detect_patient_conflicts(valid_records, results)
+            if self.params.check_patient_conflict:
+                self._detect_patient_conflicts(valid_records, results)
+        else:
+            self._log("INFO", "全局冲突检测开关关闭", "check_overlap=False，跳过所有冲突检测")
 
         for source_id, result in results.items():
             if result.status == "success" and result.conflict_with:
@@ -275,6 +279,15 @@ class IdempotencyManager:
                 final_results.append(prev)
                 self._log("DEBUG", "数据未变", f"记录 {source_id} 数据未变化，沿用上次结果")
             else:
+                diffs.append(DiffRecord(
+                    source_id=source_id,
+                    diff_type="修改",
+                    field_name="row_hash",
+                    old_value=prev.row_hash,
+                    new_value=curr.row_hash,
+                    batch_id=self.batch_id
+                ))
+
                 diff_fields = self._compare_record_fields(curr, prev)
                 for field_name, old_val, new_val in diff_fields:
                     diffs.append(DiffRecord(
@@ -285,10 +298,16 @@ class IdempotencyManager:
                         new_value=new_val,
                         batch_id=self.batch_id
                     ))
+                curr.batch_id = self.batch_id
                 final_results.append(curr)
+                change_desc = "源数据变更"
+                if diff_fields:
+                    change_desc += f"，结果变化: {', '.join([f[0] for f in diff_fields])}"
+                else:
+                    change_desc += "，结果无变化"
                 self._log("INFO", "记录已修改",
                           f"记录 {source_id} 数据已变化",
-                          f"变化字段: {', '.join([f[0] for f in diff_fields])}")
+                          change_desc)
 
         self._log("INFO", "幂等性校验完成", f"共产生 {len(diffs)} 条差异")
 

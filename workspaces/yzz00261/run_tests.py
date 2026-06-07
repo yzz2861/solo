@@ -662,6 +662,263 @@ def test_scenario_7_export_and_summary():
     return all_pass
 
 
+def test_scenario_8_check_overlap_global():
+    """
+    场景八：check_overlap 全局开关验证
+    验证：check_overlap=False 时，所有冲突检测都不执行
+    """
+    print("\n" + "="*70)
+    print("🧪 场景八：check_overlap 全局开关")
+    print("="*70)
+
+    scenario_dir = os.path.join(OUTPUT_DIR, "scenario8_check_overlap")
+    os.makedirs(scenario_dir, exist_ok=True)
+
+    ledger_path = os.path.join(scenario_dir, "ledger.csv")
+    with open(ledger_path, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "source_id", "patient_id", "patient_name", "therapist_id",
+            "therapist_name", "treatment_type", "appointment_date",
+            "start_time", "end_time", "room", "source_system", "status"
+        ])
+        writer.writerow(["O001", "P001", "张三", "T001", "李医生", "物理治疗", "2024-01-15", "09:00", "10:00", "Room1", "HIS", "pending"])
+        writer.writerow(["O002", "P002", "李四", "T001", "李医生", "作业治疗", "2024-01-15", "09:00", "10:00", "Room2", "HIS", "pending"])
+        writer.writerow(["O003", "P003", "王五", "T002", "王医生", "言语治疗", "2024-01-15", "09:00", "10:00", "Room1", "HIS", "pending"])
+
+    params_path = os.path.join(scenario_dir, "params.json")
+    with open(params_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "batch_id": "TEST-OVERLAP-OFF",
+            "check_overlap": False,
+            "check_room_conflict": True,
+            "check_therapist_conflict": True,
+            "check_patient_conflict": True,
+            "operator": "tester"
+        }, f, ensure_ascii=False)
+
+    run_cli([
+        "generate",
+        "-l", ledger_path,
+        "-p", params_path,
+        "-o", scenario_dir
+    ], "check_overlap=False 时生成")
+
+    success_file = os.path.join(scenario_dir, "success_TEST-OVERLAP-OFF.csv")
+    summary_file = os.path.join(scenario_dir, "summary_TEST-OVERLAP-OFF.json")
+    logs_file = os.path.join(scenario_dir, "logs_TEST-OVERLAP-OFF.csv")
+
+    success_rows = read_csv(success_file)
+    summary = read_json(summary_file)
+    logs = read_csv(logs_file)
+
+    all_pass = True
+    all_pass &= assert_eq(summary["total_count"], 3, "总记录数")
+    all_pass &= assert_eq(summary["conflict_count"], 0, "冲突数为0（全局开关关闭）")
+    all_pass &= assert_eq(summary["success_count"], 3, "全部成功")
+
+    all_normal = all(r["status"] == "success" for r in success_rows)
+    all_pass &= assert_eq(all_normal, True, "所有记录状态均为 success")
+
+    all_no_risk = all(r["risk_label"] == "无风险" for r in success_rows)
+    all_pass &= assert_eq(all_no_risk, True, "所有记录风险标签均为无风险")
+
+    has_global_off_log = any("全局冲突检测开关关闭" in log["action"] or "check_overlap=False" in log["details"]
+                             for log in logs)
+    all_pass &= assert_eq(has_global_off_log, True, "日志包含全局开关关闭记录")
+
+    if all_pass:
+        print("\n✅ 场景八：check_overlap 全局开关 - 通过")
+    else:
+        print("\n❌ 场景八：check_overlap 全局开关 - 失败")
+
+    return all_pass
+
+
+def test_scenario_9_treatment_types_filter():
+    """
+    场景九：treatment_types 配置验证
+    验证：配置限定治疗类型时，未配置类型的记录校验失败，不参与冲突检测
+    """
+    print("\n" + "="*70)
+    print("🧪 场景九：treatment_types 治疗类型过滤")
+    print("="*70)
+
+    scenario_dir = os.path.join(OUTPUT_DIR, "scenario9_treatment_types")
+    os.makedirs(scenario_dir, exist_ok=True)
+
+    ledger_path = os.path.join(scenario_dir, "ledger.csv")
+    with open(ledger_path, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "source_id", "patient_id", "patient_name", "therapist_id",
+            "therapist_name", "treatment_type", "appointment_date",
+            "start_time", "end_time", "room", "source_system", "status"
+        ])
+        writer.writerow(["T001", "P001", "张三", "T001", "李医生", "物理治疗", "2024-01-15", "09:00", "10:00", "Room1", "HIS", "pending"])
+        writer.writerow(["T002", "P002", "李四", "T001", "李医生", "作业治疗", "2024-01-15", "09:00", "10:00", "Room2", "HIS", "pending"])
+        writer.writerow(["T003", "P003", "王五", "T002", "王医生", "针灸治疗", "2024-01-15", "09:00", "10:00", "Room3", "HIS", "pending"])
+        writer.writerow(["T004", "P004", "赵六", "T002", "王医生", "物理治疗", "2024-01-15", "09:00", "10:00", "Room4", "HIS", "pending"])
+
+    params_path = os.path.join(scenario_dir, "params.json")
+    with open(params_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "batch_id": "TEST-TYPE-FILTER",
+            "check_overlap": True,
+            "check_therapist_conflict": True,
+            "check_room_conflict": True,
+            "treatment_types": ["物理治疗", "作业治疗"],
+            "operator": "tester"
+        }, f, ensure_ascii=False)
+
+    run_cli([
+        "generate",
+        "-l", ledger_path,
+        "-p", params_path,
+        "-o", scenario_dir
+    ], "限定治疗类型生成")
+
+    success_file = os.path.join(scenario_dir, "success_TEST-TYPE-FILTER.csv")
+    bad_file = os.path.join(scenario_dir, "bad_rows_TEST-TYPE-FILTER.csv")
+    summary_file = os.path.join(scenario_dir, "summary_TEST-TYPE-FILTER.json")
+
+    success_rows = read_csv(success_file)
+    bad_rows = read_csv(bad_file)
+    summary = read_json(summary_file)
+
+    all_pass = True
+    all_pass &= assert_eq(summary["total_count"], 4, "总记录数")
+    all_pass &= assert_eq(summary["failed_count"], 1, "失败数（针灸治疗不在列表）")
+    all_pass &= assert_eq(summary["success_count"], 3, "成功数（含冲突）")
+
+    bad_ids = [r["source_id"] for r in bad_rows]
+    all_pass &= assert_eq("T003" in bad_ids, True, "T003 在坏行中（针灸治疗不在允许列表）")
+
+    has_type_error = any("治疗类型" in r["error_message"] for r in bad_rows)
+    all_pass &= assert_eq(has_type_error, True, "错误信息包含治疗类型相关描述")
+
+    success_ids = [r["source_id"] for r in success_rows]
+    all_pass &= assert_eq("T001" in success_ids, True, "T001 在成功结果中")
+    all_pass &= assert_eq("T002" in success_ids, True, "T002 在成功结果中")
+    all_pass &= assert_eq("T004" in success_ids, True, "T004 在成功结果中")
+
+    therapist_conflict_count = len([
+        r for r in success_rows
+        if any(c.startswith("therapist:") for c in r.get("conflict_with", "").split("|") if c)
+    ])
+    all_pass &= assert_eq(therapist_conflict_count, 2, "T001 和 T004 有治疗师冲突")
+
+    if all_pass:
+        print("\n✅ 场景九：treatment_types 治疗类型过滤 - 通过")
+    else:
+        print("\n❌ 场景九：treatment_types 治疗类型过滤 - 失败")
+
+    return all_pass
+
+
+def test_scenario_10_source_change_no_result_change():
+    """
+    场景十：源数据变化但结果不变 - 差异可追溯
+    验证：源数据变化但状态/风险/冲突列表不变时，差异表仍有记录
+    """
+    print("\n" + "="*70)
+    print("🧪 场景十：源数据变化但结果不变")
+    print("="*70)
+
+    scenario_dir = os.path.join(OUTPUT_DIR, "scenario10_source_change")
+    os.makedirs(scenario_dir, exist_ok=True)
+
+    ledger1_path = os.path.join(scenario_dir, "ledger_v1.csv")
+    with open(ledger1_path, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "source_id", "patient_id", "patient_name", "therapist_id",
+            "therapist_name", "treatment_type", "appointment_date",
+            "start_time", "end_time", "room", "source_system", "status"
+        ])
+        writer.writerow(["S101", "P001", "张三", "T001", "李医生", "物理治疗", "2024-01-15", "09:00", "10:00", "Room1", "HIS", "pending"])
+        writer.writerow(["S102", "P002", "李四", "T002", "王医生", "作业治疗", "2024-01-15", "14:00", "15:00", "Room2", "HIS", "pending"])
+
+    params1_path = os.path.join(scenario_dir, "params1.json")
+    with open(params1_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "batch_id": "TEST-SRC-FIRST",
+            "operator": "first"
+        }, f, ensure_ascii=False)
+
+    run_cli([
+        "generate",
+        "-l", ledger1_path,
+        "-p", params1_path,
+        "-o", scenario_dir
+    ], "第一次执行（初始数据）")
+
+    first_success = os.path.join(scenario_dir, "success_TEST-SRC-FIRST.csv")
+
+    ledger2_path = os.path.join(scenario_dir, "ledger_v2.csv")
+    with open(ledger2_path, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "source_id", "patient_id", "patient_name", "therapist_id",
+            "therapist_name", "treatment_type", "appointment_date",
+            "start_time", "end_time", "room", "source_system", "status"
+        ])
+        writer.writerow(["S101", "P001", "张三丰", "T001", "李医生", "物理治疗", "2024-01-15", "09:00", "10:00", "Room1", "HIS", "pending"])
+        writer.writerow(["S102", "P002", "李四", "T002", "王主任", "作业治疗", "2024-01-15", "14:00", "15:00", "Room2", "HIS", "pending"])
+
+    params2_path = os.path.join(scenario_dir, "params2.json")
+    with open(params2_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "batch_id": "TEST-SRC-SECOND",
+            "operator": "second"
+        }, f, ensure_ascii=False)
+
+    run_cli([
+        "generate",
+        "-l", ledger2_path,
+        "-p", params2_path,
+        "-r", first_success,
+        "-o", scenario_dir
+    ], "第二次执行（患者姓名/医生姓名变化，结果不变）")
+
+    diff_file = os.path.join(scenario_dir, "diff_TEST-SRC-SECOND.csv")
+    diff_rows = read_csv(diff_file)
+    first_rows = read_csv(first_success)
+    second_rows = read_csv(os.path.join(scenario_dir, "success_TEST-SRC-SECOND.csv"))
+
+    all_pass = True
+    all_pass &= assert_eq(len(diff_rows) >= 2, True, "差异记录数 >= 2（两条记录都有源数据变化）")
+
+    row_hash_diffs = [d for d in diff_rows if d["field_name"] == "row_hash"]
+    all_pass &= assert_eq(len(row_hash_diffs) >= 2, True, "存在 row_hash 变化的差异记录")
+
+    s101_diff = [d for d in diff_rows if d["source_id"] == "S101"]
+    all_pass &= assert_eq(len(s101_diff) >= 1, True, "S101 有源数据变化差异")
+
+    status_diffs = [d for d in diff_rows if d["field_name"] == "status"]
+    risk_diffs = [d for d in diff_rows if d["field_name"] == "risk_label"]
+    conflict_diffs = [d for d in diff_rows if d["field_name"] == "conflict_with"]
+
+    all_pass &= assert_eq(len(status_diffs), 0, "状态无变化（符合预期）")
+    all_pass &= assert_eq(len(risk_diffs), 0, "风险标签无变化（符合预期）")
+    all_pass &= assert_eq(len(conflict_diffs), 0, "冲突列表无变化（符合预期）")
+
+    first_s101 = [r for r in first_rows if r["source_id"] == "S101"][0]
+    second_s101 = [r for r in second_rows if r["source_id"] == "S101"][0]
+    all_pass &= assert_eq(first_s101["status"], second_s101["status"], "S101 状态前后一致")
+    all_pass &= assert_eq(first_s101["risk_label"], second_s101["risk_label"], "S101 风险标签前后一致")
+
+    all_pass &= assert_eq(first_s101["row_hash"] != second_s101["row_hash"], True,
+                          "S101 row_hash 前后不同（源数据确实变了）")
+
+    if all_pass:
+        print("\n✅ 场景十：源数据变化但结果不变 - 通过")
+    else:
+        print("\n❌ 场景十：源数据变化但结果不变 - 失败")
+
+    return all_pass
+
+
 def main():
     """主函数"""
     print("\n" + "="*70)
@@ -681,6 +938,9 @@ def main():
     results["场景五：增量数据有变化"] = test_scenario_5_incremental_with_changes()
     results["场景六：校验命令"] = test_scenario_6_validate_command()
     results["场景七：导出和摘要"] = test_scenario_7_export_and_summary()
+    results["场景八：check_overlap 全局开关"] = test_scenario_8_check_overlap_global()
+    results["场景九：treatment_types 治疗类型过滤"] = test_scenario_9_treatment_types_filter()
+    results["场景十：源数据变化但结果不变"] = test_scenario_10_source_change_no_result_change()
 
     print("\n" + "="*70)
     print("📊 测试结果汇总")

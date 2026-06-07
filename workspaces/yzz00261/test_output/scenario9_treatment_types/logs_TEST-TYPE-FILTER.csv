@@ -1,0 +1,12 @@
+﻿timestamp,level,batch_id,action,message,details
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,开始冲突检测,共4条记录,批次号: TEST-TYPE-FILTER
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,数据校验,开始数据完整性校验,
+2026-06-07 22:40:25,WARN,TEST-TYPE-FILTER,数据校验失败,记录 T003 校验失败,治疗类型'针灸治疗'不在允许列表中
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,数据校验完成,有效记录 3 条，失败 1 条,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,治疗师冲突检测,开始检测治疗师时间冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,治疗师冲突检测完成,发现 1 对治疗师冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,房间冲突检测,开始检测房间时间冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,房间冲突检测完成,发现 0 对房间冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,患者冲突检测,开始检测患者时间冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,患者冲突检测完成,发现 0 对患者冲突,
+2026-06-07 22:40:25,INFO,TEST-TYPE-FILTER,冲突检测完成,冲突记录 2 条,失败 1 条

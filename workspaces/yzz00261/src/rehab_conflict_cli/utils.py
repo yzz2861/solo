@@ -115,8 +115,14 @@ def load_previous_results(file_path: str) -> Dict[str, ProcessResult]:
     return results
 
 
-def validate_record(record: AppointmentRecord) -> Tuple[bool, str]:
-    """校验单条记录的完整性"""
+def validate_record(record: AppointmentRecord,
+                    allowed_types: Optional[List[str]] = None) -> Tuple[bool, str]:
+    """校验单条记录的完整性
+
+    Args:
+        record: 预约记录
+        allowed_types: 允许的治疗类型列表，None 表示不限制
+    """
     errors = []
 
     if not record.source_id:
@@ -133,6 +139,10 @@ def validate_record(record: AppointmentRecord) -> Tuple[bool, str]:
         errors.append("start_time不能为空")
     if not record.end_time:
         errors.append("end_time不能为空")
+
+    if record.treatment_type and allowed_types:
+        if record.treatment_type not in allowed_types:
+            errors.append(f"治疗类型'{record.treatment_type}'不在允许列表中")
 
     if record.start_time and record.end_time:
         try:

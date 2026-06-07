@@ -63,8 +63,10 @@ def validate(ledger, params, filters, output, batch_id):
     bad_rows = []
     logs = []
 
+    allowed_types = config.treatment_types if config.treatment_types else None
+
     for record in records:
-        is_valid, error_msg = validate_record(record)
+        is_valid, error_msg = validate_record(record, allowed_types=allowed_types)
         if is_valid:
             valid_count += 1
             logs.append({
