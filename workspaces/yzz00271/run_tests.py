@@ -225,6 +225,86 @@ assert_eq(review7["results"][0]["status"], "approved", "状态=approved")
 
 print()
 print("=" * 60)
+print("测试 8: 高风险 + 缺材料 → 优先进入 LOCKED 锁定复核（关键修复验证）")
+print("=" * 60)
+service8 = ReceiptService()
+item8 = make_item(
+    "hr-mat-1", "RPT-HR-MAT-1",
+    RiskLevel.HIGH, "脑出血",
+    ["身份证", "病历本", "既往CT片"],
+    ["身份证"],
+    "CT", "头部", "急诊科",
+)
+submit8 = service8.submit_batch("BATCH-HR-MAT-001", SourceChannel.EMERGENCY, [item8])
+result8 = submit8.results[0]
+
+assert_eq(result8.status, ReceiptStatus.LOCKED,
+          "高风险+缺材料 → 状态=LOCKED（优先锁定，而非需补充）")
+assert_eq(result8.need_review, True, "需人工复核=True")
+assert_true(len(result8.missing_materials) > 0, "缺失材料信息仍被保留")
+assert_true("病历本" in result8.missing_materials, "缺失材料含'病历本'")
+assert_true(any("高风险" in tag for tag in result8.risk_tags), "风险标签含'高风险'")
+assert_eq(submit8.summary["locked"], 1, "汇总locked=1")
+assert_eq(submit8.summary["high_risk"], 1, "汇总high_risk=1")
+assert_eq(submit8.summary["need_review"], 1, "汇总need_review=1")
+
+receipt_id8 = result8.receipt_id
+detail8 = service8.get_receipt(receipt_id8)
+assert_eq(detail8["receipt"]["status"], "locked", "详情状态=locked")
+assert_true(len(detail8["receipt"]["missing_materials"]) > 0, "详情中缺失材料仍存在")
+assert_eq(len(detail8["audit_logs"]), 1, "日志数=1")
+assert_eq(detail8["audit_logs"][0]["to_status"], "locked", "日志to_status=locked")
+
+review8 = service8.review_receipts(
+    "BATCH-HR-MAT-001", [receipt_id8],
+    ActionType.APPROVE,
+    "危急值确认，材料后续补交，先通过",
+    "李主任",
+)
+assert_eq(review8["results"][0]["success"], True, "复核通过成功")
+assert_eq(review8["results"][0]["status"], "approved", "复核后状态=approved")
+assert_eq(review8["summary"]["approved"], 1, "汇总approved=1")
+
+print()
+print("=" * 60)
+print("测试 9: 状态优先级验证（FAILED > LOCKED > NEED_SUPPLEMENT）")
+print("=" * 60)
+from app.rules.engine import RuleResult, _status_priority
+from app.domain import ReceiptStatus
+
+assert_true(_status_priority(ReceiptStatus.FAILED) > _status_priority(ReceiptStatus.LOCKED),
+           "FAILED 优先级 > LOCKED")
+assert_true(_status_priority(ReceiptStatus.LOCKED) > _status_priority(ReceiptStatus.NEED_SUPPLEMENT),
+           "LOCKED 优先级 > NEED_SUPPLEMENT")
+assert_true(_status_priority(ReceiptStatus.NEED_SUPPLEMENT) > _status_priority(ReceiptStatus.PROCESSABLE),
+           "NEED_SUPPLEMENT 优先级 > PROCESSABLE")
+
+rr1 = RuleResult()
+rr1.target_status = ReceiptStatus.NEED_SUPPLEMENT
+rr2 = RuleResult()
+rr2.target_status = ReceiptStatus.LOCKED
+rr1.merge(rr2)
+assert_eq(rr1.target_status, ReceiptStatus.LOCKED,
+          "NEED_SUPPLEMENT 与 LOCKED 合并后 → LOCKED")
+
+rr3 = RuleResult()
+rr3.target_status = ReceiptStatus.LOCKED
+rr4 = RuleResult()
+rr4.target_status = ReceiptStatus.NEED_SUPPLEMENT
+rr3.merge(rr4)
+assert_eq(rr3.target_status, ReceiptStatus.LOCKED,
+          "LOCKED 与 NEED_SUPPLEMENT 合并后 → 保持 LOCKED")
+
+rr5 = RuleResult()
+rr5.target_status = ReceiptStatus.FAILED
+rr6 = RuleResult()
+rr6.target_status = ReceiptStatus.LOCKED
+rr5.merge(rr6)
+assert_eq(rr5.target_status, ReceiptStatus.FAILED,
+          "FAILED 与 LOCKED 合并后 → 保持 FAILED")
+
+print()
+print("=" * 60)
 print(f"测试总结: 通过 {passed} 个, 失败 {failed} 个")
 print("=" * 60)
 

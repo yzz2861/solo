@@ -3,6 +3,22 @@ from typing import List, Any, Optional
 from app.domain import CriticalValueReceipt, ReceiptStatus, RiskLevel
 
 
+STATUS_PRIORITY = {
+    ReceiptStatus.FAILED: 100,
+    ReceiptStatus.LOCKED: 90,
+    ReceiptStatus.NEED_SUPPLEMENT: 80,
+    ReceiptStatus.REJECTED: 70,
+    ReceiptStatus.APPROVED: 60,
+    ReceiptStatus.PROCESSABLE: 10,
+}
+
+
+def _status_priority(status: Optional[ReceiptStatus]) -> int:
+    if status is None:
+        return 0
+    return STATUS_PRIORITY.get(status, 0)
+
+
 class RuleResult:
     def __init__(self):
         self.passed: bool = True
@@ -32,7 +48,7 @@ class RuleResult:
         for mat in other.missing_materials:
             self.add_missing_material(mat)
         self.need_review = self.need_review or other.need_review
-        if other.target_status and not self.target_status:
+        if _status_priority(other.target_status) > _status_priority(self.target_status):
             self.target_status = other.target_status
 
 

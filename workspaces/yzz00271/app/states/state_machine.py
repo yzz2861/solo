@@ -1,8 +1,29 @@
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from app.domain import ReceiptStatus, ActionType, CriticalValueReceipt
+from app.domain import ReceiptStatus, ActionType, CriticalValueReceipt, RiskLevel
 from app.rules import RuleResult
+
+
+STATUS_PRIORITY = {
+    ReceiptStatus.FAILED: 100,
+    ReceiptStatus.LOCKED: 90,
+    ReceiptStatus.NEED_SUPPLEMENT: 80,
+    ReceiptStatus.REJECTED: 70,
+    ReceiptStatus.APPROVED: 60,
+    ReceiptStatus.PROCESSABLE: 10,
+}
+
+
+def _status_priority(status: Optional[ReceiptStatus]) -> int:
+    if status is None:
+        return 0
+    return STATUS_PRIORITY.get(status, 0)
+
+
+def _set_status_if_higher(receipt: CriticalValueReceipt, new_status: ReceiptStatus):
+    if _status_priority(new_status) > _status_priority(receipt.status):
+        receipt.status = new_status
 
 
 class InvalidStateTransitionError(Exception):
@@ -59,19 +80,19 @@ class ReceiptStateMachine:
         receipt.need_review = receipt.need_review or rule_result.need_review
 
         if rule_result.target_status:
-            receipt.status = rule_result.target_status
+            _set_status_if_higher(receipt, rule_result.target_status)
 
-        if not rule_result.passed and receipt.status == ReceiptStatus.PROCESSABLE:
+        if not rule_result.passed:
             if rule_result.missing_materials:
-                receipt.status = ReceiptStatus.NEED_SUPPLEMENT
-            elif rule_result.failure_reasons:
-                receipt.status = ReceiptStatus.FAILED
+                _set_status_if_higher(receipt, ReceiptStatus.NEED_SUPPLEMENT)
+            if rule_result.failure_reasons and not rule_result.missing_materials:
+                _set_status_if_higher(receipt, ReceiptStatus.FAILED)
 
-        if receipt.need_review and receipt.status == ReceiptStatus.PROCESSABLE:
-            if "高风险" in str(rule_result.risk_tags):
-                receipt.status = ReceiptStatus.LOCKED
+        if receipt.need_review:
+            if receipt.item.risk_level == RiskLevel.HIGH:
+                _set_status_if_higher(receipt, ReceiptStatus.LOCKED)
             elif rule_result.missing_materials:
-                receipt.status = ReceiptStatus.NEED_SUPPLEMENT
+                _set_status_if_higher(receipt, ReceiptStatus.NEED_SUPPLEMENT)
 
         receipt.updated_at = datetime.now()
         return receipt
