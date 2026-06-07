@@ -1,0 +1,33 @@
+{
+  "baseline_date": "2026-05-01",
+  "community_summary": {
+    "阳光花园": {
+      "total_records": 120,
+      "total_weight": 3200.5,
+      "by_category": {
+        "可回收物": {"count": 30, "weight": 450.0},
+        "有害垃圾": {"count": 10, "weight": 25.5},
+        "厨余垃圾": {"count": 45, "weight": 1800.0},
+        "其他垃圾": {"count": 35, "weight": 925.0}
+      },
+      "bad_data_count": 3
+    },
+    "翠湖小区": {
+      "total_records": 95,
+      "total_weight": 2850.0,
+      "by_category": {
+        "可回收物": {"count": 25, "weight": 380.0},
+        "有害垃圾": {"count": 8, "weight": 18.0},
+        "厨余垃圾": {"count": 38, "weight": 1600.0},
+        "其他垃圾": {"count": 24, "weight": 852.0}
+      },
+      "bad_data_count": 2
+    }
+  },
+  "supervisor_ranking": [
+    {"name": "张督导", "records": 65, "accuracy": 98.5},
+    {"name": "李督导", "records": 58, "accuracy": 97.2},
+    {"name": "王督导", "records": 52, "accuracy": 96.1},
+    {"name": "赵督导", "records": 40, "accuracy": 95.0}
+  ]
+}

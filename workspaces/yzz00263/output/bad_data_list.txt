@@ -1,0 +1,37 @@
+======================================================================
+      小区垃圾分类督导 - 坏数据清单
+======================================================================
+生成时间: 2026-06-07 12:23:52
+坏数据总数: 19
+
+问题类型统计:
+  缺失字段: 6 条
+  重复记录: 6 条
+  重量越界: 5 条
+  格式错误: 1 条
+  无效分类: 1 条
+
+----------------------------------------------------------------------
+序号    记录ID      来源                       问题描述
+----------------------------------------------------------------------
+1     R101      source_b_threshold.csv   重量越界(超过上限):600.0
+2     R102      source_b_threshold.csv   重量越界(超过上限):150.0
+3     R103      source_b_threshold.csv   重量越界(超过上限):1200.0
+4     R104      source_b_threshold.csv   重量越界(超过上限):900.0
+5     R105      source_b_threshold.csv   重量越界(低于下限):-5.0
+6     R201      source_c_missing.csv     缺失字段:supervisor
+7     R202      source_c_missing.csv     缺失字段:building
+8     R203      source_c_missing.csv     缺失字段:category
+9     R204      source_c_missing.csv     缺失字段:community
+10    R205      source_c_missing.csv     缺失字段:weight
+11    R206      source_c_missing.csv     缺失字段:timestamp
+12    R207      source_c_missing.csv     无效分类:未知分类
+13    R208      source_c_missing.csv     重量格式错误:abc
+14    R001      source_a_compliant.csv   重复记录:R001
+15    R001      source_c_missing.csv     重复记录:R001
+16    R001      source_c_missing.csv     重复记录:R001
+17    R002      source_a_compliant.csv   重复记录:R002
+18    R002      source_c_missing.csv     重复记录:R002
+19    R002      source_c_missing.csv     重复记录:R002
+
+======================================================================

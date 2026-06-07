@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-06-07 12:23:52",
+  "total_records": 39,
+  "bad_records": 19,
+  "good_records": 20,
+  "community_summary": {
+    "阳光花园": {
+      "total_records": 26,
+      "total_weight": 2020.6,
+      "by_category": {
+        "可回收物": {
+          "count": 9,
+          "weight": 821.5
+        },
+        "厨余垃圾": {
+          "count": 7,
+          "weight": 166.60000000000002
+        },
+        "有害垃圾": {
+          "count": 4,
+          "weight": 159.5
+        },
+        "其他垃圾": {
+          "count": 5,
+          "weight": 833.0
+        },
+        "未知分类": {
+          "count": 1,
+          "weight": 40.0
+        }
+      },
+      "bad_data_count": 13
+    },
+    "翠湖小区": {
+      "total_records": 12,
+      "total_weight": 2278.0,
+      "by_category": {
+        "厨余垃圾": {
+          "count": 3,
+          "weight": 1258.0
+        },
+        "可回收物": {
+          "count": 4,
+          "weight": 60.5
+        },
+        "其他垃圾": {
+          "count": 2,
+          "weight": 940.0
+        },
+        "有害垃圾": {
+          "count": 2,
+          "weight": 4.0
+        },
+        "未知分类": {
+          "count": 1,
+          "weight": 15.5
+        }
+      },
+      "bad_data_count": 5
+    },
+    "未知小区": {
+      "total_records": 1,
+      "total_weight": 5.0,
+      "by_category": {
+        "有害垃圾": {
+          "count": 1,
+          "weight": 5.0
+        }
+      },
+      "bad_data_count": 1
+    }
+  },
+  "bad_data_details": [
+    {
+      "record_id": "R101",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "3单元",
+      "category": "可回收物",
+      "weight": "600.0",
+      "timestamp": "2026-06-07 11:00:00",
+      "supervisor": "张督导",
+      "source": "source_b_threshold.csv",
+      "issues": [
+        "重量越界(超过上限):600.0"
+      ]
+    },
+    {
+      "record_id": "R102",
+      "community": "阳光花园",
+      "building": "B栋",
+      "unit": "1单元",
+      "category": "有害垃圾",
+      "weight": "150.0",
+      "timestamp": "2026-06-07 11:30:00",
+      "supervisor": "李督导",
+      "source": "source_b_threshold.csv",
+      "issues": [
+        "重量越界(超过上限):150.0"
+      ]
+    },
+    {
+      "record_id": "R103",
+      "community": "翠湖小区",
+      "building": "2号楼",
+      "unit": "1单元",
+      "category": "厨余垃圾",
+      "weight": "1200.0",
+      "timestamp": "2026-06-07 12:00:00",
+      "supervisor": "王督导",
+      "source": "source_b_threshold.csv",
+      "issues": [
+        "重量越界(超过上限):1200.0"
+      ]
+    },
+    {
+      "record_id": "R104",
+      "community": "翠湖小区",
+      "building": "3号楼",
+      "unit": "2单元",
+      "category": "其他垃圾",
+      "weight": "900.0",
+      "timestamp": "2026-06-07 12:30:00",
+      "supervisor": "赵督导",
+      "source": "source_b_threshold.csv",
+      "issues": [
+        "重量越界(超过上限):900.0"
+      ]
+    },
+    {
+      "record_id": "R105",
+      "community": "阳光花园",
+      "building": "C栋",
+      "unit": "2单元",
+      "category": "可回收物",
+      "weight": "-5.0",
+      "timestamp": "2026-06-07 13:00:00",
+      "supervisor": "张督导",
+      "source": "source_b_threshold.csv",
+      "issues": [
+        "重量越界(低于下限):-5.0"
+      ]
+    },
+    {
+      "record_id": "R201",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "1单元",
+      "category": "可回收物",
+      "weight": "25.0",
+      "timestamp": "2026-06-07 15:00:00",
+      "supervisor": "",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:supervisor"
+      ]
+    },
+    {
+      "record_id": "R202",
+      "community": "阳光花园",
+      "building": "",
+      "unit": "2单元",
+      "category": "厨余垃圾",
+      "weight": "30.0",
+      "timestamp": "2026-06-07 15:15:00",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:building"
+      ]
+    },
+    {
+      "record_id": "R203",
+      "community": "翠湖小区",
+      "building": "1号楼",
+      "unit": "1单元",
+      "category": "",
+      "weight": "15.5",
+      "timestamp": "2026-06-07 15:30:00",
+      "supervisor": "李督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:category"
+      ]
+    },
+    {
+      "record_id": "R204",
+      "community": "",
+      "building": "2号楼",
+      "unit": "1单元",
+      "category": "有害垃圾",
+      "weight": "5.0",
+      "timestamp": "2026-06-07 16:00:00",
+      "supervisor": "王督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:community"
+      ]
+    },
+    {
+      "record_id": "R205",
+      "community": "阳光花园",
+      "building": "B栋",
+      "unit": "3单元",
+      "category": "其他垃圾",
+      "weight": "",
+      "timestamp": "2026-06-07 16:15:00",
+      "supervisor": "赵督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:weight"
+      ]
+    },
+    {
+      "record_id": "R206",
+      "community": "翠湖小区",
+      "building": "3号楼",
+      "unit": "2单元",
+      "category": "可回收物",
+      "weight": "20.0",
+      "timestamp": "",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "缺失字段:timestamp"
+      ]
+    },
+    {
+      "record_id": "R207",
+      "community": "阳光花园",
+      "building": "C栋",
+      "unit": "1单元",
+      "category": "未知分类",
+      "weight": "40.0",
+      "timestamp": "2026-06-07 17:00:00",
+      "supervisor": "李督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "无效分类:未知分类"
+      ]
+    },
+    {
+      "record_id": "R208",
+      "community": "翠湖小区",
+      "building": "1号楼",
+      "unit": "1单元",
+      "category": "可回收物",
+      "weight": "abc",
+      "timestamp": "2026-06-07 17:30:00",
+      "supervisor": "王督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "重量格式错误:abc"
+      ]
+    },
+    {
+      "record_id": "R001",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "1单元",
+      "category": "可回收物",
+      "weight": "25.5",
+      "timestamp": "2026-06-07 08:30:00",
+      "supervisor": "张督导",
+      "source": "source_a_compliant.csv",
+      "issues": [
+        "重复记录:R001"
+      ]
+    },
+    {
+      "record_id": "R001",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "1单元",
+      "category": "可回收物",
+      "weight": "25.5",
+      "timestamp": "2026-06-07 08:30:00",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "重复记录:R001"
+      ]
+    },
+    {
+      "record_id": "R001",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "1单元",
+      "category": "可回收物",
+      "weight": "25.5",
+      "timestamp": "2026-06-07 08:30:00",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "重复记录:R001"
+      ]
+    },
+    {
+      "record_id": "R002",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "2单元",
+      "category": "厨余垃圾",
+      "weight": "15.2",
+      "timestamp": "2026-06-07 08:45:00",
+      "supervisor": "张督导",
+      "source": "source_a_compliant.csv",
+      "issues": [
+        "重复记录:R002"
+      ]
+    },
+    {
+      "record_id": "R002",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "2单元",
+      "category": "厨余垃圾",
+      "weight": "15.2",
+      "timestamp": "2026-06-07 08:45:00",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "重复记录:R002"
+      ]
+    },
+    {
+      "record_id": "R002",
+      "community": "阳光花园",
+      "building": "A栋",
+      "unit": "2单元",
+      "category": "厨余垃圾",
+      "weight": "15.2",
+      "timestamp": "2026-06-07 08:45:00",
+      "supervisor": "张督导",
+      "source": "source_c_missing.csv",
+      "issues": [
+        "重复记录:R002"
+      ]
+    }
+  ],
+  "baseline_comparison": {
+    "阳光花园": {
+      "records_change": -94,
+      "records_change_pct": -78.33,
+      "weight_change": -1179.9,
+      "weight_change_pct": -36.87,
+      "bad_data_change": 10
+    },
+    "翠湖小区": {
+      "records_change": -83,
+      "records_change_pct": -87.37,
+      "weight_change": -572.0,
+      "weight_change_pct": -20.07,
+      "bad_data_change": 3
+    },
+    "未知小区": {
+      "records_change": 1,
+      "records_change_pct": 100.0,
+      "weight_change": 5.0,
+      "weight_change_pct": 100.0,
+      "bad_data_change": 1,
+      "note": "新增小区"
+    }
+  }
+}
