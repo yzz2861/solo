@@ -38,6 +38,17 @@ def _can_add_to_group(plot: Plot, group: RotationGroup, rule: IrrigationRule) ->
     return True
 
 
+def _plot_fits_rule(plot: Plot, rule: IrrigationRule) -> bool:
+    """判断单个地块本身是否符合规则限制（新建组时使用）"""
+    if 1 > rule.max_plots:
+        return False
+    if plot.area > rule.max_area:
+        return False
+    if plot.total_water > rule.max_water:
+        return False
+    return True
+
+
 def _parse_date(date_str: str) -> datetime | None:
     """解析日期字符串"""
     if not date_str:
@@ -113,6 +124,9 @@ def generate_schedule(
                 break
 
             if not assigned:
+                if not _plot_fits_rule(plot, rule):
+                    continue
+
                 current_group_count = rule_sequence[rule.group_name]
                 if current_group_count >= rule.max_groups:
                     continue
