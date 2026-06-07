@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-06-07T12:23:09.269437",
+  "summary": {
+    "total": 3,
+    "success": 3,
+    "failed": 0,
+    "review_required": 1,
+    "duplicate": 0,
+    "bad_rows_count": 2
+  },
+  "results": [
+    {
+      "business_no": "BATCH-001",
+      "conclusion": "APPROVE",
+      "risk_label": "LOW",
+      "next_action": "AUTO_COMPENSATE",
+      "audit_id": "fbc2dc6a-aff2-4015-9bcb-2ef6cec48170",
+      "matched_rule_id": "RULE_LOW_001",
+      "rule_version": "v1.0",
+      "review_required": false,
+      "review_reason": null,
+      "missing_materials": [],
+      "timestamp": "2026-06-07T12:23:09.262313",
+      "is_duplicate": false,
+      "error_message": null,
+      "success": true
+    },
+    {
+      "business_no": "BATCH-002",
+      "conclusion": "APPROVE",
+      "risk_label": "MEDIUM",
+      "next_action": "AUTO_COMPENSATE",
+      "audit_id": "7ad8dd37-a500-4758-a523-47583951aa61",
+      "matched_rule_id": "RULE_MED_001",
+      "rule_version": "v1.0",
+      "review_required": false,
+      "review_reason": null,
+      "missing_materials": [],
+      "timestamp": "2026-06-07T12:23:09.262523",
+      "is_duplicate": false,
+      "error_message": null,
+      "success": true
+    },
+    {
+      "business_no": "BATCH-005",
+      "conclusion": "REVIEW",
+      "risk_label": "HIGH",
+      "next_action": "MANUAL_REVIEW",
+      "audit_id": "3c4adb47-c44a-4f4c-9ef5-92ec6541bce9",
+      "matched_rule_id": "RULE_HIGH_001",
+      "rule_version": "v1.0",
+      "review_required": true,
+      "review_reason": "高风险补偿，需人工复核",
+      "missing_materials": [],
+      "timestamp": "2026-06-07T12:23:09.262622",
+      "is_duplicate": false,
+      "error_message": null,
+      "success": true
+    }
+  ],
+  "bad_rows": [
+    {
+      "index": 2,
+      "data": {
+        "business_no": "",
+        "object_status": "PENDING_PROCESS",
+        "time_window": "WORKING_HOURS",
+        "rule_version": "v1.0",
+        "operator": "坏行1-缺业务编号"
+      },
+      "errors": [
+        "缺少必需字段: business_no"
+      ]
+    },
+    {
+      "index": 3,
+      "data": {
+        "business_no": "BATCH-004",
+        "object_status": "PENDING_PROCESS",
+        "time_window": "WORKING_HOURS",
+        "rule_version": "v1.0",
+        "operator": "",
+        "complaint_type": "一般投诉"
+      },
+      "errors": [
+        "缺少必需字段: operator"
+      ]
+    }
+  ]
+}
