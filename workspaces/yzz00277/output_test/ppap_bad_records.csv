@@ -1,0 +1,4 @@
+﻿record_id,part_number,part_name,process_step,inspection_item,measurement_value,unit,spec_min,spec_max,inspector,inspection_date,shift,equipment_id,batch_number,问题类型,问题描述,行号
+REC013,P-003,活塞,,销孔直径,22.003,mm,22.000,22.005,周工,2025-03-16,白班,EQ-005,B2025031601,缺失,缺失字段:process_step,13
+REC014,P-004,连杆,机加工,,55.015,mm,55.010,55.020,郑工,2025-03-16,夜班,EQ-007,B2025031601,缺失,缺失字段:inspection_item,14
+REC015,P-005,凸轮轴,机加工,升程,8.60,mm,8.55,8.45,冯工,2025-03-17,白班,EQ-008,B2025031701,"规则冲突,越界",规则冲突:规格下限(8.55)大于上限(8.45);越界:高于上限8.45,15
