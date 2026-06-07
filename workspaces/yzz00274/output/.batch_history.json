@@ -1,0 +1,25 @@
+[
+  {
+    "batch_id": "INS-20260607132143-514563",
+    "processed_at": "2026-06-07 13:21:43",
+    "source_files": [
+      "insurance_list_1.csv",
+      "insurance_list_2.csv"
+    ],
+    "total_count": 21,
+    "normal_count": 15,
+    "abnormal_count": 4,
+    "pending_count": 2,
+    "output_files": {
+      "正常": "./output/INS-20260607132143-514563_正常.csv",
+      "异常": "./output/INS-20260607132143-514563_异常.csv",
+      "待复核": "./output/INS-20260607132143-514563_待复核.csv",
+      "汇总": "./output/INS-20260607132143-514563_全部.csv",
+      "统计摘要": "./output/INS-20260607132143-514563_统计摘要.csv"
+    },
+    "reviewed": true,
+    "review_notes": "整体数据质量良好，2条待复核记录需人工核实联系方式和保险公司信息，4条异常记录需退回补全",
+    "reviewed_at": "2026-06-07 13:24:18",
+    "review_status": "中风险需关注"
+  }
+]
