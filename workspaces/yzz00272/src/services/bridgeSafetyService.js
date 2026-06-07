@@ -18,11 +18,7 @@ function processBridgeDockingRequest(reqBody) {
   const config = loadConfig();
 
   const validationResult = validateRequest(reqBody);
-  const idempotencyKey = generateIdempotencyKey(
-    reqBody?.batchNo || 'UNKNOWN',
-    reqBody?.action || 'UNKNOWN',
-    reqBody?.sourceChannel || 'UNKNOWN'
-  );
+  const idempotencyKey = generateIdempotencyKey(reqBody);
 
   const cachedResult = getRequestResult(idempotencyKey);
   if (cachedResult && validationResult.valid) {

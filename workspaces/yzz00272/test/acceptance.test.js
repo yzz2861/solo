@@ -106,6 +106,8 @@ async function main() {
 
   await runTest('场景七: 汇总校验 - 数量合计与风险标签验证', testSummaryVerification);
 
+  await runTest('场景八: 同批次不同明细 - 不应幂等命中', testDifferentDetailsSameBatch);
+
   console.log('\n' + '═'.repeat(60));
   console.log('  测试结果汇总');
   console.log('═'.repeat(60));
@@ -579,6 +581,105 @@ async function testSummaryVerification() {
   const thisAudit = audits.find(a => a.auditNo === data.auditNo);
   assert(!!thisAudit, `审计日志中可找到当前记录 ${data.auditNo}`);
   assert(thisAudit.type === 'PROCESS_SUCCESS', '审计记录类型为 PROCESS_SUCCESS');
+}
+
+async function testDifferentDetailsSameBatch() {
+  await request('/admin/clear', 'POST');
+
+  const batchNo = 'BATCH-20260607-0888';
+  const payloadV1 = {
+    batchNo,
+    sourceChannel: 'AOC',
+    action: 'SUBMIT',
+    reviewComment: '第一次提交：正常明细',
+    operator: 'operator.v1',
+    details: [
+      {
+        detailId: 'DET-20260607-088801',
+        bridgeCode: 'T1-B01',
+        bridgeStatus: 'DOCKING',
+        flightNo: 'CA8888',
+        dockingTime: formatDate(0, 0, 10),
+        windSpeed: 5,
+        visibility: 2000,
+        hasAlarm: false,
+        operatorCertified: true
+      }
+    ]
+  };
+
+  const res1 = await request('/bridge-docking/process', 'POST', payloadV1);
+  const data1 = res1.body.data;
+
+  assert(res1.status === 200, '第一次请求：HTTP 状态码 200');
+  assert(data1.businessConclusion === 'PASS', '第一次请求：业务结论为 PASS');
+  assert(data1.summary.totalCount === 1, '第一次请求：明细数量为 1');
+  assert(data1.summary.highRiskCount === 0, '第一次请求：高风险数为 0');
+  assert(data1.riskTags.length === 0, '第一次请求：风险标签为空');
+  assert(!res1.body._fromCache, '第一次请求：非缓存命中');
+
+  const payloadV2 = {
+    batchNo,
+    sourceChannel: 'AOC',
+    action: 'SUBMIT',
+    reviewComment: '第二次提交：高风险明细（同批次不同明细）',
+    operator: 'operator.v1',
+    details: [
+      {
+        detailId: 'DET-20260607-088802',
+        bridgeCode: 'T2-B05',
+        bridgeStatus: 'FAULT',
+        flightNo: 'CA8889',
+        dockingTime: formatDate(0, 4, 0),
+        windSpeed: 20,
+        visibility: 100,
+        hasAlarm: true,
+        operatorCertified: false
+      },
+      {
+        detailId: 'DET-20260607-088803',
+        bridgeCode: 'T1-B07',
+        bridgeStatus: 'DOCKING',
+        flightNo: 'CA8890',
+        dockingTime: formatDate(0, 0, 15),
+        windSpeed: 3,
+        visibility: 1500,
+        hasAlarm: false,
+        operatorCertified: true
+      }
+    ]
+  };
+
+  const res2 = await request('/bridge-docking/process', 'POST', payloadV2);
+  const data2 = res2.body.data;
+
+  assert(res2.status === 200, '第二次请求：HTTP 状态码 200');
+  assert(!res2.body._fromCache, '第二次请求：不应命中缓存（明细不同）');
+  assert(data2.auditNo !== data1.auditNo, '第二次请求：审计编号不同（新的处理记录）');
+  assert(data2.businessConclusion !== 'PASS', '第二次请求：业务结论不为 PASS（有高风险项）');
+  assert(data2.summary.totalCount === 2, `第二次请求：明细数量为 2，实际: ${data2.summary.totalCount}`);
+  assert(data2.summary.highRiskCount >= 1, `第二次请求：至少有1个高风险项，实际: ${data2.summary.highRiskCount}`);
+  assert(data2.riskTags.length > 0, '第二次请求：风险标签不为空');
+  assert(data2.nextAction !== data1.nextAction, '第二次请求：下一步动作与第一次不同');
+
+  assert(data2.details.some(d => d.riskLevel === 'HIGH'), '第二次请求：存在 HIGH 风险等级的明细');
+
+  const countRes = await request('/admin/audit-count');
+  const count = countRes.body.data.count;
+  assert(count === 2, `审计记录共 2 条（同批次不同明细各一条），实际: ${count}`);
+
+  const payloadV1Again = JSON.parse(JSON.stringify(payloadV1));
+  const res1Again = await request('/bridge-docking/process', 'POST', payloadV1Again);
+
+  assert(res1Again.body._fromCache === true, '完全相同的请求再次提交：命中缓存');
+  assert(res1Again.body.data.auditNo === data1.auditNo, '完全相同的请求再次提交：审计编号一致');
+  assert(res1Again.body.data.businessConclusion === data1.businessConclusion,
+    '完全相同的请求再次提交：业务结论一致');
+  assert(JSON.stringify(res1Again.body.data.riskTags) === JSON.stringify(data1.riskTags),
+    '完全相同的请求再次提交：风险标签一致');
+
+  const countAfterAgain = (await request('/admin/audit-count')).body.data.count;
+  assert(countAfterAgain === 2, `重复提交相同请求不新增审计记录，仍为 2 条，实际: ${countAfterAgain}`);
 }
 
 main().catch(e => {

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 
 const auditStore = new Map();
@@ -7,8 +8,24 @@ function generateAuditNo() {
   return 'AUD-' + Date.now().toString(36).toUpperCase() + '-' + uuidv4().slice(0, 8).toUpperCase();
 }
 
-function generateIdempotencyKey(batchNo, action, sourceChannel) {
-  return `${batchNo}::${action}::${sourceChannel}`;
+function stableStringify(obj) {
+  if (obj === null || obj === undefined) return String(obj);
+  if (typeof obj !== 'object') return String(obj);
+  if (Array.isArray(obj)) {
+    return '[' + obj.map(stableStringify).join(',') + ']';
+  }
+  const keys = Object.keys(obj).sort();
+  return '{' + keys.map(k => `"${k}":${stableStringify(obj[k])}`).join(',') + '}';
+}
+
+function generateIdempotencyKey(reqBody) {
+  if (!reqBody || typeof reqBody !== 'object') {
+    return 'EMPTY_BODY';
+  }
+  const normalized = stableStringify(reqBody);
+  const hash = crypto.createHash('sha256').update(normalized).digest('hex').slice(0, 32);
+  const prefix = `${reqBody.batchNo || 'NO_BATCH'}::${reqBody.action || 'NO_ACTION'}::${reqBody.sourceChannel || 'NO_CHANNEL'}`;
+  return `${prefix}::${hash}`;
 }
 
 function saveAuditRecord(auditNo, record) {
