@@ -1,0 +1,42 @@
+/Users/bill/Library/Python/3.9/lib/python/site-packages/pytest_asyncio/plugin.py:207: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.3.4, pluggy-1.6.0 -- /Library/Developer/CommandLineTools/usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/bill/Documents/solo/workspaces/yzz00271
+plugins: cov-7.1.0, anyio-3.7.1, asyncio-0.25.0
+asyncio: mode=strict, asyncio_default_fixture_loop_scope=None
+collecting ... collected 0 items / 2 errors
+
+==================================== ERRORS ====================================
+______________________ ERROR collecting tests/test_api.py ______________________
+ImportError while importing test module '/Users/bill/Documents/solo/workspaces/yzz00271/tests/test_api.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_api.py:4: in <module>
+    from app.main import app, receipt_service
+app/main.py:3: in <module>
+    from app.domain import (
+app/domain/__init__.py:1: in <module>
+    from .models import (
+E   ImportError: cannot import name 'ReceiptQueryResponse' from 'app.domain.models' (/Users/bill/Documents/solo/workspaces/yzz00271/app/domain/models.py)
+________________ ERROR collecting tests/test_receipt_service.py ________________
+ImportError while importing test module '/Users/bill/Documents/solo/workspaces/yzz00271/tests/test_receipt_service.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_receipt_service.py:2: in <module>
+    from app.domain import (
+app/domain/__init__.py:1: in <module>
+    from .models import (
+E   ImportError: cannot import name 'ReceiptQueryResponse' from 'app.domain.models' (/Users/bill/Documents/solo/workspaces/yzz00271/app/domain/models.py)
+=========================== short test summary info ============================
+ERROR tests/test_api.py
+ERROR tests/test_receipt_service.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+============================== 2 errors in 1.30s ===============================
