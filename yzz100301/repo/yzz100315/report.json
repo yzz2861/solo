@@ -1,0 +1,731 @@
+{
+  "export_time": "2026-06-09T11:59:55.126361",
+  "total_equipment": 6,
+  "fuel_threshold": null,
+  "equipment": [
+    {
+      "equipment_id": "TR-001",
+      "status": "异常待处理",
+      "anomaly_count": 1,
+      "anomalies": [
+        {
+          "type": "inspector_inconsistency",
+          "description": "发现 2 处验收人不一致异常",
+          "detail": {
+            "equipment_id": "TR-001",
+            "is_abnormal": true,
+            "details": [
+              {
+                "type": "multiple_inspectors",
+                "inspectors": [
+                  "李四",
+                  "张三"
+                ],
+                "explanation": "同一设备存在多名验收人: 李四, 张三"
+              },
+              {
+                "type": "operator_inspector_diff",
+                "operator": "张三",
+                "inspector": "李四",
+                "lease_date": "2024-06-11",
+                "return_date": "2024-06-20",
+                "explanation": "操作人员(张三)与验收人(李四)不一致"
+              }
+            ],
+            "explanation": "发现 2 处验收人不一致异常"
+          }
+        }
+      ],
+      "fuel_stats": {
+        "total_fuel": 185.5,
+        "total_hours": 69.5,
+        "fuel_rate": 2.6690647482014387,
+        "hours_inverted": false,
+        "lease_count": 2,
+        "fuel_count": 3,
+        "return_count": 2,
+        "latest_lease": {
+          "id": 7,
+          "batch_id": 4,
+          "source_line": 3,
+          "equipment_id": "TR-001",
+          "lease_date": "2024-06-11",
+          "start_hours": 1280.5,
+          "operator": "张三",
+          "remarks": "二次租出",
+          "created_at": "2026-06-09 11:58:21.393278",
+          "batch_file": "lease_out_02_late.csv"
+        },
+        "latest_return": {
+          "id": 7,
+          "batch_id": 6,
+          "source_line": 3,
+          "equipment_id": "TR-001",
+          "return_date": "2024-06-20",
+          "end_hours": 1350.0,
+          "inspector": "李四",
+          "inspection_result": "正常",
+          "remarks": "二次归还-不同验收人",
+          "created_at": "2026-06-09 11:58:21.468270",
+          "batch_file": "return_check_02_late.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 1,
+          "batch_id": 1,
+          "source_line": 2,
+          "equipment_id": "TR-001",
+          "lease_date": "2024-06-01",
+          "start_hours": 1200.5,
+          "operator": "张三",
+          "remarks": "农忙第一季",
+          "created_at": "2026-06-09 11:57:37.381294",
+          "batch_file": "lease_out_01.csv"
+        },
+        {
+          "id": 7,
+          "batch_id": 4,
+          "source_line": 3,
+          "equipment_id": "TR-001",
+          "lease_date": "2024-06-11",
+          "start_hours": 1280.5,
+          "operator": "张三",
+          "remarks": "二次租出",
+          "created_at": "2026-06-09 11:58:21.393278",
+          "batch_file": "lease_out_02_late.csv"
+        }
+      ],
+      "fuel_records": [
+        {
+          "id": 1,
+          "batch_id": 2,
+          "source_line": 1,
+          "equipment_id": "TR-001",
+          "fuel_date": "2024-06-02",
+          "fuel_amount": 80.5,
+          "fuel_station": "农机站A",
+          "operator": "李加油",
+          "remarks": "第一次加油",
+          "created_at": "2026-06-09 11:57:45.126872",
+          "batch_file": "fuel_records_01.json"
+        },
+        {
+          "id": 2,
+          "batch_id": 2,
+          "source_line": 2,
+          "equipment_id": "TR-001",
+          "fuel_date": "2024-06-05",
+          "fuel_amount": 65.0,
+          "fuel_station": "农机站A",
+          "operator": "李加油",
+          "remarks": "第二次加油",
+          "created_at": "2026-06-09 11:57:45.126986",
+          "batch_file": "fuel_records_01.json"
+        },
+        {
+          "id": 7,
+          "batch_id": 5,
+          "source_line": 2,
+          "equipment_id": "TR-001",
+          "fuel_date": "2024-06-12",
+          "fuel_amount": 40.0,
+          "fuel_station": "农机站A",
+          "operator": "李加油",
+          "remarks": "二次租出加油",
+          "created_at": "2026-06-09 11:58:21.431293",
+          "batch_file": "fuel_records_02_late.json"
+        }
+      ],
+      "return_records": [
+        {
+          "id": 1,
+          "batch_id": 3,
+          "source_line": 2,
+          "equipment_id": "TR-001",
+          "return_date": "2024-06-10",
+          "end_hours": 1280.5,
+          "inspector": "张三",
+          "inspection_result": "正常",
+          "remarks": "使用正常",
+          "created_at": "2026-06-09 11:57:45.163496",
+          "batch_file": "return_check_01.csv"
+        },
+        {
+          "id": 7,
+          "batch_id": 6,
+          "source_line": 3,
+          "equipment_id": "TR-001",
+          "return_date": "2024-06-20",
+          "end_hours": 1350.0,
+          "inspector": "李四",
+          "inspection_result": "正常",
+          "remarks": "二次归还-不同验收人",
+          "created_at": "2026-06-09 11:58:21.468270",
+          "batch_file": "return_check_02_late.csv"
+        }
+      ],
+      "review_history": [],
+      "latest_review": null,
+      "final_conclusion": "存在异常(inspector_inconsistency)，需人工处理"
+    },
+    {
+      "equipment_id": "TR-002",
+      "status": "异常待处理",
+      "anomaly_count": 1,
+      "anomalies": [
+        {
+          "type": "inspector_inconsistency",
+          "description": "发现 1 处验收人不一致异常",
+          "detail": {
+            "equipment_id": "TR-002",
+            "is_abnormal": true,
+            "details": [
+              {
+                "type": "multiple_inspectors",
+                "inspectors": [
+                  "赵六",
+                  "李四"
+                ],
+                "explanation": "同一设备存在多名验收人: 赵六, 李四"
+              }
+            ],
+            "explanation": "发现 1 处验收人不一致异常"
+          }
+        }
+      ],
+      "fuel_stats": {
+        "total_fuel": 175.0,
+        "total_hours": 60.0,
+        "fuel_rate": 2.9166666666666665,
+        "hours_inverted": false,
+        "lease_count": 2,
+        "fuel_count": 2,
+        "return_count": 2,
+        "latest_lease": {
+          "id": 8,
+          "batch_id": 4,
+          "source_line": 4,
+          "equipment_id": "TR-002",
+          "lease_date": "2024-06-09",
+          "start_hours": 900.0,
+          "operator": "赵六",
+          "remarks": "换操作员",
+          "created_at": "2026-06-09 11:58:21.393284",
+          "batch_file": "lease_out_02_late.csv"
+        },
+        "latest_return": {
+          "id": 8,
+          "batch_id": 6,
+          "source_line": 4,
+          "equipment_id": "TR-002",
+          "return_date": "2024-06-18",
+          "end_hours": 960.0,
+          "inspector": "赵六",
+          "inspection_result": "正常",
+          "remarks": "二次归还",
+          "created_at": "2026-06-09 11:58:21.468276",
+          "batch_file": "return_check_02_late.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 2,
+          "batch_id": 1,
+          "source_line": 3,
+          "equipment_id": "TR-002",
+          "lease_date": "2024-06-01",
+          "start_hours": 850.0,
+          "operator": "李四",
+          "remarks": "农忙第一季",
+          "created_at": "2026-06-09 11:57:37.381404",
+          "batch_file": "lease_out_01.csv"
+        },
+        {
+          "id": 8,
+          "batch_id": 4,
+          "source_line": 4,
+          "equipment_id": "TR-002",
+          "lease_date": "2024-06-09",
+          "start_hours": 900.0,
+          "operator": "赵六",
+          "remarks": "换操作员",
+          "created_at": "2026-06-09 11:58:21.393284",
+          "batch_file": "lease_out_02_late.csv"
+        }
+      ],
+      "fuel_records": [
+        {
+          "id": 3,
+          "batch_id": 2,
+          "source_line": 3,
+          "equipment_id": "TR-002",
+          "fuel_date": "2024-06-03",
+          "fuel_amount": 120.0,
+          "fuel_station": "农机站B",
+          "operator": "王加油",
+          "remarks": "油耗偏高",
+          "created_at": "2026-06-09 11:57:45.126991",
+          "batch_file": "fuel_records_01.json"
+        },
+        {
+          "id": 8,
+          "batch_id": 5,
+          "source_line": 3,
+          "equipment_id": "TR-002",
+          "fuel_date": "2024-06-10",
+          "fuel_amount": 55.0,
+          "fuel_station": "农机站C",
+          "operator": "张加油",
+          "remarks": "二次租出加油",
+          "created_at": "2026-06-09 11:58:21.431300",
+          "batch_file": "fuel_records_02_late.json"
+        }
+      ],
+      "return_records": [
+        {
+          "id": 2,
+          "batch_id": 3,
+          "source_line": 3,
+          "equipment_id": "TR-002",
+          "return_date": "2024-06-08",
+          "end_hours": 900.0,
+          "inspector": "李四",
+          "inspection_result": "正常",
+          "remarks": "归还",
+          "created_at": "2026-06-09 11:57:45.163652",
+          "batch_file": "return_check_01.csv"
+        },
+        {
+          "id": 8,
+          "batch_id": 6,
+          "source_line": 4,
+          "equipment_id": "TR-002",
+          "return_date": "2024-06-18",
+          "end_hours": 960.0,
+          "inspector": "赵六",
+          "inspection_result": "正常",
+          "remarks": "二次归还",
+          "created_at": "2026-06-09 11:58:21.468276",
+          "batch_file": "return_check_02_late.csv"
+        }
+      ],
+      "review_history": [],
+      "latest_review": null,
+      "final_conclusion": "存在异常(inspector_inconsistency)，需人工处理"
+    },
+    {
+      "equipment_id": "TR-003",
+      "status": "已复核通过",
+      "anomaly_count": 2,
+      "anomalies": [
+        {
+          "type": "hours_inverted",
+          "description": "发现 1 处小时数倒挂异常",
+          "detail": {
+            "equipment_id": "TR-003",
+            "is_abnormal": true,
+            "details": [
+              {
+                "lease_date": "2024-06-02",
+                "start_hours": 2100.3,
+                "lease_source": "lease_out_01.csv",
+                "lease_line": 4,
+                "return_date": "2024-06-09",
+                "end_hours": 2050.0,
+                "return_source": "return_check_01.csv",
+                "return_line": 4
+              }
+            ],
+            "explanation": "发现 1 处小时数倒挂异常"
+          }
+        },
+        {
+          "type": "inspector_inconsistency",
+          "description": "发现 1 处验收人不一致异常",
+          "detail": {
+            "equipment_id": "TR-003",
+            "is_abnormal": true,
+            "details": [
+              {
+                "type": "operator_inspector_diff",
+                "operator": "王五",
+                "inspector": "赵六",
+                "lease_date": "2024-06-02",
+                "return_date": "2024-06-09",
+                "explanation": "操作人员(王五)与验收人(赵六)不一致"
+              }
+            ],
+            "explanation": "发现 1 处验收人不一致异常"
+          }
+        }
+      ],
+      "fuel_stats": {
+        "total_fuel": 45.5,
+        "total_hours": -50.30000000000018,
+        "fuel_rate": 0,
+        "hours_inverted": true,
+        "lease_count": 1,
+        "fuel_count": 1,
+        "return_count": 1,
+        "latest_lease": {
+          "id": 3,
+          "batch_id": 1,
+          "source_line": 4,
+          "equipment_id": "TR-003",
+          "lease_date": "2024-06-02",
+          "start_hours": 2100.3,
+          "operator": "王五",
+          "remarks": "农忙第一季",
+          "created_at": "2026-06-09 11:57:37.381409",
+          "batch_file": "lease_out_01.csv"
+        },
+        "latest_return": {
+          "id": 3,
+          "batch_id": 3,
+          "source_line": 4,
+          "equipment_id": "TR-003",
+          "return_date": "2024-06-09",
+          "end_hours": 2050.0,
+          "inspector": "赵六",
+          "inspection_result": "异常",
+          "remarks": "小时数倒挂",
+          "created_at": "2026-06-09 11:57:45.163658",
+          "batch_file": "return_check_01.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 3,
+          "batch_id": 1,
+          "source_line": 4,
+          "equipment_id": "TR-003",
+          "lease_date": "2024-06-02",
+          "start_hours": 2100.3,
+          "operator": "王五",
+          "remarks": "农忙第一季",
+          "created_at": "2026-06-09 11:57:37.381409",
+          "batch_file": "lease_out_01.csv"
+        }
+      ],
+      "fuel_records": [
+        {
+          "id": 4,
+          "batch_id": 2,
+          "source_line": 4,
+          "equipment_id": "TR-003",
+          "fuel_date": "2024-06-04",
+          "fuel_amount": 45.5,
+          "fuel_station": "农机站A",
+          "operator": "李加油",
+          "remarks": "",
+          "created_at": "2026-06-09 11:57:45.126994",
+          "batch_file": "fuel_records_01.json"
+        }
+      ],
+      "return_records": [
+        {
+          "id": 3,
+          "batch_id": 3,
+          "source_line": 4,
+          "equipment_id": "TR-003",
+          "return_date": "2024-06-09",
+          "end_hours": 2050.0,
+          "inspector": "赵六",
+          "inspection_result": "异常",
+          "remarks": "小时数倒挂",
+          "created_at": "2026-06-09 11:57:45.163658",
+          "batch_file": "return_check_01.csv"
+        }
+      ],
+      "review_history": [
+        {
+          "id": 1,
+          "equipment_id": "TR-003",
+          "reviewer": "陈主管",
+          "review_status": "通过",
+          "review_comment": "经核实为表填写错误，实际小时数为2150.0",
+          "review_time": "2026-06-09 11:58:36.757550",
+          "anomalies_addressed": ""
+        }
+      ],
+      "latest_review": {
+        "id": 1,
+        "equipment_id": "TR-003",
+        "reviewer": "陈主管",
+        "review_status": "通过",
+        "review_comment": "经核实为表填写错误，实际小时数为2150.0",
+        "review_time": "2026-06-09 11:58:36.757550",
+        "anomalies_addressed": ""
+      },
+      "final_conclusion": "存在异常(hours_inverted, inspector_inconsistency)，已人工复核通过"
+    },
+    {
+      "equipment_id": "TR-004",
+      "status": "正常",
+      "anomaly_count": 0,
+      "anomalies": [],
+      "fuel_stats": {
+        "total_fuel": 30.0,
+        "total_hours": 20.0,
+        "fuel_rate": 1.5,
+        "hours_inverted": false,
+        "lease_count": 1,
+        "fuel_count": 1,
+        "return_count": 1,
+        "latest_lease": {
+          "id": 4,
+          "batch_id": 1,
+          "source_line": 5,
+          "equipment_id": "TR-004",
+          "lease_date": "2024-06-03",
+          "start_hours": 500.0,
+          "operator": "赵六",
+          "remarks": "备用设备",
+          "created_at": "2026-06-09 11:57:37.381412",
+          "batch_file": "lease_out_01.csv"
+        },
+        "latest_return": {
+          "id": 4,
+          "batch_id": 3,
+          "source_line": 5,
+          "equipment_id": "TR-004",
+          "return_date": "2024-06-12",
+          "end_hours": 520.0,
+          "inspector": "赵六",
+          "inspection_result": "正常",
+          "remarks": "备用设备归还",
+          "created_at": "2026-06-09 11:57:45.163661",
+          "batch_file": "return_check_01.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 4,
+          "batch_id": 1,
+          "source_line": 5,
+          "equipment_id": "TR-004",
+          "lease_date": "2024-06-03",
+          "start_hours": 500.0,
+          "operator": "赵六",
+          "remarks": "备用设备",
+          "created_at": "2026-06-09 11:57:37.381412",
+          "batch_file": "lease_out_01.csv"
+        }
+      ],
+      "fuel_records": [
+        {
+          "id": 5,
+          "batch_id": 2,
+          "source_line": 5,
+          "equipment_id": "TR-004",
+          "fuel_date": "2024-06-06",
+          "fuel_amount": 30.0,
+          "fuel_station": "农机站C",
+          "operator": "张加油",
+          "remarks": "备用设备少量加油",
+          "created_at": "2026-06-09 11:57:45.126996",
+          "batch_file": "fuel_records_01.json"
+        }
+      ],
+      "return_records": [
+        {
+          "id": 4,
+          "batch_id": 3,
+          "source_line": 5,
+          "equipment_id": "TR-004",
+          "return_date": "2024-06-12",
+          "end_hours": 520.0,
+          "inspector": "赵六",
+          "inspection_result": "正常",
+          "remarks": "备用设备归还",
+          "created_at": "2026-06-09 11:57:45.163661",
+          "batch_file": "return_check_01.csv"
+        }
+      ],
+      "review_history": [],
+      "latest_review": null,
+      "final_conclusion": "设备租赁数据正常"
+    },
+    {
+      "equipment_id": "TR-005",
+      "status": "异常待处理",
+      "anomaly_count": 1,
+      "anomalies": [
+        {
+          "type": "inspector_inconsistency",
+          "description": "发现 1 处验收人不一致异常",
+          "detail": {
+            "equipment_id": "TR-005",
+            "is_abnormal": true,
+            "details": [
+              {
+                "type": "operator_inspector_diff",
+                "operator": "张三",
+                "inspector": "王五",
+                "lease_date": "2024-06-05",
+                "return_date": "2024-06-15",
+                "explanation": "操作人员(张三)与验收人(王五)不一致"
+              }
+            ],
+            "explanation": "发现 1 处验收人不一致异常"
+          }
+        }
+      ],
+      "fuel_stats": {
+        "total_fuel": 0,
+        "total_hours": 79.20000000000005,
+        "fuel_rate": 0.0,
+        "hours_inverted": false,
+        "lease_count": 1,
+        "fuel_count": 0,
+        "return_count": 1,
+        "latest_lease": {
+          "id": 5,
+          "batch_id": 1,
+          "source_line": 6,
+          "equipment_id": "TR-005",
+          "lease_date": "2024-06-05",
+          "start_hours": 1500.8,
+          "operator": "张三",
+          "remarks": "晚到批次",
+          "created_at": "2026-06-09 11:57:37.381414",
+          "batch_file": "lease_out_01.csv"
+        },
+        "latest_return": {
+          "id": 5,
+          "batch_id": 3,
+          "source_line": 6,
+          "equipment_id": "TR-005",
+          "return_date": "2024-06-15",
+          "end_hours": 1580.0,
+          "inspector": "王五",
+          "inspection_result": "正常",
+          "remarks": "晚到批次归还",
+          "created_at": "2026-06-09 11:57:45.163663",
+          "batch_file": "return_check_01.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 5,
+          "batch_id": 1,
+          "source_line": 6,
+          "equipment_id": "TR-005",
+          "lease_date": "2024-06-05",
+          "start_hours": 1500.8,
+          "operator": "张三",
+          "remarks": "晚到批次",
+          "created_at": "2026-06-09 11:57:37.381414",
+          "batch_file": "lease_out_01.csv"
+        }
+      ],
+      "fuel_records": [],
+      "return_records": [
+        {
+          "id": 5,
+          "batch_id": 3,
+          "source_line": 6,
+          "equipment_id": "TR-005",
+          "return_date": "2024-06-15",
+          "end_hours": 1580.0,
+          "inspector": "王五",
+          "inspection_result": "正常",
+          "remarks": "晚到批次归还",
+          "created_at": "2026-06-09 11:57:45.163663",
+          "batch_file": "return_check_01.csv"
+        }
+      ],
+      "review_history": [],
+      "latest_review": null,
+      "final_conclusion": "存在异常(inspector_inconsistency)，需人工处理"
+    },
+    {
+      "equipment_id": "TR-006",
+      "status": "正常",
+      "anomaly_count": 0,
+      "anomalies": [],
+      "fuel_stats": {
+        "total_fuel": 50.0,
+        "total_hours": 50.0,
+        "fuel_rate": 1.0,
+        "hours_inverted": false,
+        "lease_count": 1,
+        "fuel_count": 1,
+        "return_count": 1,
+        "latest_lease": {
+          "id": 6,
+          "batch_id": 4,
+          "source_line": 2,
+          "equipment_id": "TR-006",
+          "lease_date": "2024-06-07",
+          "start_hours": 900.0,
+          "operator": "钱七",
+          "remarks": "晚到补充批次",
+          "created_at": "2026-06-09 11:58:21.392960",
+          "batch_file": "lease_out_02_late.csv"
+        },
+        "latest_return": {
+          "id": 6,
+          "batch_id": 6,
+          "source_line": 2,
+          "equipment_id": "TR-006",
+          "return_date": "2024-06-15",
+          "end_hours": 950.0,
+          "inspector": "钱七",
+          "inspection_result": "正常",
+          "remarks": "晚到归还",
+          "created_at": "2026-06-09 11:58:21.468142",
+          "batch_file": "return_check_02_late.csv"
+        }
+      },
+      "lease_records": [
+        {
+          "id": 6,
+          "batch_id": 4,
+          "source_line": 2,
+          "equipment_id": "TR-006",
+          "lease_date": "2024-06-07",
+          "start_hours": 900.0,
+          "operator": "钱七",
+          "remarks": "晚到补充批次",
+          "created_at": "2026-06-09 11:58:21.392960",
+          "batch_file": "lease_out_02_late.csv"
+        }
+      ],
+      "fuel_records": [
+        {
+          "id": 6,
+          "batch_id": 5,
+          "source_line": 1,
+          "equipment_id": "TR-006",
+          "fuel_date": "2024-06-08",
+          "fuel_amount": 50.0,
+          "fuel_station": "农机站B",
+          "operator": "王加油",
+          "remarks": "晚到记录",
+          "created_at": "2026-06-09 11:58:21.431020",
+          "batch_file": "fuel_records_02_late.json"
+        }
+      ],
+      "return_records": [
+        {
+          "id": 6,
+          "batch_id": 6,
+          "source_line": 2,
+          "equipment_id": "TR-006",
+          "return_date": "2024-06-15",
+          "end_hours": 950.0,
+          "inspector": "钱七",
+          "inspection_result": "正常",
+          "remarks": "晚到归还",
+          "created_at": "2026-06-09 11:58:21.468142",
+          "batch_file": "return_check_02_late.csv"
+        }
+      ],
+      "review_history": [],
+      "latest_review": null,
+      "final_conclusion": "设备租赁数据正常"
+    }
+  ]
+}

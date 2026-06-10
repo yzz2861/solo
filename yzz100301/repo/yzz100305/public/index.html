@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>缺货替换对账系统</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  font-size: 14px;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header h1 { font-size: 22px; font-weight: 600; }
+.header p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: white;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-left: 4px solid #667eea;
+}
+.stat-card.warn { border-left-color: #f59e0b; }
+.stat-card.danger { border-left-color: #ef4444; }
+.stat-card.success { border-left-color: #10b981; }
+.stat-card.info { border-left-color: #3b82f6; }
+.stat-label { font-size: 13px; color: #6b7280; margin-bottom: 6px; }
+.stat-value { font-size: 24px; font-weight: 600; color: #1f2937; }
+.stat-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+
+.section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: #667eea;
+  border-radius: 2px;
+}
+
+.upload-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.upload-box {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: #fafbfc;
+}
+.upload-box:hover {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+.upload-box.dragover {
+  border-color: #667eea;
+  background: #eef2ff;
+}
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-title { font-weight: 500; color: #374151; margin-bottom: 4px; }
+.upload-desc { font-size: 12px; color: #9ca3af; }
+.upload-box input[type="file"] { display: none; }
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  color: #4b5563;
+}
+.filter-btn:hover { border-color: #667eea; color: #667eea; }
+.filter-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+.search-box {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+}
+.search-box:focus { border-color: #667eea; }
+.export-btn {
+  padding: 6px 16px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-left: auto;
+}
+.export-btn:hover { background: #059669; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+tr:hover { background: #f9fafb; }
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.tag-gray { background: #f3f4f6; color: #6b7280; }
+.tag-blue { background: #dbeafe; color: #1d4ed8; }
+.tag-green { background: #d1fae5; color: #065f46; }
+.tag-yellow { background: #fef3c7; color: #92400e; }
+.tag-red { background: #fee2e2; color: #991b1b; }
+.tag-purple { background: #ede9fe; color: #5b21b6; }
+
+.action-btn {
+  padding: 4px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  color: #4b5563;
+}
+.action-btn:hover { border-color: #667eea; color: #667eea; }
+.action-btn.primary {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+.action-btn.primary:hover { background: #5b68d8; }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.page-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+.page-btn:hover:not(:disabled) { border-color: #667eea; color: #667eea; }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.page-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+.page-info { font-size: 13px; color: #6b7280; }
+
+.modal-mask {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+.modal-mask.show { display: flex; }
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 { font-size: 16px; font-weight: 600; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+.modal-close:hover { color: #4b5563; }
+.modal-body { padding: 20px 24px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.detail-section { margin-bottom: 18px; }
+.detail-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #e5e7eb;
+}
+.detail-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.detail-label { color: #6b7280; }
+.detail-value { color: #1f2937; }
+
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #667eea; }
+.form-textarea { resize: vertical; min-height: 80px; }
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  z-index: 2000;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s;
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.success { background: #10b981; }
+.toast.error { background: #ef4444; }
+.toast.warning { background: #f59e0b; }
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+.tooltip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>缺货替换对账系统</h1>
+  <p>订单 · 替换 · 退款 · 复核 全流程追踪</p>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="section">
+    <div class="section-title">数据导入</div>
+    <div class="upload-row">
+      <div class="upload-box" id="uploadOrder" onclick="document.getElementById('fileOrder').click()">
+        <div class="upload-icon">📋</div>
+        <div class="upload-title">订单 CSV</div>
+        <div class="upload-desc">点击或拖拽上传</div>
+        <input type="file" id="fileOrder" accept=".csv">
+      </div>
+      <div class="upload-box" id="uploadReplace" onclick="document.getElementById('fileReplace').click()">
+        <div class="upload-icon">🔄</div>
+        <div class="upload-title">替换单 JSON</div>
+        <div class="upload-desc">点击或拖拽上传</div>
+        <input type="file" id="fileReplace" accept=".json">
+      </div>
+      <div class="upload-box" id="uploadRefund" onclick="document.getElementById('fileRefund').click()">
+        <div class="upload-icon">💰</div>
+        <div class="upload-title">退款台账 CSV</div>
+        <div class="upload-desc">点击或拖拽上传</div>
+        <input type="file" id="fileRefund" accept=".csv">
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">订单列表</div>
+    <div class="filter-row">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="has_replace">有替换</button>
+        <button class="filter-btn" data-filter="has_refund">有退款</button>
+        <button class="filter-btn" data-filter="unbalanced">金额不平</button>
+        <button class="filter-btn" data-filter="late_refund">退款晚到</button>
+        <button class="filter-btn" data-filter="manual">手工改判</button>
+        <button class="filter-btn" data-filter="pending">待复核</button>
+        <button class="filter-btn" data-filter="reviewed">已复核</button>
+      </div>
+      <input type="text" class="search-box" id="searchInput" placeholder="搜索订单号...">
+      <button class="export-btn" onclick="exportReport()">📊 导出对账报告</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <table>
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>商品</th>
+          <th>订单金额</th>
+          <th>下单日期</th>
+          <th>替换状态</th>
+          <th>金额差异</th>
+          <th>退款金额</th>
+          <th>流程状态</th>
+          <th>风险标签</th>
+          <th>复核状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody"></tbody>
+    </table>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+</div>
+
+<div class="modal-mask" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">订单详情</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="action-btn" onclick="closeModal()">取消</button>
+      <button class="action-btn primary" onclick="saveReview()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let currentPage = 1;
+let pageSize = 20;
+let currentFilter = 'all';
+let currentKeyword = '';
+let currentOrder = null;
+
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+async function api(url, options = {}) {
+  try {
+    const res = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options
+    });
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    showToast('请求失败: ' + e.message, 'error');
+    throw e;
+  }
+}
+
+async function loadStats() {
+  const stats = await api('/api/statistics');
+  const html = `
+    <div class="stat-card info">
+      <div class="stat-label">总订单数</div>
+      <div class="stat-value">${stats.totalOrders}</div>
+      <div class="stat-sub">订单总额 ¥${stats.totalOrderAmount.toFixed(2)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">有替换</div>
+      <div class="stat-value">${stats.totalReplace}</div>
+      <div class="stat-sub">差异合计 ¥${stats.totalDiffAmount.toFixed(2)}</div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-label">有退款</div>
+      <div class="stat-value">${stats.totalRefund}</div>
+      <div class="stat-sub">退款总额 ¥${stats.totalRefundAmount.toFixed(2)}</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">金额不平</div>
+      <div class="stat-value">${stats.unbalanced}</div>
+      <div class="stat-sub">替换后金额有差异</div>
+    </div>
+    <div class="stat-card danger">
+      <div class="stat-label">退款晚到</div>
+      <div class="stat-value">${stats.lateRefund}</div>
+      <div class="stat-sub">退款日期晚于替换日期</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">待复核</div>
+      <div class="stat-value">${stats.pending}</div>
+      <div class="stat-sub">需要人工处理</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">手工改判</div>
+      <div class="stat-value">${stats.manual}</div>
+      <div class="stat-sub">团长手工调整</div>
+    </div>
+  `;
+  document.getElementById('statsGrid').innerHTML = html;
+}
+
+async function loadOrders() {
+  const params = new URLSearchParams({
+    status: currentFilter === 'all' ? '' : currentFilter,
+    keyword: currentKeyword,
+    page: currentPage,
+    pageSize: pageSize
+  });
+  const data = await api('/api/orders?' + params.toString());
+  renderTable(data.list);
+  renderPagination(data.total, data.page, data.pageSize);
+}
+
+function renderTable(list) {
+  const tbody = document.getElementById('orderTableBody');
+  if (!list || list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div class="empty-state-icon">📭</div>暂无数据，请先导入订单</div></td></tr>`;
+    return;
+  }
+
+  const statusMap = {
+    pending: { text: '待复核', cls: 'tag-yellow' },
+    reviewed: { text: '已复核', cls: 'tag-green' }
+  };
+
+  const html = list.map(item => {
+    const rs = statusMap[item.review_status] || statusMap.pending;
+    const riskTags = [];
+    if (item.is_amount_unbalanced) riskTags.push('<span class="tag tag-red">金额不平</span>');
+    if (item.is_late_refund) riskTags.push('<span class="tag tag-yellow">退款晚到</span>');
+    if (item.manual_adjustment) riskTags.push('<span class="tag tag-purple">手工改判</span>');
+
+    const flowCls = item.flow_status === '正常订单' ? 'tag-gray' :
+      item.flow_status === '已替换已退款' ? 'tag-green' :
+      item.flow_status === '已替换未退款' ? 'tag-yellow' : 'tag-blue';
+
+    return `
+      <tr>
+        <td><strong>${item.order_no}</strong></td>
+        <td>${item.product_name || '-'}</td>
+        <td>¥${(item.order_amount || 0).toFixed(2)}</td>
+        <td>${item.order_date || '-'}</td>
+        <td>${item.replaced_product ? item.replaced_product : '<span class="tag tag-gray">无替换</span>'}</td>
+        <td class="${item.amount_diff ? 'text-red' : ''}">${item.amount_diff !== undefined && item.amount_diff !== null ? '¥' + item.amount_diff.toFixed(2) : '-'}</td>
+        <td>${item.refund_amount ? '¥' + item.refund_amount.toFixed(2) : '-'}</td>
+        <td><span class="tag ${flowCls}">${item.flow_status}</span></td>
+        <td>${riskTags.join(' ') || '-'}</td>
+        <td><span class="tag ${rs.cls}">${rs.text}</span></td>
+        <td><button class="action-btn primary" onclick="openDetail('${item.order_no}')">复核</button></td>
+      </tr>
+    `;
+  }).join('');
+  tbody.innerHTML = html;
+}
+
+function renderPagination(total, page, pageSize) {
+  const totalPages = Math.ceil(total / pageSize) || 1;
+  const pagination = document.getElementById('pagination');
+
+  let pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+      pages.push(i);
+    } else if (pages[pages.length - 1] !== '...') {
+      pages.push('...');
+    }
+  }
+
+  const html = `
+    <button class="page-btn" ${page <= 1 ? 'disabled' : ''} onclick="goPage(${page - 1})">上一页</button>
+    ${pages.map(p => p === '...'
+      ? '<span class="page-info">...</span>'
+      : `<button class="page-btn ${p === page ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`
+    ).join('')}
+    <button class="page-btn" ${page >= totalPages ? 'disabled' : ''} onclick="goPage(${page + 1})">下一页</button>
+    <span class="page-info">共 ${total} 条，第 ${page}/${totalPages} 页</span>
+  `;
+  pagination.innerHTML = html;
+}
+
+function goPage(p) {
+  currentPage = p;
+  loadOrders();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    currentPage = 1;
+    loadOrders();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  currentKeyword = e.target.value.trim();
+  currentPage = 1;
+  loadOrders();
+});
+
+function setupUpload(boxId, inputId, url) {
+  const box = document.getElementById(boxId);
+  const input = document.getElementById(inputId);
+
+  input.addEventListener('change', async (e) => {
+    if (e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    await uploadFile(file, url);
+    input.value = '';
+  });
+
+  box.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    box.classList.add('dragover');
+  });
+  box.addEventListener('dragleave', () => {
+    box.classList.remove('dragover');
+  });
+  box.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    box.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) await uploadFile(file, url);
+  });
+}
+
+async function uploadFile(file, url) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+
+    if (data.duplicate) {
+      showToast(data.message, 'warning');
+    } else if (data.success) {
+      showToast(data.message, 'success');
+      loadStats();
+      loadOrders();
+    } else {
+      showToast(data.error || '导入失败', 'error');
+    }
+  } catch (e) {
+    showToast('上传失败: ' + e.message, 'error');
+  }
+}
+
+setupUpload('uploadOrder', 'fileOrder', '/api/import/orders');
+setupUpload('uploadReplace', 'fileReplace', '/api/import/replacements');
+setupUpload('uploadRefund', 'fileRefund', '/api/import/refunds');
+
+async function openDetail(orderNo) {
+  const data = await api('/api/orders/' + orderNo);
+  currentOrder = data;
+  renderModal(data);
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  currentOrder = null;
+}
+
+function renderModal(data) {
+  const statusMap = { pending: '待复核', reviewed: '已复核' };
+  const finalMap = {
+    normal: '正常',
+    unbalanced: '金额不平',
+    late_refund: '退款晚到',
+    manual: '手工改判',
+    other: '其他'
+  };
+
+  const html = `
+    <div class="detail-section">
+      <h4>📋 订单信息</h4>
+      <div class="detail-row"><div class="detail-label">订单号</div><div class="detail-value"><strong>${data.order_no}</strong></div></div>
+      <div class="detail-row"><div class="detail-label">商品名称</div><div class="detail-value">${data.product_name || '-'}</div></div>
+      <div class="detail-row"><div class="detail-label">数量</div><div class="detail-value">${data.quantity || 0}</div></div>
+      <div class="detail-row"><div class="detail-label">单价</div><div class="detail-value">¥${(data.price || 0).toFixed(2)}</div></div>
+      <div class="detail-row"><div class="detail-label">订单金额</div><div class="detail-value">¥${(data.order_amount || 0).toFixed(2)}</div></div>
+      <div class="detail-row"><div class="detail-label">下单日期</div><div class="detail-value">${data.order_date || '-'}</div></div>
+    </div>
+
+    <div class="detail-section">
+      <h4>🔄 替换信息 ${data.replaced_product ? '' : '(无替换)'}</h4>
+      ${data.replaced_product ? `
+        <div class="detail-row"><div class="detail-label">原商品</div><div class="detail-value">${data.original_product || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">替换商品</div><div class="detail-value">${data.replaced_product}</div></div>
+        <div class="detail-row"><div class="detail-label">替换数量</div><div class="detail-value">${data.rep_quantity || 0}</div></div>
+        <div class="detail-row"><div class="detail-label">原单价</div><div class="detail-value">¥${(data.original_price || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">替换单价</div><div class="detail-value">¥${(data.replaced_price || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">原金额</div><div class="detail-value">¥${(data.original_amount || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">替换后金额</div><div class="detail-value">¥${(data.replaced_amount || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">金额差异</div><div class="detail-value" style="color:${data.amount_diff > 0 ? '#ef4444' : data.amount_diff < 0 ? '#10b981' : '#333'}">¥${(data.amount_diff || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">替换日期</div><div class="detail-value">${data.replace_date || '-'}</div></div>
+      ` : '<div style="color:#9ca3af; font-size:13px;">该订单无替换记录</div>'}
+    </div>
+
+    <div class="detail-section">
+      <h4>💰 退款信息 ${data.refund_amount ? '' : '(无退款)'}</h4>
+      ${data.refund_amount ? `
+        <div class="detail-row"><div class="detail-label">退款金额</div><div class="detail-value">¥${data.refund_amount.toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">退款日期</div><div class="detail-value">${data.refund_date || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">退款原因</div><div class="detail-value">${data.refund_reason || '-'}</div></div>
+      ` : '<div style="color:#9ca3af; font-size:13px;">该订单无退款记录</div>'}
+    </div>
+
+    <div class="detail-section">
+      <h4>✅ 复核处理</h4>
+      <div class="form-group">
+        <label class="form-label">复核状态</label>
+        <select class="form-select" id="reviewStatus">
+          <option value="pending" ${data.review_status === 'pending' ? 'selected' : ''}>待复核</option>
+          <option value="reviewed" ${data.review_status === 'reviewed' ? 'selected' : ''}>已复核</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">最终处理状态</label>
+        <select class="form-select" id="finalStatus">
+          <option value="normal" ${data.final_status === 'normal' ? 'selected' : ''}>正常</option>
+          <option value="unbalanced" ${data.final_status === 'unbalanced' ? 'selected' : ''}>金额不平</option>
+          <option value="late_refund" ${data.final_status === 'late_refund' ? 'selected' : ''}>退款晚到</option>
+          <option value="manual" ${data.final_status === 'manual' ? 'selected' : ''}>手工改判</option>
+          <option value="other" ${data.final_status === 'other' ? 'selected' : ''}>其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <input type="checkbox" id="manualAdjustment" ${data.manual_adjustment ? 'checked' : ''}>
+          团长手工改判
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-label">复核意见</label>
+        <textarea class="form-textarea" id="reviewComment" placeholder="请输入复核意见...">${data.review_comment || ''}</textarea>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalBody').innerHTML = html;
+}
+
+async function saveReview() {
+  if (!currentOrder) return;
+
+  const data = {
+    review_status: document.getElementById('reviewStatus').value,
+    final_status: document.getElementById('finalStatus').value,
+    review_comment: document.getElementById('reviewComment').value,
+    manual_adjustment: document.getElementById('manualAdjustment').checked
+  };
+
+  const result = await api('/api/orders/' + currentOrder.order_no + '/review', {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  });
+
+  showToast('保存成功', 'success');
+  closeModal();
+  loadStats();
+  loadOrders();
+}
+
+function exportReport() {
+  const params = new URLSearchParams({
+    status: currentFilter === 'all' ? '' : currentFilter,
+    keyword: currentKeyword
+  });
+  window.open('/api/export?' + params.toString(), '_blank');
+}
+
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+loadStats();
+loadOrders();
+</script>
+
+</body>
+</html>

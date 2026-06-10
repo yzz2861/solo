@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>广告素材审核管理工具</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-content">
+      <h1>广告素材审核管理</h1>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="openImportModal()">
+          📥 导入数据
+        </button>
+        <button class="btn btn-success" onclick="exportReport()">
+          📊 导出报告
+        </button>
+        <button class="btn btn-outline" onclick="openBannedWordsModal()">
+          🔤 禁用词管理
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <section class="stats-section">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">素材总数</div>
+      </div>
+      <div class="stat-card stat-warning">
+        <div class="stat-value" id="statPending">0</div>
+        <div class="stat-label">待复核</div>
+      </div>
+      <div class="stat-card stat-danger">
+        <div class="stat-value" id="statBanned">0</div>
+        <div class="stat-label">禁用词命中</div>
+      </div>
+      <div class="stat-card stat-danger">
+        <div class="stat-value" id="statRejected">0</div>
+        <div class="stat-label">渠道驳回</div>
+      </div>
+      <div class="stat-card stat-info">
+        <div class="stat-value" id="statOverridden">0</div>
+        <div class="stat-label">人工改判</div>
+      </div>
+      <div class="stat-card stat-success">
+        <div class="stat-value" id="statCompliant">0</div>
+        <div class="stat-label">已合规</div>
+      </div>
+    </section>
+
+    <section class="filter-section">
+      <div class="filter-row">
+        <div class="filter-item">
+          <label>关键词搜索</label>
+          <input type="text" id="filterKeyword" placeholder="素材编号/标题/内容" onkeyup="handleFilterKeyup(event)">
+        </div>
+        <div class="filter-item">
+          <label>复核状态</label>
+          <select id="filterReviewStatus" onchange="loadMaterials()">
+            <option value="">全部</option>
+            <option value="pending">待复核</option>
+            <option value="compliant">合规</option>
+            <option value="non_compliant">不合规</option>
+          </select>
+        </div>
+        <div class="filter-item filter-checkbox">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filterBannedWord" onchange="loadMaterials()">
+            <span>仅显示禁用词命中</span>
+          </label>
+        </div>
+        <div class="filter-item filter-checkbox">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filterChannelRejected" onchange="loadMaterials()">
+            <span>仅显示渠道驳回</span>
+          </label>
+        </div>
+        <div class="filter-item filter-checkbox">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filterOverridden" onchange="loadMaterials()">
+            <span>仅显示人工改判</span>
+          </label>
+        </div>
+        <div class="filter-item">
+          <button class="btn btn-primary" onclick="loadMaterials()">🔍 搜索</button>
+          <button class="btn btn-outline" onclick="resetFilters()">重置</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <div class="table-header">
+        <h3>素材列表</h3>
+        <div class="table-info">
+          <span id="totalCount">共 0 条</span>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 120px;">素材编号</th>
+              <th>标题</th>
+              <th style="width: 100px;">渠道</th>
+              <th style="width: 90px;">禁用词</th>
+              <th style="width: 90px;">渠道驳回</th>
+              <th style="width: 90px;">改判</th>
+              <th style="width: 100px;">复核状态</th>
+              <th style="width: 120px;">提交时间</th>
+              <th style="width: 100px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="materialsTableBody">
+            <tr>
+              <td colspan="9" class="loading-cell">加载中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button class="btn btn-outline" id="btnPrev" onclick="prevPage()">上一页</button>
+        <span class="page-info" id="pageInfo">第 1 页 / 共 1 页</span>
+        <button class="btn btn-outline" id="btnNext" onclick="nextPage()">下一页</button>
+        <select id="pageSizeSelect" onchange="changePageSize()">
+          <option value="10">10 条/页</option>
+          <option value="20" selected>20 条/页</option>
+          <option value="50">50 条/页</option>
+          <option value="100">100 条/页</option>
+        </select>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3>素材详情</h3>
+        <button class="modal-close" onclick="closeDetailModal()">×</button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="openReviewModal()">✏️ 填写复核意见</button>
+        <button class="btn btn-outline" onclick="closeDetailModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="reviewModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>复核意见</h3>
+        <button class="modal-close" onclick="closeReviewModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>素材编号</label>
+          <input type="text" id="reviewMaterialId" readonly>
+        </div>
+        <div class="form-group">
+          <label>复核状态</label>
+          <select id="reviewStatus">
+            <option value="pending">待复核</option>
+            <option value="compliant">合规</option>
+            <option value="non_compliant">不合规</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>审核员</label>
+          <input type="text" id="reviewerName" placeholder="请输入审核员姓名">
+        </div>
+        <div class="form-group">
+          <label>复核意见</label>
+          <textarea id="reviewOpinion" rows="4" placeholder="请输入复核意见"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="submitReview()">提交</button>
+        <button class="btn btn-outline" onclick="closeReviewModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="importModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>数据导入</h3>
+        <button class="modal-close" onclick="closeImportModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="import-tabs">
+          <button class="tab-btn active" data-tab="materials" onclick="switchImportTab('materials')">
+            📄 投放文案 CSV
+          </button>
+          <button class="tab-btn" data-tab="channel" onclick="switchImportTab('channel')">
+            📋 渠道驳回 JSON
+          </button>
+          <button class="tab-btn" data-tab="reviews" onclick="switchImportTab('reviews')">
+            ✅ 人工改判表
+          </button>
+        </div>
+
+        <div class="import-tab-content" id="tab-materials">
+          <div class="import-hint">
+            <p><strong>CSV 格式要求：</strong></p>
+            <ul>
+              <li>必须包含 <code>素材编号</code> 或 <code>material_id</code> 列</li>
+              <li>可选列：标题、文案内容、投放渠道、提交时间</li>
+            </ul>
+          </div>
+          <div class="file-upload-area" id="upload-materials">
+            <input type="file" id="fileMaterials" accept=".csv" onchange="handleFileSelect('materials')" style="display:none">
+            <div class="upload-placeholder" onclick="document.getElementById('fileMaterials').click()">
+              <div class="upload-icon">📁</div>
+              <p>点击选择 CSV 文件，或拖拽文件到此处</p>
+              <p class="upload-hint-text">支持 .csv 格式</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="import-tab-content hidden" id="tab-channel">
+          <div class="import-hint">
+            <p><strong>JSON 格式要求：</strong></p>
+            <ul>
+              <li>必须包含 <code>material_id</code> 字段</li>
+              <li>可选字段：channel、status、reject_reason、feedback_time</li>
+              <li>支持单条对象或数组格式</li>
+            </ul>
+          </div>
+          <div class="file-upload-area" id="upload-channel">
+            <input type="file" id="fileChannel" accept=".json" onchange="handleFileSelect('channel')" style="display:none">
+            <div class="upload-placeholder" onclick="document.getElementById('fileChannel').click()">
+              <div class="upload-icon">📁</div>
+              <p>点击选择 JSON 文件，或拖拽文件到此处</p>
+              <p class="upload-hint-text">支持 .json 格式</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="import-tab-content hidden" id="tab-reviews">
+          <div class="import-hint">
+            <p><strong>CSV 格式要求：</strong></p>
+            <ul>
+              <li>必须包含 <code>素材编号</code> 或 <code>material_id</code> 列</li>
+              <li>可选列：审核员、复核状态、复核意见</li>
+            </ul>
+          </div>
+          <div class="file-upload-area" id="upload-reviews">
+            <input type="file" id="fileReviews" accept=".csv" onchange="handleFileSelect('reviews')" style="display:none">
+            <div class="upload-placeholder" onclick="document.getElementById('fileReviews').click()">
+              <div class="upload-icon">📁</div>
+              <p>点击选择 CSV 文件，或拖拽文件到此处</p>
+              <p class="upload-hint-text">支持 .csv 格式</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="import-result hidden" id="importResult">
+          <div class="result-header">导入结果</div>
+          <div class="result-body" id="importResultBody"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeImportModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="bannedWordsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>禁用词管理</h3>
+        <button class="modal-close" onclick="closeBannedWordsModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="add-banned-word">
+          <input type="text" id="newBannedWord" placeholder="输入禁用词">
+          <select id="newBannedCategory">
+            <option value="绝对化用语">绝对化用语</option>
+            <option value="虚假宣传">虚假宣传</option>
+            <option value="其他">其他</option>
+          </select>
+          <button class="btn btn-primary" onclick="addBannedWord()">添加</button>
+        </div>
+        <div class="banned-words-list" id="bannedWordsList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeBannedWordsModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

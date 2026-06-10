@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验室器材预约管理工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>实验室器材预约管理工具</h1>
+        <div class="header-stats">
+            <div class="stat-item">
+                <span class="stat-label">设备总数</span>
+                <span class="stat-value" id="stat-equipment">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">预约总数</span>
+                <span class="stat-value" id="stat-reservations">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">停用记录</span>
+                <span class="stat-value" id="stat-outages">0</span>
+            </div>
+            <div class="stat-item warning">
+                <span class="stat-label">冲突数</span>
+                <span class="stat-value" id="stat-conflicts">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <section class="import-section">
+                <h2>数据导入</h2>
+                
+                <div class="import-group">
+                    <label class="import-label">
+                        <span class="import-icon">📦</span>
+                        设备台账 (CSV)
+                    </label>
+                    <input type="file" id="equipment-file" accept=".csv" class="file-input">
+                    <div class="file-info" id="equipment-info">未选择文件</div>
+                </div>
+
+                <div class="import-group">
+                    <label class="import-label">
+                        <span class="import-icon">📅</span>
+                        预约记录 (JSON)
+                    </label>
+                    <input type="file" id="reservation-file" accept=".json" class="file-input">
+                    <div class="file-info" id="reservation-info">未选择文件</div>
+                </div>
+
+                <div class="import-group">
+                    <label class="import-label">
+                        <span class="import-icon">🚫</span>
+                        停用记录 (CSV)
+                    </label>
+                    <input type="file" id="outage-file" accept=".csv" class="file-input">
+                    <div class="file-info" id="outage-info">未选择文件</div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-import">导入数据</button>
+                <button class="btn btn-secondary" id="btn-clear">清空数据</button>
+            </section>
+
+            <section class="filter-section">
+                <h2>筛选条件</h2>
+                
+                <div class="filter-group">
+                    <label>设备编号</label>
+                    <input type="text" id="filter-equipment-id" placeholder="输入设备编号..." class="filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label>预约人</label>
+                    <input type="text" id="filter-person" placeholder="输入预约人姓名..." class="filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label>冲突类型</label>
+                    <select id="filter-conflict-type" class="filter-select">
+                        <option value="all">全部</option>
+                        <option value="time">时段冲突</option>
+                        <option value="outage">停用冲突</option>
+                        <option value="qualification">资格不匹配</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>处理状态</label>
+                    <select id="filter-status" class="filter-select">
+                        <option value="all">全部</option>
+                        <option value="pending">待处理</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已驳回</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-filter" id="btn-filter">筛选</button>
+                <button class="btn btn-reset" id="btn-reset-filter">重置</button>
+            </section>
+
+            <section class="export-section">
+                <h2>报告导出</h2>
+                <button class="btn btn-export" id="btn-export-conflicts">导出冲突报告</button>
+                <button class="btn btn-export-secondary" id="btn-export-all">导出全部数据</button>
+            </section>
+        </aside>
+
+        <main class="main-content">
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="equipment">设备台账</button>
+                <button class="tab-btn" data-tab="reservations">预约列表</button>
+                <button class="tab-btn" data-tab="conflicts">
+                    冲突检测
+                    <span class="conflict-badge" id="conflict-badge">0</span>
+                </button>
+                <button class="tab-btn" data-tab="review">复核管理</button>
+            </nav>
+
+            <div class="tab-content active" id="tab-equipment">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>设备编号</th>
+                                <th>设备名称</th>
+                                <th>设备类型</th>
+                                <th>所在实验室</th>
+                                <th>资格要求</th>
+                                <th>状态</th>
+                                <th>当前预约</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipment-table-body">
+                            <tr class="empty-row">
+                                <td colspan="7">请先导入设备数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-reservations">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>预约ID</th>
+                                <th>设备编号</th>
+                                <th>预约人</th>
+                                <th>预约人类型</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>用途</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservation-table-body">
+                            <tr class="empty-row">
+                                <td colspan="8">请先导入预约数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-conflicts">
+                <div class="conflict-summary">
+                    <div class="conflict-card time-conflict">
+                        <div class="conflict-icon">⏰</div>
+                        <div class="conflict-info">
+                            <div class="conflict-count" id="time-conflict-count">0</div>
+                            <div class="conflict-label">时段冲突</div>
+                        </div>
+                    </div>
+                    <div class="conflict-card outage-conflict">
+                        <div class="conflict-icon">🔧</div>
+                        <div class="conflict-info">
+                            <div class="conflict-count" id="outage-conflict-count">0</div>
+                            <div class="conflict-label">停用冲突</div>
+                        </div>
+                    </div>
+                    <div class="conflict-card qualification-conflict">
+                        <div class="conflict-icon">🎓</div>
+                        <div class="conflict-info">
+                            <div class="conflict-count" id="qualification-conflict-count">0</div>
+                            <div class="conflict-label">资格不匹配</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>冲突类型</th>
+                                <th>设备编号</th>
+                                <th>预约ID</th>
+                                <th>预约人</th>
+                                <th>冲突详情</th>
+                                <th>严重程度</th>
+                            </tr>
+                        </thead>
+                        <tbody id="conflict-table-body">
+                            <tr class="empty-row">
+                                <td colspan="6">暂无冲突数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-review">
+                <div class="review-toolbar">
+                    <h3>待复核预约</h3>
+                    <div class="batch-actions">
+                        <button class="btn btn-approve" id="btn-batch-approve">批量通过</button>
+                        <button class="btn btn-reject" id="btn-batch-reject">批量驳回</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>预约ID</th>
+                                <th>设备编号</th>
+                                <th>预约人</th>
+                                <th>时段</th>
+                                <th>冲突标记</th>
+                                <th>复核意见</th>
+                                <th>处理状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="review-table-body">
+                            <tr class="empty-row">
+                                <td colspan="9">暂无待复核预约</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="review-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>复核预约</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>预约ID</label>
+                    <div class="form-value" id="modal-reservation-id">-</div>
+                </div>
+                <div class="form-group">
+                    <label>设备编号</label>
+                    <div class="form-value" id="modal-equipment-id">-</div>
+                </div>
+                <div class="form-group">
+                    <label>预约人</label>
+                    <div class="form-value" id="modal-person">-</div>
+                </div>
+                <div class="form-group">
+                    <label>预约时段</label>
+                    <div class="form-value" id="modal-time">-</div>
+                </div>
+                <div class="form-group">
+                    <label>冲突信息</label>
+                    <div class="form-value conflict-list" id="modal-conflicts">-</div>
+                </div>
+                <div class="form-group">
+                    <label for="modal-review-comment">复核意见</label>
+                    <textarea id="modal-review-comment" class="form-textarea" rows="4" placeholder="请输入复核意见..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="modal-review-status">处理状态</label>
+                    <select id="modal-review-status" class="form-select">
+                        <option value="pending">待处理</option>
+                        <option value="approved">通过</option>
+                        <option value="rejected">驳回</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">取消</button>
+                <button class="btn btn-primary" id="modal-save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

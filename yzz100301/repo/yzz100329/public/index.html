@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>城市路灯巡修管理系统</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">💡</span>
+        <h1>路灯巡修</h1>
+      </div>
+      <nav class="nav">
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <span>📊</span> 概览
+        </a>
+        <a href="#import" class="nav-item" data-view="import">
+          <span>📥</span> 数据导入
+        </a>
+        <a href="#poles" class="nav-item" data-view="poles">
+          <span>🏮</span> 灯杆台账
+        </a>
+        <a href="#chain" class="nav-item" data-view="chain">
+          <span>🔗</span> 巡修链
+        </a>
+        <a href="#anomalies" class="nav-item" data-view="anomalies">
+          <span>⚠️</span> 异常检测
+        </a>
+        <a href="#review" class="nav-item" data-view="review">
+          <span>✅</span> 复核管理
+        </a>
+        <a href="#report" class="nav-item" data-view="report">
+          <span>📋</span> 闭环报告
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <p>v1.0.0 · 本地版</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <h2 id="page-title">数据概览</h2>
+        <div class="header-actions">
+          <button id="btn-refresh" class="btn btn-secondary">刷新</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="view-dashboard" class="view active">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">🏮</div>
+              <div class="stat-info">
+                <div class="stat-label">灯杆总数</div>
+                <div class="stat-value" id="stat-poles">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">📋</div>
+              <div class="stat-info">
+                <div class="stat-label">巡检记录</div>
+                <div class="stat-value" id="stat-inspections">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple">📤</div>
+              <div class="stat-info">
+                <div class="stat-label">派单记录</div>
+                <div class="stat-value" id="stat-dispatches">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">✅</div>
+              <div class="stat-info">
+                <div class="stat-label">完工回执</div>
+                <div class="stat-value" id="stat-completions">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon red">⏰</div>
+              <div class="stat-info">
+                <div class="stat-label">超期未修</div>
+                <div class="stat-value" id="stat-overdue">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon teal">📐</div>
+              <div class="stat-info">
+                <div class="stat-label">闭环率</div>
+                <div class="stat-value" id="stat-close-rate">0%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-panels">
+            <div class="panel">
+              <h3>待办事项</h3>
+              <div class="todo-list">
+                <div class="todo-item">
+                  <span class="todo-count" id="todo-dispatch">0</span>
+                  <span class="todo-label">待派单</span>
+                </div>
+                <div class="todo-item">
+                  <span class="todo-count" id="todo-completion">0</span>
+                  <span class="todo-label">待完工</span>
+                </div>
+                <div class="todo-item">
+                  <span class="todo-count" id="todo-review">0</span>
+                  <span class="todo-label">待复核</span>
+                </div>
+                <div class="todo-item">
+                  <span class="todo-count" id="todo-reviewed">0</span>
+                  <span class="todo-label">已复核</span>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>最近导入批次</h3>
+              <div id="recent-batches" class="batch-list">
+                <p class="empty">暂无数据</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-import" class="view">
+          <div class="import-cards">
+            <div class="import-card">
+              <div class="import-icon">🏮</div>
+              <h3>灯杆台账</h3>
+              <p>CSV 格式：灯杆编号、位置、道路名称、灯具类型、功率、安装日期</p>
+              <div class="file-input-wrapper">
+                <input type="file" id="file-poles" accept=".csv" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('file-poles').click()">
+                  选择 CSV 文件
+                </button>
+                <span id="poles-file-name" class="file-name"></span>
+              </div>
+              <div class="batch-input">
+                <label>批次号（可选，用于防重复）</label>
+                <input type="text" id="batch-poles" placeholder="留空自动生成">
+              </div>
+              <button class="btn btn-success btn-import" id="btn-import-poles">导入</button>
+              <div id="poles-import-result" class="import-result"></div>
+            </div>
+
+            <div class="import-card">
+              <div class="import-icon">📋</div>
+              <h3>巡检记录</h3>
+              <p>JSON 格式数组：巡检单号、灯杆编号、巡检日期、巡检员、故障类型、故障描述、故障等级</p>
+              <div class="file-input-wrapper">
+                <input type="file" id="file-inspections" accept=".json" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('file-inspections').click()">
+                  选择 JSON 文件
+                </button>
+                <span id="inspections-file-name" class="file-name"></span>
+              </div>
+              <div class="batch-input">
+                <label>批次号（可选，用于防重复）</label>
+                <input type="text" id="batch-inspections" placeholder="留空自动生成">
+              </div>
+              <button class="btn btn-success btn-import" id="btn-import-inspections">导入</button>
+              <div id="inspections-import-result" class="import-result"></div>
+            </div>
+
+            <div class="import-card">
+              <div class="import-icon">📤</div>
+              <h3>派单记录</h3>
+              <p>CSV 格式：派单号、巡检单号、灯杆编号、派单日期、派单人、维修班组、截止日期</p>
+              <div class="file-input-wrapper">
+                <input type="file" id="file-dispatches" accept=".csv" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('file-dispatches').click()">
+                  选择 CSV 文件
+                </button>
+                <span id="dispatches-file-name" class="file-name"></span>
+              </div>
+              <div class="batch-input">
+                <label>批次号（可选，用于防重复）</label>
+                <input type="text" id="batch-dispatches" placeholder="留空自动生成">
+              </div>
+              <button class="btn btn-success btn-import" id="btn-import-dispatches">导入</button>
+              <div id="dispatches-import-result" class="import-result"></div>
+            </div>
+
+            <div class="import-card">
+              <div class="import-icon">✅</div>
+              <h3>完工回执</h3>
+              <p>CSV 格式：完工单号、灯杆编号、完工日期、施工人员、维修内容、使用配件、工时</p>
+              <div class="file-input-wrapper">
+                <input type="file" id="file-completions" accept=".csv" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('file-completions').click()">
+                  选择 CSV 文件
+                </button>
+                <span id="completions-file-name" class="file-name"></span>
+              </div>
+              <div class="batch-input">
+                <label>批次号（可选，用于防重复）</label>
+                <input type="text" id="batch-completions" placeholder="留空自动生成">
+              </div>
+              <button class="btn btn-success btn-import" id="btn-import-completions">导入</button>
+              <div id="completions-import-result" class="import-result"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-poles" class="view">
+          <div class="toolbar">
+            <div class="search-box">
+              <input type="text" id="poles-search" placeholder="搜索灯杆编号、位置、道路...">
+              <button class="btn btn-primary" id="btn-search-poles">搜索</button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>灯杆编号</th>
+                  <th>位置</th>
+                  <th>道路名称</th>
+                  <th>灯具类型</th>
+                  <th>功率(W)</th>
+                  <th>巡检数</th>
+                  <th>派单数</th>
+                  <th>完工数</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="poles-table-body">
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="poles-pagination"></div>
+        </div>
+
+        <div id="view-chain" class="view">
+          <div class="chain-search">
+            <input type="text" id="chain-pole-no" placeholder="输入灯杆编号查看巡修链">
+            <button class="btn btn-primary" id="btn-chain-search">查询</button>
+          </div>
+          <div id="chain-result"></div>
+        </div>
+
+        <div id="view-anomalies" class="view">
+          <div class="anomaly-filters">
+            <button class="filter-btn active" data-type="">全部</button>
+            <button class="filter-btn" data-type="overdue">超期未修</button>
+            <button class="filter-btn" data-type="mismatch">完工人不一致</button>
+            <button class="filter-btn" data-type="duplicate">同灯杆多故障</button>
+            <button class="filter-btn" data-type="orphan">坏灯漏修</button>
+            <button class="filter-btn" data-type="no_completion">派单未完工</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>类型</th>
+                  <th>灯杆编号</th>
+                  <th>位置</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody id="anomalies-table-body">
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="anomalies-pagination"></div>
+        </div>
+
+        <div id="view-review" class="view">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>完工单号</th>
+                  <th>灯杆编号</th>
+                  <th>位置</th>
+                  <th>故障类型</th>
+                  <th>施工人员</th>
+                  <th>完工日期</th>
+                  <th>维修内容</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="review-table-body">
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="review-pagination"></div>
+        </div>
+
+        <div id="view-report" class="view">
+          <div class="report-filters">
+            <div class="filter-group">
+              <label>开始日期</label>
+              <input type="date" id="report-start">
+            </div>
+            <div class="filter-group">
+              <label>结束日期</label>
+              <input type="date" id="report-end">
+            </div>
+            <button class="btn btn-primary" id="btn-generate-report">生成报告</button>
+            <button class="btn btn-success" id="btn-export-csv">导出 CSV</button>
+          </div>
+          <div class="report-stats" id="report-stats"></div>
+          <div class="table-container">
+            <table class="data-table small">
+              <thead>
+                <tr>
+                  <th>灯杆编号</th>
+                  <th>位置</th>
+                  <th>巡检单号</th>
+                  <th>故障类型</th>
+                  <th>派单号</th>
+                  <th>完工单号</th>
+                  <th>当前阶段</th>
+                  <th>是否闭环</th>
+                </tr>
+              </thead>
+              <tbody id="report-table-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">复核</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" id="modal-confirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

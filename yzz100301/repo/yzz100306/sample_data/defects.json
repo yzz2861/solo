@@ -1,0 +1,86 @@
+[
+  {
+    "defect_code": "DF-2024-001",
+    "component_code": "PV-001",
+    "defect_type": "热斑",
+    "severity": "critical",
+    "source": "drone",
+    "discovery_time": "2024-01-15T09:30:00",
+    "discovery_image": "/images/df-001.jpg",
+    "position_detail": "组件左上角第3片电池片",
+    "temperature": 85.5,
+    "description": "无人机红外检测发现明显热斑，温度异常升高"
+  },
+  {
+    "defect_code": "DF-2024-002",
+    "component_code": "PV-002",
+    "defect_type": "热斑",
+    "severity": "major",
+    "source": "drone",
+    "discovery_time": "2024-01-15T09:32:00",
+    "discovery_image": "/images/df-002.jpg",
+    "position_detail": "组件中部第12片电池片",
+    "temperature": 72.3,
+    "description": "中等程度热斑，需要进一步检查"
+  },
+  {
+    "defect_code": "DF-2024-003",
+    "component_code": "PV-003",
+    "defect_type": "二极管故障",
+    "severity": "major",
+    "source": "drone",
+    "discovery_time": "2024-01-15T09:35:00",
+    "discovery_image": "/images/df-003.jpg",
+    "position_detail": "组件接线盒处",
+    "temperature": 68.0,
+    "description": "旁路二极管疑似故障"
+  },
+  {
+    "defect_code": "DF-2024-004",
+    "component_code": "PV-005",
+    "defect_type": "热斑",
+    "severity": "minor",
+    "source": "drone",
+    "discovery_time": "2024-01-15T10:05:00",
+    "discovery_image": "/images/df-004.jpg",
+    "position_detail": "组件右下角",
+    "temperature": 55.2,
+    "description": "轻微热斑，建议观察"
+  },
+  {
+    "defect_code": "DF-2024-005",
+    "component_code": "PV-007",
+    "defect_type": "隐裂",
+    "severity": "minor",
+    "source": "drone",
+    "discovery_time": "2024-01-15T10:20:00",
+    "discovery_image": "/images/df-005.jpg",
+    "position_detail": "组件边缘",
+    "temperature": 45.0,
+    "description": "疑似隐裂，需人工确认"
+  },
+  {
+    "defect_code": "DF-2024-006",
+    "component_code": "PV-008",
+    "defect_type": "热斑",
+    "severity": "critical",
+    "source": "drone",
+    "discovery_time": "2024-01-15T10:25:00",
+    "discovery_image": "/images/df-006.jpg",
+    "position_detail": "组件中心区域",
+    "temperature": 92.1,
+    "description": "严重热斑，需紧急处理"
+  },
+  {
+    "defect_code": "DF-2024-007",
+    "component_code": "PV-009",
+    "defect_type": "玻璃破损",
+    "severity": "major",
+    "source": "drone",
+    "discovery_time": "2024-01-15T10:30:00",
+    "discovery_image": "/images/df-007.jpg",
+    "position_detail": "组件左下角",
+    "temperature": 42.0,
+    "description": "玻璃表面有裂纹"
+  }
+]

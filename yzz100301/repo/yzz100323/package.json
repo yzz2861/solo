@@ -1,0 +1,23 @@
+{
+  "name": "yzz100323",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "csv-parser": "^3.2.1",
+    "dayjs": "^1.11.21",
+    "express": "^5.2.1",
+    "json2csv": "^6.0.0-alpha.2",
+    "multer": "^2.1.1"
+  }
+}

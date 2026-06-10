@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "water-repair"
+version = "0.1.0"
+description = "水务抢修单审计 CLI：串联派单、停水通知、短信回执与复核"
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.0",
+]
+
+[project.scripts]
+water-repair = "water_repair.cli:cli"

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>港口危化品堆场管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>港口危化品堆场管理系统</h1>
+            <div class="header-actions">
+                <button id="btn-export-report" class="btn btn-primary">导出交班报告</button>
+                <button id="btn-clear-all" class="btn btn-danger">清空所有数据</button>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="import">数据导入</button>
+            <button class="tab-btn" data-tab="stacks">堆位台账</button>
+            <button class="tab-btn" data-tab="declarations">入场申报</button>
+            <button class="tab-btn" data-tab="containers">货箱追踪</button>
+            <button class="tab-btn" data-tab="anomalies">异常检测</button>
+            <button class="tab-btn" data-tab="lockdowns">封控记录</button>
+        </nav>
+
+        <main>
+            <section id="tab-import" class="tab-content active">
+                <h2>数据导入</h2>
+                <p class="hint">支持重复导入，系统会自动去重，不会重复占位。</p>
+                
+                <div class="import-grid">
+                    <div class="import-card">
+                        <h3>堆位台账 CSV</h3>
+                        <p class="hint">字段：stackId, name, row, col, zoneType, capacity</p>
+                        <p class="hint">zoneType: A（A类危化区）/ B（B类危化区）/ N（普通区）</p>
+                        <input type="file" id="file-stacks" accept=".csv">
+                        <div class="import-status" id="status-stacks">未导入</div>
+                    </div>
+
+                    <div class="import-card">
+                        <h3>入场申报 JSON</h3>
+                        <p class="hint">字段：containerId, cargoName, hazardClass, declaredStack, declareTime, weight</p>
+                        <p class="hint">hazardClass: A / B / N</p>
+                        <input type="file" id="file-declarations" accept=".json">
+                        <div class="import-status" id="status-declarations">未导入</div>
+                    </div>
+
+                    <div class="import-card">
+                        <h3>封控记录 JSON</h3>
+                        <p class="hint">字段：lockdownId, stackId, reason, startTime, endTime, status</p>
+                        <p class="hint">status: active / released</p>
+                        <input type="file" id="file-lockdowns" accept=".json">
+                        <div class="import-status" id="status-lockdowns">未导入</div>
+                    </div>
+                </div>
+
+                <div class="sample-data">
+                    <h3>快速体验：加载示例数据</h3>
+                    <button id="btn-load-sample" class="btn btn-secondary">加载示例数据</button>
+                </div>
+            </section>
+
+            <section id="tab-stacks" class="tab-content">
+                <h2>堆位台账</h2>
+                <div class="toolbar">
+                    <input type="text" id="search-stacks" placeholder="搜索堆位号或名称...">
+                    <select id="filter-zone-type">
+                        <option value="">全部区域类型</option>
+                        <option value="A">A类危化区</option>
+                        <option value="B">B类危化区</option>
+                        <option value="N">普通区</option>
+                    </select>
+                    <span class="stat">共 <span id="stat-stacks">0</span> 个堆位</span>
+                </div>
+                <div class="table-container">
+                    <table id="table-stacks">
+                        <thead>
+                            <tr>
+                                <th>堆位编号</th>
+                                <th>名称</th>
+                                <th>行</th>
+                                <th>列</th>
+                                <th>区域类型</th>
+                                <th>容量</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-declarations" class="tab-content">
+                <h2>入场申报</h2>
+                <div class="toolbar">
+                    <input type="text" id="search-declarations" placeholder="搜索箱号或货名...">
+                    <select id="filter-declaration-status">
+                        <option value="">全部状态</option>
+                        <option value="pending">待入场</option>
+                        <option value="entered">已入场</option>
+                        <option value="released">已释放</option>
+                    </select>
+                    <span class="stat">共 <span id="stat-declarations">0</span> 条申报</span>
+                </div>
+                <div class="table-container">
+                    <table id="table-declarations">
+                        <thead>
+                            <tr>
+                                <th>箱号</th>
+                                <th>货名</th>
+                                <th>危险类别</th>
+                                <th>申报堆位</th>
+                                <th>申报时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-containers" class="tab-content">
+                <h2>货箱状态追踪</h2>
+                <div class="toolbar">
+                    <input type="text" id="search-containers" placeholder="搜索箱号...">
+                    <select id="filter-container-status">
+                        <option value="">全部状态</option>
+                        <option value="declared">已申报</option>
+                        <option value="entered">已入场</option>
+                        <option value="reviewed">已复核</option>
+                        <option value="released">已释放</option>
+                    </select>
+                    <span class="stat">共 <span id="stat-containers">0</span> 个货箱</span>
+                </div>
+                <div class="table-container">
+                    <table id="table-containers">
+                        <thead>
+                            <tr>
+                                <th>箱号</th>
+                                <th>货名</th>
+                                <th>危险类别</th>
+                                <th>占用堆位</th>
+                                <th>入场时间</th>
+                                <th>状态</th>
+                                <th>复核意见</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-anomalies" class="tab-content">
+                <h2>异常检测</h2>
+                <div class="anomaly-stats">
+                    <div class="anomaly-card distance">
+                        <h4>隔离距离不足</h4>
+                        <div class="count" id="count-distance">0</div>
+                        <p>A类与B类货箱间距过近</p>
+                    </div>
+                    <div class="anomaly-card lockdown">
+                        <h4>封控堆位误用</h4>
+                        <div class="count" id="count-lockdown">0</div>
+                        <p>货箱占用封控堆位</p>
+                    </div>
+                    <div class="anomaly-card mismatch">
+                        <h4>类别不一致</h4>
+                        <div class="count" id="count-mismatch">0</div>
+                        <p>申报类别与台账不符</p>
+                    </div>
+                </div>
+
+                <div class="anomaly-section">
+                    <h3>隔离距离不足 <span class="badge" id="badge-distance">0</span></h3>
+                    <div class="table-container">
+                        <table id="table-distance-anomalies">
+                            <thead>
+                                <tr>
+                                    <th>箱号A</th>
+                                    <th>类别A</th>
+                                    <th>堆位A</th>
+                                    <th>箱号B</th>
+                                    <th>类别B</th>
+                                    <th>堆位B</th>
+                                    <th>距离</th>
+                                    <th>安全距离</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="anomaly-section">
+                    <h3>封控堆位误用 <span class="badge" id="badge-lockdown">0</span></h3>
+                    <div class="table-container">
+                        <table id="table-lockdown-anomalies">
+                            <thead>
+                                <tr>
+                                    <th>箱号</th>
+                                    <th>占用堆位</th>
+                                    <th>封控原因</th>
+                                    <th>封控开始</th>
+                                    <th>封控结束</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="anomaly-section">
+                    <h3>申报类别与台账不一致 <span class="badge" id="badge-mismatch">0</span></h3>
+                    <div class="table-container">
+                        <table id="table-mismatch-anomalies">
+                            <thead>
+                                <tr>
+                                    <th>箱号</th>
+                                    <th>申报类别</th>
+                                    <th>堆位</th>
+                                    <th>台账区域类型</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-lockdowns" class="tab-content">
+                <h2>封控记录</h2>
+                <div class="toolbar">
+                    <select id="filter-lockdown-status">
+                        <option value="">全部状态</option>
+                        <option value="active">封控中</option>
+                        <option value="released">已解除</option>
+                    </select>
+                    <span class="stat">共 <span id="stat-lockdowns">0</span> 条封控</span>
+                </div>
+                <div class="table-container">
+                    <table id="table-lockdowns">
+                        <thead>
+                            <tr>
+                                <th>封控编号</th>
+                                <th>堆位编号</th>
+                                <th>原因</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal-review" class="modal">
+        <div class="modal-content">
+            <h3>复核意见</h3>
+            <div class="form-group">
+                <label>箱号：</label>
+                <span id="review-container-id"></span>
+            </div>
+            <div class="form-group">
+                <label>当前状态：</label>
+                <span id="review-current-status"></span>
+            </div>
+            <div class="form-group">
+                <label for="review-opinion">复核意见：</label>
+                <textarea id="review-opinion" rows="4" placeholder="请输入复核意见..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>复核结果：</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="review-result" value="pass" checked> 通过</label>
+                    <label><input type="radio" name="review-result" value="reject"> 驳回</label>
+                    <label><input type="radio" name="review-result" value="pending"> 待处理</label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btn-cancel-review">取消</button>
+                <button class="btn btn-primary" id="btn-save-review">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-report" class="modal">
+        <div class="modal-content modal-large">
+            <h3>交班报告</h3>
+            <div id="report-content" class="report-content"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btn-close-report">关闭</button>
+                <button class="btn btn-primary" id="btn-download-report">下载报告</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

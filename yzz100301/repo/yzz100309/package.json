@@ -1,0 +1,22 @@
+{
+  "name": "cryo-tracker",
+  "version": "1.0.0",
+  "description": "实验室样本冻存管理 CLI 工具 - 台账、移动、复核、冲突检测",
+  "main": "src/index.js",
+  "bin": {
+    "cryo": "bin/cryo-cli.js"
+  },
+  "scripts": {
+    "test": "node test/run-tests.js",
+    "start": "node bin/cryo-cli.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@json2csv/plainjs": "^7.0.6",
+    "commander": "^15.0.0",
+    "csv-parser": "^3.2.1"
+  }
+}

@@ -1,0 +1,24 @@
+
+paths:
+  plans_dir: data/plans
+  records_dir: data/records
+  water_dir: data/water
+  output_dir: output
+
+thresholds:
+  feed_deviation_pct: 10.0
+  water_temp_min: 18.0
+  water_temp_max: 28.0
+  water_do_min: 5.0
+  water_ph_min: 7.5
+  water_ph_max: 8.5
+  water_salinity_min: 20.0
+  water_salinity_max: 35.0
+
+import:
+  dedup_by: record_id
+  state_file: .import_state.json
+
+report:
+  title: 养殖场投喂异常分析报告
+  lang: zh-CN

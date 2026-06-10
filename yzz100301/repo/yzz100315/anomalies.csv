@@ -1,0 +1,7 @@
+﻿设备编号,异常类型,异常描述,最终结论,复核状态,复核人,复核意见,不一致类型,验收人列表,详细说明,操作人员,验收人,租出日期,归还日期,起始小时数,租出来源,租出行号,结束小时数,归还来源,归还行号
+TR-001,inspector_inconsistency,发现 2 处验收人不一致异常,存在异常(inspector_inconsistency)，需人工处理,未复核,,,multiple_inspectors,"李四, 张三","同一设备存在多名验收人: 李四, 张三",,,,,,,,,,
+TR-001,inspector_inconsistency,发现 2 处验收人不一致异常,存在异常(inspector_inconsistency)，需人工处理,未复核,,,operator_inspector_diff,,操作人员(张三)与验收人(李四)不一致,张三,李四,2024-06-11,2024-06-20,,,,,,
+TR-002,inspector_inconsistency,发现 1 处验收人不一致异常,存在异常(inspector_inconsistency)，需人工处理,未复核,,,multiple_inspectors,"李四, 赵六","同一设备存在多名验收人: 李四, 赵六",,,,,,,,,,
+TR-003,hours_inverted,发现 1 处小时数倒挂异常,"存在异常(hours_inverted, inspector_inconsistency)，已人工复核通过",通过,陈主管,经核实为表填写错误，实际小时数为2150.0,,,,,,2024-06-02,2024-06-09,2100.3,lease_out_01.csv,4,2050.0,return_check_01.csv,4
+TR-003,inspector_inconsistency,发现 1 处验收人不一致异常,"存在异常(hours_inverted, inspector_inconsistency)，已人工复核通过",通过,陈主管,经核实为表填写错误，实际小时数为2150.0,operator_inspector_diff,,操作人员(王五)与验收人(赵六)不一致,王五,赵六,2024-06-02,2024-06-09,,,,,,
+TR-005,inspector_inconsistency,发现 1 处验收人不一致异常,存在异常(inspector_inconsistency)，需人工处理,未复核,,,operator_inspector_diff,,操作人员(张三)与验收人(王五)不一致,张三,王五,2024-06-05,2024-06-15,,,,,,

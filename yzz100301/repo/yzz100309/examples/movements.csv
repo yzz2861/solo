@@ -1,0 +1,11 @@
+sampleId,fromBox,fromPosition,toBox,toPosition,moveOperator,moveDate,reviewer,reviewDate,batchId,action,notes
+S003,BOX-A,A2,BOX-B,C1,张三,2024-02-01,李四,2024-02-02,BATCH001,move,正常移库
+S004,BOX-A,B1,BOX-B,C2,王五,2024-02-03,王五,2024-02-03,BATCH001,move,复核人与移动人相同
+S005,BOX-A,B2,BOX-B,A2,赵六,2024-02-05,张三,2024-02-06,BATCH001,move,目标位置已存在样本
+S003,BOX-A,A2,BOX-B,C1,张三,2024-02-01,李四,2024-02-02,BATCH001,move,重复移动-同一批次
+,BOX-A,A3,BOX-B,D1,张三,2024-02-07,李四,2024-02-08,BATCH002,move,空样本编号
+S999,BOX-A,Z1,BOX-B,Z1,王五,2024-02-09,赵六,2024-02-10,BATCH002,move,台账中不存在的样本
+S006,BOX-B,A1,BOX-A,A3,李四,2024-02-11,王五,2024-02-12,BATCH002,move,从B盒移到A盒
+S001,BOX-A,A1,BOX-B,D2,张三,2024-02-13,李四,2024-02-14,BATCH003,discard,废弃样本
+S007,BOX-B,A2,BOX-A,C1,赵六,2024-02-15,张三,2024-02-16,BATCH003,move,正常移动
+S008,BOX-B,B1,BOX-A,A1,王五,2024-02-17,李四,2024-02-18,BATCH003,move,移动到A1（原S001废弃后的位置）

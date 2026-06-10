@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中央厨房批次追溯系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <h1>🏭 中央厨房批次追溯系统</h1>
+                <span class="subtitle">原料 · 加工 · 配送 · 复核 全链路追踪</span>
+            </div>
+            <div class="header-right">
+                <span id="currentDate" class="current-date"></span>
+                <button id="clearAllBtn" class="btn btn-danger btn-sm">清空数据</button>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">总览看板</span>
+                </li>
+                <li class="nav-item" data-tab="import">
+                    <span class="nav-icon">📥</span>
+                    <span class="nav-text">数据导入</span>
+                </li>
+                <li class="nav-item" data-tab="trace">
+                    <span class="nav-icon">🔗</span>
+                    <span class="nav-text">批次追溯</span>
+                </li>
+                <li class="nav-item" data-tab="risk">
+                    <span class="nav-icon">⚠️</span>
+                    <span class="nav-text">风险筛查</span>
+                    <span id="riskBadge" class="badge hidden">0</span>
+                </li>
+                <li class="nav-item" data-tab="review">
+                    <span class="nav-icon">✅</span>
+                    <span class="nav-text">复核管理</span>
+                </li>
+                <li class="nav-item" data-tab="export">
+                    <span class="nav-icon">📤</span>
+                    <span class="nav-text">报告导出</span>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="dashboard-tab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card material">
+                        <div class="stat-icon">🥬</div>
+                        <div class="stat-info">
+                            <h3>原料批次</h3>
+                            <p id="statMaterialCount">0</p>
+                            <span class="stat-label">条记录</span>
+                        </div>
+                    </div>
+                    <div class="stat-card processing">
+                        <div class="stat-icon">🍳</div>
+                        <div class="stat-info">
+                            <h3>加工批次</h3>
+                            <p id="statProcessingCount">0</p>
+                            <span class="stat-label">条记录</span>
+                        </div>
+                    </div>
+                    <div class="stat-card feedback">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <h3>门店反馈</h3>
+                            <p id="statFeedbackCount">0</p>
+                            <span class="stat-label">条记录</span>
+                        </div>
+                    </div>
+                    <div class="stat-card risk">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-info">
+                            <h3>风险项</h3>
+                            <p id="statRiskCount">0</p>
+                            <span class="stat-label">待处理</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <h2>最近批次</h2>
+                    <div id="recentBatches" class="recent-batches">
+                        <p class="empty-state">暂无数据，请先导入批次记录</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <h2>风险概览</h2>
+                    <div id="riskOverview" class="risk-overview">
+                        <p class="empty-state">暂无风险项</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="import-tab" class="tab-content">
+                <h2>数据导入</h2>
+                <p class="tab-desc">支持导入原料台账 CSV、加工记录 JSON 和门店反馈 CSV，重复导入同批次不会重复生成风险。</p>
+
+                <div class="import-sections">
+                    <div class="import-card">
+                        <div class="import-header">
+                            <span class="import-icon">🥬</span>
+                            <h3>原料台账 CSV</h3>
+                        </div>
+                        <div class="import-body">
+                            <p class="import-hint">CSV 列：批次号,原料名称,数量,单位,供应商,入库日期,过期日期</p>
+                            <input type="file" id="materialFile" accept=".csv" class="file-input">
+                            <label for="materialFile" class="btn btn-primary">选择文件</label>
+                            <span id="materialFileName" class="file-name">未选择文件</span>
+                        </div>
+                        <div class="import-footer">
+                            <button id="importMaterialBtn" class="btn btn-success" disabled>导入</button>
+                            <span id="materialImportResult" class="import-result"></span>
+                        </div>
+                    </div>
+
+                    <div class="import-card">
+                        <div class="import-header">
+                            <span class="import-icon">🍳</span>
+                            <h3>加工记录 JSON</h3>
+                        </div>
+                        <div class="import-body">
+                            <p class="import-hint">JSON 数组，字段：batchNo, productName, materialBatchNos, processDate, quantity, deliveryStores</p>
+                            <input type="file" id="processingFile" accept=".json" class="file-input">
+                            <label for="processingFile" class="btn btn-primary">选择文件</label>
+                            <span id="processingFileName" class="file-name">未选择文件</span>
+                        </div>
+                        <div class="import-footer">
+                            <button id="importProcessingBtn" class="btn btn-success" disabled>导入</button>
+                            <span id="processingImportResult" class="import-result"></span>
+                        </div>
+                    </div>
+
+                    <div class="import-card">
+                        <div class="import-header">
+                            <span class="import-icon">🏪</span>
+                            <h3>门店反馈 CSV</h3>
+                        </div>
+                        <div class="import-body">
+                            <p class="import-hint">CSV 列：反馈ID,门店名称,配送批次号,反馈日期,反馈内容,反馈类型</p>
+                            <input type="file" id="feedbackFile" accept=".csv" class="file-input">
+                            <label for="feedbackFile" class="btn btn-primary">选择文件</label>
+                            <span id="feedbackFileName" class="file-name">未选择文件</span>
+                        </div>
+                        <div class="import-footer">
+                            <button id="importFeedbackBtn" class="btn btn-success" disabled>导入</button>
+                            <span id="feedbackImportResult" class="import-result"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sample-data-section">
+                    <h3>快速生成示例数据</h3>
+                    <p>点击下方按钮生成完整的示例数据，方便体验系统功能。</p>
+                    <button id="generateSampleBtn" class="btn btn-warning">生成示例数据</button>
+                </div>
+            </section>
+
+            <section id="trace-tab" class="tab-content">
+                <h2>批次追溯</h2>
+                <p class="tab-desc">按批次号串联原料入库、加工、配送、复核全链路状态。</p>
+
+                <div class="search-bar">
+                    <input type="text" id="traceSearch" placeholder="搜索批次号、原料名称、产品名称..." class="search-input">
+                    <select id="traceFilter" class="filter-select">
+                        <option value="all">全部类型</option>
+                        <option value="material">原料批次</option>
+                        <option value="processing">加工批次</option>
+                    </select>
+                    <button id="traceSearchBtn" class="btn btn-primary">搜索</button>
+                </div>
+
+                <div id="traceResults" class="trace-results">
+                    <p class="empty-state">请搜索或导入数据后查看</p>
+                </div>
+            </section>
+
+            <section id="risk-tab" class="tab-content">
+                <h2>风险筛查</h2>
+                <p class="tab-desc">自动检测原料过期、加工批次缺来源、门店反馈与配送批次不一致等问题。</p>
+
+                <div class="risk-filters">
+                    <button class="risk-filter-btn active" data-risk="all">全部风险</button>
+                    <button class="risk-filter-btn" data-risk="expired">原料过期</button>
+                    <button class="risk-filter-btn" data-risk="missing-source">加工缺来源</button>
+                    <button class="risk-filter-btn" data-risk="mismatch">批次不一致</button>
+                    <button class="risk-filter-btn" data-risk="near-expiry">临期预警</button>
+                </div>
+
+                <div id="riskResults" class="risk-results">
+                    <p class="empty-state">暂无风险项</p>
+                </div>
+            </section>
+
+            <section id="review-tab" class="tab-content">
+                <h2>复核管理</h2>
+                <p class="tab-desc">质检员可在此填写复核意见，标记风险处理状态。</p>
+
+                <div class="review-filters">
+                    <select id="reviewStatusFilter" class="filter-select">
+                        <option value="all">全部状态</option>
+                        <option value="pending">待复核</option>
+                        <option value="reviewed">已复核</option>
+                    </select>
+                    <select id="reviewRiskFilter" class="filter-select">
+                        <option value="all">全部风险等级</option>
+                        <option value="high">高风险</option>
+                        <option value="medium">中风险</option>
+                        <option value="low">低风险</option>
+                    </select>
+                </div>
+
+                <div id="reviewList" class="review-list">
+                    <p class="empty-state">暂无待复核项</p>
+                </div>
+            </section>
+
+            <section id="export-tab" class="tab-content">
+                <h2>报告导出</h2>
+                <p class="tab-desc">导出批次追溯报告，支持多种格式。</p>
+
+                <div class="export-options">
+                    <div class="export-card">
+                        <h3>📋 批次追溯报告</h3>
+                        <p>包含指定批次的完整追溯链路信息</p>
+                        <div class="export-form">
+                            <input type="text" id="exportBatchNo" placeholder="输入批次号（留空导出全部）">
+                            <button id="exportTraceBtn" class="btn btn-primary">导出追溯报告</button>
+                        </div>
+                    </div>
+
+                    <div class="export-card">
+                        <h3>⚠️ 风险分析报告</h3>
+                        <p>包含所有风险项及处理状态统计</p>
+                        <button id="exportRiskBtn" class="btn btn-warning">导出风险报告</button>
+                    </div>
+
+                    <div class="export-card">
+                        <h3>📊 全量数据导出</h3>
+                        <p>导出系统中所有批次数据为 JSON</p>
+                        <button id="exportAllBtn" class="btn btn-success">导出全部数据</button>
+                    </div>
+                </div>
+
+                <div class="export-preview">
+                    <h3>导出预览</h3>
+                    <div id="exportPreviewContent" class="export-preview-content">
+                        <p class="empty-state">选择导出类型后预览</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="reviewModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>复核意见</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>批次号</label>
+                    <input type="text" id="reviewBatchNo" readonly>
+                </div>
+                <div class="form-group">
+                    <label>风险等级</label>
+                    <select id="reviewRiskLevel">
+                        <option value="high">高风险</option>
+                        <option value="medium">中风险</option>
+                        <option value="low">低风险</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>复核人</label>
+                    <input type="text" id="reviewerName" placeholder="请输入复核人姓名">
+                </div>
+                <div class="form-group">
+                    <label>复核意见</label>
+                    <textarea id="reviewOpinion" rows="5" placeholder="请填写复核意见..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>处理结果</label>
+                    <select id="reviewResult">
+                        <option value="pending">待处理</option>
+                        <option value="resolved">已解决</option>
+                        <option value="accepted">可接受</option>
+                        <option value="rejected">驳回</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelReview">取消</button>
+                <button class="btn btn-primary" id="saveReview">保存复核</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
