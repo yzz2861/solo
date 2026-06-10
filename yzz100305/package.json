@@ -1,0 +1,21 @@
+{
+  "name": "stockout-replacement-reconciliation",
+  "version": "1.0.0",
+  "description": "社区团购缺货替换对账系统 - 订单/替换/退款/复核全流程管理",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "cors": "^2.8.6",
+    "csv-parser": "^3.2.1",
+    "express": "^5.2.1",
+    "multer": "^2.1.1"
+  }
+}
