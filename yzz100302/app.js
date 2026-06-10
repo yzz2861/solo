@@ -287,7 +287,9 @@
     }
 
     function detectAnomalies() {
-        const containers = getContainers().filter(c => c.status === 'entered' || c.status === 'reviewed');
+        const allContainers = getContainers();
+        const containers = allContainers.filter(c => c.status === 'entered' || c.status === 'reviewed');
+        const mismatchCandidates = allContainers.filter(c => c.status !== 'released' && c.currentStack);
         const stacks = getStacks();
         const lockdowns = getLockdowns().filter(l => l.status === 'active');
         const declarations = getDeclarations();
@@ -359,7 +361,7 @@
         });
 
         const mismatchAnomalies = [];
-        containers.forEach(c => {
+        mismatchCandidates.forEach(c => {
             if (!c.currentStack) return;
             const stack = stackMap.get(c.currentStack);
             if (!stack) return;
@@ -373,11 +375,11 @@
             if (hazard === 'A' && zone !== 'A') {
                 mismatch = true;
                 note = 'A类危化品应存放于A类危化区';
-            } else if (hazard === 'B' && zone !== 'A' && zone !== 'B') {
+            } else if (hazard === 'B' && zone !== 'B') {
                 mismatch = true;
-                note = 'B类危化品应存放于A类或B类危化区';
-            } else if (hazard === 'N' && (zone === 'A' || zone === 'B')) {
-                mismatch = false;
+                note = zone === 'A'
+                    ? 'B类危化品落入A类危化区，类别不一致'
+                    : 'B类危化品应存放于B类危化区';
             }
 
             if (mismatch) {
