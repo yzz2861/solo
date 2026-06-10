@@ -1,0 +1,15 @@
+{
+  "name": "ticket-sla-audit-system",
+  "version": "1.0.0",
+  "description": "客服工单SLA审计系统 - 全栈应用",
+  "private": true,
+  "scripts": {
+    "start": "bash start.sh",
+    "dev": "bash start.sh",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev"
+  },
+  "keywords": ["sla", "audit", "ticket", "customer-service"],
+  "license": "MIT"
+}
