@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0f2a24;
+  color: #1f2937;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: "ZCOOL XiaoWei", serif;
+  }
+  .font-mono,
+  table td.num,
+  table th.num,
+  .price-big {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-semibold text-sm border-2 bg-white text-ink transition-all active:translate-y-0.5 active:shadow-press select-none;
+    border-color: rgba(55, 65, 81, 0.8);
+  }
+  .btn-primary {
+    @apply btn border-brand-500 bg-brand-500 text-white hover:bg-brand-400 hover:border-brand-400;
+  }
+  .btn-warn {
+    @apply btn border-warn bg-warn text-white hover:bg-warn-light hover:border-warn-light;
+  }
+  .btn-danger {
+    @apply btn border-danger bg-danger text-white hover:bg-danger-light hover:border-danger-light;
+  }
+  .btn-success {
+    @apply btn border-success bg-success text-white hover:bg-success-light hover:border-success-light;
+  }
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent text-white hover:bg-white/10;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded;
+  }
+  .badge-error {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: rgb(239, 68, 68);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    @apply badge;
+  }
+  .badge-warn {
+    background-color: rgba(255, 122, 69, 0.15);
+    color: rgb(178, 74, 33);
+    border: 1px solid rgba(255, 122, 69, 0.4);
+    @apply badge;
+  }
+  .badge-info {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: rgb(29, 78, 216);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    @apply badge;
+  }
+  .badge-success {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: rgb(21, 128, 61);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    @apply badge;
+  }
+  .chip {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+  .panel {
+    background-color: #FAFAF5;
+    border: 2px solid rgba(15, 42, 36, 0.1);
+    @apply rounded-lg;
+  }
+  .input-cell {
+    background-color: rgba(255, 255, 255, 0.6);
+    @apply w-full min-w-[80px] px-2 py-1.5 border border-transparent rounded text-sm transition-colors;
+  }
+  .input-cell:hover {
+    border-color: rgba(15, 42, 36, 0.3);
+  }
+  .input-cell:focus {
+    border-color: rgb(15, 42, 36);
+    @apply outline-none;
+    box-shadow: 0 0 0 1px rgba(15, 42, 36, 0.3);
+  }
+  .th-cell {
+    background-color: rgba(15, 42, 36, 0.08);
+    border-bottom: 2px solid rgba(15, 42, 36, 0.15);
+    color: rgb(55, 65, 81);
+    @apply px-3 py-2.5 text-left text-xs font-semibold whitespace-nowrap;
+  }
+  .paper-bg {
+    background-color: #fff8e7;
+    background-image: linear-gradient(
+        135deg,
+        rgba(255, 247, 207, 0.4) 0%,
+        rgba(255, 248, 231, 0) 50%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(200, 170, 100, 0.03) 0px,
+        rgba(200, 170, 100, 0.03) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+  }
+  .stamp-printed {
+    @apply absolute top-4 right-4 px-3 py-1 text-danger border-2 border-danger rounded font-bold -rotate-12 text-sm opacity-90;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ================== 打印样式 ================== */
+@page {
+  size: A4;
+  margin: 8mm;
+}
+@page sticker-100 {
+  size: 100mm 150mm;
+  margin: 2mm;
+}
+@page thermal {
+  size: 60mm auto;
+  margin: 2mm;
+}
+
+@media print {
+  html,
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .tag-unconfirmed {
+    display: none !important;
+  }
+  .price-tag-print {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-page-split {
+    page-break-after: always;
+    break-after: page;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
