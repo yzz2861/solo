@@ -1,0 +1,105 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                              字幕时间轴修补报告                               ║
+║                        SUBTITLE PATCH REPORT                         ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  报告生成时间 : 2026-06-11 00:00:47
+  处理文件数   : 3
+  总操作数     : 11
+  参考字幕文件 : /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.zh.srt
+  备份目录     : /Users/bill/Documents/solo/workspaces/yzz100370/_subtitle_backups/patch_20260611_000047_demo_run
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  一、各语言行数差异总览（方便判断是否漏段）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  语言                 修补前       修补后        变化状态        
+  ────────────────────────────────────────────────────
+  en                  23        22        -1有变化       
+  ja                  11        11        +0✓ 一致      
+  zh                  16        16        +0✓ 一致      
+
+  ▶ 与参考语言对比：
+    ⚠ ja vs en: 差 -11 行（建议检查是否漏段旁白）
+    ⚠ zh vs en: 差 -6 行（建议检查是否漏段旁白）
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  二、各文件修补明细
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [1] ep01_handmade_market.en.srt
+      语言: en  |  路径: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.en.srt
+      行数: 23 → 22  (-1)
+      重叠: 0 → 0  |  越界: 0 → 0
+      合并: 1 次 | 移位: 23 行
+      平均偏移量: -250ms
+
+      操作日志：
+         #  类型            严重度           描述
+      ────  ──────────────────────────  ──────────────────────────────
+         1  整体偏移          【已自动调整】       整体时间偏移 250ms
+         2  行数差异提醒        【建议检查】        行数差异：23 vs 参考 16（差+7行），多出的行请人工确认是否重复
+         3  ALIGN_SKIP    【已处理】         行数差异过大（44%），跳过细粒度时间对齐，仅保留整体偏移
+         4  合并短片段         【已处理】         合并第2和3行
+         5  填补空白间隔        【已处理】         第18行：填补6.0s空白间隔
+         6  LARGE_SEGMENT_GAP【已处理】         第19→20行之间有1h4m12.4s的大段空白（可能是片尾/广告跳转），保持不修改
+
+  [2] ep01_handmade_market.ja.vtt
+      语言: ja  |  路径: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.ja.vtt
+      行数: 11 → 11  (+0)
+      重叠: 0 → 0  |  越界: 0 → 0
+      合并: 0 次 | 移位: 11 行
+      平均偏移量: 2.5s
+
+      操作日志：
+         #  类型            严重度           描述
+      ────  ──────────────────────────  ──────────────────────────────
+         1  整体偏移          【已自动调整】       整体时间偏移 -2.5s
+         2  行数差异提醒        【建议检查】        行数差异：11 vs 参考 16（差-5行），缺少的行请人工确认是否漏句
+         3  ALIGN_SKIP    【已处理】         行数差异过大（31%），跳过细粒度时间对齐，仅保留整体偏移
+         4  LARGE_SEGMENT_GAP【已处理】         第10→11行之间有1h4m34.0s的大段空白（可能是片尾/广告跳转），保持不修改
+
+  [3] ep01_handmade_market.zh.srt
+      语言: zh  |  路径: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.zh.srt
+      行数: 16 → 16  (+0)
+      重叠: 0 → 0  |  越界: 0 → 0
+      合并: 0 次 | 移位: 0 行
+
+      操作日志：
+         #  类型            严重度           描述
+      ────  ──────────────────────────  ──────────────────────────────
+         1  LARGE_SEGMENT_GAP【已处理】         第13→14行之间有1h4m35.6s的大段空白（可能是片尾/广告跳转），保持不修改
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  三、复查指引（剪辑师请按此清单回到视频确认）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   1. [ ] 视频「ep01_handmade_market.en.srt」（en）：行数变化 -1，确认无漏段或重复
+   2. [ ] 视频「ep01_handmade_market.en.srt」（en）：抽查 1 处合并后的字幕完整性
+   3. [ ] 视频「ep01_handmade_market.ja.vtt」（ja）：整体偏移 2.5s，抽查口型同步
+   4. [ ] 视频「ep01_handmade_market.ja.vtt」（ja）：行数差异：11 vs 参考 16（差-5行），缺少的行请人工确认是否漏句
+   5. [ ] 对比参考语言，抽查片头/片尾/中间转场位置的时间轴是否同步
+   6. [ ] 快进全片一遍，确认无明显空白过长或字幕闪退的情况
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  四、备份信息（如需恢复请参照）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  备份会话 : patch_20260611_000047_demo_run
+  备份目录 : /Users/bill/Documents/solo/workspaces/yzz100370/_subtitle_backups/patch_20260611_000047_demo_run
+  备份数量 : 3 个文件
+
+  各文件备份：
+    [1] ep01_handmade_market.en.srt
+        ← 原: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.en.srt
+        → 备: /Users/bill/Documents/solo/workspaces/yzz100370/_subtitle_backups/patch_20260611_000047_demo_run/en/ep01_handmade_market.en.srt
+    [2] ep01_handmade_market.ja.vtt
+        ← 原: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.ja.vtt
+        → 备: /Users/bill/Documents/solo/workspaces/yzz100370/_subtitle_backups/patch_20260611_000047_demo_run/ja/ep01_handmade_market.ja.vtt
+    [3] ep01_handmade_market.zh.srt
+        ← 原: /Users/bill/Documents/solo/workspaces/yzz100370/test_samples/ep01_handmade_market.zh.srt
+        → 备: /Users/bill/Documents/solo/workspaces/yzz100370/_subtitle_backups/patch_20260611_000047_demo_run/zh/ep01_handmade_market.zh.srt
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  报告结束 | 如有疑问请保留备份目录后联系技术支持  ║
+╚══════════════════════════════════════════════════════════════════════╝
