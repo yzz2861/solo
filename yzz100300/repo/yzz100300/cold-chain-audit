@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+"""冷链周转箱扫码盘点 CLI - 可执行脚本。"""
+
+import sys
+import os
+
+# 确保能找到包
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from cold_chain_audit.cli import main
+
+if __name__ == "__main__":
+    main()
