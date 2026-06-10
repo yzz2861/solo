@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    @apply bg-background text-primary font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 select-none;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-light active:scale-[0.98] shadow-sm hover:shadow-md;
+  }
+  .btn-accent {
+    @apply bg-accent text-primary-dark hover:bg-accent-light active:scale-[0.98] shadow-sm hover:shadow-md;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-primary hover:bg-primary/5 border border-transparent hover:border-primary/10;
+  }
+  .btn-outline {
+    @apply bg-transparent text-primary border border-primary/20 hover:bg-primary/5;
+  }
+  .btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600 active:scale-[0.98];
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  .input {
+    @apply w-full px-3 py-2 border border-border rounded-md bg-surface text-sm text-primary placeholder-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition;
+  }
+  .textarea {
+    @apply w-full px-3 py-2 border border-border rounded-md bg-surface text-sm text-primary placeholder-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition resize-y;
+  }
+  .card {
+    @apply bg-surface border border-border rounded-xl shadow-sm;
+  }
+  .card-header {
+    @apply px-5 py-4 border-b border-border;
+  }
+  .card-body {
+    @apply p-5;
+  }
+  .chip {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 95, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 58, 95, 0.35);
+}
