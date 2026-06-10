@@ -1,0 +1,7 @@
+﻿设备编号,状态,异常数量,异常说明,总加油量(升),工作小时数,油耗率(升/小时),租出记录数,加油记录数,归还记录数,租出原始位置,加油原始位置,归还原始位置,最新复核人,最新复核状态,复核意见,最终结论,导出时间
+TR-001,待复核,1,[inspector_inconsistency] 发现 2 处验收人不一致异常,185.50,149.50,1.24,2,3,2,lease_out_01.csv:第2行; lease_out_02_late.csv:第3行,fuel_records_01.json:第1行; fuel_records_01.json:第2行; fuel_records_02_late.json:第2行,return_check_01.csv:第2行; return_check_02_late.csv:第3行,李主管,待复核,油耗需进一步核实,存在异常(inspector_inconsistency)，待人工复核,2026-06-10 20:30:52
+TR-002,异常待处理,1,[inspector_inconsistency] 发现 1 处验收人不一致异常,175.00,110.00,1.59,2,2,2,lease_out_01.csv:第3行; lease_out_02_late.csv:第4行,fuel_records_01.json:第3行; fuel_records_02_late.json:第3行,return_check_01.csv:第3行; return_check_02_late.csv:第4行,,,,存在异常(inspector_inconsistency)，需人工处理,2026-06-10 20:30:52
+TR-003,已复核通过,2,[hours_inverted] 发现 1 处小时数倒挂异常; [inspector_inconsistency] 发现 1 处验收人不一致异常,0.00,0.00,0.00,1,1,1,lease_out_01.csv:第4行,fuel_records_01.json:第4行,return_check_01.csv:第4行,陈主管,通过,经核实为表填写错误，实际小时数为2150.0,"存在异常(hours_inverted, inspector_inconsistency)，已人工复核通过",2026-06-10 20:30:52
+TR-004,正常,0,,30.00,20.00,1.50,1,1,1,lease_out_01.csv:第5行,fuel_records_01.json:第5行,return_check_01.csv:第5行,,,,设备租赁数据正常,2026-06-10 20:30:52
+TR-005,异常待处理,1,[inspector_inconsistency] 发现 1 处验收人不一致异常,0.00,79.20,0.00,1,0,1,lease_out_01.csv:第6行,,return_check_01.csv:第6行,,,,存在异常(inspector_inconsistency)，需人工处理,2026-06-10 20:30:52
+TR-006,正常,0,,50.00,50.00,1.00,1,1,1,lease_out_02_late.csv:第2行,fuel_records_02_late.json:第1行,return_check_02_late.csv:第2行,,,,设备租赁数据正常,2026-06-10 20:30:52
