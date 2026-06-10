@@ -1,0 +1,106 @@
+{
+  "workers": [
+    {
+      "id": "w1",
+      "name": "张师傅",
+      "status": "active"
+    },
+    {
+      "id": "w2",
+      "name": "李师傅",
+      "status": "active"
+    },
+    {
+      "id": "w3",
+      "name": "王师傅",
+      "status": "active"
+    }
+  ],
+  "addonConfigs": [
+    {
+      "id": "ac1",
+      "name": "内饰清洁",
+      "defaultPrice": 80
+    },
+    {
+      "id": "ac2",
+      "name": "发动机舱清洗",
+      "defaultPrice": 50
+    },
+    {
+      "id": "ac3",
+      "name": "轮胎上光",
+      "defaultPrice": 30
+    },
+    {
+      "id": "ac4",
+      "name": "玻璃镀膜",
+      "defaultPrice": 100
+    }
+  ],
+  "members": [
+    {
+      "id": "m1",
+      "name": "陈先生",
+      "phone": "13800138001",
+      "plateNumber": "京A12345",
+      "createdAt": "2026-06-10T15:55:39.221Z"
+    },
+    {
+      "id": "m2",
+      "name": "刘女士",
+      "phone": "13800138002",
+      "plateNumber": "京A1234S",
+      "createdAt": "2026-06-10T15:55:39.222Z"
+    },
+    {
+      "id": "m3",
+      "name": "赵总",
+      "phone": "13800138003",
+      "plateNumber": "京B88888",
+      "createdAt": "2026-06-10T15:55:39.222Z"
+    }
+  ],
+  "memberPackages": [
+    {
+      "id": "mp1",
+      "memberId": "m1",
+      "packageName": "精洗10次卡",
+      "totalTimes": 10,
+      "remainingTimes": 7,
+      "pricePerTime": 35
+    },
+    {
+      "id": "mp2",
+      "memberId": "m2",
+      "packageName": "普洗20次卡",
+      "totalTimes": 20,
+      "remainingTimes": 1,
+      "pricePerTime": 25
+    },
+    {
+      "id": "mp3",
+      "memberId": "m3",
+      "packageName": "精洗年卡",
+      "totalTimes": 52,
+      "remainingTimes": 45,
+      "pricePerTime": 30
+    }
+  ],
+  "orders": [
+    {
+      "id": "o1781107108630411",
+      "queueNumber": 1,
+      "plateNumber": "京C99999",
+      "packageDeducted": 0,
+      "payType": "cash",
+      "cashAmount": 35,
+      "workerId": "w1",
+      "workerName": "张师傅",
+      "currentStep": "rinsing",
+      "status": "washing",
+      "addons": [],
+      "createdAt": "2026-06-10T15:58:28.630Z"
+    }
+  ]
+}
