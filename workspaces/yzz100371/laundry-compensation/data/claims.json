@@ -1,0 +1,54 @@
+[
+  {
+    "id": "dbc6fb9c-2a11-42ca-927b-99609871993d",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "storeId": "STORE-001",
+    "amount": 500,
+    "reason": "洗后掉色",
+    "status": "pending",
+    "mergedIntoId": null,
+    "reviewerId": null,
+    "requiresSeniorReview": true,
+    "createdAt": "2026-06-10T16:03:00.452Z",
+    "updatedAt": "2026-06-10T16:03:00.479Z"
+  },
+  {
+    "id": "4a10dea0-c701-41c1-8bf0-5127eec96760",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "storeId": "STORE-001",
+    "amount": 300,
+    "reason": "纽扣丢失",
+    "status": "merged",
+    "mergedIntoId": "dbc6fb9c-2a11-42ca-927b-99609871993d",
+    "reviewerId": null,
+    "requiresSeniorReview": false,
+    "createdAt": "2026-06-10T16:03:00.478Z",
+    "updatedAt": "2026-06-10T16:03:00.478Z"
+  },
+  {
+    "id": "8bff1641-35ee-4a71-88f6-1df8f533ae50",
+    "orderId": "75c893f5-ecd8-4e83-b2b9-91ccadd87ad0",
+    "storeId": "STORE-002",
+    "amount": 800,
+    "reason": "衣物损坏严重",
+    "status": "approved",
+    "mergedIntoId": null,
+    "reviewerId": "reviewer-senior",
+    "requiresSeniorReview": false,
+    "createdAt": "2026-06-10T16:03:19.286Z",
+    "updatedAt": "2026-06-10T16:03:19.380Z"
+  },
+  {
+    "id": "ea29196d-f997-4426-9e34-f864adf519ef",
+    "orderId": "2825c1fb-5558-442a-bd6e-a534f1f2562c",
+    "storeId": "STORE-003",
+    "amount": 100,
+    "reason": "缩水",
+    "status": "under_review",
+    "mergedIntoId": null,
+    "reviewerId": null,
+    "requiresSeniorReview": false,
+    "createdAt": "2026-06-10T16:03:19.465Z",
+    "updatedAt": "2026-06-10T16:03:19.551Z"
+  }
+]

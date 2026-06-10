@@ -1,0 +1,130 @@
+[
+  {
+    "id": "7439dabc-473e-47c1-b37d-4734bcea03af",
+    "orderId": "4b5e82ff-85e2-431b-8dca-a8a5b5696dac",
+    "eventType": "order_created",
+    "actorId": "store-001-staff",
+    "detail": "门店 STORE-001 创建洗护订单，客户: 张三",
+    "createdAt": "2026-06-10T16:02:41.668Z"
+  },
+  {
+    "id": "80b42198-dfa6-4079-b9c8-bc8044fcb922",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "eventType": "order_created",
+    "actorId": "store-001-staff",
+    "detail": "门店 STORE-001 创建洗护订单，客户: 张三",
+    "createdAt": "2026-06-10T16:03:00.388Z"
+  },
+  {
+    "id": "5c05af79-cffd-4f36-aa56-4ff1da11c469",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "eventType": "note_added",
+    "actorId": "store-001-staff",
+    "detail": "添加瑕疵备注: 领口有污渍（严重程度: moderate）",
+    "createdAt": "2026-06-10T16:03:00.421Z"
+  },
+  {
+    "id": "61840ca2-1f57-4715-9c8a-ee17f309045a",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "eventType": "claim_submitted",
+    "actorId": "store-001-staff",
+    "detail": "提交赔付申请，金额: 200元",
+    "createdAt": "2026-06-10T16:03:00.452Z"
+  },
+  {
+    "id": "d4db7fe0-8b4d-4e27-87a9-7a77d6f4cc71",
+    "orderId": "5b5f2556-a5e4-4102-819c-b72d36c69951",
+    "eventType": "claim_merged",
+    "actorId": "store-001-staff",
+    "detail": "重复赔付申请已合并至 dbc6fb9c-2a11-42ca-927b-99609871993d，追加金额: 300元",
+    "createdAt": "2026-06-10T16:03:00.478Z"
+  },
+  {
+    "id": "0b14ddf6-78c1-4ccc-97a4-b40c30c11e10",
+    "orderId": "75c893f5-ecd8-4e83-b2b9-91ccadd87ad0",
+    "eventType": "order_created",
+    "actorId": "store-002-staff",
+    "detail": "门店 STORE-002 创建洗护订单，客户: 李四",
+    "createdAt": "2026-06-10T16:03:19.241Z"
+  },
+  {
+    "id": "67d41cce-1cf6-48de-9cec-d7387a43b782",
+    "orderId": "75c893f5-ecd8-4e83-b2b9-91ccadd87ad0",
+    "eventType": "claim_submitted",
+    "actorId": "store-002-staff",
+    "detail": "提交赔付申请，金额: 800元（需高级复核）",
+    "createdAt": "2026-06-10T16:03:19.286Z"
+  },
+  {
+    "id": "2f24dc84-4fb1-4e32-864b-e8a8bf1f3f09",
+    "orderId": "75c893f5-ecd8-4e83-b2b9-91ccadd87ad0",
+    "eventType": "review_completed",
+    "actorId": "reviewer-senior",
+    "detail": "复核人 reviewer-senior 同意赔付，金额: 800元",
+    "createdAt": "2026-06-10T16:03:19.379Z"
+  },
+  {
+    "id": "7a7ee7b7-0a58-45ed-bcb5-7737111d3eb4",
+    "orderId": "2825c1fb-5558-442a-bd6e-a534f1f2562c",
+    "eventType": "order_created",
+    "actorId": "store-003",
+    "detail": "门店 STORE-003 创建洗护订单，客户: 王五",
+    "createdAt": "2026-06-10T16:03:19.425Z"
+  },
+  {
+    "id": "a3991172-14f5-42ec-af01-d662bed93e37",
+    "orderId": "2825c1fb-5558-442a-bd6e-a534f1f2562c",
+    "eventType": "claim_submitted",
+    "actorId": "store-003",
+    "detail": "提交赔付申请，金额: 100元",
+    "createdAt": "2026-06-10T16:03:19.465Z"
+  },
+  {
+    "id": "84a0ef66-a5b1-4db7-9577-5325331be02a",
+    "orderId": "2825c1fb-5558-442a-bd6e-a534f1f2562c",
+    "eventType": "review_completed",
+    "actorId": "hq-reviewer",
+    "detail": "复核人 hq-reviewer 要求补充材料: 请提供损坏照片",
+    "createdAt": "2026-06-10T16:03:19.503Z"
+  },
+  {
+    "id": "e814c21e-e758-4656-8f75-50dabd4d0e93",
+    "orderId": "2825c1fb-5558-442a-bd6e-a534f1f2562c",
+    "eventType": "supplement_submitted",
+    "actorId": "store-003-manager",
+    "detail": "门店一次性提交 3 张补充照片，状态变更为复核中",
+    "createdAt": "2026-06-10T16:03:19.550Z"
+  },
+  {
+    "id": "08204811-b125-4cb1-aa2a-6dc4f630a6a5",
+    "orderId": "a139bbda-9a14-475f-a765-068b5cb9bfd2",
+    "eventType": "order_created",
+    "actorId": "store-004",
+    "detail": "门店 STORE-004 创建洗护订单，客户: 赵六",
+    "createdAt": "2026-06-10T16:03:32.497Z"
+  },
+  {
+    "id": "252f57d8-a269-41f9-bc8e-f1ecb0fe7809",
+    "orderId": "a139bbda-9a14-475f-a765-068b5cb9bfd2",
+    "eventType": "order_status_changed",
+    "actorId": "store-004",
+    "detail": "订单状态从 washing 变更为 washing",
+    "createdAt": "2026-06-10T16:03:32.525Z"
+  },
+  {
+    "id": "5844d5ee-475e-4f1b-b3d9-536340aa0b9f",
+    "orderId": "a139bbda-9a14-475f-a765-068b5cb9bfd2",
+    "eventType": "order_status_changed",
+    "actorId": "store-004",
+    "detail": "订单状态从 done 变更为 done",
+    "createdAt": "2026-06-10T16:03:32.550Z"
+  },
+  {
+    "id": "780956d2-3b7b-43c9-a01d-a3ed28b59219",
+    "orderId": "a139bbda-9a14-475f-a765-068b5cb9bfd2",
+    "eventType": "order_status_changed",
+    "actorId": "store-004",
+    "detail": "订单状态从 picked_up 变更为 picked_up",
+    "createdAt": "2026-06-10T16:03:32.576Z"
+  }
+]
