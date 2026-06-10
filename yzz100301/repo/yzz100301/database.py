@@ -11,6 +11,28 @@ def get_connection():
     return conn
 
 
+def row_to_dict(row):
+    if row is None:
+        return None
+    return dict(row)
+
+
+def rows_to_dict_list(rows):
+    if rows is None:
+        return []
+    return [dict(row) for row in rows]
+
+
+def fetch_one(cursor):
+    row = cursor.fetchone()
+    return row_to_dict(row)
+
+
+def fetch_all(cursor):
+    rows = cursor.fetchall()
+    return rows_to_dict_list(rows)
+
+
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
