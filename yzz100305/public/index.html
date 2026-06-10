@@ -543,15 +543,25 @@ function renderTable(list) {
       item.flow_status === '已替换已退款' ? 'tag-green' :
       item.flow_status === '已替换未退款' ? 'tag-yellow' : 'tag-blue';
 
+    const replaceDisplay = item.has_replace
+      ? item.replaced_product
+      : '<span class="tag tag-gray">无替换</span>';
+    const diffDisplay = item.has_replace
+      ? '¥' + (item.amount_diff || 0).toFixed(2)
+      : '-';
+    const refundDisplay = item.has_refund
+      ? '¥' + (item.refund_amount || 0).toFixed(2)
+      : '-';
+
     return `
       <tr>
         <td><strong>${item.order_no}</strong></td>
         <td>${item.product_name || '-'}</td>
         <td>¥${(item.order_amount || 0).toFixed(2)}</td>
         <td>${item.order_date || '-'}</td>
-        <td>${item.replaced_product ? item.replaced_product : '<span class="tag tag-gray">无替换</span>'}</td>
-        <td class="${item.amount_diff ? 'text-red' : ''}">${item.amount_diff !== undefined && item.amount_diff !== null ? '¥' + item.amount_diff.toFixed(2) : '-'}</td>
-        <td>${item.refund_amount ? '¥' + item.refund_amount.toFixed(2) : '-'}</td>
+        <td>${replaceDisplay}</td>
+        <td>${diffDisplay}</td>
+        <td>${refundDisplay}</td>
         <td><span class="tag ${flowCls}">${item.flow_status}</span></td>
         <td>${riskTags.join(' ') || '-'}</td>
         <td><span class="tag ${rs.cls}">${rs.text}</span></td>
@@ -697,24 +707,24 @@ function renderModal(data) {
     </div>
 
     <div class="detail-section">
-      <h4>🔄 替换信息 ${data.replaced_product ? '' : '(无替换)'}</h4>
-      ${data.replaced_product ? `
+      <h4>🔄 替换信息 ${data.has_replace ? '' : '(无替换)'}</h4>
+      ${data.has_replace ? `
         <div class="detail-row"><div class="detail-label">原商品</div><div class="detail-value">${data.original_product || '-'}</div></div>
-        <div class="detail-row"><div class="detail-label">替换商品</div><div class="detail-value">${data.replaced_product}</div></div>
+        <div class="detail-row"><div class="detail-label">替换商品</div><div class="detail-value">${data.replaced_product || '-'}</div></div>
         <div class="detail-row"><div class="detail-label">替换数量</div><div class="detail-value">${data.rep_quantity || 0}</div></div>
         <div class="detail-row"><div class="detail-label">原单价</div><div class="detail-value">¥${(data.original_price || 0).toFixed(2)}</div></div>
         <div class="detail-row"><div class="detail-label">替换单价</div><div class="detail-value">¥${(data.replaced_price || 0).toFixed(2)}</div></div>
         <div class="detail-row"><div class="detail-label">原金额</div><div class="detail-value">¥${(data.original_amount || 0).toFixed(2)}</div></div>
         <div class="detail-row"><div class="detail-label">替换后金额</div><div class="detail-value">¥${(data.replaced_amount || 0).toFixed(2)}</div></div>
-        <div class="detail-row"><div class="detail-label">金额差异</div><div class="detail-value" style="color:${data.amount_diff > 0 ? '#ef4444' : data.amount_diff < 0 ? '#10b981' : '#333'}">¥${(data.amount_diff || 0).toFixed(2)}</div></div>
+        <div class="detail-row"><div class="detail-label">金额差异</div><div class="detail-value" style="color:${(data.amount_diff || 0) > 0 ? '#ef4444' : (data.amount_diff || 0) < 0 ? '#10b981' : '#333'}">¥${(data.amount_diff || 0).toFixed(2)}</div></div>
         <div class="detail-row"><div class="detail-label">替换日期</div><div class="detail-value">${data.replace_date || '-'}</div></div>
       ` : '<div style="color:#9ca3af; font-size:13px;">该订单无替换记录</div>'}
     </div>
 
     <div class="detail-section">
-      <h4>💰 退款信息 ${data.refund_amount ? '' : '(无退款)'}</h4>
-      ${data.refund_amount ? `
-        <div class="detail-row"><div class="detail-label">退款金额</div><div class="detail-value">¥${data.refund_amount.toFixed(2)}</div></div>
+      <h4>💰 退款信息 ${data.has_refund ? '' : '(无退款)'}</h4>
+      ${data.has_refund ? `
+        <div class="detail-row"><div class="detail-label">退款金额</div><div class="detail-value">¥${(data.refund_amount || 0).toFixed(2)}</div></div>
         <div class="detail-row"><div class="detail-label">退款日期</div><div class="detail-value">${data.refund_date || '-'}</div></div>
         <div class="detail-row"><div class="detail-label">退款原因</div><div class="detail-value">${data.refund_reason || '-'}</div></div>
       ` : '<div style="color:#9ca3af; font-size:13px;">该订单无退款记录</div>'}

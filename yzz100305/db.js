@@ -179,20 +179,21 @@ function getAggregatedOrders(filters = {}) {
   const params = [];
 
   if (filters.status === 'unbalanced') {
-    whereClauses.push('replaced_amount IS NOT NULL AND ABS(COALESCE(amount_diff, 0)) > 0.01');
+    whereClauses.push('rep.id IS NOT NULL AND ABS(COALESCE(rep.amount_diff, 0)) > 0.01');
   } else if (filters.status === 'late_refund') {
     whereClauses.push(`
-      refund_amount IS NOT NULL
-      AND replace_date IS NOT NULL
-      AND refund_date IS NOT NULL
-      AND refund_date > replace_date
+      ref.id IS NOT NULL
+      AND rep.id IS NOT NULL
+      AND ref.refund_date IS NOT NULL
+      AND rep.replace_date IS NOT NULL
+      AND ref.refund_date > rep.replace_date
     `);
   } else if (filters.status === 'manual') {
     whereClauses.push('r.manual_adjustment = 1');
   } else if (filters.status === 'has_replace') {
-    whereClauses.push('replaced_amount IS NOT NULL');
+    whereClauses.push('rep.id IS NOT NULL');
   } else if (filters.status === 'has_refund') {
-    whereClauses.push('refund_amount IS NOT NULL');
+    whereClauses.push('ref.id IS NOT NULL');
   } else if (filters.status === 'pending') {
     whereClauses.push("r.review_status = 'pending'");
   } else if (filters.status === 'reviewed') {
@@ -230,6 +231,12 @@ function getAggregatedOrders(filters = {}) {
       COALESCE(r.review_comment, '') AS review_comment,
       COALESCE(r.final_status, 'normal') AS final_status,
       COALESCE(r.manual_adjustment, 0) AS manual_adjustment,
+      CASE
+        WHEN rep.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_replace,
+      CASE
+        WHEN ref.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_refund,
       CASE
         WHEN rep.id IS NOT NULL AND ref.id IS NOT NULL THEN '已替换已退款'
         WHEN rep.id IS NOT NULL THEN '已替换未退款'
@@ -303,7 +310,13 @@ function getOrderByNo(orderNo) {
       COALESCE(r.review_status, 'pending') AS review_status,
       COALESCE(r.review_comment, '') AS review_comment,
       COALESCE(r.final_status, 'normal') AS final_status,
-      COALESCE(r.manual_adjustment, 0) AS manual_adjustment
+      COALESCE(r.manual_adjustment, 0) AS manual_adjustment,
+      CASE
+        WHEN rep.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_replace,
+      CASE
+        WHEN ref.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_refund
     FROM orders o
     LEFT JOIN replacements rep ON o.order_no = rep.order_no
     LEFT JOIN refunds ref ON o.order_no = ref.order_no
@@ -400,20 +413,21 @@ function getAllOrdersForExport(filters = {}) {
   const params = [];
 
   if (filters.status === 'unbalanced') {
-    whereClauses.push('replaced_amount IS NOT NULL AND ABS(COALESCE(amount_diff, 0)) > 0.01');
+    whereClauses.push('rep.id IS NOT NULL AND ABS(COALESCE(rep.amount_diff, 0)) > 0.01');
   } else if (filters.status === 'late_refund') {
     whereClauses.push(`
-      refund_amount IS NOT NULL
-      AND replace_date IS NOT NULL
-      AND refund_date IS NOT NULL
-      AND refund_date > replace_date
+      ref.id IS NOT NULL
+      AND rep.id IS NOT NULL
+      AND ref.refund_date IS NOT NULL
+      AND rep.replace_date IS NOT NULL
+      AND ref.refund_date > rep.replace_date
     `);
   } else if (filters.status === 'manual') {
     whereClauses.push('r.manual_adjustment = 1');
   } else if (filters.status === 'has_replace') {
-    whereClauses.push('replaced_amount IS NOT NULL');
+    whereClauses.push('rep.id IS NOT NULL');
   } else if (filters.status === 'has_refund') {
-    whereClauses.push('refund_amount IS NOT NULL');
+    whereClauses.push('ref.id IS NOT NULL');
   } else if (filters.status === 'pending') {
     whereClauses.push("r.review_status = 'pending'");
   } else if (filters.status === 'reviewed') {
@@ -451,6 +465,12 @@ function getAllOrdersForExport(filters = {}) {
       COALESCE(r.review_comment, '') AS review_comment,
       COALESCE(r.final_status, 'normal') AS final_status,
       COALESCE(r.manual_adjustment, 0) AS manual_adjustment,
+      CASE
+        WHEN rep.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_replace,
+      CASE
+        WHEN ref.id IS NOT NULL THEN 1 ELSE 0
+      END AS has_refund,
       CASE
         WHEN rep.id IS NOT NULL AND ABS(COALESCE(rep.amount_diff, 0)) > 0.01 THEN '是'
         ELSE '否'
