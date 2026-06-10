@@ -1,0 +1,122 @@
+{
+  "run_time": "2026-06-10 22:16:08",
+  "target_month": "2026-05",
+  "prev_month": "2026-04",
+  "total_cost_cny": 92536.5,
+  "resource_count": 22,
+  "missing_tag_count": 6,
+  "case_issue_count": 2,
+  "duplicate_name_count": 1,
+  "unmapped_project_count": 3,
+  "spike_count": 1,
+  "peak_count": 2,
+  "idle_count": 2,
+  "pending_count": 9,
+  "traceable_count": 13,
+  "missing_tags": [
+    {
+      "resource_id": "i-2ze8a1b2d0",
+      "issues": [
+        "缺少项目标签"
+      ]
+    },
+    {
+      "resource_id": "i-2ze8a1b2d4",
+      "issues": [
+        "缺少项目标签"
+      ]
+    },
+    {
+      "resource_id": "i-2ze8a1b2d5",
+      "issues": [
+        "缺少负责人标签"
+      ]
+    },
+    {
+      "resource_id": "i-2ze8a1b2d8",
+      "issues": [
+        "缺少负责人标签"
+      ]
+    },
+    {
+      "resource_id": "i-2ze8a1b2d9",
+      "issues": [
+        "缺少项目标签",
+        "缺少负责人标签"
+      ]
+    },
+    {
+      "resource_id": "i-2ze8a1b2e2",
+      "issues": [
+        "缺少项目标签",
+        "缺少负责人标签"
+      ]
+    }
+  ],
+  "unmapped_projects": [
+    {
+      "project_tag": "ALPHA",
+      "owner_hint": "张伟",
+      "resource_id_hint": "i-2ze8a1b2c4"
+    },
+    {
+      "project_tag": "Omega",
+      "owner_hint": "孙鹏",
+      "resource_id_hint": "i-2ze8a1b2e0"
+    },
+    {
+      "project_tag": "omega",
+      "owner_hint": "孙鹏",
+      "resource_id_hint": "i-2ze8a1b2e1"
+    }
+  ],
+  "spikes": [
+    {
+      "resource_id": "i-2ze8a1b2c8",
+      "resource_name": "ml-training-gpu",
+      "project_tag": "Beta",
+      "owner": "王强",
+      "prev_total_cny": 15800.0,
+      "curr_total_cny": 22400.0,
+      "spike_pct": 41.8
+    }
+  ],
+  "peaks": [
+    {
+      "resource_id": "i-2ze8a1b2c8",
+      "resource_name": "ml-training-gpu",
+      "resource_type": "ECS",
+      "project_tag": "Beta",
+      "owner": "王强",
+      "total_cny": 22400.0
+    },
+    {
+      "resource_id": "i-2ze8a1b2e0",
+      "resource_name": "new-ai-inference",
+      "resource_type": "ECS",
+      "project_tag": "Omega",
+      "owner": "孙鹏",
+      "total_cny": 18600.0
+    }
+  ],
+  "idles": [
+    {
+      "resource_id": "i-2ze8a1b2d4",
+      "resource_name": "tmp-benchmark",
+      "resource_type": "ECS",
+      "region": "华东2",
+      "project_tag": "",
+      "owner": "刘洋",
+      "total_cny": 8.5
+    },
+    {
+      "resource_id": "i-2ze8a1b2e2",
+      "resource_name": "forgotten-test",
+      "resource_type": "ECS",
+      "region": "华东2",
+      "project_tag": "",
+      "owner": "",
+      "total_cny": 15.0
+    }
+  ]
+}
