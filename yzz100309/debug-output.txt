@@ -1,0 +1,41 @@
+=== Inventory 数据 ===
+  行2: S001 -> BOX-A/A1
+  行3: S002 -> BOX-A/A1
+  行4: S003 -> BOX-A/A2
+  行5: S004 -> BOX-A/B1
+  行6: S005 -> BOX-A/B2
+  行7: S006 -> BOX-B/A1
+  行8: S007 -> BOX-B/A2
+  行9: S008 -> BOX-B/B1
+  行10: S009 -> BOX-B/B2
+  行11:  -> BOX-B/C1
+  行12: S011 -> BOX-A/Z9
+
+=== Movements 数据 ===
+  行2: S003 BOX-A/A2 -> BOX-B/C1
+  行3: S004 BOX-A/B1 -> BOX-B/C2
+  行4: S005 BOX-A/B2 -> BOX-B/A2
+  行5: S003 BOX-A/A2 -> BOX-B/C1
+  行6:  BOX-A/A3 -> BOX-B/D1
+  行7: S999 BOX-A/Z1 -> BOX-B/Z1
+  行8: S006 BOX-B/A1 -> BOX-A/A3
+  行9: S001 BOX-A/A1 -> BOX-B/D2
+  行10: S007 BOX-B/A2 -> BOX-A/C1
+  行11: S008 BOX-B/B1 -> BOX-A/A1
+
+=== 最终样本位置 ===
+  S001: null/null (status: discarded)
+  S002: BOX-A/A1 (status: stored)
+  S003: BOX-B/C1 (status: reviewed)
+  S004: BOX-B/C2 (status: reviewed)
+  S005: BOX-B/A2 (status: reviewed)
+  S006: BOX-A/A3 (status: reviewed)
+  S007: BOX-A/C1 (status: reviewed)
+  S008: BOX-A/A1 (status: reviewed)
+  S009: BOX-B/B2 (status: stored)
+  S011: BOX-A/Z9 (status: stored)
+
+=== BOX-B 盒子布局占用情况 ===
+Error: TypeError: boxB.grid is not iterable
+    at test (/Users/bill/pro/solo/workspaces/yzz100309/debug-test.js:30:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
