@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stagelend"
+version = "0.1.0"
+description = "剧场舞台设备借还管理 CLI 工具"
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.0",
+    "rich>=13.0",
+]
+
+[project.scripts]
+stagelend = "stagelend.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["stagelend*"]
