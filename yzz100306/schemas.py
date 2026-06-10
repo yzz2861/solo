@@ -112,6 +112,7 @@ class ImportResult(BaseModel):
     total_count: int
     new_count: int
     skipped_count: int
+    updated_count: Optional[int] = 0
     batch_hash: str
 
 

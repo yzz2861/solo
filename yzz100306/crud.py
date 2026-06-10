@@ -107,6 +107,7 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
             "total_count": existing.record_count,
             "new_count": 0,
             "skipped_count": existing.record_count,
+            "updated_count": 0,
             "batch_hash": batch_hash
         }
 
@@ -119,6 +120,7 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
             "total_count": 0,
             "new_count": 0,
             "skipped_count": 0,
+            "updated_count": 0,
             "batch_hash": batch_hash
         }
 
@@ -126,6 +128,7 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
     total = len(items)
     new_count = 0
     skipped = 0
+    updated_count = 0
 
     batch = create_batch(db, models.ImportType.DEFECTS, batch_hash, file_name, total)
 
@@ -137,12 +140,32 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
             skipped += 1
             continue
 
+        severity_str = item.get("severity", "minor")
+        try:
+            severity = models.DefectSeverity(severity_str.lower())
+        except ValueError:
+            severity = models.DefectSeverity.MINOR
+
         existing_defect = db.query(models.Defect).filter(
             models.Defect.defect_code == defect_code
         ).first()
 
         if existing_defect:
-            skipped += 1
+            if severity != existing_defect.severity:
+                try:
+                    history = json.loads(existing_defect.severity_history or "[]")
+                except (json.JSONDecodeError, TypeError):
+                    history = []
+                history.append({
+                    "severity": severity.value,
+                    "time": datetime.utcnow().isoformat(),
+                    "source": "import"
+                })
+                existing_defect.severity_history = json.dumps(history)
+                existing_defect.severity = severity
+                updated_count += 1
+            else:
+                skipped += 1
             continue
 
         comp = db.query(models.Component).filter(
@@ -152,12 +175,6 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
             comp = models.Component(component_code=component_code)
             db.add(comp)
             db.flush()
-
-        severity_str = item.get("severity", "minor")
-        try:
-            severity = models.DefectSeverity(severity_str.lower())
-        except ValueError:
-            severity = models.DefectSeverity.MINOR
 
         source_str = item.get("source", "drone")
         try:
@@ -197,6 +214,7 @@ def import_defects_from_json(db: Session, json_content: str, file_name: str) -> 
         "total_count": total,
         "new_count": new_count,
         "skipped_count": skipped,
+        "updated_count": updated_count,
         "batch_hash": batch_hash
     }
 
