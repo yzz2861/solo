@@ -106,6 +106,23 @@ def init_db(db_path: Optional[str] = None) -> None:
             );
             CREATE INDEX IF NOT EXISTS idx_hoist_point ON hoist_points(point_no);
             CREATE INDEX IF NOT EXISTS idx_hoist_equip ON hoist_points(equipment_no);
+
+            CREATE TABLE IF NOT EXISTS decommission_records (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                source_id INTEGER,
+                source_line_no INTEGER,
+                equipment_no TEXT NOT NULL,
+                decommission_date TEXT NOT NULL,
+                reason TEXT DEFAULT 'normal',
+                reason_detail TEXT,
+                operator TEXT,
+                remark TEXT,
+                revoked INTEGER DEFAULT 0,
+                imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (source_id) REFERENCES import_sources(id)
+            );
+            CREATE INDEX IF NOT EXISTS idx_decom_equip ON decommission_records(equipment_no);
+            CREATE INDEX IF NOT EXISTS idx_decom_date ON decommission_records(decommission_date);
         """)
 
 

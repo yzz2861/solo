@@ -11,9 +11,20 @@ from rich.panel import Panel
 from rich.text import Text
 
 from .database import init_db, get_db_path
-from .importers import import_lending_csv, import_returns_json, import_hoist_csv
+from .importers import import_lending_csv, import_returns_json, import_hoist_csv, import_decommission_csv
 from .audit import run_full_audit, audit_overdue, audit_hoist_overload, audit_person_mismatch
-from .core import list_all_equipments, get_equipment_status, get_equipment_summary
+from .core import (
+    list_all_equipments,
+    get_equipment_status,
+    get_equipment_summary,
+    decommission_equipment,
+    recommission_equipment,
+    list_decommissioned_equipments,
+    DECOMMISSION_REASON_NORMAL,
+    DECOMMISSION_REASON_DAMAGED,
+    DECOMMISSION_REASON_LOST,
+    DECOMMISSION_REASON_OBSOLETE,
+)
 from .review import (
     get_unverified_returns,
     get_verified_returns,
@@ -117,13 +128,37 @@ def import_hoist(ctx, file_path):
         sys.exit(1)
 
 
+@imp.command("decommission")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.pass_context
+def import_decommission(ctx, file_path):
+    """导入停用/报废表 (CSV)"""
+    db_path = _get_db_path(ctx)
+    try:
+        added, skipped, warnings = import_decommission_csv(file_path, db_path)
+        if added == 0 and warnings and any("已导入" in w for w in warnings):
+            console.print("[yellow]⚠️ 文件已导入过，跳过（幂等保护）[/yellow]")
+            for w in warnings:
+                console.print(f"  {w}")
+        else:
+            console.print(f"[green]✓ 成功导入 {added} 条停用/报废记录[/green]")
+            if warnings:
+                console.print(f"[yellow]警告 {len(warnings)} 条:[/yellow]")
+                for w in warnings:
+                    console.print(f"  - {w}")
+    except Exception as e:
+        console.print(f"[red]✗ 导入失败: {e}[/red]")
+        sys.exit(1)
+
+
 @imp.command("all")
 @click.option("--lending", help="借出表 CSV 路径", type=click.Path(exists=True))
 @click.option("--returns", help="归还记录 JSON 路径", type=click.Path(exists=True))
 @click.option("--hoist", help="吊点载荷表 CSV 路径", type=click.Path(exists=True))
+@click.option("--decommission", "decom", help="停用/报废表 CSV 路径", type=click.Path(exists=True))
 @click.pass_context
-def import_all(ctx, lending, returns, hoist):
-    """一次性导入三类数据"""
+def import_all(ctx, lending, returns, hoist, decom):
+    """一次性导入四类数据"""
     db_path = _get_db_path(ctx)
     results = {}
 
@@ -148,8 +183,16 @@ def import_all(ctx, lending, returns, hoist):
         except Exception as e:
             results["hoist"] = (0, [f"错误: {e}"])
 
+    if decom:
+        try:
+            added, _, warnings = import_decommission_csv(decom, db_path)
+            results["decommission"] = (added, warnings)
+        except Exception as e:
+            results["decommission"] = (0, [f"错误: {e}"])
+
     for name, (added, warnings) in results.items():
-        label = {"lending": "借出表", "returns": "归还记录", "hoist": "吊点表"}.get(name, name)
+        label = {"lending": "借出表", "returns": "归还记录", "hoist": "吊点表",
+                 "decommission": "停用/报废表"}.get(name, name)
         console.print(f"[green]✓ {label}: 导入 {added} 条[/green]")
         for w in warnings:
             console.print(f"  [yellow]- {w}[/yellow]")
@@ -176,7 +219,12 @@ def audit(ctx, audit_type, ref_date):
     console.print()
 
     if audit_type in ("all", "overdue"):
-        _print_overdue_table(audit_overdue(db_path, ref))
+        overdue_items = audit_overdue(db_path, ref)
+        from .audit import OVERDUE_UNRETURNED, OVERDUE_RETURNED_LATE
+        unreturned = [o for o in overdue_items if o["type"] == OVERDUE_UNRETURNED]
+        returned_late = [o for o in overdue_items if o["type"] == OVERDUE_RETURNED_LATE]
+        _print_overdue_unreturned_table(unreturned)
+        _print_overdue_returned_late_table(returned_late)
 
     if audit_type in ("all", "hoist"):
         _print_hoist_overload_table(audit_hoist_overload(db_path))
@@ -184,34 +232,85 @@ def audit(ctx, audit_type, ref_date):
     if audit_type in ("all", "person"):
         _print_person_mismatch_table(audit_person_mismatch(db_path))
 
+    console.print()
+
     result = run_full_audit(db_path, ref)
     total = len(result["overdue"]) + len(result["hoist_overload"]) + len(result["person_mismatch"])
     console.print()
     console.print(f"[bold]异常总计: {total} 项[/bold]")
 
+    from .audit import get_audit_summary
+    summary = get_audit_summary(result)
+    console.print(f"  - 逾期未还: {summary['overdue_unreturned_count']} 项")
+    console.print(f"  - 逾期归还: {summary['overdue_returned_late_count']} 项")
+    console.print(f"  - 吊点超限: {summary['hoist_overload_count']} 项")
+    console.print(f"  - 人员不一致: {summary['person_mismatch_count']} 项")
 
-def _print_overdue_table(items):
-    console.print("[bold red]⏰ 逾期未还[/bold red]")
+
+def _print_overdue_unreturned_table(items):
+    console.print("[bold red]⏰ 逾期未还（仍在外）[/bold red]")
     if not items:
-        console.print("  [green]无逾期记录 ✓[/green]")
+        console.print("  [green]无逾期未还记录 ✓[/green]")
         console.print()
         return
 
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("设备编号", style="cyan")
     table.add_column("设备名称")
-    table.add_column("逾期数", justify="right")
+    table.add_column("借出数", justify="right")
+    table.add_column("已还数", justify="right")
+    table.add_column("未还数", justify="right", style="bold red")
     table.add_column("借用人")
+    table.add_column("借出日期")
     table.add_column("应还日期")
+    table.add_column("用途")
     table.add_column("来源行")
 
     for item in items:
         table.add_row(
             item["equipment_no"],
             item["equipment_name"],
+            str(item["quantity_lent"]),
+            str(item["quantity_returned"]),
+            str(item["quantity_overdue"]),
+            item["borrower"],
+            item["lend_date"],
+            item["due_date"],
+            item.get("purpose", ""),
+            str(item.get("source_line_no", "-")),
+        )
+
+    console.print(table)
+
+
+def _print_overdue_returned_late_table(items):
+    console.print("[bold yellow]⚠️ 逾期归还（已归还但超期）[/bold yellow]")
+    if not items:
+        console.print("  [green]无逾期归还记录 ✓[/green]")
+        console.print()
+        return
+
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("设备编号", style="cyan")
+    table.add_column("设备名称")
+    table.add_column("借出数", justify="right")
+    table.add_column("逾期归还数", justify="right", style="bold yellow")
+    table.add_column("借用人")
+    table.add_column("应还日期")
+    table.add_column("实际归还日期", style="yellow")
+    table.add_column("用途")
+    table.add_column("来源行")
+
+    for item in items:
+        table.add_row(
+            item["equipment_no"],
+            item["equipment_name"],
+            str(item["quantity_lent"]),
             str(item["quantity_overdue"]),
             item["borrower"],
             item["due_date"],
+            item["latest_return_date"],
+            item.get("purpose", ""),
             str(item.get("source_line_no", "-")),
         )
 
@@ -433,7 +532,29 @@ def _print_single_status(info):
     console.print(f"  累计借出: {info['total_lent']}")
     console.print(f"  累计归还: {info['total_returned']}")
     console.print(f"  已复核: {info['total_verified']}")
+    console.print(f"  在途未还: {info.get('qty_in_transit', 0)}")
+    console.print(f"  待复核: {info.get('qty_pending_verify', 0)}")
     console.print(f"  净借出: {info['net_lent']}")
+    if info.get("has_late_return"):
+        console.print(f"  [yellow]⚠️ 存在逾期归还记录[/yellow]")
+    if info.get("decommissioned") and info.get("decommission_info"):
+        d = info["decommission_info"]
+        reason_labels = {
+            "normal": "正常停用",
+            "damaged": "损坏报废",
+            "lost": "丢失",
+            "obsolete": "淘汰",
+        }
+        console.print()
+        console.print(f"  [bold]⚫ 停用/报废信息:[/bold]")
+        console.print(f"    停用日期: {d['date']}")
+        console.print(f"    原因: {reason_labels.get(d['reason'], d['reason'])}")
+        if d["reason_detail"]:
+            console.print(f"    详情: {d['reason_detail']}")
+        if d["operator"]:
+            console.print(f"    操作人: {d['operator']}")
+        if d["remark"]:
+            console.print(f"    备注: {d['remark']}")
     console.print()
 
     if info["lend_records"]:
@@ -451,6 +572,103 @@ def _print_single_status(info):
             console.print(f"  - {r['return_date']} x{r['quantity']} "
                           f"(归还人: {r['returner']}, {v}) "
                           f"[行{r['source_line_no']}]")
+
+
+# ============== decommission 命令组 ==============
+
+@cli.group()
+def decom():
+    """停用/报废管理"""
+    pass
+
+
+@decom.command("list")
+@click.pass_context
+def decom_list(ctx):
+    """列出所有停用/报废设备"""
+    db_path = _get_db_path(ctx)
+    items = list_decommissioned_equipments(db_path)
+
+    console.print()
+    console.print(Panel("⚫ 停用/报废设备清单", style="bold"))
+    console.print()
+
+    if not items:
+        console.print("  [green]无停用/报废记录 ✓[/green]")
+        console.print()
+        return
+
+    reason_labels = {
+        "normal": "正常停用",
+        "damaged": "损坏报废",
+        "lost": "丢失",
+        "obsolete": "淘汰",
+    }
+
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("设备编号", style="cyan")
+    table.add_column("设备名称")
+    table.add_column("停用日期")
+    table.add_column("原因")
+    table.add_column("原因详情")
+    table.add_column("操作人")
+    table.add_column("备注")
+
+    for item in items:
+        table.add_row(
+            item["equipment_no"],
+            item.get("equip_name", ""),
+            item["decommission_date"],
+            reason_labels.get(item["reason"], item["reason"]),
+            item.get("reason_detail", ""),
+            item.get("operator", ""),
+            item.get("remark", ""),
+        )
+
+    console.print(table)
+    console.print(f"共 {len(items)} 台停用/报废设备")
+    console.print()
+
+
+@decom.command("mark")
+@click.argument("equipment_no")
+@click.option("--date", "decommission_date", help="停用日期 (YYYY-MM-DD)，默认今天", default=None)
+@click.option("--reason", type=click.Choice(["normal", "damaged", "lost", "obsolete"]),
+              default="normal", help="停用原因")
+@click.option("--reason-detail", help="原因详细描述", default="")
+@click.option("--operator", help="操作人", default="")
+@click.option("--remark", help="备注", default="")
+@click.pass_context
+def decom_mark(ctx, equipment_no, decommission_date, reason, reason_detail, operator, remark):
+    """停用/报废单台设备"""
+    db_path = _get_db_path(ctx)
+    if not decommission_date:
+        from datetime import date as _date
+        decommission_date = _date.today().strftime("%Y-%m-%d")
+
+    ok, msg = decommission_equipment(
+        equipment_no, decommission_date, reason, reason_detail, operator, remark, db_path
+    )
+    if ok:
+        console.print(f"[green]✓ {msg}[/green]")
+    else:
+        console.print(f"[red]✗ {msg}[/red]")
+        sys.exit(1)
+
+
+@decom.command("restore")
+@click.argument("equipment_no")
+@click.option("--operator", help="操作人", default="")
+@click.option("--remark", help="备注", default="")
+@click.pass_context
+def decom_restore(ctx, equipment_no, operator, remark):
+    """恢复停用设备为可用"""
+    db_path = _get_db_path(ctx)
+    ok, msg = recommission_equipment(equipment_no, operator, remark, db_path)
+    if ok:
+        console.print(f"[green]✓ {msg}[/green]")
+    else:
+        console.print(f"[yellow]⚠️ {msg}[/yellow]")
 
 
 # ============== export 命令 ==============
@@ -503,7 +721,8 @@ def db_info(ctx):
 
     from .database import get_conn
     with get_conn(_get_db_path(ctx)) as conn:
-        for table in ["lending_records", "return_records", "hoist_points", "equipments", "import_sources"]:
+        for table in ["lending_records", "return_records", "hoist_points",
+                       "equipments", "decommission_records", "import_sources"]:
             count = conn.execute(f"SELECT COUNT(*) as cnt FROM {table}").fetchone()["cnt"]
             console.print(f"  {table}: {count} 条")
 
