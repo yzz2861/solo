@@ -32,6 +32,7 @@ def _log_operation(
 def _get_inventory(
     db: Session,
     shipping_company: str,
+    ship_name: str,
     container_type: str,
 ) -> Optional[ContainerInventory]:
     return (
@@ -39,6 +40,7 @@ def _get_inventory(
         .filter(
             and_(
                 ContainerInventory.shipping_company == shipping_company,
+                ContainerInventory.ship_name == ship_name,
                 ContainerInventory.container_type == container_type,
             )
         )
@@ -77,11 +79,11 @@ def create_appointment(db: Session, data) -> Appointment:
             detail=f"车牌 {data.vehicle_plate} 在 {data.pickup_date} 已有有效预约（预约号: {duplicate.appointment_no}），不可重复申请",
         )
 
-    inventory = _get_inventory(db, data.shipping_company, data.container_type)
+    inventory = _get_inventory(db, data.shipping_company, data.ship_name, data.container_type)
     if inventory is None or inventory.available_qty <= 0:
         raise HTTPException(
             status_code=422,
-            detail=f"船公司 {data.shipping_company} 箱型 {data.container_type} 库存不足，当前可用: {inventory.available_qty if inventory else 0}",
+            detail=f"船公司 {data.shipping_company} 船名 {data.ship_name} 箱型 {data.container_type} 库存不足或未录入，当前可用: {inventory.available_qty if inventory else 0}",
         )
 
     appointment = Appointment(
@@ -115,10 +117,10 @@ def approve_appointment(db: Session, appointment_id: int, operator: str) -> Appo
     if appointment.status != Appointment.STATUS_PENDING:
         raise HTTPException(status_code=400, detail=f"预约单状态为 {appointment.status}，无法审批")
 
-    inventory = _get_inventory(db, appointment.shipping_company, appointment.container_type)
+    inventory = _get_inventory(db, appointment.shipping_company, appointment.ship_name, appointment.container_type)
     if inventory is None or inventory.available_qty <= 0:
         appointment.status = Appointment.STATUS_REJECTED
-        appointment.reject_reason = f"箱型 {appointment.container_type} 库存不足（可用: {inventory.available_qty if inventory else 0}）"
+        appointment.reject_reason = f"船名 {appointment.ship_name} 箱型 {appointment.container_type} 库存不足（可用: {inventory.available_qty if inventory else 0}）"
         appointment.updated_at = datetime.utcnow()
         _log_operation(
             db, appointment.id, "REJECT", operator,
@@ -135,7 +137,7 @@ def approve_appointment(db: Session, appointment_id: int, operator: str) -> Appo
     appointment.updated_at = datetime.utcnow()
     _log_operation(
         db, appointment.id, "APPROVE", operator,
-        f"审批通过，占用库存: 船公司={appointment.shipping_company}, 箱型={appointment.container_type}",
+        f"审批通过，占用库存: 船公司={appointment.shipping_company}, 船名={appointment.ship_name}, 箱型={appointment.container_type}",
     )
 
     db.commit()
@@ -189,7 +191,7 @@ def cancel_release(db: Session, appointment_id: int, reason: str, operator: str)
     if appointment.status != Appointment.STATUS_RELEASED:
         raise HTTPException(status_code=400, detail=f"预约单状态为 {appointment.status}，无法撤销放行。只有已放行的预约才可撤销")
 
-    inventory = _get_inventory(db, appointment.shipping_company, appointment.container_type)
+    inventory = _get_inventory(db, appointment.shipping_company, appointment.ship_name, appointment.container_type)
     if inventory and inventory.occupied_qty > 0:
         inventory.occupied_qty -= 1
         inventory.updated_at = datetime.utcnow()
@@ -214,7 +216,7 @@ def check_in_appointment(db: Session, appointment_id: int, operator: str) -> App
     if appointment.status != Appointment.STATUS_RELEASED:
         raise HTTPException(status_code=400, detail=f"预约单状态为 {appointment.status}，无法签到。只有已放行的预约才可签到")
 
-    inventory = _get_inventory(db, appointment.shipping_company, appointment.container_type)
+    inventory = _get_inventory(db, appointment.shipping_company, appointment.ship_name, appointment.container_type)
     if inventory:
         if inventory.total_qty > 0:
             inventory.total_qty -= 1
@@ -241,7 +243,7 @@ def mark_timeout(db: Session, appointment_id: int, operator: str) -> Appointment
     if appointment.status not in (Appointment.STATUS_APPROVED, Appointment.STATUS_RELEASED):
         raise HTTPException(status_code=400, detail=f"预约单状态为 {appointment.status}，无法标记超时")
 
-    inventory = _get_inventory(db, appointment.shipping_company, appointment.container_type)
+    inventory = _get_inventory(db, appointment.shipping_company, appointment.ship_name, appointment.container_type)
     if inventory and inventory.occupied_qty > 0:
         inventory.occupied_qty -= 1
         inventory.updated_at = datetime.utcnow()
@@ -322,6 +324,7 @@ def recalculate_inventory(db: Session):
             .filter(
                 and_(
                     Appointment.shipping_company == inv.shipping_company,
+                    Appointment.ship_name == inv.ship_name,
                     Appointment.container_type == inv.container_type,
                     Appointment.status.in_(
                         (Appointment.STATUS_APPROVED, Appointment.STATUS_RELEASED)

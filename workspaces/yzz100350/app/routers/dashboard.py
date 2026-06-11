@@ -30,6 +30,7 @@ def create_inventory(data: InventoryCreate, db: Session = Depends(get_db)):
         db.query(ContainerInventory)
         .filter(
             ContainerInventory.shipping_company == data.shipping_company,
+            ContainerInventory.ship_name == data.ship_name,
             ContainerInventory.container_type == data.container_type,
         )
         .first()

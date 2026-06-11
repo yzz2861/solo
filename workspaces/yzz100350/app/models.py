@@ -16,7 +16,7 @@ class ContainerInventory(Base):
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __table_args__ = (
-        Index("ix_inv_company_type", "shipping_company", "container_type"),
+        Index("ix_inv_company_ship_type", "shipping_company", "ship_name", "container_type"),
     )
 
     @property
