@@ -65,16 +65,9 @@ export interface SummaryVersion {
   modifiedBy: string;
 }
 
-export interface MaterialOrderItem {
-  materialId: string;
-  order: number;
-  customName: string;
-  include: boolean;
-}
-
 export interface MaterialOrder {
   projectId: string;
-  items: MaterialOrderItem[];
+  order: string[];
 }
 
 export interface ApiResponse<T> {

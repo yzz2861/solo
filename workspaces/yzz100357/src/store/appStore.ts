@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Order, Material, Evidence, AppealSummary, MaterialOrder, MaterialOrderItem, SummaryVersion } from '../../shared/types';
+import type { Order, Material, Evidence, AppealSummary, MaterialOrder, SummaryVersion } from '../../shared/types';
 import { projectApi, materialApi, evidenceApi, summaryApi, exportApi } from '../services/api';
 
 interface AppState {
@@ -42,8 +42,8 @@ interface AppState {
   saveSummary: (projectId: string, content: string, changeLog?: string) => Promise<AppealSummary | null>;
   createSummaryVersion: (projectId: string, content: string, versionNote: string) => Promise<SummaryVersion | null>;
   loadMaterialOrders: (projectId: string) => Promise<void>;
-  saveMaterialOrders: (projectId: string, items: MaterialOrderItem[]) => Promise<void>;
-  updateMaterialOrder: (projectId: string, items: MaterialOrderItem[]) => Promise<void>;
+  saveMaterialOrders: (projectId: string, order: string[]) => Promise<void>;
+  updateMaterialOrder: (projectId: string, order: string[]) => Promise<void>;
   exportMaterials: (projectId: string, format: any) => Promise<any>;
   setError: (error: string | null) => void;
 }
@@ -406,13 +406,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
 
-  saveMaterialOrders: async (projectId, items) => {
+  saveMaterialOrders: async (projectId, order) => {
     set({ loading: true, error: null });
     try {
-      const order = items.filter(i => i.include).sort((a, b) => a.order - b.order).map(i => i.materialId);
       const response = await materialApi.updateOrder(projectId, order);
       if (response.success) {
-        set({ materialOrders: { projectId, items } });
+        set({ materialOrders: { projectId, order } });
       }
     } catch (error: any) {
       set({ error: error.message });
@@ -421,11 +420,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
 
-  updateMaterialOrder: async (projectId, items) => {
+  updateMaterialOrder: async (projectId, order) => {
     try {
-      const order = items.filter(i => i.include).sort((a, b) => a.order - b.order).map(i => i.materialId);
       await materialApi.updateOrder(projectId, order);
-      set({ materialOrders: { projectId, items } });
+      set({ materialOrders: { projectId, order } });
     } catch (error: any) {
       set({ error: error.message });
     }
@@ -436,6 +434,20 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       const response = await exportApi.export(projectId, format);
       if (response.success && response.data) {
+        const { downloadUrl, fileName } = response.data;
+        
+        const downloadResponse = await fetch(downloadUrl);
+        const blob = await downloadResponse.blob();
+        
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
         return response.data;
       }
       return null;

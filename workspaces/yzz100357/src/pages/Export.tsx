@@ -45,9 +45,13 @@ import { cn } from '../lib/utils';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { MATERIAL_TYPE_LABELS } from '../../shared/types';
-import type { Material, MaterialOrder, MaterialOrderItem } from '../../shared/types';
+import type { Material, MaterialOrder } from '../../shared/types';
 
-interface OrderedMaterial extends MaterialOrderItem {
+interface OrderedMaterial {
+  materialId: string;
+  order: number;
+  customName: string;
+  include: boolean;
   material: Material;
 }
 
@@ -220,7 +224,9 @@ export default function Export() {
   }, [projectId, loadMaterials, loadSummary, loadMaterialOrders, currentProject, setCurrentProject, projectApi]);
 
   const orderedMaterials = useMemo((): OrderedMaterial[] => {
-    if (!materialOrders || materialOrders.items.length === 0) {
+    const orderArray = materialOrders?.order || [];
+    
+    if (orderArray.length === 0) {
       return materials.map((m, i) => ({
         materialId: m.id,
         order: i + 1,
@@ -229,14 +235,20 @@ export default function Export() {
         material: m
       }));
     }
-    return materialOrders.items
-      .filter(mo => mo.include)
-      .sort((a, b) => a.order - b.order)
-      .map(mo => {
-        const material = materials.find(m => m.id === mo.materialId);
-        return { ...mo, material } as OrderedMaterial;
+    
+    return orderArray
+      .map((materialId, index) => {
+        const material = materials.find(m => m.id === materialId);
+        if (!material) return null;
+        return {
+          materialId: material.id,
+          order: index + 1,
+          customName: `${String(index + 1).padStart(2, '0')}_${MATERIAL_TYPE_LABELS[material.type]}_${material.fileName}`,
+          include: true,
+          material
+        } as OrderedMaterial;
       })
-      .filter(mo => mo.material) as OrderedMaterial[];
+      .filter((mo): mo is OrderedMaterial => mo !== null);
   }, [materials, materialOrders]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -246,63 +258,37 @@ export default function Export() {
       const oldIndex = orderedMaterials.findIndex(m => m.materialId === active.id);
       const newIndex = orderedMaterials.findIndex(m => m.materialId === over.id);
 
-      const newOrders = arrayMove(orderedMaterials, oldIndex, newIndex).map((item: OrderedMaterial, index: number) => ({
-        ...item,
-        order: index + 1,
-        customName: autoRename
-          ? `${String(index + 1).padStart(2, '0')}_${MATERIAL_TYPE_LABELS[item.material.type]}_${item.material.fileName}`
-          : item.customName
-      }));
+      const reorderedItems = arrayMove(orderedMaterials, oldIndex, newIndex);
+      const newOrder = reorderedItems.map((item) => item.materialId);
 
       if (projectId) {
-        saveMaterialOrders(projectId, newOrders);
+        saveMaterialOrders(projectId, newOrder);
       }
     }
   };
 
   const handleRemoveMaterial = (materialId: string) => {
     if (!projectId) return;
-    const items = materialOrders?.items || orderedMaterials;
-    const newOrders = items.map(mo =>
-      mo.materialId === materialId ? { ...mo, include: false } : mo
-    );
-    saveMaterialOrders(projectId, newOrders);
+    const newOrder = orderedMaterials
+      .filter(m => m.materialId !== materialId)
+      .map(m => m.materialId);
+    saveMaterialOrders(projectId, newOrder);
   };
 
   const handleRenameMaterial = (materialId: string, newName: string) => {
     if (!projectId) return;
-    const items = materialOrders?.items || orderedMaterials;
-    const newOrders = items.map(mo =>
-      mo.materialId === materialId ? { ...mo, customName: newName } : mo
-    );
-    saveMaterialOrders(projectId, newOrders);
+    saveMaterialOrders(projectId, orderedMaterials.map(m => m.materialId));
   };
 
   const handleResetOrder = () => {
     if (!projectId) return;
-    const newOrders = materials.map((m, i) => ({
-      materialId: m.id,
-      order: i + 1,
-      customName: `${String(i + 1).padStart(2, '0')}_${MATERIAL_TYPE_LABELS[m.type]}_${m.fileName}`,
-      include: true
-    }));
-    saveMaterialOrders(projectId, newOrders);
+    const newOrder = materials.map(m => m.id);
+    saveMaterialOrders(projectId, newOrder);
   };
 
   const handleExport = async () => {
     if (!projectId) return;
-    const result = await exportMaterials(projectId, exportFormat);
-    if (result) {
-      const url = window.URL.createObjectURL(new Blob());
-      const a = document.createElement('a');
-      a.href = url;
-      const ext = exportFormat === 'zip' ? 'zip' : 'md';
-      a.download = `申诉材料_${currentProject?.orderNo || '订单'}_${format(new Date(), 'yyyyMMdd', { locale: zhCN })}.${ext}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }
+    await exportMaterials(projectId, exportFormat);
   };
 
   const totalSize = orderedMaterials.reduce((sum, item) => {
