@@ -1,0 +1,17 @@
+{
+  "name": "dental-sterilization-tracker",
+  "version": "1.0.0",
+  "description": "牙科器械灭菌追踪API系统",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "init-db": "node src/db/init.js",
+    "test": "node tests/api.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0"
+  }
+}
