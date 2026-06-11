@@ -4,29 +4,23 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple, List
 
 from .models import ReferenceEntry, ReferenceType
 
 
 DOI_PATTERN = re.compile(
-    r'(?:https?://(?:dx\.)?doi\.org/|doi:\s*)?(10\.\d{4,9}/[\-._;()/:A-Z0-9]+)',
+    r'(?:https?://(?:dx\.)?doi\.org/|doi:\s*)?(10\.\d{4,9}/[\-._;()/:A-Za-z0-9]+)',
     re.IGNORECASE,
 )
 
 YEAR_PATTERN = re.compile(r'\b(19|20)\d{2}\b')
-
 PAGE_PATTERN = re.compile(r'(\d+)\s*[-–—]\s*(\d+)')
-
-VOLUME_PATTERN = re.compile(r'Vol\.?\s*(\d+)', re.IGNORECASE)
-NUMBER_PATTERN = re.compile(r'(?:No\.?|Issue)\s*(\d+)', re.IGNORECASE)
 
 
 class TextParser:
-    def __init__(self, preserve_order: bool = True) -> None:
-        self.preserve_order = preserve_order
-        self._entry_split_pattern = re.compile(r'\n\s*(?:\[?\d+\]?\.?\s*)?\n')
-        self._numbered_pattern = re.compile(r'^\s*\[?(\d+)\]?[\.\)]\s*')
+    def __init__(self) -> None:
+        self._numbered_pattern = re.compile(r'^\s*\[?(\d+)\]?[\.\)]?\s*')
 
     def parse(self, text: str) -> list[ReferenceEntry]:
         entries = []
@@ -73,9 +67,36 @@ class TextParser:
             original_position=position,
         )
 
+        self._extract_structured_fields(text, entry)
+
+        if self._looks_like_doi_only(text):
+            if not entry.title:
+                entry.title = f"DOI: {entry.doi}" if entry.doi else text[:100]
+            entry.entry_type = self._detect_type(entry, text)
+            return entry
+
+        text_clean = text.replace('，', ',').replace('。', '.').replace('；', ';').replace('：', ':')
+        
+        self._parse_reference(text_clean, entry)
+
+        if not entry.title:
+            entry.title = text[:min(len(text), 200)]
+
+        entry.entry_type = self._detect_type(entry, text)
+        return entry
+
+    def _looks_like_doi_only(self, text: str) -> bool:
+        text = text.strip()
+        if text.lower().startswith('doi:') or text.lower().startswith('https://doi.org'):
+            return True
+        if re.match(r'^10\.\d{4,9}/[\-._;()/:A-Za-z0-9]+$', text):
+            return True
+        return False
+
+    def _extract_structured_fields(self, text: str, entry: ReferenceEntry) -> None:
         doi_match = DOI_PATTERN.search(text)
         if doi_match:
-            entry.doi = doi_match.group(1)
+            entry.doi = doi_match.group(1).lower()
 
         year_match = YEAR_PATTERN.search(text)
         if year_match:
@@ -83,150 +104,354 @@ class TextParser:
 
         page_match = PAGE_PATTERN.search(text)
         if page_match:
-            entry.pages = f"{page_match.group(1)}-{page_match.group(2)}"
+            start_page = page_match.group(1)
+            end_page = page_match.group(2)
+            if len(start_page) <= 5 and len(end_page) <= 5:
+                entry.pages = f"{start_page}-{end_page}"
 
-        vol_match = VOLUME_PATTERN.search(text)
+        url_match = re.search(r'https?://\S+', text)
+        if url_match and not entry.doi:
+            entry.url = url_match.group(0).rstrip('.,;)')
+
+        vol_pattern = re.compile(r',\s*(\d+)\s*\(\s*(\d+)\s*\)')
+        vol_match = vol_pattern.search(text)
         if vol_match:
             entry.volume = vol_match.group(1)
+            entry.number = vol_match.group(2)
 
-        num_match = NUMBER_PATTERN.search(text)
-        if num_match:
-            entry.number = num_match.group(1)
+        chinese_vol = re.search(r'第\s*(\d+)\s*卷', text)
+        if chinese_vol and not entry.volume:
+            entry.volume = chinese_vol.group(1)
 
-        authors, remaining = self._extract_authors(text)
-        entry.authors = authors
+        chinese_num = re.search(r'第\s*(\d+)\s*期', text)
+        if chinese_num and not entry.number:
+            entry.number = chinese_num.group(1)
 
-        title, remaining = self._extract_title(remaining, entry.year)
-        if title:
-            entry.title = title
+        vol_word_pattern = re.search(r'Vol\.?\s*(\d+)', text, re.IGNORECASE)
+        if vol_word_pattern and not entry.volume:
+            entry.volume = vol_word_pattern.group(1)
 
-        journal = self._extract_journal(remaining)
-        if journal:
-            entry.journal = journal
+    def _parse_reference(self, text: str, entry: ReferenceEntry) -> None:
+        quoted_title = self._find_quoted_title(text)
+        if quoted_title:
+            title_text, before_title, after_title = quoted_title
+            entry.title = title_text.strip('"“”《》').strip('.')
+            self._extract_authors_safe(before_title, entry)
+            self._extract_journal(after_title, entry)
+            return
 
-        entry.entry_type = self._detect_type(text)
-
-        if 'http' in text.lower() and not entry.doi:
-            url_match = re.search(r'https?://\S+', text)
-            if url_match:
-                entry.url = url_match.group(0).rstrip('.,;)')
-
-        return entry
-
-    def _extract_authors(self, text: str) -> tuple[list[str], str]:
-        authors = []
-        remaining = text
-
-        year_match = YEAR_PATTERN.search(text)
-        if year_match:
-            before_year = text[:year_match.start()]
-            author_part = before_year.strip()
-            remaining = text[year_match.start():]
-        else:
-            first_period = text.find('. ')
-            if first_period > 0 and first_period < 200:
-                author_part = text[:first_period]
-                remaining = text[first_period + 2:]
+        year_in_parens = re.search(r'\((19|20)\d{2}\)', text)
+        if year_in_parens:
+            year_str = year_in_parens.group(0)
+            year_pos = text.find(year_str)
+            
+            before_year = text[:year_pos].strip().rstrip(',.;:')
+            after_year = text[year_pos + len(year_str):].strip().lstrip(',.;: ')
+            
+            period_pos = before_year.rfind('. ')
+            comma_before_year = before_year.rfind(', ')
+            
+            if period_pos > comma_before_year:
+                author_part = before_year[:period_pos].strip()
+                title_part = before_year[period_pos + 2:].strip()
+                
+                self._extract_authors_safe(author_part, entry)
+                if title_part and len(title_part) >= 5:
+                    entry.title = title_part.strip('"“”《》').strip('.')
             else:
-                return [], text
+                self._extract_authors_safe(before_year, entry)
+            
+            self._extract_journal(after_year, entry)
+            return
 
-        author_part = author_part.strip().rstrip(',.;')
+        dot_sections = re.split(r'(?<=[\.\?])\s+', text)
+        if len(dot_sections) >= 2:
+            first_section = dot_sections[0].strip()
+            if self._is_author_section(first_section):
+                self._extract_authors_safe(first_section, entry)
+                if len(dot_sections) >= 2:
+                    second_section = dot_sections[1].strip()
+                    if second_section and len(second_section) >= 5:
+                        entry.title = second_section.strip('"“”《》').strip('.')
+                if len(dot_sections) >= 3:
+                    third_section = dot_sections[2].strip()
+                    self._extract_journal(third_section, entry)
 
-        if not author_part:
-            return [], remaining
+    def _find_quoted_title(self, text: str) -> Optional[Tuple[str, str, str]]:
+        patterns = [
+            r'“([^”]+)”',
+            r'《([^》]+)》',
+            r'"([^"]+)"',
+        ]
 
-        author_part = re.sub(r'[，；]', ',', author_part)
-        author_part = re.sub(r'\s+and\s+', ', ', author_part, flags=re.IGNORECASE)
-
-        raw_authors = [a.strip() for a in author_part.split(',') if a.strip()]
-
-        for author in raw_authors:
-            normalized = self._normalize_author_name(author)
-            if normalized:
-                authors.append(normalized)
-
-        return authors, remaining
-
-    def _normalize_author_name(self, author: str) -> Optional[str]:
-        author = author.strip().strip('.')
-        if not author or author.lower() in ['et al', 'etal', '等']:
-            return 'et al.'
-
-        author = re.sub(r'\s+', ' ', author)
-
-        if ',' in author:
-            parts = [p.strip() for p in author.split(',', 1)]
-            if len(parts) == 2:
-                last, first = parts
-                if first:
-                    initials = '. '.join([c for c in first if c.isupper()]) + '.'
-                    return f"{last}, {initials}"
-                return last
-
-        words = author.split()
-        if len(words) > 1:
-            last = words[-1]
-            first_initials = '. '.join([w[0].upper() for w in words[:-1] if w])
-            if first_initials:
-                return f"{last}, {first_initials}."
-            return last
-
-        return author if author else None
-
-    def _extract_title(self, text: str, year: Optional[int]) -> tuple[Optional[str], str]:
-        text = text.strip()
-
-        if year:
-            year_str = str(year)
-            idx = text.find(year_str)
-            if idx >= 0:
-                text = text[idx + len(year_str):].lstrip(').,; ')
-
-        quoted_match = re.match(r'[《"“]([^》"”]+)[》"”]', text)
-        if quoted_match:
-            title = quoted_match.group(1).strip()
-            remaining = text[quoted_match.end():].lstrip('.,; ')
-            return title, remaining
-
-        parts = re.split(r'[.。]\s+', text, maxsplit=2)
-        if len(parts) >= 2:
-            title_candidate = parts[0].strip().strip('"“”《》')
-            if 5 <= len(title_candidate) <= 300:
-                if not re.match(r'^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*$', title_candidate):
-                    remaining = '. '.join(parts[1:]).strip()
-                    return title_candidate, remaining
-
-        return None, text
-
-    def _extract_journal(self, text: str) -> Optional[str]:
-        text = text.strip()
-
-        if not text:
-            return None
-
-        parts = re.split(r'[.,;]\s+', text, maxsplit=1)
-        if parts:
-            journal_candidate = parts[0].strip().strip('"“”')
-            if 2 <= len(journal_candidate) <= 100:
-                if not journal_candidate.lower().startswith(('vol', 'no', 'issue', '19', '20', 'http')):
-                    return journal_candidate
+        for pattern in patterns:
+            match = re.search(pattern, text)
+            if match:
+                title_text = match.group(1).strip()
+                if 5 <= len(title_text) <= 300:
+                    before_title = text[:match.start()].strip().rstrip(',.;:')
+                    after_title = text[match.end():].strip().lstrip(',.;: ')
+                    return (title_text, before_title, after_title)
 
         return None
 
-    def _detect_type(self, text: str) -> ReferenceType:
+    def _is_author_section(self, text: str) -> bool:
+        if not text or len(text) > 200:
+            return False
+        
+        if ' and ' in text.lower() or ' & ' in text or '与' in text or '和' in text:
+            comma_count = text.count(',')
+            and_count = text.lower().count(' and ') + text.count(' & ') + text.count(' 与 ') + text.count(' 和 ')
+            if and_count >= 1 or comma_count >= 1:
+                return True
+        
+        if re.match(r'^[\u4e00-\u9fff]{1,4}(?:[\u3002，,]\s*[\u4e00-\u9fff]{1,4})*$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+(?:,\s*[A-Z][a-z]+)+$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+\s+[A-Z][a-z]?(?:,\s*[A-Z][a-z]+\s+[A-Z][a-z]?)+$', text):
+            return True
+        
+        return False
+
+    def _extract_authors_safe(self, text: str, entry: ReferenceEntry) -> None:
+        if not text:
+            return
+        
+        text = text.strip().rstrip(',.;:')
+        
+        if len(text) > 200:
+            return
+        
+        authors = []
+        
+        sep_patterns = [
+            r'\s+(?:and|AND|And)\s+',
+            r'\s+(?:与|和)\s+',
+            r'\s*&\s*',
+        ]
+        
+        found_sep = None
+        parts = None
+        
+        for sep in sep_patterns:
+            if re.search(sep, text):
+                parts = re.split(sep, text)
+                found_sep = sep
+                break
+        
+        if parts is not None:
+            authors_list = []
+            for part in parts:
+                part = part.strip().rstrip(',.;')
+                if not part:
+                    continue
+                if part.lower() in ['et al', 'et al.', 'etal', '等']:
+                    if authors_list:
+                        authors_list.append('et al.')
+                    break
+                normalized = self._normalize_author(part)
+                if normalized:
+                    authors_list.append(normalized)
+            
+            if authors_list and len(authors_list) <= 10:
+                authors = authors_list
+        
+        if not authors:
+            chinese_authors = re.findall(r'[\u4e00-\u9fff]{1,4}(?:\s+[\u4e00-\u9fff]{1,4})?', text)
+            if len(chinese_authors) >= 1 and len(chinese_authors) <= 10:
+                authors = [a.strip() for a in chinese_authors if a.strip()]
+        
+        if not authors and self._looks_like_single_author(text):
+            normalized = self._normalize_author(text)
+            if normalized:
+                authors.append(normalized)
+        
+        if authors:
+            entry.authors = authors
+
+    def _looks_like_single_author(self, text: str) -> bool:
+        if not text:
+            return False
+        
+        text = text.strip().rstrip('.')
+        
+        if re.match(r'^[\u4e00-\u9fff]{1,4}(?:\s+[\u4e00-\u9fff]{1,4})?$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+\s+[A-Z][a-z]?$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+,\s*[A-Z][a-z]?$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+,\s*[A-Z]\.\s*[A-Z]\.?$', text):
+            return True
+        
+        return False
+
+    def _normalize_author(self, name: str) -> Optional[str]:
+        name = name.strip().strip('.').strip()
+        if not name:
+            return None
+        
+        name = re.sub(r'\s+', ' ', name)
+        
+        if name.lower() in ['et al', 'et al.', 'etal', '等']:
+            return 'et al.'
+        
+        if re.match(r'^[\u4e00-\u9fff]{1,4}(?:\s+[\u4e00-\u9fff]{1,4})?$', name):
+            return name
+        
+        if ',' in name:
+            parts = [p.strip() for p in name.split(',', 1)]
+            if len(parts) == 2:
+                last, first = parts
+                last = last.strip()
+                first = first.strip()
+                
+                if re.match(r'^[A-Za-z]+(?:\s+[A-Za-z]+)*$', last):
+                    initial_chars = [c for c in first if c.isupper()]
+                    if initial_chars:
+                        initials = '. '.join(initial_chars)
+                        return f"{last}, {initials}."
+                    return last
+                
+                if re.match(r'^[\u4e00-\u9fff]{1,4}$', last):
+                    return name
+        
+        words = name.split()
+        if len(words) == 2:
+            if re.match(r'^[A-Z][a-z]+$', words[0]) and re.match(r'^[A-Z]([a-z]+)?$', words[1]):
+                return f"{words[0]}, {words[1][0]}."
+            if re.match(r'^[\u4e00-\u9fff]{1,4}$', words[0]) and re.match(r'^[\u4e00-\u9fff]{1,4}$', words[1]):
+                return name
+        
+        if len(words) == 1:
+            if re.match(r'^[A-Z][a-z]+$', name):
+                return name
+            if re.match(r'^[\u4e00-\u9fff]{1,4}$', name):
+                return name
+        
+        if len(words) >= 2 and all(re.match(r'^[A-Za-z]+$', w) for w in words):
+            last_name = words[-1]
+            initials = [w[0].upper() for w in words[:-1] if w]
+            if initials:
+                return f"{last_name}, {'. '.join(initials)}."
+            return last_name
+        
+        return None
+
+    def _extract_journal(self, text: str, entry: ReferenceEntry) -> None:
+        if not text:
+            return
+        
+        text = text.lstrip('()').strip()
+        if not text:
+            return
+        
+        year_str = str(entry.year) if entry.year else None
+        
+        if year_str and year_str in text:
+            year_pos = text.find(year_str)
+            candidate = text[:year_pos].strip().rstrip(',.;: ')
+            if self._is_valid_journal(candidate):
+                entry.journal = candidate
+                return
+        
+        comma_pos = text.find(',')
+        if comma_pos > 0:
+            candidate = text[:comma_pos].strip()
+            if self._is_valid_journal(candidate):
+                entry.journal = candidate
+                return
+        
+        period_pos = text.find('. ')
+        if period_pos > 0:
+            candidate = text[:period_pos].strip()
+            if self._is_valid_journal(candidate):
+                entry.journal = candidate
+                return
+        
+        colon_pos = text.find(': ')
+        if colon_pos > 0:
+            candidate = text[:colon_pos].strip()
+            if self._is_valid_journal(candidate):
+                entry.journal = candidate
+                return
+        
+        words = text.split()
+        for i in range(min(len(words), 8), 1, -1):
+            candidate = ' '.join(words[:i])
+            if self._is_valid_journal(candidate):
+                entry.journal = candidate
+                return
+
+    def _is_valid_journal(self, text: str) -> bool:
+        if not text or len(text) < 3 or len(text) > 200:
+            return False
+        
+        text_lower = text.lower()
+        
+        if text_lower.startswith(('http', 'doi', '10.', 'url', 'pp.', 'vol.', 'no.', '19', '20', 'https', '第', '(')):
+            return False
+        
+        if re.match(r'^\d+$', text):
+            return False
+        
+        if re.match(r'^\d+\s*[-–—]\s*\d+$', text):
+            return False
+        
+        if re.match(r'^\d+\(\d+\)$', text):
+            return False
+        
+        if re.match(r'^[A-Za-z]\.?$', text):
+            return False
+        
+        if re.search(r'^\d+卷|\d+期', text):
+            return False
+        
+        if text_lower in ['et al', 'et al.', 'etal', '等', 'and', '与', '和']:
+            return False
+        
+        if re.match(r'^[A-Z][a-z]+\s+\d+\.\d+', text):
+            return False
+        
+        if len(text) >= 100:
+            return False
+        
+        if re.match(r'^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*$', text):
+            return True
+        
+        if re.match(r'^[\u4e00-\u9fff]+(?:[\u4e00-\u9fff]| )*$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+(?:[ -][A-Z][a-z]+)*$', text):
+            return True
+        
+        if re.match(r'^[A-Z][a-z]+(?:\.[A-Z][a-z]+)*$', text):
+            return True
+        
+        return False
+
+    def _detect_type(self, entry: ReferenceEntry, text: str) -> ReferenceType:
         lower = text.lower()
 
-        if any(k in lower for k in ['thesis', 'dissertation', '硕士', '博士']):
+        if any(k in lower for k in ['thesis', 'dissertation', '硕士', '博士', '学位论文']):
             return ReferenceType.THESIS
-        elif any(k in lower for k in ['proceedings', 'conference', 'symposium', '会议']):
+        elif any(k in lower for k in ['proceedings', 'conference', 'symposium', '会议录', '研讨会', 'Neural Information Processing Systems']):
             return ReferenceType.INPROCEEDINGS
-        elif any(k in lower for k in ['book', '图书', '出版']):
+        elif any(k in lower for k in ['book', '图书', '专著', '出版社', 'press', 'University Press', 'Cambridge', 'Oxford']):
             return ReferenceType.BOOK
-        elif any(k in lower for k in ['chapter', 'in:', 'pp.']):
+        elif any(k in lower for k in ['chapter', 'in:', '编者', '章节']):
             return ReferenceType.INCOLLECTION
-        elif any(k in lower for k in ['http', 'url', 'www.']):
+        elif any(k in lower for k in ['http://', 'https://', 'www.', 'online']):
+            if entry.doi or entry.url:
+                return ReferenceType.ARTICLE
             return ReferenceType.ONLINE
-        elif any(k in text for k in ['Journal', 'Trans.', 'Proc.', 'Review', 'Letters']) or re.search(r'Vol\.?\s*\d+', text):
+        elif entry.journal:
             return ReferenceType.ARTICLE
         else:
             return ReferenceType.UNKNOWN
@@ -350,7 +575,7 @@ class BibTeXParser:
         if not entry.doi:
             doi_match = DOI_PATTERN.search(original_text)
             if doi_match:
-                entry.doi = doi_match.group(1)
+                entry.doi = doi_match.group(1).lower()
 
         return entry
 
