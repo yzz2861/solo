@@ -27,6 +27,7 @@ parser.add_argument("idea_id", nargs="?")
 parser.add_argument("--run-dir")
 parser.add_argument("--round-name")
 parser.add_argument("--session-timeout")
+parser.add_argument("--commit-timeout")
 parser.add_argument("--trajectory-timeout")
 args, _ = parser.parse_known_args(sys.argv[1:])
 
@@ -142,6 +143,8 @@ HEADERS = [
     "产物及过程是否满意",
     "不满意原因",
     "远端Github地址",
+    "github地址",
+    "commit id",
     "分支文件夹",
     "截图",
     "日志轨迹",
@@ -152,6 +155,7 @@ parser.add_argument("idea_id", nargs="?")
 parser.add_argument("--run-dir")
 parser.add_argument("--round-name")
 parser.add_argument("--session-timeout")
+parser.add_argument("--commit-timeout")
 parser.add_argument("--trajectory-timeout")
 args, _ = parser.parse_known_args(sys.argv[1:])
 
@@ -167,6 +171,7 @@ if not final_row_path.exists():
     raise SystemExit(f"找不到本次收尾结果: {final_row_path}")
 
 row = json.loads(final_row_path.read_text(encoding="utf-8"))
+row["分支文件夹"] = f"pro3/{args.idea_id}"
 
 try:
     from openpyxl import Workbook

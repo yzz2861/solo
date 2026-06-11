@@ -45,6 +45,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-dir", help="指定 run 目录；默认使用 run_log/script/manual_state.json 中该项目最近一次 run。")
     parser.add_argument("--round-name", help="写入结果表的轮次；默认从 run 目录自动识别。")
     parser.add_argument("--session-timeout", type=int, default=600, help="等待剪贴板 sessionId 的秒数；0 表示一直等。默认 600。")
+    parser.add_argument("--commit-timeout", type=int, default=600, help="等待剪贴板 commitId 的秒数；0 表示一直等。默认 600。")
     parser.add_argument("--trajectory-timeout", type=int, default=600, help="等待剪贴板轨迹内容的秒数；0 表示一直等。默认 600。")
     parser.add_argument("--detach-after-capture", action="store_true", help="捕获 sessionId/轨迹并启动后台收尾后立即返回；auto_finish 专用。")
     return parser.parse_args()
@@ -82,7 +83,40 @@ def infer_round_name(run_dir: Path, explicit_round_name: str | None = None) -> s
     return "第一轮"
 
 
-def build_capture_row(runner: object, idea_id: str, run_dir: Path, workspace: Path, session_id: str, round_name: str) -> dict[str, str]:
+def github_url_for_idea(idea_id: str) -> str:
+    return f"https://github.com/yzz2861/solo/tree/pro3/{idea_id}"
+
+
+def branch_folder_for_idea(idea_id: str) -> str:
+    return f"pro3/{idea_id}"
+
+
+def commitish(text: str) -> str:
+    match = re.search(r"\b[0-9a-f]{7,40}\b", text.strip(), re.I)
+    return match.group(0) if match else ""
+
+
+def wait_for_commit_clipboard(runner: object, timeout_seconds: int, trace: object) -> str:
+    deadline = None if timeout_seconds <= 0 else time.time() + timeout_seconds
+    while True:
+        value = runner.get_clipboard().strip()
+        commit_id = commitish(value)
+        if commit_id:
+            trace.write("manual_commit_clipboard_detected", chars=len(value), commit_chars=len(commit_id))
+            return commit_id
+        if deadline is not None and time.time() >= deadline:
+            raise TimeoutError(f"等待剪贴板 commitId 超时: {timeout_seconds}s")
+        time.sleep(1)
+
+
+def save_commit_identifier(run_dir: Path, idea_id: str, commit_id: str, trace: object) -> Path:
+    commit_path = run_dir / f"commitId_{idea_id}.txt"
+    commit_path.write_text(commit_id.strip() + "\n", encoding="utf-8")
+    trace.write("commit_id_saved", path=str(commit_path), chars=len(commit_id.strip()))
+    return commit_path
+
+
+def build_capture_row(runner: object, idea_id: str, run_dir: Path, workspace: Path, session_id: str, commit_id: str, round_name: str) -> dict[str, str]:
     idea_data = read_json(run_dir / "idea.json", {})
     fields = idea_data.get("fields") if isinstance(idea_data.get("fields"), dict) else {}
     manual_trajectory_path = run_dir / "trae_manual_trajectory.md"
@@ -107,7 +141,9 @@ def build_capture_row(runner: object, idea_id: str, run_dir: Path, workspace: Pa
         "产物及过程是否满意": "",
         "不满意原因": "",
         "远端Github地址": "",
-        "分支文件夹": "",
+        "github地址": github_url_for_idea(idea_id),
+        "commit id": commit_id,
+        "分支文件夹": branch_folder_for_idea(idea_id),
         "截图": str(screenshot_path) if screenshot_path.exists() else "",
         "日志轨迹": table_text(trajectory_text),
         "流程状态": "captured_waiting_qc",
@@ -116,6 +152,7 @@ def build_capture_row(runner: object, idea_id: str, run_dir: Path, workspace: Pa
         "run_dir": str(run_dir),
         "prompt_path": str(run_dir / "prompt.txt"),
         "session_id": session_id,
+        "commit_id": commit_id,
         "screenshot_path": str(screenshot_path) if screenshot_path.exists() else "",
         "trajectory_path": str(preferred_trajectory_path) if preferred_trajectory_path.exists() else "",
         "manual_trajectory_path": str(manual_trajectory_path) if manual_trajectory_path.exists() else "",
@@ -333,11 +370,27 @@ def main() -> int:
     manual_trajectory_path = run_dir / "trae_manual_trajectory.md"
     manual_trajectory_path.write_text(trajectory_text.rstrip() + "\n", encoding="utf-8")
     (run_dir / "trae_trajectory.md").write_text(trajectory_text.rstrip() + "\n", encoding="utf-8")
+    trace.write("manual_trajectory_saved", path=str(manual_trajectory_path), chars=len(trajectory_text))
+
+    runner.set_clipboard("")
+    trace.write("manual_clipboard_cleared", target="commit_id")
+    print(red_text(f"重要提醒：已记录日志轨迹；当前正在处理 {idea_id} 的 {round_name}，请复制这一轮对应的 commitId；脚本会从剪贴板提取 7-40 位 git hash。"), flush=True)
+    print("请复制 commitId 到剪贴板；脚本正在等待并会自动记录。", flush=True)
+    try:
+        commit_id = wait_for_commit_clipboard(runner, args.commit_timeout, trace)
+    except TimeoutError as exc:
+        trace.write("manual_commit_clipboard_timeout", timeout_seconds=args.commit_timeout)
+        raise SystemExit(f"等待 commitId 超时；请重新运行 finish 脚本，并复制 {round_name} 对应的 commitId 后让脚本从剪贴板读取。") from exc
+
+    commit_file = save_commit_identifier(run_dir, idea_id, commit_id, trace)
+
     write_json(
         run_dir / "manual_clipboard_capture.json",
         {
             "session_id": session_id,
             "session_file": str(session_file),
+            "commit_id": commit_id,
+            "commit_file": str(commit_file),
             "trajectory_path": str(manual_trajectory_path),
             "trajectory_chars": len(trajectory_text),
             "trajectory_source": trajectory_source,
@@ -345,11 +398,18 @@ def main() -> int:
             "captured_at": now(),
         },
     )
-    trace.write("manual_trajectory_saved", path=str(manual_trajectory_path), chars=len(trajectory_text))
 
-    capture_row = build_capture_row(runner, idea_id, run_dir, workspace, session_id, round_name)
+    capture_row = build_capture_row(runner, idea_id, run_dir, workspace, session_id, commit_id, round_name)
     upsert_manual_table(capture_row)
     write_json(run_dir / "manual_capture_row.json", capture_row)
+    write_json(
+        run_dir / "manual_commit_capture.json",
+        {
+            "commit_id": commit_id,
+            "commit_file": str(commit_file),
+            "captured_at": now(),
+        },
+    )
     update_started_entry(
         idea_id,
         status="captured_waiting_qc",
@@ -358,6 +418,7 @@ def main() -> int:
         run_dir=str(run_dir),
         workspace=str(workspace),
         session_file=str(session_file),
+        commit_file=str(commit_file),
         trajectory_file=str(manual_trajectory_path),
         captured_at=now(),
     )

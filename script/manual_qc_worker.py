@@ -60,6 +60,8 @@ FEISHU_UPDATE_HEADERS = [
     "产物及过程是否满意",
     "不满意原因",
     "远端Github地址",
+    "github地址",
+    "commit id",
     "分支文件夹",
     "截图",
     "日志轨迹",
@@ -111,6 +113,35 @@ def sync_current_row_to_feishu(run_dir: Path, row: dict[str, str], trace: Any) -
     if proc.returncode != 0:
         raise RuntimeError(f"飞书同步失败，退出码 {proc.returncode}，同步文件: {workbook}")
     return result
+
+
+def github_url_for_idea(idea_id: str) -> str:
+    return f"https://github.com/yzz2861/solo/tree/pro3/{idea_id}"
+
+
+def branch_folder_for_idea(idea_id: str) -> str:
+    return f"pro3/{idea_id}"
+
+
+def read_manual_commit_id(run_dir: Path, idea_id: str) -> str:
+    capture = read_json(run_dir / "manual_commit_capture.json", {})
+    if isinstance(capture, dict):
+        commit_id = str(capture.get("commit_id") or "").strip()
+        if commit_id:
+            return commit_id
+    capture_row = read_json(run_dir / "manual_capture_row.json", {})
+    if isinstance(capture_row, dict):
+        commit_id = str(capture_row.get("commit_id") or capture_row.get("commit id") or "").strip()
+        if commit_id:
+            return commit_id
+    preferred = run_dir / f"commitId_{idea_id}.txt"
+    if preferred.exists():
+        return read_text_if_exists(preferred).strip()
+    for path in sorted(run_dir.glob("commitId_*.txt"), key=lambda p: p.stat().st_mtime, reverse=True):
+        commit_id = read_text_if_exists(path).strip()
+        if commit_id:
+            return commit_id
+    return ""
 
 
 def publish_with_codex_recovery(
@@ -551,6 +582,10 @@ def main() -> int:
         fields = idea_data.get("fields") if isinstance(idea_data.get("fields"), dict) else {}
         prompt_text = read_text_if_exists(run_dir / "prompt.txt").strip()
         session_id = read_text_if_exists(run_dir / runner.idea_session_filename(idea_id)).strip()
+        manual_commit_id = read_manual_commit_id(run_dir, idea_id)
+        if not manual_commit_id:
+            raise RuntimeError("缺少人工复制的 commitId，请重新运行 finish 并按提示复制本轮 commitId。")
+        github_url = github_url_for_idea(idea_id)
         transcript_path = run_dir / "trae_full_transcript.md"
         trajectory_path = run_dir / "trae_trajectory.md"
         preferred_trajectory_path = manual_trajectory_path if manual_trajectory_path.exists() else trajectory_path
@@ -583,7 +618,9 @@ def main() -> int:
             "产物及过程是否满意": verdict["satisfied"],
             "不满意原因": verdict["reason"],
             "远端Github地址": publish_result["remote"],
-            "分支文件夹": publish_result["branch"],
+            "github地址": github_url,
+            "commit id": manual_commit_id,
+            "分支文件夹": branch_folder_for_idea(idea_id),
             "截图": str(screenshot_path) if screenshot_path.exists() else "",
             "日志轨迹": table_text(trajectory_text),
             "流程状态": "qc_done",
@@ -593,6 +630,7 @@ def main() -> int:
             "prompt_path": str(run_dir / "prompt.txt"),
             "output_path": str(output_path),
             "session_id": session_id,
+            "commit_id": manual_commit_id,
             "screenshot_path": str(screenshot_path) if screenshot_path.exists() else "",
             "trajectory_path": str(preferred_trajectory_path) if preferred_trajectory_path.exists() else "",
             "manual_trajectory_path": str(manual_trajectory_path) if manual_trajectory_path.exists() else "",
