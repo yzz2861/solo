@@ -158,13 +158,31 @@ export function ManagerView() {
                 </tr>
               </thead>
               <tbody>
-                {result.calculationSteps.map((step, i) => (
-                  <tr key={i} className="border-b border-bakery-cream/50 hover:bg-bakery-cream/30">
-                    <td className="py-2 px-3 text-bakery-brownDark">{step.description}</td>
-                    <td className="py-2 px-3 font-mono text-xs text-bakery-brown/70">{step.formula}</td>
-                    <td className="py-2 px-3 text-right font-mono font-bold text-bakery-orange">{step.result}</td>
-                  </tr>
-                ))}
+                {result.calculationSteps.map((step, i) => {
+                  const isStarterStep = step.description.includes('老面') || step.description.includes('种面');
+                  return (
+                    <tr
+                      key={i}
+                      className={`border-b transition-colors ${
+                        isStarterStep
+                          ? 'bg-bakery-water/5 hover:bg-bakery-water/10 border-bakery-water/20'
+                          : 'border-bakery-cream/50 hover:bg-bakery-cream/30'
+                      }`}
+                    >
+                      <td className={`py-2 px-3 ${isStarterStep ? 'text-bakery-water font-medium' : 'text-bakery-brownDark'}`}>
+                        {step.description}
+                      </td>
+                      <td className={`py-2 px-3 font-mono text-xs ${isStarterStep ? 'text-bakery-water/70' : 'text-bakery-brown/70'}`}>
+                        {step.formula}
+                      </td>
+                      <td className={`py-2 px-3 text-right font-mono font-bold ${
+                        isStarterStep ? 'text-bakery-water' : 'text-bakery-orange'
+                      }`}>
+                        {step.result}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

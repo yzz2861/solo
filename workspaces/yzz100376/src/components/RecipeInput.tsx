@@ -1,7 +1,7 @@
-import { Plus, Trash2, Droplets, Wheat } from 'lucide-react';
+import { Plus, Trash2, Droplets, Wheat, Info, Sliders } from 'lucide-react';
 import { useRecipeStore } from '@/store';
 import type { Unit } from '@/types';
-import { isWaterContained } from '@/utils/calculator';
+import { isWaterContained, roundTo } from '@/utils/calculator';
 
 const unitOptions: Unit[] = ['g', 'kg', '%'];
 
@@ -11,8 +11,18 @@ export function RecipeInput() {
   const addIngredient = useRecipeStore((s) => s.addIngredient);
   const removeIngredient = useRecipeStore((s) => s.removeIngredient);
   const adjustments = useRecipeStore((s) => s.result?.adjustments || []);
+  const result = useRecipeStore((s) => s.result);
+  const envParams = useRecipeStore((s) => s.envParams);
 
   const starterWarning = adjustments.find((a) => a.type === 'warning');
+  const starterInfo = adjustments.find(
+    (a) => a.type === 'info' && a.description.includes('老面比例')
+  );
+
+  const starterItem = recipe.find(
+    (i) => i.category === 'starter' || isWaterContained(i.name)
+  );
+  const hasStarterRow = !!starterItem;
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-bakery-orange/20 overflow-hidden">
@@ -34,6 +44,19 @@ export function RecipeInput() {
           </div>
         )}
 
+        {hasStarterRow && result && envParams.starterRatio > 0 && (
+          <div className="mb-4 p-3 bg-bakery-water/10 border border-bakery-water/30 rounded-xl flex items-start gap-2 animate-fade-in">
+            <Sliders className="w-5 h-5 text-bakery-water flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-bakery-brownDark">
+              <p className="font-medium">老面重量由「老面比例」控制</p>
+              <p className="text-bakery-brown/70 text-xs mt-0.5">
+                当前比例 {envParams.starterRatio}% → 老面重 {roundTo(result.finalRecipe.find(i => i.category === 'starter')?.value || 0, 0)}g
+                （在下方「环境与参数」中调整比例）
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-2">
           <div className="grid grid-cols-12 gap-2 px-2 py-2 text-xs font-medium text-bakery-brown/60">
             <div className="col-span-4">原料名称</div>
@@ -45,9 +68,13 @@ export function RecipeInput() {
           {recipe.map((ing, idx) => {
             const isZero = ing.value === 0;
             const containsWater = isWaterContained(ing.name);
+            const isStarter = ing.category === 'starter' || containsWater;
             const isFlour = ing.category === 'flour';
             const flourCount = recipe.filter((i) => i.category === 'flour').length;
-            const canRemove = !(isFlour && flourCount <= 1);
+            const canRemove = !(isFlour && flourCount <= 1) && !isStarter;
+            const isStarterControlled = isStarter && envParams.starterRatio > 0;
+
+            const starterFinalWeight = result?.finalRecipe.find(i => i.category === 'starter')?.value || 0;
 
             return (
               <div
@@ -55,7 +82,7 @@ export function RecipeInput() {
                 className={`grid grid-cols-12 gap-2 items-center p-2 rounded-xl transition-all ${
                   isZero
                     ? 'bg-gray-50'
-                    : containsWater
+                    : isStarter
                     ? 'bg-bakery-waterLight/10 border border-bakery-water/20'
                     : 'bg-bakery-cream/50 hover:bg-bakery-cream'
                 }`}
@@ -75,26 +102,31 @@ export function RecipeInput() {
                       <Droplets className="w-2.5 h-2.5 text-white" />
                     </span>
                   )}
-                  {isZero && (
-                    <span className="absolute bottom-full left-0 mb-1 px-2 py-0.5 bg-gray-500 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      此项为0
-                    </span>
-                  )}
                 </div>
 
-                <div className="col-span-3">
+                <div className="col-span-3 relative">
                   <input
                     type="number"
-                    value={ing.value}
+                    value={isStarterControlled ? roundTo(starterFinalWeight, 0) : ing.value}
                     onChange={(e) =>
                       updateIngredient(ing.id, { value: parseFloat(e.target.value) || 0 })
                     }
                     step="0.1"
                     min="0"
-                    className={`w-full px-3 py-2 text-right font-mono font-semibold bg-white border border-bakery-orange/20 rounded-lg focus:border-bakery-orange focus:ring-2 focus:ring-bakery-orange/20 outline-none transition-all ${
-                      isZero ? 'text-gray-400' : 'text-bakery-brownDark'
+                    readOnly={isStarterControlled}
+                    className={`w-full px-3 py-2 text-right font-mono font-semibold border rounded-lg focus:ring-2 outline-none transition-all ${
+                      isStarterControlled
+                        ? 'bg-bakery-water/5 border-bakery-water/30 text-bakery-water cursor-not-allowed'
+                        : isZero
+                        ? 'bg-white border-bakery-orange/20 text-gray-400 focus:border-bakery-orange focus:ring-bakery-orange/20'
+                        : 'bg-white border-bakery-orange/20 text-bakery-brownDark focus:border-bakery-orange focus:ring-bakery-orange/20'
                     }`}
                   />
+                  {isStarterControlled && (
+                    <span className="absolute -top-2 left-2 px-1.5 py-0.5 bg-bakery-water text-white text-[10px] rounded-full font-medium">
+                      比例驱动
+                    </span>
+                  )}
                 </div>
 
                 <div className="col-span-3">
@@ -103,7 +135,12 @@ export function RecipeInput() {
                     onChange={(e) =>
                       updateIngredient(ing.id, { unit: e.target.value as Unit })
                     }
-                    className="w-full px-2 py-2 bg-white border border-bakery-orange/20 rounded-lg focus:border-bakery-orange focus:ring-2 focus:ring-bakery-orange/20 outline-none transition-all text-bakery-brownDark font-medium cursor-pointer"
+                    disabled={isStarterControlled}
+                    className={`w-full px-2 py-2 border rounded-lg focus:ring-2 outline-none transition-all font-medium cursor-pointer ${
+                      isStarterControlled
+                        ? 'bg-bakery-water/5 border-bakery-water/30 text-bakery-water/70 cursor-not-allowed'
+                        : 'bg-white border-bakery-orange/20 text-bakery-brownDark focus:border-bakery-orange focus:ring-bakery-orange/20'
+                    }`}
                   >
                     {unitOptions.map((u) => (
                       <option key={u} value={u}>
@@ -113,12 +150,12 @@ export function RecipeInput() {
                   </select>
                 </div>
 
-                <div className="col-span-2 flex justify-end">
+                <div className="col-span-2 flex justify-end items-center gap-1">
                   {containsWater && (
-                    <div className="flex-1 mr-2">
+                    <div className="flex-1 flex flex-col items-center">
                       <input
                         type="number"
-                        value={ing.hydrationRatio || 65}
+                        value={ing.hydrationRatio || envParams.starterHydration}
                         onChange={(e) =>
                           updateIngredient(ing.id, {
                             hydrationRatio: parseFloat(e.target.value) || 65,
@@ -126,9 +163,10 @@ export function RecipeInput() {
                         }
                         min="0"
                         max="100"
-                        className="w-full px-2 py-1 text-xs text-center bg-bakery-water/10 border border-bakery-water/30 rounded text-bakery-water"
-                        title="含水量%"
+                        className="w-full px-1 py-1 text-[10px] text-center bg-bakery-water/10 border border-bakery-water/30 rounded text-bakery-water font-mono"
+                        title="水合率%"
                       />
+                      <span className="text-[9px] text-bakery-water/60 mt-0.5">水合率%</span>
                     </div>
                   )}
                   <button
@@ -139,7 +177,13 @@ export function RecipeInput() {
                         ? 'text-bakery-orange hover:bg-bakery-orange/10 hover:text-bakery-brown'
                         : 'text-gray-300 cursor-not-allowed'
                     }`}
-                    title={canRemove ? '删除' : '至少保留一种面粉'}
+                    title={
+                      canRemove
+                        ? '删除'
+                        : isStarter
+                        ? '老面由环境参数控制'
+                        : '至少保留一种面粉'
+                    }
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -157,12 +201,25 @@ export function RecipeInput() {
           添加原料
         </button>
 
-        <div className="mt-4 p-3 bg-bakery-cream rounded-xl">
-          <p className="text-xs text-bakery-brown/70 leading-relaxed">
-            💡 <strong>提示：</strong>烘焙百分比以面粉总量为100%基准。
-            含水原料（老面/种面/汤种）会自动扣除其中水分，避免重复算水。
-            数字旁<span className="inline-flex items-center justify-center w-4 h-4 bg-bakery-water rounded-full"><Droplets className="w-2.5 h-2.5 text-white" /></span>标记表示已识别为预含水原料。
-          </p>
+        <div className="mt-4 space-y-2">
+          <div className="p-3 bg-bakery-cream rounded-xl">
+            <p className="text-xs text-bakery-brown/70 leading-relaxed">
+              💡 <strong>提示：</strong>烘焙百分比以面粉总量为100%基准。
+              含水原料（老面/种面/汤种）会自动扣除其中水分，避免重复算水。
+            </p>
+          </div>
+          {hasStarterRow && (
+            <div className="p-3 bg-bakery-water/5 border border-bakery-water/20 rounded-xl">
+              <div className="flex items-start gap-2">
+                <Info className="w-4 h-4 text-bakery-water flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-bakery-brown/70 leading-relaxed">
+                  <strong className="text-bakery-water">老面使用说明：</strong>
+                  老面的用量由下方「环境与参数」中的<strong>「老面比例」</strong>滑块控制。
+                  系统会自动拆分老面中的面粉和水分，并在主配方中相应扣减，确保总面粉量和总水量准确。
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
