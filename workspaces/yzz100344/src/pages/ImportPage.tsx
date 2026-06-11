@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import { useComplaintStore } from '@/store/useComplaintStore';
 import DataQualityReport from '@/components/DataQualityReport';
 import { generateMockData } from '@/utils/mockData';
-import type { RawComplaintRow } from '@/utils/dataCleaner';
+import { remapRows, getSupportedHeaders } from '@/utils/dataCleaner';
 import { Link } from 'react-router-dom';
 
 type Step = 'upload' | 'preview' | 'done';
@@ -14,11 +14,14 @@ export default function ImportPage() {
   const [step, setStep] = useState<Step>('upload');
   const [fileName, setFileName] = useState('');
   const [fileSize, setFileSize] = useState(0);
-  const [rawRows, setRawRows] = useState<RawComplaintRow[]>([]);
+  const [rawRows, setRawRows] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [headerMatchInfo, setHeaderMatchInfo] = useState<{ matched: number; total: number; unmatched: string[] } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { importData, hasData, cleaningReport } = useComplaintStore();
+
+  const supportedHeaders = getSupportedHeaders();
 
   const handleFile = (file: File) => {
     setFileName(file.name);
@@ -32,8 +35,7 @@ export default function ImportPage() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          const rows = results.data as RawComplaintRow[];
-          processRows(rows);
+          processParsedRows(results.data as Record<string, unknown>[]);
         },
         error: () => {
           setIsProcessing(false);
@@ -46,8 +48,8 @@ export default function ImportPage() {
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const rows = XLSX.utils.sheet_to_json(firstSheet) as RawComplaintRow[];
-        processRows(rows);
+        const rows = XLSX.utils.sheet_to_json(firstSheet) as Record<string, unknown>[];
+        processParsedRows(rows);
       };
       reader.readAsArrayBuffer(file);
     } else {
@@ -56,16 +58,59 @@ export default function ImportPage() {
     }
   };
 
-  const processRows = (rows: RawComplaintRow[]) => {
-    setRawRows(rows);
+  const processParsedRows = (rows: Record<string, unknown>[]) => {
+    if (rows.length === 0) {
+      setIsProcessing(false);
+      alert('文件中没有数据');
+      return;
+    }
+
+    const firstRow = rows[0];
+    const allHeaders = Object.keys(firstRow);
+    const matchedHeaders = new Set<string>();
+    const unmatchedHeaders: string[] = [];
+
+    for (const rawHeader of allHeaders) {
+      let matched = false;
+      for (const { aliases } of supportedHeaders) {
+        const normalizedHeader = normalizeHeader(rawHeader);
+        const normalizedAliases = aliases.map(a => normalizeHeader(a));
+        if (normalizedAliases.includes(normalizedHeader)) {
+          matchedHeaders.add(rawHeader);
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        unmatchedHeaders.push(rawHeader);
+      }
+    }
+
+    setHeaderMatchInfo({
+      matched: matchedHeaders.size,
+      total: allHeaders.length,
+      unmatched: unmatchedHeaders,
+    });
+
+    const remapped = remapRows(rows);
+    setRawRows(remapped);
     setIsProcessing(false);
     setStep('preview');
+  };
+
+  const normalizeHeader = (header: string): string => {
+    let result = header.trim();
+    result = result.replace(/^\uFEFF/, '');
+    result = result.replace(/\r/g, '');
+    result = result.replace(/\s+/g, '');
+    return result.toLowerCase();
   };
 
   const handleLoadMock = () => {
     const mock = generateMockData(120);
     setFileName('示例数据（已自动生成）');
     setFileSize(mock.length * 200);
+    setHeaderMatchInfo({ matched: 12, total: 12, unmatched: [] });
     setRawRows(mock);
     setStep('preview');
   };
@@ -80,6 +125,7 @@ export default function ImportPage() {
     setFileName('');
     setFileSize(0);
     setRawRows([]);
+    setHeaderMatchInfo(null);
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -107,7 +153,7 @@ export default function ImportPage() {
     return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
   };
 
-  const sampleColumns = [
+  const displayColumns = [
     { key: 'orderNo', label: '工单号' },
     { key: 'ownerName', label: '业主姓名' },
     { key: 'phone', label: '联系电话' },
@@ -126,7 +172,7 @@ export default function ImportPage() {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-serif font-bold text-warm-800 mb-2">数据导入</h2>
-        <p className="text-warm-500">上传工单系统导出文件，系统将自动进行数据清洗和标准化处理</p>
+        <p className="text-warm-500">上传工单系统导出文件，系统将自动识别中文表头并进行数据清洗</p>
       </div>
 
       <div className="flex items-center justify-center mb-8">
@@ -200,18 +246,23 @@ export default function ImportPage() {
           <div className="mt-8 p-5 bg-warm-50 rounded-xl border border-warm-200">
             <h4 className="font-semibold text-warm-800 mb-3 flex items-center gap-2">
               <FileSpreadsheet className="w-4 h-4" />
-              支持的字段格式
+              支持的字段及别名
             </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-              {sampleColumns.map(col => (
-                <div key={col.key} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
-                  <span className="text-warm-600">{col.label}</span>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+              {supportedHeaders.map(({ internal, aliases }) => {
+                const displayLabel = displayColumns.find(c => c.key === internal)?.label || internal;
+                return (
+                  <div key={internal} className="bg-white rounded-lg p-3 border border-warm-100">
+                    <p className="font-medium text-primary-700 mb-1">{displayLabel}</p>
+                    <p className="text-xs text-warm-500 line-clamp-2">
+                      {aliases.join(' / ')}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-            <p className="text-xs text-warm-500 mt-3">
-              提示：系统将自动识别常见列名并进行匹配，部分字段缺失不影响导入
+            <p className="text-xs text-warm-500 mt-4">
+              💡 提示：系统支持中英文混合表头，会自动识别字段别名并映射到正确的内部字段
             </p>
           </div>
         </div>
@@ -237,12 +288,33 @@ export default function ImportPage() {
               </button>
             </div>
 
+            {headerMatchInfo && (
+              <div className={`
+                p-3 rounded-lg mb-4 flex items-center gap-2
+                ${headerMatchInfo.unmatched.length === 0 
+                  ? 'bg-green-50 border border-green-200' 
+                  : 'bg-yellow-50 border border-yellow-200'}
+              `}>
+                <AlertCircle className={`w-4 h-4 ${headerMatchInfo.unmatched.length === 0 ? 'text-green-600' : 'text-yellow-600'}`} />
+                <span className="text-sm">
+                  已识别 <span className="font-bold text-primary-700">{headerMatchInfo.matched}</span> 个字段
+                  {headerMatchInfo.unmatched.length > 0 && (
+                    <>
+                      ，<span className="font-bold text-yellow-600">{headerMatchInfo.unmatched.length}</span> 个字段未匹配：
+                      {headerMatchInfo.unmatched.slice(0, 5).join('、')}
+                      {headerMatchInfo.unmatched.length > 5 && `等${headerMatchInfo.unmatched.length}个`}
+                    </>
+                  )}
+                </span>
+              </div>
+            )}
+
             <div className="overflow-x-auto scrollbar-thin border border-warm-200 rounded-lg">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="table-header">
                     <th className="px-3 py-2.5 text-left">#</th>
-                    {sampleColumns.slice(0, 8).map(col => (
+                    {displayColumns.slice(0, 8).map(col => (
                       <th key={col.key} className="px-3 py-2.5 text-left whitespace-nowrap">
                         {col.label}
                       </th>
@@ -253,7 +325,7 @@ export default function ImportPage() {
                   {rawRows.slice(0, 8).map((row, idx) => (
                     <tr key={idx} className="table-row">
                       <td className="px-3 py-2.5 text-warm-400 font-mono">{idx + 1}</td>
-                      {sampleColumns.slice(0, 8).map(col => (
+                      {displayColumns.slice(0, 8).map(col => (
                         <td key={col.key} className="px-3 py-2.5 text-warm-700 max-w-[150px] truncate">
                           {String((row as any)[col.key] || '-')}
                         </td>

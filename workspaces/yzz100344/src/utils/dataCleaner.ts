@@ -21,6 +21,70 @@ export interface RawComplaintRow {
   overdueReason?: string;
 }
 
+const FIELD_MAPPING: Record<string, string[]> = {
+  orderNo: ['工单号', '工单编号', '工单ID', '编号', 'order_no', 'orderNo', 'ORDER_NO', 'OrderNo', 'WO', 'ticket_no', 'ticketId'],
+  ownerName: ['业主姓名', '姓名', '业主名', '业主', 'owner_name', 'ownerName', 'OWNER_NAME', 'Name', 'username', '联系人'],
+  phone: ['联系电话', '电话', '手机号', '手机', 'phone', 'phone_no', 'mobile', 'tel', 'phoneNumber', '联系手机'],
+  roomNumber: ['房号', '房间号', '室号', '单元房号', 'room', 'room_no', 'roomNumber', 'ROOM', '地址'],
+  community: ['小区', '小区名称', '社区', '园区', 'community', 'community_name', 'Community', '楼盘', '项目'],
+  building: ['楼栋', '楼号', '楼宇', 'building', 'building_no', 'Building', '幢号', '座号'],
+  staffName: ['处理管家', '管家', '负责人', '处理人', 'staff', 'staff_name', 'staffName', 'handler', '处理员'],
+  problemType: ['问题类型', '问题', '类型', '投诉类型', 'problem', 'problem_type', 'Problem', 'issue', 'complaint_type'],
+  source: ['来源', '渠道', '投诉渠道', 'source', 'channel', 'Source', '来源渠道'],
+  receiveTime: ['受理时间', '接单时间', '创建时间', '投诉时间', 'receive_time', 'receiveTime', 'created_at', 'CreateTime', '受理日期', '接单日期'],
+  responseTime: ['响应时间', '首次响应', '回复时间', 'response_time', 'responseTime', 'responded_at', 'ResponseTime'],
+  closeTime: ['关闭时间', '完成时间', '结案时间', 'close_time', 'closeTime', 'closed_at', 'CloseTime', '处理完成时间'],
+  status: ['状态', '工单状态', '处理状态', 'status', 'Status', 'state', 'STATE'],
+  description: ['描述', '问题描述', '详情', '备注', 'description', 'desc', 'Description', '备注信息'],
+  overdueReason: ['超期原因', '逾期原因', '延迟原因', 'overdue_reason', 'overdueReason', 'delay_reason', '原因'],
+};
+
+function normalizeHeader(header: string): string {
+  let result = header.trim();
+  result = result.replace(/^\uFEFF/, '');
+  result = result.replace(/\r/g, '');
+  result = result.replace(/\s+/g, '');
+  result = result.toLowerCase();
+  return result;
+}
+
+function mapFieldName(rawHeader: string): string | null {
+  const normalized = normalizeHeader(rawHeader);
+  
+  for (const [internalField, aliases] of Object.entries(FIELD_MAPPING)) {
+    const normalizedAliases = aliases.map(alias => normalizeHeader(alias));
+    if (normalizedAliases.includes(normalized)) {
+      return internalField;
+    }
+  }
+  return null;
+}
+
+export function remapRows(rows: Record<string, unknown>[]): RawComplaintRow[] {
+  if (rows.length === 0) return [];
+  
+  const firstRow = rows[0];
+  const headerMap: Record<string, string> = {};
+  
+  for (const rawHeader of Object.keys(firstRow)) {
+    const mappedField = mapFieldName(rawHeader);
+    if (mappedField) {
+      headerMap[rawHeader] = mappedField;
+    }
+  }
+  
+  return rows.map(row => {
+    const remapped: RawComplaintRow = {};
+    for (const [rawKey, value] of Object.entries(row)) {
+      const mappedField = headerMap[rawKey];
+      if (mappedField) {
+        remapped[mappedField as keyof RawComplaintRow] = String(value ?? '');
+      }
+    }
+    return remapped;
+  });
+}
+
 function safeParseDate(value: string | number | undefined): Date | null {
   if (!value) return null;
   const str = String(value).trim();
@@ -211,4 +275,11 @@ export function cleanData(rows: RawComplaintRow[]): {
     owners: Array.from(ownerMap.values()),
     report,
   };
+}
+
+export function getSupportedHeaders(): Array<{ internal: string; aliases: string[] }> {
+  return Object.entries(FIELD_MAPPING).map(([internal, aliases]) => ({
+    internal,
+    aliases,
+  }));
 }

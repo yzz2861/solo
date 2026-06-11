@@ -1,5 +1,7 @@
 import type { RawComplaintRow } from './dataCleaner';
 
+export type MockComplaintRow = RawComplaintRow;
+
 const COMMUNITIES = ['阳光花园', '翠湖天地', '绿城水岸', '金色家园'];
 const BUILDINGS = ['1号楼', '2号楼', '3号楼', '5号楼', '6号楼', '8号楼', '9号楼', '10号楼'];
 const STAFFS = ['张管家', '李管家', '王管家', '赵管家', '陈管家'];
@@ -21,7 +23,7 @@ const OWNERS = [
   { name: '林先生', room: '1501', phone: '13800138015' },
 ];
 
-const RAW_PROBLEM_TYPES = [
+const PROBLEM_TYPES = [
   '电梯噪音太大', '电梯坏了', '电梯困梯', '梯控刷卡没反应',
   '卫生间漏水', '水管爆了', '下水道堵塞', '厨房渗水',
   '走廊灯坏了', '家里停电', '总闸跳闸', '楼道照明不亮',
@@ -52,15 +54,15 @@ function addHours(timeStr: string, hours: number): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
 }
 
-export function generateMockData(count = 120): RawComplaintRow[] {
-  const rows: RawComplaintRow[] = [];
+export function generateMockData(count = 120): MockComplaintRow[] {
+  const rows: MockComplaintRow[] = [];
   
   for (let i = 0; i < count; i++) {
     const owner = OWNERS[i % OWNERS.length];
     const community = COMMUNITIES[i % COMMUNITIES.length];
     const building = BUILDINGS[i % BUILDINGS.length];
     const staff = STAFFS[i % STAFFS.length];
-    const problem = RAW_PROBLEM_TYPES[i % RAW_PROBLEM_TYPES.length];
+    const problem = PROBLEM_TYPES[i % PROBLEM_TYPES.length];
     const source = SOURCES[i % SOURCES.length];
     const status = STATUSES[i % STATUSES.length];
     
@@ -77,7 +79,7 @@ export function generateMockData(count = 120): RawComplaintRow[] {
       closeTime = addHours(receiveTime, closeDelay);
     }
 
-    const row: RawComplaintRow = {
+    const row: MockComplaintRow = {
       orderNo: `WO2026${String(5000 + i).padStart(6, '0')}`,
       ownerName: owner.name,
       phone: owner.phone,
@@ -101,8 +103,9 @@ export function generateMockData(count = 120): RawComplaintRow[] {
       row.closeTime = '';
     }
     if (i === 10) {
-      row.closeTime = receiveTime;
-      row.receiveTime = closeTime || addHours(receiveTime, 48);
+      const temp = row.closeTime;
+      row.closeTime = row.receiveTime;
+      row.receiveTime = temp;
     }
     if (i === 3) {
       row.ownerName = '王先生';
