@@ -6,7 +6,7 @@ export type EvidenceType = 'shipping_time' | 'customer_promise' | 'refund_node' 
 
 export type RiskLevel = 'low' | 'medium' | 'high';
 
-export type ExportFormat = 'pdf' | 'word' | 'zip';
+export type ExportFormat = 'pdf' | 'word' | 'zip' | 'markdown';
 
 export interface Order {
   id: string;

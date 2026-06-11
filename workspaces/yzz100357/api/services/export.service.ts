@@ -34,6 +34,8 @@ export async function exportPackage(
   
   if (format === 'zip') {
     return await exportZip(context, baseName);
+  } else if (format === 'markdown') {
+    return await exportMarkdown(context, baseName);
   } else if (format === 'pdf') {
     return await exportPdf(context, baseName);
   } else {
@@ -80,11 +82,17 @@ async function exportZip(context: ExportContext, baseName: string): Promise<{ fi
   return { fileName, filePath };
 }
 
-async function exportPdf(context: ExportContext, baseName: string): Promise<{ fileName: string; filePath: string }> {
-  const { project, materials, evidence, summary } = context;
+async function exportMarkdown(context: ExportContext, baseName: string): Promise<{ fileName: string; filePath: string }> {
+  const { project, materials, evidence, summary, materialOrder } = context;
+  
+  const orderedMaterials = materialOrder.length > 0
+    ? materialOrder.map(id => materials.find(m => m.id === id)!).filter(Boolean)
+    : materials;
   
   let markdown = `# 差评申诉材料包 - ${project.orderNo}\n\n`;
-  markdown += `**生成时间**：${new Date().toLocaleString('zh-CN')}\n\n`;
+  markdown += `**生成时间**：${new Date().toLocaleString('zh-CN')}\n`;
+  markdown += `**订单号**：${project.orderNo}\n`;
+  markdown += `**客户**：${project.customerName}\n\n`;
   markdown += `---\n\n`;
   
   markdown += `## 申诉摘要\n\n`;
@@ -96,8 +104,8 @@ async function exportPdf(context: ExportContext, baseName: string): Promise<{ fi
   markdown += `---\n\n`;
   
   markdown += `## 材料清单\n\n`;
-  for (let i = 0; i < materials.length; i++) {
-    const material = materials[i];
+  for (let i = 0; i < orderedMaterials.length; i++) {
+    const material = orderedMaterials[i];
     const typeLabel = MATERIAL_TYPE_LABELS[material.type];
     markdown += `${i + 1}. **${typeLabel}**：${material.fileName} (${formatFileSize(material.fileSize)})\n`;
     
@@ -106,6 +114,9 @@ async function exportPdf(context: ExportContext, baseName: string): Promise<{ fi
     }
   }
   
+  markdown += `---\n\n`;
+  markdown += `*本材料包由商家差评申诉助手自动生成，敏感信息已脱敏处理。*\n`;
+  
   const fileName = `${baseName}.md`;
   const filePath = path.join(EXPORT_DIR, fileName);
   await fs.writeFile(filePath, markdown, 'utf-8');
@@ -113,8 +124,12 @@ async function exportPdf(context: ExportContext, baseName: string): Promise<{ fi
   return { fileName, filePath };
 }
 
+async function exportPdf(context: ExportContext, baseName: string): Promise<{ fileName: string; filePath: string }> {
+  return await exportMarkdown(context, baseName);
+}
+
 async function exportWord(context: ExportContext, baseName: string): Promise<{ fileName: string; filePath: string }> {
-  return await exportPdf(context, baseName);
+  return await exportMarkdown(context, baseName);
 }
 
 function generateIndexMarkdown(context: ExportContext): string {
