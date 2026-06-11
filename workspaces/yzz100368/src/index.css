@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Noto Serif SC', Georgia, serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.highlight-chief {
+  background: rgba(59, 130, 246, 0.15);
+  border-bottom: 2px solid #2563eb;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.highlight-diagnosis {
+  background: rgba(16, 185, 129, 0.15);
+  border-bottom: 2px solid #059669;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.highlight-medication {
+  background: rgba(217, 119, 6, 0.15);
+  border-bottom: 2px solid #d97706;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.highlight-allergy {
+  background: rgba(220, 38, 38, 0.12);
+  border-bottom: 2px solid #dc2626;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.highlight-followup {
+  background: rgba(139, 92, 246, 0.15);
+  border-bottom: 2px solid #7c3aed;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; }
+.stagger-6 { animation-delay: 300ms; }
