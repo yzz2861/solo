@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: '"Source Han Sans CN"', '"Noto Sans SC"', system-ui, sans-serif;
+  }
+  body {
+    @apply bg-warm-50 text-warm-900 antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-warm-200 shadow-sm transition-all duration-300;
+  }
+  .card:hover {
+    @apply shadow-md;
+  }
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-700 text-white rounded-lg font-medium
+           hover:bg-primary-800 hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 transition-all duration-200;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 bg-white border border-primary-700 text-primary-700 rounded-lg font-medium
+           hover:bg-primary-50 transition-all duration-200;
+  }
+  .stat-card {
+    @apply card p-5 relative overflow-hidden;
+  }
+  .stat-card-alert {
+    @apply border-accent-300 bg-gradient-to-br from-white to-accent-50;
+  }
+  .table-header {
+    @apply bg-warm-50 text-warm-600 text-xs font-semibold uppercase tracking-wider;
+  }
+  .table-row {
+    @apply border-b border-warm-100 transition-all duration-200;
+  }
+  .table-row:hover {
+    @apply bg-warm-50 -translate-x-1;
+  }
+  .tag {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-warm-100 rounded;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-warm-300 rounded hover:bg-warm-400;
+  }
+}
