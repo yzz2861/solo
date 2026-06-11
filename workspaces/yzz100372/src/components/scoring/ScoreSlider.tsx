@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ScoreSliderProps {
@@ -25,9 +26,12 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const percentage = ((value - min) / (max - min)) * 100;
+  const isOutOfRange = value < min || value > max;
+  const clampedPercentage = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
 
   const getScoreColor = (score: number): string => {
+    if (score > max) return 'from-red-500 to-red-700';
+    if (score < min) return 'from-red-400 to-red-600';
     if (score >= 9) return 'from-emerald-400 to-emerald-600';
     if (score >= 8) return 'from-green-400 to-green-600';
     if (score >= 7) return 'from-amber-400 to-amber-600';
@@ -36,6 +40,8 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
   };
 
   const getScoreLabel = (score: number): string => {
+    if (score > max) return '超出上限';
+    if (score < min) return '低于下限';
     if (score >= 9.5) return '卓越';
     if (score >= 9.0) return '优秀';
     if (score >= 8.5) return '很好';
@@ -53,8 +59,8 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
       
       const rect = sliderRef.current.getBoundingClientRect();
       const x = clientX - rect.left;
-      const percentage = Math.max(0, Math.min(1, x / rect.width));
-      const rawValue = min + percentage * (max - min);
+      const pct = Math.max(0, Math.min(1, x / rect.width));
+      const rawValue = min + pct * (max - min);
       const steppedValue = Math.round(rawValue / step) * step;
       const clampedValue = Math.max(min, Math.min(max, steppedValue));
       
@@ -97,7 +103,7 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     if (!isNaN(val)) {
-      onChange(Math.max(min, Math.min(max, val)));
+      onChange(Number(val.toFixed(2)));
     }
   };
 
@@ -109,12 +115,20 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
           <span
             className={cn(
               'text-lg font-bold font-serif',
-              error ? 'text-red-600' : 'text-coffee-900'
+              isOutOfRange ? 'text-red-600' : 'text-coffee-900'
             )}
           >
             {value.toFixed(2)}
           </span>
-          <span className="text-xs text-coffee-500">{getScoreLabel(value)}</span>
+          <span
+            className={cn(
+              'text-xs',
+              isOutOfRange ? 'text-red-500 font-semibold' : 'text-coffee-500'
+            )}
+          >
+            {isOutOfRange && <AlertCircle className="w-3 h-3 inline mr-0.5 -mt-0.5" />}
+            {getScoreLabel(value)}
+          </span>
         </div>
       </div>
 
@@ -124,6 +138,7 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
           className={cn(
             'relative flex-1 h-3 rounded-full cursor-pointer select-none',
             'bg-coffee-200',
+            isOutOfRange && 'ring-2 ring-red-400 ring-offset-1',
             error && 'ring-2 ring-red-400 ring-offset-1',
             isDragging && 'cursor-grabbing',
             !disabled && 'hover:bg-coffee-300',
@@ -136,17 +151,19 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
               'absolute top-0 left-0 h-full rounded-full bg-gradient-to-r',
               getScoreColor(value)
             )}
-            style={{ width: `${percentage}%` }}
+            style={{ width: `${clampedPercentage}%` }}
           />
           <div
             className={cn(
               'absolute top-1/2 -translate-y-1/2 -translate-x-1/2',
-              'w-6 h-6 rounded-full bg-white shadow-lg border-2 border-coffee-400',
+              'w-6 h-6 rounded-full bg-white shadow-lg border-2',
+              isOutOfRange ? 'border-red-400' : 'border-coffee-400',
               'transition-transform',
-              isDragging && 'scale-110 border-coffee-600',
+              isDragging && 'scale-110',
+              isDragging && !isOutOfRange && 'border-coffee-600',
               !disabled && 'hover:scale-110 hover:border-coffee-500'
             )}
-            style={{ left: `${percentage}%` }}
+            style={{ left: `${clampedPercentage}%` }}
           />
         </div>
 
@@ -154,21 +171,26 @@ const ScoreSlider: React.FC<ScoreSliderProps> = ({
           type="number"
           value={value}
           onChange={handleInputChange}
-          min={min}
-          max={max}
           step={step}
           disabled={disabled}
           className={cn(
             'w-20 px-2 py-1.5 text-center text-sm font-medium',
             'border rounded-lg bg-white',
             'focus:outline-none focus:ring-2 focus:ring-coffee-500 focus:border-transparent',
-            error
-              ? 'border-red-400 text-red-600'
+            isOutOfRange
+              ? 'border-red-400 text-red-600 bg-red-50'
               : 'border-coffee-300 text-coffee-800',
             disabled && 'bg-coffee-100 cursor-not-allowed'
           )}
         />
       </div>
+
+      {isOutOfRange && (
+        <p className="text-xs text-red-500 flex items-center gap-1">
+          <AlertCircle className="w-3 h-3" />
+          分数必须在 {min}-{max} 之间
+        </p>
+      )}
 
       <div className="flex justify-between text-xs text-coffee-400">
         <span>{min}</span>
