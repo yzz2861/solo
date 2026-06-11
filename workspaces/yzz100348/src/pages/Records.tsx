@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { useRecordStore } from '@/store/recordStore';
 import { fmt } from '@/utils/calculation';
 import type { CalculationRecord } from '@/types';
@@ -20,30 +20,54 @@ export default function Records() {
   const { records, deleteRecord, clearRecords } = useRecordStore();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [qcRecord, setQcRecord] = useState<CalculationRecord | null>(null);
-  const printRef = useRef<HTMLDivElement>(null);
 
   const toggleExpand = useCallback((id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
   }, []);
 
-  const handlePrintHandover = useCallback(() => {
-    if (!printRef.current) return;
+  const handlePrintHandover = useCallback((record: CalculationRecord) => {
     const win = window.open('', '_blank');
     if (!win) return;
-    win.document.write(`
+    
+    const content = `
       <html><head><title>交班记录</title>
       <style>
-        body { font-family: -apple-system, sans-serif; padding: 20px; font-size: 14px; }
+        body { font-family: -apple-system, sans-serif; padding: 20px; font-size: 14px; max-width: 600px; margin: 0 auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 13px; }
         th { background: #f0f0f0; font-weight: 600; }
         h2 { font-size: 16px; margin-bottom: 4px; }
-        .sig { margin-top: 20px; display: flex; gap: 40px; font-size: 13px; }
-        .sig span { border-bottom: 1px solid #999; padding-bottom: 2px; }
+        .header { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee; }
+        .drug-name { font-size: 18px; font-weight: 600; }
+        .time { color: #666; font-size: 12px; }
       </style></head><body>
-      ${printRef.current.innerHTML}
+      <div class="header">
+        <div class="drug-name">${record.input.drugName || '未命名药品'}</div>
+        <div class="time">${record.confirmedAt ? new Date(record.confirmedAt).toLocaleString('zh-CN') : ''}</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>医嘱剂量</td><td>${record.input.doseValue} ${record.input.doseUnit}</td></tr>
+          <tr><td>药液浓度</td><td>${record.input.concentration} ${record.input.concentrationUnit}</td></tr>
+          <tr><td>药液总量</td><td>${record.input.totalVolume} ${record.input.volumeUnit}</td></tr>
+          <tr><td>患者体重</td><td>${record.input.weight ? `${record.input.weight} ${record.input.weightUnit}` : '未填写'}</td></tr>
+          <tr><td>计划时间</td><td>${record.input.plannedTime} ${record.input.timeUnit}</td></tr>
+          <tr><td>泵速</td><td>${record.result.pumpRateMlPerH !== null ? fmt(record.result.pumpRateMlPerH) : '—'} mL/h</td></tr>
+          <tr><td>体重剂量</td><td>${record.result.weightDoseMgKgMin !== null ? fmt(record.result.weightDoseMgKgMin) : '—'} mg/kg/min</td></tr>
+          <tr><td>体重剂量</td><td>${record.result.weightDoseUgKgH !== null ? fmt(record.result.weightDoseUgKgH) : '—'} μg/kg/h</td></tr>
+          <tr><td>确认人</td><td>${record.confirmedBy}</td></tr>
+        </tbody>
+      </table>
       </body></html>
-    `);
+    `;
+    
+    win.document.write(content);
     win.document.close();
     win.print();
   }, []);
@@ -109,10 +133,7 @@ export default function Records() {
                 expanded={expandedId === rec.id}
                 onToggle={() => toggleExpand(rec.id)}
                 onDelete={() => handleDelete(rec.id)}
-                onPrint={() => {
-                  setQcRecord(rec);
-                  setTimeout(handlePrintHandover, 100);
-                }}
+                onPrint={() => handlePrintHandover(rec)}
                 onQc={() => setQcRecord(rec)}
               />
             ))}
@@ -123,30 +144,6 @@ export default function Records() {
       {qcRecord && (
         <QcDetailModal record={qcRecord} onClose={() => setQcRecord(null)} />
       )}
-
-      <div ref={printRef} className="hidden">
-        {records.slice(0, 5).map((rec) => (
-          <div key={rec.id} className="mb-4">
-            <h2>
-              {rec.input.drugName || '未命名'} — {rec.confirmedAt ? new Date(rec.confirmedAt).toLocaleString('zh-CN') : ''}
-            </h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>项目</th>
-                  <th>值</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>泵速</td><td>{rec.result.pumpRateMlPerH !== null ? fmt(rec.result.pumpRateMlPerH) : '—'} mL/h</td></tr>
-                <tr><td>体重剂量</td><td>{rec.result.weightDoseMgKgMin !== null ? fmt(rec.result.weightDoseMgKgMin) : '—'} mg/kg/min</td></tr>
-                <tr><td>体重剂量</td><td>{rec.result.weightDoseUgKgH !== null ? fmt(rec.result.weightDoseUgKgH) : '—'} μg/kg/h</td></tr>
-                <tr><td>确认人</td><td>{rec.confirmedBy}</td></tr>
-              </tbody>
-            </table>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -209,7 +206,8 @@ function RecordCard({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
             <Detail label="医嘱剂量" value={`${rec.input.doseValue} ${rec.input.doseUnit}`} />
             <Detail label="药液浓度" value={`${rec.input.concentration} ${rec.input.concentrationUnit}`} />
-            <Detail label="体重" value={rec.input.weight ? `${rec.input.weight} kg` : '未填写'} />
+            <Detail label="药液总量" value={`${rec.input.totalVolume} ${rec.input.volumeUnit}`} />
+            <Detail label="患者体重" value={rec.input.weight ? `${rec.input.weight} kg` : '未填写'} />
             <Detail label="计划时间" value={`${rec.input.plannedTime} ${rec.input.timeUnit}`} />
           </div>
 

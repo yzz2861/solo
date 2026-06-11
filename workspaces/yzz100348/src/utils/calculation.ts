@@ -152,6 +152,10 @@ function validate(input: CalculationInput): CalculationWarning[] {
     warnings.push({ level: 'error', message: '医嘱剂量不能为负数' });
   }
 
+  if (input.totalVolume < 0) {
+    warnings.push({ level: 'error', message: '药液总量不能为负数' });
+  }
+
   return warnings;
 }
 
@@ -192,6 +196,41 @@ export function calculate(input: CalculationInput): CalculationResult {
     }
     if (pumpRateMlPerH < 0) {
       warnings.push({ level: 'error', message: '泵速为负数，请检查输入参数' });
+    }
+  }
+
+  if (input.totalVolume > 0 && pumpRateMlPerH !== null && pumpRateMlPerH > 0) {
+    const timeH = toHours(input.plannedTime, input.timeUnit);
+    if (timeH > 0) {
+      const totalUsageMl = pumpRateMlPerH * timeH;
+      const doseInTotalVolume = totalUsageMl * (concMgPerMl || 0);
+      
+      allSteps.push({
+        label: '总量核对',
+        formula: `${fmt(pumpRateMlPerH)} mL/h × ${fmt(timeH)} h = ${fmt(totalUsageMl)} mL`,
+        result: `需使用 ${fmt(totalUsageMl)} mL`
+      });
+
+      if (totalUsageMl > input.totalVolume) {
+        warnings.push({
+          level: 'warning',
+          message: `计算用量 ${fmt(totalUsageMl)} mL 大于药液总量 ${input.totalVolume} mL，请核实总量或调整输液时间`
+        });
+      } else if (concMgPerMl !== null && doseInTotalVolume > 0) {
+        const remainingVolume = input.totalVolume - totalUsageMl;
+        const remainingDose = remainingVolume * concMgPerMl;
+        allSteps.push({
+          label: '剩余药量',
+          formula: `${input.totalVolume} mL - ${fmt(totalUsageMl)} mL = ${fmt(remainingVolume)} mL`,
+          result: `剩余 ${fmt(remainingVolume)} mL (${fmt(remainingDose)} mg)`
+        });
+      }
+    } else if (input.totalVolume > 0) {
+      allSteps.push({
+        label: '总量核对',
+        formula: `药液总量 ${input.totalVolume} mL`,
+        result: '时间未填写，无法计算用量'
+      });
     }
   }
 
