@@ -1,8 +1,8 @@
 import { useGameStore } from "@/store/gameStore"
 import { useScoreStore } from "@/store/scoreStore"
 import { useNavigate } from "react-router-dom"
-import { Trophy, Clock, Users, AlertTriangle, RotateCcw, Home } from "lucide-react"
-import { calculatePassedRate, calculateAvgCongestionTime, calculateAvgDetourDistance } from "@/engine/scoring"
+import { Trophy, Clock, Users, AlertTriangle, RotateCcw, Home, Compass, Zap } from "lucide-react"
+import { calculatePassedRate, calculateAvgCongestionTime, calculateAvgDetourDistance, calculateGuideEfficiency } from "@/engine/scoring"
 import { buildCongestionHeatmap } from "@/engine/collision"
 import { TrainingRecord, WeakPoint } from "@/types"
 
@@ -14,6 +14,9 @@ export default function ScoreBoard() {
   const congestionPenalty = useGameStore(s => s.congestionPenalty)
   const detourPenalty = useGameStore(s => s.detourPenalty)
   const eventBonus = useGameStore(s => s.eventBonus)
+  const guideBonus = useGameStore(s => s.guideBonus)
+  const assistedByGuide = useGameStore(s => s.assistedByGuide)
+  const guides = useGameStore(s => s.guides)
   const elapsedTime = useGameStore(s => s.elapsedTime)
   const passengers = useGameStore(s => s.passengers)
   const replayFrames = useGameStore(s => s.replayFrames)
@@ -27,6 +30,8 @@ export default function ScoreBoard() {
   const passedRate = calculatePassedRate({ totalSpawned, totalExited } as any)
   const avgCongestionTime = calculateAvgCongestionTime(passengers)
   const avgDetourDistance = calculateAvgDetourDistance(passengers)
+  const totalFrames = Math.max(1, Math.floor(elapsedTime * 30))
+  const guideEfficiency = calculateGuideEfficiency(guides, assistedByGuide, guideBonus, totalFrames)
 
   const weakPoints: WeakPoint[] = level.transferPoints.map(tp => ({
     transferPointId: tp.id,
@@ -87,11 +92,43 @@ export default function ScoreBoard() {
             <span className="text-gray-400">事件加分</span>
             <span className="text-[#2a9d8f]">+{eventBonus.toFixed(1)}</span>
           </div>
+          {guides.length > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">引导加分 ({guides.length}人)</span>
+              <span className="text-[#00cc66]">+{guideBonus.toFixed(1)}</span>
+            </div>
+          )}
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">用时</span>
             <span className="text-white">{Math.floor(elapsedTime)}秒</span>
           </div>
         </div>
+
+        {guides.length > 0 && (
+          <div className="mb-4 rounded-lg bg-[#00cc66]/10 p-3">
+            <div className="mb-1 flex items-center gap-1 text-xs font-medium text-[#00cc66]">
+              <Compass className="h-3 w-3" /> 引导员绩效
+            </div>
+            <div className="space-y-1 text-xs text-gray-300">
+              <div className="flex justify-between">
+                <span>部署人数</span>
+                <span>{guides.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>平均覆盖</span>
+                <span>{guideEfficiency.avgAssistedPerFrame} 人/帧</span>
+              </div>
+              <div className="flex justify-between">
+                <span>利用率</span>
+                <span className={guideEfficiency.utilization > 50 ? "text-[#00cc66]" : "text-[#f4a261]"}>{guideEfficiency.utilization}%</span>
+              </div>
+              <div className="flex justify-between">
+                <span>单员加分</span>
+                <span>+{guideEfficiency.bonusPerGuide}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {weakPoints.some(wp => wp.congestionOccurrences > 0) && (
           <div className="mb-4 rounded-lg bg-[#ff4444]/10 p-3">

@@ -1,11 +1,18 @@
-import { Position } from "@/types"
+import { Position, Guide, Entrance } from "@/types"
+
+export const GUIDE_INFLUENCE_RADIUS = 2
+const GUIDE_DISCOUNT_BASE = 0.45
+const GUIDE_DISCOUNT_PER_TIER = 0.15
 
 export function findPath(
   gridSize: { cols: number; rows: number },
   walls: Set<string>,
   start: Position,
   end: Position,
-  blockedCells?: Set<string>
+  blockedCells?: Set<string>,
+  guides?: Guide[],
+  passengerEntranceId?: string,
+  entrances?: Entrance[]
 ): Position[] | null {
   const key = (p: Position) => `${p.x},${p.y}`
 
@@ -15,9 +22,8 @@ export function findPath(
   const openSet: Map<string, { pos: Position; g: number; f: number; parent: Position | null }> = new Map()
   const closedSet: Set<string> = new Set()
 
-  const startKey = key(start)
   const h = (p: Position) => Math.abs(p.x - end.x) + Math.abs(p.y - end.y)
-  openSet.set(startKey, { pos: start, g: 0, f: h(start), parent: null })
+  openSet.set(key(start), { pos: start, g: 0, f: h(start), parent: null })
 
   const dirs: Position[] = [{ x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
 
@@ -56,7 +62,27 @@ export function findPath(
       if (walls.has(nKey) || closedSet.has(nKey)) continue
       if (blockedCells && blockedCells.has(nKey)) continue
 
-      const g = currentNode!.g + 1
+      let stepCost = 1.0
+      if (guides && guides.length > 0) {
+        let bestDiscount = GUIDE_DISCOUNT_BASE
+        for (const guide of guides) {
+          const manhattan = Math.abs(nx - guide.x) + Math.abs(ny - guide.y)
+          if (manhattan <= guide.influenceRadius) {
+            const tier = guide.influenceRadius - manhattan
+            const discount = GUIDE_DISCOUNT_BASE + tier * GUIDE_DISCOUNT_PER_TIER
+            if (discount > bestDiscount) {
+              if (passengerEntranceId && guide.targetEntranceId && passengerEntranceId === guide.targetEntranceId) {
+                bestDiscount = Math.min(discount + 0.1, 0.7)
+              } else {
+                bestDiscount = discount
+              }
+            }
+          }
+        }
+        stepCost = 1.0 - bestDiscount
+      }
+
+      const g = currentNode!.g + stepCost
       const existing = openSet.get(nKey)
       if (existing && g >= existing.g) continue
 
@@ -92,4 +118,67 @@ export function buildBlockedCells(
     }
   }
   return s
+}
+
+export function isInGuideRange(
+  x: number,
+  y: number,
+  guides: Guide[],
+  radius?: number
+): Guide | null {
+  const r = radius ?? GUIDE_INFLUENCE_RADIUS
+  let nearest: Guide | null = null
+  let nearestDist = Infinity
+  for (const g of guides) {
+    const dist = Math.abs(x - g.x) + Math.abs(y - g.y)
+    if (dist <= r && dist < nearestDist) {
+      nearest = g
+      nearestDist = dist
+    }
+  }
+  return nearest
+}
+
+export function getGuideInfluenceDiscount(
+  x: number,
+  y: number,
+  guides: Guide[],
+  passengerEntranceId?: string
+): number {
+  let bestDiscount = 0
+  for (const g of guides) {
+    const dist = Math.abs(x - g.x) + Math.abs(y - g.y)
+    if (dist <= g.influenceRadius) {
+      const tier = g.influenceRadius - dist
+      let discount = GUIDE_DISCOUNT_BASE + tier * GUIDE_DISCOUNT_PER_TIER
+      if (passengerEntranceId && g.targetEntranceId && passengerEntranceId === g.targetEntranceId) {
+        discount = Math.min(discount + 0.1, 0.7)
+      }
+      if (discount > bestDiscount) bestDiscount = discount
+    }
+  }
+  return bestDiscount
+}
+
+export function buildGuideInfluenceGrid(
+  guides: Guide[],
+  cols: number,
+  rows: number
+): number[][] {
+  const grid: number[][] = Array.from({ length: rows }, () => Array(cols).fill(0))
+  for (const g of guides) {
+    for (let dy = -g.influenceRadius; dy <= g.influenceRadius; dy++) {
+      for (let dx = -g.influenceRadius; dx <= g.influenceRadius; dx++) {
+        const x = g.x + dx
+        const y = g.y + dy
+        if (x < 0 || x >= cols || y < 0 || y >= rows) continue
+        const dist = Math.abs(dx) + Math.abs(dy)
+        if (dist <= g.influenceRadius) {
+          const tier = g.influenceRadius - dist
+          grid[y][x] += GUIDE_DISCOUNT_BASE + tier * GUIDE_DISCOUNT_PER_TIER
+        }
+      }
+    }
+  }
+  return grid
 }

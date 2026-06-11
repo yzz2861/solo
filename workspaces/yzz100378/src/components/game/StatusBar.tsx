@@ -1,4 +1,4 @@
-import { Clock, Users, TrendingDown, AlertTriangle, Trophy } from "lucide-react"
+import { Clock, Users, TrendingDown, AlertTriangle, Trophy, Compass, Zap } from "lucide-react"
 import { useGameStore } from "@/store/gameStore"
 
 export default function StatusBar() {
@@ -8,6 +8,9 @@ export default function StatusBar() {
   const totalExited = useGameStore(s => s.totalExited)
   const congestionPenalty = useGameStore(s => s.congestionPenalty)
   const detourPenalty = useGameStore(s => s.detourPenalty)
+  const guideBonus = useGameStore(s => s.guideBonus)
+  const assistedByGuide = useGameStore(s => s.assistedByGuide)
+  const guides = useGameStore(s => s.guides)
   const level = useGameStore(s => s.level)
   const phase = useGameStore(s => s.phase)
   const passengers = useGameStore(s => s.passengers)
@@ -15,6 +18,15 @@ export default function StatusBar() {
   const remaining = level ? Math.max(0, level.timeLimit - elapsedTime) : 0
   const passedRate = totalSpawned > 0 ? Math.round((totalExited / totalSpawned) * 100) : 0
   const congestedCount = passengers.filter(p => p.state === "congested").length
+  const assistedActive = passengers.filter(p => {
+    if (p.state === "exited") return false
+    for (const g of guides) {
+      const r = g.influenceRadius ?? 2
+      const d = Math.abs(Math.floor(p.x) - g.x) + Math.abs(Math.floor(p.y) - g.y)
+      if (d <= r) return true
+    }
+    return false
+  }).length
 
   return (
     <div className="flex w-48 flex-col gap-3 border-l border-white/10 bg-[#141830] p-3 text-xs">
@@ -47,6 +59,24 @@ export default function StatusBar() {
         </div>
       </div>
 
+      {guides.length > 0 && (
+        <div className="flex items-center gap-2 rounded-lg bg-[#00cc66]/10 p-2.5">
+          <Compass className="h-4 w-4 text-[#00cc66]" />
+          <div>
+            <div className="text-[10px] text-[#00cc66]">引导员效果</div>
+            <div className="flex items-center gap-1">
+              <Zap className="h-3 w-3 text-[#00cc66]" />
+              <span className="text-sm font-bold tabular-nums text-[#00cc66]">
+                +{guideBonus.toFixed(1)}
+              </span>
+            </div>
+            <div className="text-[10px] text-[#00cc66]/70">
+              覆盖 {assistedActive} 人·实时
+            </div>
+          </div>
+        </div>
+      )}
+
       {congestedCount > 0 && (
         <div className="flex items-center gap-2 rounded-lg bg-[#ff4444]/10 p-2.5">
           <AlertTriangle className="h-4 w-4 text-[#ff4444]" />
@@ -66,6 +96,12 @@ export default function StatusBar() {
           <span>绕行扣分</span>
           <span className="tabular-nums text-[#ffaa00]">-{detourPenalty.toFixed(1)}</span>
         </div>
+        {guides.length > 0 && (
+          <div className="flex items-center justify-between text-gray-500">
+            <span className="text-[#00cc66]/80">引导加分</span>
+            <span className="tabular-nums text-[#00cc66]">+{guideBonus.toFixed(1)}</span>
+          </div>
+        )}
       </div>
 
       {phase === "preparing" && (

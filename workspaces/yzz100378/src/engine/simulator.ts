@@ -1,11 +1,14 @@
-import { LevelConfig, GameState, Passenger, Fence, Guide, Position } from "@/types"
-import { findPath, buildWallSet, buildBlockedCells } from "./pathfinding"
-import { getCongestedCells, isCellCongested, CELL_CAPACITY } from "./collision"
+import { LevelConfig, GameState, Passenger, Guide, Position } from "@/types"
+import { findPath, buildWallSet, buildBlockedCells, isInGuideRange, getGuideInfluenceDiscount, GUIDE_INFLUENCE_RADIUS } from "./pathfinding"
+import { getCongestedCells, isCellCongested, CELL_CAPACITY, getCellCapacityWithGuides, getGuidedPassengerCount } from "./collision"
 import { calculateCongestionPenalty, calculateDetourPenalty } from "./scoring"
 import { checkEvents, EventResult } from "./events"
 
 const TICK_RATE = 1 / 30
 const PASSENGER_SPEED = 2
+
+const GUIDE_SPEED_BOOST_BASE = 1.5
+const GUIDE_SPEED_BOOST_PER_TIER = 0.2
 
 let passengerCounter = 0
 
@@ -29,8 +32,33 @@ export function createInitialState(level: LevelConfig): GameState {
     totalExited: 0,
     congestionPenalty: 0,
     detourPenalty: 0,
-    eventBonus: 0
+    eventBonus: 0,
+    guideBonus: 0,
+    assistedByGuide: 0
   }
+}
+
+function calcPassengerSpeed(
+  passenger: Passenger,
+  guides: Guide[],
+  congested: boolean
+): number {
+  let speed = congested ? PASSENGER_SPEED * 0.3 : PASSENGER_SPEED
+  const guide = isInGuideRange(Math.floor(passenger.x), Math.floor(passenger.y), guides)
+  if (guide) {
+    const dist = Math.abs(Math.floor(passenger.x) - guide.x) + Math.abs(Math.floor(passenger.y) - guide.y)
+    const tier = guide.influenceRadius - dist
+    let boost = GUIDE_SPEED_BOOST_BASE + tier * GUIDE_SPEED_BOOST_PER_TIER
+    if (passenger.entranceId && guide.targetEntranceId && passenger.entranceId === guide.targetEntranceId) {
+      boost += 0.1
+    }
+    if (congested) {
+      speed = PASSENGER_SPEED * Math.min(boost, 1.0)
+    } else {
+      speed = PASSENGER_SPEED * boost
+    }
+  }
+  return speed
 }
 
 export function spawnPassengers(level: LevelConfig, state: GameState, dt: number, surgeMultipliers: Record<string, number>): Passenger[] {
@@ -45,7 +73,16 @@ export function spawnPassengers(level: LevelConfig, state: GameState, dt: number
 
       const walls = buildWallSet(level.walls, state.fences)
       const blocked = buildBlockedCells(level.escalators, state.escalatorStates, state.closedExits, level.exits)
-      const path = findPath(level.gridSize, walls, { x: entrance.x, y: entrance.y }, { x: exit.x, y: exit.y }, blocked)
+      const path = findPath(
+        level.gridSize,
+        walls,
+        { x: entrance.x, y: entrance.y },
+        { x: exit.x, y: exit.y },
+        blocked,
+        state.guides.length > 0 ? state.guides : undefined,
+        entrance.id,
+        level.entrances
+      )
 
       if (path) {
         const p: Passenger = {
@@ -72,17 +109,36 @@ export function spawnPassengers(level: LevelConfig, state: GameState, dt: number
 export function updatePassengers(state: GameState, level: LevelConfig, dt: number): GameState {
   const walls = buildWallSet(level.walls, state.fences)
   const blocked = buildBlockedCells(level.escalators, state.escalatorStates, state.closedExits, level.exits)
-  const congestedCells = getCongestedCells(state.passengers)
+  const congestedCells = getCongestedCells(state.passengers, state.guides)
   let congestionDelta = 0
   let detourDelta = 0
+  let guideBonusDelta = 0
+  let assistedThisFrame = 0
 
   const updatedPassengers = state.passengers.map(p => {
     if (p.state === "exited") return p
 
-    const cellKey = `${Math.floor(p.x)},${Math.floor(p.y)}`
+    const cellX = Math.floor(p.x)
+    const cellY = Math.floor(p.y)
+    const cellKey = `${cellX},${cellY}`
     const isCongested = congestedCells.has(cellKey)
+    const nearbyGuide = isInGuideRange(cellX, cellY, state.guides)
+    if (nearbyGuide) {
+      assistedThisFrame += 1
+      guideBonusDelta += 0.25 * dt
+    }
 
     if (isCongested) {
+      if (nearbyGuide) {
+        const cap = getCellCapacityWithGuides(cellX, cellY, state.guides)
+        const count = getCongestedCellRawCount(state.passengers, cellX, cellY)
+        const prevented = Math.max(0, cap - CELL_CAPACITY)
+        const stillOver = Math.max(0, count - CELL_CAPACITY)
+        const mitigated = Math.min(prevented, stillOver)
+        if (mitigated > 0) {
+          guideBonusDelta += mitigated * 0.6 * dt
+        }
+      }
       congestionDelta += dt
       return { ...p, state: "congested" as const, congestionTime: p.congestionTime + dt }
     }
@@ -90,12 +146,25 @@ export function updatePassengers(state: GameState, level: LevelConfig, dt: numbe
     if (p.pathIndex >= p.path.length) {
       const targetExit = level.exits.find(e => e.id === p.targetExitId)
       if (targetExit && Math.abs(p.x - targetExit.x) < 0.5 && Math.abs(p.y - targetExit.y) < 0.5) {
+        if (nearbyGuide) {
+          guideBonusDelta += 0.05 * dt
+        }
         return { ...p, state: "exited" as const }
       }
-      const newPath = findPath(level.gridSize, walls, { x: p.x, y: p.y }, { x: targetExit!.x, y: targetExit!.y }, blocked)
+      const newPath = findPath(
+        level.gridSize,
+        walls,
+        { x: cellX, y: cellY },
+        { x: targetExit!.x, y: targetExit!.y },
+        blocked,
+        state.guides.length > 0 ? state.guides : undefined,
+        p.entranceId,
+        level.entrances
+      )
       if (newPath && newPath.length > 0) {
         const extraDist = newPath.length
-        detourDelta += calculateDetourPenalty({ ...p, detourDistance: p.detourDistance + extraDist })
+        const dp = calculateDetourPenalty({ ...p, detourDistance: p.detourDistance + extraDist })
+        detourDelta += dp
         return { ...p, path: newPath, pathIndex: 0, state: "detouring" as const, detourDistance: p.detourDistance + extraDist }
       }
       return { ...p, state: "congested" as const, congestionTime: p.congestionTime + dt }
@@ -106,11 +175,14 @@ export function updatePassengers(state: GameState, level: LevelConfig, dt: numbe
     const dy = target.y - p.y
     const dist = Math.sqrt(dx * dx + dy * dy)
 
-    if (dist < PASSENGER_SPEED * dt) {
+    const speed = calcPassengerSpeed(p, state.guides, isCongested)
+    if (dist < speed * dt) {
+      if (nearbyGuide) {
+        guideBonusDelta += 0.02 * dt
+      }
       return { ...p, x: target.x, y: target.y, pathIndex: p.pathIndex + 1, state: "moving" as const }
     }
 
-    const speed = isCongested ? PASSENGER_SPEED * 0.3 : PASSENGER_SPEED
     return {
       ...p,
       x: p.x + (dx / dist) * speed * dt,
@@ -118,6 +190,18 @@ export function updatePassengers(state: GameState, level: LevelConfig, dt: numbe
       state: "moving" as const
     }
   })
+
+  for (const guide of state.guides) {
+    const count = getCongestedCellRawCount(state.passengers, guide.x, guide.y)
+    if (count >= 2) {
+      const cap = getCellCapacityWithGuides(guide.x, guide.y, state.guides)
+      const extra = cap - CELL_CAPACITY
+      const actuallyUseful = Math.min(extra, Math.max(0, count - 2))
+      if (actuallyUseful > 0) {
+        guideBonusDelta += actuallyUseful * 0.4 * dt
+      }
+    }
+  }
 
   const totalExited = updatedPassengers.filter(p => p.state === "exited").length
   const activePassengers = updatedPassengers.filter(p => p.state !== "exited")
@@ -127,8 +211,19 @@ export function updatePassengers(state: GameState, level: LevelConfig, dt: numbe
     passengers: activePassengers.length > 200 ? activePassengers.slice(-200) : updatedPassengers,
     totalExited: state.totalExited + (totalExited - state.totalExited),
     congestionPenalty: state.congestionPenalty + congestionDelta,
-    detourPenalty: state.detourPenalty + detourDelta
+    detourPenalty: state.detourPenalty + detourDelta,
+    guideBonus: state.guideBonus + guideBonusDelta,
+    assistedByGuide: state.assistedByGuide + assistedThisFrame
   }
+}
+
+function getCongestedCellRawCount(passengers: Passenger[], x: number, y: number): number {
+  let count = 0
+  for (const p of passengers) {
+    if (p.state === "exited") continue
+    if (Math.floor(p.x) === x && Math.floor(p.y) === y) count++
+  }
+  return count
 }
 
 export function processEvents(level: LevelConfig, state: GameState): {
@@ -148,6 +243,9 @@ export function processEvents(level: LevelConfig, state: GameState): {
     if (result.closedExits) {
       newState.closedExits = { ...newState.closedExits, ...result.closedExits }
     }
+    if ("eventBonus" in result && typeof result.eventBonus === "number") {
+      newState.eventBonus += result.eventBonus
+    }
     results.push({ event, result })
   }
 
@@ -157,15 +255,27 @@ export function processEvents(level: LevelConfig, state: GameState): {
 export function recalculatePaths(state: GameState, level: LevelConfig): Passenger[] {
   const walls = buildWallSet(level.walls, state.fences)
   const blocked = buildBlockedCells(level.escalators, state.escalatorStates, state.closedExits, level.exits)
+  const guides = state.guides.length > 0 ? state.guides : undefined
 
   return state.passengers.map(p => {
     if (p.state === "exited") return p
     const targetExit = level.exits.find(e => e.id === p.targetExitId)
     if (!targetExit) return p
 
-    const newPath = findPath(level.gridSize, walls, { x: Math.floor(p.x), y: Math.floor(p.y) }, { x: targetExit.x, y: targetExit.y }, blocked)
+    const newPath = findPath(
+      level.gridSize,
+      walls,
+      { x: Math.floor(p.x), y: Math.floor(p.y) },
+      { x: targetExit.x, y: targetExit.y },
+      blocked,
+      guides,
+      p.entranceId,
+      level.entrances
+    )
     if (newPath) {
-      return { ...p, path: newPath, pathIndex: 0, detourDistance: p.detourDistance + Math.max(0, newPath.length - p.optimalPathLength) }
+      const oldLen = p.path.length - p.pathIndex
+      const detourAdd = Math.max(0, newPath.length - oldLen)
+      return { ...p, path: newPath, pathIndex: 0, detourDistance: p.detourDistance + detourAdd }
     }
     return p
   })

@@ -9,6 +9,7 @@ import {
 } from "@/engine/simulator"
 import { calculateScore, calculatePassedRate } from "@/engine/scoring"
 import { buildCongestionHeatmap } from "@/engine/collision"
+import { GUIDE_INFLUENCE_RADIUS } from "@/engine/pathfinding"
 
 interface GameStore extends GameState {
   level: LevelConfig | null
@@ -49,6 +50,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   congestionPenalty: 0,
   detourPenalty: 0,
   eventBonus: 0,
+  guideBonus: 0,
+  assistedByGuide: 0,
   level: null,
   selectedTool: "select" as GameTool,
   surgeMultipliers: {},
@@ -163,14 +166,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get()
     if (!state.level) return
     if (state.guides.length >= state.level.maxGuides) return
-    const guide: Guide = { id: `g${Date.now()}`, x, y, targetEntranceId }
-    set({ guides: [...state.guides, guide], lastPlacedGuide: guide.id })
+    const guide: Guide = {
+      id: `g${Date.now()}`,
+      x, y,
+      targetEntranceId,
+      influenceRadius: GUIDE_INFLUENCE_RADIUS,
+      bonusScore: 0,
+      assistedPassengers: 0
+    }
+    const newGuides = [...state.guides, guide]
+    const newPassengers = recalculatePaths({ ...state, guides: newGuides }, state.level)
+    set({
+      guides: newGuides,
+      passengers: newPassengers,
+      lastPlacedGuide: guide.id
+    })
   },
 
   removeGuide: (id: string) => {
     const state = get()
+    if (!state.level) return
     const newGuides = state.guides.filter(g => g.id !== id)
-    set({ guides: newGuides })
+    const newPassengers = recalculatePaths({ ...state, guides: newGuides }, state.level)
+    set({ guides: newGuides, passengers: newPassengers })
   },
 
   toggleEscalator: (id: string) => {

@@ -2,6 +2,7 @@ import { useRef, useEffect, useCallback } from "react"
 import { useGameStore } from "@/store/gameStore"
 import { LevelConfig, Passenger, GameTool } from "@/types"
 import { getCellKey } from "@/engine/collision"
+import { GUIDE_INFLUENCE_RADIUS } from "@/engine/pathfinding"
 
 const COLORS = {
   bg: "#0f1225",
@@ -13,11 +14,14 @@ const COLORS = {
   escalatorOff: "#6b4c2a",
   fence: "#ff6b6b",
   guide: "#00cc66",
+  guideRange: "rgba(0,204,102,0.12)",
+  guideRangeInner: "rgba(0,204,102,0.22)",
   transferPoint: "#9b5de5",
   passenger_moving: "#457b9d",
   passenger_congested: "#ff4444",
   passenger_detouring: "#ffaa00",
   guideIcon: "#00cc66",
+  guideAssisted: "rgba(0, 255, 136, 0.55)",
 }
 
 export default function StationMap() {
@@ -57,6 +61,23 @@ export default function StationMap() {
       }
     }
 
+    for (const g of guides) {
+      const r = g.influenceRadius ?? GUIDE_INFLUENCE_RADIUS
+      const cx = g.x * cellSize + cellSize / 2
+      const cy = g.y * cellSize + cellSize / 2
+      const outer = (r + 0.5) * cellSize
+      ctx.fillStyle = COLORS.guideRange
+      ctx.beginPath()
+      ctx.arc(cx, cy, outer, 0, Math.PI * 2)
+      ctx.fill()
+
+      const inner = (r * 0.5 + 0.2) * cellSize
+      ctx.fillStyle = COLORS.guideRangeInner
+      ctx.beginPath()
+      ctx.arc(cx, cy, inner, 0, Math.PI * 2)
+      ctx.fill()
+    }
+
     for (const w of level.walls) {
       ctx.fillStyle = COLORS.wall
       ctx.fillRect(w.x * cellSize, w.y * cellSize, cellSize, cellSize)
@@ -82,20 +103,20 @@ export default function StationMap() {
       ctx.font = `bold ${Math.max(9, cellSize * 0.35)}px sans-serif`
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
-      ctx.fillText("入", ent.x * cellSize + cellSize / 2, ent.y * cellSize + cellSize / 2)
+      ctx.fillText(ent.label?.[0] ?? "入", ent.x * cellSize + cellSize / 2, ent.y * cellSize + cellSize / 2)
     }
 
     for (const ext of level.exits) {
       const isClosed = closedExits[ext.id]
       ctx.fillStyle = isClosed ? "#ff000033" : COLORS.exit(ext.color)
-      ctx.globalAlpha = isClosed ? 0.3 : 0.3
+      ctx.globalAlpha = 0.3
       ctx.fillRect(ext.x * cellSize, ext.y * cellSize, cellSize, cellSize)
       ctx.globalAlpha = 1
       ctx.fillStyle = isClosed ? "#ff4444" : ext.color
       ctx.font = `bold ${Math.max(9, cellSize * 0.35)}px sans-serif`
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
-      ctx.fillText(isClosed ? "✕" : "出", ext.x * cellSize + cellSize / 2, ext.y * cellSize + cellSize / 2)
+      ctx.fillText(isClosed ? "✕" : (ext.label?.[0] ?? "出"), ext.x * cellSize + cellSize / 2, ext.y * cellSize + cellSize / 2)
     }
 
     for (const esc of level.escalators) {
@@ -126,6 +147,18 @@ export default function StationMap() {
     }
 
     for (const g of guides) {
+      const entrance = level.entrances.find(en => en.id === g.targetEntranceId)
+      const matchColor = entrance ? entrance.color : COLORS.guideIcon
+
+      ctx.strokeStyle = matchColor
+      ctx.globalAlpha = 0.7
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.arc(g.x * cellSize + cellSize / 2, g.y * cellSize + cellSize / 2, cellSize * 0.42, 0, Math.PI * 2)
+      ctx.stroke()
+      ctx.lineWidth = 1
+      ctx.globalAlpha = 1
+
       ctx.fillStyle = COLORS.guideIcon
       ctx.globalAlpha = 0.6
       ctx.beginPath()
@@ -137,6 +170,13 @@ export default function StationMap() {
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
       ctx.fillText("引", g.x * cellSize + cellSize / 2, g.y * cellSize + cellSize / 2)
+
+      if (entrance) {
+        ctx.fillStyle = matchColor
+        ctx.font = `bold ${Math.max(7, cellSize * 0.22)}px sans-serif`
+        ctx.textAlign = "center"
+        ctx.fillText(entrance.label, g.x * cellSize + cellSize / 2, g.y * cellSize + cellSize * 0.1)
+      }
     }
 
     for (const p of passengers) {
@@ -145,10 +185,27 @@ export default function StationMap() {
       if (p.state === "congested") color = COLORS.passenger_congested
       else if (p.state === "detouring") color = COLORS.passenger_detouring
 
+      let assisted = false
+      for (const g of guides) {
+        const r = g.influenceRadius ?? GUIDE_INFLUENCE_RADIUS
+        const dist = Math.abs(Math.floor(p.x) - g.x) + Math.abs(Math.floor(p.y) - g.y)
+        if (dist <= r) { assisted = true; break }
+      }
+
+      const cx = p.x * cellSize + cellSize / 2
+      const cy = p.y * cellSize + cellSize / 2
+
+      if (assisted) {
+        ctx.fillStyle = COLORS.guideAssisted
+        ctx.beginPath()
+        ctx.arc(cx, cy, cellSize * 0.3, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
       ctx.fillStyle = color
-      ctx.globalAlpha = p.state === "congested" ? 0.6 + Math.sin(Date.now() / 200) * 0.4 : 0.85
+      ctx.globalAlpha = p.state === "congested" ? 0.6 + Math.sin(Date.now() / 200) * 0.4 : 0.9
       ctx.beginPath()
-      ctx.arc(p.x * cellSize + cellSize / 2, p.y * cellSize + cellSize / 2, cellSize * 0.2, 0, Math.PI * 2)
+      ctx.arc(cx, cy, cellSize * 0.2, 0, Math.PI * 2)
       ctx.fill()
       ctx.globalAlpha = 1
     }
@@ -189,11 +246,22 @@ export default function StationMap() {
       const existingGuide = guides.find(g => g.x === gx && g.y === gy)
       if (existingGuide) {
         removeGuide(existingGuide.id)
-      } else {
-        const firstEntrance = level.entrances[0]
-        if (firstEntrance) {
-          addGuide(gx, gy, firstEntrance.id)
-        }
+        return
+      }
+      const isWall = level.walls.some(w => w.x === gx && w.y === gy)
+      const isEntrance = level.entrances.some(en => en.x === gx && en.y === gy)
+      const isExit = level.exits.some(ex => ex.x === gx && ex.y === gy)
+      const isEscalator = level.escalators.some(es => es.x === gx && es.y === gy)
+      if (isWall || isEntrance || isExit || isEscalator) return
+
+      let bestEntrance = level.entrances[0]
+      let bestDist = Infinity
+      for (const ent of level.entrances) {
+        const d = Math.abs(gx - ent.x) + Math.abs(gy - ent.y)
+        if (d < bestDist) { bestDist = d; bestEntrance = ent }
+      }
+      if (bestEntrance) {
+        addGuide(gx, gy, bestEntrance.id)
       }
     } else if (selectedTool === "escalator") {
       const esc = level.escalators.find(es => es.x === gx && es.y === gy)

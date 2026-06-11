@@ -75,6 +75,9 @@ export interface Guide {
   x: number
   y: number
   targetEntranceId: string
+  influenceRadius: number
+  bonusScore: number
+  assistedPassengers: number
 }
 
 export type PassengerState = "moving" | "congested" | "detouring" | "exited"
@@ -118,6 +121,8 @@ export interface GameState {
   congestionPenalty: number
   detourPenalty: number
   eventBonus: number
+  guideBonus: number
+  assistedByGuide: number
 }
 
 export interface WeakPoint {
