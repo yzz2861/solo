@@ -2,18 +2,29 @@ import type { Hazard, Rectification, Review } from '@/types';
 
 const BASE_URL = '/api';
 
+function buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>): string {
+  if (!params) return `${BASE_URL}${path}`;
+  
+  const queryString = Object.entries(params)
+    .filter(([, value]) => value !== undefined && value !== null && value !== '')
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+    .join('&');
+  
+  if (!queryString) return `${BASE_URL}${path}`;
+  return `${BASE_URL}${path}?${queryString}`;
+}
+
 export async function fetchHazards(params?: {
   status?: string;
   team?: string;
   onlyOverdue?: boolean;
 }): Promise<Hazard[]> {
-  const url = new URL(`${BASE_URL}/hazards`);
-  if (params) {
-    if (params.status && params.status !== 'ALL') url.searchParams.set('status', params.status);
-    if (params.team && params.team !== 'ALL') url.searchParams.set('team', params.team);
-    if (params.onlyOverdue) url.searchParams.set('onlyOverdue', 'true');
-  }
-  const response = await fetch(url.toString());
+  const url = buildUrl('/hazards', {
+    status: params?.status && params.status !== 'ALL' ? params.status : undefined,
+    team: params?.team && params.team !== 'ALL' ? params.team : undefined,
+    onlyOverdue: params?.onlyOverdue ? 'true' : undefined,
+  });
+  const response = await fetch(url);
   if (!response.ok) throw new Error('获取隐患列表失败');
   return response.json();
 }
