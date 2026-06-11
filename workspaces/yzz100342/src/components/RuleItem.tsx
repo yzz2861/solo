@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp, Trash2, GripVertical, ToggleLeft, ToggleRight } from 'lucide-react';
 import type { GiftRule } from '@/types';
 import { useSolutionStore } from '@/store/useSolutionStore';
+import GiftSelector from './GiftSelector';
 
 interface Props {
   rule: GiftRule;
@@ -11,8 +12,16 @@ export default function RuleItem({ rule }: Props) {
   const [expanded, setExpanded] = useState(false);
   const updateRule = useSolutionStore((s) => s.updateRule);
   const deleteRule = useSolutionStore((s) => s.deleteRule);
+  const solution = useSolutionStore((s) => s.getActive());
 
   const isThreshold = rule.type === 'threshold';
+
+  const allGifts = solution?.rules.map((r) => ({
+    giftId: r.giftId,
+    giftName: r.giftName,
+    giftStock: r.giftStock,
+    giftPerOrder: r.giftPerOrder,
+  })) ?? [];
 
   return (
     <div
@@ -44,6 +53,9 @@ export default function RuleItem({ rule }: Props) {
           </div>
           <div className="text-xs text-gray-500 mt-0.5 truncate">
             🎁 {rule.giftName} x{rule.giftPerOrder} · 库存 {rule.giftStock}
+            {allGifts.filter((g) => g.giftId === rule.giftId).length > 1 && (
+              <span className="ml-1 text-red-500 font-medium">(*{allGifts.filter((g) => g.giftId === rule.giftId).length}规则共用)</span>
+            )}
           </div>
         </div>
         <button
@@ -169,7 +181,12 @@ export default function RuleItem({ rule }: Props) {
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-3 pt-1">
+          <div className="pt-1">
+            <label className="block text-xs text-gray-500 mb-1.5">关联赠品</label>
+            <GiftSelector rule={rule} allGifts={allGifts} onUpdate={(patch) => updateRule(rule.id, patch)} />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
             <div className="col-span-1">
               <label className="block text-xs text-gray-500 mb-1">赠品名称</label>
               <input
