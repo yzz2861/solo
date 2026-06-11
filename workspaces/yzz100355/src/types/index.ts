@@ -43,11 +43,14 @@ export interface ForbiddenZone {
 export interface Annotation {
   id: string;
   targetId: string;
-  targetType: 'alarm' | 'detection' | 'point';
+  targetType: 'alarm' | 'detection' | 'point' | 'checkpoint' | 'zone';
   reason: string;
   note: string;
   createdAt: string;
   createdBy: string;
+  x?: number;
+  y?: number;
+  z?: number;
 }
 
 export interface DetectionResult {

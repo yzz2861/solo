@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import type { Annotation } from '@/types';
+import { loadAnnotations, saveAnnotations } from '@/services/dataService';
 import { generateId } from '@/utils/math';
-
-const STORAGE_KEY = 'patrol-annotations';
 
 interface AnnotationState {
   annotations: Annotation[];
@@ -26,6 +25,8 @@ interface AnnotationState {
     saveAnnotations: () => void;
     getAnnotationsForTarget: (targetId: string) => Annotation[];
     getFilteredAnnotations: () => Annotation[];
+    getTargetAnnotation: (targetId: string, targetType: Annotation['targetType']) => Annotation | undefined;
+    validateAnnotations: (validTargetIds: { alarms: string[]; points: string[]; checkpoints: string[]; zones: string[] }) => Annotation[];
   };
 }
 
@@ -84,10 +85,8 @@ export const useAnnotationStore = create<AnnotationState>((set, get) => ({
     
     loadAnnotations: () => {
       try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          set({ annotations: JSON.parse(stored) });
-        }
+        const stored = loadAnnotations();
+        set({ annotations: stored });
       } catch (error) {
         console.error('Failed to load annotations:', error);
       }
@@ -96,7 +95,7 @@ export const useAnnotationStore = create<AnnotationState>((set, get) => ({
     saveAnnotations: () => {
       try {
         const { annotations } = get();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(annotations));
+        saveAnnotations(annotations);
       } catch (error) {
         console.error('Failed to save annotations:', error);
       }
@@ -104,6 +103,12 @@ export const useAnnotationStore = create<AnnotationState>((set, get) => ({
     
     getAnnotationsForTarget: (targetId) => {
       return get().annotations.filter(a => a.targetId === targetId);
+    },
+    
+    getTargetAnnotation: (targetId, targetType) => {
+      return get().annotations.find(
+        a => a.targetId === targetId && a.targetType === targetType
+      );
     },
     
     getFilteredAnnotations: () => {
@@ -125,6 +130,32 @@ export const useAnnotationStore = create<AnnotationState>((set, get) => ({
       }).sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
+    },
+    
+    validateAnnotations: (validTargetIds) => {
+      const { annotations } = get();
+      const invalidAnnotations = annotations.filter(a => {
+        switch (a.targetType) {
+          case 'alarm':
+            return !validTargetIds.alarms.includes(a.targetId);
+          case 'point':
+            return !validTargetIds.points.includes(a.targetId);
+          case 'checkpoint':
+            return !validTargetIds.checkpoints.includes(a.targetId);
+          case 'zone':
+            return !validTargetIds.zones.includes(a.targetId);
+          case 'detection':
+            return false;
+          default:
+            return true;
+        }
+      });
+      
+      if (invalidAnnotations.length > 0) {
+        console.warn(`Found ${invalidAnnotations.length} invalid annotations pointing to non-existent targets`);
+      }
+      
+      return invalidAnnotations;
     },
   },
 }));

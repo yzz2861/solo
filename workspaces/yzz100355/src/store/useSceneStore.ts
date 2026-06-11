@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { PatrolShift, ForbiddenZone, Checkpoint } from '@/types';
-import { generatePatrolShifts, generateForbiddenZones, generateCheckpoints } from '@/utils/mockData';
+import { loadPatrolShifts, loadForbiddenZones, loadCheckpoints } from '@/services/dataService';
 
 interface SceneState {
   patrolShifts: PatrolShift[];
@@ -22,6 +22,7 @@ interface SceneState {
   
   actions: {
     loadData: () => void;
+    reloadData: () => void;
     selectShift: (id: string | null) => void;
     toggleShiftVisibility: (id: string) => void;
     toggleForbiddenZones: () => void;
@@ -34,6 +35,9 @@ interface SceneState {
     selectAlarm: (id: string | null) => void;
     getSelectedShift: () => PatrolShift | undefined;
     getVisibleShifts: () => PatrolShift[];
+    getShiftById: (id: string) => PatrolShift | undefined;
+    getAlarmById: (id: string) => PatrolShift['alarms'][0] | undefined;
+    getCheckpointById: (id: string) => Checkpoint | undefined;
   };
 }
 
@@ -59,9 +63,9 @@ export const useSceneStore = create<SceneState>((set, get) => ({
     loadData: () => {
       set({ isLoading: true });
       try {
-        const shifts = generatePatrolShifts();
-        const zones = generateForbiddenZones();
-        const checkpoints = generateCheckpoints();
+        const shifts = loadPatrolShifts();
+        const zones = loadForbiddenZones();
+        const checkpoints = loadCheckpoints();
         
         const shiftIds = shifts.map(s => s.id);
         
@@ -72,6 +76,7 @@ export const useSceneStore = create<SceneState>((set, get) => ({
           selectedShiftId: shiftIds[shiftIds.length - 1] || null,
           visibleShiftIds: shiftIds.slice(-2),
           isLoading: false,
+          error: null,
         });
       } catch (error) {
         set({
@@ -79,6 +84,10 @@ export const useSceneStore = create<SceneState>((set, get) => ({
           isLoading: false,
         });
       }
+    },
+    
+    reloadData: () => {
+      get().actions.loadData();
     },
     
     selectShift: (id) => set({ selectedShiftId: id }),
@@ -114,6 +123,23 @@ export const useSceneStore = create<SceneState>((set, get) => ({
     getVisibleShifts: () => {
       const state = get();
       return state.patrolShifts.filter(s => state.visibleShiftIds.includes(s.id));
+    },
+    
+    getShiftById: (id) => {
+      return get().patrolShifts.find(s => s.id === id);
+    },
+    
+    getAlarmById: (id) => {
+      const shifts = get().patrolShifts;
+      for (const shift of shifts) {
+        const alarm = shift.alarms.find(a => a.id === id);
+        if (alarm) return alarm;
+      }
+      return undefined;
+    },
+    
+    getCheckpointById: (id) => {
+      return get().checkpoints.find(cp => cp.id === id);
     },
   },
 }));

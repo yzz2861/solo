@@ -22,6 +22,8 @@ const targetTypeLabels: { [key: string]: string } = {
   alarm: '告警',
   detection: '异常',
   point: '轨迹点',
+  checkpoint: '检查点',
+  zone: '禁区',
 };
 
 export function AnnotationPanel() {
@@ -53,7 +55,7 @@ export function AnnotationPanel() {
     note: '',
     createdBy: '',
     targetId: '',
-    targetType: 'detection' as 'alarm' | 'detection' | 'point',
+    targetType: 'detection' as Annotation['targetType'],
   });
 
   useEffect(() => {

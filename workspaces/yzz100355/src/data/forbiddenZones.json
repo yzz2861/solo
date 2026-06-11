@@ -1,0 +1,68 @@
+[
+  {
+    "id": "zone-pool-001",
+    "name": "景观水池",
+    "type": "pool",
+    "polygon": [
+      {"x": 20, "y": 20},
+      {"x": 35, "y": 20},
+      {"x": 38, "y": 35},
+      {"x": 25, "y": 40},
+      {"x": 18, "y": 32}
+    ],
+    "warningDistance": 3,
+    "height": 0.5
+  },
+  {
+    "id": "zone-warehouse-001",
+    "name": "仓库A门",
+    "type": "warehouse",
+    "polygon": [
+      {"x": 60, "y": 15},
+      {"x": 75, "y": 15},
+      {"x": 75, "y": 25},
+      {"x": 60, "y": 25}
+    ],
+    "warningDistance": 2,
+    "height": 3
+  },
+  {
+    "id": "zone-warehouse-002",
+    "name": "仓库B门",
+    "type": "warehouse",
+    "polygon": [
+      {"x": 70, "y": 55},
+      {"x": 85, "y": 55},
+      {"x": 85, "y": 65},
+      {"x": 70, "y": 65}
+    ],
+    "warningDistance": 2,
+    "height": 3
+  },
+  {
+    "id": "zone-building-001",
+    "name": "办公楼",
+    "type": "building",
+    "polygon": [
+      {"x": 40, "y": 50},
+      {"x": 55, "y": 50},
+      {"x": 55, "y": 70},
+      {"x": 40, "y": 70}
+    ],
+    "warningDistance": 1,
+    "height": 15
+  },
+  {
+    "id": "zone-restricted-001",
+    "name": "配电房",
+    "type": "restricted",
+    "polygon": [
+      {"x": 10, "y": 60},
+      {"x": 20, "y": 60},
+      {"x": 20, "y": 70},
+      {"x": 10, "y": 70}
+    ],
+    "warningDistance": 3,
+    "height": 4
+  }
+]

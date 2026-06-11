@@ -1,27 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Scene3D } from '@/components/Scene3D/Scene3D';
 import { TimelineControl } from '@/components/Timeline/TimelineControl';
 import { ShiftSelector } from '@/components/Panels/ShiftSelector';
 import { DetectionPanel } from '@/components/Panels/DetectionPanel';
 import { AnnotationPanel } from '@/components/Panels/AnnotationPanel';
 import { LayerControl } from '@/components/Panels/LayerControl';
+import { DataManagementPanel } from '@/components/Panels/DataManagementPanel';
 import { useSceneStore } from '@/store/useSceneStore';
-import { useAnnotationStore } from '@/store/useAnnotationStore';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 type TabType = 'detection' | 'annotation';
 
 export default function Home() {
-  const { isLoading, error, actions: { loadData } } = useSceneStore();
-  const { actions: { loadAnnotations } } = useAnnotationStore();
+  const { isLoading, error, actions: { reloadData } } = useSceneStore();
   const [activeTab, setActiveTab] = useState<TabType>('detection');
   const [showSidebar, setShowSidebar] = useState(true);
-
-  useEffect(() => {
-    loadData();
-    loadAnnotations();
-  }, [loadData, loadAnnotations]);
+  const [showDataPanel, setShowDataPanel] = useState(false);
 
   if (isLoading) {
     return (
@@ -42,7 +37,7 @@ export default function Home() {
           <p className="text-white/70 mb-2">数据加载失败</p>
           <p className="text-white/50 text-sm">{error}</p>
           <button
-            onClick={loadData}
+            onClick={reloadData}
             className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
           >
             重新加载
@@ -62,6 +57,23 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             <ShiftSelector />
             <LayerControl />
+            
+            <button
+              onClick={() => setShowDataPanel(!showDataPanel)}
+              className="w-full text-left p-3 bg-background border border-white/10 rounded-lg hover:border-primary/50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">数据管理</span>
+                <span className={cn(
+                  "text-xs px-2 py-0.5 rounded-full",
+                  showDataPanel ? "bg-primary/20 text-primary" : "bg-white/10 text-white/50"
+                )}>
+                  {showDataPanel ? '展开' : '收起'}
+                </span>
+              </div>
+            </button>
+            
+            {showDataPanel && <DataManagementPanel />}
           </div>
         </div>
 
