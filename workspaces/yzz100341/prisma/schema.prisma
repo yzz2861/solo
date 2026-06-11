@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String
+  classId   String?
+  routeId   String?
+  createdAt DateTime @default(now())
+
+  parentLinks ParentStudent[] @relation("ParentLinks")
+}
+
+model Class {
+  id     String @id @default(cuid())
+  name   String @unique
+  grade  Int
+
+  students Student[]
+}
+
+model Student {
+  id             String @id @default(cuid())
+  name           String
+  studentNo      String @unique
+  classId        String
+  defaultRouteId String
+  defaultStopId  String
+
+  class         Class          @relation(fields: [classId], references: [id])
+  defaultRoute  BusRoute       @relation("DefaultRoute", fields: [defaultRouteId], references: [id])
+  defaultStop   BusStop        @relation("DefaultStop", fields: [defaultStopId], references: [id])
+  parentLinks   ParentStudent[] @relation("StudentLinks")
+  changeRequests ChangeRequest[]
+  boardingRecords BoardingRecord[]
+}
+
+model ParentStudent {
+  id        String @id @default(cuid())
+  parentId  String
+  studentId String
+
+  parent  User    @relation("ParentLinks", fields: [parentId], references: [id])
+  student Student @relation("StudentLinks", fields: [studentId], references: [id])
+
+  @@unique([parentId, studentId])
+  @@index([parentId])
+  @@index([studentId])
+}
+
+model BusRoute {
+  id       String @id @default(cuid())
+  name     String @unique
+  plateNo  String
+  capacity Int
+
+  stops           BusStop[]
+  defaultStudents Student[]      @relation("DefaultRoute")
+  originalChanges ChangeRequest[] @relation("OriginalRoute")
+  newChanges      ChangeRequest[] @relation("NewRoute")
+  boardingRecords BoardingRecord[]
+}
+
+model BusStop {
+  id       String @id @default(cuid())
+  name     String
+  address  String
+  routeId  String
+  sequence Int
+
+  route           BusRoute       @relation(fields: [routeId], references: [id])
+  defaultStudents Student[]      @relation("DefaultStop")
+  originalChanges ChangeRequest[] @relation("OriginalStop")
+  newChanges      ChangeRequest[] @relation("NewStop")
+  boardingRecords BoardingRecord[]
+
+  @@unique([routeId, sequence])
+  @@index([routeId])
+}
+
+model ChangeRequest {
+  id              String   @id @default(cuid())
+  studentId       String
+  date            String
+  originalRouteId String
+  originalStopId  String
+  newRouteId      String
+  newStopId       String
+  reason          String?
+  initiatorId     String
+  initiatorName   String
+  initiatorRole   String
+  status          String
+  mergedToId      String?
+  confirmedById   String?
+  confirmedByName String?
+  confirmedAt     DateTime?
+  rejectComment   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student        Student  @relation(fields: [studentId], references: [id])
+  originalRoute  BusRoute @relation("OriginalRoute", fields: [originalRouteId], references: [id])
+  originalStop   BusStop  @relation("OriginalStop", fields: [originalStopId], references: [id])
+  newRoute       BusRoute @relation("NewRoute", fields: [newRouteId], references: [id])
+  newStop        BusStop  @relation("NewStop", fields: [newStopId], references: [id])
+  auditLogs      AuditLog[]
+
+  @@index([studentId, date])
+  @@index([newRouteId, date, status])
+  @@index([originalRouteId, date])
+}
+
+model BoardingRecord {
+  id           String   @id @default(cuid())
+  studentId    String
+  routeId      String
+  stopId       String
+  date         String
+  boardedAt    DateTime?
+  markedById   String
+  markedByName String
+
+  student Student  @relation(fields: [studentId], references: [id])
+  route   BusRoute @relation(fields: [routeId], references: [id])
+  stop    BusStop  @relation(fields: [stopId], references: [id])
+
+  @@unique([studentId, date])
+  @@index([routeId, date])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  action       String
+  changeId     String?
+  operatorId   String
+  operatorName String
+  operatorRole String
+  detail       String
+  createdAt    DateTime @default(now())
+
+  change ChangeRequest? @relation(fields: [changeId], references: [id])
+
+  @@index([createdAt])
+  @@index([changeId])
+}
