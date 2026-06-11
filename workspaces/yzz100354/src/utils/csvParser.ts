@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import type { TemperatureLog, SugarReading, FeedingRecord, BadRowInfo, ImportFileType } from '../types';
-import { parseFlexibleDateTime } from './timeParser';
+import { SequentialTimeParser } from './timeParser';
 import { detectSugarUnit, convertToBrix } from './unitConverter';
 
 function generateId(): string {
@@ -97,7 +97,7 @@ function parseTemperatureData(
   const timeIdx = findColumnIndex(headers, ['时间', '日期', 'date', 'time', 'timestamp', 'datetime']);
   const tempIdx = findColumnIndex(headers, ['温度', 'temperature', 'temp', 't']);
   
-  let baseDate: Date | undefined;
+  const timeParser = new SequentialTimeParser();
   
   rows.forEach((row, index) => {
     try {
@@ -108,11 +108,7 @@ function parseTemperatureData(
       
       let timestamp: Date;
       try {
-        timestamp = parseFlexibleDateTime(rawTime, baseDate);
-        if (!baseDate) {
-          baseDate = new Date(timestamp);
-          baseDate.setHours(0, 0, 0, 0);
-        }
+        timestamp = timeParser.parse(rawTime);
       } catch (e) {
         throw new Error(`时间格式无法解析: ${rawTime}`);
       }
@@ -155,7 +151,7 @@ function parseSugarData(
   const sugarIdx = findColumnIndex(headers, ['糖度', 'brix', 'sugar', '浓度']);
   const unitIdx = findColumnIndex(headers, ['单位', 'unit', '类型']);
   
-  let baseDate: Date | undefined;
+  const timeParser = new SequentialTimeParser();
   
   rows.forEach((row, index) => {
     try {
@@ -167,11 +163,7 @@ function parseSugarData(
       
       let timestamp: Date;
       try {
-        timestamp = parseFlexibleDateTime(rawTime, baseDate);
-        if (!baseDate) {
-          baseDate = new Date(timestamp);
-          baseDate.setHours(0, 0, 0, 0);
-        }
+        timestamp = timeParser.parse(rawTime);
       } catch (e) {
         throw new Error(`时间格式无法解析: ${rawTime}`);
       }
@@ -220,7 +212,7 @@ function parseFeedingData(
   const amountIdx = findColumnIndex(headers, ['数量', '投料量', 'amount', 'weight', '重量']);
   const unitIdx = findColumnIndex(headers, ['单位', 'unit', '计量单位']);
   
-  let baseDate: Date | undefined;
+  const timeParser = new SequentialTimeParser();
   
   rows.forEach((row, index) => {
     try {
@@ -233,11 +225,7 @@ function parseFeedingData(
       
       let timestamp: Date;
       try {
-        timestamp = parseFlexibleDateTime(rawTime, baseDate);
-        if (!baseDate) {
-          baseDate = new Date(timestamp);
-          baseDate.setHours(0, 0, 0, 0);
-        }
+        timestamp = timeParser.parse(rawTime);
       } catch (e) {
         throw new Error(`时间格式无法解析: ${rawTime}`);
       }

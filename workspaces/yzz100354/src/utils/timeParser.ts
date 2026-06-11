@@ -1,4 +1,4 @@
-export function parseFlexibleDateTime(dateStr: string, baseDate?: Date): Date {
+export function parseFlexibleDateTime(dateStr: string, baseDate?: Date, previousTime?: Date): Date {
   const trimmed = dateStr.trim();
   const base = baseDate || new Date();
 
@@ -48,8 +48,20 @@ export function parseFlexibleDateTime(dateStr: string, baseDate?: Date): Date {
     let result = new Date(base);
     result.setHours(h, m, 0, 0);
     
-    if (result > base && base.getHours() > 12 && h < 6) {
-      result.setDate(result.getDate() + 1);
+    if (previousTime) {
+      const previousMinutes = previousTime.getHours() * 60 + previousTime.getMinutes();
+      const currentMinutes = h * 60 + m;
+      
+      if (currentMinutes < previousMinutes) {
+        const diffMinutes = previousMinutes - currentMinutes;
+        if (diffMinutes > 60) {
+          result.setDate(result.getDate() + 1);
+        }
+      }
+    } else {
+      if (result > base && base.getHours() > 12 && h < 6) {
+        result.setDate(result.getDate() + 1);
+      }
     }
     
     return result;
@@ -72,6 +84,39 @@ export function parseFlexibleDateTime(dateStr: string, baseDate?: Date): Date {
   }
 
   throw new Error(`无法解析时间格式: ${dateStr}`);
+}
+
+export class SequentialTimeParser {
+  private baseDate: Date;
+  private previousTime: Date | undefined;
+
+  constructor(baseDate?: Date) {
+    this.baseDate = baseDate || new Date();
+    this.previousTime = undefined;
+  }
+
+  parse(dateStr: string): Date {
+    const result = parseFlexibleDateTime(dateStr, this.baseDate, this.previousTime);
+    
+    if (!this.previousTime) {
+      const startOfDay = new Date(result);
+      startOfDay.setHours(0, 0, 0, 0);
+      this.baseDate = startOfDay;
+    }
+    
+    this.previousTime = result;
+    
+    return result;
+  }
+
+  reset(newBaseDate?: Date) {
+    this.baseDate = newBaseDate || new Date();
+    this.previousTime = undefined;
+  }
+
+  setPreviousTime(time: Date) {
+    this.previousTime = time;
+  }
 }
 
 export function formatDateTime(date: Date): string {

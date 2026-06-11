@@ -4,11 +4,20 @@ export function convertToBrix(value: number, unit: SugarUnit): number {
   if (unit === 'Brix') {
     return value;
   }
+  
+  if (unit === '%') {
+    return convertPercentToBrix(value);
+  }
+  
   return value;
 }
 
 export function convertBrixToPercent(brix: number): number {
-  return brix;
+  return brix / 1.005 + 0.002;
+}
+
+export function convertPercentToBrix(percent: number): number {
+  return 1.005 * percent - 0.002;
 }
 
 export function detectSugarUnit(unitStr: string): SugarUnit {
@@ -40,4 +49,11 @@ export function celsiusToFahrenheit(celsius: number): number {
 
 export function fahrenheitToCelsius(fahrenheit: number): number {
   return (fahrenheit - 32) * 5 / 9;
+}
+
+export function formatSugar(value: number, unit: SugarUnit): string {
+  if (unit === 'Brix') {
+    return formatBrix(value);
+  }
+  return formatPercent(value);
 }
