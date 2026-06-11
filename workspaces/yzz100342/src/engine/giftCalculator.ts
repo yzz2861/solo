@@ -135,6 +135,10 @@ export function runTrial(
         existing.hitRules.push(rule.id);
         existing.isMultiHit = existing.hitRules.length > 1;
         existing.stockDeducted += willGive;
+        existing.remainingStock = existing.initialStock - existing.stockDeducted;
+        if (remainingBefore <= willGive) {
+          existing.stockOut = true;
+        }
       } else {
         giftMap.set(rule.giftId, {
           giftId: rule.giftId,
