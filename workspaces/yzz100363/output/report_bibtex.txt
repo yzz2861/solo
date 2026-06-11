@@ -1,0 +1,93 @@
+======================================================================
+参考文献清洗补全 - 处理报告
+======================================================================
+
+📊 处理概览
+  总条目数:       9
+  正常处理:       8 条
+  自动修复:       3 条 (3 处)
+  待确认:         6 条 (8 项)
+  需咨询导师:     4 条
+  重复文献:       1 条 (1 组)
+
+----------------------------------------------------------------------
+一、自动处理情况
+----------------------------------------------------------------------
+
+  共 3 条文献进行了自动修复:
+
+  [原始位置 1] Deep Learning for Image Recognition
+    ✓ doi: "10.1038/NATURE14539" → "10.1038/nature14539"
+      原因: DOI normalized to lowercase: 10.1038/NATURE14539 -> 10.1038/nature14539
+
+  [原始位置 2] 机器学习算法研究
+    ✓ doi: "10.11897/SP.J.1016.2022.00567" → "10.11897/sp.j.1016.2022.00567"
+      原因: DOI normalized to lowercase: 10.11897/SP.J.1016.2022.00567 -> 10.11897/sp.j.1016.2022.00567
+
+  [原始位置 7] Masked Autoencoders Are Scalable Vision Learners
+    ✓ doi: "10.1109/CVPR52688.2022.01587" → "10.1109/cvpr52688.2022.01587"
+      原因: DOI normalized to lowercase: 10.1109/CVPR52688.2022.01587 -> 10.1109/cvpr52688.2022.01587
+
+
+----------------------------------------------------------------------
+二、待确认清单
+----------------------------------------------------------------------
+
+  🔴 需咨询导师的项:
+
+  [原始位置 3] Deep learning for image recognition
+    ⚠️ [possible_duplicate] 疑似重复条目：与原始位置 1 的条目相似度 100.0%。该条目将被标记为重复，保留当前条目。原因：条目 1 与 3: DOI 完全匹配
+    ℹ️ [journal_abbreviation_conflict] 期刊名检测到全称: Nature，标准缩写为: nature，请确认是否需要缩写
+       原值: "Nature"
+       建议: "nature"
+
+  [原始位置 4] A Comprehensive Survey of Neural Network Architectures
+    ℹ️ [journal_abbreviation_conflict] 期刊名检测到全称: Journal of the American Chemical Society，标准缩写为: j. am. chem. soc.，请确认是否需要缩写
+       原值: "Journal of the American Chemical Society"
+       建议: "j. am. chem. soc."
+
+  [原始位置 8] Protein Structure Prediction Using AlphaFold
+    ℹ️ [journal_abbreviation_conflict] 期刊名检测到全称: Science，标准缩写为: science，请确认是否需要缩写
+       原值: "Science"
+       建议: "science"
+
+  🟡 建议确认的项（不影响使用）:
+
+  [原始位置 2] 机器学习算法研究
+    ℹ️ [doi_case_difference] DOI 存在大小写差异，已统一为标准格式
+
+  [原始位置 7] Masked Autoencoders Are Scalable Vision Learners
+    ℹ️ [doi_case_difference] DOI 存在大小写差异，已统一为标准格式
+
+
+----------------------------------------------------------------------
+三、疑似重复文献
+----------------------------------------------------------------------
+
+  检测到 1 组重复文献，共 1 条:
+
+  组 dup_group_001: 置信度 100.0%
+    保留条目: [原始位置 3] Deep learning for image recognition
+    移除条目: [原始位置 1] Deep Learning for Image Recognition
+    原因: 条目 1 与 3: DOI 完全匹配
+
+
+----------------------------------------------------------------------
+四、按原始位置索引
+----------------------------------------------------------------------
+
+  原始位置 → 输出位置 映射:
+
+  原始位置   1 → 【重复，已移除】  Deep Learning for Image Recognition
+  原始位置   2 → 输出位置: [1]  机器学习算法研究
+  原始位置   3 → 输出位置: [2]  Deep learning for image recognition
+  原始位置   4 → 输出位置: [3]  A Comprehensive Survey of Neural Network...
+  原始位置   5 → 输出位置: [4]  基于深度学习的自然语言处理方法研究
+  原始位置   6 → 输出位置: [5]  Attention is All You Need
+  原始位置   7 → 输出位置: [6]  Masked Autoencoders Are Scalable Vision ...
+  原始位置   8 → 输出位置: [7]  Protein Structure Prediction Using Alpha...
+  原始位置   9 → 输出位置: [8]  Introduction to Quantum Computing
+
+======================================================================
+处理完成，耗时: 0.01 秒
+======================================================================

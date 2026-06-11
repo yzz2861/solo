@@ -1,0 +1,539 @@
+{
+  "report": {
+    "total_entries": 10,
+    "processed_entries": 9,
+    "auto_fixed_entries": 6,
+    "needs_confirmation_entries": 10,
+    "duplicate_entries": 1,
+    "error_entries": 0,
+    "duplicate_groups": [
+      {
+        "group_id": "dup_group_001",
+        "primary_index": 0,
+        "duplicate_indices": [
+          2
+        ],
+        "confidence": 100.0,
+        "reason": "条目 1 与 3: DOI 完全匹配"
+      }
+    ],
+    "auto_fixes_count": 6,
+    "confirmation_items_count": 22,
+    "consult_advisor_count": 4,
+    "processing_time": 0.02,
+    "timestamp": "2026-06-11T00:37:48.857077"
+  },
+  "entries": [
+    {
+      "original_position": 0,
+      "output_position": 0,
+      "stable_id": "ref_000000_8987a975",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [
+        "Smith",
+        "John",
+        "Li",
+        "(, X. \". L. F. I. R. N. 5."
+      ],
+      "title": ": 436-444",
+      "journal": "DOI: 10.1038/NATURE14539.",
+      "booktitle": null,
+      "year": 2015,
+      "volume": null,
+      "number": null,
+      "pages": "436-444",
+      "publisher": null,
+      "doi": "10.1038/nature14539",
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [
+        {
+          "field": "doi",
+          "original_value": "10.1038/NATURE14539.",
+          "new_value": "10.1038/nature14539",
+          "reason": "DOI normalized to lowercase: 10.1038/NATURE14539. -> 10.1038/nature14539.; Removed trailing punctuation from DOI"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "possible_duplicate",
+          "severity": "warning",
+          "message": "疑似重复条目：与原始位置 3 的条目相似度 100.0%。该条目将被标记为重复，保留当前条目。原因：条目 1 与 3: DOI 完全匹配",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": true
+        },
+        {
+          "type": "chinese_punctuation",
+          "severity": "warning",
+          "message": "检测到中文标点: \"，已自动替换为英文标点",
+          "field": null,
+          "original_value": "\"",
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "uncertain_type",
+          "severity": "info",
+          "message": "文献类型无法自动识别，请确认并手动指定",
+          "field": "entry_type",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "1. Smith, John, and Li, Xiao-Ming. \"Deep Learning for Image Recognition.\" Nature 521.7553 (2015): 436-444. DOI: 10.1038/NATURE14539."
+    },
+    {
+      "original_position": 1,
+      "output_position": 1,
+      "stable_id": "ref_000001_a270f4ad",
+      "entry_type": "incollection",
+      "citation_key": null,
+      "authors": [
+        "王芳",
+        "张伟。《机器学习算法研究》",
+        "计算机学报",
+        "第45卷",
+        "第3期",
+        "2022年",
+        "https://doi.org/10.11897/SP.J.1016, P. 5."
+      ],
+      "title": null,
+      "journal": "00567.",
+      "booktitle": null,
+      "year": 2022,
+      "volume": null,
+      "number": null,
+      "pages": "567-580",
+      "publisher": null,
+      "doi": "10.11897/sp.j.1016.2022.00567",
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [
+        {
+          "field": "doi",
+          "original_value": "10.11897/SP.J.1016.2022.00567.",
+          "new_value": "10.11897/sp.j.1016.2022.00567",
+          "reason": "DOI normalized to lowercase: 10.11897/SP.J.1016.2022.00567. -> 10.11897/sp.j.1016.2022.00567.; Removed trailing punctuation from DOI"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "chinese_punctuation",
+          "severity": "warning",
+          "message": "检测到中文标点: 。, 《, 》, ，，已自动替换为英文标点",
+          "field": null,
+          "original_value": "。《》，",
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "2. 王芳，张伟。《机器学习算法研究》，计算机学报，第45卷，第3期，2022年，pp. 567-580。DOI: https://doi.org/10.11897/SP.J.1016.2022.00567."
+    },
+    {
+      "original_position": 2,
+      "output_position": -1,
+      "stable_id": "ref_000002_0daf69e4",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [
+        "J, S.",
+        "Nature, L. X. D. L. F. I. R."
+      ],
+      "title": "521(7553): 436-44",
+      "journal": "doi:10.1038/nature14539.",
+      "booktitle": null,
+      "year": 2015,
+      "volume": null,
+      "number": null,
+      "pages": "436-44",
+      "publisher": null,
+      "doi": "10.1038/nature14539",
+      "url": null,
+      "status": "duplicate",
+      "auto_fixes": [
+        {
+          "field": "doi",
+          "original_value": "10.1038/nature14539.",
+          "new_value": "10.1038/nature14539",
+          "reason": "Removed trailing punctuation from DOI"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "possible_duplicate",
+          "severity": "warning",
+          "message": "疑似重复条目：与原始位置 1 的条目相似度 100.0%。已被标记为重复，将从输出列表中移除。原因：条目 1 与 3: DOI 完全匹配",
+          "field": null,
+          "original_value": "3. Smith J, Li XM. Deep learning for image recognition. Nature. 2015; 521(7553): 436-44. doi:10.1038/nature14539.",
+          "suggested_value": "1. Smith, John, and Li, Xiao-Ming. \"Deep Learning for Image Recognition.\" Nature 521.7553 (2015): 436-444. DOI: 10.1038/NATURE14539.",
+          "consult_advisor": true
+        }
+      ],
+      "original_text": "3. Smith J, Li XM. Deep learning for image recognition. Nature. 2015; 521(7553): 436-44. doi:10.1038/nature14539."
+    },
+    {
+      "original_position": 3,
+      "output_position": 2,
+      "stable_id": "ref_000003_858096dc",
+      "entry_type": "online",
+      "citation_key": null,
+      "authors": [
+        "Johnson",
+        "A",
+        "Williams",
+        "B",
+        "Brown, &.",
+        "(, C."
+      ],
+      "title": "A Comprehensive Survey of Neural Network Architectures",
+      "journal": "Journal of the American Chemical Society",
+      "booktitle": null,
+      "year": 2020,
+      "volume": null,
+      "number": null,
+      "pages": "6984-7011",
+      "publisher": null,
+      "doi": "10.1021/jacs.9b13456",
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [
+        {
+          "field": "doi",
+          "original_value": "10.1021/jacs.9b13456.",
+          "new_value": "10.1021/jacs.9b13456",
+          "reason": "Removed trailing punctuation from DOI"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "journal_abbreviation_conflict",
+          "severity": "info",
+          "message": "期刊名检测到全称: Journal of the American Chemical Society，标准缩写为: j. am. chem. soc.，请确认是否需要缩写",
+          "field": "journal",
+          "original_value": "Journal of the American Chemical Society",
+          "suggested_value": "j. am. chem. soc.",
+          "consult_advisor": true
+        }
+      ],
+      "original_text": "4. Johnson, A., Williams, B., & Brown, C. (2020). A Comprehensive Survey of Neural Network Architectures. Journal of the American Chemical Society, 142(15), 6984-7011. https://doi.org/10.1021/jacs.9b13456."
+    },
+    {
+      "original_position": 4,
+      "output_position": 3,
+      "stable_id": "ref_000004_acdf2a83",
+      "entry_type": "thesis",
+      "citation_key": null,
+      "authors": [
+        "李明。（"
+      ],
+      "title": null,
+      "journal": "). 基于深度学习的自然语言处理方法研究[博士论文]. 清华大学. ",
+      "booktitle": null,
+      "year": 2018,
+      "volume": null,
+      "number": null,
+      "pages": null,
+      "publisher": null,
+      "doi": null,
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [
+        {
+          "field": "journal",
+          "original_value": "）。基于深度学习的自然语言处理方法研究【博士论文】。清华大学。",
+          "new_value": "). 基于深度学习的自然语言处理方法研究[博士论文]. 清华大学. ",
+          "reason": "替换中文标点为英文标点"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "chinese_punctuation",
+          "severity": "warning",
+          "message": "检测到中文标点: 。, 【, 】, （, ），已自动替换为英文标点",
+          "field": null,
+          "original_value": "。【】（）",
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "5. 李明。（2018）。基于深度学习的自然语言处理方法研究【博士论文】。清华大学。"
+    },
+    {
+      "original_position": 5,
+      "output_position": 4,
+      "stable_id": "ref_000005_daebd571",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [
+        "Chen",
+        "Wei",
+        "(, E. A. \". I. A. Y. N. A. I. N. I. P. S. 3."
+      ],
+      "title": null,
+      "journal": null,
+      "booktitle": null,
+      "year": 2017,
+      "volume": null,
+      "number": null,
+      "pages": null,
+      "publisher": null,
+      "doi": null,
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [],
+      "confirmation_items": [
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "chinese_punctuation",
+          "severity": "warning",
+          "message": "检测到中文标点: \"，已自动替换为英文标点",
+          "field": null,
+          "original_value": "\"",
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "uncertain_type",
+          "severity": "info",
+          "message": "文献类型无法自动识别，请确认并手动指定",
+          "field": "entry_type",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "6. Chen, Wei, et al. \"Attention is All You Need.\" Advances in Neural Information Processing Systems 30 (2017)."
+    },
+    {
+      "original_position": 6,
+      "output_position": 5,
+      "stable_id": "ref_000006_78369d61",
+      "entry_type": "online",
+      "citation_key": null,
+      "authors": [
+        "https://doi.org/10.1109/TPAMI"
+      ],
+      "title": null,
+      "journal": "2998028",
+      "booktitle": null,
+      "year": 2020,
+      "volume": null,
+      "number": null,
+      "pages": null,
+      "publisher": null,
+      "doi": "10.1109/tpami.2020.2998028",
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [
+        {
+          "field": "doi",
+          "original_value": "10.1109/TPAMI.2020.2998028",
+          "new_value": "10.1109/tpami.2020.2998028",
+          "reason": "DOI normalized to lowercase: 10.1109/TPAMI.2020.2998028 -> 10.1109/tpami.2020.2998028"
+        }
+      ],
+      "confirmation_items": [
+        {
+          "type": "doi_case_difference",
+          "severity": "info",
+          "message": "DOI 存在大小写差异，已统一为标准格式",
+          "field": "doi",
+          "original_value": "10.1109/TPAMI.2020.2998028",
+          "suggested_value": "10.1109/tpami.2020.2998028",
+          "consult_advisor": false
+        },
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "7. https://doi.org/10.1109/TPAMI.2020.2998028"
+    },
+    {
+      "original_position": 7,
+      "output_position": 6,
+      "stable_id": "ref_000007_4cddfbcc",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [
+        "Liu",
+        "Yang",
+        "Chen",
+        "(, H. \". S. P. U. A. S. 3."
+      ],
+      "title": null,
+      "journal": ": 871-876.",
+      "booktitle": null,
+      "year": 2021,
+      "volume": null,
+      "number": null,
+      "pages": "871-876",
+      "publisher": null,
+      "doi": null,
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [],
+      "confirmation_items": [
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "chinese_punctuation",
+          "severity": "warning",
+          "message": "检测到中文标点: \"，已自动替换为英文标点",
+          "field": null,
+          "original_value": "\"",
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "uncertain_type",
+          "severity": "info",
+          "message": "文献类型无法自动识别，请确认并手动指定",
+          "field": "entry_type",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "8. Liu, Yang, and Chen, Hong-Bo. \"Protein Structure Prediction Using AlphaFold.\" Science 373.6557 (2021): 871-876."
+    },
+    {
+      "original_position": 8,
+      "output_position": 7,
+      "stable_id": "ref_000008_2648ea73",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [
+        "Brown",
+        "E, D.",
+        "Miller",
+        "Press, S. T. I. T. Q. C. C. U."
+      ],
+      "title": null,
+      "journal": null,
+      "booktitle": null,
+      "year": 2019,
+      "volume": null,
+      "number": null,
+      "pages": null,
+      "publisher": null,
+      "doi": null,
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [],
+      "confirmation_items": [
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 标题",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        },
+        {
+          "type": "uncertain_type",
+          "severity": "info",
+          "message": "文献类型无法自动识别，请确认并手动指定",
+          "field": "entry_type",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "9. Brown, D. E., and Miller, S. T. Introduction to Quantum Computing. Cambridge University Press, 2019."
+    },
+    {
+      "original_position": 9,
+      "output_position": 8,
+      "stable_id": "ref_000009_6c0648c1",
+      "entry_type": "unknown",
+      "citation_key": null,
+      "authors": [],
+      "title": null,
+      "journal": "10.1038/s41586-023-06291-w",
+      "booktitle": null,
+      "year": null,
+      "volume": null,
+      "number": null,
+      "pages": "41586-023",
+      "publisher": null,
+      "doi": "10.1038/s41586-023-06291-w",
+      "url": null,
+      "status": "processed",
+      "auto_fixes": [],
+      "confirmation_items": [
+        {
+          "type": "missing_year",
+          "severity": "warning",
+          "message": "年份缺失，建议补充或咨询导师",
+          "field": "year",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": true
+        },
+        {
+          "type": "incomplete_field",
+          "severity": "warning",
+          "message": "字段不完整，缺少: 作者, 标题, 年份",
+          "field": null,
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": true
+        },
+        {
+          "type": "uncertain_type",
+          "severity": "info",
+          "message": "文献类型无法自动识别，请确认并手动指定",
+          "field": "entry_type",
+          "original_value": null,
+          "suggested_value": null,
+          "consult_advisor": false
+        }
+      ],
+      "original_text": "10. 10.1038/s41586-023-06291-w"
+    }
+  ]
+}
