@@ -21,12 +21,12 @@ router.get('/addons-config', (_req, res) => {
 });
 
 router.get('/members', (req, res) => {
-  const keyword = typeof req.query.q as string | undefined;
+  const keyword = req.query.q ? String(req.query.q) : undefined;
   res.json(searchMembers(keyword));
 });
 
 router.get('/members/similar-plates', (req, res) => {
-  const plate = typeof req.query.plate as string | undefined;
+  const plate = req.query.plate ? String(req.query.plate) : undefined;
   if (!plate) {
     res.json([]);
     return;

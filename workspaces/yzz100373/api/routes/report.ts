@@ -5,7 +5,7 @@ import { generateDailyReport, generateCSV } from '../utils/report';
 const router = Router();
 
 router.get('/daily', (req, res) => {
-  const dateStr = typeof req.query.date as string | undefined;
+  const dateStr = req.query.date ? String(req.query.date) : undefined;
   const date = dateStr ? new Date(dateStr) : new Date();
   const orders = getOrders(date);
   const report = generateDailyReport(orders, date);
@@ -13,7 +13,7 @@ router.get('/daily', (req, res) => {
 });
 
 router.get('/daily/export', (req, res) => {
-  const dateStr = typeof req.query.date as string | undefined;
+  const dateStr = req.query.date ? String(req.query.date) : undefined;
   const date = dateStr ? new Date(dateStr) : new Date();
   const orders = getOrders(date);
   const report = generateDailyReport(orders, date);

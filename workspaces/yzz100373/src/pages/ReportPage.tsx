@@ -3,6 +3,7 @@ import type { DailyReport, Order } from '../../shared/types';
 import { WASH_STEP_LABELS } from '../../shared/types';
 import { reportApi } from '../lib/services';
 import { useAppStore } from '../store/appStore';
+import { formatLocalDate } from '../utils/date';
 import {
   BarChart3,
   Download,
@@ -23,7 +24,7 @@ export default function ReportPage() {
 
   const loadReport = async () => {
     try {
-      const data = await reportApi.getDaily(date.toISOString().split('T')[0]);
+      const data = await reportApi.getDaily(formatLocalDate(date));
       setReport(data);
     } catch {
       showToast('error', '加载报表失败');
@@ -34,7 +35,6 @@ export default function ReportPage() {
     loadReport();
   }, [date]);
 
-  const formatDate = (d: Date) => d.toISOString().split('T')[0];
   const addDays = (d: Date, n: number) => {
     const nd = new Date(d);
     nd.setDate(nd.getDate() + n);
@@ -42,7 +42,7 @@ export default function ReportPage() {
   };
 
   const handleExport = () => {
-    reportApi.exportDaily(formatDate(date));
+    reportApi.exportDaily(formatLocalDate(date));
     showToast('success', '正在导出报表...');
   };
 

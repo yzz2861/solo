@@ -14,8 +14,8 @@ import type { CreateOrderRequest, AddAddonRequest, CancelOrderRequest, OrderStat
 const router = Router();
 
 router.get('/', (req, res) => {
-  const dateStr = typeof req.query.date as string | undefined;
-  const status = typeof req.query.status as OrderStatus | undefined;
+  const dateStr = req.query.date ? String(req.query.date) : undefined;
+  const status = req.query.status ? (String(req.query.status) as OrderStatus) : undefined;
   const date = dateStr ? new Date(dateStr) : undefined;
   res.json(getOrders(date, status));
 });

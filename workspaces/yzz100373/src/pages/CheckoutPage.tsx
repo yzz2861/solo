@@ -5,6 +5,7 @@ import { OrderCard } from '../components/checkout/OrderCard';
 import { VehicleForm } from '../components/checkout/VehicleForm';
 import { OrderDetailPanel } from '../components/checkout/OrderDetailPanel';
 import { useAppStore } from '../store/appStore';
+import { formatLocalDate, getLocalDateDisplay } from '../utils/date';
 import { ListTodo, Car, CheckCircle, Clock } from 'lucide-react';
 
 type FilterTab = 'all' | OrderStatus;
@@ -25,7 +26,7 @@ export default function CheckoutPage() {
 
   const loadOrders = async () => {
     try {
-      const data = await orderApi.getList({ date: new Date().toISOString().split('T')[0] });
+      const data = await orderApi.getList({ date: formatLocalDate() });
       setOrders(data);
     } catch {
       showToast('error', '加载订单失败');
@@ -70,7 +71,7 @@ export default function CheckoutPage() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">前台核销台</h1>
             <p className="text-sm text-slate-500 mt-0.5">
-              {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+              {getLocalDateDisplay()}
             </p>
           </div>
           <div className="flex items-center gap-3">

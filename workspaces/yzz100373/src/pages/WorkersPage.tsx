@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Order, Worker, WashStep } from '../../shared/types';
 import { WASH_STEP_LABELS, WASH_STEPS } from '../../shared/types';
 import { orderApi, workerApi } from '../lib/services';
+import { formatLocalDate } from '../utils/date';
 import { User, Car, ChevronRight } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -11,7 +12,7 @@ export default function WorkersPage() {
 
   const loadData = async () => {
     const [o, w] = await Promise.all([
-      orderApi.getList({ date: new Date().toISOString().split('T')[0] }),
+      orderApi.getList({ date: formatLocalDate() }),
       workerApi.getList(),
     ]);
     setOrders(o.filter((o) => o.status !== 'cancelled'));
