@@ -163,6 +163,8 @@ SOLO_QC_HEADERS = [
     "产物及过程是否满意",
     "不满意原因",
     "远端Github地址",
+    "github地址",
+    "commit id",
     "分支文件夹",
     "截图",
     "日志轨迹",
@@ -3242,7 +3244,7 @@ def backfill_submission_fields(row: dict[str, str]) -> dict[str, str]:
 
 
 def extract_report_field(text: str, field: str) -> str:
-    pattern = rf"^\s*[-*]?\s*{re.escape(field)}\s*[:：]\s*(.*?)\s*$"
+    pattern = rf"^[ \t]*[-*]?[ \t]*{re.escape(field)}[ \t]*[:：][ \t]*([^\r\n]*)[ \t]*$"
     match = re.search(pattern, text, re.M)
     return match.group(1).strip() if match else ""
 
@@ -3279,10 +3281,20 @@ def qa_verdict_from_report(report_path: Path | None, qa_status: str) -> dict[str
     verdict = extract_report_field(text, "结论")
     task_type = normalize_task_type(extract_report_field(text, "任务类型"))
     task_completed = extract_report_field(text, "任务是否完成")
-    reason = extract_report_field(text, "未完成原因") or extract_report_field(text, "不满意原因")
+    product_reason = extract_report_field(text, "未完成原因") or extract_report_field(text, "产物不满意原因")
+    fallback_reason = extract_report_field(text, "不满意原因")
+    process_reason = extract_report_field(text, "过程不满意原因")
+
+    if not process_reason:
+        match = re.search(r"过程不满意[：:]\s*(.+)", fallback_reason)
+        if match:
+            process_reason = match.group(1).strip()
+            fallback_reason = fallback_reason[: match.start()].strip()
+    if not product_reason and fallback_reason and not fallback_reason.startswith("过程不满意"):
+        product_reason = fallback_reason
 
     passed = qa_status == "success" and bool(re.search(r"结论\s*[:：]\s*通过", text))
-    failed = bool(re.search(r"结论\s*[:：]\s*不通过", text)) or qa_status != "success"
+    failed = bool(re.search(r"结论\s*[:：]\s*不通过", text)) or qa_status != "success" or bool(process_reason)
     if passed and not failed:
         return {
             "discard_status": "discarded",
@@ -3292,16 +3304,29 @@ def qa_verdict_from_report(report_path: Path | None, qa_status: str) -> dict[str
             "reason": "",
         }
 
-    if not reason:
+    reason_parts: list[str] = []
+    if product_reason:
+        product_reason = relativeize_report_paths(product_reason)
+        if not product_reason.startswith("产物不满意："):
+            product_reason = f"产物不满意：{product_reason}"
+        reason_parts.append(product_reason)
+    if process_reason:
+        process_reason = relativeize_report_paths(process_reason)
+        if process_reason.startswith("过程不满意："):
+            reason_parts.append(process_reason)
+        else:
+            reason_parts.append(f"过程不满意：{process_reason}")
+
+    if not reason_parts:
         summary = first_line(text, 260) if text else f"Codex 质检未正常生成报告，qa_status={qa_status}"
-        reason = f"产物不满意：{summary}"
-    elif not reason.startswith("产物不满意："):
-        reason = f"产物不满意：{reason}"
-    reason = relativeize_report_paths(reason)
+        reason_parts.append(f"产物不满意：{summary}")
+
+    reason = "".join(reason_parts)
+    default_task_completed = "完成了任务" if process_reason and not product_reason else "未完成任务"
     return {
         "discard_status": "not_discarded",
         "task_type": task_type,
-        "task_completed": task_completed if task_completed in {"完成了任务", "未完成任务"} else "未完成任务",
+        "task_completed": task_completed if task_completed in {"完成了任务", "未完成任务"} else default_task_completed,
         "satisfied": "不满意",
         "reason": reason,
     }
@@ -3468,17 +3493,54 @@ def run_codex_quality_check(
     status_update: Any | None = None,
 ) -> tuple[Path | None, str]:
     report_path = run_dir / "codex_qa_report.md"
+    trajectory_paths = [
+        run_dir / "trae_manual_trajectory.md",
+        run_dir / "trae_full_transcript.md",
+        run_dir / "trae_trajectory.md",
+        run_dir / "trace.jsonl",
+        run_dir / "output.md",
+    ]
+    trajectory_path_lines = "\n".join(
+        f"- {path} ({'exists' if path.exists() else 'missing'})" for path in trajectory_paths
+    )
     prompt = f"""你是代码质检员。请优先使用并严格遵循本机 Codex 的“solo质检”技能；如果技能没有自动加载，也要按“solo质检”的口径执行。请只做质检，不要修改任何文件，不要提交或推送 Git。
 
 项目 ID: {idea_id}
 当前轮次: {round_name}
 工作目录: {workspace}
+run 目录: {run_dir}
+可用轨迹/对话/运行记录路径:
+{trajectory_path_lines}
 
 请检查这个由 Trae/SOLO Coder 生成的项目是否满足用户原始目标，重点看：
 1. 项目是否可安装、可运行，或是否能通过项目中真实存在的入口体验核心流程。
 2. 主要功能是否和提示词一致。
 3. 是否存在阻断性 bug、入口错误、依赖缺失、运行链路不可用、README 与实际不一致。
-4. 给出明确结论：通过 / 不通过。
+4. 必须阅读已有轨迹/对话/日志/截图/运行记录，检查模型完成任务的过程是否可靠。
+5. 给出明确结论：通过 / 不通过。
+
+产物不满意原因规则：
+- 必须针对原始提示词或当前轮次提示词，明确说明“要求中的哪一项”完成不好，并说明为什么不好；不要只写泛泛的失败现象。
+- 页面 404、空白、无法渲染等问题，要落实到具体页面/路由/入口、渲染链路、路径配置、资源加载或前端代码问题。
+- 接口调用错误必须区分 400、401/403、404、500、网络错误等返回，结合请求路径、参数、前端调用或后端处理位置，判断更像前端传参/路由问题还是后端接口/数据处理问题。
+- Bug 原因要写触发方式和影响，不要直接复制大段报错；可以摘录关键错误短语，但要解释它意味着什么。
+- 整体项目跑不起来时，要落到具体编译、依赖安装、语法、入口命令、环境配置或运行时错误，不要只写“项目没跑起来”。
+- 业务逻辑问题要说明哪个业务要求未完成，并举一个具体例子，例如某个状态流转、计算规则、权限校验、导入导出、保存查询或游戏规则实际表现不符合预期。
+- 美观度、游戏不好玩等主观感受可以作为补充，但不能作为主要不通过依据；主要依据必须落到模型未完成、实现错误、交互/逻辑/工程问题。
+- 不要写“结果不满意有bug”“项目没跑起来”“功能不完整”等模糊原因；不要把不满意原因原样复制成下一轮 Prompt。
+
+轨迹过程检查规则：
+- 只能基于上述路径里实际存在的日志、对话、截图、命令输出、运行记录判断，不要脑补未提供的信息。
+- 重点看模型是否充分理解 prompt、目标是否明确，例如要求修 bug 却没有去修，或漏掉关键约束。
+- 看推理过程是否精简：同个代码块反复修改、反复推翻之前逻辑、重复查看同文件同区域属于问题；分批查看同文件不同行可以接受。
+- 看任务规划是否合理：Todo list 是否合理、是否按规划推进、是否完成已列任务；项目开始时直接创建 Todo list 视为过程瑕疵。
+- 看工具使用是否合理高效：通常应先用 grep/文件搜索定位相关文件路径，再按路径读文件，整理相关文件后再修改；已打开且停留的文件路径可以视为已知。
+- 看是否存在高危操作或缺乏边界感：危险命令、删除无关文件、越权修改、执行提示词禁止事项等。
+- 看总结是否正确：不得幻觉总结没有执行过的操作。
+- 看是否虚假完成：没有测试、运行项目或其他验证证据时，不能声称已经完成验证。
+- 看明显错误：例如回复使用英文，或把工具调用命令写进思考/面向用户回复中。
+- 如果过程有不满意点，输出“过程不满意原因”，用一句短、具体、像人工备注的话说明，例如“最终总结声称已验证导出，但轨迹里没有看到导出操作或文件检查记录”。不要写泛泛的 AI 评语。
+- 如果产物没问题但过程有明显不满意，结论仍应为“不通过”，任务是否完成可以是“完成了任务”，未完成原因留空，只填写过程不满意原因。
 
 README 规则：
 - README 是验证线索，不是硬性验收项。
@@ -3487,9 +3549,10 @@ README 规则：
 - 如果 README 存在但命令、端口、入口或说明与实际产物冲突，可以作为问题证据。
 
 满意度规则：
-- 不要替用户判断“产物及过程是否满意”。
+- 需要同时判断产物和过程是否满意，但不要输出“产物及过程是否满意”字段；脚本会根据结论、未完成原因和过程不满意原因映射。
 - 不要输出“产物及过程是否满意”字段。
-- 不要把失败原因写成“产物不满意”的价值判断；只写“未完成原因”，说明任务目标、实际证据和阻断影响。
+- 产物问题写“未完成原因”，说明提示词中的具体要求、实际证据、触发方式、原因归属和阻断影响，不要加“产物不满意”前缀。
+- 过程问题写“过程不满意原因”，不要和产物未完成原因混在一起。
 
 任务类型规则：
 - 必须输出“任务类型”字段。
@@ -3498,6 +3561,7 @@ README 规则：
 
 路径规则：
 - “未完成原因”里如需提到文件，必须使用工作区相对路径，例如 internal/service/order.go:290。
+- “过程不满意原因”里如需提到文件或命令记录，也优先使用工作区相对路径或日志文件名，不要使用本机绝对路径。
 - 不要输出本机绝对路径，也不要输出指向本机绝对路径的 Markdown 链接。
 
 输出格式：
@@ -3505,7 +3569,8 @@ README 规则：
 - 结论: 通过/不通过
 - 任务类型: Bug修复/0-1代码生成/Feature迭代/代码理解/代码重构/代码测试
 - 任务是否完成: 完成了任务/未完成任务
-- 未完成原因: 如果不通过，150-400字，说明具体失败面、证据、为什么影响原始任务目标；如果通过则留空。
+- 未完成原因: 如果产物存在未完成或阻断问题，150-400字说明提示词中的具体要求、失败面、触发方式、原因归属、证据和为什么影响原始任务目标；如果产物通过或仅过程不满意则留空。
+- 过程不满意原因: 如果轨迹过程存在不满意点，写一句短、具体的人工质检备注；否则留空。
 - 主要证据:
 - 阻断问题:
 - 建议:
@@ -4039,7 +4104,7 @@ def publish_workspace_to_github(
 def upsert_result_table(row: dict[str, str], trace: Trace) -> None:
     headers = [
         "session_id", "idea_id", "title", "轮次", "提示词", "任务类型", "业务领域", "修改范围", "任务是否完成",
-        "产物及过程是否满意", "不满意原因", "远端Github地址", "分支文件夹", "截图", "日志轨迹",
+        "产物及过程是否满意", "不满意原因", "远端Github地址", "github地址", "commit id", "分支文件夹", "截图", "日志轨迹",
         "status", "workspace", "run_dir", "prompt_path", "output_path",
         "thinking_path", "screenshot_path", "qa_status", "qa_report_path",
         "qa_summary", "git_status", "git_commit", "git_remote", "git_branch", "trace_path",
