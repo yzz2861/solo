@@ -1,6 +1,11 @@
 import type { TrajectoryPoint, ForbiddenZone, DetectionResult } from '@/types';
 import { getTimeDifference } from '@/utils/time';
-import { pointToPolygonDistance, isPointInPolygon, generateId } from '@/utils/math';
+import { pointToPolygonDistance, isPointInPolygon } from '@/utils/math';
+
+const generateDetectionId = (type: string, ...keys: string[]): string => {
+  const key = keys.filter(k => k).join('-');
+  return `det-${type}-${btoa(key).replace(/[^a-zA-Z0-9]/g, '')}`;
+};
 
 export const detectMissingCoordinates = (
   points: TrajectoryPoint[],
@@ -15,8 +20,9 @@ export const detectMissingCoordinates = (
     const interval = getTimeDifference(prev.timestamp, curr.timestamp);
     
     if (interval > maxIntervalSeconds) {
+      const detectionId = generateDetectionId('missing', prev.id, prev.timestamp);
       results.push({
-        id: generateId(),
+        id: detectionId,
         type: 'missing',
         description: `坐标缺失：在 ${prev.timestamp} 到 ${curr.timestamp} 之间间隔 ${interval.toFixed(0)} 秒，超过最大允许间隔 ${maxIntervalSeconds} 秒`,
         severity: interval > maxIntervalSeconds * 3 ? 'high' : interval > maxIntervalSeconds * 2 ? 'medium' : 'low',
