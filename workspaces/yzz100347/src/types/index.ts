@@ -65,7 +65,7 @@ export interface AnomalyAlert {
 
 export const UNIT_CONVERT: Record<PriceUnit, number> = {
   "斤": 1,
-  "公斤": 2,
+  "公斤": 0.5,
 };
 
 export function toJin(price: number, unit: PriceUnit): number {

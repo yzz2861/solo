@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { PriceItem, PriceSession, ChangeRecord, AnomalyAlert, PriceUnit, ConfirmSource, ItemStatus, SessionStatus } from "@/types";
 import { generateMockSessions, generateTodaySession } from "@/utils/mockData";
-import { detectAnomalies } from "@/utils/verifyEngine";
+import { detectAnomalies, shouldAutoMarkAskVendor } from "@/utils/verifyEngine";
 import { generateBroadcastScript } from "@/utils/broadcastGen";
 
 interface PriceStore {
@@ -14,6 +14,7 @@ interface PriceStore {
   getSessionByDate: (date: string) => PriceSession | undefined;
   getYesterdaySession: () => PriceSession | undefined;
   createTodaySession: () => void;
+  autoMarkAskVendorItems: () => void;
 
   addItem: (item: Omit<PriceItem, "id">) => void;
   updateItem: (itemId: string, updates: Partial<PriceItem>) => void;
@@ -81,9 +82,38 @@ export const usePriceStore = create<PriceStore>()(
       createTodaySession: () => {
         const yesterday = get().getYesterdaySession?.();
         const today = generateTodaySession(yesterday);
+        const anomalies = detectAnomalies(today.items);
+        const updatedItems = today.items.map((item) => {
+          if (shouldAutoMarkAskVendor(item, anomalies)) {
+            return { ...item, status: "ask_vendor" as ItemStatus };
+          }
+          return item;
+        });
+        const updatedToday = { ...today, items: updatedItems };
         set((state) => ({
-          sessions: [...state.sessions, today],
-          currentSessionId: today.id,
+          sessions: [...state.sessions, updatedToday],
+          currentSessionId: updatedToday.id,
+        }));
+      },
+
+      autoMarkAskVendorItems: () => {
+        const { currentSessionId } = get();
+        if (!currentSessionId) return;
+        const session = get().sessions.find((s) => s.id === currentSessionId);
+        if (!session) return;
+        
+        const anomalies = detectAnomalies(session.items);
+        const updatedItems = session.items.map((item) => {
+          if (item.status === "pending" && shouldAutoMarkAskVendor(item, anomalies)) {
+            return { ...item, status: "ask_vendor" as ItemStatus, confirmedSource: "pending" as ConfirmSource };
+          }
+          return item;
+        });
+        
+        set((state) => ({
+          sessions: state.sessions.map((s) =>
+            s.id === currentSessionId ? { ...s, items: updatedItems } : s
+          ),
         }));
       },
 

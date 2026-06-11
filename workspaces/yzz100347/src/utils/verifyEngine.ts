@@ -3,6 +3,7 @@ import { toJin, calcChangeRate } from "@/types";
 
 const SURGE_THRESHOLD = 30;
 const OCR_CONFIDENCE_THRESHOLD = 0.5;
+const EXTREME_SURGE_THRESHOLD = 60;
 
 const SIMILAR_NAMES: [string, string][] = [
   ["青菜", "小青菜"],
@@ -47,9 +48,9 @@ export function detectAnomalies(items: PriceItem[]): AnomalyAlert[] {
           id: aid(),
           itemId: item.id,
           type: "price_surge",
-          severity: Math.abs(rate) > 60 ? "error" : "warning",
+          severity: Math.abs(rate) > EXTREME_SURGE_THRESHOLD ? "error" : "warning",
           message: `"${item.name}" 较昨日${direction}${Math.abs(rate).toFixed(0)}%(昨${item.yesterdayPrice}元/${item.yesterdayUnit} → 今${item.confirmedPrice}元/${item.confirmedUnit})`,
-          suggestion: Math.abs(rate) > 60
+          suggestion: Math.abs(rate) > EXTREME_SURGE_THRESHOLD
             ? "涨跌幅度过大，建议核实是否为同品种或单位标错"
             : "涨跌幅度较大，请留意是否正常波动",
         });
@@ -71,7 +72,7 @@ export function detectAnomalies(items: PriceItem[]): AnomalyAlert[] {
             id: aid(),
             itemId: item.id,
             type: "price_surge",
-            severity: Math.abs(rate) > 60 ? "error" : "warning",
+            severity: Math.abs(rate) > EXTREME_SURGE_THRESHOLD ? "error" : "warning",
             message: `"${item.name}" 口述价较昨日${direction}${Math.abs(rate).toFixed(0)}%`,
             suggestion: "口述价波动较大，建议与摊主二次确认",
           });
@@ -87,6 +88,28 @@ export function detectAnomalies(items: PriceItem[]): AnomalyAlert[] {
         severity: "error",
         message: `"${item.name}" OCR识别置信度仅${(item.ocrConfidence * 100).toFixed(0)}%，识别结果不可靠`,
         suggestion: "价签识别不清，建议放入待问摊主清单，人工核实后再确认",
+      });
+    }
+
+    if (item.oralPrice !== undefined && item.oralPrice > 50) {
+      alerts.push({
+        id: aid(),
+        itemId: item.id,
+        type: "price_surge",
+        severity: "error",
+        message: `"${item.name}" 口述价${item.oralPrice}元/${item.oralUnit}过高，可能存在输入错误`,
+        suggestion: "价格异常离谱，请与摊主核实后再确认",
+      });
+    }
+
+    if (item.ocrPrice !== undefined && item.ocrPrice > 50) {
+      alerts.push({
+        id: aid(),
+        itemId: item.id,
+        type: "price_surge",
+        severity: "error",
+        message: `"${item.name}" OCR识别价${item.ocrPrice}元/${item.ocrUnit}过高，可能存在识别错误`,
+        suggestion: "价格异常离谱，请与摊主核实后再确认",
       });
     }
 
@@ -126,4 +149,23 @@ export function detectAnomalies(items: PriceItem[]): AnomalyAlert[] {
 
 export function normalizeToJin(price: number, unit: PriceUnit): number {
   return toJin(price, unit);
+}
+
+export function shouldAutoMarkAskVendor(item: PriceItem, anomalies: AnomalyAlert[]): boolean {
+  const itemAnomalies = anomalies.filter((a) => a.itemId === item.id);
+  
+  const hasErrorAnomaly = itemAnomalies.some((a) => a.severity === "error");
+  
+  const hasExtremeSurge = itemAnomalies.some((a) => a.type === "price_surge" && a.severity === "error");
+  
+  const hasOcrUnclear = itemAnomalies.some((a) => a.type === "ocr_unclear");
+  
+  const hasUnitMismatchError = itemAnomalies.some((a) => a.type === "unit_mismatch" && a.severity === "error");
+  
+  const hasNoPrice = !item.oralPrice && !item.ocrPrice;
+  
+  const oralTooHigh = item.oralPrice !== undefined && item.oralPrice > 50;
+  const ocrTooHigh = item.ocrPrice !== undefined && item.ocrPrice > 50;
+
+  return hasErrorAnomaly || hasExtremeSurge || hasOcrUnclear || hasUnitMismatchError || hasNoPrice || oralTooHigh || ocrTooHigh;
 }

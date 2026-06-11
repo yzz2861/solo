@@ -11,6 +11,7 @@ import {
   ArrowRight,
   ShieldCheck,
   ShieldAlert,
+  Zap,
 } from "lucide-react";
 
 const ANOMALY_LABELS: Record<string, { label: string; color: string }> = {
@@ -28,6 +29,7 @@ export default function VerifyPage() {
   const confirmFromVendor = usePriceStore((s) => s.confirmFromVendor);
   const getAnomalies = usePriceStore((s) => s.getAnomalies);
   const getVendorList = usePriceStore((s) => s.getVendorList);
+  const autoMarkAskVendorItems = usePriceStore((s) => s.autoMarkAskVendorItems);
 
   const [manualEditId, setManualEditId] = useState<string | null>(null);
   const [manualPrice, setManualPrice] = useState("");
@@ -109,26 +111,35 @@ export default function VerifyPage() {
         </div>
       )}
 
-      <div className="flex gap-2 flex-wrap">
-        {[
-          { key: "all", label: "全部" },
-          { key: "anomaly", label: "有异常" },
-          { key: "pending", label: "待确认" },
-          { key: "confirmed", label: "已确认" },
-          { key: "ask_vendor", label: "待问摊主" },
-        ].map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setActiveFilter(f.key)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              activeFilter === f.key
-                ? "bg-orange-500 text-white"
-                : "bg-stone-100 text-stone-600 hover:bg-stone-200"
-            }`}
-          >
-            {f.label} ({counts[f.key as keyof typeof counts]})
-          </button>
-        ))}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2 flex-wrap">
+          {[
+            { key: "all", label: "全部" },
+            { key: "anomaly", label: "有异常" },
+            { key: "pending", label: "待确认" },
+            { key: "confirmed", label: "已确认" },
+            { key: "ask_vendor", label: "待问摊主" },
+          ].map((f) => (
+            <button
+              key={f.key}
+              onClick={() => setActiveFilter(f.key)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                activeFilter === f.key
+                  ? "bg-orange-500 text-white"
+                  : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+              }`}
+            >
+              {f.label} ({counts[f.key as keyof typeof counts]})
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={autoMarkAskVendorItems}
+          className="px-4 py-1.5 bg-red-500 text-white rounded-full text-sm font-medium hover:bg-red-600 transition-colors flex items-center gap-2"
+        >
+          <Zap className="w-4 h-4" />
+          自动标记异常项为待问摊主
+        </button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
