@@ -55,9 +55,17 @@ export const usePriceStore = create<PriceStore>()(
         const mockSessions = generateMockSessions();
         const yesterday = mockSessions[mockSessions.length - 1];
         const today = generateTodaySession(yesterday);
+        const anomalies = detectAnomalies(today.items);
+        const updatedItems = today.items.map((item) => {
+          if (shouldAutoMarkAskVendor(item, anomalies)) {
+            return { ...item, status: "ask_vendor" as ItemStatus };
+          }
+          return item;
+        });
+        const updatedToday = { ...today, items: updatedItems };
         set({
-          sessions: [...mockSessions, today],
-          currentSessionId: today.id,
+          sessions: [...mockSessions, updatedToday],
+          currentSessionId: updatedToday.id,
         });
       },
 
