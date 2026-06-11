@@ -103,8 +103,8 @@ export const HazardRegister: React.FC = () => {
     }
   };
 
-  const doSubmit = () => {
-    const created = addHazard({
+  const doSubmit = async () => {
+    const created = await addHazard({
       boxNumber: form.boxNumber.trim(),
       location: form.location.trim(),
       description: form.description.trim(),
@@ -114,8 +114,12 @@ export const HazardRegister: React.FC = () => {
       createdBy: currentRole,
     });
     setDuplicates(null);
-    showToast('success', `隐患登记成功！编号 ${created.boxNumber}`);
-    navigate(`/hazards/${created.id}`);
+    if (created) {
+      showToast('success', `隐患登记成功！编号 ${created.boxNumber}`);
+      navigate(`/hazards/${created.id}`);
+    } else {
+      showToast('error', '登记失败，请重试');
+    }
   };
 
   const field = (key: keyof FormData, val: string) => {

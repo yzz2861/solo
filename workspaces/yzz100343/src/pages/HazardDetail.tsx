@@ -109,7 +109,7 @@ export const HazardDetail: React.FC = () => {
     (currentRole === 'SAFETY_OFFICER' || currentRole === 'PROJECT_MANAGER') &&
     hazard.status === 'PENDING_REVIEW';
 
-  const handleSubmitRectify = () => {
+  const handleSubmitRectification = async () => {
     setRectErr('');
     if (!rectForm.description.trim()) {
       setRectErr('请填写整改说明');
@@ -119,7 +119,7 @@ export const HazardDetail: React.FC = () => {
       setRectErr('整改说明至少8字，请详细描述处理过程');
       return;
     }
-    const ok = submitRectification(hazard.id, {
+    const ok = await submitRectification(hazard.id, {
       description: rectForm.description.trim(),
       photoUrl: rectForm.photoUrl.trim() || undefined,
       submittedBy: currentRole,
@@ -132,13 +132,13 @@ export const HazardDetail: React.FC = () => {
     }
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     setReviewErr('');
     if (!reviewForm.passed && !reviewForm.comment.trim()) {
       setReviewErr('打回时必须填写复查意见，说明需要如何整改');
       return;
     }
-    const ok = submitReview(hazard.id, {
+    const ok = await submitReview(hazard.id, {
       passed: reviewForm.passed,
       comment: reviewForm.comment.trim(),
       reviewedBy: currentRole,
@@ -425,7 +425,7 @@ export const HazardDetail: React.FC = () => {
                 <p className="text-xs text-industrial-gray-500">
                   提交后将进入「待复查」状态，等待安全员验收
                 </p>
-                <button className="btn-steel px-6" onClick={handleSubmitRectify}>
+                <button className="btn-steel px-6" onClick={handleSubmitRectification}>
                   <Send size={15} />
                   提交整改
                 </button>

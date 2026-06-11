@@ -45,6 +45,7 @@ interface TeamStat {
   total: number;
   closed: number;
   rectifying: number;
+  pendingReview: number;
   rejected: number;
   overdue: number;
   rejectCount: number;
@@ -85,7 +86,7 @@ export const Statistics: React.FC = () => {
       const pending = list.filter(
         (h) => h.status === 'PENDING_RECTIFICATION' || h.status === 'REJECTED'
       ).length;
-      const review = list.filter((h) => h.status === 'PENDING_REVIEW').length;
+      const pendingReview = list.filter((h) => h.status === 'PENDING_REVIEW').length;
       const overdue = list.filter((h) => h.isOverdue && h.status !== 'CLOSED').length;
       const rejectCount = list.reduce((s, h) => s + h.rejectCount, 0);
       const openRate = list.length ? Math.round(((list.length - closed) / list.length) * 100) : 0;
@@ -93,7 +94,8 @@ export const Statistics: React.FC = () => {
         team: t,
         total: list.length,
         closed,
-        rectifying: pending + review,
+        rectifying: pending,
+        pendingReview,
         rejected: list.filter((h) => h.status === 'REJECTED').length,
         overdue,
         rejectCount,
@@ -410,8 +412,8 @@ export const Statistics: React.FC = () => {
                   <td className="py-3 px-3 text-right tabular-nums text-pending-blue">
                     {t.rectifying}
                   </td>
-                  <td className="py-3 px-3 text-right tabular-nums text-warning-yellow">
-                    {0 /* 可拆分 */}
+                  <td className="py-3 px-3 text-right tabular-nums text-warning-yellow font-medium">
+                    {t.pendingReview}
                   </td>
                   <td className="py-3 px-3 text-right tabular-nums text-danger-red">
                     {t.rejected}
@@ -470,8 +472,11 @@ export const Statistics: React.FC = () => {
                 <td className="py-3 px-3 text-right tabular-nums text-pending-blue">
                   {teamStats.reduce((s, t) => s + t.rectifying, 0)}
                 </td>
-                <td className="py-3 px-3 text-right tabular-nums" colSpan={2}>
-                  —
+                <td className="py-3 px-3 text-right tabular-nums text-warning-yellow">
+                  {teamStats.reduce((s, t) => s + t.pendingReview, 0)}
+                </td>
+                <td className="py-3 px-3 text-right tabular-nums text-danger-red">
+                  {teamStats.reduce((s, t) => s + t.rejected, 0)}
                 </td>
                 <td className="py-3 px-3 text-right tabular-nums text-danger-red">
                   {teamStats.reduce((s, t) => s + t.overdue, 0)}
