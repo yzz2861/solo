@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮已修复 `src/irrigation_scheduler/scheduler.py` 中单个地块超出 `max_area/max_water` 仍可新建组成功的问题，只读内存验证中超限地块会正确变为 `failed`。但第一轮未完成原因中的来源追溯问题仍存在：原始目标要求结果保留处理批次和来源标识，便于回到原始数据复盘；README 也声明每条结果应有 `source_file/source_line`。实际 `PlotResult.to_dict()`、`export_detail_csv()` 和现有 `output/*/detail.csv` 都没有逐条来源文件与行号，幂等复用结果还会丢失 `source_files`，业务人员无法按明细定位原始 CSV 行。
+- 主要证据:
+  - `PYTHONPATH=src python3 -m irrigation_scheduler.cli --help` 可运行，入口存在。
+  - `validate` 与 `summary` 命令可运行。
+  - 超限地块内存验证结果为 `failed 所有适用规则均已超限 0`，第二轮核心调度 bug 已修复。
+  - `output/batch_partial_failure/detail.csv` 表头只有 `batch_id,batch_name,plot_id,...,review_reason`，没有 `source_file/source_line`。
+  - `README.md` 声明明细可用 `source_file/source_line` 回到 CSV 定位，但导出实现未提供。
+- 阻断问题:
+  - 明细和 JSON 结果缺少逐条来源标识，未满足“方便业务人员回到原始数据复盘”的原始目标。
+- 建议:
+  - 在 `PlotResult` 中保留 `source_file/source_line`，生成成功、失败、复核结果时都写入。
+  - 在 `detail.csv`、`report.json`、快照与幂等复用结果中同步保留来源字段。

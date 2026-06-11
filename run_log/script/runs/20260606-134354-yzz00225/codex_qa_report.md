@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目实现了 FastAPI 主体和对象、规则、状态、记录分层，核心服务单测 `tests/test_service_receipt.py` 可通过，API 也能用 TestClient 跑通正常处理和回放。但验收链路存在入口错误：`main.py:11` 启动端口是 8000，而根目录接口验收脚本 `test_api.py:5` 固定请求 8080；按项目真实测试入口运行会连接失败。并且 `test_api.py:193`、`test_api.py:215` 把 `audit_no` 写成 pytest fixture，项目根目录执行 pytest 会出现 `7 failed, 2 errors`。原始目标明确要求测试覆盖正常记录、缺字段、规则冲突、重复处理和数据回放，当前交付的接口验收脚本不可直接验证这些流程，影响可运行验收。
+- 主要证据:
+  - `python3 -m pytest -q -s -p no:cacheprovider tests/test_service_receipt.py`：43 passed。
+  - `python3 -m pytest -q -s -p no:cacheprovider test_api.py`：7 failed, 2 errors。
+  - TestClient 烟测 `POST /api/v1/receipt/process` 返回 200，并包含 `business_conclusion`、`next_action`、`audit_no`、`task_status`。
+- 阻断问题:
+  - `test_api.py` 与 `main.py` 端口不一致，接口验收脚本无法按默认入口使用。
+  - `test_api.py` 在 pytest 下存在缺失 fixture，整体验收测试套件失败。
+- 建议:
+  - 统一服务端口，或让 `test_api.py` 读取环境变量/默认 8000。
+  - 将 `test_api.py` 改成可独立运行的脚本，或改为 FastAPI TestClient/pytest fixture 驱动的真实集成测试。

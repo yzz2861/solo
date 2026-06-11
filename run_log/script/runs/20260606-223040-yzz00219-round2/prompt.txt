@@ -1,0 +1,3 @@
+项目核心 CSV dry-run 入口可以跑通，但实现与自身暴露的关键参数不一致，影响原始“按参数归并、筛选、风险分级”的目标可信度。`noise_complaint_cli/noise_complaint/config.py:73` 定义并由 `validator.py` 解析了 `min_risk_level`，但全项目只解析不使用；实测设置 `min_risk_level=high` 后普通低风险数据仍进入有效行。`config.py:78` 定义 `same_address_distance_threshold`，但归并逻辑只按规范化后的地址字符串精确分组，未使用距离阈值；相近地址在 50 阈值下仍被拆成两个投诉组。这会导致筛选和归并结果与配置预期不符。
+
+请修改第一轮发现的问题， 保留已有功能，完成后确保项目仍可安装、可运行、可验证。

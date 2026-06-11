@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始目标要求输入统计周期、分组维度后输出可解释的统计结果、异常样本、趋势摘要，并用配置缺失场景验证复核入口一致性。项目默认链路可运行，`verify_all.py` 覆盖的固定场景也显示通过，但核心统计逻辑对分组维度存在错误：`quality_analyzer.py:369` 假定 `clinker_code` 一定是分组键最后一段，否则合格率会按错误品种查阈值；当使用合法参数 `--group-by clinker_code kiln_id` 时，首日各组 `f_cao_pass_rate` 实测全为 0.0，统计结果失真。另外，`quality_analyzer.py:197`、`quality_analyzer.py:201` 能返回“无阈值配置”，但 `analyze_abnormal` 只记录 warning/critical，配置缺失不会进入异常样本、复核入口或审计日志，影响“配置缺失验证”和处理留痕目标。
+- 主要证据:
+  - `python3 -B quality_analyzer.py --help` 可显示 CLI 参数，入口存在。
+  - `verify_all.py` 固定运行四个场景，输出显示 4/4 PASS。
+  - 自定义合法分组 `['clinker_code','kiln_id']` 后，统计合格率因 `quality_analyzer.py:369` 取错阈值品种而明显错误。
+  - `output/verify_scenario4_config/analysis_summary.txt` 未体现缺失阈值规则的复核项。
+- 阻断问题:
+  - 分组维度顺序变化会导致阈值合格率错误。
+  - 配置缺失被静默忽略，未留痕、未进入复核。
+- 建议:
+  - 统计时保留每条样本的 `clinker_code`，逐行按真实品种计算合格率。
+  - 将缺失品种/指标阈值作为可复核问题输出到摘要和审计日志。

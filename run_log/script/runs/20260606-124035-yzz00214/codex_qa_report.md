@@ -1,0 +1,17 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始提示词明确要求“高风险或缺材料时进入复核，不允许直接通过”。项目中高风险分支可进入 `under_review`，但缺少必备材料时，`src/status/status-manager.ts:101` 直接返回 `supplement_required`，且 `requireReview` 为 `false`。通过 `dist` 入口复现：盗刷卡场景仅提交 `screenshot`，缺少 `police_report` 和 `identity_proof` 时输出为“需补充”，不是“复核中”。这会导致核心状态流转与原始目标不一致；同时 `tests/anomaly-card-api.test.ts:279` 还把缺材料期望写成“需补充”，测试覆盖也偏离提示词。
+- 主要证据:
+  - `npx tsc --noEmit --pretty false` 通过，类型层面无错误。
+  - `npm start`、`npm run dev` 均可执行，包入口存在。
+  - `dist` 包导出 `AnomalyCardApi`、`createAnomalyCardApi`、`DEFAULT_THRESHOLD_CONFIG`。
+  - 低风险材料齐全场景输出 `processable/可办理`；高风险场景输出 `under_review/复核中`。
+  - 缺材料场景实际输出 `supplement_required/需补充`，`needReview: false`。
+- 阻断问题:
+  - 缺少必备材料未进入复核，违反原始提示词的核心业务规则。
+  - 测试用例对缺材料分支的断言与原始目标不一致，无法防止该偏差。
+- 建议:
+  - 调整缺关键材料分支，使其进入 `under_review` 并标记 `requireReview: true`。
+  - 同步修改缺材料相关测试，断言“复核中/需复核”，并保留缺失材料明细作为解释。

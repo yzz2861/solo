@@ -1,0 +1,19 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目具备可运行 CLI，`validate/generate/summary/replay` 基础链路可以执行，但未完整满足原始目标的关键机制。`generate --help` 只有 `--no-export`，没有 dry-run/预览入口；代码中未见阈值配置或阈值命中说明逻辑；重复处理主要依赖手工传 `--previous`，不是重复办理拦截。并且相同输入带 `--previous` 运行时，摘要显示任务状态为 `pending`，与“核对任务状态”目标冲突，原因是 `notary_checklist/engine/generator.py:33` 提前返回，跳过 `batch.task_status = "completed"`。
+- 主要证据:
+  - `python3 -m notary_checklist.cli --help` 可列出 `validate/generate/export/summary/replay/explain`。
+  - `validate tests/test_data/ledger_normal.csv examples/params.json` 可运行，返回 10 条记录、1 个规则冲突警告。
+  - `validate tests/test_data/ledger_missing_fields.csv examples/params.json` 能识别缺字段并以退出码 1 失败。
+  - `notary_checklist/cli.py:130` 到 `notary_checklist/cli.py:190` 的 `generate` 选项缺少 dry-run/预览参数。
+  - `notary_checklist/engine/generator.py:33` 到 `notary_checklist/engine/generator.py:38` 的幂等分支直接返回，实测任务状态显示 `pending`。
+- 阻断问题:
+  - dry-run 预览未实现。
+  - 阈值命中说明未实现。
+  - 重复办理拦截不完整，且重复处理分支任务状态错误。
+- 建议:
+  - 增加 `--dry-run`，只计算和展示摘要/复核预览，不落盘。
+  - 在参数文件和校验引擎中加入阈值规则及命中解释。
+  - 重复输入应自动查找历史结果并拦截或明确复用，幂等分支也应保持 `completed` 状态。

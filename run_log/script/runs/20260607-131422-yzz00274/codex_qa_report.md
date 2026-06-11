@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - 原始目标是“研学活动保险名单 CLI”，入口 `insurance_cli.py` 存在，`python3 insurance_cli.py --help`、`process --help` 可正常展示命令。
+  - `requirements.txt` 中的 `click/pandas/openpyxl` 可导入，核心包 `research_insurance_cli` 可导入。
+  - `research_insurance_cli/cli.py` 提供 `process/list/show/review/stats/template`，覆盖多文件输入、字段映射、日期范围、导出格式、批次查询与验收。
+  - `output/.batch_history.json` 和 `output/INS-20260607132143-514563_*.csv` 显示已生成正常/异常/待复核拆分文件，异常文件保留来源文件、来源行号和异常原因。
+  - `python3 insurance_cli.py list -d ./output`、`stats`、`show INS-20260607132143-514563` 可读取历史批次、统计和验收状态。
+- 阻断问题:
+  - 无阻断问题。
+- 建议:
+  - 当前 `sample_data/*.csv` 与已有 `output/.batch_history.json` 对应数据不一致；直接用当前样例做内存校验会因身份证校验位问题得到 `0 正常 / 20 异常 / 0 待复核`。建议重新运行或更新 `generate_samples.py` 生成的样例数据，避免用户按样例体验时与历史输出不一致。
+  - 可补一个简短 README 或命令说明，虽然原始目标未硬性要求文档。

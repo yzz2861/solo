@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目实现了麻醉药品余量交接的对象、规则、状态、记录分层，并且通过直接调用控制器验证，合规、超阈值、材料缺失、高风险、历史回放等核心场景能输出对应 decision、riskTags、summary 和日志数量。但标准运行链路存在入口错误：package.json:5 和 package.json:8 指向 dist/index.js，而 tsconfig.json:6、tsconfig.json:16 的编译结构会输出 dist/src/index.js，构建后执行 npm start 会找不到入口文件。这会阻断使用项目声明的生产启动命令运行 API，不满足“项目可运行/入口可用”的验收重点。
+- 主要证据:
+  - package.json:7 定义 build 为 `tsc`，package.json:8 定义 start 为 `node dist/index.js`。
+  - tsconfig.json:6 只设置 `outDir`，tsconfig.json:16 同时包含 `src/**/*` 和 `__tests__/**/*`，实际编译输出路径为 `dist/src/index.js`，不是 `dist/index.js`。
+  - `npm run lint` 执行通过，说明 TypeScript 类型检查通过。
+  - 直接调用 `HandoverController.processHandover` 验证核心场景：合规为 `pass`，超阈值为 `reject`，材料缺失和高风险为 `review_required`，能返回汇总数量与风险标签。
+  - `npm test` 与 `npm run build` 在当前只读沙箱中因写 Jest 缓存或 dist 被系统权限拦截，未作为项目逻辑失败依据。
+- 阻断问题:
+  - package.json 的生产入口与 TypeScript 实际输出不一致，导致标准 `npm run build && npm start` 链路不可用。
+- 建议:
+  - 将 `start` 改为指向实际输出入口，或在 tsconfig 中设置 `rootDir: "src"` 并排除测试文件，使构建产物入口与 package.json 保持一致。
+  - 构建配置应避免把 `__tests__` 输出到 dist。

@@ -1,0 +1,731 @@
+{
+  "metadata": {
+    "log_dir": "/Users/bill/Library/Application Support/Trae CN/logs/20260606T175953",
+    "renderer_log": "/Users/bill/Library/Application Support/Trae CN/logs/20260606T175953/window43/renderer.log",
+    "workspace": "/Users/bill/Documents/solo/workspaces/yzz00204",
+    "session_id": "6a236b731a2b098d0dd9ba38",
+    "message_id": "6a236b7bf6ef69acc4000caf",
+    "chat_model": "Seed-Code-DogFooding",
+    "agent_name": "SOLO Agent",
+    "agent_id": "solo_agent"
+  },
+  "completion_events": [
+    {
+      "ts": "2026-06-06T22:24:58.540+08:00",
+      "event": "code_comp_complete_shown",
+      "tool_count": 28,
+      "request_round_count": 28,
+      "duration": 1512072,
+      "is_interrupted": 0
+    }
+  ],
+  "copy_events": [],
+  "tool_events": [
+    {
+      "ts": "2026-06-06T21:59:58.176+08:00",
+      "event": "tool_call_show",
+      "toolName": "todo_write",
+      "tool_id": "6a2427dca871165839a76bd7",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2427dca871165839a76bd7",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:13.825+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a2427eda871165839a76bda",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2427eda871165839a76bda",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:13.825+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a2427eda871165839a76bda",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2427eda871165839a76bda",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:22.433+08:00",
+      "event": "file_tool_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a2427efa871165839a76bdd",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2427efa871165839a76bdd",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:22.434+08:00",
+      "event": "tool_call_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a2427efa871165839a76bdd",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2427efa871165839a76bdd",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:33.643+08:00",
+      "event": "tool_call_show",
+      "toolName": "todo_write",
+      "tool_id": "6a242801a871165839a76be0",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242801a871165839a76be0",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:46.230+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a24280ea871165839a76be6",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24280ea871165839a76be6",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:46.230+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a24280ea871165839a76be6",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24280ea871165839a76be6",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:52.826+08:00",
+      "event": "tool_call_show",
+      "toolName": "todo_write",
+      "tool_id": "6a242810a871165839a76be9",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242810a871165839a76be9",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:00:55.688+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a242817a871165839a76bec",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242817a871165839a76bec",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:31.596+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a24282fa871165839a76bef",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24282fa871165839a76bef",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:31.596+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a24282fa871165839a76bef",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24282fa871165839a76bef",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:35.078+08:00",
+      "event": "file_tool_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a24283ea871165839a76bfc",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24283ea871165839a76bfc",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:35.078+08:00",
+      "event": "tool_call_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a24283ea871165839a76bfc",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24283ea871165839a76bfc",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:48.603+08:00",
+      "event": "file_tool_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a24284aa871165839a76c05",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24284aa871165839a76c05",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:48.603+08:00",
+      "event": "tool_call_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a24284aa871165839a76c05",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24284aa871165839a76c05",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:01:54.831+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a242852a871165839a76c0e",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242852a871165839a76c0e",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:02:26.080+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a24286ea871165839a76c1e",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24286ea871165839a76c1e",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:02:50.742+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a24288aa871165839a76c33",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a24288aa871165839a76c33",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:02:59.049+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a242892a871165839a76c3c",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242892a871165839a76c3c",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:02:59.049+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a242892a871165839a76c3c",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242892a871165839a76c3c",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:03:04.857+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a242896a871165839a76c3f",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242896a871165839a76c3f",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:03:24.541+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a2428aba871165839a76c51",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428aba871165839a76c51",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:03:38.323+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a2428b9a871165839a76c57",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428b9a871165839a76c57",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:03:45.540+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428bfa871165839a76c60",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428bfa871165839a76c60",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:03:45.540+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428bfa871165839a76c60",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428bfa871165839a76c60",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:01.582+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428cca871165839a76c66",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428cca871165839a76c66",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:01.582+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428cca871165839a76c66",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428cca871165839a76c66",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:14.226+08:00",
+      "event": "file_tool_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a2428dca871165839a76c7f",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428dca871165839a76c7f",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:14.226+08:00",
+      "event": "tool_call_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a2428dca871165839a76c7f",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428dca871165839a76c7f",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:40.110+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a2428f7a871165839a76c97",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428f7a871165839a76c97",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:46.345+08:00",
+      "event": "file_tool_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428fba871165839a76ca3",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428fba871165839a76ca3",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:46.346+08:00",
+      "event": "tool_call_show",
+      "toolName": "view_files",
+      "tool_id": "6a2428fba871165839a76ca3",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a2428fba871165839a76ca3",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:50.123+08:00",
+      "event": "file_tool_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a242901a871165839a76ca6",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242901a871165839a76ca6",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:50.123+08:00",
+      "event": "tool_call_show",
+      "toolName": "edit_file_search_replace",
+      "tool_id": "6a242901a871165839a76ca6",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242901a871165839a76ca6",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:04:57.061+08:00",
+      "event": "tool_call_show",
+      "toolName": "todo_write",
+      "tool_id": "6a242908a871165839a76cb6",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242908a871165839a76cb6",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:05:06.533+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a242911a871165839a76cbc",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242911a871165839a76cbc",
+      "status": "shown",
+      "runtime_duration": null
+    },
+    {
+      "ts": "2026-06-06T22:24:35.220+08:00",
+      "event": "tool_call_show",
+      "toolName": "run_command",
+      "tool_id": "6a242da1a871165839a76ebc",
+      "block_id": "6a2427d22b15330eaf8ceb6a_6a242da1a871165839a76ebc",
+      "status": "shown",
+      "runtime_duration": null
+    }
+  ],
+  "command_events": [
+    {
+      "tool_call_key": "6a242817a871165839a76bee",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && python3 -c \"\nimport sys\nsys.path.insert(0, '.')\nfrom paper_review_cli.core.generator import run_generate_command\nfrom paper_review_cli.core.exporter import export_summary\n\nprint('=== 测试1: 人工复核场景（3篇论文，合格评审人不足） ===')\nresult = run_generate_command(\n    paper_file='examples/papers_manual_review.csv',\n    reviewer_file='examples/reviewers_manual_review.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n    allow_manual_review=True,\n)\nsummary = export_summary(result)\nprint(f'状态: {summary[\\\"status\\\"]}')\nprint(f'总论文数: {summary[\\\"total_count\\\"]}')\nprint(f'成功数: {summary[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary[\\\"failed_count\\\"]}')\nprint(f'分配记录数: {summary[\\\"assignments_count\\\"]}')\nprint()\n\nprint('=== 测试2: 关闭人工复核（全部失败的情况） ===')\nresult2 = run_generate_command(\n    paper_file='examples/papers_manual_review.csv',\n    reviewer_file='examples/reviewers_manual_review.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n    allow_manual_review=False,\n)\nsummary2 = export_summary(result2)\nprint(f'状态: {summary2[\\\"status\\\"]}')\nprint(f'总论文数: {summary2[\\\"total_count\\\"]}')\nprint(f'成功数: {summary2[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary2[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary2[\\\"failed_count\\\"]}')\nprint(f'分配记录数: {summary2[\\\"assignments_count\\\"]}')\nprint()\n\nprint('=== 测试3: 单条成功场景 ===')\nresult3 = run_generate_command(\n    paper_file='examples/papers_single_success.csv',\n    reviewer_file='examples/reviewers.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n)\nsummary3 = export_summary(result3)\nprint(f'状态: {summary3[\\\"status\\\"]}')\nprint(f'总论文数: {summary3[\\\"total_count\\\"]}')\nprint(f'成功数: {summary3[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary3[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary3[\\\"failed_count\\\"]}')\n\"\n",
+      "exitCode": "1",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 6424,
+        "cmd_length": 1984,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 1,
+        "create_terminal_duration": 0,
+        "terminal_ready_duration": 5468,
+        "wait_shell_integration_duration": 1002,
+        "ensure_terminal_environment_duration": 4279,
+        "send_command_duration": 72,
+        "command_finished_duration": 956
+      }
+    },
+    {
+      "tool_call_key": "6a242852a871165839a76c10",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && python3 -c \"\nimport sys\nsys.path.insert(0, '.')\nfrom paper_review_cli.core.generator import run_generate_command\nfrom paper_review_cli.core.exporter import export_summary\n\nprint('=== 测试1: 人工复核场景（3篇论文全部待复核） ===')\nresult = run_generate_command(\n    paper_file='examples/papers_manual_review.csv',\n    reviewer_file='examples/reviewers_manual_review.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n    allow_manual_review=True,\n)\nsummary = export_summary(result)\nprint(f'状态: {summary[\\\"status\\\"]}')\nprint(f'总论文数: {summary[\\\"total_count\\\"]}')\nprint(f'成功数: {summary[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary[\\\"failed_count\\\"]}')\nprint(f'分配记录数: {summary[\\\"assignments_count\\\"]}')\nprint(f'CLI退出码应为: {0 if summary[\\\"status\\\"] == \\\"success\\\" else 1}')\nprint()\n\nprint('=== 测试2: 关闭人工复核（全部失败） ===')\nresult2 = run_generate_command(\n    paper_file='examples/papers_manual_review.csv',\n    reviewer_file='examples/reviewers_manual_review.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n    allow_manual_review=False,\n)\nsummary2 = export_summary(result2)\nprint(f'状态: {summary2[\\\"status\\\"]}')\nprint(f'总论文数: {summary2[\\\"total_count\\\"]}')\nprint(f'成功数: {summary2[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary2[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary2[\\\"failed_count\\\"]}')\nprint(f'分配记录数: {summary2[\\\"assignments_count\\\"]}')\nprint(f'CLI退出码应为: {0 if summary2[\\\"status\\\"] == \\\"success\\\" else 1}')\nprint()\n\nprint('=== 测试3: 单条成功场景（全部成功） ===')\nresult3 = run_generate_command(\n    paper_file='examples/papers_single_success.csv',\n    reviewer_file='examples/reviewers.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n)\nsummary3 = export_summary(result3)\nprint(f'状态: {summary3[\\\"status\\\"]}')\nprint(f'总论文数: {summary3[\\\"total_count\\\"]}')\nprint(f'成功数: {summary3[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary3[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary3[\\\"failed_count\\\"]}')\nprint(f'CLI退出码应为: {0 if summary3[\\\"status\\\"] == \\\"success\\\" else 1}')\nprint()\n\nprint('=== 测试4: 批量部分失败（有坏行+有成功） ===')\nresult4 = run_generate_command(\n    paper_file='examples/papers_partial_failure.csv',\n    reviewer_file='examples/reviewers.csv',\n    rules_file='examples/rules.json',\n    output_dir='/tmp/test_fix',\n    per_paper_count=3,\n)\nsummary4 = export_summary(result4)\nprint(f'状态: {summary4[\\\"status\\\"]}')\nprint(f'总论文数: {summary4[\\\"total_count\\\"]}')\nprint(f'成功数: {summary4[\\\"success_count\\\"]}')\nprint(f'待人工复核数: {summary4[\\\"manual_review_count\\\"]}')\nprint(f'失败数: {summary4[\\\"failed_count\\\"]}')\nprint(f'坏行数: {summary4[\\\"bad_count\\\"]}')\nprint(f'CLI退出码应为: {0 if summary4[\\\"status\\\"] == \\\"success\\\" else 1}')\n\"\n",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 8150,
+        "cmd_length": 2835,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "create_terminal_duration": 1,
+        "terminal_ready_duration": 5434,
+        "wait_shell_integration_duration": 1002,
+        "ensure_terminal_environment_duration": 4278,
+        "send_command_duration": 36,
+        "command_finished_duration": 2716
+      }
+    },
+    {
+      "tool_call_key": "6a24286ea871165839a76c20",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && python3 test_scenarios.py 2>&1",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 5167,
+        "cmd_length": 83,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "create_terminal_duration": 0,
+        "terminal_ready_duration": 5078,
+        "wait_shell_integration_duration": 1001,
+        "ensure_terminal_environment_duration": 4004,
+        "send_command_duration": 21,
+        "command_finished_duration": 89
+      }
+    },
+    {
+      "tool_call_key": "6a24288aa871165839a76c35",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && python3 test_scenarios.py > /tmp/test_result.txt 2>&1 ; echo \"Exit code: $?\" ; cat /tmp/test_result.txt",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 5213,
+        "cmd_length": 156,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "create_terminal_duration": 0,
+        "terminal_ready_duration": 5102,
+        "wait_shell_integration_duration": 1002,
+        "ensure_terminal_environment_duration": 4002,
+        "send_command_duration": 12,
+        "command_finished_duration": 111
+      }
+    },
+    {
+      "tool_call_key": "6a242896a871165839a76c41",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && rm -rf cli_fix_test && echo \"=== 测试1: 全部成功 -> 退出码0 ===\" && python3 main.py generate -p examples/papers_single_success.csv -r examples/reviewers.csv -R examples/rules.json -o cli_fix_test -c 3 > /dev/null 2>&1 ; echo \"Exit code: $?\" && echo \"\" && echo \"=== 测试2: 关闭人工复核全部失败 -> 退出码1 ===\" && python3 main.py generate -p examples/papers_manual_review.csv -r examples/reviewers_manual_review.csv -R examples/rules.json -o cli_fix_test --no-manual-review > /dev/null 2>&1 ; echo \"Exit code: $?\" && echo \"\" && echo \"=== 测试3: 有坏行部分成功 -> 退出码1 ===\" && python3 main.py generate -p examples/papers_partial_failure.csv -r examples/reviewers.csv -R examples/rules.json -o cli_fix_test -c 3 > /dev/null 2>&1 ; echo \"Exit code: $?\" && echo \"\" && echo \"=== 测试4: 人工复核状态 -> 退出码1 ===\" && python3 main.py generate -p examples/papers_manual_review.csv -r examples/reviewers_manual_review.csv -R examples/rules.json -o cli_fix_test -c 3 > /dev/null 2>&1 ; echo \"Exit code: $?\"",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 5225,
+        "cmd_length": 1005,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "create_terminal_duration": 0,
+        "terminal_ready_duration": 5089,
+        "wait_shell_integration_duration": 1001,
+        "ensure_terminal_environment_duration": 4000,
+        "send_command_duration": 10,
+        "command_finished_duration": 136
+      }
+    },
+    {
+      "tool_call_key": "6a2428aba871165839a76c53",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && rm -rf cli_fix_test && echo \"Test 1 (all success):\" && python3 main.py generate -p examples/papers_single_success.csv -r examples/reviewers.csv -o cli_fix_test/t1 > /tmp/t1.out 2>&1 ; echo \"exit=$?\"",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 1015,
+        "cmd_length": 251,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "ensure_terminal_environment_duration": 15,
+        "send_command_duration": 22,
+        "command_finished_duration": 977,
+        "terminal_ready_duration": 37
+      }
+    },
+    {
+      "tool_call_key": "6a2428b9a871165839a76c59",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && echo \"Test 2 (all failed, no manual review):\" && python3 main.py generate -p examples/papers_manual_review.csv -r examples/reviewers_manual_review.csv -o cli_fix_test/t2 --no-manual-review > /tmp/t2.out 2>&1 ; echo \"exit=$?\" && echo \"Test 3 (manual review status):\" && python3 main.py generate -p examples/papers_manual_review.csv -r examples/reviewers_manual_review.csv -o cli_fix_test/t3 > /tmp/t3.out 2>&1 ; echo \"exit=$?\" && echo \"Test 4 (partial success with bad records):\" && python3 main.py generate -p examples/papers_partial_failure.csv -r examples/reviewers.csv -o cli_fix_test/t4 > /tmp/t4.out 2>&1 ; echo \"exit=$?\"",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 584,
+        "cmd_length": 679,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "ensure_terminal_environment_duration": 0,
+        "send_command_duration": 9,
+        "command_finished_duration": 575,
+        "terminal_ready_duration": 9
+      }
+    },
+    {
+      "tool_call_key": "6a2428f7a871165839a76c99",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && python3 test_scenarios.py > /tmp/full_test.txt 2>&1 ; echo \"Exit code: $?\" ; echo \"\" ; tail -20 /tmp/full_test.txt",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 601,
+        "cmd_length": 167,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "ensure_terminal_environment_duration": 275,
+        "send_command_duration": 46,
+        "command_finished_duration": 280,
+        "terminal_ready_duration": 321
+      }
+    },
+    {
+      "tool_call_key": "6a242911a871165839a76cbe",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && rm -rf final_verify && python3 main.py --help > /tmp/help.txt 2>&1 && echo \"=== --help 退出码: $? ===\" && head -20 /tmp/help.txt && echo \"...\" && echo \"\" && echo \"=== 测试成功场景 ===\" && python3 main.py generate -p examples/papers_single_success.csv -r examples/reviewers.csv -R examples/rules.json -o final_verify/success -c 3 && echo \"退出码: $?\" && echo \"\" && echo \"=== 测试失败场景（关闭人工复核） ===\" && python3 main.py generate -p examples/papers_manual_review.csv -r examples/reviewers_manual_review.csv -o final_verify/fail --no-manual-review && echo \"退出码: $?\"",
+      "exitCode": "1",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 2977,
+        "cmd_length": 597,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "ensure_terminal_environment_duration": 464,
+        "send_command_duration": 71,
+        "command_finished_duration": 2442,
+        "terminal_ready_duration": 535
+      }
+    },
+    {
+      "tool_call_key": "6a242da1a871165839a76ebe",
+      "command": "cd /Users/bill/Documents/solo/workspaces/yzz00204 && echo \"=== summary 列表 ===\" && python3 main.py summary -o final_verify/success && echo \"\" && echo \"=== export 命令 ===\" && SNAP=$(ls final_verify/success/snapshots/*.json 2>/dev/null | head -1) && python3 main.py export -s \"$SNAP\" -o final_verify/exported && echo \"导出完成\" && ls final_verify/exported/*/",
+      "exitCode": "0",
+      "terminal_type": "zsh",
+      "blocking": "false",
+      "metrics": {
+        "total_duration": 423,
+        "cmd_length": 350,
+        "start_duration": 0,
+        "find_reusable_terminal_duration": 0,
+        "ensure_terminal_environment_duration": 3,
+        "send_command_duration": 15,
+        "command_finished_duration": 405,
+        "terminal_ready_duration": 18
+      }
+    }
+  ],
+  "file_events": [
+    {
+      "ts": "2026-06-06T21:59:40.235+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_manual_review.csv"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.255+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_partial_failure.csv"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.283+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/papers_single_success.csv"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.340+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/reviewers.csv"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.362+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/reviewers_manual_review.csv"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.380+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/examples/rules.json"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.413+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/main.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.434+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/__init__.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.443+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/cli.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.455+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/__init__.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.478+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/diff.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.493+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/exporter.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.514+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/generator.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.535+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/validator.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.578+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/models.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.588+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/utils/__init__.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.611+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/utils/config.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.627+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/utils/csv_io.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.653+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/utils/file_io.py"
+    },
+    {
+      "ts": "2026-06-06T21:59:40.673+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/test_scenarios.py"
+    },
+    {
+      "ts": "2026-06-06T22:00:31.196+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/generator.py"
+    },
+    {
+      "ts": "2026-06-06T22:00:31.204+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/generator.py"
+    },
+    {
+      "ts": "2026-06-06T22:01:38.440+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/exporter.py"
+    },
+    {
+      "ts": "2026-06-06T22:01:38.460+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/exporter.py"
+    },
+    {
+      "ts": "2026-06-06T22:01:52.688+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/generator.py"
+    },
+    {
+      "ts": "2026-06-06T22:01:52.699+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/core/generator.py"
+    },
+    {
+      "ts": "2026-06-06T22:04:28.838+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/test_scenarios.py"
+    },
+    {
+      "ts": "2026-06-06T22:04:28.852+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/test_scenarios.py"
+    },
+    {
+      "ts": "2026-06-06T22:04:53.989+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/cli.py"
+    },
+    {
+      "ts": "2026-06-06T22:04:54.013+08:00",
+      "toolName": "Write",
+      "status": "success",
+      "filePath": "/Users/bill/Documents/solo/workspaces/yzz00204/paper_review_cli/cli.py"
+    }
+  ]
+}

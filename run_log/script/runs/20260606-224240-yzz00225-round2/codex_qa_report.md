@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 本轮目标是修复第一轮发现的接口验收链路问题，但实际只通过 `pytest.ini` 将默认测试范围限制到 `tests/`，没有修好原验收脚本。`main.py:11` 仍启动 8000 端口，`demo_api_test.py:5` 仍固定请求 8080；`demo_api_test.py:193`、`demo_api_test.py:215` 仍把 `audit_no` 当 pytest fixture 使用。按显式入口运行该脚本仍出现 `7 failed, 2 errors`，正常记录、缺字段、规则冲突、重复处理、回放等 API 验收流程不可直接验证。
+- 主要证据:
+  - `python3 -m pytest -q -s -p no:cacheprovider`: 43 passed。
+  - `python3 -m pytest -q -s -p no:cacheprovider demo_api_test.py`: 7 failed, 2 errors。
+  - TestClient 烟测 `/api/v1/health` 返回 200，`POST /api/v1/receipt/process` 返回 `PASSED/APPROVED` 且有审计编号，说明核心 API 可导入但验收入口未修复。
+- 阻断问题:
+  - `main.py:11` 与 `demo_api_test.py:5` 端口不一致。
+  - `demo_api_test.py:193`、`demo_api_test.py:215` 缺少 `audit_no` fixture，pytest 显式运行失败。
+  - `pytest.ini:2` 只收集 `tests/`，绕过了未修复的接口验收脚本。
+- 建议:
+  - 统一启动端口和接口测试脚本端口，或让脚本读取环境变量。
+  - 将 `demo_api_test.py` 改成可独立运行且可被 pytest 正确执行的集成测试。

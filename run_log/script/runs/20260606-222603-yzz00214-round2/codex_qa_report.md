@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - 第二轮要求修复“缺材料未进入复核”。`src/status/status-manager.ts` 已将材料不完整/缺关键材料分支改为 `under_review`，`requireReview: true`，并给出“不允许直接通过”的复核原因。
+  - `tests/anomaly-card-api.test.ts` 已同步把缺材料断言改为“复核中/需复核”，不再把缺材料期望写成“需补充”。
+  - `dist/status/status-manager.js` 也包含同样修复，说明构建产物已同步。
+  - `npx tsc --noEmit` 通过；`npm ls --depth=0` 依赖完整；`npm start` 与 `npm run dev` 均可加载入口。
+  - 通过 `dist` 入口复现盗刷卡仅提交 `screenshot` 的场景，实际输出 `taskStatus: under_review`、`needReview: true`、`canHandle: false`，缺失 `police_report` 和 `identity_proof`。
+  - `npm test` 在当前只读沙箱因 Jest 写临时 haste-map 缓存被 EPERM 拦截，未进入业务断言阶段；该失败来自当前执行环境权限限制。
+- 阻断问题:
+  - 无。
+- 建议:
+  - 后续可补充更明确的“无法判定/failed”输入校验场景，增强对原始验收项中“无法判定”的覆盖。

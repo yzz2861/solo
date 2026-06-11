@@ -1,0 +1,3 @@
+项目有真实入口 `sla_processor.py`，且核心类可导入处理 `data/work_orders.csv` 的 45 条记录，标准库依赖也不存在安装缺口。但核心 SLA 逾期判断存在漏算：`sla_processor.py:291` 只在 `resolve_time` 存在或工单仍处于打开状态时计算解决耗时，已关闭且缺少 `resolve_time`、但有 `close_time` 的工单被跳过，导致解决风险为 `UNKNOWN` 或整体风险被低估。`output/sla_detail.csv` 中 WO0004、WO0007、WO0018 均有该问题，影响逾期率、严重逾期 TOP、汇总报告等核心结果，未达到“工单SLA逾期处理/分析”的目标。
+
+请修改第一轮发现的问题， 保留已有功能，完成后确保项目仍可安装、可运行、可验证。

@@ -1,0 +1,17 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目实现了环卫车辆油耗异常 API 的主要服务逻辑，但真实 HTTP 入口在当前工作区无法跑通。`package.json` 提供的 `npm start` 和换端口后的 `PORT=4317 npm start` 都在 `src/app.js:41` 触发 `listen EPERM: operation not permitted 0.0.0.0`，无法访问 `/health` 或 `/api/fuel-abnormal` 核心接口。项目存在 `test/api.test.js`，但 `package.json` 没有 `test` 脚本，`npm test` 直接报 Missing script，且该测试依赖 localhost:3000 的运行服务。因此入口体验和自动化验证链路不可用。
+- 主要证据:
+  - `package.json` 仅有 `start`、`dev`，无 `test` 脚本。
+  - `npm start` 与 `PORT=4317 npm start` 均监听失败，错误位置为 `src/app.js:41`。
+  - 服务层直接调用可跑通正常、缺字段、规则命中、规则冲突、重复提交、人工复核、导出、轨迹等场景。
+  - `node --check` 检查 `src/app.js`、路由和服务文件未发现语法错误。
+- 阻断问题:
+  - 当前真实 HTTP 入口不可运行，无法通过 API 入口体验核心流程。
+  - 项目自带测试文件没有接入 npm 命令，验证链路不完整。
+- 建议:
+  - 将 Express app 与 server listen 拆分，支持测试直接导入 app。
+  - 增加 `test` 脚本，并让测试自动启动/关闭服务或使用 supertest。
+  - 支持配置监听 host，优先绑定 `127.0.0.1` 或通过环境变量控制。

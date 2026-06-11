@@ -1,0 +1,19 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目基础入口 `main.py` 可运行，风险判定也能输出结果，但核心流程没有真正闭环。高风险记录会返回 `review_required=True`，日志也写“进入人工复核流程”，但 `InspectionService` 的状态机初始化后仍停在 `draft`，没有先流转到 `auto_inspection`，因此不会进入 `pending_review`，复核入口只停留在说明层面。另一个关键目标“坏行隔离”也未实现：处理异常被 `process_single` 捕获并包装成普通 `pending` 结果，`process_batch` 的 `bad_rows` 始终为 0，演示输出中的坏行文件也是空数组。这会影响原始任务中巡检复核、异常数据隔离和审计结果可信度。
+- 主要证据:
+  - `python3 main.py` 可运行，能输出批量巡检结果、字段说明和复核入口信息。
+  - `app/services/inspection_service.py:121` 仅在 `can_enter_review()` 为真时才转入 `PENDING_REVIEW`，但状态机初始状态来自 `app/states/state_machine.py:48` 的 `DRAFT`，`can_enter_review()` 要求当前状态为 `AUTO_INSPECTION`。
+  - smoke 验证高风险记录结果为 `review_required=True`，但 `state=draft`、`history_len=0`。
+  - `app/services/inspection_service.py:167` 捕获处理异常并返回普通 `InspectionOutput`；`app/services/inspection_service.py:193` 的坏行分支因此很难触发。
+  - 异常数值输入 smoke 结果为 `results=1`、`bad_rows=0`、`conclusion=pending`。
+- 阻断问题:
+  - 高风险/材料缺失的复核状态机未接入实际处理链路。
+  - 坏行隔离机制没有把异常数据写入 `bad_rows`。
+  - `run_full_demo.py:187` 声明验证“坏行隔离”和“复核入口”，但实际服务层结果与声明不一致。
+- 建议:
+  - 在处理申请时补齐 `DRAFT -> SUBMITTED -> AUTO_INSPECTION -> PENDING_REVIEW` 的真实状态流转，或为每条记录维护独立状态机。
+  - 将解析错误、类型错误、不可处理记录作为 `BadRowRecord` 返回，而不是吞掉异常并计入成功结果。
+  - 增加覆盖复核状态变化和坏行隔离数量的端到端测试。

@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目可加载并具备核心 API，但闭环锁定流程存在阻断性业务缺陷。同一明细先通过 `/api/v1/evidence/process` 以“复核通过”处理后返回“已锁定”，再换新批次用相同 `itemId` “初次提交”，接口又返回“可办理”，且查询明细显示已锁定记录被覆盖。原因是 `src/controllers/evidenceController.js:27` 将 `existingRecord` 固定为 `null`，没有读取 `getItemRecord`；而 `src/services/auditService.js:49` 会直接覆盖同一 `itemId`。这破坏“已锁定不可重复处理/闭环处理”的目标。
+- 主要证据:
+  - `npm test` 通过：40 项通过，0 项失败。
+  - `npm ls --depth=0` 可解析依赖：`express`、`uuid` 存在。
+  - 沙箱禁止端口监听，`npm start` 因 `listen EPERM` 失败，未作为项目缺陷判定。
+  - 通过加载 `src/app.js` 模拟 HTTP 请求验证：健康检查、批次处理、重复批次、批次查询、明细查询、审计日志均可单次跑通。
+- 阻断问题:
+  - 锁定记录可被新批次重新处理并覆盖，闭环状态失效：`src/controllers/evidenceController.js:27-29`、`src/services/statusRouter.js:4-7`、`src/services/auditService.js:49-53`。
+- 建议:
+  - `processEvidence` 按 `item.itemId` 读取已有明细传入 `routeStatus`。
+  - 保存明细前避免覆盖 `已锁定` 记录，或保留历史并拒绝状态回退。
+  - 增加 API 级回归测试：复核通过/撤销后，同一 `itemId` 换批次再次提交应保持“已锁定”。

@@ -1,0 +1,32 @@
+# Workspace Snapshot
+
+- baseline/historical_baseline.json
+- config/scan_config.json
+- output/compliant/bad_data_list.csv
+- output/compliant/group_report.csv
+- output/compliant/manual_review_table.csv
+- output/compliant/scan_result.json
+- output/historical/bad_data_list.csv
+- output/historical/group_report.csv
+- output/historical/manual_review_table.csv
+- output/historical/scan_result.json
+- output/missing_material/bad_data_list.csv
+- output/missing_material/duplicates_list.csv
+- output/missing_material/group_report.csv
+- output/missing_material/manual_review_table.csv
+- output/missing_material/scan_result.json
+- output/over_threshold/bad_data_list.csv
+- output/over_threshold/group_report.csv
+- output/over_threshold/manual_review_table.csv
+- output/over_threshold/scan_result.json
+- samples/compliant/config.json
+- samples/compliant/harbor_scan.log
+- samples/compliant/trivy_report.json
+- samples/historical/config.json
+- samples/historical/current_scan.log
+- samples/missing_material/config.json
+- samples/missing_material/mixed_bad.log
+- samples/over_threshold/config.json
+- samples/over_threshold/payment_scan.log
+- samples/over_threshold/snyk_report.json
+- scan_report.py

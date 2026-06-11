@@ -1,0 +1,3 @@
+项目核心入口不可用。`package.json` 声明通过 `npm run dev` 启动 `src/index.ts`，但该入口依赖 `src/api/routes.ts`，运行时被 TypeScript 编译错误阻断；`npm start` 又指向 `dist/index.js`，仓库中不存在 `dist`，且 `npm run build` 同样会因类型错误失败，无法生成该入口文件。因此即使项目实现了港口引航员资质派单、风险评估、材料校验等代码结构，也无法通过真实入口启动 API 或体验核心流程，未达到可运行交付要求。
+
+请修改第一轮发现的问题， 保留已有功能，完成后确保项目仍可安装、可运行、可验证。

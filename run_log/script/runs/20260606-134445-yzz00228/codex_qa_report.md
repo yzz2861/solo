@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目服务层测试能通过，但用户目标是“二手奢品鉴定流程API”，真实 FastAPI 入口无法处理核心批次鉴定流程。通过 `TestClient` 调用 `POST /api/v1/auth/batch/process` 时返回 500，错误为 `'LuxuryItemSchema' object has no attribute 'get_missing_materials'`。原因是 `app/main.py:33` 直接把 Pydantic 请求对象 `request.items` 传入 `AuthBatch`，而 `app/models/batch.py:22` 只会转换 dict，不会转换 Pydantic Schema，导致规则层 `app/rules/material_rules.py:44` 调用数据类方法失败。核心 API 链路不可用，因此未满足原始目标。
+- 主要证据:
+  - `python3 -m pytest -q -s -p no:cacheprovider`：34 passed，说明服务层测试通过。
+  - `TestClient(app).post("/api/v1/auth/batch/process", json=...)`：返回 500，响应 `{'code': 'INTERNAL_ERROR', 'message': "'LuxuryItemSchema' object has no attribute 'get_missing_materials'", 'details': {}}`。
+  - 失败链路对应 `app/main.py:33-42`、`app/models/batch.py:19-23`、`app/rules/material_rules.py:41-44`。
+- 阻断问题:
+  - 真实 API 入口无法完成批次鉴定处理，后续查询批次、历史回放、追溯编号等核心流程无法从 API 层体验。
+- 建议:
+  - 在 API 层或 `AuthBatch.__post_init__` 中把 Pydantic Schema 显式转换为内部数据类模型。
+  - 增加 FastAPI `TestClient` 集成测试，覆盖批次处理、复核、历史回放和追溯查询。

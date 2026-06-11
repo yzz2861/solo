@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮已修复第一轮指出的 `validate` 日期范围过滤问题，`precool_scheduler/cli.py` 现在会调用 `filter_sources_by_date`，只读验证也确认范围外数据会被过滤。但第一轮另一个阻断问题仍存在：Excel 导出结果无法通过 `summary` 命令查看摘要。当前 `output` 只有 `BATCH-20260606-140242_result.xlsx`，`summary --batch-id BATCH-20260606-140242` 只查找 JSON/summary JSON 并报未找到；直接传 xlsx 又按 UTF-8 JSON 读取导致解码失败。这仍然破坏“导出和查看摘要”的核心闭环。
+- 主要证据:
+  - `python3 -m precool_scheduler --help` 可正常列出 `validate/generate/export/summary`。
+  - 日期过滤只读验证返回 `0` 条，说明第一轮的日期过滤缺陷已修复。
+  - `python3 -m precool_scheduler summary --batch-id BATCH-20260606-140242` 返回“未找到批次 BATCH-20260606-140242 的结果文件”。
+  - `python3 -m precool_scheduler summary output/BATCH-20260606-140242_result.xlsx` 返回 UTF-8 解码错误。
+  - `precool_scheduler/cli.py` 的 `summary` 仍只按 JSON 读取文件。
+- 阻断问题:
+  - Excel 导出批次不能通过 `summary` 回查，导出和摘要查看流程未闭环。
+- 建议:
+  - Excel 导出时同步生成 `{batch_id}_summary.json`，或让 `summary` 支持读取 xlsx 的“汇总摘要”工作表。

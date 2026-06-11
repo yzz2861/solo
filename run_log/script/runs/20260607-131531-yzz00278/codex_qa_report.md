@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 按项目自身呈现的目标，这是“健身房私教课排期CLI工具”，核心不仅包括校验和生成，还包含待复核记录的人工处理。但复核链路无法闭环：`gym_scheduler/reviewer.py:20` 通过复核后只把记录置为 `valid`；`gym_scheduler/cli.py:168` 的 `generate` 每次重新从原始文件加载并校验，只会用本轮原始数据里的有效记录生成排期；`gym_scheduler/generator.py:210` 又保留已存在的 `valid` 记录但不把它们转成 `scheduled`。现有存储也证明复核通过的记录仍停在 `valid`，未进入排期输出，影响“复核后生成完整排期”的核心流程。
+- 主要证据:
+  - `pyproject.toml:1` 声明 Python 包、依赖和 `gym-scheduler` CLI 入口。
+  - `python3 -m gym_scheduler.cli --help` 可正常显示 `validate/generate/export/summary/review` 命令。
+  - 样例校验可跑通：`sample_good.csv` 为 4 条有效；`sample_mixed.csv` 为 1 条有效、2 条无效、2 条待复核。
+  - `output/schedules_20260607_133242.csv:2` 只包含混合样例中 1 条直接有效记录。
+  - `output/.store/schedules.json:83`、`output/.store/schedules.json:117` 显示已修复/复核通过记录仍为 `valid`，未进入 `scheduled`。
+- 阻断问题:
+  - 人工复核通过后的记录没有可用链路进入排期结果，导致待复核课程不能完成生成。
+  - `gym_scheduler/exporter.py:57` 在导出后只在内存中把 `scheduled` 改成 `exported`，未回写存储，导出状态跟踪不可靠。
+- 建议:
+  - 增加“生成已复核有效记录”的流程，或让 `generate` 合并 store 中已复核的 `valid` 记录并转为 `scheduled`。
+  - 导出后将状态变化保存回 `.store/schedules.json`。
+  - 补充端到端测试覆盖：混合数据导入、复核通过、再次生成、导出状态持久化。

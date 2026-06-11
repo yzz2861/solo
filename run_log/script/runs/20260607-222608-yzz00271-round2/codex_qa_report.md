@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `app/main.py` 提供 FastAPI 真实入口，包含批量提交、人工复核、批次查询、单条查询、审计日志查询接口。
+  - `app/services/receipt_service.py` 串联规则引擎、状态机、内存仓储和汇总服务，核心流程可执行。
+  - `app/states/state_machine.py` 已实现状态优先级，`LOCKED` 优先于 `NEED_SUPPLEMENT`，覆盖“高风险 + 缺材料”场景。
+  - 执行 `python3 run_tests.py`：109 个断言通过，0 失败。
+  - 执行 `python3 run_api_tests.py`：34 个 API 断言通过，0 失败。
+- 阻断问题:
+  - 未发现阻断性问题。`python3 -m pytest -q` 因当前只读沙箱无法创建临时目录失败，非业务断言失败；项目自带脚本和 API TestClient 验证均通过。
+- 建议:
+  - 可补充 README，说明使用 `python3`、安装依赖和 `uvicorn app.main:app --reload` 启动方式，便于复现验证。

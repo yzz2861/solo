@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目可导入并存在 FastAPI 入口，`run_tests.py` 和 `run_api_tests.py` 自带脚本均通过，但项目真实 pytest 用例未通过，说明核心规则链路仍有缺陷。高风险危急值合并缺材料时，本应优先进入锁定复核流程，实际返回 `need_supplement`。原因是 `app/rules/material_rules.py:20` 先设置 `NEED_SUPPLEMENT`，而 `app/rules/engine.py:35` 只保留第一个 `target_status`，导致 `app/rules/review_rules.py:14` 的 `LOCKED` 被丢弃。这会使高风险病例绕过“锁定后复核”的关键状态，影响原始危急值回执管理目标。
+- 主要证据:
+  - `python3 -m pytest -q -s -p no:cacheprovider`：16 通过，1 失败。
+  - 失败用例：`tests/test_receipt_service.py:420`，期望状态 `locked`，实际为 `need_supplement`。
+  - API 复核场景验证：高风险“脑疝”且缺“病历”提交后返回 `200 need_supplement ['病历'] True`。
+  - `python3 run_tests.py`：88 个断言通过；`python3 run_api_tests.py`：34 个断言通过，但未覆盖该冲突优先级。
+- 阻断问题:
+  - 高风险锁定规则与材料补充规则存在状态优先级冲突，核心业务状态机行为错误。
+- 建议:
+  - 明确规则优先级，高风险 `LOCKED` 应覆盖缺材料 `NEED_SUPPLEMENT`。
+  - 保留并通过 `tests/test_receipt_service.py:405` 覆盖的高风险+缺材料回归用例。

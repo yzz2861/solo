@@ -1,0 +1,24 @@
+# Workspace Snapshot
+
+- noise_complaint_cli/examples/bad_params.json
+- noise_complaint_cli/examples/business_ledger.csv
+- noise_complaint_cli/examples/filters.json
+- noise_complaint_cli/examples/last_result.csv
+- noise_complaint_cli/examples/params.json
+- noise_complaint_cli/noise_complaint/__init__.py
+- noise_complaint_cli/noise_complaint/__main__.py
+- noise_complaint_cli/noise_complaint/bad_row_detector.py
+- noise_complaint_cli/noise_complaint/cli.py
+- noise_complaint_cli/noise_complaint/config.py
+- noise_complaint_cli/noise_complaint/diff.py
+- noise_complaint_cli/noise_complaint/exporter.py
+- noise_complaint_cli/noise_complaint/logger.py
+- noise_complaint_cli/noise_complaint/merger.py
+- noise_complaint_cli/noise_complaint/pipeline.py
+- noise_complaint_cli/noise_complaint/reader.py
+- noise_complaint_cli/noise_complaint/validator.py
+- noise_complaint_cli/output/operation.log
+- noise_complaint_cli/output_test/bad_rows.csv
+- noise_complaint_cli/output_test/diff_result.csv
+- noise_complaint_cli/output_test/operation.log
+- noise_complaint_cli/output_test/success_result.csv

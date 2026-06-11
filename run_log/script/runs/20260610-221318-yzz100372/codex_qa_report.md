@@ -1,0 +1,17 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始提示词要求“分数超过范围时给提醒”，但 `src/components/scoring/ScoreSlider.tsx` 在滑块拖动和数字输入变更时都会把数值直接夹到 0-10，输入 15 或 -1 会被静默改成 10 或 0；虽然 `src/utils/validation.ts` 写了 `score_range` 校验，但正常页面操作无法触发该提醒，导致三类提醒中的分数越界提醒实际不可用。其他核心录入、筛选、本地持久化、摘要/CSV 导出代码基本存在。
+- 过程不满意原因: 最终总结称核心功能均已测试，但 `trae_manual_trajectory.md` 里只看到页面、表单、瑕疵词、筛选和搜索测试，没有看到实际点击摘要/导出或检查下载文件记录。
+- 主要证据:
+  - `package.json` 提供 `dev`、`check`、`lint` 入口，`./node_modules/.bin/tsc --noEmit --incremental false` 和 `npm run lint` 均通过。
+  - `src/components/layout/Header.tsx` 有打印、摘要、导出、新增入口。
+  - `trae_manual_trajectory.md` 记录了浏览器打开页面、表单、瑕疵词建议、批次筛选和搜索验证。
+  - Vite 内存构建尝试因只读质检环境禁止写 `node_modules/.vite-temp` 临时文件失败，不作为产物构建错误。
+- 阻断问题:
+  - 分数越界提醒在真实 UI 链路不可触发，未满足明确提示词要求。
+  - 过程验证对导出/摘要下载不足。
+- 建议:
+  - 数字输入保留用户输入并显示越界提醒，提交时阻止保存；不要在输入阶段静默夹值。
+  - 补充实际点击“摘要”“导出”并检查下载内容的验证记录。

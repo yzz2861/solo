@@ -1,0 +1,32 @@
+# Workspace Snapshot
+
+- examples/banned_list.csv
+- examples/field_mapping.json
+- examples/formula_sample_1.csv
+- examples/formula_sample_2.csv
+- feed_ban_checker/__init__.py
+- feed_ban_checker/checker.py
+- feed_ban_checker/cli.py
+- feed_ban_checker/config.py
+- feed_ban_checker/exporter.py
+- feed_ban_checker/logger.py
+- feed_ban_checker/models.py
+- feed_ban_checker/pipeline.py
+- feed_ban_checker/reader.py
+- output/TEST002_坏行.csv
+- output/TEST002_差异表.csv
+- output/TEST002_成功结果.csv
+- output/TEST002_汇总.csv
+- output/TEST_DATE_坏行.json
+- output/TEST_DATE_差异表.json
+- output/TEST_DATE_成功结果.json
+- output/TEST_DATE_汇总.json
+- output/TEST_XLSX_坏行.xlsx
+- output/TEST_XLSX_差异表.xlsx
+- output/TEST_XLSX_成功结果.xlsx
+- output/TEST_XLSX_汇总.xlsx
+- output/logs/TEST002_操作日志.json
+- output/logs/TEST_DATE_操作日志.json
+- output/logs/TEST_XLSX_操作日志.json
+- pyproject.toml
+- requirements.txt

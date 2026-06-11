@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目具备 Node/Express 入口和补贴核算、异常解释、审计留痕、回放等基础实现，但核心规则校验存在明显缺口。`src/constants/index.js` 定义了合法案件类别，`src/services/ruleEngine.js` 也提供了 `validateObjectCategory`，但主流程 `processSubsidyRules` 未调用该校验。实际执行未知类别 `objectStatus.category="unknown"` 时，系统返回 `conclusion="pass"`、`nextAction="accept"`，并以 `baseAmount=0` 生成成功核算结果。这会把非法业务对象当成通过案件处理，直接影响“规则判断”和“补贴核算”目标的正确性。另，`package.json` 没有 `test` 脚本，`test/api.test.js` 只能在服务已手动启动且固定监听 3000 时运行，验证入口不够规范；HTTP 启动在当前沙箱被 `listen EPERM` 阻止，服务层逻辑已用 Node 调用验证。
+- 主要证据:
+  - `npm ls --depth=0` 成功，依赖可解析：express、uuid、dayjs、lodash。
+  - `node --check` 检查 `src` 与 `test/api.test.js` 均无语法错误。
+  - 服务层正常案例可生成 `pass`、金额 `2500`、审计记录、4 步回放和历史记录。
+  - 未知案件类别案例返回 `pass/accept` 且金额为 `0`，未报参数无效或规则失败。
+- 阻断问题:
+  - `src/services/ruleEngine.js` 未在主流程校验案件类别，导致非法类别通过核心核算流程。
+- 建议:
+  - 在 `processSubsidyRules` 中调用 `validateObjectCategory`，非法类别应返回失败或待补充，并附带异常解释。
+  - 为 `test/api.test.js` 增加 `npm test` 脚本，或改造为可直接启动/关闭服务的自动化测试。

@@ -1,0 +1,1 @@
+产物不满意：原始提示词明确要求“高风险或缺材料时进入复核，不允许直接通过”。项目中高风险分支可进入 `under_review`，但缺少必备材料时，`src/status/status-manager.ts:101` 直接返回 `supplement_required`，且 `requireReview` 为 `false`。通过 `dist` 入口复现：盗刷卡场景仅提交 `screenshot`，缺少 `police_report` 和 `identity_proof` 时输出为“需补充”，不是“复核中”。这会导致核心状态流转与原始目标不一致；同时 `tests/anomaly-card-api.test.ts:279` 还把缺材料期望写成“需补充”，测试覆盖也偏离提示词。

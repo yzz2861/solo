@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮主要修复第一轮指出的分组维度与配置缺失问题。项目入口可运行，`verify_all.py` 固定 5 个场景均 PASS，配置缺失也已进入异常样本和复核摘要。但分组统计的合格率仍依赖分组键里的 `clinker_code`：`quality_analyzer.py:393-397` 在分组维度不包含 `clinker_code` 时直接使用字典第一个品种计算阈值。合法参数 `group_by=['kiln_id']` 下，2026-06-01 K1 的 `f_cao_pass_rate` 实际输出 33.33%，按每条样本真实熟料品种计算应为 66.67%，统计结果仍失真，影响“分组维度可配置、阈值命中可解释”的原始目标。
+- 主要证据:
+  - `python3 -B quality_analyzer.py --help` 可显示 CLI 参数，入口存在。
+  - `python3 -B verify_all.py` 运行成功，5/5 PASS。
+  - `output/verify_scenario4_config/abnormal_samples.csv` 有 25 条配置缺失异常，`analysis_summary.txt` 包含“配置缺失复核”。
+  - 内存验证 `group_by=['kiln_id']` 时，K1/K2 多个周期的 `f_cao_pass_rate` 与逐行按真实 `clinker_code` 计算结果不一致。
+- 阻断问题:
+  - `quality_analyzer.py:393-397` 未保留分组内每条样本的真实熟料编号，导致不按 `clinker_code` 分组时合格率错误。
+- 建议:
+  - 统计分组时同时保存每条样本的指标值和对应 `clinker_code`，合格率逐行按真实品种阈值计算，而不是从 `group_key` 或字典默认值推断。

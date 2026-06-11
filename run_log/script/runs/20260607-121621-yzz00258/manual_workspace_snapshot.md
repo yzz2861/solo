@@ -1,0 +1,36 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/lastfailed
+- .pytest_cache/v/cache/nodeids
+- .pytest_cache/v/cache/stepwise
+- demo.py
+- demo_output/bad_rows/bad_rows_20260607_122309.json
+- demo_output/batch_report_20260607_122309.json
+- hotel_compensation/__init__.py
+- hotel_compensation/api/__init__.py
+- hotel_compensation/api/compensation_api.py
+- hotel_compensation/config/__init__.py
+- hotel_compensation/config/default_rules.py
+- hotel_compensation/engine/__init__.py
+- hotel_compensation/engine/review_engine.py
+- hotel_compensation/engine/risk_engine.py
+- hotel_compensation/engine/rule_engine.py
+- hotel_compensation/models/__init__.py
+- hotel_compensation/models/compensation_object.py
+- hotel_compensation/models/compensation_record.py
+- hotel_compensation/models/compensation_rule.py
+- hotel_compensation/models/compensation_status.py
+- hotel_compensation/utils/__init__.py
+- hotel_compensation/utils/console_output.py
+- hotel_compensation/utils/file_handler.py
+- test_output/bad_rows/bad_rows_20260607_122042.json
+- test_output/bad_rows/bad_rows_20260607_122043.json
+- test_output/bad_rows/bad_rows_20260607_122228.json
+- test_output/batch_report_20260607_122042.json
+- test_output/batch_report_20260607_122043.json
+- test_output/batch_report_20260607_122228.json
+- tests/__init__.py
+- tests/test_compensation.py

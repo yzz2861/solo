@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目核心入口不可用。`package.json` 声明通过 `npm run dev` 启动 `src/index.ts`，但该入口依赖 `src/api/routes.ts`，运行时被 TypeScript 编译错误阻断；`npm start` 又指向 `dist/index.js`，仓库中不存在 `dist`，且 `npm run build` 同样会因类型错误失败，无法生成该入口文件。因此即使项目实现了港口引航员资质派单、风险评估、材料校验等代码结构，也无法通过真实入口启动 API 或体验核心流程，未达到可运行交付要求。
+- 主要证据:
+  - `npx tsc --noEmit` 失败：`src/api/routes.ts:96` 的 `items` 不符合 `DispatchResultItem[]`，其中 `riskLevel: "LOW"` 不是 `RiskLevel` 枚举类型。
+  - `npm run dev` 失败：同一 TypeScript 编译错误阻断 `ts-node src/index.ts`。
+  - `npm start` 失败：`dist/index.js` 不存在。
+  - `package.json:7-9` 声明 `build/start/dev`，但当前构建和启动链路均不可用。
+- 阻断问题:
+  - `src/api/routes.ts:96` 导出结果 mock 数据类型错误导致项目无法编译、无法启动。
+  - `dist` 未生成，`npm start` 默认入口不可用。
+- 建议:
+  - 将 `src/api/routes.ts:102` 的 `riskLevel` 改为合法 `RiskLevel` 枚举值，并补齐导出数据中真实的 `pilotName/riskLevel/reviewRequired/canDirectApprove` 等字段来源。
+  - 修复后重新执行 `npm run build`、`npm run dev`，再用 `/health` 和 `/api/dispatch/process` 验证核心流程。

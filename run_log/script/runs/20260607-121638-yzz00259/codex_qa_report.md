@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目有可运行入口 `app.py`，依赖可导入，主要通过/拦截/待复核流程基本可用，但关键验收存在阻断问题：请求缺少 `rule_version` 时仍被默认规则版本处理成功，违背“请求包含规则版本”的目标；`trace_id` 只纳入 metrics，忽略 `building_id` 和当前操作人，导致不同楼栋/操作人的请求被误判为重复并返回旧审计操作人。自带 `test_acceptance.py` 也有时间越界场景失败，说明边界验收未完全通过。
+- 主要证据:
+  - `PYTHONDONTWRITEBYTECODE=1 python3 test_acceptance.py`：59 项中 56 项通过、3 项失败，失败集中在“时间越界 - 晚于规则失效时间”。
+  - `PYTHONDONTWRITEBYTECODE=1 python3 run_tests.py`：通过，但未覆盖上述失败分支。
+  - `services/abnormal_check.py:12` 生成 trace 只包含 `biz_no`、`rule_version`、`time_window`、`object_status.metrics`。
+  - `services/validator.py:82` 未校验 `rule_version` 必填；`services/abnormal_check.py:32` 会在缺失版本时取默认规则。
+- 阻断问题:
+  - 缺少 `rule_version` 的请求返回 `success=True`，不符合原始请求字段要求。
+  - 不同 `building_id` 或不同操作人的请求可能复用同一审计记录，导致“操作人和审计记录保留”不可信。
+  - 项目自带验收脚本存在失败用例，边界场景未完全闭环。
+- 建议:
+  - 将 `rule_version` 加入必填校验。
+  - trace/idempotency 计算应覆盖完整对象状态，或明确重复请求判定键；避免返回旧操作人。
+  - 修正规则有效期配置或调整时间越界逻辑，使自带验收与实现一致。

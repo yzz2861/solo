@@ -1,0 +1,17 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目提供了 CLI 入口和样例产物，基础命令可执行，但幂等与历史批次逻辑存在阻断性缺陷。`fhr_archive/batch.py:20` 的 checksum 只包含记录数量、记录 ID 和规则哈希，不包含主清单/补充表字段值；同一批记录 ID 下胎心基线等内容变化仍会被判定为历史相同批次，导致新风险不会重新生成。且 `fhr_archive/cli.py:214` 读取历史结果只读 JSON 明细，而 `generate` 默认格式是 CSV，重复执行默认链路会丢失明细和复核列表。这直接影响“重复执行不能制造新增差异”和业务复盘准确性。
+- 主要证据:
+  - `python3 -m fhr_archive --help` 可显示 `validate/generate/export/summary/history` 命令。
+  - `python3 -m fhr_archive history --output output/historical --limit 5 --no-color` 可读取历史批次。
+  - `python3 -m fhr_archive summary --batch-id FHR-20260606140632 --output output/over_threshold --show-review --show-details --no-color` 可展示样例摘要、复核列表和明细。
+  - `fhr_archive/batch.py:26-37` 的 checksum 未纳入实际业务字段值。
+  - `fhr_archive/cli.py:214-257` 只从 `details/*.json` 恢复历史明细，未使用默认生成的 CSV 明细/复核表。
+- 阻断问题:
+  - 不同数据但相同记录 ID 会被误判为同一历史批次，核心校验结果可能不更新。
+  - 默认 CSV 输出命中历史批次后无法完整恢复复核列表和明细，影响重复执行、导出报告和复盘。
+- 建议:
+  - checksum 应基于规范化后的主清单、补充表、规则完整内容计算。
+  - 历史结果恢复应支持默认 CSV，或默认同时保存 JSON 明细，并保证重复执行与首次执行输出一致。

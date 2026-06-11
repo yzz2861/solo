@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `python3 main.py --help`、`python3 main.py generate --help` 可正常加载 CLI 入口，包含 `validate/generate/export/summary` 命令。
+  - 依赖导入检查通过：`click`、`pandas` 可导入。
+  - 第二轮要求修复的三项均已验证：`check_overlap=False` 时不再产生冲突；`treatment_types` 会把未允许类型写入坏行；`row_hash` 变化但结果不变时仍产生差异记录。
+  - 已有测试输出显示 `scenario8_check_overlap` 冲突数为 0，`scenario9_treatment_types` 坏行包含“针灸治疗不在允许列表中”，`scenario10_source_change` 差异表包含 `row_hash` 修改记录。
+- 阻断问题:
+  - 无。完整写文件型 CLI 流程在当前只读沙箱中无法重新跑完，失败点是输出目录创建权限，不是项目代码链路问题。
+- 建议:
+  - 若 `export --format excel` 作为正式验收能力，建议把 `openpyxl` 加入 `requirements.txt`，因为代码显式使用 `engine="openpyxl"`。

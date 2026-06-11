@@ -1,0 +1,37 @@
+# Workspace Snapshot
+
+- bin/score.js
+- examples/rules.json
+- examples/test_records.csv
+- examples/test_records_batch2.csv
+- output/dedupe_test/batch1/BATCH-20260606-0BD2197E_abnormal.csv
+- output/dedupe_test/batch1/BATCH-20260606-0BD2197E_normal.csv
+- output/dedupe_test/batch1/BATCH-20260606-0BD2197E_pending.csv
+- output/dedupe_test/batch2/BATCH-20260606-6CA2DDE3_abnormal.csv
+- output/dedupe_test/batch2/BATCH-20260606-6CA2DDE3_normal.csv
+- output/dedupe_test2/BATCH-20260606-00FB82AB_abnormal.csv
+- output/dedupe_test2/BATCH-20260606-00FB82AB_normal.csv
+- output/dedupe_test2/BATCH-20260606-00FB82AB_pending.csv
+- output/e2e_test/batch1/BATCH-20260606-1C15303C_abnormal.csv
+- output/e2e_test/batch1/BATCH-20260606-1C15303C_normal.csv
+- output/e2e_test/batch1/BATCH-20260606-1C15303C_pending.csv
+- output/e2e_test/batch2/BATCH-20260606-3F9D5EE8_abnormal.csv
+- output/e2e_test/batch2/BATCH-20260606-3F9D5EE8_normal.csv
+- output/e2e_test/snapshot.json
+- output/test1/BATCH-20260606-769F5D6F_abnormal.csv
+- output/test1/BATCH-20260606-769F5D6F_normal.csv
+- output/test1/BATCH-20260606-769F5D6F_pending.csv
+- output/test2/BATCH-20260606-E8A639E0_abnormal.csv
+- output/test2/BATCH-20260606-E8A639E0_normal.csv
+- output/test2/BATCH-20260606-E8A639E0_pending.csv
+- package-lock.json
+- package.json
+- snapshot_test.json
+- snapshot_test2.json
+- src/cli.js
+- src/csv.js
+- src/history.js
+- src/processor.js
+- src/rules.js
+- src/utils.js
+- test/run-test.js

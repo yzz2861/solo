@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - 原始目标为构建“供水管网阀门启闭CLI”，项目实现了 `valve_cli/__main__.py` 入口，可通过 `python3 -m valve_cli` 运行。
+  - `python3 -m valve_cli --help` 可正常展示参数；合规样例 dry-run 返回 0，超阈值、材料缺失、坏行、历史回放样例可识别异常并返回 1。
+  - `valve_cli/cli.py` 支持多输入文件、字段映射、日期范围、导出格式、dry-run、历史文件、批次号等参数。
+  - `output/FINAL_ACCEPTANCE_summary.json` 与导出的 passed/exceptions/bad_rows 文件对应，记录了批次、来源文件、数量统计和输出文件列表。
+  - 导出记录包含 `source_file`、`batch_id`、`row_number`，满足回到原始数据复盘的要求。
+- 阻断问题: 无
+- 建议:
+  - 可补充 `pyproject.toml` 或 `setup.py`，让 `valve-cli` 命令可安装使用。
+  - 可增加自动化测试脚本，固化样例验收和退出码校验。
+  - 可对非数字压力值给出显式异常原因，提升业务可解释性。

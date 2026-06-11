@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目有真实入口 `sla_processor.py`，且核心类可导入处理 `data/work_orders.csv` 的 45 条记录，标准库依赖也不存在安装缺口。但核心 SLA 逾期判断存在漏算：`sla_processor.py:291` 只在 `resolve_time` 存在或工单仍处于打开状态时计算解决耗时，已关闭且缺少 `resolve_time`、但有 `close_time` 的工单被跳过，导致解决风险为 `UNKNOWN` 或整体风险被低估。`output/sla_detail.csv` 中 WO0004、WO0007、WO0018 均有该问题，影响逾期率、严重逾期 TOP、汇总报告等核心结果，未达到“工单SLA逾期处理/分析”的目标。
+- 主要证据:
+  - `sla_processor.py:282` 解析了 `close_time`，但 `sla_processor.py:291` 后续未使用它兜底计算解决耗时。
+  - `data/work_orders.csv:5` WO0004 为 `CLOSED`，有 `close_time`，无 `resolve_time`；`output/sla_detail.csv:5` 输出解决耗时为空、解决风险 `UNKNOWN`、整体 `NORMAL`。
+  - `data/work_orders.csv:8` WO0007 同类情况；关闭耗时等于 120 小时 SLA，应触发逾期边界，但输出为 `NORMAL`。
+  - `output/validation_report.txt:5` 显示 8/8 通过，但 `sla_processor.py:877` 的校验只复核响应耗时，未覆盖解决耗时漏算。
+- 阻断问题:
+  - 已关闭工单缺 `resolve_time` 时未使用 `close_time` 计算解决 SLA，核心逾期分析结果不可信。
+- 建议:
+  - 对 `CLOSED`/`RESOLVED` 工单使用 `resolve_time`，缺失时用 `close_time` 兜底；同步扩展验证器，校验解决耗时、风险等级和汇总逾期数。

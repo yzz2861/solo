@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `package.json:6` 提供 `start/dev/test` 脚本，依赖仅为 `express`、`uuid`，`npm ls --depth=0` 显示依赖已安装且可解析。
+  - `server.js:1`、`src/app.js:14`、`src/routes/assessment.js:12` 提供真实 API 入口：`POST /api/pressure-ulcer/assessment`，并包含健康检查、批次查询、审计日志、统计、重置接口。
+  - `src/middleware/validator.js:4` 实现批次、来源、动作、明细、Braden 评分校验；`src/middleware/validator.js:96` 实现材料缺失识别。
+  - `src/services/triageService.js:5` 覆盖正常、规则命中、材料缺失、重复提交、历史回放、人工复核等分流；`src/services/triageService.js:51`、`157`、`194`、`224` 分别实现核心结论路径。
+  - 受当前只读/网络沙箱限制，`npm start` 监听 `0.0.0.0:3000` 被系统拒绝；改用项目导出的应用/控制器链路做无端口验证，合规样例返回 `合规通过/NORMAL`，高风险样例返回 `超阈值预警/RULE_HIT`，材料缺失返回 `材料缺失`，重复提交返回 `DUPLICATE`，历史回放返回 `REPLAY`，统计接口返回批次与审计日志数据。
+- 阻断问题:
+  - 未发现项目代码层面的阻断问题。
+- 建议:
+  - `tests/acceptance.test.js:3` 固定依赖已启动的 `localhost:3000`，而 `npm test` 不会自行启动服务；建议让测试脚本自启动/关闭服务，或在 README 中明确需先运行 `npm start`。当前不作为不通过原因。

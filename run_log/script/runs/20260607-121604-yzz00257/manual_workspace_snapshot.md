@@ -1,0 +1,32 @@
+# Workspace Snapshot
+
+- examples/rules.json
+- plating_waste.py
+- plating_waste_cli/__init__.py
+- plating_waste_cli/__main__.py
+- plating_waste_cli/cli.py
+- plating_waste_cli/csv_io.py
+- plating_waste_cli/models.py
+- plating_waste_cli/processor.py
+- plating_waste_cli/rules.py
+- plating_waste_cli/utils.py
+- plating_waste_cli/validator.py
+- tests/acceptance_test.py
+- tests/history_snapshot.csv
+- tests/output/test_input_badrows_ACC-007.csv
+- tests/output/test_input_badrows_ACC-009.csv
+- tests/output/test_input_badrows_TEST-BATCH-002.csv
+- tests/output/test_input_exception_ACC-007.csv
+- tests/output/test_input_exception_ACC-009.csv
+- tests/output/test_input_exception_TEST-BATCH-002.csv
+- tests/output/test_input_pass_ACC-007.csv
+- tests/output/test_input_pass_ACC-009.csv
+- tests/output/test_input_pass_TEST-BATCH-002.csv
+- tests/output/test_input_summary_ACC-007.csv
+- tests/output/test_input_summary_ACC-007.json
+- tests/output/test_input_summary_ACC-009.csv
+- tests/output/test_input_summary_ACC-009.json
+- tests/output/test_input_summary_TEST-BATCH-002.csv
+- tests/output/test_input_summary_TEST-BATCH-002.json
+- tests/run_tests.py
+- tests/test_input.csv

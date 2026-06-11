@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml` 声明了可安装包、依赖和 CLI 入口 `feed-ban-checker = feed_ban_checker.cli:main`，`feed_ban_checker/cli.py` 实际存在 `main()`。
+  - `python3 -m feed_ban_checker.cli --help`、`check --help`、`--version` 均可正常执行。
+  - 使用 `examples/formula_sample_1.csv`、`examples/formula_sample_2.csv`、`examples/banned_list.csv` 执行 `check --dry-run` 成功，统计总行 20、有效行 18、坏行 2、命中禁料 6。
+  - `replay output/logs/TEST002_操作日志.json` 可回放历史处理日志；`output/` 下已有 CSV/JSON/XLSX 导出结果。
+- 阻断问题:
+  - 无阻断性问题。
+- 建议:
+  - `feed_ban_checker/exporter.py` 生成汇总时，“输出文件”列为空，因为汇总在 `result.output_files` 回填前生成，建议调整导出顺序。
+  - 当前风险统计把未命中禁料的正常行也计入“低风险”，如业务期望只统计命中禁料风险等级，需调整 `summarize_risks` 口径。

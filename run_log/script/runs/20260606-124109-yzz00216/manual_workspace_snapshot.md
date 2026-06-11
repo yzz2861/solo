@@ -1,0 +1,21 @@
+# Workspace Snapshot
+
+- package-lock.json
+- package.json
+- scripts/quick-test.js
+- src/app.js
+- src/constants.js
+- src/controllers/detectionController.js
+- src/controllers/reviewController.js
+- src/models.js
+- src/routes/api.js
+- src/rules/ruleEngine.js
+- src/server.js
+- src/services/detectionService.js
+- src/store/inMemoryStore.js
+- tests/helpers/testData.js
+- tests/integration/batchDetect.test.js
+- tests/integration/review.test.js
+- tests/integration/singleDetect.test.js
+- tests/setup.js
+- tests/unit/ruleEngine.test.js

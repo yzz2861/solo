@@ -1,0 +1,3 @@
+项目具备 Node/Express 入口，依赖已存在，`npm test` 能通过 25 项自测；但核心人工复核闭环没有完成。原始目标要求规则命中、人工复核、重复提交分开处理，并返回可办理/需补充等明确状态。实际在 `src/services/grayRateLimitService.js:250` 记录 `lastReviewResult: APPROVED` 后，`src/services/ruleEngine.js:127` 仍只按 `requiresManualReview` 重新进入待复核分支，没有读取审批通过状态。实测同一业务审核通过后再次检查仍返回 `202 needs_supplement / manual_review_required`，无法进入可办理状态，影响核心流程。
+
+请修改第一轮发现的问题， 保留已有功能，完成后确保项目仍可安装、可运行、可验证。

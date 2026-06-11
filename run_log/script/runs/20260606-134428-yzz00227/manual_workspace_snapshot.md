@@ -1,0 +1,23 @@
+# Workspace Snapshot
+
+- coal_gas_inspection/__init__.py
+- coal_gas_inspection/cli.py
+- coal_gas_inspection/exporter.py
+- coal_gas_inspection/logger.py
+- coal_gas_inspection/processor.py
+- coal_gas_inspection/reader.py
+- coal_gas_inspection/validator.py
+- gas_inspect.py
+- requirements.txt
+- tests/acceptance_test.py
+- tests/data/mapping.json
+- tests/data/mapping_alt.json
+- tests/data/source_a.csv
+- tests/data/source_alt_fields.csv
+- tests/data/source_b.csv
+- tests/data/source_with_errors.csv
+- tests/output/bad_rows_GAS_20260606_135848_09223f74.csv
+- tests/output/diff_GAS_20260606_135848_09223f74.csv
+- tests/output/operation_GAS_20260606_135848_09223f74.log
+- tests/output/success_GAS_20260606_135848_09223f74.csv
+- tests/output/summary_GAS_20260606_135848_09223f74.json

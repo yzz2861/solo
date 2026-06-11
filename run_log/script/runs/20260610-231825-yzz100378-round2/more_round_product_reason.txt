@@ -1,0 +1,1 @@
+原始要求明确要求玩家设置“引导员位置”来调度不同方向客流，但当前实现中引导员只是在 `src/components/game/StationMap.tsx` 被放置和绘制，`src/store/gameStore.ts` 的 `addGuide` 只保存坐标，`src/engine/simulator.ts`、`src/engine/pathfinding.ts` 的生成、寻路、移动、拥堵与评分逻辑完全不读取 guides。触发方式是游戏中选择“引导员”并放置后，乘客路线、速度、拥堵判断和得分都不会因此变化，导致核心培训工具之一实际无效，不能满足“设置围栏、扶梯开关和引导员位置，让客流通过”的主目标。

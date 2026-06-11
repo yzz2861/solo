@@ -1,0 +1,1 @@
+产物不满意：项目可加载并具备核心 API，但闭环锁定流程存在阻断性业务缺陷。同一明细先通过 `/api/v1/evidence/process` 以“复核通过”处理后返回“已锁定”，再换新批次用相同 `itemId` “初次提交”，接口又返回“可办理”，且查询明细显示已锁定记录被覆盖。原因是 `src/controllers/evidenceController.js:27` 将 `existingRecord` 固定为 `null`，没有读取 `getItemRecord`；而 `src/services/auditService.js:49` 会直接覆盖同一 `itemId`。这破坏“已锁定不可重复处理/闭环处理”的目标。

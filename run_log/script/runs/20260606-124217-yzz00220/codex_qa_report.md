@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始目标要求 CLI 将正常、异常、待复核记录拆开输出，并且验收覆盖“正常记录”。当前项目入口和输出文件存在，但样例端到端结果中 `mobile_compliance_cli/result/normal.csv` 只有表头，`summary.json` 显示 normal=0、abnormal=5、review=10，未覆盖正常记录验收面。进一步检查规则发现 `mobile_compliance_cli/rules.py` 的 contains 逻辑会把 `企业微信|钉钉` 中的“微信”命中为“存在违规应用”，导致看起来合规的企业微信设备被归入待复核；同时 `security_level=high` 被配置为 info 并进入 review，样例里几乎没有正常路径。该问题影响“正常/异常/待复核拆分输出”的核心目标。
+- 主要证据:
+  - `python3 mobile_compliance_cli/main.py --help` 可正常显示 CLI 参数入口。
+  - `mobile_compliance_cli/result/summary.json` 显示 `total=15, normal=0, abnormal=5, review=10`。
+  - `mobile_compliance_cli/result/normal.csv` 仅有表头，无正常记录。
+  - 对 `企业微信|钉钉` 应用规则会命中“存在违规应用”，分类为 review。
+- 阻断问题:
+  - 正常记录验收未被真实样例覆盖，且规则存在误判，核心分类结果不可靠。
+- 建议:
+  - 调整违规应用匹配为按分隔符精确匹配，避免“企业微信”误命中“微信”。
+  - 补充至少一条真实 normal 样例，并让测试断言 normal 输出数量和明细合计。

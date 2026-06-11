@@ -1,0 +1,1 @@
+产物不满意：项目实现了麻醉药品余量交接的对象、规则、状态、记录分层，并且通过直接调用控制器验证，合规、超阈值、材料缺失、高风险、历史回放等核心场景能输出对应 decision、riskTags、summary 和日志数量。但标准运行链路存在入口错误：package.json:5 和 package.json:8 指向 dist/index.js，而 tsconfig.json:6、tsconfig.json:16 的编译结构会输出 dist/src/index.js，构建后执行 npm start 会找不到入口文件。这会阻断使用项目声明的生产启动命令运行 API，不满足“项目可运行/入口可用”的验收重点。

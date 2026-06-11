@@ -1,0 +1,21 @@
+# Workspace Snapshot
+
+- mobile_compliance_cli/.pytest_cache/.gitignore
+- mobile_compliance_cli/.pytest_cache/CACHEDIR.TAG
+- mobile_compliance_cli/.pytest_cache/README.md
+- mobile_compliance_cli/.pytest_cache/v/cache/lastfailed
+- mobile_compliance_cli/.pytest_cache/v/cache/nodeids
+- mobile_compliance_cli/logger.py
+- mobile_compliance_cli/logs/compliance_20260606_125440.log
+- mobile_compliance_cli/main.py
+- mobile_compliance_cli/processor.py
+- mobile_compliance_cli/requirements.txt
+- mobile_compliance_cli/result/abnormal.csv
+- mobile_compliance_cli/result/normal.csv
+- mobile_compliance_cli/result/review.csv
+- mobile_compliance_cli/result/summary.json
+- mobile_compliance_cli/rules.py
+- mobile_compliance_cli/samples/devices.csv
+- mobile_compliance_cli/samples/last_result.csv
+- mobile_compliance_cli/samples/rules.yaml
+- mobile_compliance_cli/tests/test_compliance.py

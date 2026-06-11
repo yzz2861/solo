@@ -1,0 +1,1 @@
+产物不满意：项目可通过 `python3 main.py --help` 进入 CLI，纯内存运行成功样例也能生成 5 篇论文共 15 条分配；但核心异常链路存在阻断性错误。`paper_review_cli/core/generator.py:177` 后按“记录数 // 每篇人数”统计人工复核论文数，人工复核样例实际 3 篇论文存在复核记录，却汇总为 `manual_review_count=1` 且 `status=success`。更严重的是关闭人工复核时，3 篇论文 0 条分配仍返回 `status=success`，`paper_review_cli/cli.py:75` 会据此返回 0，导致失败分配被当作成功完成。该问题直接破坏“论文盲审冲突回避/分配结果可校验”的核心目标。

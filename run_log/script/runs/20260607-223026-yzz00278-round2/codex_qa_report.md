@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `pyproject.toml` 提供 `gym-scheduler = gym_scheduler.cli:cli` 入口，`python3 -B -m gym_scheduler.cli --help` 可正常列出 `validate/generate/export/summary/review` 命令。
+  - 第二轮修复点已落到 `gym_scheduler/cli.py:180`、`gym_scheduler/generator.py:157`、`gym_scheduler/generator.py:195`：生成前导入 store，并从历史 store 中取 `valid` 记录继续排期，避免复核/修复后的记录被原始坏数据覆盖。
+  - 现有 `output/.store/schedules.json` 显示修复后的孙八和复核通过的吴十均已进入 `scheduled`，`output/schedules_20260607_224340.csv` 导出 3 条排期，保留 `batch_id/source_file/source_row/review_comment`。
+  - `summary --all-batches` 可读到两次批次记录，第二次差异为新增 2 条，符合“复核/修复后再次生成”的闭环目标。
+- 阻断问题: 无
+- 建议:
+  - 输出文件名只精确到秒，快速连续执行可能覆盖同秒产物；建议改为包含批次号或更高精度时间戳。
+  - 二次生成后的坏行文件仍按本轮原始文件导出，可能包含已被人工修复并排期的原始坏行；建议在文件名或字段中区分“原始校验坏行”和“当前待处理坏行”。

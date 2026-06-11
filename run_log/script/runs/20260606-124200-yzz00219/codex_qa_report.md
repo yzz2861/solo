@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目核心 CSV dry-run 入口可以跑通，但实现与自身暴露的关键参数不一致，影响原始“按参数归并、筛选、风险分级”的目标可信度。`noise_complaint_cli/noise_complaint/config.py:73` 定义并由 `validator.py` 解析了 `min_risk_level`，但全项目只解析不使用；实测设置 `min_risk_level=high` 后普通低风险数据仍进入有效行。`config.py:78` 定义 `same_address_distance_threshold`，但归并逻辑只按规范化后的地址字符串精确分组，未使用距离阈值；相近地址在 50 阈值下仍被拆成两个投诉组。这会导致筛选和归并结果与配置预期不符。
+- 主要证据:
+  - `python3 -m noise_complaint.cli ... --dry-run` 在 `noise_complaint_cli` 目录下可完成读取、坏行隔离、归并、风险分级、差异预览。
+  - `rg -n "min_risk_level|same_address_distance_threshold"` 显示二者只在配置/校验解析处出现，核心归并和输出链路未使用。
+  - `noise_complaint_cli/noise_complaint/merger.py:58` 起按规范化地址直接分桶，`same_address_distance_threshold` 未参与计算。
+- 阻断问题:
+  - `min_risk_level` 筛选失效。
+  - 同地址距离阈值参数失效，近似地址无法按配置归并。
+- 建议:
+  - 在风险评估完成后应用 `min_risk_level` 过滤或明确移除该参数。
+  - 实现地址相似度/距离阈值归并，或删除 `same_address_distance_threshold` 避免误导。
+  - 补充最小测试覆盖参数解析、风险筛选、地址阈值归并和 CLI dry-run。

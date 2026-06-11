@@ -1,0 +1,28 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/nodeids
+- app/__init__.py
+- app/api/__init__.py
+- app/api/endpoints.py
+- app/models/__init__.py
+- app/models/entities.py
+- app/records/__init__.py
+- app/records/audit_records.py
+- app/rules/__init__.py
+- app/rules/inspection_rules.py
+- app/services/__init__.py
+- app/services/inspection_service.py
+- app/states/__init__.py
+- app/states/state_machine.py
+- app/utils/__init__.py
+- app/utils/logger.py
+- data/bad/bad_rows_demo_full_test.json
+- data/output/inspection_results_demo_full_test.csv
+- data/output/inspection_results_demo_full_test.json
+- main.py
+- run_full_demo.py
+- tests/__init__.py
+- tests/test_inspection_api.py

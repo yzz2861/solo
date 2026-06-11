@@ -1,0 +1,34 @@
+# Workspace Snapshot
+
+- .pytest_cache/.gitignore
+- .pytest_cache/CACHEDIR.TAG
+- .pytest_cache/README.md
+- .pytest_cache/v/cache/lastfailed
+- .pytest_cache/v/cache/nodeids
+- .pytest_cache/v/cache/stepwise
+- app/__init__.py
+- app/domain/__init__.py
+- app/domain/models.py
+- app/main.py
+- app/records/__init__.py
+- app/records/audit_log.py
+- app/records/repository.py
+- app/records/summary.py
+- app/rules/__init__.py
+- app/rules/duplicate_rules.py
+- app/rules/engine.py
+- app/rules/material_rules.py
+- app/rules/review_rules.py
+- app/rules/risk_rules.py
+- app/services/__init__.py
+- app/services/receipt_service.py
+- app/states/__init__.py
+- app/states/state_machine.py
+- requirements.txt
+- run_api_tests.py
+- run_tests.py
+- test_output.txt
+- tests/__init__.py
+- tests/conftest.py
+- tests/test_api.py
+- tests/test_receipt_service.py

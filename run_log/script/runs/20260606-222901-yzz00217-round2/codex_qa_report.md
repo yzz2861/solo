@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮已修复复核状态机的主要问题：`app/services/inspection_service.py:50` 会把每条记录推进到 `auto_inspection`，高风险记录可判定为 `review_required`。但第一轮要求修复的“坏行隔离”仍未完成：`app/services/inspection_service.py:209` 把处理异常捕获后包装成普通 `pending` 结果返回，导致 `app/services/inspection_service.py:240` 的 `bad_rows` 隔离分支仍不可达。用字符串缺陷尺寸触发真实处理异常时，结果为 `results=1, bad_rows=0`，异常数据没有进入坏行记录。这直接影响原始目标中“坏行隔离”和异常数据审计可信度。
+- 主要证据:
+  - `python3 main.py` 可运行，能输出巡检结果和复核入口。
+  - 高风险 smoke 输出 `review_required high_risk schedule_repair True`，说明复核规则已基本接入。
+  - 异常输入 smoke 输出 `results 1 bad_rows 0`，且普通结果包含 `处理异常: '>=' not supported between instances of 'str' and 'float'`。
+  - `run_full_demo.py:187` 声明验证“坏行隔离”，但演示数据实际 `bad_rows=0`。
+- 阻断问题:
+  - 处理异常仍被计入成功结果，坏行隔离机制没有闭环。
+- 建议:
+  - 让 `process_single` 的不可处理异常向 `process_batch` 抛出，或返回显式坏行结果并写入 `BadRowRecord`。
+  - 增加端到端测试断言异常输入会产生 `bad_row_count > 0`。

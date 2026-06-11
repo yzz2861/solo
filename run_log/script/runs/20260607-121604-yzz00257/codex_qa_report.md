@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - 原始目标见 `prompt.txt`：要求实现电镀废液更换 CLI，读取 CSV、规则配置、历史快照和输出目录，输出通过清单、异常清单、汇总摘要、退出码，并支持参数校验、坏行隔离、dry-run、复核标识。
+  - `python3 plating_waste.py --version` 和 `python3 -m plating_waste_cli --version` 均可运行，返回 `plating-waste 1.0.0`。
+  - `python3 plating_waste.py -i tests/test_input.csv -r examples/rules.json -s tests/history_snapshot.csv -o tests/output --batch-id QC-DRY --dry-run` 能完成核心流程：总 17 行、通过 4、异常 12、坏行 1，dry-run 未生成文件，因存在业务异常返回退出码 1。
+  - 已存在导出样例 `tests/output/test_input_pass_ACC-007.csv`、`tests/output/test_input_exception_ACC-007.csv`、`tests/output/test_input_badrows_ACC-007.csv`、`tests/output/test_input_summary_ACC-007.json`，包含 `_source_file`、`_batch_id`、`_line_no` 等复核字段。
+- 阻断问题:
+  - 未发现阻断性问题。本次环境为只读，无法重新执行会写入 `tests/output` 的完整验收脚本，但已通过 dry-run、入口命令和现有输出样例完成验证。
+- 建议:
+  - 若希望真正以 `plating-waste` 命令安装使用，可补充 `pyproject.toml`/console script。
+  - 坏行隔离可进一步覆盖“字段过多”的 CSV 行，避免静默截断额外列。

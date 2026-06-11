@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮目标是修复第一轮质检指出的缺口。当前项目基础 CLI 可运行，`validate/generate/summary/replay` 主链路能执行，且手工传入同输入 `--previous` 时任务状态已显示 `completed`。但关键修复仍未完成：`notary_checklist/cli.py:133` 到 `notary_checklist/cli.py:139` 的 `generate` 参数仍无 dry-run/预览入口；`notary_checklist/cli.py:159` 到 `notary_checklist/cli.py:173` 仍只在用户手工传 `--previous` 时加载历史结果，未自动按幂等键拦截重复办理；`notary_checklist/models/params.py:50` 到 `notary_checklist/models/params.py:56` 也没有阈值配置模型，源码搜索未见阈值命中说明逻辑。这些都是本轮明确要求修复的原问题，影响“重复处理、阈值说明、预览校验”的目标闭环。
+- 主要证据:
+  - `python3 -m notary_checklist.cli --help` 可启动，列出 `validate/generate/export/summary/replay/explain`。
+  - `validate tests/test_data/ledger_normal.csv examples/params.json` 成功执行。
+  - `generate --help` 仅有 `--filters`、`--previous`、`--output-dir`、`--operator`、`--source-system`、`--no-export`，无 dry-run/预览。
+  - 输出目录已有 3 个同幂等键正常台账结果，但不传 `--previous` 运行 `generate --no-export` 仍提示“新的输入组合”。
+- 阻断问题:
+  - 缺少 dry-run/预览入口。
+  - 重复办理拦截未接入 `generate`，仍依赖人工指定历史结果。
+  - 阈值配置及阈值命中说明逻辑缺失。
+- 建议:
+  - 在 `generate` 中自动按当前幂等键查询输出目录历史结果。
+  - 增加 dry-run/preview 模式，只输出摘要和差异不落盘。
+  - 在参数模型、校验/摘要/报告中补齐阈值配置与命中说明。

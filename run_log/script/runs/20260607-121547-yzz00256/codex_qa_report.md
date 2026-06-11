@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目具备 Python CLI 入口，`--help`、`validate`、`summary` 可运行，示例输出也覆盖了成功、失败、复核场景；但核心调度口径存在阻断性错误。`src/irrigation_scheduler/scheduler.py:115` 到 `src/irrigation_scheduler/scheduler.py:128` 新建轮灌组时没有校验单个地块是否超过 `max_area`、`max_water` 等规则上限，导致明显超限地块仍被标记为 `success`。只读内存验证中，面积 200、用水 20000 的地块在规则上限面积 100、用水 1000 下仍生成成功组，直接破坏“核对计算口径、异常解释、任务状态”的目标。另外，`src/irrigation_scheduler/exporter.py:28` 的明细字段和现有 `output/batch_partial_failure/detail.csv` 都缺少 `source_file/source_line`，只能看到批次，不能逐条回到原始 CSV 行复盘，未完整满足来源标识要求。
+- 主要证据:
+  - 原始目标见 `idea_history.md:65`：要求校验、生成、导出、摘要、重复提交、计算口径、异常解释、任务状态、数据回放和来源标识。
+  - `PYTHONPATH=src python3 -m irrigation_scheduler.cli --help` 可列出 `validate/generate/export/summary/history`。
+  - `validate` 单条示例可执行通过，仅有“地块数量较少”警告。
+  - 反例验证输出：`PX success 严格规则-G001`，同时组总面积 `200.0`、总用水 `20000.0`，超过规则上限仍成功。
+- 阻断问题:
+  - 新建轮灌组时跳过容量校验，超限地块会被错误分配成功。
+  - 导出明细缺少逐行来源字段，业务人员无法按结果定位原始数据行。
+- 建议:
+  - 新建组前复用容量校验逻辑，若单地块超过规则上限应进入失败并给出明确原因。
+  - 在 `PlotResult` 或导出阶段保留 `source_file`、`source_line`，并写入 `detail.csv`、报告 JSON 和复核列表。

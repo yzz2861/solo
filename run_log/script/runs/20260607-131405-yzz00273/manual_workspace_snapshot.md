@@ -1,0 +1,23 @@
+# Workspace Snapshot
+
+- output/FINAL_ACCEPTANCE_bad_rows.csv
+- output/FINAL_ACCEPTANCE_exceptions.csv
+- output/FINAL_ACCEPTANCE_passed.csv
+- output/FINAL_ACCEPTANCE_summary.json
+- samples/bad_rows_sample.csv
+- samples/compliant_sample.csv
+- samples/english_columns_sample.csv
+- samples/english_mapping.json
+- samples/field_mapping.json
+- samples/history_original.csv
+- samples/history_replay_sample.csv
+- samples/missing_material_sample.csv
+- samples/over_threshold_sample.csv
+- valve_cli/__init__.py
+- valve_cli/__main__.py
+- valve_cli/cli.py
+- valve_cli/exporter.py
+- valve_cli/models.py
+- valve_cli/processor.py
+- valve_cli/reader.py
+- valve_cli/validator.py

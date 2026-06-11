@@ -1,0 +1,14 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: Bug修复
+- 任务是否完成: 未完成任务
+- 未完成原因: 第二轮目标是修复第一轮发现的真实 FastAPI 批次鉴定入口不可用问题，但当前核心接口仍未修复。`app/main.py:33` 仍将 Pydantic 的 `request.items` 原样传入 `AuthBatch`，而 `app/models/batch.py:22` 只会把 dict 转为 `AuthItem`，不会转换 `AuthItemSchema`。因此规则层在 `app/rules/material_rules.py:44` 调用 `item.luxury.get_missing_materials()` 时，实际对象仍是 `LuxuryItemSchema`，导致 `POST /api/v1/auth/batch/process` 返回 500。用户原始目标要求输入批次号和明细后输出通过、拦截、待复核及原因，核心 API 链路无法完成，后续批次查询、复核和追溯体验也无法从 API 正常进入。
+- 主要证据:
+  - `python3 -m pytest -q -s -p no:cacheprovider`：34 passed，但 API 复现脚本只打印 500，没有断言失败。
+  - `python3 test_api_issue.py`：`Status code: 500`，响应为 `{'code': 'INTERNAL_ERROR', 'message': "'LuxuryItemSchema' object has no attribute 'get_missing_materials'", 'details': {}}`。
+  - `GET /api/v1/health` 返回 200，说明基础应用可导入；但 `POST /api/v1/auth/batch/process` 后查询同批次仍为 404。
+- 阻断问题:
+  - 真实批次鉴定 API 入口仍不可用，第二轮明确要求修复的问题未解决。
+- 建议:
+  - 在 API 层使用 `model_dump()` 转 dict，或在 `AuthBatch/AuthItem/LuxuryItem/SourceChannel` 中兼容 Pydantic Schema 到领域 dataclass 的转换。
+  - 增加 `TestClient` 集成测试并断言状态码和响应内容，覆盖批次处理、待复核、复核、历史回放和追溯查询。

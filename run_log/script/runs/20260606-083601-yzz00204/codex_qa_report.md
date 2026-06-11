@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目可通过 `python3 main.py --help` 进入 CLI，纯内存运行成功样例也能生成 5 篇论文共 15 条分配；但核心异常链路存在阻断性错误。`paper_review_cli/core/generator.py:177` 后按“记录数 // 每篇人数”统计人工复核论文数，人工复核样例实际 3 篇论文存在复核记录，却汇总为 `manual_review_count=1` 且 `status=success`。更严重的是关闭人工复核时，3 篇论文 0 条分配仍返回 `status=success`，`paper_review_cli/cli.py:75` 会据此返回 0，导致失败分配被当作成功完成。该问题直接破坏“论文盲审冲突回避/分配结果可校验”的核心目标。
+- 主要证据:
+  - `python3 main.py --help` 可显示 `validate/generate/export/summary` 入口。
+  - 纯内存运行 `examples/papers_single_success.csv` 生成 `status=success`、`assignments_count=15`。
+  - 纯内存运行 `examples/papers_manual_review.csv` 返回 `status=success`、`success_count=0`、`manual_review_count=1`、`assignments_count=5`。
+  - 关闭人工复核后，同一异常场景返回 `status=success`、`assignments_count=0`。
+- 阻断问题:
+  - `paper_review_cli/core/generator.py:188` 到 `paper_review_cli/core/generator.py:193` 未把分配不足、人工复核、零分配判为失败或待复核状态。
+  - `paper_review_cli/cli.py:75` 依赖错误状态返回退出码，导致不可用结果被 CLI 当作成功。
+  - 项目缺少 `pyproject.toml/setup.py/requirements.txt`，说明中 `paper-review-cli` 安装命令不可验证；目前只能用 `python3 main.py` 运行。
+- 建议:
+  - 按论文维度统计成功、人工复核、失败，而不是用记录数整除。
+  - 当任一论文未获得足够无冲突评审人时，状态应为 `manual_review`、`partial_success` 或 `failed`，CLI 退出码同步反映。
+  - 补充可安装入口或把实际入口统一写为 `python3 main.py ...`。

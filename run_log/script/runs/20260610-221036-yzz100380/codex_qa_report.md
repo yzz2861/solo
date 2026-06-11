@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 原始要求“成员版只显示自己的待练小节”，但实际成员模式没有隔离权限：`src/components/layout/Sidebar.tsx` 在成员模式下仍展示成员管理、声部、曲谱、出勤、导出等全部社长入口；`src/pages/MemberView.tsx` 还提供全体成员下拉框，可切换查看任意成员的练习、演出确认和老师批注。这导致成员版不是个人受限视图，核心隐私/角色目标未达成。另外 `npm run lint` 失败，存在未使用导入。
+- 过程不满意原因: 最终总结声称成员视图“仅显示自己的”内容，但轨迹没有验证成员模式隔离，代码也不支持该结论。
+- 主要证据:
+  - `npx tsc -p tsconfig.json --noEmit --incremental false` 通过。
+  - `npm run lint` 失败：`src/components/layout/Sidebar.tsx:8`、`src/pages/Sheets.tsx:8` 未使用导入。
+  - `trae_manual_trajectory.md` 显示曾启动 Vite 并点击部分页面，但未覆盖成员版隔离验证。
+  - `src/store/useAppStore.ts` 使用 persist，本地持久化、导入导出、重置数据有实现。
+- 阻断问题:
+  - 成员版访问范围不符合“只显示自己的待练小节”要求。
+  - lint 入口失败。
+- 建议:
+  - 成员模式下隐藏或禁用社长功能路由，只保留个人视图。
+  - 移除成员下拉选择，绑定当前成员身份。
+  - 修复 lint 未使用导入后重新验证。

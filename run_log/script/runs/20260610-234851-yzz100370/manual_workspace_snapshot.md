@@ -1,0 +1,27 @@
+# Workspace Snapshot
+
+- _patch_reports/patch_report_demo_run.txt
+- _patch_reports/patch_summary_demo_run.csv
+- _subtitle_backups/patch_20260611_000047_demo_run/BACKUP_MANIFEST.txt
+- _subtitle_backups/patch_20260611_000047_demo_run/en/ep01_handmade_market.en.srt
+- _subtitle_backups/patch_20260611_000047_demo_run/ja/ep01_handmade_market.ja.vtt
+- _subtitle_backups/patch_20260611_000047_demo_run/zh/ep01_handmade_market.zh.srt
+- subtitle_patch/__init__.py
+- subtitle_patch/backup.py
+- subtitle_patch/cli.py
+- subtitle_patch/formats/__init__.py
+- subtitle_patch/formats/ass_parser.py
+- subtitle_patch/formats/base.py
+- subtitle_patch/formats/srt_parser.py
+- subtitle_patch/formats/vtt_parser.py
+- subtitle_patch/models.py
+- subtitle_patch/patcher.py
+- subtitle_patch/report.py
+- subtitle_patch/timecode.py
+- subtitle_patch.py
+- test_samples/ep01_handmade_market.en.srt
+- test_samples/ep01_handmade_market.ja.vtt
+- test_samples/ep01_handmade_market.zh.srt
+- test_samples/patched/ep01_handmade_market.en.srt
+- test_samples/patched/ep01_handmade_market.ja.vtt
+- test_samples/patched/ep01_handmade_market.zh.srt

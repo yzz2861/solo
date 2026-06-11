@@ -1,0 +1,1 @@
+产物不满意：项目基础入口 `main.py` 可运行，风险判定也能输出结果，但核心流程没有真正闭环。高风险记录会返回 `review_required=True`，日志也写“进入人工复核流程”，但 `InspectionService` 的状态机初始化后仍停在 `draft`，没有先流转到 `auto_inspection`，因此不会进入 `pending_review`，复核入口只停留在说明层面。另一个关键目标“坏行隔离”也未实现：处理异常被 `process_single` 捕获并包装成普通 `pending` 结果，`process_batch` 的 `bad_rows` 始终为 0，演示输出中的坏行文件也是空数组。这会影响原始任务中巡检复核、异常数据隔离和审计结果可信度。

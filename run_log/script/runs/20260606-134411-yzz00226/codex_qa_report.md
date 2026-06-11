@@ -1,0 +1,16 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目具备 `python -m precool_scheduler` 入口，能导入并暴露 `validate/generate/export/summary` 四个命令，也有测试数据和已生成 Excel 结果；但原始目标要求日期范围参与输入处理、并支持导出后查看摘要。实际 `validate` 在 precool_scheduler/cli.py:93-97 读取全部数据后直接校验，`--date-start/--date-end` 只写入摘要，不影响校验或导出结果，校验命令会输出范围外记录。另一个闭环问题是 Excel 导出只生成 xlsx，summary 只查找 JSON/summary JSON；现有 output/BATCH-20260606-140242_result.xlsx 无法通过 `summary --batch-id` 查看，直接传 xlsx 也按 JSON 解码失败，影响“导出和查看摘要”的核心流程。
+- 主要证据:
+  - `python3 -m precool_scheduler --help` 可列出 `export/generate/summary/validate`。
+  - `precool_scheduler/cli.py:90-130` 中 `validate` 未使用日期范围过滤。
+  - `precool_scheduler/scheduler.py:83-85` 仅 `generate/export` 走日期过滤。
+  - `precool_scheduler/cli.py:277-291` 的 `summary` 只读取 JSON；`summary --batch-id BATCH-20260606-140242` 报“未找到批次”的结果文件。
+- 阻断问题:
+  - `validate` 日期范围参数无效，导致校验/导出结果与用户指定范围不一致。
+  - Excel 导出批次不能通过 `summary` 命令回查，现有导出结果无法完成摘要查看闭环。
+- 建议:
+  - 让 `validate` 与 `generate` 共用日期过滤逻辑。
+  - Excel 导出时同步保留 `_summary.json` 或让 `summary` 支持读取 xlsx 的“汇总摘要”工作表。

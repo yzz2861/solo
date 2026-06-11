@@ -1,0 +1,15 @@
+# Codex 质检报告
+- 结论: 通过
+- 任务类型: Bug修复
+- 任务是否完成: 完成了任务
+- 未完成原因: 
+- 主要证据:
+  - `python3 -m fhr_archive --help` 可正常进入 CLI，包含 `validate/generate/export/summary/history` 命令。
+  - `generate` 重复执行超阈值样例时识别历史批次并复用已有结果，未制造新增差异。
+  - `summary` 可读取合规、超阈值、材料缺失样例，汇总数量、复核列表、风险标签均能展示。
+  - `fhr_archive/batch.py:20` 已将主清单字段、补充表字段和规则哈希纳入 checksum；内存改动主清单或补充表后 checksum 均变化，且不会命中原历史批次。
+  - `fhr_archive/cli.py:176` 默认保存 JSON 明细、CSV 复核、JSON 摘要；`fhr_archive/cli.py:264` 起补充了 CSV 明细回读，`fhr_archive/cli.py:309` 起补充了复核 CSV 回读。
+- 阻断问题:
+  - 无。
+- 建议:
+  - 后续可补充 `pyproject.toml` 或 README 安装说明，并增加自动化测试覆盖 checksum 幂等、CSV/JSON 历史回读、导出报告链路。

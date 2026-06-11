@@ -1,0 +1,18 @@
+# Codex 质检报告
+- 结论: 不通过
+- 任务类型: 0-1代码生成
+- 任务是否完成: 未完成任务
+- 未完成原因: 项目入口 `main.py` 可以加载，`summary` 等只读命令可运行，但核心功能存在与配置和增量差异目标不一致的问题。`src/rehab_conflict_cli/core.py:71` 之后只按 `check_therapist_conflict/check_room_conflict/check_patient_conflict` 执行检测，完全未使用全局 `check_overlap`，实测 `check_overlap=False` 仍会输出治疗师时间冲突。`src/rehab_conflict_cli/utils.py:118` 的记录校验也未使用 `ConfigParams.treatment_types`，配置限定治疗类型时，未配置类型仍参与冲突检测。更严重的是 `src/rehab_conflict_cli/core.py:277` 仅在 `row_hash` 变化后比较结果字段，若源台账变化但状态、风险、冲突列表不变，差异表为空，无法满足增量变更可追溯的核心流程。
+- 主要证据:
+  - `python3 main.py --help` 成功展示 `generate/validate/export/summary` 命令。
+  - `python3 main.py summary ...` 可读取既有产物并展示汇总。
+  - 内存调用验证：`check_overlap=False` 时两条重叠记录仍被标记为 `conflict`。
+  - 内存调用验证：同一 `source_id` 的 `row_hash` 从 `oldhash` 变为 `newhash`，但状态等结果字段不变时，`IdempotencyManager.compare()` 返回 `diffs=[]`。
+- 阻断问题:
+  - 全局重叠检测开关不生效。
+  - 治疗类型参数未参与校验或过滤。
+  - 源数据变更但检测结果不变时差异漏报，影响重复提交/增量对比链路。
+- 建议:
+  - 在冲突检测前显式处理 `check_overlap`，关闭时不执行时间冲突检测。
+  - 将 `treatment_types` 纳入校验或明确过滤策略。
+  - 差异比对应记录 `row_hash` 变化，或保留并比较源台账关键字段。
