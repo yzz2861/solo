@@ -112,6 +112,7 @@ function SceneContent({ schemeId }: { schemeId?: string | null }) {
             layerHeight={layerHeight}
             shelfWidth={scheme.shelf.width}
             shelfDepth={scheme.shelf.depth}
+            layers={scheme.shelf.layers}
             isSelected={selectedPlacementId === placement.id}
             hasIssue={issuePlacementIds.has(placement.id)}
             onClick={() =>

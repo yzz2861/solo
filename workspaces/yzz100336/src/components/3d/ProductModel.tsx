@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import * as THREE from 'three'
-import type { Placement, Product } from '@/types'
+import type { Placement, Product, ShelfLayer } from '@/types'
 import { useSchemeStore } from '@/stores/schemeStore'
 import { useUIStore } from '@/stores/uiStore'
 import type { ThreeEvent } from '@react-three/fiber'
@@ -13,6 +13,7 @@ interface ProductModelProps {
   layerHeight: number
   shelfWidth: number
   shelfDepth: number
+  layers: ShelfLayer[]
   isSelected: boolean
   hasIssue: boolean
   onClick: () => void
@@ -24,14 +25,16 @@ export default function ProductModel({
   layerHeight,
   shelfWidth,
   shelfDepth,
+  layers,
   isSelected,
   hasIssue,
   onClick,
 }: ProductModelProps) {
   const [hovered, setHovered] = useState(false)
   const [dragging, setDragging] = useState(false)
+  const [dragY, setDragY] = useState(0)
   const ref = useRef<THREE.Mesh>(null)
-  const { raycaster, mouse, gl } = useThree()
+  const { raycaster, mouse, gl, camera } = useThree()
   const S = 0.01
 
   const currentSchemeId = useSchemeStore((s) => s.currentSchemeId)
@@ -40,30 +43,50 @@ export default function ProductModel({
 
   const targetScale = hovered || isSelected ? 1.05 : 1.0
 
+  const sortedLayers = useMemo(
+    () => [...layers].sort((a, b) => a.heightFromGround - b.heightFromGround),
+    [layers]
+  )
+
+  const findTargetLayer = (yCm: number): string => {
+    for (let i = sortedLayers.length - 1; i >= 0; i--) {
+      const layer = sortedLayers[i]
+      if (yCm >= layer.heightFromGround - 5) {
+        return layer.id
+      }
+    }
+    return sortedLayers[0]?.id ?? placement.shelfLayerId
+  }
+
   useFrame(() => {
     if (!ref.current) return
     const cur = ref.current.scale.x
     const next = cur + (targetScale - cur) * 0.15
     ref.current.scale.setScalar(next)
 
-    if (dragging && ref.current && currentSchemeId) {
-      const rect = gl.domElement.getBoundingClientRect()
-      const x = ((mouse.x * rect.width) / 2) + rect.width / 2
-      const y = (-(mouse.y * rect.height) / 2) + rect.height / 2
-      
-      const intersects = raycaster.intersectObject(ref.current.parent!, true)
-      if (intersects.length > 0) {
-        const intersect = intersects[0]
-        const point = intersect.point
+    if (dragging && currentSchemeId) {
+      raycaster.setFromCamera(mouse, camera)
+      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -dragY)
+      const intersectPoint = new THREE.Vector3()
+      raycaster.ray.intersectPlane(plane, intersectPoint)
+
+      if (intersectPoint) {
         const newX = Math.max(
           product.width / 2,
-          Math.min(shelfWidth - product.width / 2, (point.x / S) + shelfWidth / 2)
+          Math.min(shelfWidth - product.width / 2, (intersectPoint.x / S) + shelfWidth / 2)
         )
         const newZ = Math.max(
           0,
-          Math.min(shelfDepth - product.depth / 2, point.z / S)
+          Math.min(shelfDepth - product.depth / 2, intersectPoint.z / S)
         )
-        updatePlacement(currentSchemeId, placement.id, { positionX: newX, positionZ: newZ })
+        const yCm = dragY / S
+        const targetLayerId = findTargetLayer(yCm)
+
+        updatePlacement(currentSchemeId, placement.id, {
+          positionX: newX,
+          positionZ: newZ,
+          shelfLayerId: targetLayerId,
+        })
       }
     }
   })
@@ -80,10 +103,11 @@ export default function ProductModel({
     e.stopPropagation()
     onClick()
     setDragging(true)
+    setDragY(e.point.y)
     const rect = gl.domElement.getBoundingClientRect()
     mouse.set(
-      ((e.point.x * rect.width) / 2) / rect.width * 2 - 1,
-      -((e.point.y * rect.height) / 2) / rect.height * 2 + 1
+      (e.clientX / rect.width) * 2 - 1,
+      -(e.clientY / rect.height) * 2 + 1
     )
   }
 
@@ -93,6 +117,7 @@ export default function ProductModel({
 
   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
     if (!dragging) return
+    setDragY(e.point.y)
     const rect = gl.domElement.getBoundingClientRect()
     mouse.set(
       (e.clientX / rect.width) * 2 - 1,
