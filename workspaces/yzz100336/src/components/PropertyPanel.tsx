@@ -207,6 +207,80 @@ export default function PropertyPanel() {
             </section>
 
             <section>
+              <h3 className="mb-2 text-xs font-medium text-gray-400">尺寸设置</h3>
+              <div className="space-y-2">
+                <label className="block text-xs text-gray-500">
+                  宽度 (cm)
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={product?.width ?? 10}
+                    onChange={(e) => {
+                      if (product) updateProduct(product.id, { width: Number(e.target.value) })
+                    }}
+                    className="mt-0.5 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-200"
+                  />
+                </label>
+                <label className="block text-xs text-gray-500">
+                  高度 (cm)
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={product?.height ?? 20}
+                    onChange={(e) => {
+                      if (product) updateProduct(product.id, { height: Number(e.target.value) })
+                    }}
+                    className="mt-0.5 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-200"
+                  />
+                </label>
+                <label className="block text-xs text-gray-500">
+                  深度 (cm)
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={product?.depth ?? 10}
+                    onChange={(e) => {
+                      if (product) updateProduct(product.id, { depth: Number(e.target.value) })
+                    }}
+                    className="mt-0.5 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-200"
+                  />
+                </label>
+                <label className="block text-xs text-gray-500">
+                  重量 (kg)
+                  <input
+                    type="number"
+                    min="0.01"
+                    max="20"
+                    step="0.01"
+                    value={product?.weight ?? 1}
+                    onChange={(e) => {
+                      if (product) updateProduct(product.id, { weight: Number(e.target.value) })
+                    }}
+                    className="mt-0.5 w-full rounded border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-200"
+                  />
+                </label>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="mb-2 text-xs font-medium text-gray-400">层位选择</h3>
+              <select
+                value={placement?.shelfLayerId ?? ''}
+                onChange={(e) => handlePlacementUpdate({ shelfLayerId: e.target.value })}
+                className="w-full rounded border border-gray-700 bg-gray-900 px-2 py-1.5 text-xs text-gray-200"
+              >
+                {shelf.layers.map((layer, idx) => (
+                  <option key={layer.id} value={layer.id}>
+                    层 {idx + 1} ({layer.heightFromGround}cm)
+                  </option>
+                ))}
+              </select>
+            </section>
+
+            <section>
               <h3 className="mb-2 text-xs font-medium text-gray-400">位置调整</h3>
               <div className="space-y-3">
                 <label className="block text-xs text-gray-500">

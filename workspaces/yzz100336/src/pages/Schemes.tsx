@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useSchemeStore } from '@/stores/schemeStore'
-import { Plus, FolderOpen, Copy, Trash2 } from 'lucide-react'
+import { Plus, FolderOpen, Copy, Trash2, Download } from 'lucide-react'
 
 export default function Schemes() {
   const navigate = useNavigate()
@@ -93,6 +93,13 @@ export default function Schemes() {
                 >
                   <Copy size={12} />
                   复制方案
+                </button>
+                <button
+                  onClick={() => navigate(`/export/${scheme.id}`)}
+                  className="flex items-center gap-1 rounded px-2 py-1 text-xs text-blue-400 hover:bg-gray-800"
+                >
+                  <Download size={12} />
+                  导出
                 </button>
                 <button
                   onClick={() => handleDelete(scheme.id)}

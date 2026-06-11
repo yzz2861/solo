@@ -6,7 +6,7 @@ const NAV_ITEMS = [
   { to: '/editor', icon: LayoutGrid, label: '编辑器' },
   { to: '/schemes', icon: FolderOpen, label: '方案' },
   { to: '/compare', icon: Columns2, label: '对比' },
-  { to: '/export', icon: Download, label: '导出' },
+  { to: '/schemes', icon: Download, label: '导出' },
 ]
 
 export default function Sidebar() {
