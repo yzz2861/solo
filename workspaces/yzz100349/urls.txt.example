@@ -1,0 +1,15 @@
+# 竞品页面 URL 配置文件示例
+# 每行一个 URL，以 # 开头的行为注释，会被忽略
+# 重复的 URL 会自动去重，无需手动删除
+
+# 电商竞品示例
+https://www.example.com/product/123
+https://shop.example.com/item/456
+https://m.example.com/goods/789
+
+# 注意：以下 URL 会被识别为重复（规范化后相同）
+# https://www.example.com/product/123/
+# https://www.example.com/product/123
+
+# 可以添加无协议的 URL，会自动补全为 https://
+# example.com/sale/promo
