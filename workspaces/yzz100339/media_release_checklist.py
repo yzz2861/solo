@@ -36,6 +36,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+
 CHANNELS = ["微信", "抖音", "小红书", "微博", "B站", "快手"]
 
 POSTER_EXTS = {".jpg", ".jpeg", ".png", ".psd", ".ai", ".webp", ".svg", ".gif"}
@@ -44,6 +50,24 @@ COVER_EXTS = POSTER_EXTS
 COPY_EXTS = {".txt", ".md", ".doc", ".docx", ".pages"}
 LANDING_EXTS = {".url", ".txt", ".html"}
 APPROVAL_EXTS = {".txt", ".md", ".pdf", ".doc", ".docx"}
+
+CHANNEL_POSTER_SIZES = {
+    "微信": [(1080, 1440), (1080, 1080), (1080, 1920)],
+    "抖音": [(1080, 1920), (1080, 1080)],
+    "小红书": [(1080, 1440), (1080, 1920)],
+    "微博": [(900, 1200), (1080, 1080), (1080, 1920)],
+    "B站": [(1146, 717), (1080, 1920)],
+    "快手": [(1080, 1920), (1080, 1080)],
+}
+
+CHANNEL_COVER_SIZES = {
+    "微信": [(900, 500)],
+    "抖音": [(1080, 1920)],
+    "小红书": [(1080, 1440)],
+    "微博": [(900, 500)],
+    "B站": [(1146, 717)],
+    "快手": [(1080, 1920)],
+}
 
 CATEGORY_DIRS = {
     "海报": "海报",
@@ -85,6 +109,9 @@ class AssetInfo:
     size_bytes: int
     md5: str
     issues: list = field(default_factory=list)
+    width: int = 0
+    height: int = 0
+    is_valid_image: bool = False
 
 
 @dataclass
@@ -92,10 +119,14 @@ class ChannelCheckResult:
     channel: str
     has_poster: bool = False
     poster_count: int = 0
+    valid_poster_count: int = 0
     poster_details: list = field(default_factory=list)
+    poster_size_issues: list = field(default_factory=list)
     has_video_cover: bool = False
     video_cover_count: int = 0
+    valid_cover_count: int = 0
     video_cover_details: list = field(default_factory=list)
+    cover_size_issues: list = field(default_factory=list)
     has_copy: bool = False
     copy_count: int = 0
     copy_details: list = field(default_factory=list)
@@ -122,6 +153,27 @@ def compute_md5(file_path: str) -> str:
         for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def get_image_dimensions(file_path: str) -> tuple:
+    width, height = 0, 0
+    is_valid = False
+    
+    if not PIL_AVAILABLE:
+        return width, height, is_valid
+    
+    ext = Path(file_path).suffix.lower()
+    if ext in {".psd", ".ai"}:
+        return width, height, False
+    
+    try:
+        with Image.open(file_path) as img:
+            width, height = img.size
+            is_valid = True
+    except Exception:
+        pass
+    
+    return width, height, is_valid
 
 
 def parse_channel(filename: str) -> Optional[str]:
@@ -236,6 +288,26 @@ def scan_directory(activity_dir: str, snapshot_dir_name: str = ".release_check")
             size = 0
             md5 = ""
 
+        width, height = 0, 0
+        is_valid_image = False
+        
+        ext = file_path.suffix.lower()
+        if ext in POSTER_EXTS or ext in COVER_EXTS:
+            width, height, is_valid_image = get_image_dimensions(str(file_path))
+            
+            if size == 0:
+                issues.append(FilenameIssue(
+                    file_path=fname,
+                    issue_type="文件为空",
+                    detail="文件大小为0字节，可能是损坏或未完成的文件",
+                ))
+            elif not is_valid_image and ext not in {".psd", ".ai", ".svg"}:
+                issues.append(FilenameIssue(
+                    file_path=fname,
+                    issue_type="图片无法解析",
+                    detail="图片文件损坏或格式不支持，无法读取尺寸",
+                ))
+
         rel_path = str(file_path.relative_to(root))
 
         assets.append(AssetInfo(
@@ -248,6 +320,9 @@ def scan_directory(activity_dir: str, snapshot_dir_name: str = ".release_check")
             size_bytes=size,
             md5=md5,
             issues=[asdict(i) for i in issues],
+            width=width,
+            height=height,
+            is_valid_image=is_valid_image,
         ))
 
     return assets
@@ -264,6 +339,42 @@ def group_by_channel(assets: list) -> dict:
     return dict(groups), no_channel
 
 
+def is_valid_poster_for_channel(channel: str, width: int, height: int, is_valid_image: bool, size_bytes: int) -> tuple:
+    if size_bytes == 0:
+        return False, "文件为空"
+    if not is_valid_image:
+        return False, "图片无法解析"
+    
+    if channel not in CHANNEL_POSTER_SIZES:
+        return True, None
+    
+    valid_sizes = CHANNEL_POSTER_SIZES[channel]
+    for w, h in valid_sizes:
+        if width == w and height == h:
+            return True, None
+    
+    expected_sizes = ", ".join([f"{w}x{h}" for w, h in valid_sizes])
+    return False, f"尺寸 {width}x{height} 不符合要求，期望: {expected_sizes}"
+
+
+def is_valid_cover_for_channel(channel: str, width: int, height: int, is_valid_image: bool, size_bytes: int) -> tuple:
+    if size_bytes == 0:
+        return False, "文件为空"
+    if not is_valid_image:
+        return False, "图片无法解析"
+    
+    if channel not in CHANNEL_COVER_SIZES:
+        return True, None
+    
+    valid_sizes = CHANNEL_COVER_SIZES[channel]
+    for w, h in valid_sizes:
+        if width == w and height == h:
+            return True, None
+    
+    expected_sizes = ", ".join([f"{w}x{h}" for w, h in valid_sizes])
+    return False, f"尺寸 {width}x{height} 不符合要求，期望: {expected_sizes}"
+
+
 def check_channel_completeness(channel: str, assets: list) -> ChannelCheckResult:
     result = ChannelCheckResult(channel=channel)
 
@@ -273,13 +384,66 @@ def check_channel_completeness(channel: str, assets: list) -> ChannelCheckResult
 
         if atype == "海报" or (not atype and ext in POSTER_EXTS):
             result.poster_count += 1
-            result.poster_details.append(a.file_name)
-            result.has_poster = True
+            
+            size_info = f" ({a.width}x{a.height})" if a.width > 0 else ""
+            detail = {
+                "name": a.file_name,
+                "width": a.width,
+                "height": a.height,
+                "is_valid": a.is_valid_image and a.size_bytes > 0,
+                "size": a.size_bytes,
+            }
+            result.poster_details.append(detail)
+            
+            if a.size_bytes == 0 or not a.is_valid_image:
+                result.poster_size_issues.append({
+                    "file": a.file_name,
+                    "issue": "文件为空" if a.size_bytes == 0 else "图片无法解析",
+                    "expected": None,
+                })
+            else:
+                is_valid, reason = is_valid_poster_for_channel(channel, a.width, a.height, a.is_valid_image, a.size_bytes)
+                if is_valid:
+                    result.valid_poster_count += 1
+                else:
+                    result.poster_size_issues.append({
+                        "file": a.file_name,
+                        "issue": reason,
+                        "expected": ", ".join([f"{w}x{h}" for w, h in CHANNEL_POSTER_SIZES.get(channel, [])]),
+                    })
+            
+            result.has_poster = result.valid_poster_count > 0
 
         elif atype == "封面" or (atype == "视频" and ext in COVER_EXTS):
             result.video_cover_count += 1
-            result.video_cover_details.append(a.file_name)
-            result.has_video_cover = True
+            
+            detail = {
+                "name": a.file_name,
+                "width": a.width,
+                "height": a.height,
+                "is_valid": a.is_valid_image and a.size_bytes > 0,
+                "size": a.size_bytes,
+            }
+            result.video_cover_details.append(detail)
+            
+            if a.size_bytes == 0 or not a.is_valid_image:
+                result.cover_size_issues.append({
+                    "file": a.file_name,
+                    "issue": "文件为空" if a.size_bytes == 0 else "图片无法解析",
+                    "expected": None,
+                })
+            else:
+                is_valid, reason = is_valid_cover_for_channel(channel, a.width, a.height, a.is_valid_image, a.size_bytes)
+                if is_valid:
+                    result.valid_cover_count += 1
+                else:
+                    result.cover_size_issues.append({
+                        "file": a.file_name,
+                        "issue": reason,
+                        "expected": ", ".join([f"{w}x{h}" for w, h in CHANNEL_COVER_SIZES.get(channel, [])]),
+                    })
+            
+            result.has_video_cover = result.valid_cover_count > 0
 
         elif atype == "视频":
             pass
@@ -313,10 +477,16 @@ def check_channel_completeness(channel: str, assets: list) -> ChannelCheckResult
                 })
 
     missing = []
-    if not result.has_poster:
+    if result.poster_count == 0:
         missing.append("海报（需要 jpg/png/psd/ai 格式）")
-    if not result.has_video_cover:
+    elif result.valid_poster_count == 0:
+        missing.append("海报（所有海报文件无效或尺寸不匹配）")
+    
+    if result.video_cover_count == 0:
         missing.append("视频封面（需要与视频配套的封面图）")
+    elif result.valid_cover_count == 0:
+        missing.append("视频封面（所有封面文件无效或尺寸不匹配）")
+    
     if not result.has_copy:
         missing.append("文案（需要 txt/md/doc 格式）")
     if not result.has_landing_page:
@@ -437,19 +607,47 @@ def generate_report(
         lines.append(f"  📢 {ch}")
         lines.append(sep)
 
-        checks = [
-            ("海报", r.has_poster, r.poster_count, r.poster_details),
-            ("视频封面", r.has_video_cover, r.video_cover_count, r.video_cover_details),
-            ("文案", r.has_copy, r.copy_count, r.copy_details),
-            ("落地页链接", r.has_landing_page, r.landing_page_count, r.landing_page_details),
-            ("审批备注", r.has_approval, r.approval_count, r.approval_details),
-        ]
+        lines.append(f"  {'✅' if r.has_poster else '❌ 缺失'} 海报: {r.valid_poster_count}/{r.poster_count} 份")
+        for d in r.poster_details:
+            size_info = f" [{d['width']}x{d['height']}]" if d['width'] > 0 else ""
+            status_icon = "✅" if d['is_valid'] else "❌"
+            lines.append(f"     {status_icon} {d['name']}{size_info}")
+        
+        if r.poster_size_issues:
+            lines.append("")
+            lines.append("  📐 海报尺寸问题:")
+            for issue in r.poster_size_issues:
+                lines.append(f"     ❌ {issue['file']}")
+                lines.append(f"        → {issue['issue']}")
+                if issue['expected']:
+                    lines.append(f"        期望尺寸: {issue['expected']}")
 
-        for name, has, count, details in checks:
-            status = "✅" if has else "❌ 缺失"
-            lines.append(f"  {status} {name}: {count} 份")
-            for d in details:
-                lines.append(f"     · {d}")
+        lines.append(f"  {'✅' if r.has_video_cover else '❌ 缺失'} 视频封面: {r.valid_cover_count}/{r.video_cover_count} 份")
+        for d in r.video_cover_details:
+            size_info = f" [{d['width']}x{d['height']}]" if d['width'] > 0 else ""
+            status_icon = "✅" if d['is_valid'] else "❌"
+            lines.append(f"     {status_icon} {d['name']}{size_info}")
+        
+        if r.cover_size_issues:
+            lines.append("")
+            lines.append("  📐 封面尺寸问题:")
+            for issue in r.cover_size_issues:
+                lines.append(f"     ❌ {issue['file']}")
+                lines.append(f"        → {issue['issue']}")
+                if issue['expected']:
+                    lines.append(f"        期望尺寸: {issue['expected']}")
+
+        lines.append(f"  {'✅' if r.has_copy else '❌ 缺失'} 文案: {r.copy_count} 份")
+        for d in r.copy_details:
+            lines.append(f"     · {d}")
+
+        lines.append(f"  {'✅' if r.has_landing_page else '❌ 缺失'} 落地页链接: {r.landing_page_count} 份")
+        for d in r.landing_page_details:
+            lines.append(f"     · {d}")
+
+        lines.append(f"  {'✅' if r.has_approval else '❌ 缺失'} 审批备注: {r.approval_count} 份")
+        for d in r.approval_details:
+            lines.append(f"     · {d}")
 
         if r.multiple_finals:
             lines.append("")
