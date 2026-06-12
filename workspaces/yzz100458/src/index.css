@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  font-family: "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #e2e8f0;
+  background-color: #0f1720;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-accent text-white rounded-lg font-medium
+           hover:bg-accent-light active:bg-accent-dark
+           transition-all duration-200 shadow-md hover:shadow-lg
+           active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-surface-light text-gray-200 rounded-lg font-medium
+           hover:bg-surface-lighter active:bg-brand-600
+           transition-all duration-200 border border-brand-600/50;
+  }
+
+  .btn-pass {
+    @apply px-4 py-2 bg-pass text-white rounded-lg font-medium
+           hover:bg-pass-light active:bg-pass-dark
+           transition-all duration-200 shadow-md hover:shadow-lg
+           active:scale-[0.98];
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-danger text-white rounded-lg font-medium
+           hover:bg-danger-light active:bg-danger-dark
+           transition-all duration-200 shadow-md hover:shadow-lg
+           active:scale-[0.98];
+  }
+
+  .card {
+    @apply bg-surface-card border border-brand-700/40 rounded-xl
+           shadow-lg shadow-black/20;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger/20 text-danger-light;
+  }
+
+  .badge-warn {
+    @apply badge bg-warn/20 text-warn-light;
+  }
+
+  .badge-pass {
+    @apply badge bg-pass/20 text-pass-light;
+  }
+
+  .badge-accent {
+    @apply badge bg-accent/20 text-accent-light;
+  }
+
+  .input-base {
+    @apply w-full px-3 py-2 bg-brand-900 border border-brand-700/50
+           rounded-lg text-gray-200 placeholder-gray-500
+           focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30
+           transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-gray-100 tracking-tight;
+  }
+
+  .stat-value {
+    @apply font-mono text-2xl font-bold tracking-tight;
+  }
+}
