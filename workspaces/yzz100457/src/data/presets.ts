@@ -1,0 +1,93 @@
+import type { Level } from '@/types/level';
+
+export const PRESET_LEVELS: Level[] = [
+  {
+    id: 'bay_shallow_harbor',
+    name: '浅滩港湾',
+    description: '小型海湾，两艘小船，潮流平缓。适合初次演练，学习基本路线规划和卸载节奏。',
+    width: 8,
+    height: 7,
+    totalTurns: 8,
+    tiles: [
+      { q: 0, r: 0, terrain: 'land' }, { q: 1, r: 0, terrain: 'coast' }, { q: 2, r: 0, terrain: 'shallow' }, { q: 3, r: 0, terrain: 'water' }, { q: 4, r: 0, terrain: 'water' }, { q: 5, r: 0, terrain: 'coast' }, { q: 6, r: 0, terrain: 'land' },
+      { q: 0, r: 1, terrain: 'land' }, { q: 1, r: 1, terrain: 'shallow' }, { q: 2, r: 1, terrain: 'water' }, { q: 3, r: 1, terrain: 'water' }, { q: 4, r: 1, terrain: 'water' }, { q: 5, r: 1, terrain: 'shallow' }, { q: 6, r: 1, terrain: 'coast' },
+      { q: 0, r: 2, terrain: 'coast' }, { q: 1, r: 2, terrain: 'water' }, { q: 2, r: 2, terrain: 'water' }, { q: 3, r: 2, terrain: 'water' }, { q: 4, r: 2, terrain: 'water' }, { q: 5, r: 2, terrain: 'water' }, { q: 6, r: 2, terrain: 'coast' },
+      { q: 0, r: 3, terrain: 'coast' }, { q: 1, r: 3, terrain: 'shallow' }, { q: 2, r: 3, terrain: 'water' }, { q: 3, r: 3, terrain: 'water' }, { q: 4, r: 3, terrain: 'water' }, { q: 5, r: 3, terrain: 'water' }, { q: 6, r: 3, terrain: 'land' },
+      { q: 0, r: 4, terrain: 'land' }, { q: 1, r: 4, terrain: 'coast' }, { q: 2, r: 4, terrain: 'shallow' }, { q: 3, r: 4, terrain: 'water' }, { q: 4, r: 4, terrain: 'shallow' }, { q: 5, r: 4, terrain: 'coast' }, { q: 6, r: 4, terrain: 'land' },
+      { q: 0, r: 5, terrain: 'land' }, { q: 1, r: 5, terrain: 'land' }, { q: 2, r: 5, terrain: 'coast' }, { q: 3, r: 5, terrain: 'shallow' }, { q: 4, r: 5, terrain: 'coast' }, { q: 5, r: 5, terrain: 'land' }, { q: 6, r: 5, terrain: 'land' },
+    ],
+    currents: [
+      { q: 3, r: 0, direction: 'e', strength: 1 },
+      { q: 4, r: 1, direction: 'se', strength: 1 },
+      { q: 5, r: 2, direction: 'se', strength: 1 },
+      { q: 4, r: 3, direction: 'sw', strength: 1 },
+    ],
+    garbage: [
+      { id: 'g1', q: 2, r: 1, type: 'floating_plastic', amount: 5 },
+      { id: 'g2', q: 3, r: 2, type: 'floating_plastic', amount: 4 },
+      { id: 'g3', q: 1, r: 2, type: 'shoreline_foam', amount: 6 },
+      { id: 'g4', q: 5, r: 2, type: 'shoreline_foam', amount: 3 },
+      { id: 'g5', q: 4, r: 3, type: 'large_debris', amount: 2 },
+    ],
+    supplyPoints: [
+      { q: 1, r: 1, name: '北码头' },
+      { q: 5, r: 3, name: '东码头' },
+    ],
+    dangerZones: [],
+    boats: [
+      { id: 'b1', name: '海鸥号', capacity: 15, q: 1, r: 1, baseSpeed: 2, color: '#00d4aa' },
+      { id: 'b2', name: '蓝鲸号', capacity: 20, q: 5, r: 3, baseSpeed: 2, color: '#ff6b35' },
+    ],
+    isPreset: true,
+    createdAt: 0,
+  },
+  {
+    id: 'bay_tidal_channel',
+    name: '潮汐水道',
+    description: '狭窄水道中潮流强劲，垃圾会被快速推移。必须预判潮流方向抢在垃圾漂走前打捞，还要避开安全员标记的危险暗礁。',
+    width: 10,
+    height: 8,
+    totalTurns: 10,
+    tiles: [
+      { q: 0, r: 0, terrain: 'land' }, { q: 1, r: 0, terrain: 'land' }, { q: 2, r: 0, terrain: 'coast' }, { q: 3, r: 0, terrain: 'water' }, { q: 4, r: 0, terrain: 'water' }, { q: 5, r: 0, terrain: 'water' }, { q: 6, r: 0, terrain: 'water' }, { q: 7, r: 0, terrain: 'coast' }, { q: 8, r: 0, terrain: 'land' }, { q: 9, r: 0, terrain: 'land' },
+      { q: 0, r: 1, terrain: 'land' }, { q: 1, r: 1, terrain: 'coast' }, { q: 2, r: 1, terrain: 'shallow' }, { q: 3, r: 1, terrain: 'water' }, { q: 4, r: 1, terrain: 'water' }, { q: 5, r: 1, terrain: 'water' }, { q: 6, r: 1, terrain: 'water' }, { q: 7, r: 1, terrain: 'shallow' }, { q: 8, r: 1, terrain: 'coast' }, { q: 9, r: 1, terrain: 'land' },
+      { q: 0, r: 2, terrain: 'coast' }, { q: 1, r: 2, terrain: 'shallow' }, { q: 2, r: 2, terrain: 'water' }, { q: 3, r: 2, terrain: 'water' }, { q: 4, r: 2, terrain: 'water' }, { q: 5, r: 2, terrain: 'water' }, { q: 6, r: 2, terrain: 'water' }, { q: 7, r: 2, terrain: 'water' }, { q: 8, r: 2, terrain: 'shallow' }, { q: 9, r: 2, terrain: 'coast' },
+      { q: 0, r: 3, terrain: 'coast' }, { q: 1, r: 3, terrain: 'water' }, { q: 2, r: 3, terrain: 'water' }, { q: 3, r: 3, terrain: 'water' }, { q: 4, r: 3, terrain: 'water' }, { q: 5, r: 3, terrain: 'water' }, { q: 6, r: 3, terrain: 'water' }, { q: 7, r: 3, terrain: 'water' }, { q: 8, r: 3, terrain: 'water' }, { q: 9, r: 3, terrain: 'coast' },
+      { q: 0, r: 4, terrain: 'coast' }, { q: 1, r: 4, terrain: 'shallow' }, { q: 2, r: 4, terrain: 'water' }, { q: 3, r: 4, terrain: 'water' }, { q: 4, r: 4, terrain: 'water' }, { q: 5, r: 4, terrain: 'water' }, { q: 6, r: 4, terrain: 'water' }, { q: 7, r: 4, terrain: 'water' }, { q: 8, r: 4, terrain: 'shallow' }, { q: 9, r: 4, terrain: 'coast' },
+      { q: 0, r: 5, terrain: 'land' }, { q: 1, r: 5, terrain: 'coast' }, { q: 2, r: 5, terrain: 'shallow' }, { q: 3, r: 5, terrain: 'water' }, { q: 4, r: 5, terrain: 'water' }, { q: 5, r: 5, terrain: 'water' }, { q: 6, r: 5, terrain: 'water' }, { q: 7, r: 5, terrain: 'shallow' }, { q: 8, r: 5, terrain: 'coast' }, { q: 9, r: 5, terrain: 'land' },
+      { q: 0, r: 6, terrain: 'land' }, { q: 1, r: 6, terrain: 'land' }, { q: 2, r: 6, terrain: 'coast' }, { q: 3, r: 6, terrain: 'shallow' }, { q: 4, r: 6, terrain: 'water' }, { q: 5, r: 6, terrain: 'shallow' }, { q: 6, r: 6, terrain: 'coast' }, { q: 7, r: 6, terrain: 'coast' }, { q: 8, r: 6, terrain: 'land' }, { q: 9, r: 6, terrain: 'land' },
+    ],
+    currents: [
+      { q: 3, r: 1, direction: 'e', strength: 2 },
+      { q: 4, r: 2, direction: 'se', strength: 2 },
+      { q: 5, r: 3, direction: 'se', strength: 2 },
+      { q: 6, r: 3, direction: 'sw', strength: 1 },
+      { q: 5, r: 4, direction: 'sw', strength: 1 },
+    ],
+    garbage: [
+      { id: 'g10', q: 3, r: 1, type: 'floating_plastic', amount: 4 },
+      { id: 'g11', q: 4, r: 2, type: 'floating_plastic', amount: 5 },
+      { id: 'g12', q: 6, r: 2, type: 'floating_plastic', amount: 3 },
+      { id: 'g13', q: 2, r: 3, type: 'shoreline_foam', amount: 7 },
+      { id: 'g14', q: 7, r: 3, type: 'shoreline_foam', amount: 4 },
+      { id: 'g15', q: 5, r: 2, type: 'large_debris', amount: 2 },
+      { id: 'g16', q: 3, r: 4, type: 'floating_plastic', amount: 6 },
+    ],
+    supplyPoints: [
+      { q: 2, r: 2, name: '西码头' },
+      { q: 8, r: 3, name: '东码头' },
+      { q: 4, r: 6, name: '南码头' },
+    ],
+    dangerZones: [
+      { q: 5, r: 1, reason: '暗礁区' },
+      { q: 4, r: 4, reason: '暗礁区' },
+    ],
+    boats: [
+      { id: 'b10', name: '白鹭号', capacity: 12, q: 2, r: 2, baseSpeed: 2, color: '#00d4aa' },
+      { id: 'b11', name: '翠鸟号', capacity: 18, q: 8, r: 3, baseSpeed: 2, color: '#ff6b35' },
+      { id: 'b12', name: '沙鸥号', capacity: 10, q: 4, r: 6, baseSpeed: 3, color: '#9b59b6' },
+    ],
+    isPreset: true,
+    createdAt: 0,
+  },
+];
