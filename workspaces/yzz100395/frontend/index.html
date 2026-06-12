@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>团餐留样追溯台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+    .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; font-weight: 600; }
+    .header p { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+    
+    .nav { display: flex; gap: 10px; margin: 20px; background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .nav button { padding: 12px 24px; border: none; border-radius: 8px; background: #e8f4fd; color: #3498db; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .nav button.active { background: #3498db; color: white; }
+    .nav button:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(52,152,219,0.3); }
+    
+    .container { margin: 20px; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 24px; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-title { font-size: 18px; font-weight: 600; color: #2c3e50; }
+    
+    .form-group { margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .form-group label { display: block; font-size: 14px; color: #555; margin-bottom: 6px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 2px solid #e1e8ed; border-radius: 8px; font-size: 14px; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #3498db; }
+    
+    .btn { padding: 12px 32px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(52,152,219,0.4); }
+    .btn-success { background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; }
+    .btn-warning { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; }
+    .btn-danger { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; }
+    
+    .table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e1e8ed; }
+    .table th { background: #f8fafc; font-weight: 600; color: #555; font-size: 13px; }
+    .table tr:hover { background: #f8fafc; }
+    .table .status { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-inspected { background: #d4edda; color: #155724; }
+    .status-destroyed { background: #f8d7da; color: #721c24; }
+    
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .badge-danger { background: #fef2f2; color: #dc2626; }
+    .badge-warning { background: #fffbeb; color: #d97706; }
+    
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; display: none; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: white; border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 20px; border-bottom: 1px solid #e1e8ed; display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 18px; font-weight: 600; }
+    .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 16px 20px; border-top: 1px solid #e1e8ed; text-align: right; }
+    
+    .filter-bar { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-bar select, .filter-bar input { padding: 10px 14px; border: 2px solid #e1e8ed; border-radius: 8px; font-size: 14px; }
+    
+    .empty-state { text-align: center; padding: 40px; color: #999; }
+    .empty-state svg { width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5; }
+    
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .stat-value { font-size: 28px; font-weight: 700; color: #2c3e50; }
+    .stat-label { font-size: 14px; color: #888; margin-top: 4px; }
+    
+    .error-message { color: #dc2626; font-size: 13px; margin-top: 4px; }
+    
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .nav { flex-wrap: wrap; }
+      .nav button { flex: 1; min-width: 120px; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>团餐留样追溯台</h1>
+    <p>食品安全追溯管理系统</p>
+  </div>
+  
+  <div class="nav">
+    <button id="nav-register" class="active">留样登记</button>
+    <button id="nav-todo">待处理列表</button>
+    <button id="nav-search">留样查询</button>
+    <button id="nav-report">报表导出</button>
+  </div>
+  
+  <div class="container">
+    <div id="page-register" class="page">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">新增留样记录</div>
+        </div>
+        
+        <form id="register-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>学校</label>
+              <select id="school_id" required>
+                <option value="">请选择学校</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>菜品</label>
+              <select id="dish_id" required>
+                <option value="">请选择菜品</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>批次号</label>
+              <input type="text" id="batch_number" required placeholder="如：20240101001">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>留样日期</label>
+              <input type="date" id="sample_date" required>
+            </div>
+            <div class="form-group">
+              <label>留样时间</label>
+              <input type="time" id="sample_time" required>
+            </div>
+            <div class="form-group">
+              <label>留样克数</label>
+              <input type="number" id="weight" required placeholder="不少于100克" min="1">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>冰箱编号</label>
+              <select id="fridge_number" required>
+                <option value="1">冰箱1号</option>
+                <option value="2">冰箱2号</option>
+                <option value="3">冰箱3号</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>格位编号</label>
+              <select id="slot_number" required>
+                <option value="">请选择格位</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>责任人</label>
+              <input type="text" id="responsible_person" required placeholder="厨师姓名">
+            </div>
+          </div>
+          
+          <div style="text-align: right; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary">保存登记</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">冰箱格位状态</div>
+        </div>
+        <div id="slot-status"></div>
+      </div>
+    </div>
+    
+    <div id="page-todo" class="page" style="display: none;">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-todo">0</div>
+          <div class="stat-label">待处理项</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-weight">0</div>
+          <div class="stat-label">重量不足</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-overdue">0</div>
+          <div class="stat-label">送检超时</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">待处理列表</div>
+        </div>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>学校</th>
+              <th>菜品</th>
+              <th>批次号</th>
+              <th>问题</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="todo-list"></tbody>
+        </table>
+        
+        <div id="todo-empty" class="empty-state" style="display: none;">
+          <div>暂无待处理项</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="page-search" class="page" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">留样查询</div>
+        </div>
+        
+        <div class="filter-bar">
+          <select id="search-school">
+            <option value="">全部学校</option>
+          </select>
+          <input type="date" id="search-date" placeholder="选择日期">
+          <button id="search-btn" class="btn btn-primary">查询</button>
+        </div>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>学校</th>
+              <th>菜品</th>
+              <th>批次号</th>
+              <th>重量</th>
+              <th>位置</th>
+              <th>责任人</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="search-results"></tbody>
+        </table>
+        
+        <div id="search-empty" class="empty-state" style="display: none;">
+          <div>暂无记录</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="page-report" class="page" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">报表导出</div>
+        </div>
+        
+        <div class="filter-bar">
+          <select id="report-school">
+            <option value="">全部学校</option>
+          </select>
+          <input type="date" id="report-start" placeholder="开始日期">
+          <input type="date" id="report-end" placeholder="结束日期">
+          <button id="export-btn" class="btn btn-success">导出Excel</button>
+        </div>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>学校</th>
+              <th>菜品</th>
+              <th>批次号</th>
+              <th>重量</th>
+              <th>送检人</th>
+              <th>送检结果</th>
+              <th>销毁人</th>
+              <th>销毁原因</th>
+              <th>异常情况</th>
+            </tr>
+          </thead>
+          <tbody id="report-results"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="inspection-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">登记送检记录</div>
+        <button class="modal-close" onclick="closeModal('inspection-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="inspection-form">
+          <input type="hidden" id="inspection-sample-id">
+          <div class="form-group">
+            <label>送检日期</label>
+            <input type="date" id="inspection-date" required>
+          </div>
+          <div class="form-group">
+            <label>送检人</label>
+            <input type="text" id="inspection-inspector" required>
+          </div>
+          <div class="form-group">
+            <label>检测结果</label>
+            <select id="inspection-result" required>
+              <option value="">请选择结果</option>
+              <option value="合格">合格</option>
+              <option value="不合格">不合格</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>结果回填日期</label>
+            <input type="date" id="inspection-result-date" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="submitInspection()">保存</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="destruction-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">登记销毁记录</div>
+        <button class="modal-close" onclick="closeModal('destruction-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="destruction-form">
+          <input type="hidden" id="destruction-sample-id">
+          <div class="form-group">
+            <label>销毁日期</label>
+            <input type="date" id="destruction-date" required>
+          </div>
+          <div class="form-group">
+            <label>销毁人</label>
+            <input type="text" id="destruction-destroyer" required>
+          </div>
+          <div class="form-group">
+            <label>销毁原因</label>
+            <input type="text" id="destruction-reason" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="submitDestruction()">确认销毁</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="anomaly-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">异常处置</div>
+        <button class="modal-close" onclick="closeModal('anomaly-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="anomaly-form">
+          <input type="hidden" id="anomaly-sample-id">
+          <div class="form-group">
+            <label>异常类型</label>
+            <select id="anomaly-type" required>
+              <option value="">请选择类型</option>
+              <option value="重量不足">重量不足</option>
+              <option value="格位重复">格位重复</option>
+              <option value="销毁超时">销毁超时</option>
+              <option value="送检超时">送检超时</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>处置描述</label>
+            <textarea id="anomaly-description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>处置人</label>
+            <input type="text" id="anomaly-handler" required>
+          </div>
+          <div class="form-group">
+            <label>处置日期</label>
+            <input type="date" id="anomaly-handle-date" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-warning" onclick="submitAnomaly()">保存处置</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let schools = [];
+    let dishes = [];
+    let currentSampleId = null;
+
+    async function fetchSchools() {
+      const res = await fetch(`${API_URL}/schools`);
+      schools = await res.json();
+      populateSelect('school_id', schools, 'name');
+      populateSelect('search-school', schools, 'name', true);
+      populateSelect('report-school', schools, 'name', true);
+    }
+
+    async function fetchDishes() {
+      const res = await fetch(`${API_URL}/dishes`);
+      dishes = await res.json();
+      populateSelect('dish_id', dishes, 'name');
+    }
+
+    async function fetchSlots(fridgeNumber) {
+      const res = await fetch(`${API_URL}/storage_slots?fridge_number=${fridgeNumber}`);
+      const slots = await res.json();
+      const select = document.getElementById('slot_number');
+      select.innerHTML = '<option value="">请选择格位</option>';
+      slots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.slot_number;
+        option.textContent = `格位${slot.slot_number}`;
+        if (slot.status !== 'available') option.disabled = true;
+        select.appendChild(option);
+      });
+      renderSlotStatus(slots);
+    }
+
+    function populateSelect(id, data, textField, addAll = false) {
+      const select = document.getElementById(id);
+      if (addAll) select.innerHTML = '<option value="">全部</option>';
+      else select.innerHTML = `<option value="">请选择${textField}</option>`;
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item[textField];
+        select.appendChild(option);
+      });
+    }
+
+    function renderSlotStatus(slots) {
+      const container = document.getElementById('slot-status');
+      let html = '<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">';
+      slots.forEach(slot => {
+        const color = slot.status === 'available' ? '#d4edda' : '#f8d7da';
+        const text = slot.status === 'available' ? '空闲' : '占用';
+        html += `<div style="padding: 12px; background: ${color}; border-radius: 8px; text-align: center;">
+          <div style="font-weight: 600;">格位${slot.slot_number}</div>
+          <div style="font-size: 12px; opacity: 0.8;">${text}</div>
+        </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    document.getElementById('fridge_number').addEventListener('change', (e) => {
+      fetchSlots(e.target.value);
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        school_id: document.getElementById('school_id').value,
+        dish_id: document.getElementById('dish_id').value,
+        batch_number: document.getElementById('batch_number').value,
+        sample_date: document.getElementById('sample_date').value,
+        sample_time: document.getElementById('sample_time').value,
+        weight: parseFloat(document.getElementById('weight').value),
+        fridge_number: parseInt(document.getElementById('fridge_number').value),
+        slot_number: parseInt(document.getElementById('slot_number').value),
+        responsible_person: document.getElementById('responsible_person').value
+      };
+
+      const res = await fetch(`${API_URL}/samples`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message);
+        document.getElementById('register-form').reset();
+        fetchSlots(document.getElementById('fridge_number').value);
+      } else {
+        alert(result.errors?.join('\n') || '提交失败');
+      }
+    });
+
+    async function loadTodoList() {
+      const res = await fetch(`${API_URL}/todo`);
+      const data = await res.json();
+      
+      document.getElementById('stat-todo').textContent = data.length;
+      const weightCount = data.filter(item => item.issues.some(i => i.includes('重量'))).length;
+      const overdueCount = data.filter(item => item.issues.some(i => i.includes('超时'))).length;
+      document.getElementById('stat-weight').textContent = weightCount;
+      document.getElementById('stat-overdue').textContent = overdueCount;
+
+      const tbody = document.getElementById('todo-list');
+      if (data.length === 0) {
+        tbody.innerHTML = '';
+        document.getElementById('todo-empty').style.display = 'block';
+        return;
+      }
+      document.getElementById('todo-empty').style.display = 'none';
+
+      tbody.innerHTML = data.map(item => `
+        <tr>
+          <td>${item.sample_date} ${item.sample_time}</td>
+          <td>${item.school_name}</td>
+          <td>${item.dish_name}</td>
+          <td>${item.batch_number}</td>
+          <td>${item.issues.map(i => `<span class="badge badge-danger">${i}</span>`).join(' ')}</td>
+          <td>
+            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="openInspectionModal(${item.id})">送检</button>
+            <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="openDestructionModal(${item.id})">销毁</button>
+            <button class="btn btn-warning" style="padding: 6px 12px; font-size: 12px;" onclick="openAnomalyModal(${item.id})">异常处置</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function searchSamples() {
+      const schoolId = document.getElementById('search-school').value;
+      const date = document.getElementById('search-date').value;
+      let url = `${API_URL}/samples`;
+      const params = [];
+      if (schoolId) params.push(`school_id=${schoolId}`);
+      if (date) params.push(`sample_date=${date}`);
+      if (params.length) url += '?' + params.join('&');
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const tbody = document.getElementById('search-results');
+      if (data.length === 0) {
+        tbody.innerHTML = '';
+        document.getElementById('search-empty').style.display = 'block';
+        return;
+      }
+      document.getElementById('search-empty').style.display = 'none';
+
+      tbody.innerHTML = data.map(item => `
+        <tr>
+          <td>${item.sample_date} ${item.sample_time}</td>
+          <td>${item.school_name}</td>
+          <td>${item.dish_name}</td>
+          <td>${item.batch_number}</td>
+          <td>${item.weight}克</td>
+          <td>冰箱${item.fridge_number}号-格位${item.slot_number}</td>
+          <td>${item.responsible_person}</td>
+          <td><span class="status status-${item.status}">${getStatusText(item.status)}</span></td>
+          <td>
+            ${item.status !== 'destroyed' ? `
+              <button class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="openInspectionModal(${item.id})">送检</button>
+              <button class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;" onclick="openDestructionModal(${item.id})">销毁</button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getStatusText(status) {
+      const map = { pending: '待送检', inspected: '已送检', destroyed: '已销毁' };
+      return map[status] || status;
+    }
+
+    async function loadReport() {
+      const schoolId = document.getElementById('report-school').value;
+      const start = document.getElementById('report-start').value;
+      const end = document.getElementById('report-end').value;
+      let url = `${API_URL}/report`;
+      const params = [];
+      if (schoolId) params.push(`school_id=${schoolId}`);
+      if (start) params.push(`start_date=${start}`);
+      if (end) params.push(`end_date=${end}`);
+      if (params.length) url += '?' + params.join('&');
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const tbody = document.getElementById('report-results');
+      tbody.innerHTML = data.map(item => `
+        <tr>
+          <td>${item.sample_date}</td>
+          <td>${item.school_name}</td>
+          <td>${item.dish_name}</td>
+          <td>${item.batch_number}</td>
+          <td>${item.weight}克</td>
+          <td>${item.inspector || '-'}</td>
+          <td>${item.result || '-'}</td>
+          <td>${item.destroyer || '-'}</td>
+          <td>${item.reason || '-'}</td>
+          <td>${item.anomaly_description || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function exportToExcel() {
+      const table = document.querySelector('#page-report .table');
+      const html = table.outerHTML;
+      const blob = new Blob([`
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'>
+          <head><meta charset="utf-8"></head>
+          <body>${html}</body>
+        </html>
+      `], { type: 'application/vnd.ms-excel' });
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `留样报表_${new Date().toISOString().split('T')[0]}.xls`;
+      link.click();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('show');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function openInspectionModal(id) {
+      currentSampleId = id;
+      document.getElementById('inspection-sample-id').value = id;
+      openModal('inspection-modal');
+    }
+
+    function openDestructionModal(id) {
+      currentSampleId = id;
+      document.getElementById('destruction-sample-id').value = id;
+      openModal('destruction-modal');
+    }
+
+    function openAnomalyModal(id) {
+      currentSampleId = id;
+      document.getElementById('anomaly-sample-id').value = id;
+      openModal('anomaly-modal');
+    }
+
+    async function submitInspection() {
+      const data = {
+        sample_id: document.getElementById('inspection-sample-id').value,
+        inspection_date: document.getElementById('inspection-date').value,
+        inspector: document.getElementById('inspection-inspector').value,
+        result: document.getElementById('inspection-result').value,
+        result_date: document.getElementById('inspection-result-date').value
+      };
+
+      const res = await fetch(`${API_URL}/inspections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message);
+        closeModal('inspection-modal');
+        document.getElementById('inspection-form').reset();
+        loadTodoList();
+      } else {
+        alert(result.error || '提交失败');
+      }
+    }
+
+    async function submitDestruction() {
+      const data = {
+        sample_id: document.getElementById('destruction-sample-id').value,
+        destruction_date: document.getElementById('destruction-date').value,
+        destroyer: document.getElementById('destruction-destroyer').value,
+        reason: document.getElementById('destruction-reason').value
+      };
+
+      const res = await fetch(`${API_URL}/destructions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message);
+        closeModal('destruction-modal');
+        document.getElementById('destruction-form').reset();
+        loadTodoList();
+        fetchSlots(document.getElementById('fridge_number').value);
+      } else {
+        alert(result.errors?.join('\n') || result.error || '提交失败');
+      }
+    }
+
+    async function submitAnomaly() {
+      const data = {
+        sample_id: document.getElementById('anomaly-sample-id').value,
+        anomaly_type: document.getElementById('anomaly-type').value,
+        description: document.getElementById('anomaly-description').value,
+        handler: document.getElementById('anomaly-handler').value,
+        handle_date: document.getElementById('anomaly-handle-date').value
+      };
+
+      const res = await fetch(`${API_URL}/anomalies`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message);
+        closeModal('anomaly-modal');
+        document.getElementById('anomaly-form').reset();
+        loadTodoList();
+      } else {
+        alert(result.error || '提交失败');
+      }
+    }
+
+    document.getElementById('nav-register').addEventListener('click', () => {
+      showPage('page-register');
+    });
+
+    document.getElementById('nav-todo').addEventListener('click', () => {
+      showPage('page-todo');
+      loadTodoList();
+    });
+
+    document.getElementById('nav-search').addEventListener('click', () => {
+      showPage('page-search');
+      searchSamples();
+    });
+
+    document.getElementById('nav-report').addEventListener('click', () => {
+      showPage('page-report');
+      loadReport();
+    });
+
+    document.getElementById('search-btn').addEventListener('click', searchSamples);
+    document.getElementById('export-btn').addEventListener('click', exportToExcel);
+    document.getElementById('report-school').addEventListener('change', loadReport);
+    document.getElementById('report-start').addEventListener('change', loadReport);
+    document.getElementById('report-end').addEventListener('change', loadReport);
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+      document.querySelectorAll('.nav button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(pageId).style.display = 'block';
+      document.getElementById('nav-' + pageId.replace('page-', '')).classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('sample_date').value = today;
+      document.getElementById('inspection-date').value = today;
+      document.getElementById('destruction-date').value = today;
+      document.getElementById('anomaly-handle-date').value = today;
+      document.getElementById('search-date').value = today;
+
+      fetchSchools();
+      fetchDishes();
+      fetchSlots(1);
+    });
+  </script>
+</body>
+</html>
