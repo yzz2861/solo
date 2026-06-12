@@ -1,0 +1,90 @@
+# 测试用配置文件 - 对应 test-data 目录
+project_name: "XX项目-测试用招投标附件清单"
+bid_deadline: "2026-07-15"
+default_owner: "张工"
+
+scan_dirs:
+  - "./test-data/资料-营业执照"
+  - "./test-data/资料-人员证书"
+  - "./test-data/资料-业绩合同"
+  - "./test-data/资料-盖章版标书"
+
+final_keywords: ["最终版", "终稿", "定稿", "封标版", "final"]
+draft_keywords: ["草稿", "draft", "未盖章", "草签", "初稿", "v0"]
+
+attachments:
+  # ---- 一、企业资质 ----
+  - section: "一、企业资质"
+    name: "营业执照"
+    category: "营业执照"
+    keywords: ["营业执照", "统一社会信用代码"]
+    owner: "李总"
+    expire_date: "2028-06-30"
+    require_stamp: true
+    expected_pages: 1
+
+  - section: "一、企业资质"
+    name: "法定代表人授权书"
+    category: "授权书"
+    keywords: ["授权委托书", "法定代表人", "授权书"]
+    owner: "李总"
+    authorized_person: "王小明"
+    require_stamp: true
+    expected_pages: 2
+
+  # ---- 二、人员证书 ----
+  - section: "二、人员证书"
+    name: "项目经理-建造师证书"
+    category: "人员证书"
+    keywords: ["建造师", "项目经理", "一级建造师"]
+    owner: "张工"
+    expire_date: "2027-12-31"
+    expected_pages: 2
+
+  - section: "二、人员证书"
+    name: "项目经理-安全生产考核B证"
+    category: "人员证书"
+    keywords: ["安全生产考核", "B证", "安全员B"]
+    owner: "张工"
+    expire_date: "2026-08-31"
+
+  - section: "二、人员证书"
+    name: "技术负责人-高级工程师职称"
+    category: "人员证书"
+    keywords: ["高级工程师", "职称证", "技术负责人"]
+    owner: "张工"
+    expected_pages: 1
+
+  # ---- 三、业绩合同 ----
+  - section: "三、业绩合同"
+    name: "业绩合同1-XX广场"
+    category: "业绩合同"
+    keywords: ["XX广场", "合同", "协议书"]
+    owner: "王经理"
+    page_range: "20-60"
+    require_stamp: true
+
+  - section: "三、业绩合同"
+    name: "业绩合同2-YY大厦"
+    category: "业绩合同"
+    keywords: ["YY大厦", "合同"]
+    owner: "王经理"
+    page_range: "+15"
+    require_stamp: true
+
+  # ---- 四、盖章版标书 ----
+  - section: "四、盖章版标书"
+    name: "技术标-盖章版PDF"
+    category: "盖章版PDF"
+    keywords: ["技术标", "盖章"]
+    owner: "张工"
+    require_stamp: true
+    page_range: "80-120"
+
+  - section: "四、盖章版标书"
+    name: "商务标-盖章版PDF"
+    category: "盖章版PDF"
+    keywords: ["商务标"]
+    owner: "李总"
+    require_stamp: true
+    page_range: "80-120"

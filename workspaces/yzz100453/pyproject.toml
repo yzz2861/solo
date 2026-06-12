@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bid-checklist"
+version = "0.1.0"
+description = "招投标附件清单器 - 封标前附件核对、过期检查、盖章校验、待补清单生成"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Bid Checklist Team" }]
+keywords = ["招投标", "附件清单", "封标", "PDF检查", "证照过期"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "click>=8.1.0",
+    "PyYAML>=6.0",
+    "pypdf>=4.0.0",
+    "python-dateutil>=2.8.0",
+    "rich>=13.0.0",
+    "fuzzywuzzy>=0.18.0",
+    "python-Levenshtein>=0.23.0",
+]
+
+[project.scripts]
+bid-checklist = "bid_checklist.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"bid_checklist" = ["templates/*.yaml"]
