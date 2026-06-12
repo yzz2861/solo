@@ -1,0 +1,82 @@
+student: 张三
+student_name: 张三
+
+schools:
+  - school_name: 哥伦比亚大学
+    program: 计算机科学硕士
+    deadline: "2026-06-15"
+    required_materials:
+      - type: transcript
+        name: 成绩单
+        language: both
+        need_official: true
+      - type: recommendation
+        name: 推荐信
+        count: 3
+        need_signature: true
+      - type: passport
+        name: 护照个人信息页
+        min_validity_months: 6
+      - type: essay
+        name: 个人陈述
+        prompt: "描述你的学术背景和职业目标"
+        word_limit: 500
+      - type: cv
+        name: 简历
+        language: en
+    essay_prompts:
+      - "描述你的学术背景和职业目标"
+      - "为什么选择我们学校"
+    notes: "成绩单需要WES认证"
+    internal_notes: "学生GPA 3.8，重点冲刺校，推荐信找张教授和李教授"
+
+  - school_name: 纽约大学
+    program: 数据科学硕士
+    deadline: "2026-06-20"
+    required_materials:
+      - type: transcript
+        name: 成绩单
+        language: both
+      - type: recommendation
+        name: 推荐信
+        count: 2
+        need_signature: true
+      - type: passport
+        name: 护照个人信息页
+      - type: essay
+        name: 个人陈述
+        prompt: "你为什么对数据科学感兴趣"
+        word_limit: 800
+      - type: cv
+        name: 简历
+    essay_prompts:
+      - "你为什么对数据科学感兴趣"
+      - "描述一个数据分析项目经历"
+    notes: "需要邮寄纸质成绩单"
+    internal_notes: "保底校，文书内容可以和哥大的调整一下侧重点"
+
+  - school_name: 南加州大学
+    program: 人工智能硕士
+    deadline: "2026-07-01"
+    required_materials:
+      - type: transcript
+        name: 成绩单
+        language: en
+      - type: recommendation
+        name: 推荐信
+        count: 3
+        need_signature: true
+      - type: passport
+        name: 护照个人信息页
+      - type: essay
+        name: 个人陈述
+        prompt: "描述你在AI领域的研究兴趣"
+        word_limit: 1000
+      - type: cv
+        name: 简历
+      - type: certificate
+        name: 语言成绩（托福/雅思）
+    essay_prompts:
+      - "描述你在AI领域的研究兴趣"
+    notes: "接受电子成绩单"
+    internal_notes: "匹配度高，学生有AI相关项目经历"
