@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "badminton-verify"
+version = "0.1.0"
+description = "业余羽毛球赛名单去重验资 CLI - 合并多源报名、核验缴费、分组导出"
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.1.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "SQLAlchemy>=2.0.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.scripts]
+badminton-verify = "badminton_verify.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["badminton_verify*"]
