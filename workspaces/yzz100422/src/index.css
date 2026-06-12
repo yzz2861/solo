@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color: #1a1a2e;
+  background-color: #faf9f7;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .blind-path-pattern {
+    background-image: 
+      linear-gradient(90deg, transparent 48%, #e8d4a8 48%, #e8d4a8 52%, transparent 52%),
+      linear-gradient(0deg, transparent 48%, #e8d4a8 48%, #e8d4a8 52%, transparent 52%);
+    background-size: 20px 20px;
+  }
+
+  .blind-path-line {
+    background: repeating-linear-gradient(
+      90deg,
+      #F5A623 0px,
+      #F5A623 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    background-size: 16px 100%;
+  }
+
+  .card-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-shadow-hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-shadow-hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer select-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white btn-shadow hover:bg-primary-600 hover:btn-shadow-hover active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 text-white btn-shadow hover:bg-secondary-600 hover:btn-shadow-hover active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-600 bg-transparent hover:bg-primary-50 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply text-secondary-600 hover:bg-secondary-50 active:scale-95;
+  }
+
+  .btn-success {
+    @apply bg-success text-white btn-shadow hover:opacity-90 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply bg-danger text-white btn-shadow hover:opacity-90 active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-xl card-shadow overflow-hidden;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:card-shadow-hover hover:-translate-y-1;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all;
+  }
+
+  .badge {
+    @apply px-2 py-1 text-xs font-medium rounded-full;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .badge-warning {
+    @apply bg-amber-100 text-amber-700;
+  }
+
+  .badge-danger {
+    @apply bg-red-100 text-red-700;
+  }
+
+  .badge-info {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .badge-primary {
+    @apply bg-primary-100 text-primary-700;
+  }
+}
+
+.map-container {
+  cursor: crosshair;
+}
+
+.map-container svg {
+  display: block;
+}
+
+.obstacle-marker {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.obstacle-marker:hover {
+  transform: scale(1.2);
+}
+
+.obstacle-ripple {
+  animation: ripple 1s ease-out;
+  transform-origin: center;
+}
+
+@keyframes ripple {
+  0% {
+    r: 8;
+    opacity: 0.6;
+  }
+  100% {
+    r: 30;
+    opacity: 0;
+  }
+}
+
+.panel-slide-up {
+  animation: panelSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes panelSlideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.score-pop {
+  animation: scorePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scorePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.count-up {
+  font-variant-numeric: tabular-nums;
+}
