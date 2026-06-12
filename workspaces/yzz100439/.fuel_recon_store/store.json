@@ -1,0 +1,118 @@
+{
+  "transactions": [
+    {
+      "txn_id": "TXN001",
+      "card_number": "CARD001",
+      "plate_number": "京A12345",
+      "driver_name": "张三",
+      "fuel_time": "2025-03-15T10:00:00",
+      "station_name": "中石油朝阳站",
+      "station_city": "北京",
+      "fuel_type": "0号柴油",
+      "volume_liters": 100.0,
+      "amount_with_tax": 700.0,
+      "tax_rate": 0.13,
+      "receipt_number": "INV001",
+      "source_file": "sample_fuel.csv"
+    },
+    {
+      "txn_id": "TXN002",
+      "card_number": "CARD001",
+      "plate_number": "京A12345",
+      "driver_name": "张三",
+      "fuel_time": "2025-03-15T10:30:00",
+      "station_name": "中石油朝阳站",
+      "station_city": "北京",
+      "fuel_type": "0号柴油",
+      "volume_liters": 100.0,
+      "amount_with_tax": 700.0,
+      "tax_rate": 0.13,
+      "receipt_number": "INV002",
+      "source_file": "sample_fuel.csv"
+    },
+    {
+      "txn_id": "TXN003",
+      "card_number": "CARD002",
+      "plate_number": "京A12346",
+      "driver_name": "李四",
+      "fuel_time": "2025-03-15T14:00:00",
+      "station_name": "中石化浦东站",
+      "station_city": "上海",
+      "fuel_type": "0号柴油",
+      "volume_liters": 200.0,
+      "amount_with_tax": 1400.0,
+      "tax_rate": 0.13,
+      "receipt_number": "INV003",
+      "source_file": "sample_fuel.csv"
+    },
+    {
+      "txn_id": "TXN004",
+      "card_number": "CARD002",
+      "plate_number": "京A12345",
+      "driver_name": "李四",
+      "fuel_time": "2025-03-15T23:30:00",
+      "station_name": "中石油海淀站",
+      "station_city": "北京",
+      "fuel_type": "0号柴油",
+      "volume_liters": 80.0,
+      "amount_with_tax": 560.0,
+      "tax_rate": 0.13,
+      "receipt_number": "INV004",
+      "source_file": "sample_fuel.csv"
+    },
+    {
+      "txn_id": "TXN005",
+      "card_number": "CARD003",
+      "plate_number": "京B99999",
+      "driver_name": "王五",
+      "fuel_time": "2025-03-15T08:00:00",
+      "station_name": "中石油丰台站",
+      "station_city": "北京",
+      "fuel_type": "0号柴油",
+      "volume_liters": 150.0,
+      "amount_with_tax": 1050.0,
+      "tax_rate": 0.13,
+      "receipt_number": "INV005",
+      "source_file": "sample_fuel.csv"
+    }
+  ],
+  "shifts": [
+    {
+      "driver_name": "张三",
+      "plate_number": "京A12345",
+      "shift_start": "2025-03-15T08:00:00",
+      "shift_end": "2025-03-15T20:00:00",
+      "source_file": "sample_shift.csv"
+    },
+    {
+      "driver_name": "李四",
+      "plate_number": "京A12345",
+      "shift_start": "2025-03-15T20:00:00",
+      "shift_end": "2025-03-16T08:00:00",
+      "source_file": "sample_shift.csv"
+    },
+    {
+      "driver_name": "王五",
+      "plate_number": "京B88888",
+      "shift_start": "2025-03-15T08:00:00",
+      "shift_end": "2025-03-15T20:00:00",
+      "source_file": "sample_shift.csv"
+    }
+  ],
+  "mileages": [
+    {
+      "plate_number": "京A12345",
+      "record_date": "2025-03-15",
+      "start_mileage": 10000.0,
+      "end_mileage": 10200.0,
+      "source_file": "sample_mileage.csv"
+    },
+    {
+      "plate_number": "京B99999",
+      "record_date": "2025-03-15",
+      "start_mileage": 50000.0,
+      "end_mileage": 50100.0,
+      "source_file": "sample_mileage.csv"
+    }
+  ]
+}

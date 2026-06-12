@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "fuel-recon"
+version = "1.0.0"
+description = "车队油卡流水核对 CLI"
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.1",
+    "pandas>=2.0",
+    "openpyxl>=3.1",
+]
+
+[project.scripts]
+fuel-recon = "fuel_recon.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov"]
