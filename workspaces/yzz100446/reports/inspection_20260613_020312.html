@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>会议室屏幕巡检报告</title>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 24px; color: #222; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 18px; border-left: 4px solid #3b82f6; padding-left: 8px; margin-top: 28px; }
+  h3 { font-size: 15px; margin: 16px 0 8px; }
+  .meta { color: #666; font-size: 13px; margin-bottom: 16px; }
+  .summary { display: flex; gap: 16px; flex-wrap: wrap; }
+  .card { padding: 12px 18px; border-radius: 8px; background: #f3f4f6; min-width: 140px; }
+  .card b { font-size: 22px; display: block; }
+  .card.bad { background: #fee2e2; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f9fafb; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; margin-right: 4px; }
+  .tag.red { background: #fee2e2; color: #991b1b; }
+  .tag.green { background: #dcfce7; color: #166534; }
+  .tag.yellow { background: #fef3c7; color: #92400e; }
+  img.ss { max-width: 260px; max-height: 160px; border: 1px solid #ddd; border-radius: 4px; }
+  .note { color: #991b1b; font-size: 12px; }
+  .booking { background: #eff6ff; padding: 4px 8px; border-radius: 4px; font-size: 12px; color: #1e40af; }
+</style>
+</head>
+<body>
+<h1>会议室屏幕巡检报告</h1>
+<div class="meta">示例公司行政部 · 生成于 2026-06-13 02:03:12 CST</div>
+
+<div class="summary">
+  <div class="card"><span>会议室</span><b>3</b></div>
+  <div class="card"><span>设备总数</span><b>9</b></div>
+  <div class="card bad"><span>异常设备</span><b>3</b></div>
+  <div class="card bad"><span>需现场处理房间</span><b>0</b></div>
+  <div class="card bad"><span>疑似软件问题</span><b>3</b></div>
+  <div class="card bad"><span>连续多天异常</span><b>0</b></div>
+</div>
+
+<h2>🔴 需要现场处理的房间</h2>
+
+<p>无。</p>
+
+
+<h2>🟡 疑似软件问题（接口/日程/截图异常）</h2>
+
+<table>
+  <tr><th>会议室</th><th>设备</th><th>现象</th><th>接口状态</th><th>截图</th><th>期望日程</th><th>屏幕实际显示</th></tr>
+  
+  <tr>
+    <td>星河 A101<br/><span class="note">room-a101</span></td>
+    <td>门口屏<br/><span class="note">door-a101</span></td>
+    <td class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</td>
+    <td>DRY RUN: online</td>
+    <td><span class="note">截图失败</span></td>
+    <td>-</td>
+    <td>DRY RUN: online</td>
+  </tr>
+  
+  <tr>
+    <td>云帆 B203<br/><span class="note">room-b203</span></td>
+    <td>门口屏<br/><span class="note">door-b203</span></td>
+    <td class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</td>
+    <td>DRY RUN: online</td>
+    <td><span class="note">截图失败</span></td>
+    <td>-</td>
+    <td>DRY RUN: online</td>
+  </tr>
+  
+  <tr>
+    <td>瀚海 C305<br/><span class="note">room-c305</span></td>
+    <td>门口屏<br/><span class="note">door-c305</span></td>
+    <td class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</td>
+    <td>DRY RUN: online</td>
+    <td><span class="note">截图失败</span></td>
+    <td>-</td>
+    <td>DRY RUN: online</td>
+  </tr>
+  
+</table>
+
+
+<h2>🟠 连续多天异常设备（≥3天）</h2>
+
+<p>无。</p>
+
+
+<h2>📋 所有房间巡检详情</h2>
+
+<h3>星河 A101 <span class="meta">A座 1F · 容纳 8 人 · room-a101</span></h3>
+<table>
+  <tr><th>设备</th><th>在线</th><th>状态文本</th><th>截图</th><th>日程比对</th></tr>
+  
+  <tr>
+    <td>主显示屏<br/><span class="note">screen-a101</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>投屏盒<br/><span class="note">cast-a101</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>门口屏<br/><span class="note">door-a101</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      
+        <span class="tag red">不匹配</span><div class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</div>
+        
+        
+        <div>实际显示：DRY RUN: online</div>
+      
+    </td>
+  </tr>
+  
+</table>
+
+<h3>云帆 B203 <span class="meta">B座 2F · 容纳 12 人 · room-b203</span></h3>
+<table>
+  <tr><th>设备</th><th>在线</th><th>状态文本</th><th>截图</th><th>日程比对</th></tr>
+  
+  <tr>
+    <td>主显示屏<br/><span class="note">screen-b203</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>投屏盒<br/><span class="note">cast-b203</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>门口屏<br/><span class="note">door-b203</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      
+        <span class="tag red">不匹配</span><div class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</div>
+        
+        
+        <div>实际显示：DRY RUN: online</div>
+      
+    </td>
+  </tr>
+  
+</table>
+
+<h3>瀚海 C305 <span class="meta">C座 3F · 容纳 20 人 · room-c305</span></h3>
+<table>
+  <tr><th>设备</th><th>在线</th><th>状态文本</th><th>截图</th><th>日程比对</th></tr>
+  
+  <tr>
+    <td>主显示屏<br/><span class="note">screen-c305</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>投屏盒<br/><span class="note">cast-c305</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      -
+    </td>
+  </tr>
+  
+  <tr>
+    <td>门口屏<br/><span class="note">door-c305</span></td>
+    <td><span class="tag green">在线</span></td>
+    <td>DRY RUN: online</td>
+    <td>-</td>
+    <td>
+      
+        <span class="tag red">不匹配</span><div class="note">屏幕显示日程但日历无对应预约（可能缓存过期或同名房间）</div>
+        
+        
+        <div>实际显示：DRY RUN: online</div>
+      
+    </td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

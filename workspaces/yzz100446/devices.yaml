@@ -1,0 +1,101 @@
+rooms:
+  - id: "room-a101"
+    name: "星河 A101"
+    floor: "A座 1F"
+    capacity: 8
+    devices:
+      - id: "screen-a101"
+        name: "主显示屏"
+        type: "screen"
+        protocol: "http"
+        host: "192.168.1.101"
+        port: 80
+        status_url: "http://192.168.1.101/api/status"
+        screenshot_url: "http://192.168.1.101/api/screenshot"
+        screenshot_format: "jpeg"
+
+      - id: "cast-a101"
+        name: "投屏盒"
+        type: "cast"
+        protocol: "ping"
+        host: "192.168.1.102"
+        port: null
+        status_url: null
+        screenshot_url: null
+
+      - id: "door-a101"
+        name: "门口屏"
+        type: "door_display"
+        protocol: "http"
+        host: "192.168.1.103"
+        port: 80
+        status_url: "http://192.168.1.103/api/status"
+        screenshot_url: "http://192.168.1.103/api/screenshot"
+        screenshot_format: "png"
+
+  - id: "room-b203"
+    name: "云帆 B203"
+    floor: "B座 2F"
+    capacity: 12
+    devices:
+      - id: "screen-b203"
+        name: "主显示屏"
+        type: "screen"
+        protocol: "http"
+        host: "192.168.1.201"
+        port: 80
+        status_url: "http://192.168.1.201/status"
+        screenshot_url: "http://192.168.1.201/snapshot.cgi"
+        screenshot_format: "jpeg"
+
+      - id: "cast-b203"
+        name: "投屏盒"
+        type: "cast"
+        protocol: "http"
+        host: "192.168.1.202"
+        port: 8080
+        status_url: "http://192.168.1.202:8080/health"
+        screenshot_url: null
+
+      - id: "door-b203"
+        name: "门口屏"
+        type: "door_display"
+        protocol: "http"
+        host: "192.168.1.203"
+        port: 80
+        status_url: "http://192.168.1.203/api/info"
+        screenshot_url: "http://192.168.1.203/api/screenshot"
+        screenshot_format: "png"
+
+  - id: "room-c305"
+    name: "瀚海 C305"
+    floor: "C座 3F"
+    capacity: 20
+    devices:
+      - id: "screen-c305"
+        name: "主显示屏"
+        type: "screen"
+        protocol: "ping"
+        host: "192.168.1.301"
+        port: null
+        status_url: null
+        screenshot_url: null
+
+      - id: "cast-c305"
+        name: "投屏盒"
+        type: "cast"
+        protocol: "ping"
+        host: "192.168.1.302"
+        port: null
+        status_url: null
+        screenshot_url: null
+
+      - id: "door-c305"
+        name: "门口屏"
+        type: "door_display"
+        protocol: "http"
+        host: "192.168.1.303"
+        port: 80
+        status_url: "http://192.168.1.303/status"
+        screenshot_url: "http://192.168.1.303/screen.png"
+        screenshot_format: "png"
