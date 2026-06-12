@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap');
+
+:root {
+  font-family: 'Noto Sans SC', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  height: 100%;
+  background: #F5F0E8;
+  color: #082420;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-150 select-none;
+    @apply active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gold-300/60;
+  }
+  .btn-primary {
+    @apply btn bg-felt-500 text-white border border-gold-500/40 hover:bg-felt-600 hover:shadow-lg hover:-translate-y-0.5;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-felt-700 border border-felt-200 hover:bg-cream-50;
+  }
+  .btn-danger {
+    @apply btn bg-danger-500 text-white hover:bg-danger-600;
+  }
+  .btn-warn {
+    @apply btn bg-warn-500 text-white hover:bg-warn-600;
+  }
+  .btn-ghost {
+    @apply btn text-felt-700 hover:bg-felt-500/10;
+  }
+  .btn-gold {
+    @apply btn bg-gold-500 text-felt-900 hover:bg-gold-300 shadow;
+  }
+  .card {
+    @apply bg-white rounded-xl border border-felt-100/80 shadow-sm;
+  }
+  .input {
+    @apply w-full px-3.5 py-2.5 rounded-lg border border-felt-100 bg-white text-sm;
+    @apply focus:outline-none focus:ring-2 focus:ring-felt-500/30 focus:border-felt-500/60;
+    @apply placeholder:text-felt-300;
+  }
+  .input-locked {
+    @apply bg-cream-100 text-felt-700/80 cursor-not-allowed;
+  }
+  .label {
+    @apply block text-xs font-semibold text-felt-600 mb-1.5 tracking-wide uppercase;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border;
+  }
+  .nav-item {
+    @apply flex flex-col items-center justify-center w-12 h-12 rounded-xl text-felt-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer;
+  }
+  .nav-item-active {
+    @apply bg-white/15 text-gold-300 shadow-inner;
+  }
+  .status-dot {
+    @apply w-2.5 h-2.5 rounded-full;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(13,59,52,0.2); border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+}
+
+.toast-enter {
+  animation: slideDown 0.25s ease-out;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+  .print-area { width: 58mm; margin: 0 auto; font-family: 'Noto Sans SC', monospace; font-size: 12px; color: #000; }
+}
