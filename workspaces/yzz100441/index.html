@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🎙 房间混响估算器 · Reverb Estimator</title>
+  <meta name="description" content="小录音棚装修前混响时间估算工具，支持多套材料方案对比、双版本报告（老板版+声学师版）、面积与预算估算">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== Header ===== -->
+    <header class="app-header">
+      <div class="app-brand">
+        <div class="app-logo">RT</div>
+        <div class="app-title">
+          <h1>房间混响估算器</h1>
+          <div class="tag">REVERB · ESTIMATOR · v1.0</div>
+        </div>
+      </div>
+      <div class="app-actions">
+        <button class="btn btn-ghost" id="theme-toggle" title="切换深浅主题">🌓 主题</button>
+        <button class="btn" id="export-btn">⬇ 导出方案</button>
+        <label class="btn" id="import-btn" for="import-file" style="cursor:pointer">⬆ 导入方案</label>
+        <input type="file" id="import-file" accept="application/json" style="display:none">
+      </div>
+    </header>
+
+    <div class="layout">
+
+      <!-- ===== Left sidebar ===== -->
+      <aside class="side-panel">
+
+        <!-- Schemes -->
+        <section class="panel">
+          <div class="panel-head">
+            <h3>📚 方案管理</h3>
+            <button class="btn btn-primary" id="add-scheme-btn" style="padding:4px 10px;font-size:12px">+ 新增方案</button>
+          </div>
+          <div class="scheme-list" id="scheme-list"></div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-3);text-align:center">
+            勾选"对比"可同时查看多条曲线 · 最多 5 套方案
+          </div>
+        </section>
+
+        <!-- Room input -->
+        <section class="panel">
+          <div class="panel-head"><h3>📏 房间尺寸</h3></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <label class="field-label">单位制式</label>
+            <div class="radio-group">
+              <label><input type="radio" name="units" id="units-metric" checked> 公制 (m)</label>
+              <label><input type="radio" name="units" id="units-imperial"> 英制 (ft)</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>长 L<span class="unit-label">m</span></label>
+              <input type="number" id="room-L" step="0.1" min="0" value="5.00">
+            </div>
+            <div class="form-field">
+              <label>宽 W<span class="unit-label">m</span></label>
+              <input type="number" id="room-W" step="0.1" min="0" value="4.00">
+            </div>
+            <div class="form-field">
+              <label>高 H<span class="unit-label">m</span></label>
+              <input type="number" id="room-H" step="0.1" min="0" value="2.80">
+            </div>
+          </div>
+          <div class="form-field" style="margin-bottom:6px">
+            <label>🎯 目标用途</label>
+            <select id="purpose-select"></select>
+          </div>
+          <div class="room-summary" id="room-summary">体积 ≈ 56.0 m³ · 总表面积 ≈ 90.4 ㎡</div>
+        </section>
+
+        <!-- Curtains & Furniture -->
+        <section class="panel">
+          <div class="panel-head">
+            <h3>🛋 窗帘 & 家具</h3>
+            <div style="display:flex;gap:4px">
+              <button class="btn" id="add-curtain-btn" style="padding:4px 10px;font-size:12px">+ 加窗帘</button>
+              <button class="btn" id="add-furniture-btn" style="padding:4px 10px;font-size:12px">+ 加家具</button>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;font-size:11px;color:var(--text-3);padding:4px 0">窗帘</div>
+          <div class="furniture-list" id="curtains-list"></div>
+          <div style="margin:14px 0 8px;font-size:11px;color:var(--text-3);padding:4px 0;border-top:1px dashed var(--border);padding-top:12px">家具 / 设备</div>
+          <div class="furniture-list" id="furniture-list"></div>
+        </section>
+      </aside>
+
+      <!-- ===== Main ===== -->
+      <main class="main-panel">
+
+        <!-- Tabs + Charts -->
+        <section class="panel">
+          <div id="scheme-tabs"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 2px 12px;flex-wrap:wrap;gap:8px">
+            <div style="font-size:12px;color:var(--text-3)">
+              💡 在左侧调整参数，结果实时更新 · 下方曲线可叠加对比多方案
+            </div>
+          </div>
+
+          <div class="charts-wrap">
+            <div class="chart-card">
+              <h5>📈 各频段 RT₆₀ 曲线（灰色带 = 目标区间）</h5>
+              <div class="chart-container"><canvas id="rt-chart"></canvas></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div class="chart-card">
+                <h5>💰 预算构成</h5>
+                <div class="chart-container small"><canvas id="budget-chart"></canvas></div>
+              </div>
+              <div class="chart-card">
+                <h5>🎚 偏离目标中心 (0=理想)</h5>
+                <div class="chart-container small"><canvas id="deviation-chart"></canvas></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Issues -->
+        <section id="issues-block"></section>
+
+        <!-- Surface Materials -->
+        <section class="panel">
+          <div class="panel-head"><h3>🧱 六面材料配置</h3></div>
+          <div id="surfaces-grid"></div>
+        </section>
+
+        <!-- Reports -->
+        <section>
+          <div style="display:flex;align-items:center;">
+            <div class="report-tabs" style="flex:1;border:none;margin:0">
+              <button class="report-tab active" data-tab="owner">🧑‍💼 老板版</button>
+              <button class="report-tab" data-tab="acoustician">🎓 声学师版</button>
+            </div>
+            <div class="report-actions">
+              <button class="btn" id="print-owner">🖨 打印老板版</button>
+              <button class="btn" id="print-acoustician">🖨 打印声学师版</button>
+            </div>
+          </div>
+
+          <div class="report-wrapper active" id="owner-report"></div>
+          <div class="report-wrapper" id="acoustician-report"></div>
+        </section>
+
+        <footer style="text-align:center;padding:20px 0 10px;font-size:11px;color:var(--text-3);font-family:'Orbitron',monospace;letter-spacing:1px">
+          RT60 ESTIMATOR · SABINE / EYRING MODEL · 仅供装修前估算参考 · 最终结果请以实测为准
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/materials.js"></script>
+  <script src="js/acoustics.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/report.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    // Report tabs switcher (simple, outside ui.js)
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.report-tab');
+        const owner = document.getElementById('owner-report');
+        const acou = document.getElementById('acoustician-report');
+        tabs.forEach(t => {
+          t.addEventListener('click', () => {
+            tabs.forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            if (t.dataset.tab === 'owner') {
+              owner.classList.add('active'); acou.classList.remove('active');
+            } else {
+              acou.classList.add('active'); owner.classList.remove('active');
+            }
+          });
+        });
+      }, 50);
+    });
+  </script>
+</body>
+</html>
