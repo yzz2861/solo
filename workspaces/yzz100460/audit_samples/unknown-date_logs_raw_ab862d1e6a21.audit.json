@@ -1,0 +1,16 @@
+{
+  "date": "unknown-date",
+  "service": "logs_raw",
+  "generated_at": "2026-06-13T03:35:44",
+  "samples": [
+    {
+      "line_no": 2,
+      "matched_rules": [
+        "手机号-中国大陆",
+        "日志格式 token"
+      ],
+      "before": "ERROR user phone is 15688889999 but also token=abcdefghijklmnopqrst1234567890",
+      "after": "ERROR user phone is ***MASKED*** but also token=***MASKED***"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "date": "2026-06-10",
+  "service": "order-service",
+  "generated_at": "2026-06-13T03:35:44",
+  "samples": [
+    {
+      "line_no": 1,
+      "matched_rules": [
+        "手机号-中国大陆"
+      ],
+      "before": "20260610 11:22:33 INFO OrderService createOrder userId=1001 phone=18600001111 card_no=6222020202020200001",
+      "after": "20260610 11:22:33 INFO OrderService createOrder userId=1001 phone=***MASKED*** card_no=6222020202020200001"
+    },
+    {
+      "line_no": 2,
+      "matched_rules": [
+        "日志格式 token"
+      ],
+      "before": "20260610 11:22:34 INFO headers: authToken=Bearer_tok_abc_xyz_123456789_signed",
+      "after": "20260610 11:22:34 INFO headers: authToken=***MASKED***"
+    },
+    {
+      "line_no": 1,
+      "matched_rules": [
+        "身份证号-18位",
+        "邮箱地址"
+      ],
+      "before": "2026-06-10 12:00:00 INFO backup job run, user=test@test.com idcard=310101199505055678",
+      "after": "2026-06-10 12:00:00 INFO backup job run, user=***MASKED*** idcard=***MASKED***"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "generated_at": "2026-06-13T03:35:45",
+  "input_dir": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw",
+  "output_dir": "/Users/bill/Documents/solo/workspaces/yzz100460/archives",
+  "statistics": {
+    "groups": 6,
+    "files_processed": 8,
+    "files_failed": 0,
+    "lines_total": 24,
+    "lines_masked": 14,
+    "rules_hit_total": {
+      "手机号-中国大陆": 6,
+      "日志格式 token": 2,
+      "身份证号-18位": 2,
+      "邮箱地址": 2,
+      "JWT Token": 1,
+      "JSON 敏感字段通用": 1,
+      "银行卡号": 1,
+      "URL中的token参数": 1,
+      "Bearer Token": 1,
+      "Authorization Header": 1,
+      "Cookie / Session ID": 2,
+      "API Key / Secret": 2,
+      "password 字段": 1
+    },
+    "anomaly_summary": {
+      "BROKEN_JSON": 2,
+      "DUPLICATE": 1,
+      "NO_MATCH": 1,
+      "LONG_LINE": 1
+    }
+  },
+  "failed_files": [],
+  "anomalies": [
+    {
+      "date": "2026-06-10",
+      "service": "order-service",
+      "type": "BROKEN_JSON",
+      "file": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/order-service_20260610_002.log",
+      "detail": "疑似半截JSON（位置59）：Unterminated string starting at: line 1 column 17 (char 16)",
+      "line_no": 3
+    },
+    {
+      "date": "2026-06-10",
+      "service": "order-service",
+      "type": "DUPLICATE",
+      "file": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/order-service_20260610_001.log",
+      "detail": "与 /Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/order-service_20260610_002.log 内容完全相同，已跳过",
+      "line_no": null
+    },
+    {
+      "date": "2026-06-10",
+      "service": "payment-service",
+      "type": "NO_MATCH",
+      "file": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/payment-service_2026-06-10.log",
+      "detail": "共 3 行，无任何脱敏规则命中，请人工确认",
+      "line_no": null
+    },
+    {
+      "date": "2026-06-10",
+      "service": "user-service",
+      "type": "BROKEN_JSON",
+      "file": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/user-service_2026-06-10.log",
+      "detail": "疑似半截JSON（位置71）：Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+      "line_no": 11
+    },
+    {
+      "date": "2026-06-10",
+      "service": "user-service",
+      "type": "LONG_LINE",
+      "file": "/Users/bill/Documents/solo/workspaces/yzz100460/logs_raw/user-service_2026-06-10.log",
+      "detail": "行长度 6034 > 阈值 5000",
+      "line_no": 12
+    }
+  ],
+  "deliverable_packages": [
+    {
+      "date": "2026-06-10",
+      "service": "metrics",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_metrics_d6fc19808d46.tar.gz",
+      "checksum": "d6fc19808d46",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_metrics_d6fc19808d46.tar.gz.sha256",
+      "audit_sample": null,
+      "skipped_duplicate": true,
+      "files_count": 1
+    },
+    {
+      "date": "2026-06-10",
+      "service": "order-service",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_order-service_5138a895aa40.tar.gz",
+      "checksum": "5138a895aa40",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_order-service_5138a895aa40.tar.gz.sha256",
+      "audit_sample": "/Users/bill/Documents/solo/workspaces/yzz100460/audit_samples/2026-06-10_order-service_5138a895aa40.audit.json",
+      "skipped_duplicate": true,
+      "files_count": 3
+    },
+    {
+      "date": "2026-06-10",
+      "service": "payment-service",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_payment-service_cc18683f4e8c.tar.gz",
+      "checksum": "cc18683f4e8c",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_payment-service_cc18683f4e8c.tar.gz.sha256",
+      "audit_sample": null,
+      "skipped_duplicate": true,
+      "files_count": 1
+    },
+    {
+      "date": "2026-06-10",
+      "service": "user-service",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_user-service_b4630454dbef.tar.gz",
+      "checksum": "b4630454dbef",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-10_user-service_b4630454dbef.tar.gz.sha256",
+      "audit_sample": "/Users/bill/Documents/solo/workspaces/yzz100460/audit_samples/2026-06-10_user-service_b4630454dbef.audit.json",
+      "skipped_duplicate": true,
+      "files_count": 1
+    },
+    {
+      "date": "2026-06-11",
+      "service": "user-service",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-11_user-service_d0ee7867cc0c.tar.gz",
+      "checksum": "d0ee7867cc0c",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/2026-06-11_user-service_d0ee7867cc0c.tar.gz.sha256",
+      "audit_sample": "/Users/bill/Documents/solo/workspaces/yzz100460/audit_samples/2026-06-11_user-service_d0ee7867cc0c.audit.json",
+      "skipped_duplicate": true,
+      "files_count": 1
+    },
+    {
+      "date": "unknown-date",
+      "service": "logs_raw",
+      "archive": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/unknown-date_logs_raw_ab862d1e6a21.tar.gz",
+      "checksum": "ab862d1e6a21",
+      "checksum_file": "/Users/bill/Documents/solo/workspaces/yzz100460/archives/unknown-date_logs_raw_ab862d1e6a21.tar.gz.sha256",
+      "audit_sample": "/Users/bill/Documents/solo/workspaces/yzz100460/audit_samples/unknown-date_logs_raw_ab862d1e6a21.audit.json",
+      "skipped_duplicate": true,
+      "files_count": 1
+    }
+  ]
+}

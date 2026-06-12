@@ -1,0 +1,16 @@
+{
+  "date": "2026-06-11",
+  "service": "user-service",
+  "generated_at": "2026-06-13T03:35:44",
+  "samples": [
+    {
+      "line_no": 1,
+      "matched_rules": [
+        "手机号-中国大陆",
+        "password 字段"
+      ],
+      "before": "2026-06-11 09:00:01 INFO  UserService 注册新用户 phone=15566667777 password=StrongP@ss1",
+      "after": "2026-06-11 09:00:01 INFO  UserService 注册新用户 phone=***MASKED*** password=***MASKED***"
+    }
+  ]
+}

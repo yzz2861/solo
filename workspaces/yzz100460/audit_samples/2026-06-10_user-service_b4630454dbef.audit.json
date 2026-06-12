@@ -1,0 +1,83 @@
+{
+  "date": "2026-06-10",
+  "service": "user-service",
+  "generated_at": "2026-06-13T03:35:44",
+  "samples": [
+    {
+      "line_no": 1,
+      "matched_rules": [
+        "手机号-中国大陆",
+        "JWT Token"
+      ],
+      "before": "2026-06-10 10:15:22 INFO  UserController login: user=zhangsan phone=13812345678 token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.7fC8qFdY9qkMGOekJ0x3n_ABTq1-ExampleExampleEx",
+      "after": "2026-06-10 10:15:22 INFO  UserController login: user=zhangsan phone=***MASKED*** token=***MASKED***"
+    },
+    {
+      "line_no": 2,
+      "matched_rules": [
+        "手机号-中国大陆",
+        "邮箱地址",
+        "JSON 敏感字段通用"
+      ],
+      "before": "2026-06-10 10:15:23 DEBUG 请求参数: {\"userId\":1001,\"mobile\":\"13987654321\",\"password\":\"MySecret123!\",\"email\":\"zhangsan@example.com\"}",
+      "after": "2026-06-10 10:15:23 DEBUG 请求参数: {\"userId\":1001,\"mobile\":\"***MASKED***\",\"password\":\"***MASKED***\",\"email\":\"***MASKED***\"}"
+    },
+    {
+      "line_no": 3,
+      "matched_rules": [
+        "手机号-中国大陆"
+      ],
+      "before": "2026-06-10 10:15:24 INFO  发送验证码到 +86 15011112222 成功",
+      "after": "2026-06-10 10:15:24 INFO  发送验证码到 +86 ***MASKED*** 成功"
+    },
+    {
+      "line_no": 4,
+      "matched_rules": [
+        "身份证号-18位"
+      ],
+      "before": "2026-06-10 10:15:25 WARN  身份证 110101199001011234 已绑定其他账号",
+      "after": "2026-06-10 10:15:25 WARN  身份证 ***MASKED*** 已绑定其他账号"
+    },
+    {
+      "line_no": 5,
+      "matched_rules": [
+        "银行卡号"
+      ],
+      "before": "2026-06-10 10:15:26 INFO  支付请求 card=6222 0202 0202 0202 amount=99.00",
+      "after": "2026-06-10 10:15:26 INFO  支付请求 card=***MASKED*** amount=99.00"
+    },
+    {
+      "line_no": 6,
+      "matched_rules": [
+        "URL中的token参数"
+      ],
+      "before": "2026-06-10 10:15:27 INFO  回调 URL: https://api.example.com/notify?token=abcXYZ987654321secretKey&orderId=99887",
+      "after": "2026-06-10 10:15:27 INFO  回调 URL: https://api.example.com/notify?token=***MASKED***&orderId=99887"
+    },
+    {
+      "line_no": 7,
+      "matched_rules": [
+        "Bearer Token",
+        "Authorization Header"
+      ],
+      "before": "2026-06-10 10:15:28 INFO  HTTP POST /api/user header: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.signaturePart.verysignature1234567890abcdefgh",
+      "after": "2026-06-10 10:15:28 INFO  HTTP POST /api/user header: Authorization:***MASKED******MASKED***"
+    },
+    {
+      "line_no": 8,
+      "matched_rules": [
+        "Cookie / Session ID"
+      ],
+      "before": "2026-06-10 10:15:29 INFO  Cookie: sessionId=a1b2c3d4e5f67890; JSESSIONID=ABCDEF1234567890GHIJ",
+      "after": "2026-06-10 10:15:29 INFO  Cookie=***MASKED***=a1b2c3d4e5f67890; JSESSIONID=***MASKED***"
+    },
+    {
+      "line_no": 9,
+      "matched_rules": [
+        "API Key / Secret"
+      ],
+      "before": "2026-06-10 10:15:30 DEBUG apiKey=STRIPE_SECRET_KEY_EXAMPLE secret=PRIVATE_key_1234_xyz",
+      "after": "2026-06-10 10:15:30 DEBUG apiKey=***MASKED*** secret=***MASKED***"
+    }
+  ]
+}
