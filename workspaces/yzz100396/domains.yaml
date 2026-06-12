@@ -1,0 +1,72 @@
+domains:
+  - host: api.example.com
+    port: 443
+    environment: production
+    owner: team-backend
+    owner_contact: backend@example.com
+
+  - host: api.example.com
+    port: 8443
+    environment: staging
+    owner: team-qa
+    owner_contact: qa@example.com
+
+  - host: www.shop.com
+    port: 443
+    environment: production
+    owner: team-ecom
+    owner_contact: ecom@example.com
+
+  - host: admin.shop.com
+    port: 443
+    environment: production
+    owner: ""
+    owner_contact: ""
+
+  - host: ci.internal.corp
+    port: 443
+    environment: internal
+    owner: team-devops
+    owner_contact: devops@example.com
+
+  - host: test.old-system.com
+    port: 443
+    environment: test
+    owner: unknown
+    owner_contact: ""
+
+  - host: docs.company.com
+    port: 443
+    environment: production
+    owner: team-docs
+    owner_contact: docs@example.com
+
+  - host: mail.company.com
+    port: 993
+    environment: production
+    owner: ""
+    owner_contact: ""
+
+  - host: staging-api.example.com
+    port: 443
+    environment: staging
+    owner: team-backend
+    owner_contact: backend@example.com
+
+  - host: dev.internal.corp
+    port: 8443
+    environment: development
+    owner: unknown
+    owner_contact: ""
+
+  - host: deprecated.legacy.com
+    port: 443
+    environment: legacy
+    owner: ""
+    owner_contact: ""
+
+  - host: monitoring.company.com
+    port: 443
+    environment: production
+    owner: team-devops
+    owner_contact: devops@example.com
