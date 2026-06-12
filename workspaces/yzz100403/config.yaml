@@ -1,0 +1,252 @@
+sensitive_keywords:
+  salary:
+    - 薪资
+    - 工资
+    - salary
+    - 薪酬
+    - 绩效
+    - bonus
+    - 奖金
+    - 收入证明
+  customer:
+    - 客户名单
+    - 客户信息
+    - customer list
+    - 客户资料
+    - 客户数据
+    - 联系方式
+    - contact
+    - 客户通讯录
+  personal:
+    - 身份证
+    - 护照
+    - 银行卡
+    - 简历
+    - 档案
+    - 个人信息
+    - personal info
+    - 背景调查
+  confidential:
+    - 机密
+    - 绝密
+    - confidential
+    - 内部资料
+    - 保密
+    - secret
+    - NDA
+    - 保密协议
+  employee:
+    - 离职
+    - 员工档案
+    - 入职
+    - 劳动合同
+    - 离职证明
+    - 人事
+    - HR
+    - 花名册
+  financial:
+    - 财报
+    - 财务报表
+    - 预算
+    - budget
+    - 报价
+    - 合同
+    - 发票
+    - invoice
+    - 税务
+    - 对公
+    - 账单
+
+old_department_abbr:
+  - RD
+  - HR
+  - BD
+  - OP
+  - MKT
+  - FIN
+  - IT
+  - ADM
+  - QA
+  - PM
+  - TD
+  - CS
+  - PR
+  - FA
+  - GA
+
+department_mapping:
+  研发部:
+    - 研发
+    - 技术部
+    - 技术中心
+    - 开发
+    - RD
+    - Tech
+    - Engineering
+    - 后端
+    - 前端
+    - 算法
+    - 测试
+    - QA
+  人事部:
+    - 人事
+    - HR
+    - 人力资源
+    - People
+    - 组织发展
+    - OD
+    - 招聘
+    - 薪酬绩效
+  财务部:
+    - 财务
+    - Finance
+    - FIN
+    - 会计
+    - 出纳
+    - 税务
+    - FA
+  市场部:
+    - 市场
+    - Marketing
+    - MKT
+    - 品牌
+    - 公关
+    - PR
+    - 增长
+    - Growth
+  销售部:
+    - 销售
+    - Sales
+    - BD
+    - 商务
+    - 大客户
+    - KA
+    - 渠道
+  运营部:
+    - 运营
+    - Operation
+    - OP
+    - 内容
+    - 活动
+    - 用户运营
+    - 产品运营
+  产品部:
+    - 产品
+    - Product
+    - PM
+    - 产品设计
+    - 需求
+  设计部:
+    - 设计
+    - Design
+    - UI
+    - UX
+    - 视觉
+    - 交互
+  行政部:
+    - 行政
+    - Admin
+    - ADM
+    - GA
+    - 后勤
+    - 综合管理
+  客户服务部:
+    - 客服
+    - CS
+    - Customer Service
+    - 售后
+    - 客户成功
+  法务部:
+    - 法务
+    - Legal
+    - 合规
+    - Compliance
+    - 合同审核
+
+risk_levels:
+  critical:
+    weight: 100
+    description: 严重风险，立即处理
+    examples:
+      - 公共目录发现薪资表
+      - 根目录777权限
+      - 客户名单对外公开
+  high:
+    weight: 75
+    description: 高风险，优先处理
+    examples:
+      - 敏感文件权限过宽
+      - 外链无过期时间
+      - 离职员工文件夹无人接管
+  medium:
+    weight: 50
+    description: 中风险，计划处理
+    examples:
+      - 文件名不规范
+      - 权限信息缺失
+      - 旧部门缩写
+  low:
+    weight: 25
+    description: 低风险，按需处理
+    examples:
+      - 文件名包含空格
+      - 中文括号
+      - 格式不统一
+
+permission_rules:
+  overly_broad:
+    - "777"
+    - "rwxrwxrwx"
+    - "everyone:read"
+    - "everyone:write"
+    - "everyone:full"
+    - "public:read"
+    - "public:write"
+    - "公开"
+    - "所有人可编辑"
+    - "公司全员"
+    - "内部公开"
+  no_owner:
+    - "unknown owner"
+    - "无负责人"
+    - "owner: none"
+    - "创建者已离职"
+    - "unowned"
+  external_share:
+    - "externally shared"
+    - "外部链接"
+    - "anyone with link"
+    - "链接分享"
+    - "外部分享"
+    - "对外公开"
+
+sharing_link_patterns:
+  - https?://pan\.
+  - https?://drive\.
+  - https?://share\.
+  - https?://cloud\.
+  - https?://.*share.*
+  - https?://.*link.*
+  - 分享链接
+  - 外链
+  - 提取码
+  - 访问密码
+
+confirmation_required:
+  has_space: 文件名包含空格
+  has_chinese_parentheses: 文件名包含中文括号
+  has_old_dept_abbr: 文件名包含旧部门缩写
+  permission_missing: 权限信息缺失
+  owner_missing: 责任人信息缺失
+  expiry_missing: 外链无过期时间
+
+max_scan_depth: 10
+exclude_dirs:
+  - .DS_Store
+  - .git
+  - __pycache__
+  - node_modules
+  - .venv
+  - venv
+  - .idea
+  - .vscode

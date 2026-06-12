@@ -1,0 +1,3988 @@
+{
+  "scan_info": {
+    "timestamp": "2026-06-12T08:43:54.938454",
+    "target_directory": "test_shared_drive",
+    "files_scanned": 61,
+    "files_with_risks": 61,
+    "total_risks": 164
+  },
+  "risk_summary": {
+    "critical": 27,
+    "high": 107,
+    "medium": 14,
+    "low": 16
+  },
+  "fix_order": [
+    {
+      "order": 1,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 550,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '档案'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '员工档案'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 550,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '财务报表'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan.",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: 提取码",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: 分享链接",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://drive.",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/保密协议-NDA.pdf",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 375,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 'NDA'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密协议'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份/客户名单备份.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 350,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户名单'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户资料'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/工资明细_季度汇总.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 325,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/工资表_副本.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": false,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'",
+          "confirmation_required": false
+        },
+        {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 '-rwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/薪资表_2024.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": false,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '薪资'",
+          "confirmation_required": false
+        },
+        {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 '-rwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": false,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户信息'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link",
+          "level": "medium",
+          "description": "外部分享链接",
+          "detail": "检测到外部分享链接: https://share.",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link",
+          "level": "medium",
+          "description": "外部分享链接",
+          "detail": "检测到外部分享链接: https://...yz789",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 275,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '报价'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份",
+      "is_dir": true,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 250,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户资料'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 11,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 250,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '财务报表'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 12,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档/客户合同-机密.docx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 250,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/产品路线图（机密）.pptx",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 200,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 14,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
+      "is_dir": true,
+      "has_critical": true,
+      "has_high": false,
+      "total_weight": 200,
+      "risks": [
+        {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 'drwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 15,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/用户数据导出（机密）.csv",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 200,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 16,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/客户名单_全公司.csv",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户名单'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 17,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户信息'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 18,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户联系方式汇总.csv",
+      "is_dir": false,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '联系方式'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 19,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 450,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '档案'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '员工档案'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 20,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 325,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '简历'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 21,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '花名册'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 22,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '简历'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 23,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 300,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '预算'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan.",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://...share",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 24,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 275,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'",
+          "confirmation_required": false
+        },
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'HR'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 25,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 225,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '报价'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'BD'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 26,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/合同（最终版）（1）.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 27,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/员工身份证扫描件（复印件）.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '身份证'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 28,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'MKT'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 29,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 175,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '发票'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 30,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/PM 产品需求文档 V1.0.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'PM'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 31,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '预算'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 32,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/合作方合同.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 33,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/客户合同.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 34,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 35,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 36,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 37,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 38,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 39,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料/项目文档.doc",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 40,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）/客户发票扫描件.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '发票'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 41,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 42,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/OP 运营数据 报表.xlsx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'OP'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 43,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'PM'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 44,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'MKT'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 45,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 46,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'FIN'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 47,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'OP'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 48,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'BD'，请确认是否需要更新",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 49,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/财务 数据 备份 2024.zip",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 100,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 50,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 100,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 51,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份/用户信息 2024.zip",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 100,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 52,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 53,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 54,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 55,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 56,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/员工信息.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 57,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 58,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/会议纪要.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 59,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/员工手册.pdf",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 60,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/周报模板.xlsx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 61,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/代码规范(内部版).md",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    }
+  ],
+  "department_risks": {
+    "未归属": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.190641",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.191404",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/员工手册.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.191488",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/周报模板.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.191314",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/会议纪要.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.191088",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.177004",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/工资表_副本.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171579",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/工资表_副本.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171579",
+        "risk": {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 '-rwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/工资表_副本.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171579",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/合同（最终版）（1）.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.172486",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/合同（最终版）（1）.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.172486",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/合同（最终版）（1）.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.172486",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/员工身份证扫描件（复印件）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171961",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '身份证'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/员工身份证扫描件（复印件）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171961",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/员工身份证扫描件（复印件）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.171961",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/保密协议-NDA.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.173713",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/保密协议-NDA.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.173713",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 'NDA'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/保密协议-NDA.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.173713",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密协议'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/保密协议-NDA.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.173713",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135441",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/薪资表_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135026",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '薪资'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/薪资表_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135026",
+        "risk": {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 '-rwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/薪资表_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135026",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170210",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170210",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.169893",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.169893",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料/项目文档.doc",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170048",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料/项目文档.doc",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170048",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170437",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户资料'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170437",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170437",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份/客户名单备份.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170708",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户名单'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份/客户名单备份.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170708",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户资料'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份/客户名单备份.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170708",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份/客户名单备份.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.170708",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
+        "is_dir": true,
+        "permissions": "drwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188300",
+        "risk": {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 'drwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
+        "is_dir": true,
+        "permissions": "drwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188300",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.190236",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/员工信息.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.190415",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/客户合同.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188907",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/客户合同.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188907",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ],
+    "销售部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159660",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159660",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'BD'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-rw-rw-",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158450",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户信息'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-rw-rw-",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158450",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-rw-rw-",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158450",
+        "risk": {
+          "type": "external_link",
+          "level": "medium",
+          "description": "外部分享链接",
+          "detail": "检测到外部分享链接: https://share."
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-rw-rw-",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158450",
+        "risk": {
+          "type": "external_link",
+          "level": "medium",
+          "description": "外部分享链接",
+          "detail": "检测到外部分享链接: https://...yz789"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.160120",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户信息'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.160120",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159516",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '保密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159516",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '报价'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159516",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159516",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户联系方式汇总.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158894",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '联系方式'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户联系方式汇总.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.158894",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159247",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '报价'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159247",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159247",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.159247",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'BD'，请确认是否需要更新"
+        }
+      }
+    ],
+    "财务部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.155800",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.155800",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'FIN'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.156078",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.156078",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '财务报表'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.156078",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '财务报表'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan."
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: 提取码"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: 分享链接"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153029",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://drive."
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.154710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '发票'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.154710",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.154710",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）/客户发票扫描件.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.154925",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '发票'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）/客户发票扫描件.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.154925",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153687",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153687",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档/客户合同-机密.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153943",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档/客户合同-机密.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153943",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档/客户合同-机密.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.153943",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/财务 数据 备份 2024.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.179153",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/财务 数据 备份 2024.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.179153",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      }
+    ],
+    "产品部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.187934",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.187934",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'PM'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/PM 产品需求文档 V1.0.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.187630",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/PM 产品需求文档 V1.0.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.187630",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/PM 产品需求文档 V1.0.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.187630",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'PM'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/产品路线图（机密）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188082",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/产品路线图（机密）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188082",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/产品路线图（机密）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.188082",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      }
+    ],
+    "市场部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.168175",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.168175",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'MKT'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.168736",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '预算'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.168736",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.161758",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.161758",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.161758",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.161758",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'MKT'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.164649",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '预算'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.164649",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.164649",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan."
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.164649",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://...share"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/合作方合同.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.167825",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 财务资料",
+          "detail": "文件名/路径包含敏感词 '合同'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/合作方合同.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.167825",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ],
+    "人事部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.142191",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.142191",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.142191",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.142191",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'HR'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137599",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137599",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137599",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '花名册'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137599",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/工资明细_季度汇总.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137965",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/工资明细_季度汇总.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137965",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/工资明细_季度汇总.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137965",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/工资明细_季度汇总.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.137965",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.138793",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '简历'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.138793",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.138793",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.138793",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.140367",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '简历'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.140367",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.140367",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.140367",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.140367",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '档案'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '员工档案'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.145710",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 薪资相关",
+          "detail": "文件名/路径包含敏感词 '工资'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 个人隐私",
+          "detail": "文件名/路径包含敏感词 '档案'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '员工档案'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '人事'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 'HR'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案/2023离职员工资料.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.149577",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ],
+    "客户服务部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/客户名单_全公司.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135664",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 客户信息",
+          "detail": "文件名/路径包含敏感词 '客户名单'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/客户名单_全公司.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.135664",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ],
+    "运营部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185643",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185643",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'OP'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/OP 运营数据 报表.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.184443",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/OP 运营数据 报表.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.184443",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/OP 运营数据 报表.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.184443",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'OP'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/用户数据导出（机密）.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185496",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "critical",
+          "description": "疑似敏感内容: 机密文件",
+          "detail": "文件名/路径包含敏感词 '机密'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/用户数据导出（机密）.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185496",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/用户数据导出（机密）.csv",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185496",
+        "risk": {
+          "type": "has_chinese_parentheses",
+          "level": "low",
+          "description": "文件名包含中文括号",
+          "detail": "文件名中包含中文括号，建议使用英文括号"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185775",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185775",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份/用户信息 2024.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185881",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份/用户信息 2024.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.185881",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      }
+    ],
+    "研发部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136521",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136521",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/代码规范(内部版).md",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136431",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136211",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136211",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136211",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136798",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136798",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136958",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-12T08:43:44.136958",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ]
+  }
+}
