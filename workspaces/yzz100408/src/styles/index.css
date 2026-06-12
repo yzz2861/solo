@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background-color: #061A2D;
+    color: #E8ECF0;
+    -webkit-font-smoothing: antialiased;
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-bg-card border border-white/5 rounded-sm p-5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .card-accent {
+    @apply relative bg-bg-card border border-white/5 rounded-sm p-5 pl-6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .card-accent::before {
+    content: '';
+    @apply absolute left-0 top-4 bottom-4 w-[3px] bg-electric-green;
+  }
+  .card-warning::before {
+    @apply bg-warning-orange;
+  }
+  .card-info::before {
+    @apply bg-warning-yellow;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium
+           border border-white/10 bg-electric-blue-light text-neutral-slate
+           rounded-[2px] transition-all duration-150
+           hover:bg-electric-green/10 hover:border-electric-green/40 hover:text-electric-green
+           focus:outline-none focus:ring-1 focus:ring-electric-green/50;
+  }
+  .btn-primary {
+    @apply bg-electric-green text-electric-blue border-electric-green
+           hover:bg-electric-green-dark hover:border-electric-green-dark hover:text-electric-blue;
+    box-shadow: 0 0 20px rgba(0,212,170,0.15);
+  }
+  .btn-danger {
+    @apply bg-warning-orange/20 text-warning-orange border-warning-orange/40
+           hover:bg-warning-orange/30;
+  }
+  .chip {
+    @apply inline-flex items-center px-2 py-1 text-xs font-mono
+           bg-white/5 border border-white/10 rounded-sm text-neutral-slate-dark;
+  }
+  .chip-active {
+    @apply bg-electric-green/15 border-electric-green/40 text-electric-green;
+  }
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    @apply text-3xl font-semibold tracking-tight;
+  }
+  .stat-label {
+    @apply text-xs text-neutral-slate-dark uppercase tracking-wider;
+  }
+  .section-title {
+    @apply text-sm font-semibold text-neutral-slate uppercase tracking-wider flex items-center gap-2;
+  }
+  .divider {
+    @apply h-px bg-white/5 my-4;
+  }
+  .table-header {
+    @apply text-xs font-mono text-neutral-slate-dark uppercase tracking-wider text-left py-3 px-4 border-b border-white/5;
+  }
+  .table-cell {
+    @apply text-sm py-3 px-4 border-b border-white/5;
+  }
+  .tab-button {
+    @apply relative px-4 py-3 text-sm font-medium text-neutral-slate-dark
+           transition-colors duration-150 hover:text-neutral-slate;
+  }
+  .tab-button-active {
+    @apply text-electric-green;
+  }
+  .input-field {
+    @apply w-full bg-electric-blue border border-white/10 rounded-sm px-3 py-2
+           text-sm text-neutral-slate placeholder-neutral-slate-dark/50
+           focus:outline-none focus:border-electric-green/50
+           focus:ring-1 focus:ring-electric-green/20 transition-all;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  .breathing {
+    animation: breathing 3s ease-in-out infinite;
+  }
+  @keyframes breathing {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+}
