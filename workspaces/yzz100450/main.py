@@ -69,10 +69,17 @@ def update_blood_bag(
     bag_update: schemas.BloodBagUpdate,
     db: Session = Depends(get_db)
 ):
-    """更新血袋信息"""
-    bag = crud.update_blood_bag(db, bag_id, bag_update)
+    """
+    更新血袋信息（带状态流转保护）
+    - 终态(已发放/已过期/已损坏)血袋不可修改状态
+    - 不允许状态非法回退（如已发放→可预约）
+    """
+    bag, error = crud.update_blood_bag(db, bag_id, bag_update)
     if not bag:
-        raise HTTPException(status_code=404, detail="血袋不存在")
+        if error == "血袋不存在":
+            raise HTTPException(status_code=404, detail=error)
+        else:
+            raise HTTPException(status_code=400, detail=error)
     return bag
 
 
@@ -92,11 +99,12 @@ def count_available(
 @app.post("/appointments/", response_model=schemas.AppointmentCreateResponse, tags=["预约管理"])
 def create_appointment(appt: schemas.AppointmentCreate, db: Session = Depends(get_db)):
     """
-    登记预约
-    - 按有效期优先锁定库存（先进先出，快过期的先发）
-    - 加急单优先分配
-    - 重复申请（同医院、同血型成分、2小时内）会提示合并
-    - 库存不足时自动驳回或部分分配
+    登记预约（综合调度版）
+    1. 先从 available 池按有效期优先锁定（先进先出，快过期先发）
+    2. 库存不足且为急诊/加急时：从低优先级预约中抢占快过期（≤2天）血袋
+    3. 急诊抢占上限更高，加急更保守；同紧急度之间不互相抢占
+    4. 重复申请（同医院、同血型成分、2小时内）会提示合并
+    5. 所有调度均有日志写入 remark，便于追溯
     """
     duplicate = crud.check_duplicate_appointment(
         db, appt.hospital, appt.blood_type, appt.component, appt.appointment_time
@@ -112,7 +120,22 @@ def create_appointment(appt: schemas.AppointmentCreate, db: Session = Depends(ge
             message=f"检测到该院在相近时间已有同类预约（单号：{duplicate.appointment_no}，数量：{duplicate.quantity}），建议合并处理"
         )
 
-    db_appt, fully_allocated = crud.create_appointment(db, appt)
+    db_appt, fully_allocated, preemptions = crud.create_appointment(db, appt)
+
+    if preemptions and warning:
+        preempt_msg = "；".join(
+            f"{p['bag_code']}(剩{p['days_to_expiry']}天)" for p in preemptions
+        )
+        warning.message += f"。本次调度共紧急调配 {len(preemptions)} 袋（{preempt_msg}），均来自普通预约锁定的快过期库存"
+    elif preemptions and not warning:
+        preempt_msg = "；".join(
+            f"{p['bag_code']}(剩{p['days_to_expiry']}天)" for p in preemptions
+        )
+        warning = schemas.DuplicateAppointmentWarning(
+            has_duplicate=False,
+            message=f"本次调度共紧急调配 {len(preemptions)} 袋（{preempt_msg}），来自低优先级预约锁定的快过期库存，原预约已自动调整为待补配状态"
+        )
+
     return schemas.AppointmentCreateResponse(
         appointment=db_appt,
         duplicate_warning=warning
