@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奶茶小料损耗看板</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">🧋</span>
+                <span class="logo-text">小料损耗看板</span>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="role-switcher">
+                <button class="role-btn active" data-role="manager">店长视图</button>
+                <button class="role-btn" data-role="boss">老板视图</button>
+                <button class="role-btn" data-role="headquarters">总部视图</button>
+            </div>
+        </div>
+        <div class="header-right">
+            <select id="storeSelect" class="store-select">
+                <option value="all">全部门店</option>
+            </select>
+            <input type="date" id="dateSelect" class="date-select">
+            <button id="importBtn" class="btn btn-primary">📥 导入数据</button>
+        </div>
+    </header>
+
+    <div class="date-quick-select">
+        <button class="quick-date-btn" data-days="0">今天</button>
+        <button class="quick-date-btn" data-days="-1">昨天</button>
+        <button class="quick-date-btn active" data-days="-7">近7天</button>
+        <button class="quick-date-btn" data-days="-30">近30天</button>
+    </div>
+
+    <main class="app-main">
+        <!-- 店长视图 -->
+        <section id="managerView" class="view active">
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-label">理论用量</div>
+                    <div class="kpi-value" id="theoryUsage">0</div>
+                    <div class="kpi-unit">克</div>
+                    <div class="kpi-trend up">按配方计算</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">实际耗用</div>
+                    <div class="kpi-value" id="actualUsage">0</div>
+                    <div class="kpi-unit">克</div>
+                    <div class="kpi-trend down">领用-报废-盘点</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-label">损耗差异</div>
+                    <div class="kpi-value" id="diffUsage">0</div>
+                    <div class="kpi-unit">克</div>
+                    <div class="kpi-trend" id="diffRate">差异率 0%</div>
+                </div>
+                <div class="kpi-card info">
+                    <div class="kpi-label">异常班次</div>
+                    <div class="kpi-value" id="abnormalShifts">0</div>
+                    <div class="kpi-unit">个</div>
+                    <div class="kpi-trend">需关注班次</div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>小料损耗趋势</h3>
+                        <div class="chart-filter">
+                            <select id="toppingFilter">
+                                <option value="all">全部小料</option>
+                            </select>
+                        </div>
+                    </div>
+                    <canvas id="trendChart" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>各小料损耗对比</h3>
+                    </div>
+                    <canvas id="compareChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>班次损耗异常分布</h3>
+                        <span class="tip">红色标记为异常班次</span>
+                    </div>
+                    <canvas id="shiftChart" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>损耗原因分布</h3>
+                    </div>
+                    <canvas id="reasonChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <div class="data-table-card">
+                <div class="chart-header">
+                    <h3>小料损耗明细</h3>
+                    <div class="table-filter">
+                        <select id="categoryFilter">
+                            <option value="all">全部分类</option>
+                            <option value="粉圆">粉圆类</option>
+                            <option value="果味">果味类</option>
+                            <option value="奶制品">奶制品</option>
+                            <option value="茶底">茶底类</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="toppingDetailTable">
+                        <thead>
+                            <tr>
+                                <th>小料名称</th>
+                                <th>分类</th>
+                                <th>理论用量</th>
+                                <th>实际耗用</th>
+                                <th>差异量</th>
+                                <th>差异率</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="special-loss-card">
+                <div class="chart-header">
+                    <h3>特殊损耗记录（试饮/员工餐）</h3>
+                    <span class="badge badge-info">已单独标注，不计入偷料怀疑</span>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="specialLossTable">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>类型</th>
+                                <th>小料</th>
+                                <th>数量</th>
+                                <th>原因/备注</th>
+                                <th>操作人</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 老板视图 -->
+        <section id="bossView" class="view">
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-label">今日营收</div>
+                    <div class="kpi-value" id="todayRevenue">0</div>
+                    <div class="kpi-unit">元</div>
+                    <div class="kpi-trend up">较昨日 +12.5%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">小料成本</div>
+                    <div class="kpi-value" id="toppingCost">0</div>
+                    <div class="kpi-unit">元</div>
+                    <div class="kpi-trend down">占营收 8.3%</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-label">损耗金额</div>
+                    <div class="kpi-value" id="lossAmount">0</div>
+                    <div class="kpi-unit">元</div>
+                    <div class="kpi-trend" id="lossRate">损耗率 0%</div>
+                </div>
+                <div class="kpi-card info">
+                    <div class="kpi-label">需补货小料</div>
+                    <div class="kpi-value" id="restockCount">0</div>
+                    <div class="kpi-unit">种</div>
+                    <div class="kpi-trend">库存预警</div>
+                </div>
+            </div>
+
+            <div class="daily-report-card">
+                <div class="chart-header">
+                    <h3>📊 每日小料损耗日报</h3>
+                    <span class="date-range" id="reportDateRange">2024-01-01 至 2024-01-07</span>
+                </div>
+                <div class="report-summary">
+                    <div class="report-item">
+                        <span class="report-label">整体损耗率</span>
+                        <span class="report-value" id="overallLossRate">0%</span>
+                        <span class="report-status good">正常</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">最高损耗小料</span>
+                        <span class="report-value" id="highestLossTopping">-</span>
+                        <span class="report-status warning">需关注</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">最佳控制门店</span>
+                        <span class="report-value" id="bestStore">-</span>
+                        <span class="report-status good">优秀</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">待查班次</span>
+                        <span class="report-value" id="pendingShifts">0</span>
+                        <span class="report-status bad">需核实</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>门店损耗排行</h3>
+                        <span class="tip">从高到低</span>
+                    </div>
+                    <canvas id="storeRankChart" height="250"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>补货建议清单</h3>
+                        <span class="badge badge-warning">自动推算</span>
+                    </div>
+                    <div class="restock-list" id="restockList">
+                        <div class="empty-state">暂无补货建议</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="waste-alert-card">
+                <div class="chart-header">
+                    <h3>⚠️ 浪费预警</h3>
+                    <span class="badge badge-danger">需店长核实</span>
+                </div>
+                <div class="alert-list" id="wasteAlertList">
+                    <div class="empty-state">暂无浪费预警</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总部视图 -->
+        <section id="headquartersView" class="view">
+            <div class="kpi-cards">
+                <div class="kpi-card">
+                    <div class="kpi-label">在售饮品数</div>
+                    <div class="kpi-value" id="totalProducts">0</div>
+                    <div class="kpi-unit">款</div>
+                    <div class="kpi-trend">含新品 0 款</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">新品销量占比</div>
+                    <div class="kpi-value" id="newProductRate">0</div>
+                    <div class="kpi-unit">%</div>
+                    <div class="kpi-trend up">环比增长</div>
+                </div>
+                <div class="kpi-card info">
+                    <div class="kpi-label">新品平均损耗</div>
+                    <div class="kpi-value" id="newProductLoss">0</div>
+                    <div class="kpi-unit">%</div>
+                    <div class="kpi-trend">vs 常规品 5.2%</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-label">配方待优化</div>
+                    <div class="kpi-value" id="formulaOptimize">0</div>
+                    <div class="kpi-unit">款</div>
+                    <div class="kpi-trend">实际耗用偏差大</div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-card wide">
+                    <div class="chart-header">
+                        <h3>新品耗用真实复盘</h3>
+                        <span class="tip">对比配方理论值 vs 实际耗用</span>
+                    </div>
+                    <canvas id="newProductChart" height="280"></canvas>
+                </div>
+            </div>
+
+            <div class="new-product-card">
+                <div class="chart-header">
+                    <h3>🧪 新品配方跟踪表</h3>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="newProductTable">
+                        <thead>
+                            <tr>
+                                <th>饮品名称</th>
+                                <th>上市时间</th>
+                                <th>累计销量</th>
+                                <th>理论单杯成本</th>
+                                <th>实际单杯成本</th>
+                                <th>偏差率</th>
+                                <th>状态</th>
+                                <th>建议</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="formula-analysis-card">
+                <div class="chart-header">
+                    <h3>📐 配方变体分析（半糖/少糖等）</h3>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="formulaVariantTable">
+                        <thead>
+                            <tr>
+                                <th>饮品</th>
+                                <th>甜度选项</th>
+                                <th>占比</th>
+                                <th>小料差异</th>
+                                <th>对成本影响</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 导入数据弹窗 -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>数据导入</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-tabs">
+                    <button class="import-tab active" data-tab="sales">收银销量</button>
+                    <button class="import-tab" data-tab="formula">配方表</button>
+                    <button class="import-tab" data-tab="inventory">仓库领用</button>
+                    <button class="import-tab" data-tab="waste">报废记录</button>
+                </div>
+                <div class="import-tab-content active" id="tab-sales">
+                    <p class="import-desc">导入收银系统的销量明细，支持CSV格式</p>
+                    <div class="file-upload-area" data-type="sales">
+                        <div class="upload-icon">📁</div>
+                        <p>拖拽文件到此处或点击上传</p>
+                        <p class="hint">支持 .csv, .xlsx, .json</p>
+                        <input type="file" class="file-input" accept=".csv,.xlsx,.json">
+                    </div>
+                    <div class="sample-data-btn">
+                        <button class="btn btn-secondary" onclick="loadSampleData('sales')">加载示例数据</button>
+                    </div>
+                </div>
+                <div class="import-tab-content" id="tab-formula">
+                    <p class="import-desc">导入饮品配方表，包含各小料用量</p>
+                    <div class="file-upload-area" data-type="formula">
+                        <div class="upload-icon">📋</div>
+                        <p>拖拽文件到此处或点击上传</p>
+                        <p class="hint">支持 .csv, .xlsx, .json</p>
+                        <input type="file" class="file-input" accept=".csv,.xlsx,.json">
+                    </div>
+                    <div class="sample-data-btn">
+                        <button class="btn btn-secondary" onclick="loadSampleData('formula')">加载示例数据</button>
+                    </div>
+                </div>
+                <div class="import-tab-content" id="tab-inventory">
+                    <p class="import-desc">导入仓库领用/入库记录</p>
+                    <div class="file-upload-area" data-type="inventory">
+                        <div class="upload-icon">🏪</div>
+                        <p>拖拽文件到此处或点击上传</p>
+                        <p class="hint">支持 .csv, .xlsx, .json</p>
+                        <input type="file" class="file-input" accept=".csv,.xlsx,.json">
+                    </div>
+                    <div class="sample-data-btn">
+                        <button class="btn btn-secondary" onclick="loadSampleData('inventory')">加载示例数据</button>
+                    </div>
+                </div>
+                <div class="import-tab-content" id="tab-waste">
+                    <p class="import-desc">导入报废/损耗记录，含试饮、员工餐</p>
+                    <div class="file-upload-area" data-type="waste">
+                        <div class="upload-icon">🗑️</div>
+                        <p>拖拽文件到此处或点击上传</p>
+                        <p class="hint">支持 .csv, .xlsx, .json</p>
+                        <input type="file" class="file-input" accept=".csv,.xlsx,.json">
+                    </div>
+                    <div class="sample-data-btn">
+                        <button class="btn btn-secondary" onclick="loadSampleData('waste')">加载示例数据</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="confirmImport()">确认导入</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
