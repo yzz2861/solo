@@ -6,6 +6,9 @@ import type {
   DefectType,
   OrderStatus,
   AuditLog,
+  Photo,
+  EvidenceArea,
+  ConfidenceFactor,
 } from "@/types";
 import { generateMockOrders } from "@/utils/mockData";
 import { calculateConfidence, isDisputedOrder } from "@/utils/confidence";

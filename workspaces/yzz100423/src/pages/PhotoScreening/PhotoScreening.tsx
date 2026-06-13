@@ -33,7 +33,7 @@ const sampleImages = [
 export default function PhotoScreening() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { orders } = useOrderStore();
+  const { orders, createNewOrder } = useOrderStore();
 
   const existingOrder = id && id !== "new" ? orders.find((o) => o.id === id) : null;
 
@@ -41,6 +41,8 @@ export default function PhotoScreening() {
   const [remark, setRemark] = useState(existingOrder?.remark || "");
   const [applianceType, setApplianceType] = useState(existingOrder?.applianceType || "");
   const [customerName, setCustomerName] = useState(existingOrder?.customerName || "");
+  const [phone, setPhone] = useState(existingOrder?.phone || "");
+  const [address, setAddress] = useState(existingOrder?.address || "");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<{
     tags: any[];
@@ -155,9 +157,26 @@ export default function PhotoScreening() {
   const goToReview = () => {
     if (existingOrder) {
       navigate(`/review/${existingOrder.id}`);
-    } else {
-      navigate("/");
+      return;
     }
+
+    if (!analysisResult) return;
+
+    const newOrder = createNewOrder({
+      photos,
+      tags: analysisResult.tags,
+      evidenceAreas: analysisResult.evidenceAreas,
+      confidence: analysisResult.confidence,
+      confidenceFactors: analysisResult.confidenceFactors,
+      remark,
+      applianceType: applianceType || "未分类",
+      customerName: customerName || "待补充",
+      phone: phone || "",
+      address: address || "",
+      createdBy: "客服小王",
+    });
+
+    navigate(`/review/${newOrder.id}`);
   };
 
   const currentPhoto = photos[selectedPhotoIndex];
@@ -342,6 +361,26 @@ export default function PhotoScreening() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="请输入客户姓名"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">联系电话</label>
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="请输入联系电话"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">客户地址</label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="请输入客户地址"
                     className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
