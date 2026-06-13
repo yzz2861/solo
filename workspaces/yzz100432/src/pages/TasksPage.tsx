@@ -61,6 +61,31 @@ export function TasksPage() {
     return matchesSearch && matchesStatus && matchesAssignee && tree;
   });
 
+  const handleSubmitForReview = (taskId: string) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const beforePhotos = task.photos.filter(p => p.type === "before");
+    const afterPhotos = task.photos.filter(p => p.type === "after");
+    const recheckPhotos = task.photos.filter(p => p.type === "recheck");
+
+    const missing: string[] = [];
+    if (beforePhotos.length === 0) missing.push("修剪前照片");
+    if (afterPhotos.length === 0) missing.push("修剪后照片");
+
+    if (missing.length > 0) {
+      alert(`请先上传以下照片后再提交复查：\n${missing.join("、")}\n\n复查照片建议上传，但非强制。`);
+      return;
+    }
+
+    if (recheckPhotos.length === 0) {
+      const ok = confirm("修剪前、修剪后照片已上传，但复查照片尚未上传。\n确认提交复查？复查照片可后续补传。");
+      if (!ok) return;
+    }
+
+    updateTaskStatus(taskId, "needs_review");
+  };
+
   const handleStatusChange = (taskId: string, newStatus: string) => {
     updateTaskStatus(taskId, newStatus as any);
   };
@@ -197,6 +222,10 @@ export function TasksPage() {
               const isExpanded = selectedTask === task.id;
               const taskRecheckRecords = recheckRecords.filter(r => r.taskId === task.id);
 
+              const beforeCount = task.photos.filter(p => p.type === "before").length;
+              const afterCount = task.photos.filter(p => p.type === "after").length;
+              const recheckCount = task.photos.filter(p => p.type === "recheck").length;
+
               return (
                 <div
                   key={task.id}
@@ -275,45 +304,63 @@ export function TasksPage() {
                       <div className="mb-4">
                         <p className="text-sm font-medium text-gray-700 mb-2">照片上传</p>
                         <div className="grid grid-cols-3 gap-3">
-                          <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer"
+                          <div className={`p-4 border-2 border-dashed rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer ${beforeCount > 0 ? "border-green-400 bg-green-50" : "border-gray-200"}`}
                             onClick={(e) => { e.stopPropagation(); handlePhotoUpload(task.id, "before"); }}
                           >
                             <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                               <Camera className="w-5 h-5 text-warning-600" />
                             </div>
                             <p className="text-xs font-medium text-gray-700">修剪前照片</p>
-                            {task.photos.filter(p => p.type === "before").length > 0 && (
+                            {beforeCount > 0 && (
                               <div className="mt-2 flex items-center justify-center gap-1 text-green-600">
                                 <ImageIcon className="w-3 h-3" />
-                                <span className="text-xs">已上传 {task.photos.filter(p => p.type === "before").length} 张</span>
+                                <span className="text-xs">已上传 {beforeCount} 张</span>
+                              </div>
+                            )}
+                            {beforeCount === 0 && (
+                              <div className="mt-2 flex items-center justify-center gap-1 text-warning-600">
+                                <AlertTriangle className="w-3 h-3" />
+                                <span className="text-xs">必填</span>
                               </div>
                             )}
                           </div>
-                          <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer"
+                          <div className={`p-4 border-2 border-dashed rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer ${afterCount > 0 ? "border-green-400 bg-green-50" : "border-gray-200"}`}
                             onClick={(e) => { e.stopPropagation(); handlePhotoUpload(task.id, "after"); }}
                           >
                             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                               <Camera className="w-5 h-5 text-green-600" />
                             </div>
                             <p className="text-xs font-medium text-gray-700">修剪后照片</p>
-                            {task.photos.filter(p => p.type === "after").length > 0 && (
+                            {afterCount > 0 && (
                               <div className="mt-2 flex items-center justify-center gap-1 text-green-600">
                                 <ImageIcon className="w-3 h-3" />
-                                <span className="text-xs">已上传 {task.photos.filter(p => p.type === "after").length} 张</span>
+                                <span className="text-xs">已上传 {afterCount} 张</span>
+                              </div>
+                            )}
+                            {afterCount === 0 && (
+                              <div className="mt-2 flex items-center justify-center gap-1 text-warning-600">
+                                <AlertTriangle className="w-3 h-3" />
+                                <span className="text-xs">必填</span>
                               </div>
                             )}
                           </div>
-                          <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer"
+                          <div className={`p-4 border-2 border-dashed rounded-xl text-center hover:border-forest-400 transition-colors cursor-pointer ${recheckCount > 0 ? "border-green-400 bg-green-50" : "border-gray-200"}`}
                             onClick={(e) => { e.stopPropagation(); handlePhotoUpload(task.id, "recheck"); }}
                           >
                             <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                               <Camera className="w-5 h-5 text-sky-600" />
                             </div>
                             <p className="text-xs font-medium text-gray-700">复查照片</p>
-                            {task.photos.filter(p => p.type === "recheck").length > 0 && (
+                            {recheckCount > 0 && (
                               <div className="mt-2 flex items-center justify-center gap-1 text-green-600">
                                 <ImageIcon className="w-3 h-3" />
-                                <span className="text-xs">已上传 {task.photos.filter(p => p.type === "recheck").length} 张</span>
+                                <span className="text-xs">已上传 {recheckCount} 张</span>
+                              </div>
+                            )}
+                            {recheckCount === 0 && (
+                              <div className="mt-2 flex items-center justify-center gap-1 text-sky-600">
+                                <Clock className="w-3 h-3" />
+                                <span className="text-xs">建议上传</span>
                               </div>
                             )}
                           </div>
@@ -357,19 +404,36 @@ export function TasksPage() {
                         )}
                         {task.status === "in_progress" && (
                           <button
-                            onClick={(e) => { e.stopPropagation(); handleStatusChange(task.id, "completed"); }}
-                            className="flex-1 btn-primary"
+                            onClick={(e) => { e.stopPropagation(); handleSubmitForReview(task.id); }}
+                            className="flex-1 btn-primary flex items-center justify-center gap-2"
                           >
-                            标记完成（等待复查）
+                            <CheckCircle className="w-4 h-4" />
+                            提交复查
                           </button>
                         )}
                         {task.status === "needs_review" && role !== "gardener" && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); handleStatusChange(task.id, "completed"); }}
-                            className="flex-1 btn-primary"
-                          >
-                            复查通过
-                          </button>
+                          <>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleStatusChange(task.id, "completed"); }}
+                              className="flex-1 btn-primary flex items-center justify-center gap-2"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                              复查通过
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleStatusChange(task.id, "in_progress"); }}
+                              className="flex-1 btn-secondary flex items-center justify-center gap-2"
+                            >
+                              <AlertTriangle className="w-4 h-4" />
+                              需返工
+                            </button>
+                          </>
+                        )}
+                        {task.status === "needs_review" && role === "gardener" && (
+                          <div className="flex-1 p-3 bg-warning-50 border border-warning-200 rounded-xl text-center">
+                            <p className="text-sm text-warning-700 font-medium">等待主管复查中</p>
+                            <p className="text-xs text-warning-600 mt-1">复查照片可继续补传</p>
+                          </div>
                         )}
                         {task.status === "completed" && role !== "gardener" && (
                           <button
@@ -378,6 +442,14 @@ export function TasksPage() {
                           >
                             标记需返工
                           </button>
+                        )}
+                        {task.status === "completed" && role === "gardener" && (
+                          <div className="flex-1 p-3 bg-green-50 border border-green-200 rounded-xl text-center">
+                            <p className="text-sm text-green-700 font-medium flex items-center justify-center gap-2">
+                              <CheckCircle className="w-4 h-4" />
+                              任务已通过复查
+                            </p>
+                          </div>
                         )}
                         <input
                           ref={fileInputRef}
