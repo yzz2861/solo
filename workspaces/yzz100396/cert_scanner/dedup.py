@@ -8,13 +8,16 @@ from .risk import RiskLevel, classify_risk
 
 
 def _fingerprint(result: ScanResult) -> str:
+    risk = classify_risk(result)
     payload = (
         f"{result.domain.key}|"
         f"{result.dns_resolved}|"
         f"{result.connectable}|"
         f"{result.cert_verified}|"
         f"{result.cert_chain_complete}|"
-        f"{result.days_until_expiry}|"
+        f"{risk.value}|"
+        f"{result.domain.owner}|"
+        f"{result.domain.is_orphan}|"
         f"{result.error}"
     )
     return hashlib.sha256(payload.encode()).hexdigest()[:16]
