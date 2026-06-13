@@ -112,6 +112,53 @@ def create_test_data(base_dir: str = "test_shared_drive"):
     (base / "正常文件" / "周报模板.xlsx").write_text("测试", encoding="utf-8")
     (base / "正常文件" / "员工手册.pdf").write_text("测试", encoding="utf-8")
 
+    (base / "无人负责目录").mkdir()
+    (base / "无人负责目录" / "待认领项目").mkdir()
+    (base / "无人负责目录" / "待认领项目" / "项目资料.docx").write_text("测试", encoding="utf-8")
+    (base / "无人负责目录" / "废弃资料").mkdir()
+    (base / "无人负责目录" / "废弃资料" / "旧版文件.zip").write_text("测试", encoding="utf-8")
+    (base / "无人负责目录" / "孤儿文件夹-无人接管").mkdir()
+    (base / "无人负责目录" / "孤儿文件夹-无人接管" / "数据备份.tar.gz").write_text("测试", encoding="utf-8")
+
+    (base / "临时-无负责人").mkdir()
+    (base / "临时-无负责人" / "待处理文件.docx").write_text("测试", encoding="utf-8")
+
+    (base / "元数据测试").mkdir()
+    (base / "元数据测试" / "标记无主的文件夹").mkdir()
+    (base / "元数据测试" / "标记无主的文件夹" / "一些文件.txt").write_text("测试", encoding="utf-8")
+    meta_file1 = base / "元数据测试" / ".标记无主的文件夹.meta"
+    meta_file1.write_text(
+        "owner: 无负责人\n"
+        "department: 未知\n"
+        "last_audit: 2023-01-15\n",
+        encoding="utf-8"
+    )
+
+    (base / "元数据测试" / "权限未设置的文件.xlsx").write_text("测试", encoding="utf-8")
+    meta_file2 = base / "元数据测试" / ".权限未设置的文件.xlsx.meta"
+    meta_file2.write_text(
+        "owner: 张三\n"
+        "permission_desc: 未设置\n"
+        "department: 待定\n",
+        encoding="utf-8"
+    )
+
+    (base / "元数据测试" / "正常元数据文件.docx").write_text("测试", encoding="utf-8")
+    meta_file3 = base / "元数据测试" / ".正常元数据文件.docx.meta"
+    meta_file3.write_text(
+        "owner: 李四\n"
+        "permission_desc: 部门内可见\n"
+        "department: 研发部\n"
+        "expiry_date: 2026-12-31\n",
+        encoding="utf-8"
+    )
+
+    (base / "已离职员工目录").mkdir()
+    (base / "已离职员工目录" / "resigned_zhang_san_project").mkdir()
+    (base / "已离职员工目录" / "resigned_zhang_san_project" / "代码仓库.zip").write_text("测试", encoding="utf-8")
+    (base / "已离职员工目录" / "former_employee_docs").mkdir()
+    (base / "已离职员工目录" / "former_employee_docs" / "交接文档.docx").write_text("测试", encoding="utf-8")
+
     count = 0
     for root, dirs, files in os.walk(base):
         count += len(files) + len(dirs)
@@ -127,8 +174,11 @@ def create_test_data(base_dir: str = "test_shared_drive"):
     print(f"    - 离职员工文件夹")
     print(f"    - 外部分享链接（含/不含过期时间）")
     print(f"    - 敏感词文件名（薪资、客户、身份证、合同、保密等）")
-    print(f"    - 无人负责文件夹")
+    print(f"    - 无人负责文件夹（路径关键词识别）")
+    print(f"    - 元数据标记的无负责人文件夹")
+    print(f"    - 元数据标记的权限缺失文件")
     print(f"    - 全局可读写文件")
+    print(f"    - 待归档、临时、废弃、孤儿等疑似无主目录")
     print(f"\n运行测试命令:")
     print(f"  pip install -r requirements.txt")
     print(f"  python permission_audit.py {base_dir}")

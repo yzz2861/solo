@@ -193,6 +193,42 @@ risk_levels:
       - 中文括号
       - 格式不统一
 
+unowned_folder_patterns:
+  - "待归档"
+  - "无负责人"
+  - "无人负责"
+  - "无人接管"
+  - "待认领"
+  - "orphan"
+  - "unowned"
+  - "no owner"
+  - "ownerless"
+  - "废弃"
+  - "弃用"
+  - "deprecated"
+  - "临时"
+  - "temp"
+  - "unknown owner"
+
+departed_folder_patterns:
+  - "离职"
+  - "departed"
+  - "former"
+  - "resigned"
+  - "ex-"
+  - "离职员工"
+  - "已离职"
+  - "离职人员"
+
+metadata_files:
+  pattern: ".{name}.meta"
+  fields:
+    - owner
+    - department
+    - permission_desc
+    - expiry_date
+    - last_audit
+
 permission_rules:
   overly_broad:
     - "777"
@@ -206,12 +242,16 @@ permission_rules:
     - "所有人可编辑"
     - "公司全员"
     - "内部公开"
+    - "权限:公开"
+    - "权限:全员"
   no_owner:
     - "unknown owner"
     - "无负责人"
     - "owner: none"
     - "创建者已离职"
     - "unowned"
+    - "负责人: 无"
+    - "owner: unknown"
   external_share:
     - "externally shared"
     - "外部链接"
@@ -219,6 +259,14 @@ permission_rules:
     - "链接分享"
     - "外部分享"
     - "对外公开"
+    - "共享状态:外部"
+  permission_missing:
+    - "unknown"
+    - "未设置"
+    - "权限未知"
+    - "n/a"
+    - "none"
+    - "权限: 未设置"
 
 sharing_link_patterns:
   - https?://pan\.

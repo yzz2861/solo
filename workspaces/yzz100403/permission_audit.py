@@ -75,6 +75,7 @@ class FileScanner:
         self.config = config
         self.max_depth = config.get('max_scan_depth', 10)
         self.exclude_dirs = set(config.get('exclude_dirs', []))
+        self.metadata_config = config.get('metadata_files', {})
 
     def scan_directory(self, root_dir: str) -> List[Dict[str, Any]]:
         root_path = Path(root_dir).resolve()
@@ -105,6 +106,8 @@ class FileScanner:
             for filename in filenames:
                 if filename in self.exclude_dirs:
                     continue
+                if filename.startswith('.') and filename.endswith(('.sharing', '.meta')):
+                    continue
                 file_path = current_path / filename
                 file_info = self._get_file_info(file_path, is_dir=False)
                 if file_info:
@@ -113,38 +116,78 @@ class FileScanner:
         return scanned_files
 
     def _get_file_info(self, path: Path, is_dir: bool) -> Optional[Dict[str, Any]]:
+        permissions = '??????????'
+        permission_description = '未知'
+        owner_name = 'unknown'
+        group_name = 'unknown'
+        owner_id = -1
+        group_id = -1
+        size = 0
+        mtime = datetime.datetime.min
+        ctime = datetime.datetime.min
+        permission_error = False
+        error_message = ''
+
         try:
             stat_info = path.stat()
             file_mode = stat_info.st_mode
             permissions = self._parse_permissions(file_mode)
-
+            permission_description = self._get_permission_description(permissions)
             owner_name = self._get_owner_name(stat_info.st_uid)
             group_name = self._get_group_name(stat_info.st_gid)
-
-            file_info = {
-                'path': str(path),
-                'name': path.name,
-                'is_dir': is_dir,
-                'size': stat_info.st_size,
-                'mtime': datetime.datetime.fromtimestamp(stat_info.st_mtime),
-                'ctime': datetime.datetime.fromtimestamp(stat_info.st_ctime),
-                'permissions': permissions,
-                'owner_id': stat_info.st_uid,
-                'owner_name': owner_name,
-                'group_id': stat_info.st_gid,
-                'group_name': group_name,
-                'permission_description': self._get_permission_description(permissions),
-                'sharing_links': self._extract_sharing_links(path),
-                'relative_path': str(path.relative_to(path.anchor)),
-                'depth': len(path.parts) - 1
-            }
-            return file_info
+            owner_id = stat_info.st_uid
+            group_id = stat_info.st_gid
+            size = stat_info.st_size
+            mtime = datetime.datetime.fromtimestamp(stat_info.st_mtime)
+            ctime = datetime.datetime.fromtimestamp(stat_info.st_ctime)
         except (PermissionError, OSError) as e:
-            print(f"无法访问 {path}: {e}")
-            return None
+            permission_error = True
+            error_message = str(e)
+
+        metadata = self._load_metadata(path)
+
+        if metadata:
+            if metadata.get('owner'):
+                owner_name = metadata['owner']
+            if metadata.get('permission_desc'):
+                permission_description = metadata['permission_desc']
+            if metadata.get('department'):
+                pass
+
+        if permission_description in ['未知', '', 'unknown', '未设置']:
+            permission_missing = True
+        else:
+            permission_missing = False
+
+        file_info = {
+            'path': str(path),
+            'name': path.name,
+            'is_dir': is_dir,
+            'size': size,
+            'mtime': mtime,
+            'ctime': ctime,
+            'permissions': permissions,
+            'owner_id': owner_id,
+            'owner_name': owner_name,
+            'group_id': group_id,
+            'group_name': group_name,
+            'permission_description': permission_description,
+            'sharing_links': self._extract_sharing_links(path),
+            'relative_path': str(path.relative_to(path.anchor)) if path.anchor else str(path),
+            'depth': len(path.parts) - 1,
+            'permission_error': permission_error,
+            'permission_missing_flag': permission_missing,
+            'error_message': error_message,
+            'metadata': metadata,
+            'has_metadata': metadata is not None
+        }
+        return file_info
 
     def _parse_permissions(self, mode: int) -> str:
-        return stat.filemode(mode)
+        try:
+            return stat.filemode(mode)
+        except Exception:
+            return '??????????'
 
     def _get_owner_name(self, uid: int) -> str:
         try:
@@ -200,6 +243,32 @@ class FileScanner:
 
         return list(set(links))
 
+    def _load_metadata(self, path: Path) -> Optional[Dict[str, str]]:
+        meta_pattern = self.metadata_config.get('pattern', '.{name}.meta')
+        meta_filename = meta_pattern.replace('{name}', path.name)
+        meta_file = path.parent / meta_filename
+
+        if not meta_file.exists():
+            return None
+
+        metadata = {}
+        try:
+            with open(meta_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    if ':' in line:
+                        key, value = line.split(':', 1)
+                        metadata[key.strip().lower()] = value.strip()
+                    elif '=' in line:
+                        key, value = line.split('=', 1)
+                        metadata[key.strip().lower()] = value.strip()
+        except (PermissionError, OSError, UnicodeDecodeError):
+            return None
+
+        return metadata if metadata else None
+
 
 class RiskDetector:
     def __init__(self, config: ConfigLoader):
@@ -209,21 +278,37 @@ class RiskDetector:
         self.permission_rules = config.get('permission_rules', {})
         self.confirmation_required = config.get('confirmation_required', {})
         self.risk_levels = config.get('risk_levels', {})
+        self.unowned_patterns = config.get('unowned_folder_patterns', [])
+        self.departed_patterns = config.get('departed_folder_patterns', [])
 
     def detect_risks(self, file_info: Dict[str, Any]) -> List[Dict[str, Any]]:
         risks = []
 
         risks.extend(self._check_sensitive_content(file_info))
         risks.extend(self._check_permission_issues(file_info))
+        risks.extend(self._check_permission_missing(file_info))
         risks.extend(self._check_sharing_links(file_info))
         risks.extend(self._check_owner_issues(file_info))
+        risks.extend(self._check_unowned_folder(file_info))
         risks.extend(self._check_naming_issues(file_info))
+
+        risks = self._deduplicate_risks(risks)
 
         for risk in risks:
             risk['level'] = self._determine_risk_level(risk)
             risk['weight'] = self.risk_levels.get(risk['level'], {}).get('weight', 25)
 
         return risks
+
+    def _deduplicate_risks(self, risks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        seen_types = set()
+        unique_risks = []
+        for risk in risks:
+            key = (risk['type'], risk.get('keyword', ''), risk.get('detail', ''))
+            if key not in seen_types:
+                seen_types.add(key)
+                unique_risks.append(risk)
+        return unique_risks
 
     def _check_sensitive_content(self, file_info: Dict[str, Any]) -> List[Dict[str, Any]]:
         risks = []
@@ -342,30 +427,155 @@ class RiskDetector:
         owner = file_info.get('owner_name', '')
         owner_lower = owner.lower()
 
+        metadata = file_info.get('metadata', {})
+        if metadata:
+            meta_owner = metadata.get('owner', '').lower()
+            if meta_owner:
+                owner_lower = meta_owner
+                owner = metadata.get('owner', owner)
+
         no_owner_rules = self.permission_rules.get('no_owner', [])
         for rule in no_owner_rules:
             if rule.lower() in owner_lower:
                 risks.append({
                     'type': 'no_owner',
                     'description': '无人负责',
-                    'detail': f"文件所有者 '{owner}' 符合无负责人规则 '{rule}'"
+                    'detail': f"文件所有者 '{owner}' 符合无负责人规则 '{rule}'",
+                    'source': 'owner_name'
                 })
                 break
 
-        if owner_lower in ['none', 'unknown', 'uid_', ''] or owner.startswith('uid_'):
+        if not risks and (owner_lower in ['none', 'unknown', 'uid_', ''] or owner.startswith('uid_')):
             risks.append({
                 'type': 'owner_missing',
                 'description': '责任人信息缺失',
-                'detail': f"无法识别文件所有者: '{owner}'"
+                'detail': f"无法识别文件所有者: '{owner}'",
+                'confirmation_required': True,
+                'source': 'owner_name'
             })
 
-        departed_keywords = ['离职', 'departed', 'former', 'ex-', 'resigned']
-        if any(kw in owner_lower for kw in departed_keywords):
+        departed_keywords = self.departed_patterns if self.departed_patterns else ['离职', 'departed', 'former', 'ex-', 'resigned']
+        if any(kw.lower() in owner_lower for kw in departed_keywords):
             risks.append({
                 'type': 'departed_employee_owner',
                 'description': '离职员工文件',
-                'detail': f"文件所有者疑似离职员工: '{owner}'"
+                'detail': f"文件所有者疑似离职员工: '{owner}'",
+                'source': 'owner_name'
             })
+
+        return risks
+
+    def _check_unowned_folder(self, file_info: Dict[str, Any]) -> List[Dict[str, Any]]:
+        risks = []
+        if not file_info.get('is_dir', False):
+            return risks
+
+        folder_name = file_info['name']
+        folder_path = file_info['path']
+        name_lower = folder_name.lower()
+        path_lower = folder_path.lower()
+
+        metadata = file_info.get('metadata', {})
+
+        unowned_patterns = self.unowned_patterns if self.unowned_patterns else []
+        matched_patterns = []
+        for pattern in unowned_patterns:
+            if pattern.lower() in name_lower or pattern.lower() in path_lower:
+                matched_patterns.append(pattern)
+
+        if matched_patterns:
+            evidence = ', '.join(matched_patterns[:3])
+            risks.append({
+                'type': 'unowned_folder',
+                'description': '疑似无人负责的文件夹',
+                'detail': f"文件夹名称/路径包含无人负责关键词: {evidence}",
+                'source': 'folder_name',
+                'evidence': matched_patterns
+            })
+
+        if metadata:
+            meta_owner = metadata.get('owner', '')
+            meta_dept = metadata.get('department', '')
+            if not meta_owner or meta_owner.lower() in ['none', 'unknown', '无', '未指定', '']:
+                if not any(r['type'] == 'unowned_folder' for r in risks):
+                    risks.append({
+                        'type': 'unowned_folder',
+                        'description': '元数据标记为无负责人的文件夹',
+                        'detail': f"元数据中 owner 字段为空或无负责人: '{meta_owner}'",
+                        'source': 'metadata',
+                        'evidence': ['metadata_owner_missing']
+                    })
+
+        if not file_info.get('permission_error', False):
+            perm_desc = file_info.get('permission_description', '')
+            no_owner_rules = self.permission_rules.get('no_owner', [])
+            for rule in no_owner_rules:
+                if rule.lower() in perm_desc.lower():
+                    if not any(r['type'] == 'unowned_folder' for r in risks):
+                        risks.append({
+                            'type': 'unowned_folder',
+                            'description': '权限描述显示无负责人',
+                            'detail': f"权限描述中包含无负责人标记: '{rule}'",
+                            'source': 'permission_desc'
+                        })
+                    break
+
+        if len(matched_patterns) >= 2 and file_info.get('is_dir', False):
+            for r in risks:
+                if r['type'] == 'unowned_folder':
+                    r['confidence'] = 'high'
+                    break
+
+        return risks
+
+    def _check_permission_missing(self, file_info: Dict[str, Any]) -> List[Dict[str, Any]]:
+        risks = []
+
+        if file_info.get('permission_error', False):
+            risks.append({
+                'type': 'permission_missing',
+                'description': self.confirmation_required.get('permission_missing', '权限信息缺失'),
+                'detail': f"无法获取权限信息: {file_info.get('error_message', '未知错误')}",
+                'confirmation_required': True,
+                'source': 'stat_error'
+            })
+            return risks
+
+        perm_str = file_info.get('permissions', '')
+        if perm_str == '??????????' or '?' in perm_str:
+            risks.append({
+                'type': 'permission_missing',
+                'description': self.confirmation_required.get('permission_missing', '权限信息缺失'),
+                'detail': f"权限字符串异常: '{perm_str}'",
+                'confirmation_required': True,
+                'source': 'permission_string'
+            })
+            return risks
+
+        if file_info.get('permission_missing_flag', False):
+            risks.append({
+                'type': 'permission_missing',
+                'description': self.confirmation_required.get('permission_missing', '权限信息缺失'),
+                'detail': f"权限描述为空或未知: '{file_info.get('permission_description', '')}'",
+                'confirmation_required': True,
+                'source': 'permission_description'
+            })
+            return risks
+
+        metadata = file_info.get('metadata', {})
+        if metadata:
+            meta_perm = metadata.get('permission_desc', metadata.get('permission', ''))
+            missing_rules = self.permission_rules.get('permission_missing', [])
+            for rule in missing_rules:
+                if rule.lower() in meta_perm.lower():
+                    risks.append({
+                        'type': 'permission_missing',
+                        'description': self.confirmation_required.get('permission_missing', '权限信息缺失'),
+                        'detail': f"元数据中权限标记为缺失: '{rule}'",
+                        'confirmation_required': True,
+                        'source': 'metadata'
+                    })
+                    break
 
         return risks
 
@@ -412,7 +622,7 @@ class RiskDetector:
             return 'high'
 
         if risk_type == 'overly_broad_permission':
-            if risk.get('detail', '').find('777') >= 0 or risk.get('detail', '').find('rwxrwxrwx') >= 0:
+            if '777' in risk.get('detail', '') or 'rwxrwxrwx' in risk.get('detail', ''):
                 return 'critical'
             return 'high'
 
@@ -430,7 +640,16 @@ class RiskDetector:
         if risk_type in ['no_owner', 'departed_employee_owner']:
             return 'high'
 
+        if risk_type == 'unowned_folder':
+            confidence = risk.get('confidence', '')
+            if confidence == 'high':
+                return 'high'
+            return 'medium'
+
         if risk_type == 'owner_missing':
+            return 'medium'
+
+        if risk_type == 'permission_missing':
             return 'medium'
 
         if risk.get('confirmation_required'):
@@ -789,7 +1008,9 @@ class ReportGenerator:
             'external_link_no_expiry': '外部分享链接无过期时间',
             'external_link': '存在外部分享链接',
             'no_owner': '无负责人',
+            'unowned_folder': '疑似无人负责的文件夹',
             'owner_missing': '责任人信息缺失',
+            'permission_missing': '权限信息缺失',
             'departed_employee_owner': '离职员工名下文件',
             'has_space': '文件名含空格',
             'has_chinese_parentheses': '文件名含中文括号',
@@ -816,8 +1037,10 @@ class ReportGenerator:
                 suggestions.append('设置外链过期时间')
             elif t == 'external_link':
                 suggestions.append('审查外链必要性')
-            elif t in ['no_owner', 'owner_missing', 'departed_employee_owner']:
+            elif t in ['no_owner', 'unowned_folder', 'owner_missing', 'departed_employee_owner']:
                 suggestions.append('确认负责人')
+            elif t == 'permission_missing':
+                suggestions.append('补充权限信息')
             elif t in ['has_space', 'has_chinese_parentheses', 'has_old_dept_abbr']:
                 suggestions.append('规范命名')
 

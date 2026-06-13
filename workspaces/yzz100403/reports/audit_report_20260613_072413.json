@@ -1,15 +1,15 @@
 {
   "scan_info": {
-    "timestamp": "2026-06-12T08:43:54.938454",
+    "timestamp": "2026-06-13T07:24:13.377342",
     "target_directory": "test_shared_drive",
-    "files_scanned": 61,
-    "files_with_risks": 61,
-    "total_risks": 164
+    "files_scanned": 77,
+    "files_with_risks": 77,
+    "total_risks": 191
   },
   "risk_summary": {
-    "critical": 27,
-    "high": 107,
-    "medium": 14,
+    "critical": 25,
+    "high": 133,
+    "medium": 17,
     "low": 16
   },
   "fix_order": [
@@ -107,6 +107,13 @@
           "type": "external_link_no_expiry",
           "level": "high",
           "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://drive.",
+          "confirmation_required": false
+        },
+        {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
           "detail": "检测到外部分享链接，未设置过期时间: https://pan.",
           "confirmation_required": false
         },
@@ -122,13 +129,6 @@
           "level": "high",
           "description": "外链无过期时间",
           "detail": "检测到外部分享链接，未设置过期时间: 分享链接",
-          "confirmation_required": false
-        },
-        {
-          "type": "external_link_no_expiry",
-          "level": "high",
-          "description": "外链无过期时间",
-          "detail": "检测到外部分享链接，未设置过期时间: https://drive.",
           "confirmation_required": false
         }
       ]
@@ -341,20 +341,52 @@
           "type": "external_link",
           "level": "medium",
           "description": "外部分享链接",
-          "detail": "检测到外部分享链接: https://share.",
+          "detail": "检测到外部分享链接: https://...yz789",
           "confirmation_required": false
         },
         {
           "type": "external_link",
           "level": "medium",
           "description": "外部分享链接",
-          "detail": "检测到外部分享链接: https://...yz789",
+          "detail": "检测到外部分享链接: https://share.",
           "confirmation_required": false
         }
       ]
     },
     {
       "order": 9,
+      "batch": "严重风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
+      "is_dir": true,
+      "has_critical": true,
+      "has_high": true,
+      "total_weight": 275,
+      "risks": [
+        {
+          "type": "overly_broad_permission",
+          "level": "critical",
+          "description": "权限过宽",
+          "detail": "权限 'drwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "critical",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读写权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 待归档, 无负责人",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 10,
       "batch": "严重风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/项目报价（保密版）.xlsx",
       "is_dir": false,
@@ -393,7 +425,7 @@
       ]
     },
     {
-      "order": 10,
+      "order": 11,
       "batch": "严重风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/王五-客户资料备份",
       "is_dir": true,
@@ -413,38 +445,6 @@
           "level": "high",
           "description": "疑似敏感内容: 员工信息",
           "detail": "文件名/路径包含敏感词 '离职'",
-          "confirmation_required": false
-        },
-        {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限",
-          "confirmation_required": false
-        }
-      ]
-    },
-    {
-      "order": 11,
-      "batch": "严重风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
-      "is_dir": false,
-      "has_critical": true,
-      "has_high": true,
-      "total_weight": 250,
-      "risks": [
-        {
-          "type": "sensitive_content",
-          "level": "critical",
-          "description": "疑似敏感内容: 机密文件",
-          "detail": "文件名/路径包含敏感词 '机密'",
-          "confirmation_required": false
-        },
-        {
-          "type": "sensitive_content",
-          "level": "high",
-          "description": "疑似敏感内容: 财务资料",
-          "detail": "文件名/路径包含敏感词 '财务报表'",
           "confirmation_required": false
         },
         {
@@ -523,31 +523,6 @@
     {
       "order": 14,
       "batch": "严重风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
-      "is_dir": true,
-      "has_critical": true,
-      "has_high": false,
-      "total_weight": 200,
-      "risks": [
-        {
-          "type": "overly_broad_permission",
-          "level": "critical",
-          "description": "权限过宽",
-          "detail": "权限 'drwxrwxrwx' (所有者:读写执行, 组:读写执行, 其他:读写执行) 符合过宽权限规则 'rwxrwxrwx'",
-          "confirmation_required": false
-        },
-        {
-          "type": "world_readable_writable",
-          "level": "critical",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读写权限",
-          "confirmation_required": false
-        }
-      ]
-    },
-    {
-      "order": 15,
-      "batch": "严重风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/用户数据导出（机密）.csv",
       "is_dir": false,
       "has_critical": true,
@@ -578,7 +553,7 @@
       ]
     },
     {
-      "order": 16,
+      "order": 15,
       "batch": "严重风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/客户名单_全公司.csv",
       "is_dir": false,
@@ -603,32 +578,7 @@
       ]
     },
     {
-      "order": 17,
-      "batch": "严重风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
-      "is_dir": false,
-      "has_critical": true,
-      "has_high": true,
-      "total_weight": 175,
-      "risks": [
-        {
-          "type": "sensitive_content",
-          "level": "critical",
-          "description": "疑似敏感内容: 客户信息",
-          "detail": "文件名/路径包含敏感词 '客户信息'",
-          "confirmation_required": false
-        },
-        {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限",
-          "confirmation_required": false
-        }
-      ]
-    },
-    {
-      "order": 18,
+      "order": 16,
       "batch": "严重风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户联系方式汇总.csv",
       "is_dir": false,
@@ -653,7 +603,7 @@
       ]
     },
     {
-      "order": 19,
+      "order": 17,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/离职员工档案",
       "is_dir": true,
@@ -706,7 +656,7 @@
       ]
     },
     {
-      "order": 20,
+      "order": 18,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息/技术岗简历（最新）.pdf",
       "is_dir": false,
@@ -752,7 +702,7 @@
       ]
     },
     {
-      "order": 21,
+      "order": 19,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/员工花名册_2024.xlsx",
       "is_dir": false,
@@ -791,7 +741,7 @@
       ]
     },
     {
-      "order": 22,
+      "order": 20,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR/简历库-候选人信息",
       "is_dir": true,
@@ -830,7 +780,7 @@
       ]
     },
     {
-      "order": 23,
+      "order": 21,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
       "is_dir": false,
@@ -856,20 +806,20 @@
           "type": "external_link_no_expiry",
           "level": "high",
           "description": "外链无过期时间",
-          "detail": "检测到外部分享链接，未设置过期时间: https://pan.",
+          "detail": "检测到外部分享链接，未设置过期时间: https://...share",
           "confirmation_required": false
         },
         {
           "type": "external_link_no_expiry",
           "level": "high",
           "description": "外链无过期时间",
-          "detail": "检测到外部分享链接，未设置过期时间: https://...share",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan.",
           "confirmation_required": false
         }
       ]
     },
     {
-      "order": 24,
+      "order": 22,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/人事部-HR",
       "is_dir": true,
@@ -908,7 +858,7 @@
       ]
     },
     {
-      "order": 25,
+      "order": 23,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/BD 报价单 2024.docx",
       "is_dir": false,
@@ -947,7 +897,7 @@
       ]
     },
     {
-      "order": 26,
+      "order": 24,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/合同（最终版）（1）.docx",
       "is_dir": false,
@@ -979,7 +929,7 @@
       ]
     },
     {
-      "order": 27,
+      "order": 25,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/员工身份证扫描件（复印件）.pdf",
       "is_dir": false,
@@ -1011,7 +961,7 @@
       ]
     },
     {
-      "order": 28,
+      "order": 26,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
       "is_dir": false,
@@ -1050,7 +1000,7 @@
       ]
     },
     {
-      "order": 29,
+      "order": 27,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
       "is_dir": true,
@@ -1082,7 +1032,32 @@
       ]
     },
     {
-      "order": 30,
+      "order": 28,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时-无负责人",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无负责人, 临时",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 29,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM/PM 产品需求文档 V1.0.docx",
       "is_dir": false,
@@ -1114,10 +1089,35 @@
       ]
     },
     {
+      "order": 30,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/标记无主的文件夹",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "no_owner",
+          "level": "high",
+          "description": "无人负责",
+          "detail": "文件所有者 '无负责人' 符合无负责人规则 '无负责人'",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
       "order": 31,
       "batch": "高风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
-      "is_dir": false,
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录",
+      "is_dir": true,
       "has_critical": false,
       "has_high": true,
       "total_weight": 150,
@@ -1125,8 +1125,8 @@
         {
           "type": "sensitive_content",
           "level": "high",
-          "description": "疑似敏感内容: 财务资料",
-          "detail": "文件名/路径包含敏感词 '预算'",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
           "confirmation_required": false
         },
         {
@@ -1140,6 +1140,106 @@
     },
     {
       "order": 32,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 33,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs/交接文档.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 34,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 35,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project/代码仓库.zip",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'",
+          "confirmation_required": false
+        },
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 36,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/合作方合同.pdf",
       "is_dir": false,
@@ -1164,7 +1264,32 @@
       ]
     },
     {
-      "order": 33,
+      "order": 37,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 待归档, 无负责人",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 38,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/客户合同.pdf",
       "is_dir": false,
@@ -1189,7 +1314,82 @@
       ]
     },
     {
-      "order": 34,
+      "order": 39,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/孤儿文件夹-无人接管",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 无人接管",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 40,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/废弃资料",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 废弃",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 41,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/待认领项目",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 150,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 待认领",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 42,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
       "is_dir": false,
@@ -1221,7 +1421,7 @@
       ]
     },
     {
-      "order": 35,
+      "order": 43,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
       "is_dir": true,
@@ -1246,7 +1446,7 @@
       ]
     },
     {
-      "order": 36,
+      "order": 44,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
       "is_dir": false,
@@ -1271,7 +1471,7 @@
       ]
     },
     {
-      "order": 37,
+      "order": 45,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹",
       "is_dir": true,
@@ -1296,7 +1496,7 @@
       ]
     },
     {
-      "order": 38,
+      "order": 46,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料",
       "is_dir": true,
@@ -1321,7 +1521,7 @@
       ]
     },
     {
-      "order": 39,
+      "order": 47,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/离职员工文件夹/李四-旧项目资料/项目文档.doc",
       "is_dir": false,
@@ -1346,7 +1546,7 @@
       ]
     },
     {
-      "order": 40,
+      "order": 48,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）/客户发票扫描件.pdf",
       "is_dir": false,
@@ -1371,7 +1571,7 @@
       ]
     },
     {
-      "order": 41,
+      "order": 49,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/合同归档",
       "is_dir": true,
@@ -1396,7 +1596,7 @@
       ]
     },
     {
-      "order": 42,
+      "order": 50,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/OP 运营数据 报表.xlsx",
       "is_dir": false,
@@ -1428,7 +1628,32 @@
       ]
     },
     {
-      "order": 43,
+      "order": 51,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "medium",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 临时",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 52,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/产品部-PM",
       "is_dir": true,
@@ -1453,7 +1678,32 @@
       ]
     },
     {
-      "order": 44,
+      "order": 53,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/权限未设置的文件.xlsx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "permission_missing",
+          "level": "medium",
+          "description": "权限信息缺失",
+          "detail": "权限描述为空或未知: '未设置'",
+          "confirmation_required": true
+        }
+      ]
+    },
+    {
+      "order": 54,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT",
       "is_dir": true,
@@ -1478,7 +1728,32 @@
       ]
     },
     {
-      "order": 45,
+      "order": 55,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录",
+      "is_dir": true,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 125,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        },
+        {
+          "type": "unowned_folder",
+          "level": "medium",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 56,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
       "is_dir": true,
@@ -1503,7 +1778,7 @@
       ]
     },
     {
-      "order": 46,
+      "order": 57,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN",
       "is_dir": true,
@@ -1528,7 +1803,7 @@
       ]
     },
     {
-      "order": 47,
+      "order": 58,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP",
       "is_dir": true,
@@ -1553,7 +1828,7 @@
       ]
     },
     {
-      "order": 48,
+      "order": 59,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD",
       "is_dir": true,
@@ -1578,7 +1853,7 @@
       ]
     },
     {
-      "order": 49,
+      "order": 60,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/财务 数据 备份 2024.zip",
       "is_dir": false,
@@ -1603,7 +1878,7 @@
       ]
     },
     {
-      "order": 50,
+      "order": 61,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份",
       "is_dir": true,
@@ -1628,7 +1903,7 @@
       ]
     },
     {
-      "order": 51,
+      "order": 62,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/运营部-OP/活动数据 备份/用户信息 2024.zip",
       "is_dir": false,
@@ -1653,7 +1928,7 @@
       ]
     },
     {
-      "order": 52,
+      "order": 63,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive",
       "is_dir": true,
@@ -1671,9 +1946,27 @@
       ]
     },
     {
-      "order": 53,
+      "order": 64,
       "batch": "高风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时-无负责人/待处理文件.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 65,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试",
       "is_dir": true,
       "has_critical": false,
       "has_high": true,
@@ -1689,7 +1982,43 @@
       ]
     },
     {
-      "order": 54,
+      "order": 66,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/标记无主的文件夹/一些文件.txt",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 67,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/正常元数据文件.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 68,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录",
       "is_dir": true,
@@ -1707,25 +2036,7 @@
       ]
     },
     {
-      "order": 55,
-      "batch": "高风险批处理",
-      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
-      "is_dir": true,
-      "has_critical": false,
-      "has_high": true,
-      "total_weight": 75,
-      "risks": [
-        {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限",
-          "confirmation_required": false
-        }
-      ]
-    },
-    {
-      "order": 56,
+      "order": 69,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/员工信息.docx",
       "is_dir": false,
@@ -1743,7 +2054,61 @@
       ]
     },
     {
-      "order": 57,
+      "order": 70,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/孤儿文件夹-无人接管/数据备份.tar.gz",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 71,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/废弃资料/旧版文件.zip",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 72,
+      "batch": "高风险批处理",
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/待认领项目/项目资料.docx",
+      "is_dir": false,
+      "has_critical": false,
+      "has_high": true,
+      "total_weight": 75,
+      "risks": [
+        {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限",
+          "confirmation_required": false
+        }
+      ]
+    },
+    {
+      "order": 73,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件",
       "is_dir": true,
@@ -1761,7 +2126,7 @@
       ]
     },
     {
-      "order": 58,
+      "order": 74,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/会议纪要.docx",
       "is_dir": false,
@@ -1779,7 +2144,7 @@
       ]
     },
     {
-      "order": 59,
+      "order": 75,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/员工手册.pdf",
       "is_dir": false,
@@ -1797,7 +2162,7 @@
       ]
     },
     {
-      "order": 60,
+      "order": 76,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/正常文件/周报模板.xlsx",
       "is_dir": false,
@@ -1815,7 +2180,7 @@
       ]
     },
     {
-      "order": 61,
+      "order": 77,
       "batch": "高风险批处理",
       "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/代码规范(内部版).md",
       "is_dir": false,
@@ -1840,7 +2205,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.190641",
+        "mtime": "2026-06-13T07:23:59.083294",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1853,7 +2218,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.191404",
+        "mtime": "2026-06-13T07:23:59.081739",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1866,7 +2231,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.191488",
+        "mtime": "2026-06-13T07:23:59.081766",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1879,7 +2244,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.191314",
+        "mtime": "2026-06-13T07:23:59.081705",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1892,7 +2257,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.191088",
+        "mtime": "2026-06-13T07:23:59.081633",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1905,7 +2270,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.177004",
+        "mtime": "2026-06-13T07:23:59.080319",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1914,11 +2279,24 @@
         }
       },
       {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.080319",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "medium",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 临时"
+        }
+      },
+      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时文件/工资表_副本.xlsx",
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171579",
+        "mtime": "2026-06-13T07:23:59.079432",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -1931,7 +2309,7 @@
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171579",
+        "mtime": "2026-06-13T07:23:59.079432",
         "risk": {
           "type": "overly_broad_permission",
           "level": "critical",
@@ -1944,7 +2322,7 @@
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171579",
+        "mtime": "2026-06-13T07:23:59.079432",
         "risk": {
           "type": "world_readable_writable",
           "level": "critical",
@@ -1957,7 +2335,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.172486",
+        "mtime": "2026-06-13T07:23:59.079922",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -1970,7 +2348,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.172486",
+        "mtime": "2026-06-13T07:23:59.079922",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -1983,7 +2361,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.172486",
+        "mtime": "2026-06-13T07:23:59.079922",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -1996,7 +2374,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171961",
+        "mtime": "2026-06-13T07:23:59.079677",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2009,7 +2387,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171961",
+        "mtime": "2026-06-13T07:23:59.079677",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2022,7 +2400,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.171961",
+        "mtime": "2026-06-13T07:23:59.079677",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -2035,7 +2413,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.173713",
+        "mtime": "2026-06-13T07:23:59.080196",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2048,7 +2426,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.173713",
+        "mtime": "2026-06-13T07:23:59.080196",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2061,7 +2439,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.173713",
+        "mtime": "2026-06-13T07:23:59.080196",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2074,7 +2452,33 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.173713",
+        "mtime": "2026-06-13T07:23:59.080196",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083490",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083490",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2087,7 +2491,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135441",
+        "mtime": "2026-06-13T07:23:59.077592",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2100,7 +2504,7 @@
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135026",
+        "mtime": "2026-06-13T07:23:59.077554",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2113,7 +2517,7 @@
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135026",
+        "mtime": "2026-06-13T07:23:59.077554",
         "risk": {
           "type": "overly_broad_permission",
           "level": "critical",
@@ -2126,7 +2530,7 @@
         "is_dir": false,
         "permissions": "-rwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135026",
+        "mtime": "2026-06-13T07:23:59.077554",
         "risk": {
           "type": "world_readable_writable",
           "level": "critical",
@@ -2139,7 +2543,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170210",
+        "mtime": "2026-06-13T07:23:59.079271",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2152,7 +2556,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170210",
+        "mtime": "2026-06-13T07:23:59.079271",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2165,7 +2569,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.169893",
+        "mtime": "2026-06-13T07:23:59.079217",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2178,7 +2582,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.169893",
+        "mtime": "2026-06-13T07:23:59.079217",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2191,7 +2595,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170048",
+        "mtime": "2026-06-13T07:23:59.079244",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2204,7 +2608,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170048",
+        "mtime": "2026-06-13T07:23:59.079244",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2217,7 +2621,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170437",
+        "mtime": "2026-06-13T07:23:59.079309",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2230,7 +2634,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170437",
+        "mtime": "2026-06-13T07:23:59.079309",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2243,7 +2647,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170437",
+        "mtime": "2026-06-13T07:23:59.079309",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2256,7 +2660,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170708",
+        "mtime": "2026-06-13T07:23:59.079337",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2269,7 +2673,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170708",
+        "mtime": "2026-06-13T07:23:59.079337",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2282,7 +2686,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170708",
+        "mtime": "2026-06-13T07:23:59.079337",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2295,7 +2699,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.170708",
+        "mtime": "2026-06-13T07:23:59.079337",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2308,7 +2712,7 @@
         "is_dir": true,
         "permissions": "drwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188300",
+        "mtime": "2026-06-13T07:23:59.081336",
         "risk": {
           "type": "overly_broad_permission",
           "level": "critical",
@@ -2321,7 +2725,7 @@
         "is_dir": true,
         "permissions": "drwxrwxrwx",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188300",
+        "mtime": "2026-06-13T07:23:59.081336",
         "risk": {
           "type": "world_readable_writable",
           "level": "critical",
@@ -2330,11 +2734,24 @@
         }
       },
       {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人",
+        "is_dir": true,
+        "permissions": "drwxrwxrwx",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081336",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 待归档, 无负责人"
+        }
+      },
+      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.190236",
+        "mtime": "2026-06-13T07:23:59.081494",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2343,11 +2760,24 @@
         }
       },
       {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081494",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 待归档, 无负责人"
+        }
+      },
+      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/待归档-无负责人/旧项目资料/员工信息.docx",
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.190415",
+        "mtime": "2026-06-13T07:23:59.081522",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2360,7 +2790,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188907",
+        "mtime": "2026-06-13T07:23:59.081459",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2373,7 +2803,189 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188907",
+        "mtime": "2026-06-13T07:23:59.081459",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082045",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082045",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "medium",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/孤儿文件夹-无人接管",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082090",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/孤儿文件夹-无人接管",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082090",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 无人接管"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/孤儿文件夹-无人接管/数据备份.tar.gz",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082121",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/废弃资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081982",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/废弃资料",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081982",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 废弃"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/废弃资料/旧版文件.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082011",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/待认领项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081875",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/待认领项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081875",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无人负责, 待认领"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/无人负责目录/待认领项目/项目资料.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.081903",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时-无负责人",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082254",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时-无负责人",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082254",
+        "risk": {
+          "type": "unowned_folder",
+          "level": "high",
+          "description": "疑似无人负责的文件夹",
+          "detail": "文件夹名称/路径包含无人负责关键词: 无负责人, 临时"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/临时-无负责人/待处理文件.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082289",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2388,7 +3000,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159660",
+        "mtime": "2026-06-13T07:23:59.078829",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2401,7 +3013,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159660",
+        "mtime": "2026-06-13T07:23:59.078829",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -2414,7 +3026,7 @@
         "is_dir": false,
         "permissions": "-rw-rw-rw-",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158450",
+        "mtime": "2026-06-13T07:23:59.078654",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2427,7 +3039,7 @@
         "is_dir": false,
         "permissions": "-rw-rw-rw-",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158450",
+        "mtime": "2026-06-13T07:23:59.078654",
         "risk": {
           "type": "world_readable_writable",
           "level": "critical",
@@ -2440,20 +3052,7 @@
         "is_dir": false,
         "permissions": "-rw-rw-rw-",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158450",
-        "risk": {
-          "type": "external_link",
-          "level": "medium",
-          "description": "外部分享链接",
-          "detail": "检测到外部分享链接: https://share."
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
-        "is_dir": false,
-        "permissions": "-rw-rw-rw-",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158450",
+        "mtime": "2026-06-13T07:23:59.078654",
         "risk": {
           "type": "external_link",
           "level": "medium",
@@ -2462,29 +3061,16 @@
         }
       },
       {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/客户信息表-完整名单.xlsx",
         "is_dir": false,
-        "permissions": "-rw-r--r--",
+        "permissions": "-rw-rw-rw-",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.160120",
+        "mtime": "2026-06-13T07:23:59.078654",
         "risk": {
-          "type": "sensitive_content",
-          "level": "critical",
-          "description": "疑似敏感内容: 客户信息",
-          "detail": "文件名/路径包含敏感词 '客户信息'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/销售部-BD/.客户信息表-完整名单.xlsx.sharing",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.160120",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
+          "type": "external_link",
+          "level": "medium",
+          "description": "外部分享链接",
+          "detail": "检测到外部分享链接: https://share."
         }
       },
       {
@@ -2492,7 +3078,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159516",
+        "mtime": "2026-06-13T07:23:59.078804",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2505,7 +3091,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159516",
+        "mtime": "2026-06-13T07:23:59.078804",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2518,7 +3104,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159516",
+        "mtime": "2026-06-13T07:23:59.078804",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2531,7 +3117,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159516",
+        "mtime": "2026-06-13T07:23:59.078804",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -2544,7 +3130,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158894",
+        "mtime": "2026-06-13T07:23:59.078701",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2557,7 +3143,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.158894",
+        "mtime": "2026-06-13T07:23:59.078701",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2570,7 +3156,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159247",
+        "mtime": "2026-06-13T07:23:59.078751",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2583,7 +3169,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159247",
+        "mtime": "2026-06-13T07:23:59.078751",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2596,7 +3182,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159247",
+        "mtime": "2026-06-13T07:23:59.078751",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -2609,7 +3195,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.159247",
+        "mtime": "2026-06-13T07:23:59.078751",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -2624,7 +3210,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.155800",
+        "mtime": "2026-06-13T07:23:59.078551",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2637,7 +3223,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.155800",
+        "mtime": "2026-06-13T07:23:59.078551",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -2646,50 +3232,11 @@
         }
       },
       {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.156078",
-        "risk": {
-          "type": "sensitive_content",
-          "level": "critical",
-          "description": "疑似敏感内容: 机密文件",
-          "detail": "文件名/路径包含敏感词 '机密'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.156078",
-        "risk": {
-          "type": "sensitive_content",
-          "level": "high",
-          "description": "疑似敏感内容: 财务资料",
-          "detail": "文件名/路径包含敏感词 '财务报表'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/.2024财务报表_机密.xlsx.sharing",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.156078",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2702,7 +3249,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2715,7 +3262,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2728,7 +3275,20 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://drive."
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "external_link_no_expiry",
           "level": "high",
@@ -2741,7 +3301,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "external_link_no_expiry",
           "level": "high",
@@ -2754,7 +3314,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
+        "mtime": "2026-06-13T07:23:59.078348",
         "risk": {
           "type": "external_link_no_expiry",
           "level": "high",
@@ -2763,24 +3323,11 @@
         }
       },
       {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/2024财务报表_机密.xlsx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153029",
-        "risk": {
-          "type": "external_link_no_expiry",
-          "level": "high",
-          "description": "外链无过期时间",
-          "detail": "检测到外部分享链接，未设置过期时间: https://drive."
-        }
-      },
-      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/财务部-FIN/发票管理（待处理）",
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.154710",
+        "mtime": "2026-06-13T07:23:59.078497",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2793,7 +3340,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.154710",
+        "mtime": "2026-06-13T07:23:59.078497",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2806,7 +3353,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.154710",
+        "mtime": "2026-06-13T07:23:59.078497",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -2819,7 +3366,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.154925",
+        "mtime": "2026-06-13T07:23:59.078524",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2832,7 +3379,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.154925",
+        "mtime": "2026-06-13T07:23:59.078524",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2845,7 +3392,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153687",
+        "mtime": "2026-06-13T07:23:59.078408",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2858,7 +3405,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153687",
+        "mtime": "2026-06-13T07:23:59.078408",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2871,7 +3418,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153943",
+        "mtime": "2026-06-13T07:23:59.078434",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -2884,7 +3431,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153943",
+        "mtime": "2026-06-13T07:23:59.078434",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -2897,7 +3444,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.153943",
+        "mtime": "2026-06-13T07:23:59.078434",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2910,7 +3457,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.179153",
+        "mtime": "2026-06-13T07:23:59.080409",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2923,7 +3470,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.179153",
+        "mtime": "2026-06-13T07:23:59.080409",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -2938,7 +3485,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.187934",
+        "mtime": "2026-06-13T07:23:59.081230",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2951,7 +3498,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.187934",
+        "mtime": "2026-06-13T07:23:59.081230",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -2964,7 +3511,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.187630",
+        "mtime": "2026-06-13T07:23:59.081183",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -2977,7 +3524,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.187630",
+        "mtime": "2026-06-13T07:23:59.081183",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -2990,7 +3537,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.187630",
+        "mtime": "2026-06-13T07:23:59.081183",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3003,7 +3550,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188082",
+        "mtime": "2026-06-13T07:23:59.081264",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -3016,7 +3563,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188082",
+        "mtime": "2026-06-13T07:23:59.081264",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3029,7 +3576,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.188082",
+        "mtime": "2026-06-13T07:23:59.081264",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -3044,7 +3591,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.168175",
+        "mtime": "2026-06-13T07:23:59.079086",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3057,7 +3604,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.168175",
+        "mtime": "2026-06-13T07:23:59.079086",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3066,24 +3613,11 @@
         }
       },
       {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.168736",
-        "risk": {
-          "type": "sensitive_content",
-          "level": "high",
-          "description": "疑似敏感内容: 财务资料",
-          "detail": "文件名/路径包含敏感词 '预算'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/.品牌推广预算.xlsx.sharing",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.168736",
+        "mtime": "2026-06-13T07:23:59.078957",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3096,20 +3630,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.161758",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/MKT 活动方案 （最终版）.pptx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.161758",
+        "mtime": "2026-06-13T07:23:59.078957",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -3122,7 +3643,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.161758",
+        "mtime": "2026-06-13T07:23:59.078957",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -3135,7 +3656,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.161758",
+        "mtime": "2026-06-13T07:23:59.078957",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3148,7 +3669,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.164649",
+        "mtime": "2026-06-13T07:23:59.079004",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3161,7 +3682,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.164649",
+        "mtime": "2026-06-13T07:23:59.079004",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3174,20 +3695,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.164649",
-        "risk": {
-          "type": "external_link_no_expiry",
-          "level": "high",
-          "description": "外链无过期时间",
-          "detail": "检测到外部分享链接，未设置过期时间: https://pan."
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.164649",
+        "mtime": "2026-06-13T07:23:59.079004",
         "risk": {
           "type": "external_link_no_expiry",
           "level": "high",
@@ -3196,11 +3704,24 @@
         }
       },
       {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/品牌推广预算.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.079004",
+        "risk": {
+          "type": "external_link_no_expiry",
+          "level": "high",
+          "description": "外链无过期时间",
+          "detail": "检测到外部分享链接，未设置过期时间: https://pan."
+        }
+      },
+      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/市场部-MKT/合作方合同.pdf",
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.167825",
+        "mtime": "2026-06-13T07:23:59.079055",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3213,7 +3734,59 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.167825",
+        "mtime": "2026-06-13T07:23:59.079055",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083405",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083405",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project/代码仓库.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083442",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/resigned_zhang_san_project/代码仓库.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083442",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3228,7 +3801,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.142191",
+        "mtime": "2026-06-13T07:23:59.078202",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3241,7 +3814,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.142191",
+        "mtime": "2026-06-13T07:23:59.078202",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3254,7 +3827,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.142191",
+        "mtime": "2026-06-13T07:23:59.078202",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3267,7 +3840,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.142191",
+        "mtime": "2026-06-13T07:23:59.078202",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3280,7 +3853,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137599",
+        "mtime": "2026-06-13T07:23:59.078019",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3293,7 +3866,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137599",
+        "mtime": "2026-06-13T07:23:59.078019",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3306,7 +3879,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137599",
+        "mtime": "2026-06-13T07:23:59.078019",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3319,7 +3892,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137599",
+        "mtime": "2026-06-13T07:23:59.078019",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3332,7 +3905,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137965",
+        "mtime": "2026-06-13T07:23:59.078087",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -3345,7 +3918,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137965",
+        "mtime": "2026-06-13T07:23:59.078087",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3358,7 +3931,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137965",
+        "mtime": "2026-06-13T07:23:59.078087",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3371,7 +3944,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.137965",
+        "mtime": "2026-06-13T07:23:59.078087",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3384,7 +3957,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.138793",
+        "mtime": "2026-06-13T07:23:59.078151",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3397,7 +3970,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.138793",
+        "mtime": "2026-06-13T07:23:59.078151",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3410,7 +3983,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.138793",
+        "mtime": "2026-06-13T07:23:59.078151",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3423,7 +3996,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.138793",
+        "mtime": "2026-06-13T07:23:59.078151",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3436,7 +4009,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.140367",
+        "mtime": "2026-06-13T07:23:59.078178",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3449,7 +4022,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.140367",
+        "mtime": "2026-06-13T07:23:59.078178",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3462,7 +4035,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.140367",
+        "mtime": "2026-06-13T07:23:59.078178",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3475,7 +4048,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.140367",
+        "mtime": "2026-06-13T07:23:59.078178",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3488,7 +4061,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.140367",
+        "mtime": "2026-06-13T07:23:59.078178",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -3501,7 +4074,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3514,7 +4087,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3527,7 +4100,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3540,7 +4113,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3553,7 +4126,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3566,7 +4139,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.145710",
+        "mtime": "2026-06-13T07:23:59.078237",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3579,7 +4152,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -3592,7 +4165,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3605,7 +4178,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3618,7 +4191,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3631,7 +4204,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3644,7 +4217,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
         "risk": {
           "type": "sensitive_content",
           "level": "high",
@@ -3657,7 +4230,230 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.149577",
+        "mtime": "2026-06-13T07:23:59.078263",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      }
+    ],
+    "研发部": [
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083131",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/权限未设置的文件.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "张三",
+        "mtime": "2026-06-13T07:23:59.082586",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/权限未设置的文件.xlsx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "张三",
+        "mtime": "2026-06-13T07:23:59.082586",
+        "risk": {
+          "type": "permission_missing",
+          "level": "medium",
+          "description": "权限信息缺失",
+          "detail": "权限描述为空或未知: '未设置'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/正常元数据文件.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "李四",
+        "mtime": "2026-06-13T07:23:59.083033",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/标记无主的文件夹",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "无负责人",
+        "mtime": "2026-06-13T07:23:59.082409",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/标记无主的文件夹",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "无负责人",
+        "mtime": "2026-06-13T07:23:59.082409",
+        "risk": {
+          "type": "no_owner",
+          "level": "high",
+          "description": "无人负责",
+          "detail": "文件所有者 '无负责人' 符合无负责人规则 '无负责人'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/元数据测试/标记无主的文件夹/一些文件.txt",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.082441",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077813",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077813",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/代码规范(内部版).md",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077786",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077732",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077732",
+        "risk": {
+          "type": "has_space",
+          "level": "low",
+          "description": "文件名包含空格",
+          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077732",
+        "risk": {
+          "type": "has_old_dept_abbr",
+          "level": "medium",
+          "description": "文件名包含旧部门缩写",
+          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077849",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077849",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077892",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.077892",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3668,11 +4464,63 @@
     ],
     "客户服务部": [
       {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083531",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs",
+        "is_dir": true,
+        "permissions": "drwxr-xr-x",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083531",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs/交接文档.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083564",
+        "risk": {
+          "type": "sensitive_content",
+          "level": "high",
+          "description": "疑似敏感内容: 员工信息",
+          "detail": "文件名/路径包含敏感词 '离职'"
+        }
+      },
+      {
+        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/已离职员工目录/former_employee_docs/交接文档.docx",
+        "is_dir": false,
+        "permissions": "-rw-r--r--",
+        "owner": "bill",
+        "mtime": "2026-06-13T07:23:59.083564",
+        "risk": {
+          "type": "world_readable_writable",
+          "level": "high",
+          "description": "全局可读/可写",
+          "detail": "其他用户拥有读权限"
+        }
+      },
+      {
         "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/公共目录/客户名单_全公司.csv",
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135664",
+        "mtime": "2026-06-13T07:23:59.077621",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -3685,7 +4533,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.135664",
+        "mtime": "2026-06-13T07:23:59.077621",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3700,7 +4548,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185643",
+        "mtime": "2026-06-13T07:23:59.080850",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3713,7 +4561,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185643",
+        "mtime": "2026-06-13T07:23:59.080850",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3726,7 +4574,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.184443",
+        "mtime": "2026-06-13T07:23:59.080672",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3739,7 +4587,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.184443",
+        "mtime": "2026-06-13T07:23:59.080672",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -3752,7 +4600,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.184443",
+        "mtime": "2026-06-13T07:23:59.080672",
         "risk": {
           "type": "has_old_dept_abbr",
           "level": "medium",
@@ -3765,7 +4613,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185496",
+        "mtime": "2026-06-13T07:23:59.080794",
         "risk": {
           "type": "sensitive_content",
           "level": "critical",
@@ -3778,7 +4626,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185496",
+        "mtime": "2026-06-13T07:23:59.080794",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3791,7 +4639,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185496",
+        "mtime": "2026-06-13T07:23:59.080794",
         "risk": {
           "type": "has_chinese_parentheses",
           "level": "low",
@@ -3804,7 +4652,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185775",
+        "mtime": "2026-06-13T07:23:59.080929",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3817,7 +4665,7 @@
         "is_dir": true,
         "permissions": "drwxr-xr-x",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185775",
+        "mtime": "2026-06-13T07:23:59.080929",
         "risk": {
           "type": "has_space",
           "level": "low",
@@ -3830,7 +4678,7 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185881",
+        "mtime": "2026-06-13T07:23:59.080990",
         "risk": {
           "type": "world_readable_writable",
           "level": "high",
@@ -3843,144 +4691,12 @@
         "is_dir": false,
         "permissions": "-rw-r--r--",
         "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.185881",
+        "mtime": "2026-06-13T07:23:59.080990",
         "risk": {
           "type": "has_space",
           "level": "low",
           "description": "文件名包含空格",
           "detail": "文件名中包含空格，建议统一使用下划线或连字符"
-        }
-      }
-    ],
-    "研发部": [
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
-        "is_dir": true,
-        "permissions": "drwxr-xr-x",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136521",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD",
-        "is_dir": true,
-        "permissions": "drwxr-xr-x",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136521",
-        "risk": {
-          "type": "has_old_dept_abbr",
-          "level": "medium",
-          "description": "文件名包含旧部门缩写",
-          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/代码规范(内部版).md",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136431",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136211",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136211",
-        "risk": {
-          "type": "has_space",
-          "level": "low",
-          "description": "文件名包含空格",
-          "detail": "文件名中包含空格，建议统一使用下划线或连字符"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/RD 项目文档 版本1.docx",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136211",
-        "risk": {
-          "type": "has_old_dept_abbr",
-          "level": "medium",
-          "description": "文件名包含旧部门缩写",
-          "detail": "文件名包含旧部门缩写 'RD'，请确认是否需要更新"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
-        "is_dir": true,
-        "permissions": "drwxr-xr-x",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136798",
-        "risk": {
-          "type": "sensitive_content",
-          "level": "high",
-          "description": "疑似敏感内容: 员工信息",
-          "detail": "文件名/路径包含敏感词 '离职'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目",
-        "is_dir": true,
-        "permissions": "drwxr-xr-x",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136798",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136958",
-        "risk": {
-          "type": "sensitive_content",
-          "level": "high",
-          "description": "疑似敏感内容: 员工信息",
-          "detail": "文件名/路径包含敏感词 '离职'"
-        }
-      },
-      {
-        "path": "/Users/bill/Documents/solo/workspaces/yzz100403/test_shared_drive/研发部-RD/离职员工-张三的项目/源代码.zip",
-        "is_dir": false,
-        "permissions": "-rw-r--r--",
-        "owner": "bill",
-        "mtime": "2026-06-12T08:43:44.136958",
-        "risk": {
-          "type": "world_readable_writable",
-          "level": "high",
-          "description": "全局可读/可写",
-          "detail": "其他用户拥有读权限"
         }
       }
     ]
