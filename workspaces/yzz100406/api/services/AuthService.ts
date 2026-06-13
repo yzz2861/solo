@@ -1,19 +1,18 @@
 import { Repository } from 'typeorm';
-import bcrypt from 'bcrypt';
-import { AppDataSource } from '../data-source.js';
+import bcrypt from 'bcryptjs';
+import { getDataSource } from '../data-source.js';
 import { User } from '../entities/User.js';
 import { UserRole, User as UserType, LoginRequest, LoginResponse } from '../../shared/types.js';
 import { generateToken } from '../middleware/auth.js';
 
 export class AuthService {
-  private userRepository: Repository<User>;
-
-  constructor() {
-    this.userRepository = AppDataSource.getRepository(User);
+  private getUserRepository(): Repository<User> {
+    return getDataSource().getRepository(User);
   }
 
   async login(request: LoginRequest): Promise<LoginResponse> {
-    const user = await this.userRepository.findOne({
+    const repo = this.getUserRepository();
+    const user = await repo.findOne({
       where: { username: request.username }
     });
 
@@ -40,13 +39,14 @@ export class AuthService {
   }
 
   async initDefaultUsers(): Promise<void> {
-    const staffCount = await this.userRepository.count({
+    const repo = this.getUserRepository();
+    const staffCount = await repo.count({
       where: { username: 'staff1' }
     });
 
     if (staffCount === 0) {
       const passwordHash = await bcrypt.hash('staff123', 10);
-      const staff = this.userRepository.create({
+      const staff = repo.create({
         id: 'staff-001',
         username: 'staff1',
         passwordHash,
@@ -54,17 +54,17 @@ export class AuthService {
         role: UserRole.STAFF,
         storeId: 'store-001'
       });
-      await this.userRepository.save(staff);
+      await repo.save(staff);
       console.log('默认店员账号已创建: staff1 / staff123');
     }
 
-    const managerCount = await this.userRepository.count({
+    const managerCount = await repo.count({
       where: { username: 'manager1' }
     });
 
     if (managerCount === 0) {
       const passwordHash = await bcrypt.hash('manager123', 10);
-      const manager = this.userRepository.create({
+      const manager = repo.create({
         id: 'manager-001',
         username: 'manager1',
         passwordHash,
@@ -72,7 +72,7 @@ export class AuthService {
         role: UserRole.MANAGER,
         storeId: 'store-001'
       });
-      await this.userRepository.save(manager);
+      await repo.save(manager);
       console.log('默认经理账号已创建: manager1 / manager123');
     }
   }

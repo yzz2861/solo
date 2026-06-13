@@ -1,9 +1,7 @@
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { AppDataSource } from '../data-source.js';
+import { getDataSource } from '../data-source.js';
 import { Accident } from '../entities/Accident.js';
-import { Customer } from '../entities/Customer.js';
-import { Vehicle } from '../entities/Vehicle.js';
 import { 
   AccidentStatus, 
   User, 
@@ -28,14 +26,10 @@ const FIELD_LABELS: Record<string, string> = {
 
 export class AccidentService {
   private accidentRepository: Repository<Accident>;
-  private customerRepository: Repository<Customer>;
-  private vehicleRepository: Repository<Vehicle>;
   private auditService: AuditService;
 
   constructor() {
-    this.accidentRepository = AppDataSource.getRepository(Accident);
-    this.customerRepository = AppDataSource.getRepository(Customer);
-    this.vehicleRepository = AppDataSource.getRepository(Vehicle);
+    this.accidentRepository = getDataSource().getRepository(Accident);
     this.auditService = new AuditService();
   }
 
@@ -43,46 +37,22 @@ export class AccidentService {
     if (!accident.assessDeadline || accident.status >= AccidentStatus.ASSESSED) {
       return { isOverdue: false, overdueDays: 0 };
     }
-    
     const now = new Date();
     const deadline = new Date(accident.assessDeadline);
-    
     if (now > deadline) {
       const diffMs = now.getTime() - deadline.getTime();
       const overdueDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
       return { isOverdue: true, overdueDays };
     }
-    
     return { isOverdue: false, overdueDays: 0 };
   }
 
+  private addOverdueInfo(accident: Accident): Accident {
+    const { isOverdue, overdueDays } = this.calculateOverdue(accident);
+    return { ...accident, isOverdue, overdueDays };
+  }
+
   async createAccident(request: CreateAccidentRequest, user: User): Promise<Accident> {
-    let customer = await this.customerRepository.findOne({
-      where: { phone: request.customerPhone }
-    });
-
-    if (!customer) {
-      customer = this.customerRepository.create({
-        id: uuidv4(),
-        name: request.customerName,
-        phone: request.customerPhone,
-        idCard: request.customerIdCard
-      });
-      customer = await this.customerRepository.save(customer);
-    }
-
-    let vehicle = await this.vehicleRepository.findOne({
-      where: { plateNumber: request.plateNumber }
-    });
-
-    if (!vehicle) {
-      vehicle = this.vehicleRepository.create({
-        plateNumber: request.plateNumber,
-        model: request.vehicleModel
-      });
-      vehicle = await this.vehicleRepository.save(vehicle);
-    }
-
     const accidentTime = new Date(request.accidentTime);
     const assessDeadline = new Date(accidentTime);
     assessDeadline.setDate(assessDeadline.getDate() + 3);
@@ -90,38 +60,31 @@ export class AccidentService {
     const accident = this.accidentRepository.create({
       id: uuidv4(),
       plateNumber: request.plateNumber,
-      customerId: customer.id,
+      vehicleModel: request.vehicleModel,
+      customerId: uuidv4(),
       customerName: request.customerName,
       customerPhone: request.customerPhone,
-      customerIdCard: request.customerIdCard,
-      vehicleModel: request.vehicleModel,
+      customerIdCard: request.customerIdCard || null,
       accidentTime,
-      returnTime: request.returnTime ? new Date(request.returnTime) : undefined,
-      location: request.location,
-      description: request.description,
-      depositAmount: request.depositAmount,
+      returnTime: request.returnTime ? new Date(request.returnTime) : null,
+      location: request.location || null,
+      description: request.description || null,
+      depositAmount: request.depositAmount || null,
       customerConfirmed: false,
       replacementCar: false,
       status: AccidentStatus.REGISTERED,
       assessDeadline,
       storeId: user.storeId,
       createdBy: user.id,
-      createdAt: new Date(),
-      updatedAt: new Date()
     });
 
     const saved = await this.accidentRepository.save(accident);
-    
+
     await this.auditService.logChange(
-      saved.id,
-      user,
-      'create',
-      undefined,
-      undefined,
-      '创建事故记录'
+      saved.id, user, 'create', undefined, undefined, '创建事故记录'
     );
 
-    return saved;
+    return this.addOverdueInfo(saved);
   }
 
   async getAccidentList(filters: {
@@ -137,46 +100,30 @@ export class AccidentService {
     if (filters.status) {
       query.andWhere('accident.status = :status', { status: filters.status });
     }
-
     if (filters.startDate) {
       query.andWhere('accident.accidentTime >= :startDate', { startDate: filters.startDate });
     }
-
     if (filters.endDate) {
       query.andWhere('accident.accidentTime <= :endDate', { endDate: filters.endDate });
     }
-
     if (filters.storeId) {
       query.andWhere('accident.storeId = :storeId', { storeId: filters.storeId });
     }
-
     if (filters.plateNumber) {
-      query.andWhere('accident.plateNumber LIKE :plateNumber', { 
-        plateNumber: `%${filters.plateNumber}%` 
-      });
+      query.andWhere('accident.plateNumber LIKE :plateNumber', { plateNumber: `%${filters.plateNumber}%` });
     }
 
     const accidents = await query.getMany();
-    
-    return accidents.map(a => {
-      const { isOverdue, overdueDays } = this.calculateOverdue(a);
-      return { ...a, isOverdue, overdueDays };
-    });
+    return accidents.map(a => this.addOverdueInfo(a));
   }
 
   async getAccidentById(id: string): Promise<Accident | null> {
     const accident = await this.accidentRepository.findOne({ where: { id } });
     if (!accident) return null;
-    
-    const { isOverdue, overdueDays } = this.calculateOverdue(accident);
-    return { ...accident, isOverdue, overdueDays };
+    return this.addOverdueInfo(accident);
   }
 
-  async updateAccident(
-    id: string,
-    update: UpdateAccidentRequest,
-    user: User
-  ): Promise<Accident | null> {
+  async updateAccident(id: string, update: UpdateAccidentRequest, user: User): Promise<Accident | null> {
     const accident = await this.accidentRepository.findOne({ where: { id } });
     if (!accident) return null;
 
@@ -202,7 +149,7 @@ export class AccidentService {
     if (update.description !== undefined) accident.description = update.description;
     if (update.location !== undefined) accident.location = update.location;
     if (update.returnTime !== undefined) accident.returnTime = new Date(update.returnTime);
-    
+
     if (update.status !== undefined && update.status !== accident.status) {
       if (update.status === AccidentStatus.CLOSED && accident.status < AccidentStatus.CONFIRMED) {
         throw new Error('定损未完成或客户未确认，无法结案');
@@ -213,114 +160,65 @@ export class AccidentService {
       accident.status = update.status;
     }
 
-    if (accident.insuranceEstimate && !accident.assessmentAmount) {
+    if (accident.insuranceEstimate && !accident.assessmentAmount && accident.status === AccidentStatus.REGISTERED) {
       accident.status = AccidentStatus.ASSESSING;
     }
 
     accident.updatedAt = new Date();
 
-    const updateForAudit: Partial<UpdateAccidentRequest & { status: string }> = { ...update };
-    if (update.status !== undefined) {
-      updateForAudit.status = update.status;
-    }
+    await this.auditService.logUpdate(id, user, oldAccident, update, FIELD_LABELS);
 
-    await this.auditService.logUpdate(
-      id,
-      user,
-      oldAccident,
-      updateForAudit,
-      FIELD_LABELS
-    );
-
-    return await this.accidentRepository.save(accident);
+    const saved = await this.accidentRepository.save(accident);
+    return this.addOverdueInfo(saved);
   }
 
   async confirmFee(id: string, user: User): Promise<Accident | null> {
     const accident = await this.accidentRepository.findOne({ where: { id } });
     if (!accident) return null;
 
-    if (accident.customerConfirmed) {
-      throw new Error('费用已确认，不可重复确认');
-    }
-
-    if (!accident.assessmentAmount) {
-      throw new Error('定损金额未填写，无法确认');
-    }
+    if (accident.customerConfirmed) throw new Error('费用已确认，不可重复确认');
+    if (!accident.assessmentAmount) throw new Error('定损金额未填写，无法确认');
 
     accident.customerConfirmed = true;
     accident.customerConfirmTime = new Date();
     accident.status = AccidentStatus.CONFIRMED;
     accident.updatedAt = new Date();
 
-    await this.auditService.logChange(
-      id,
-      user,
-      'confirm',
-      '客户确认',
-      '未确认',
-      '已确认'
-    );
+    await this.auditService.logChange(id, user, 'confirm', '客户确认', '未确认', '已确认');
 
-    await this.auditService.logChange(
-      id,
-      user,
-      'update',
-      '状态',
-      accident.status,
-      AccidentStatus.CONFIRMED
-    );
-
-    return await this.accidentRepository.save(accident);
+    const saved = await this.accidentRepository.save(accident);
+    return this.addOverdueInfo(saved);
   }
 
   async requestClose(id: string, user: User): Promise<Accident | null> {
     const accident = await this.accidentRepository.findOne({ where: { id } });
     if (!accident) return null;
 
-    if (!accident.assessmentAmount) {
-      throw new Error('定损未完成，无法申请结案');
-    }
-
-    if (!accident.customerConfirmed) {
-      throw new Error('客户未确认费用，无法申请结案');
-    }
+    if (!accident.assessmentAmount) throw new Error('定损未完成，无法申请结案');
+    if (!accident.customerConfirmed) throw new Error('客户未确认费用，无法申请结案');
 
     accident.status = AccidentStatus.PENDING_CLOSE;
     accident.updatedAt = new Date();
 
-    await this.auditService.logChange(
-      id,
-      user,
-      'update',
-      '状态',
-      accident.status,
-      AccidentStatus.PENDING_CLOSE
-    );
+    await this.auditService.logChange(id, user, 'update', '状态', String(accident.status), AccidentStatus.PENDING_CLOSE);
 
-    return await this.accidentRepository.save(accident);
+    const saved = await this.accidentRepository.save(accident);
+    return this.addOverdueInfo(saved);
   }
 
   async closeAccident(id: string, user: User): Promise<Accident | null> {
     const accident = await this.accidentRepository.findOne({ where: { id } });
     if (!accident) return null;
 
-    if (!accident.assessmentAmount) {
-      throw new Error('定损未完成，无法结案');
-    }
+    if (!accident.assessmentAmount) throw new Error('定损未完成，无法结案');
 
     accident.status = AccidentStatus.CLOSED;
     accident.updatedAt = new Date();
 
-    await this.auditService.logChange(
-      id,
-      user,
-      'close',
-      '状态',
-      accident.status,
-      AccidentStatus.CLOSED
-    );
+    await this.auditService.logChange(id, user, 'close', '状态', String(accident.status), AccidentStatus.CLOSED);
 
-    return await this.accidentRepository.save(accident);
+    const saved = await this.accidentRepository.save(accident);
+    return this.addOverdueInfo(saved);
   }
 
   async markDisputed(id: string, user: User): Promise<Accident | null> {
@@ -330,44 +228,27 @@ export class AccidentService {
     accident.status = AccidentStatus.DISPUTED;
     accident.updatedAt = new Date();
 
-    await this.auditService.logChange(
-      id,
-      user,
-      'dispute',
-      '状态',
-      accident.status,
-      AccidentStatus.DISPUTED
-    );
+    await this.auditService.logChange(id, user, 'dispute', '状态', String(accident.status), AccidentStatus.DISPUTED);
 
-    return await this.accidentRepository.save(accident);
+    const saved = await this.accidentRepository.save(accident);
+    return this.addOverdueInfo(saved);
   }
 
   async getUnclosedList(): Promise<Accident[]> {
     const accidents = await this.accidentRepository.createQueryBuilder('accident')
-      .where('accident.status NOT IN (:...statuses)', { 
-        statuses: [AccidentStatus.CLOSED] 
-      })
+      .where('accident.status != :status', { status: AccidentStatus.CLOSED })
       .orderBy('accident.createdAt', 'DESC')
       .getMany();
-
-    return accidents.map(a => {
-      const { isOverdue, overdueDays } = this.calculateOverdue(a);
-      return { ...a, isOverdue, overdueDays };
-    });
+    return accidents.map(a => this.addOverdueInfo(a));
   }
 
   async getOverdueList(): Promise<Accident[]> {
     const now = new Date();
     const accidents = await this.accidentRepository.createQueryBuilder('accident')
-      .where('accident.status < :assessed', { assessed: AccidentStatus.ASSESSED })
-      .andWhere('accident.assessDeadline < :now', { now })
+      .where('accident.assessDeadline < :now', { now })
       .orderBy('accident.assessDeadline', 'ASC')
       .getMany();
-
-    return accidents.map(a => {
-      const { isOverdue, overdueDays } = this.calculateOverdue(a);
-      return { ...a, isOverdue, overdueDays };
-    });
+    return accidents.filter(a => a.status < AccidentStatus.ASSESSED).map(a => this.addOverdueInfo(a));
   }
 
   async getDisputedList(): Promise<Accident[]> {
@@ -375,10 +256,6 @@ export class AccidentService {
       .where('accident.status = :status', { status: AccidentStatus.DISPUTED })
       .orderBy('accident.updatedAt', 'DESC')
       .getMany();
-
-    return accidents.map(a => {
-      const { isOverdue, overdueDays } = this.calculateOverdue(a);
-      return { ...a, isOverdue, overdueDays };
-    });
+    return accidents.map(a => this.addOverdueInfo(a));
   }
 }

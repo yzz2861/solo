@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import app from './app.js';
-import { AppDataSource } from './data-source.js';
+import { initializeDataSource } from './data-source.js';
 import { AuthService } from './services/AuthService.js';
 
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = parseInt(process.env.SERVER_PORT || '3002');
 
 async function startServer() {
   try {
-    await AppDataSource.initialize();
+    await initializeDataSource();
     console.log('数据库连接成功');
 
     const authService = new AuthService();
@@ -21,5 +21,9 @@ async function startServer() {
     process.exit(1);
   }
 }
+
+startServer();
+
+startServer();
 
 startServer();

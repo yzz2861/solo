@@ -1,8 +1,6 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { AccidentStatus } from '../../shared/types.js';
 import { User } from './User.js';
-import { Vehicle } from './Vehicle.js';
-import { Customer } from './Customer.js';
 
 @Entity('accident')
 export class Accident {
@@ -12,16 +10,20 @@ export class Accident {
   @Column({ type: 'varchar', length: 20, name: 'plate_number' })
   plateNumber: string;
 
-  @ManyToOne(() => Vehicle)
-  @JoinColumn({ name: 'plate_number' })
-  vehicle: Vehicle;
+  @Column({ type: 'varchar', length: 100, name: 'vehicle_model' })
+  vehicleModel: string;
 
   @Column({ type: 'varchar', length: 36, name: 'customer_id' })
   customerId: string;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: 'customer_id' })
-  customer: Customer;
+  @Column({ type: 'varchar', length: 50, name: 'customer_name' })
+  customerName: string;
+
+  @Column({ type: 'varchar', length: 20, name: 'customer_phone' })
+  customerPhone: string;
+
+  @Column({ type: 'varchar', length: 30, name: 'customer_id_card', nullable: true })
+  customerIdCard: string;
 
   @Column({ type: 'datetime', name: 'accident_time' })
   accidentTime: Date;
@@ -83,4 +85,7 @@ export class Accident {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  isOverdue?: boolean;
+  overdueDays?: number;
 }

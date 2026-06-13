@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx';
-import { Accident, StatusLabels } from '../../shared/types.js';
+import { AccidentStatus, StatusLabels } from '../../shared/types.js';
+import { Accident } from '../entities/Accident.js';
 import { AccidentService } from './AccidentService.js';
 
 type ExportType = 'unclosed' | 'overdue' | 'disputed';
@@ -32,48 +33,43 @@ export class ExportService {
         throw new Error('无效的导出类型');
     }
 
-    const data = accidents.map(accident => ({
-      '事故编号': accident.id.substring(0, 8),
-      '车牌号': accident.plateNumber,
-      '车型': accident.vehicleModel,
-      '客户姓名': accident.customerName,
-      '客户电话': accident.customerPhone,
-      '事故时间': this.formatDate(accident.accidentTime),
-      '还车时间': accident.returnTime ? this.formatDate(accident.returnTime) : '',
-      '状态': StatusLabels[accident.status],
-      '定损金额': accident.assessmentAmount || '',
-      '扣款金额': accident.deductionAmount || '',
-      '押金金额': accident.depositAmount || '',
-      '客户确认': accident.customerConfirmed ? '是' : '否',
-      '代步车': accident.replacementCar ? '是' : '否',
-      '超期天数': accident.overdueDays || 0,
-      '创建时间': this.formatDate(accident.createdAt)
+    const data = accidents.map(a => ({
+      '事故编号': a.id.substring(0, 8),
+      '车牌号': a.plateNumber,
+      '车型': a.vehicleModel,
+      '客户姓名': a.customerName,
+      '客户电话': a.customerPhone,
+      '事故时间': this.formatDate(a.accidentTime),
+      '还车时间': a.returnTime ? this.formatDate(a.returnTime) : '',
+      '状态': StatusLabels[a.status],
+      '定损金额': a.assessmentAmount ?? '',
+      '扣款金额': a.deductionAmount ?? '',
+      '押金金额': a.depositAmount ?? '',
+      '客户确认': a.customerConfirmed ? '是' : '否',
+      '代步车': a.replacementCar ? '是' : '否',
+      '超期天数': a.overdueDays || 0,
+      '创建时间': this.formatDate(a.createdAt)
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
 
-    const colWidths = [
+    worksheet['!cols'] = [
       { wch: 12 }, { wch: 12 }, { wch: 15 }, { wch: 10 },
       { wch: 13 }, { wch: 20 }, { wch: 20 }, { wch: 10 },
       { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 },
       { wch: 8 }, { wch: 10 }, { wch: 20 }
     ];
-    worksheet['!cols'] = colWidths;
 
-    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
-    return buffer;
+    return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' }) as Buffer;
   }
 
   private formatDate(date: Date): string {
     const d = new Date(date);
     return d.toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit'
     });
   }
 }

@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs/promises';
-import { AppDataSource } from '../data-source.js';
+import { getDataSource } from '../data-source.js';
 import { Photo } from '../entities/Photo.js';
 import { User } from '../../shared/types.js';
 import { AuditService } from './AuditService.js';
@@ -13,7 +13,7 @@ export class PhotoService {
   private uploadDir: string;
 
   constructor() {
-    this.photoRepository = AppDataSource.getRepository(Photo);
+    this.photoRepository = getDataSource().getRepository(Photo);
     this.auditService = new AuditService();
     this.uploadDir = path.join(process.cwd(), 'uploads', 'photos');
   }

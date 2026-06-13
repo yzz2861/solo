@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { AppDataSource } from '../data-source.js';
+import { getDataSource } from '../data-source.js';
 import { AuditLog } from '../entities/AuditLog.js';
 import { User } from '../../shared/types.js';
 
@@ -8,7 +8,7 @@ export class AuditService {
   private auditRepository: Repository<AuditLog>;
 
   constructor() {
-    this.auditRepository = AppDataSource.getRepository(AuditLog);
+    this.auditRepository = getDataSource().getRepository(AuditLog);
   }
 
   async logChange(
