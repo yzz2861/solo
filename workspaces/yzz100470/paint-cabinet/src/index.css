@@ -1,0 +1,50 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.high-consumption-row td {
+  font-weight: 600;
+}
+
+.high-consumption-row .consumption-qty {
+  color: #f5222d;
+  font-weight: 700;
+}
+
+@media print {
+  .ant-layout-sider,
+  .no-print,
+  .ant-btn {
+    display: none !important;
+  }
+
+  .ant-layout {
+    display: block !important;
+  }
+
+  .ant-layout-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-area {
+    padding: 20px;
+  }
+
+  .print-area h2 {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+}
