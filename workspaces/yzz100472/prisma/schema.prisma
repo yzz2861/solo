@@ -1,0 +1,195 @@
+// 共享工位访客通行系统数据模型
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  RECEPTION
+  SECURITY
+  OPERATIONS
+  TENANT_ADMIN
+}
+
+enum VisitStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum AccessStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum AccessDirection {
+  IN
+  OUT
+}
+
+enum AccessLogType {
+  NORMAL
+  ABNORMAL
+}
+
+enum IDCardType {
+  ID_CARD
+  PASSPORT
+  DRIVER_LICENSE
+  OTHER
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String?
+  phone     String?
+  email     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users     User[]
+  visits    VisitRecord[]
+  visitors  Visitor[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      UserRole
+  phone     String?
+  email     String?
+  tenantId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant?    @relation(fields: [tenantId], references: [id])
+
+  @@map("users")
+}
+
+model Visitor {
+  id           String      @id @default(uuid())
+  name         String
+  idCardType   IDCardType  @default(ID_CARD)
+  idCardNumber String
+  phone        String?
+  company      String?
+  tenantId     String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  tenant    Tenant         @relation(fields: [tenantId], references: [id])
+  visits    VisitRecord[]
+
+  @@unique([tenantId, idCardNumber])
+  @@map("visitors")
+}
+
+model MeetingRoom {
+  id        String   @id @default(uuid())
+  name      String
+  floor     String?
+  capacity  Int      @default(0)
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  visits    VisitRecord[]
+
+  @@map("meeting_rooms")
+}
+
+model VisitRecord {
+  id             String      @id @default(uuid())
+  visitorId      String
+  tenantId       String
+  visitorName    String
+  visitorPhone   String?
+  idCardType     IDCardType
+  idCardNumber   String
+  purpose        String?
+  startTime      DateTime
+  endTime        DateTime
+  status         VisitStatus @default(PENDING)
+  meetingRoomId  String?
+  meetingName    String?
+  actualEntryAt  DateTime?
+  actualExitAt   DateTime?
+  approvedBy     String?
+  approvedAt     DateTime?
+  rejectedReason String?
+  createdBy      String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  visitor       Visitor          @relation(fields: [visitorId], references: [id])
+  tenant        Tenant           @relation(fields: [tenantId], references: [id])
+  meetingRoom   MeetingRoom?     @relation(fields: [meetingRoomId], references: [id])
+  accessPermission AccessPermission?
+  accessLogs    AccessLog[]
+
+  @@index([tenantId, startTime])
+  @@index([visitorId, startTime])
+  @@index([status, startTime])
+  @@map("visit_records")
+}
+
+model AccessPermission {
+  id             String       @id @default(uuid())
+  visitRecordId  String       @unique
+  tenantId       String
+  visitorName    String
+  cardNumber     String?
+  accessDoors    String?
+  startTime      DateTime
+  endTime        DateTime
+  status         AccessStatus @default(ACTIVE)
+  revokedAt      DateTime?
+  revokedReason  String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  visitRecord VisitRecord @relation(fields: [visitRecordId], references: [id])
+  accessLogs  AccessLog[]
+
+  @@index([tenantId, status])
+  @@index([status, endTime])
+  @@map("access_permissions")
+}
+
+model AccessLog {
+  id               String        @id @default(uuid())
+  accessPermissionId String?
+  visitRecordId    String?
+  doorName         String
+  cardNumber       String?
+  direction        AccessDirection
+  accessTime       DateTime
+  logType          AccessLogType  @default(NORMAL)
+  abnormalReason   String?
+  visitorName      String?
+  tenantName       String?
+  createdAt        DateTime      @default(now())
+
+  accessPermission AccessPermission? @relation(fields: [accessPermissionId], references: [id])
+  visitRecord      VisitRecord?      @relation(fields: [visitRecordId], references: [id])
+
+  @@index([accessTime])
+  @@index([visitRecordId, direction])
+  @@index([logType, accessTime])
+  @@map("access_logs")
+}
