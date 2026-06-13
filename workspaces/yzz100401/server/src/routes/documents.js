@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const { all, get, run } = require('../database');
 const { authenticate } = require('../middleware/auth');
+const { parseDocument, getFileType, isSupportedFileType } = require('../services/documentParser');
 
 const router = express.Router();
 router.use(authenticate);
@@ -66,7 +67,7 @@ router.get('/:claim_id', async (req, res) => {
     
     const documents = await all(`
       SELECT d.*, u.name as uploader_name,
-             (SELECT COUNT(*) FROM document_contents dc WHERE dc.document_id = d.id) as has_content
+             (SELECT COUNT(*) FROM document_contents dc WHERE dc.document_id = d.id) as content_pages
       FROM documents d
       LEFT JOIN users u ON d.upload_by = u.id
       WHERE d.claim_id = ?
@@ -125,16 +126,20 @@ router.post('/:claim_id', upload.array('files', 20), async (req, res) => {
       
       const doc = await get('SELECT * FROM documents WHERE id = ?', [result.lastID]);
       
-      const ext = path.extname(file.originalname).toLowerCase();
-      if (ext === '.txt' || file.mimetype === 'text/plain') {
-        const content = fs.readFileSync(file.path, 'utf-8');
-        await run(`
-          INSERT INTO document_contents (document_id, page_no, content)
-          VALUES (?, 1, ?)
-        `, [result.lastID, content]);
+      if (isSupportedFileType(file.originalname, file.mimetype)) {
+        setImmediate(async () => {
+          try {
+            await parseDocument(result.lastID);
+          } catch (parseErr) {
+            console.error(`异步解析文档失败 [docId=${result.lastID}]:`, parseErr);
+          }
+        });
+      } else {
+        await run('UPDATE documents SET parse_status = ? WHERE id = ?', ['unsupported', result.lastID]);
       }
       
-      insertedDocs.push(doc);
+      const docWithStatus = await get('SELECT * FROM documents WHERE id = ?', [result.lastID]);
+      insertedDocs.push(docWithStatus);
     }
     
     res.status(201).json(insertedDocs);
@@ -234,6 +239,84 @@ router.delete('/:claim_id/:doc_id', async (req, res) => {
   } catch (err) {
     console.error('删除文档错误:', err);
     res.status(500).json({ error: '服务器错误' });
+  }
+});
+
+router.get('/:claim_id/:doc_id/status', async (req, res) => {
+  try {
+    const { claim_id, doc_id } = req.params;
+    
+    const claim = await get('SELECT * FROM claims WHERE id = ?', [claim_id]);
+    if (!claim) {
+      return res.status(404).json({ error: '理赔案件不存在' });
+    }
+    
+    if (req.user.role === 'adjuster' && claim.created_by !== req.user.id) {
+      return res.status(403).json({ error: '权限不足' });
+    }
+    
+    const doc = await get(`
+      SELECT id, parse_status, parse_error, parsed_at, page_count, text_length
+      FROM documents WHERE id = ?
+    `, [doc_id]);
+    
+    if (!doc) {
+      return res.status(404).json({ error: '文档不存在' });
+    }
+    
+    const contents = await all(`
+      SELECT page_no, LENGTH(content) as content_length
+      FROM document_contents WHERE document_id = ?
+      ORDER BY page_no
+    `, [doc_id]);
+    
+    res.json({
+      ...doc,
+      pages: contents
+    });
+  } catch (err) {
+    console.error('获取解析状态错误:', err);
+    res.status(500).json({ error: '服务器错误' });
+  }
+});
+
+router.post('/:claim_id/:doc_id/reparse', async (req, res) => {
+  try {
+    const { claim_id, doc_id } = req.params;
+    
+    const claim = await get('SELECT * FROM claims WHERE id = ?', [claim_id]);
+    if (!claim) {
+      return res.status(404).json({ error: '理赔案件不存在' });
+    }
+    
+    if (req.user.role === 'adjuster' && claim.created_by !== req.user.id) {
+      return res.status(403).json({ error: '权限不足' });
+    }
+    
+    const doc = await get('SELECT * FROM documents WHERE id = ?', [doc_id]);
+    if (!doc) {
+      return res.status(404).json({ error: '文档不存在' });
+    }
+    
+    if (!isSupportedFileType(doc.file_name, '')) {
+      return res.status(400).json({ error: '不支持的文件类型，无法解析' });
+    }
+    
+    await run('UPDATE documents SET parse_status = ?, parse_error = NULL WHERE id = ?', ['pending', doc_id]);
+    
+    setImmediate(async () => {
+      try {
+        await parseDocument(doc_id);
+      } catch (parseErr) {
+        console.error(`重新解析文档失败 [docId=${doc_id}]:`, parseErr);
+      }
+    });
+    
+    const updatedDoc = await get('SELECT * FROM documents WHERE id = ?', [doc_id]);
+    res.json(updatedDoc);
+  } catch (err) {
+    console.error('重新解析文档错误:', err);
+    res.status(500).json({ error: err.message || '服务器错误' });
   }
 });
 

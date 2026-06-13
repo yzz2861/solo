@@ -46,7 +46,9 @@ export const documentAPI = {
   }),
   getContent: (claimId, docId) => api.get(`/documents/${claimId}/${docId}/content`),
   saveContent: (claimId, docId, data) => api.post(`/documents/${claimId}/${docId}/content`, data),
-  delete: (claimId, docId) => api.delete(`/documents/${claimId}/${docId}`)
+  delete: (claimId, docId) => api.delete(`/documents/${claimId}/${docId}`),
+  getStatus: (claimId, docId) => api.get(`/documents/${claimId}/${docId}/status`),
+  reparse: (claimId, docId) => api.post(`/documents/${claimId}/${docId}/reparse`)
 };
 
 export const summaryAPI = {

@@ -43,6 +43,11 @@ db.serialize(() => {
     file_size INTEGER,
     upload_by INTEGER NOT NULL,
     upload_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    parse_status TEXT NOT NULL DEFAULT 'pending' CHECK(parse_status IN ('pending', 'processing', 'success', 'failed', 'unsupported')),
+    parse_error TEXT,
+    parsed_at DATETIME,
+    page_count INTEGER DEFAULT 0,
+    text_length INTEGER DEFAULT 0,
     FOREIGN KEY (claim_id) REFERENCES claims(id),
     FOREIGN KEY (upload_by) REFERENCES users(id)
   )`);

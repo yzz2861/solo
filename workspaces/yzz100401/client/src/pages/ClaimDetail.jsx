@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Card, 
@@ -14,7 +14,8 @@ import {
   Form,
   Input,
   DatePicker,
-  Popconfirm
+  Popconfirm,
+  Tooltip
 } from 'antd';
 import { 
   ArrowLeftOutlined, 
@@ -22,7 +23,13 @@ import {
   FileTextOutlined,
   EditOutlined,
   DeleteOutlined,
-  EyeOutlined
+  EyeOutlined,
+  ReloadOutlined,
+  CheckCircleOutlined,
+  LoadingOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  FileUnknownOutlined
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { claimAPI, documentAPI, summaryAPI } from '../api';
@@ -30,12 +37,22 @@ import { useAuth } from '../context/AuthContext';
 
 const { Title } = Typography;
 
+const PARSE_STATUS_MAP = {
+  pending: { color: 'default', text: '待解析', icon: FileUnknownOutlined },
+  processing: { color: 'processing', text: '解析中', icon: LoadingOutlined, spin: true },
+  success: { color: 'green', text: '解析成功', icon: CheckCircleOutlined },
+  failed: { color: 'red', text: '解析失败', icon: CloseCircleOutlined },
+  unsupported: { color: 'orange', text: '不支持', icon: ExclamationCircleOutlined }
+};
+
 const ClaimDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [claim, setClaim] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [parsingDocs, setParsingDocs] = useState(new Set());
+  const pollTimerRef = useRef(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [contentModalVisible, setContentModalVisible] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
@@ -127,6 +144,54 @@ const ClaimDetail = () => {
     }
   };
 
+  const startPolling = () => {
+    if (pollTimerRef.current) return;
+    pollTimerRef.current = setInterval(async () => {
+      try {
+        const res = await documentAPI.list(id);
+        setDocuments(res.data);
+        
+        const parsingDocs = res.data.filter(d => d.parse_status === 'processing' || d.parse_status === 'pending');
+        if (parsingDocs.length === 0) {
+          clearInterval(pollTimerRef.current);
+          pollTimerRef.current = null;
+        }
+      } catch (err) {
+        console.error('轮询文档状态失败:', err);
+      }
+    }, 3000);
+  };
+
+  const handleReparse = async (doc) => {
+    try {
+      setParsingDocs(prev => new Set([...prev, doc.id]));
+      await documentAPI.reparse(id, doc.id);
+      message.success('已开始重新解析');
+      startPolling();
+      fetchDetail();
+    } catch (err) {
+      message.error(err.response?.data?.error || '重新解析失败');
+    } finally {
+      setParsingDocs(prev => {
+        const next = new Set(prev);
+        next.delete(doc.id);
+        return next;
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (documents.some(d => d.parse_status === 'processing' || d.parse_status === 'pending')) {
+      startPolling();
+    }
+    return () => {
+      if (pollTimerRef.current) {
+        clearInterval(pollTimerRef.current);
+        pollTimerRef.current = null;
+      }
+    };
+  }, [documents]);
+
   const docColumns = [
     {
       title: '文件名称',
@@ -157,13 +222,36 @@ const ClaimDetail = () => {
       render: (size) => size ? `${(size / 1024).toFixed(1)} KB` : '-'
     },
     {
-      title: '内容录入',
-      key: 'has_content',
-      render: (_, record) => (
-        <Tag color={record.content_count > 0 ? 'green' : 'orange'}>
-          {record.content_count > 0 ? '已录入' : '未录入'}
-        </Tag>
-      )
+      title: '解析状态',
+      dataIndex: 'parse_status',
+      key: 'parse_status',
+      render: (status, record) => {
+        const statusInfo = PARSE_STATUS_MAP[status] || PARSE_STATUS_MAP.pending;
+        const StatusIcon = statusInfo.icon;
+        const statusTag = (
+          <Tag icon={statusInfo.spin ? <StatusIcon spin /> : <StatusIcon />} color={statusInfo.color}>
+            {statusInfo.text}
+          </Tag>
+        );
+        
+        if (status === 'failed' && record.parse_error) {
+          return (
+            <Tooltip title={record.parse_error}>
+              {statusTag}
+            </Tooltip>
+          );
+        }
+        
+        if (status === 'success') {
+          return (
+            <Tooltip title={`${record.page_count || 0} 页，${record.text_length || 0} 字`}>
+              {statusTag}
+            </Tooltip>
+          );
+        }
+        
+        return statusTag;
+      }
     },
     {
       title: '上传人',
@@ -185,9 +273,22 @@ const ClaimDetail = () => {
             type="link" 
             icon={<EyeOutlined />}
             onClick={() => handleViewContent(record)}
+            disabled={record.parse_status !== 'success' && record.content_pages === 0}
           >
             内容
           </Button>
+          {record.parse_status !== 'unsupported' && record.parse_status !== 'processing' && (
+            <Tooltip title="重新解析">
+              <Button
+                type="link"
+                icon={<ReloadOutlined />}
+                loading={parsingDocs.has(record.id)}
+                onClick={() => handleReparse(record)}
+              >
+                重解析
+              </Button>
+            </Tooltip>
+          )}
           {record.is_duplicate && (
             <Tag color="warning">重复</Tag>
           )}
