@@ -93,22 +93,24 @@ def detect_anomalies(
             except (ValueError, AttributeError):
                 pass
 
-    shop_name_map = {}
-    for shop in shops:
-        existing = shop_name_map.get(shop.shop_id)
-        if existing and existing != shop.shop_name:
-            if AnomalyType.SHOP_RENAMED not in anomalies_by_shop.get(shop.shop_id, []):
-                anomalies_by_shop.setdefault(shop.shop_id, []).append(AnomalyType.SHOP_RENAMED)
-                anomaly_details.append({
-                    "shop_id": shop.shop_id,
-                    "shop_name": shop.shop_name,
-                    "anomaly_type": AnomalyType.SHOP_RENAMED.value,
-                    "description": f"店铺名称变更，原名称：{existing}，现名称：{shop.shop_name}",
-                    "old_name": existing,
-                    "new_name": shop.shop_name,
-                })
-        else:
-            shop_name_map[shop.shop_id] = shop.shop_name
+    renamed_checked = set()
+    for key, reading in reading_map.items():
+        shop_id, meter_type = key
+        if shop_id in shop_map and shop_id not in renamed_checked:
+            renamed_checked.add(shop_id)
+            area_name = shop_map[shop_id].shop_name
+            reading_name = reading.shop_name
+            if area_name and reading_name and area_name != reading_name:
+                if AnomalyType.SHOP_RENAMED not in anomalies_by_shop.get(shop_id, []):
+                    anomalies_by_shop.setdefault(shop_id, []).append(AnomalyType.SHOP_RENAMED)
+                    anomaly_details.append({
+                        "shop_id": shop_id,
+                        "shop_name": area_name,
+                        "anomaly_type": AnomalyType.SHOP_RENAMED.value,
+                        "description": (f"店铺名称不一致：读数表「{reading_name}」，面积表「{area_name}」"),
+                        "reading_name": reading_name,
+                        "area_name": area_name,
+                    })
 
     for key, reading in reading_map.items():
         shop_id, _ = key
