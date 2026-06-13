@@ -1,6 +1,7 @@
 import os
+import re
 import json
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import pandas as pd
 
 from .utils import (
@@ -30,6 +31,118 @@ COLUMN_ALIASES = {
     "screenshot_ref": ["截图", "凭证", "截图编号", "Screenshot"],
     "remark": ["备注", "说明", "Remark", "note"],
 }
+
+GENDER_KEYWORDS = {
+    "男": "男", "M": "男", "m": "男", "male": "男", "Male": "男",
+    "女": "女", "F": "女", "f": "女", "female": "女", "Female": "女",
+}
+
+PHONE_PATTERN = re.compile(r"1[3-9]\d{9}")
+PARTNER_PATTERN = re.compile(r"(搭档|队友|Partner)[：:\s]+(.*?)(?=\s+(?:报名|项目|$))", re.IGNORECASE)
+REGISTER_PATTERN = re.compile(r"(报名|参加|报|参赛)[:：]?")
+
+EVENT_PATTERN = re.compile(
+    r"(男单|男子单打|女单|女子单打|男双|男子双打|女双|女子双打|混双|混合双打|混合|单打|双打)",
+    re.IGNORECASE
+)
+
+GENDER_PATTERN = re.compile(r"(?<![\u4e00-\u9fa5])(男|女|M|F|male|female)(?![\u4e00-\u9fa5])", re.IGNORECASE)
+
+
+def parse_wechat_text(text: str) -> Dict[str, Any]:
+    result = {
+        "name": "",
+        "phone": "",
+        "gender": "",
+        "club": "",
+        "events": [],
+        "partner_name": "",
+        "partner_phone": "",
+        "raw": text,
+    }
+
+    if not text:
+        return result
+
+    text = str(text).strip()
+    remaining = text
+
+    phone_match = PHONE_PATTERN.search(remaining)
+    if phone_match:
+        result["phone"] = phone_match.group()
+        remaining = remaining.replace(result["phone"], " ").strip()
+
+    partner_match = PARTNER_PATTERN.search(remaining)
+    if partner_match:
+        partner_raw = partner_match.group(2).strip()
+        p_name, p_phone = split_name_phone(partner_raw)
+        result["partner_name"] = normalize_name(p_name)
+        result["partner_phone"] = normalize_phone(p_phone)
+        remaining = remaining.replace(partner_match.group(), " ").strip()
+
+    remaining = REGISTER_PATTERN.sub(" ", remaining).strip()
+
+    event_matches = EVENT_PATTERN.findall(remaining)
+    if event_matches:
+        seen = set()
+        for ev in event_matches:
+            ev_norm = normalize_event_name(ev)
+            if ev_norm not in seen:
+                result["events"].append(ev_norm)
+                seen.add(ev_norm)
+        for ev in event_matches:
+            remaining = remaining.replace(ev, " ", 1)
+        remaining = remaining.strip()
+
+    gender_match = GENDER_PATTERN.search(remaining)
+    if gender_match:
+        raw_gender = gender_match.group(1)
+        result["gender"] = GENDER_KEYWORDS.get(raw_gender, raw_gender)
+        remaining = remaining.replace(raw_gender, " ", 1).strip()
+
+    remaining = re.sub(r"\s+", " ", remaining).strip()
+    tokens = [t for t in remaining.split(" ") if t]
+
+    if tokens and not result["name"]:
+        result["name"] = tokens[0]
+        tokens = tokens[1:]
+
+    if tokens and result["name"] and not result["club"]:
+        for i, t in enumerate(tokens):
+            if t not in ["报名", "参加", "报", "项目", "男", "女"] and not PHONE_PATTERN.match(t):
+                result["club"] = " ".join(tokens[i:])
+                break
+
+    if not result["events"]:
+        result["events"] = ["未指定"]
+
+    return result
+
+
+def normalize_event_name(event: str) -> str:
+    e = event.strip()
+    mapping = {
+        "男子单打": "男单", "mens singles": "男单", "men's singles": "男单",
+        "女子单打": "女单", "womens singles": "女单", "women's singles": "女单",
+        "男子双打": "男双", "mens doubles": "男双", "men's doubles": "男双",
+        "女子双打": "女双", "womens doubles": "女双", "women's doubles": "女双",
+        "混合双打": "混双", "mixed": "混双", "mixed doubles": "混双", "混合": "混双",
+    }
+    return mapping.get(e, e)
+
+
+def parse_partner_field(partner_text: str) -> Tuple[str, str]:
+    if not partner_text:
+        return "", ""
+
+    name, phone = split_name_phone(partner_text)
+    if not phone:
+        phone_match = PHONE_PATTERN.search(str(partner_text))
+        if phone_match:
+            phone = phone_match.group()
+            name = str(partner_text).replace(phone, "").strip()
+
+    return normalize_name(name), normalize_phone(phone)
 
 
 def _detect_column(row: pd.Series, aliases: List[str]) -> Optional[str]:
@@ -114,6 +227,19 @@ def parse_registrations(df: pd.DataFrame, source_type: str) -> List[Dict[str, An
         raw_name = _get("name")
         raw_phone = _get("phone")
 
+        wechat_parsed = None
+        if source_type == "wechat":
+            for col in df.columns:
+                cell = safe_str(row[col])
+                if cell:
+                    parsed = parse_wechat_text(cell)
+                    if parsed["phone"] or parsed["name"]:
+                        wechat_parsed = parsed
+                        break
+            if wechat_parsed:
+                raw_name = raw_name or wechat_parsed["name"]
+                raw_phone = raw_phone or wechat_parsed["phone"]
+
         if source_type == "wechat" and (not raw_name or not raw_phone):
             for col in df.columns:
                 cell = safe_str(row[col])
@@ -134,21 +260,45 @@ def parse_registrations(df: pd.DataFrame, source_type: str) -> List[Dict[str, An
         record["id_card"] = _get("id_card")
         record["id_card_last4"] = extract_id_last4(record["id_card"])
         record["birth_year"] = extract_birth_year(record["id_card"], _get("birth_date"))
-        record["gender"] = _get("gender")
-        record["club"] = _get("club")
+
+        if wechat_parsed and wechat_parsed["gender"]:
+            record["gender"] = wechat_parsed["gender"]
+        else:
+            record["gender"] = _get("gender")
+
+        if wechat_parsed and wechat_parsed["club"]:
+            record["club"] = wechat_parsed["club"]
+        else:
+            record["club"] = _get("club")
+
         record["wechat_id"] = _get("wechat_id")
 
         raw_event = _get("event")
         events = []
-        if raw_event:
+        if source_type == "wechat" and wechat_parsed and wechat_parsed["events"]:
+            events = wechat_parsed["events"]
+        elif raw_event:
             parts = raw_event.replace("，", ",").replace("、", ",").replace("/", ",").replace(";", ",")
             events = [e.strip() for e in parts.split(",") if e.strip()]
         record["events"] = events if events else ["未指定"]
 
         record["age_group"] = _get("age_group")
-        record["partner_name"] = normalize_name(_get("partner_name"))
-        record["partner_phone"] = normalize_phone(_get("partner_phone"))
-        record["partner_raw_name"] = _get("partner_name")
+
+        partner_raw = _get("partner_name")
+        partner_phone_raw = _get("partner_phone")
+
+        if source_type == "club" and partner_raw:
+            p_name, p_phone = parse_partner_field(partner_raw)
+            record["partner_name"] = p_name
+            record["partner_phone"] = p_phone or normalize_phone(partner_phone_raw)
+        elif source_type == "wechat" and wechat_parsed and wechat_parsed["partner_name"]:
+            record["partner_name"] = wechat_parsed["partner_name"]
+            record["partner_phone"] = wechat_parsed["partner_phone"] or normalize_phone(partner_phone_raw)
+        else:
+            record["partner_name"] = normalize_name(partner_raw)
+            record["partner_phone"] = normalize_phone(partner_phone_raw)
+
+        record["partner_raw_name"] = partner_raw
         record["club_representative"] = _get("club_representative")
 
         record["source_type"] = source_type
