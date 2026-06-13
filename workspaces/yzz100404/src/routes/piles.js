@@ -71,6 +71,20 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ error: '无效的状态值，可选: available, out_of_service, under_repair' });
   }
 
+  if (status === 'available' && pile.status !== 'available') {
+    const activeOrders = db.prepare(`
+      SELECT id, order_no, status FROM fault_orders
+      WHERE pile_id = ? AND status IN ('pending', 'assigned', 'repairing', 'reviewing')
+    `).all(req.params.id);
+
+    if (activeOrders.length > 0) {
+      return res.status(409).json({
+        error: '该充电桩存在未完成的工单，恢复可用必须走物业复核流程',
+        active_orders: activeOrders,
+      });
+    }
+  }
+
   db.prepare(`
     UPDATE charging_piles
     SET location = COALESCE(?, location),

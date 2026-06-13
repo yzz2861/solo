@@ -205,10 +205,26 @@ const initDB = (db) => {
       FOREIGN KEY (order_id) REFERENCES fault_orders(id)
     );
 
+    CREATE TABLE IF NOT EXISTS reservations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      pile_id INTEGER NOT NULL,
+      user_name TEXT NOT NULL,
+      user_phone TEXT NOT NULL,
+      start_time TEXT NOT NULL,
+      end_time TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active',
+      cancel_reason TEXT,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (pile_id) REFERENCES charging_piles(id)
+    );
+
     CREATE INDEX IF NOT EXISTS idx_fault_orders_pile ON fault_orders(pile_id);
     CREATE INDEX IF NOT EXISTS idx_fault_orders_status ON fault_orders(status);
     CREATE INDEX IF NOT EXISTS idx_fault_orders_created ON fault_orders(created_at);
     CREATE INDEX IF NOT EXISTS idx_timeline_order ON order_timeline(order_id);
+    CREATE INDEX IF NOT EXISTS idx_reservations_pile ON reservations(pile_id);
+    CREATE INDEX IF NOT EXISTS idx_reservations_status ON reservations(status);
+    CREATE INDEX IF NOT EXISTS idx_reservations_time ON reservations(start_time, end_time);
   `);
 };
 

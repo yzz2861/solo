@@ -14,6 +14,7 @@ const repairersRoute = require('./routes/repairers');
 const operatorsRoute = require('./routes/operators');
 const ordersRoute = require('./routes/orders');
 const statsRoute = require('./routes/stats');
+const reservationsRoute = require('./routes/reservations');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
       '/api/repairers': '维修工管理',
       '/api/operators': '操作员管理',
       '/api/orders': '工单管理（上报、派单、回填、复核、时间线）',
+      '/api/reservations': '预约管理（创建、查询、取消）',
       '/api/stats': '统计分析',
     },
     docs: {
@@ -54,6 +56,7 @@ app.use('/api/piles', pilesRoute);
 app.use('/api/repairers', repairersRoute);
 app.use('/api/operators', operatorsRoute);
 app.use('/api/orders', ordersRoute);
+app.use('/api/reservations', reservationsRoute);
 app.use('/api/stats', statsRoute);
 
 app.use((err, req, res, next) => {
