@@ -48,7 +48,7 @@ class MessageClassifier {
     return { weight: sarcasmWeight, patterns: patternsFound };
   }
 
-  matchCategory(text, quotedRanges, categoryConfig, categoryName) {
+  matchCategory(text, quotedRanges, categoryConfig, categoryName, shortWordMinLength = 2) {
     const allMatches = [];
     let score = 0;
 
@@ -57,7 +57,8 @@ class MessageClassifier {
         const matches = findAllMatches(text, kw);
         const filtered = this.filterQuotedMatches(matches, quotedRanges);
         if (filtered.length > 0) {
-          score += 0.4 * filtered.length;
+          const isShortWord = kw.length <= shortWordMinLength;
+          score += (isShortWord ? 0.2 : 0.4) * filtered.length;
           filtered.forEach(m => {
             allMatches.push({ ...m, severity: 'high', category: categoryName });
           });
@@ -70,7 +71,8 @@ class MessageClassifier {
         const matches = findAllMatches(text, kw);
         const filtered = this.filterQuotedMatches(matches, quotedRanges);
         if (filtered.length > 0) {
-          score += 0.2 * filtered.length;
+          const isShortWord = kw.length <= shortWordMinLength;
+          score += (isShortWord ? 0.08 : 0.2) * filtered.length;
           filtered.forEach(m => {
             allMatches.push({ ...m, severity: 'medium', category: categoryName });
           });
@@ -159,7 +161,7 @@ class MessageClassifier {
     const attackScore = personalAttack.score + dialectSwear.score;
 
     const selfHarmFinal = selfHarm.score + context.contextBonus + sarcasm.weight * 0.5;
-    const threatFinal = offlineThreat.score + context.contextBonus + attackScore * 0.3;
+    const threatFinal = offlineThreat.score * 1.5 + context.contextBonus + attackScore * 0.3;
     const attackFinal = attackScore + context.contextBonus + Math.max(0, sarcasm.weight);
     const csFinal = customerService.score;
     const complaintFinal = normalComplaint.score;
@@ -217,8 +219,10 @@ class MessageClassifier {
 
     if (sarcasm.patterns.length > 0 && finalRiskLevel !== RiskLevel.SELF_HARM) {
       confidence = Math.max(0.25, confidence - 0.15);
-      if (confidence < this.MEDIUM_CONFIDENCE_THRESHOLD && !requiresReview) {
+      if (!requiresReview) {
         requiresReview = true;
+      }
+      if (finalRiskLevel === RiskLevel.NORMAL_COMPLAINT || finalRiskLevel === RiskLevel.CUSTOMER_SERVICE) {
         finalRiskLevel = RiskLevel.REVIEW_REQUIRED;
       }
     }

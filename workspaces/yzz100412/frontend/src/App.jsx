@@ -21,6 +21,7 @@ const PROCESSING_STATUS = {
 
 const NAV_ITEMS = [
   { key: 'dashboard', label: '总览看板', icon: '📊' },
+  { key: 'import', label: '导入分析', icon: '📥' },
   { key: 'urgent', label: '紧急处理', icon: '🚨' },
   { key: 'review', label: '人工复核', icon: '🔍' },
   { key: 'messages', label: '全部消息', icon: '💬' },
@@ -479,6 +480,272 @@ function FilterBar({ filters, setFilters, totalCount }) {
   );
 }
 
+function ImportPanel({ onImported }) {
+  const [inputText, setInputText] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [results, setResults] = useState(null);
+  const [mode, setMode] = useState('batch');
+  const [savedCount, setSavedCount] = useState(0);
+
+  const handleClassify = async () => {
+    if (!inputText.trim()) return;
+    setImporting(true);
+    setResults(null);
+
+    try {
+      if (mode === 'single') {
+        const msg = {
+          id: 'input-' + Date.now(),
+          userId: 'manual-input',
+          username: '手动输入',
+          avatar: 'https://api.dicebear.com/7.x/shapes/svg',
+          type: 'private_message',
+          content: inputText.trim(),
+          timestamp: Date.now(),
+          source: '手动输入'
+        };
+        const res = await fetch(`${API_BASE}/api/classify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        setResults([data]);
+      } else {
+        const lines = inputText.trim().split('\n').filter(l => l.trim());
+        const messages = lines.map((line, idx) => ({
+          id: 'input-' + Date.now() + '-' + idx,
+          userId: 'manual-batch',
+          username: '批量导入',
+          avatar: 'https://api.dicebear.com/7.x/shapes/svg',
+          type: 'comment',
+          content: line.trim(),
+          timestamp: Date.now() + idx,
+          source: '批量导入'
+        }));
+        const res = await fetch(`${API_BASE}/api/classify/batch`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages })
+        });
+        const data = await res.json();
+        setResults(data.data || []);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setImporting(false);
+  };
+
+  const handleSaveToStore = async () => {
+    if (!results || results.length === 0) return;
+    setImporting(true);
+    try {
+      const messages = results.map(r => ({
+        id: r.message?.id || r.id,
+        userId: r.message?.userId || r.userId || 'manual',
+        username: r.message?.username || r.username || '手动输入',
+        avatar: r.message?.avatar || r.avatar || 'https://api.dicebear.com/7.x/shapes/svg',
+        type: r.message?.type || r.type || 'comment',
+        content: r.message?.content || r.content || '',
+        timestamp: r.message?.timestamp || r.timestamp || Date.now(),
+        source: r.message?.source || r.source || '手动导入'
+      }));
+      const res = await fetch(`${API_BASE}/api/messages/import`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages })
+      });
+      const data = await res.json();
+      setSavedCount(data.imported || 0);
+      onImported && onImported();
+      setTimeout(() => setSavedCount(0), 3000);
+    } catch (e) {
+      console.error(e);
+    }
+    setImporting(false);
+  };
+
+  const handleClear = () => {
+    setInputText('');
+    setResults(null);
+    setSavedCount(0);
+  };
+
+  const resultStats = useMemo(() => {
+    if (!results) return null;
+    const stats = { total: results.length, byLevel: {} };
+    results.forEach(r => {
+      const level = r.classification?.riskLevel || 'unknown';
+      stats.byLevel[level] = (stats.byLevel[level] || 0) + 1;
+    });
+    return stats;
+  }, [results]);
+
+  return (
+    <div className="p-8 space-y-6 max-w-4xl mx-auto">
+      <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">📥 导入文本分析</h2>
+        <p className="text-sm text-gray-600">输入或批量粘贴待分析的留言内容，系统将自动进行风险分级。支持单条输入和多行批量分析。</p>
+      </div>
+
+      <div className="p-5 bg-white border border-gray-200 rounded-xl space-y-4">
+        <div className="flex items-center gap-4 mb-2">
+          <h3 className="font-semibold text-gray-800">输入模式</h3>
+          <div className="flex gap-2">
+            {[
+              { value: 'single', label: '单条输入', desc: '输入一条留言进行分析' },
+              { value: 'batch', label: '批量导入', desc: '每行一条留言，批量分析' }
+            ].map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => { setMode(opt.value); setResults(null); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition ${
+                  mode === opt.value
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                    : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
+                }`}
+                title={opt.desc}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            {mode === 'single' ? '输入留言内容' : '批量粘贴留言（每行一条）'}
+          </label>
+          <textarea
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            rows={mode === 'single' ? 3 : 10}
+            placeholder={mode === 'single'
+              ? '例如：我已经查到你家地址了，你今晚在家等着，我要当面跟你谈谈'
+              : '每行输入一条留言，例如：\n这个商家态度太差了\n我已经查到你家地址了，你等着\n活着真没意思，不想活了'}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+          />
+          <p className="text-xs text-gray-400 mt-1">
+            {mode === 'batch' && `已输入 ${inputText.split('\n').filter(l => l.trim()).length} 条留言`}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleClassify}
+            disabled={importing || !inputText.trim()}
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {importing ? '分析中...' : '🔍 开始分析'}
+          </button>
+          <button
+            onClick={handleClear}
+            className="px-4 py-2.5 text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 rounded-xl border border-gray-300 transition"
+          >
+            清空
+          </button>
+        </div>
+      </div>
+
+      {results && results.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-gray-800">📋 分析结果</h3>
+            <div className="flex items-center gap-3">
+              {resultStats && (
+                <div className="flex flex-wrap gap-1.5">
+                  {Object.entries(resultStats.byLevel).map(([level, count]) => {
+                    const cfg = RISK_LEVELS[level];
+                    return cfg ? (
+                      <span key={level} className={`px-2 py-0.5 text-xs font-semibold text-white rounded-full ${cfg.color}`}>
+                        {cfg.label} {count}
+                      </span>
+                    ) : null;
+                  })}
+                </div>
+              )}
+              <button
+                onClick={handleSaveToStore}
+                disabled={importing}
+                className="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition disabled:opacity-50"
+              >
+                {savedCount > 0 ? `✅ 已保存 ${savedCount} 条` : '💾 保存到消息列表'}
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {results.map((r, idx) => {
+              const msg = r.message || r;
+              const cls = r.classification;
+              if (!cls) return null;
+              const riskLevel = cls.riskLevel;
+              const cfg = RISK_LEVELS[riskLevel] || RISK_LEVELS.normal_complaint;
+              const urgent = ['self_harm', 'offline_threat'].includes(riskLevel);
+
+              return (
+                <div key={idx} className={`p-4 rounded-xl border ${
+                  urgent ? `${cfg.border} ${cfg.bgLight} shadow-md` : 'bg-white border-gray-200'
+                }`}>
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-gray-800 leading-relaxed">
+                        <HighlightedText content={msg.content} triggers={cls.triggers} />
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {urgent && <span className="px-2 py-0.5 text-xs font-bold text-white bg-red-500 rounded-full animate-pulse">紧急</span>}
+                      <RiskBadge level={riskLevel} confidence={cls.confidence} />
+                      {cls.analysis?.sarcasm?.detected && <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">反讽</span>}
+                      {cls.analysis?.dialectDetected && <span className="px-2 py-0.5 text-xs bg-teal-50 text-teal-700 rounded">方言</span>}
+                      {cls.analysis?.quotedContent?.length > 0 && <span className="px-2 py-0.5 text-xs bg-indigo-50 text-indigo-600 rounded">含引用</span>}
+                    </div>
+                  </div>
+
+                  {cls.triggers && cls.triggers.length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-gray-100">
+                      <p className="text-xs text-gray-500">
+                        触发片段: {cls.triggers.map(t => `「${t.text}」`).join(' ')}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {Object.entries(cls.scores || {}).map(([level, score]) => {
+                      if (score < 0.05) return null;
+                      const lc = RISK_LEVELS[level];
+                      return lc ? (
+                        <span key={level} className="text-xs text-gray-400">
+                          {lc.label} {Math.round(score * 100)}%
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+
+                  {cls.analysis?.sarcasm?.detected && (
+                    <div className="mt-2 px-3 py-1.5 bg-purple-50 border border-purple-100 rounded-lg">
+                      <p className="text-xs text-purple-700">😏 检测到反讽语气 — 已标记为需人工复核，请结合上下文判断实际意图</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {savedCount > 0 && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+          <p className="text-sm text-green-800 font-medium">
+            ✅ 成功保存 {savedCount} 条消息到系统，可在"全部消息"和各队列中查看
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ExportPanel({ onExport }) {
   const [format, setFormat] = useState('csv');
   const [mask, setMask] = useState(true);
@@ -620,6 +887,7 @@ export default function App() {
 
   const navCounts = useMemo(() => ({
     dashboard: stats?.total || 0,
+    import: 0,
     urgent: stats?.urgentCount || 0,
     review: stats?.reviewRequiredCount || 0,
     messages: stats?.total || 0,
@@ -876,6 +1144,7 @@ export default function App() {
         )}
 
         {currentNav === 'export' && <ExportPanel onExport={() => setTimeout(fetchData, 500)} />}
+        {currentNav === 'import' && <ImportPanel onImported={() => setTimeout(fetchData, 500)} />}
       </main>
 
       {selectedMessage && (
