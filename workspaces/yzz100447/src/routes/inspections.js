@@ -87,7 +87,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { error, value } = inspectionSchema.validate(req.body || {});
+  const { error, value } = inspectionSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }

@@ -189,7 +189,7 @@ router.get('/explanation/:customerId', (req, res) => {
 });
 
 router.post('/adjust', (req, res) => {
-  const { error, value } = adjustSchema.validate(req.body || {});
+  const { error, value } = adjustSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }

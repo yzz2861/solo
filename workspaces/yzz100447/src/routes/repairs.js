@@ -85,7 +85,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { error, value } = createSchema.validate(req.body || {});
+  const { error, value } = createSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }
@@ -139,7 +139,7 @@ router.post('/:id/complete', (req, res) => {
     return resError(res, '维修已完成');
   }
 
-  const { error, value } = completeSchema.validate(req.body || {});
+  const { error, value } = completeSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }

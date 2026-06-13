@@ -129,7 +129,7 @@ router.get('/by-order-no/:orderNo', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { error, value } = createSchema.validate(req.body || {});
+  const { error, value } = createSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }

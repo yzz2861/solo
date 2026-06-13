@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { error, value } = dpSchema.validate(req.body || {});
+  const { error, value } = dpSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }
@@ -78,7 +78,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { error, value } = updateSchema.validate(req.body || {});
+  const { error, value } = updateSchema.validate(req.body);
   if (error) {
     return resError(res, error.details[0].message);
   }
