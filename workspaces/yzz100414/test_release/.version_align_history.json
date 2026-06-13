@@ -1,7 +1,7 @@
 {
   "runs": [
     {
-      "scan_time": "2026-06-12T21:12:27.434563",
+      "scan_time": "2026-06-13T07:44:43.573675",
       "packages": [
         {
           "file_name": "MyApp-2.1.0-win-x64.exe",
@@ -24,8 +24,8 @@
                   43
                 ],
                 "modified_times": [
-                  "2026-06-12T20:11:16.821618",
-                  "2026-06-12T18:11:16.835001"
+                  "2026-06-13T06:44:40.422181",
+                  "2026-06-13T04:44:40.436217"
                 ],
                 "suggestion": "请确认哪个是正确的发布包，删除重复或过时的文件"
               },
@@ -57,8 +57,8 @@
                   43
                 ],
                 "modified_times": [
-                  "2026-06-12T20:11:16.821618",
-                  "2026-06-12T18:11:16.835001"
+                  "2026-06-13T06:44:40.422181",
+                  "2026-06-13T04:44:40.436217"
                 ],
                 "suggestion": "请确认哪个是正确的发布包，删除重复或过时的文件"
               },
@@ -96,13 +96,13 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：安装包 MyApp-2.1.0-linux-x64.tar.gz 比校验和文件新 (包修改时间: 2026-06-12 20:11, 校验和修改时间: 2026-06-11 19:11)",
+              "message": "校验和文件过期：安装包 MyApp-2.1.0-linux-x64.tar.gz 比校验和文件新 (包修改时间: 2026-06-13 06:44, 校验和修改时间: 2026-06-12 05:44)",
               "details": {
                 "package": "MyApp-2.1.0-linux-x64.tar.gz",
                 "checksum_file": "MyApp-2.1.0-linux-x64.tar.gz.sha256",
-                "package_modified": "2026-06-12T20:11:16.835984",
-                "checksum_modified": "2026-06-11T19:11:16.835984",
-                "age_hours": 26.01961071638889,
+                "package_modified": "2026-06-13T06:44:40.436456",
+                "checksum_modified": "2026-06-12T05:44:40.436456",
+                "age_hours": 26.000871449722222,
                 "package_newer": true
               },
               "actionable": true
@@ -132,13 +132,13 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-09 21:11, 已过期 72.0 小时)",
+              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-10 07:44, 已过期 72.0 小时)",
               "details": {
                 "package": "MyApp-2.0.8-macos-arm64.dmg",
                 "checksum_file": "MyApp-2.0.8-macos-arm64.dmg.sha256",
-                "package_modified": "2026-06-09T21:11:16.838368",
-                "checksum_modified": "2026-06-09T21:11:16.838368",
-                "age_hours": 72.01961005416666,
+                "package_modified": "2026-06-10T07:44:40.438694",
+                "checksum_modified": "2026-06-10T07:44:40.438694",
+                "age_hours": 72.00087082805555,
                 "package_newer": false
               },
               "actionable": true
@@ -262,13 +262,13 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-10 21:11, 已过期 48.0 小时)",
+              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-11 07:44, 已过期 48.0 小时)",
               "details": {
                 "package": "MyApp-2.0.9-win-x64.exe",
                 "checksum_file": "MyApp-2.0.9-win-x64.exe.sha256",
-                "package_modified": "2026-06-10T21:11:16.833122",
-                "checksum_modified": "2026-06-10T21:11:16.833122",
-                "age_hours": 48.01961151138889,
+                "package_modified": "2026-06-11T07:44:40.432055",
+                "checksum_modified": "2026-06-11T07:44:40.432055",
+                "age_hours": 48.00087267222222,
                 "package_newer": false
               },
               "actionable": true
@@ -288,16 +288,83 @@
       }
     },
     {
-      "scan_time": "2026-06-12T21:14:08.624671",
+      "scan_time": "2026-06-13T07:45:08.337843",
       "packages": [
         {
           "file_name": "MyApp-2.1.0-win-x64.exe",
           "version": "2.1.0",
           "platform": "windows",
-          "issues": [],
-          "issue_count": 0,
+          "issues": [
+            {
+              "type": "duplicate_package",
+              "severity": "warning",
+              "message": "同平台重复包: windows 2.1.0 存在 2 个安装包",
+              "details": {
+                "platform": "windows",
+                "version": "2.1.0",
+                "duplicate_files": [
+                  "MyApp-2.1.0-win-x64.exe",
+                  "MyApp-2.1.0-win-x64-duplicate.exe"
+                ],
+                "file_sizes": [
+                  27,
+                  43
+                ],
+                "modified_times": [
+                  "2026-06-13T06:44:40.422181",
+                  "2026-06-13T04:44:40.436217"
+                ],
+                "suggestion": "请确认哪个是正确的发布包，删除重复或过时的文件"
+              },
+              "actionable": true
+            }
+          ],
+          "issue_count": 1,
           "has_blocker": false,
-          "can_publish": true
+          "can_publish": false
+        },
+        {
+          "file_name": "MyApp-2.1.0-win-x64-duplicate.exe",
+          "version": "2.1.0",
+          "platform": "windows",
+          "issues": [
+            {
+              "type": "duplicate_package",
+              "severity": "warning",
+              "message": "同平台重复包: windows 2.1.0 存在 2 个安装包",
+              "details": {
+                "platform": "windows",
+                "version": "2.1.0",
+                "duplicate_files": [
+                  "MyApp-2.1.0-win-x64.exe",
+                  "MyApp-2.1.0-win-x64-duplicate.exe"
+                ],
+                "file_sizes": [
+                  27,
+                  43
+                ],
+                "modified_times": [
+                  "2026-06-13T06:44:40.422181",
+                  "2026-06-13T04:44:40.436217"
+                ],
+                "suggestion": "请确认哪个是正确的发布包，删除重复或过时的文件"
+              },
+              "actionable": true
+            },
+            {
+              "type": "missing_checksum",
+              "severity": "blocker",
+              "message": "缺少校验和文件: MyApp-2.1.0-win-x64-duplicate.exe",
+              "details": {
+                "package": "MyApp-2.1.0-win-x64-duplicate.exe",
+                "expected_checksum_file": "MyApp-2.1.0-win-x64-duplicate.exe.sha256"
+              },
+              "actionable": true
+            }
+          ],
+          "issue_count": 2,
+          "has_blocker": true,
+          "can_publish": false
         },
         {
           "file_name": "MyApp-2.1.0-ios.ipa",
@@ -316,13 +383,13 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：安装包 MyApp-2.1.0-linux-x64.tar.gz 比校验和文件新 (包修改时间: 2026-06-12 20:11, 校验和修改时间: 2026-06-11 19:11)",
+              "message": "校验和文件过期：安装包 MyApp-2.1.0-linux-x64.tar.gz 比校验和文件新 (包修改时间: 2026-06-13 06:44, 校验和修改时间: 2026-06-12 05:44)",
               "details": {
                 "package": "MyApp-2.1.0-linux-x64.tar.gz",
                 "checksum_file": "MyApp-2.1.0-linux-x64.tar.gz.sha256",
-                "package_modified": "2026-06-12T20:11:16.835984",
-                "checksum_modified": "2026-06-11T19:11:16.835984",
-                "age_hours": 26.04771907972222,
+                "package_modified": "2026-06-13T06:44:40.436456",
+                "checksum_modified": "2026-06-12T05:44:40.436456",
+                "age_hours": 26.00775038527778,
                 "package_newer": true
               },
               "actionable": true
@@ -352,19 +419,31 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-09 21:11, 已过期 72.0 小时)",
+              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-10 07:44, 已过期 72.0 小时)",
               "details": {
                 "package": "MyApp-2.0.8-macos-arm64.dmg",
                 "checksum_file": "MyApp-2.0.8-macos-arm64.dmg.sha256",
-                "package_modified": "2026-06-09T21:11:16.838368",
-                "checksum_modified": "2026-06-09T21:11:16.838368",
-                "age_hours": 72.0477184175,
+                "package_modified": "2026-06-10T07:44:40.438694",
+                "checksum_modified": "2026-06-10T07:44:40.438694",
+                "age_hours": 72.00774976361112,
                 "package_newer": false
+              },
+              "actionable": true
+            },
+            {
+              "type": "incomplete_release_note",
+              "severity": "warning",
+              "message": "发布说明缺少修复项: 2.0.8 的说明中没有 bug 修复记录",
+              "details": {
+                "package": "MyApp-2.0.8-macos-arm64.dmg",
+                "version": "2.0.8",
+                "release_note": "RELEASE_NOTES_v2.0.8.md",
+                "suggestion": "请在发布说明中添加 '修复' 或 'bug fix' 章节，说明此版本修复的问题"
               },
               "actionable": true
             }
           ],
-          "issue_count": 2,
+          "issue_count": 3,
           "has_blocker": true,
           "can_publish": false
         },
@@ -434,10 +513,21 @@
           "file_name": "MyApp-2.1.0-android-arm64.apk",
           "version": "2.1.0",
           "platform": "android",
-          "issues": [],
-          "issue_count": 0,
-          "has_blocker": false,
-          "can_publish": true
+          "issues": [
+            {
+              "type": "missing_checksum",
+              "severity": "blocker",
+              "message": "缺少校验和文件: MyApp-2.1.0-android-arm64.apk",
+              "details": {
+                "package": "MyApp-2.1.0-android-arm64.apk",
+                "expected_checksum_file": "MyApp-2.1.0-android-arm64.apk.sha256"
+              },
+              "actionable": true
+            }
+          ],
+          "issue_count": 1,
+          "has_blocker": true,
+          "can_publish": false
         },
         {
           "file_name": "MyApp-2.0.9-win-x64.exe",
@@ -459,13 +549,13 @@
             {
               "type": "checksum_expired",
               "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-10 21:11, 已过期 48.0 小时)",
+              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-11 07:44, 已过期 48.0 小时)",
               "details": {
                 "package": "MyApp-2.0.9-win-x64.exe",
                 "checksum_file": "MyApp-2.0.9-win-x64.exe.sha256",
-                "package_modified": "2026-06-10T21:11:16.833122",
-                "checksum_modified": "2026-06-10T21:11:16.833122",
-                "age_hours": 48.04771987472222,
+                "package_modified": "2026-06-11T07:44:40.432055",
+                "checksum_modified": "2026-06-11T07:44:40.432055",
+                "age_hours": 48.00775160777778,
                 "package_newer": false
               },
               "actionable": true
@@ -477,210 +567,13 @@
         }
       ],
       "statistics": {
-        "total_packages": 9,
-        "total_issues": 8,
-        "can_publish": 4,
-        "blocker_count": 3,
-        "warning_count": 2
-      }
-    },
-    {
-      "scan_time": "2026-06-12T21:16:15.798436",
-      "packages": [
-        {
-          "file_name": "MyApp-2.1.0-win-x64.exe",
-          "version": "2.1.0",
-          "platform": "windows",
-          "issues": [],
-          "issue_count": 0,
-          "has_blocker": false,
-          "can_publish": true
-        },
-        {
-          "file_name": "MyApp-2.1.0-ios.ipa",
-          "version": "2.1.0",
-          "platform": "ios",
-          "issues": [],
-          "issue_count": 0,
-          "has_blocker": false,
-          "can_publish": true
-        },
-        {
-          "file_name": "MyApp-2.1.0-linux-x64.tar.gz",
-          "version": "2.1.0",
-          "platform": "linux",
-          "issues": [
-            {
-              "type": "checksum_expired",
-              "severity": "blocker",
-              "message": "校验和文件过期：安装包 MyApp-2.1.0-linux-x64.tar.gz 比校验和文件新 (包修改时间: 2026-06-12 20:11, 校验和修改时间: 2026-06-11 19:11)",
-              "details": {
-                "package": "MyApp-2.1.0-linux-x64.tar.gz",
-                "checksum_file": "MyApp-2.1.0-linux-x64.tar.gz.sha256",
-                "package_modified": "2026-06-12T20:11:16.835984",
-                "checksum_modified": "2026-06-11T19:11:16.835984",
-                "age_hours": 26.083045125555557,
-                "package_newer": true
-              },
-              "actionable": true
-            }
-          ],
-          "issue_count": 1,
-          "has_blocker": true,
-          "can_publish": false
-        },
-        {
-          "file_name": "MyApp-2.0.8-macos-arm64.dmg",
-          "version": "2.0.8",
-          "platform": "macos",
-          "issues": [
-            {
-              "type": "version_mismatch",
-              "severity": "info",
-              "message": "版本不一致: 2.0.8 不是最新版本 (最新: 2.1.0)",
-              "details": {
-                "package": "MyApp-2.0.8-macos-arm64.dmg",
-                "current_version": "2.0.8",
-                "latest_version": "2.1.0",
-                "version_difference": "次版本落后 1 个小版本"
-              },
-              "actionable": false
-            },
-            {
-              "type": "checksum_expired",
-              "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-09 21:11, 已过期 72.1 小时)",
-              "details": {
-                "package": "MyApp-2.0.8-macos-arm64.dmg",
-                "checksum_file": "MyApp-2.0.8-macos-arm64.dmg.sha256",
-                "package_modified": "2026-06-09T21:11:16.838368",
-                "checksum_modified": "2026-06-09T21:11:16.838368",
-                "age_hours": 72.08304446333332,
-                "package_newer": false
-              },
-              "actionable": true
-            }
-          ],
-          "issue_count": 2,
-          "has_blocker": true,
-          "can_publish": false
-        },
-        {
-          "file_name": "MyApp-2.1.0-macos-arm64.dmg",
-          "version": "2.1.0",
-          "platform": "macos",
-          "issues": [],
-          "issue_count": 0,
-          "has_blocker": false,
-          "can_publish": true
-        },
-        {
-          "file_name": "MyApp-2.1.0-beta.1-win-x64.exe",
-          "version": "2.1.0-beta",
-          "platform": "windows",
-          "issues": [
-            {
-              "type": "beta_version",
-              "severity": "warning",
-              "message": "Beta 版本: MyApp-2.1.0-beta.1-win-x64.exe 是 BETA 版本，非正式发布版",
-              "details": {
-                "package": "MyApp-2.1.0-beta.1-win-x64.exe",
-                "version": "2.1.0-beta",
-                "prerelease_type": "beta",
-                "suggestion": "确认是否要发布此测试版本，或要求打包同事提供正式版"
-              },
-              "actionable": true
-            },
-            {
-              "type": "version_mismatch",
-              "severity": "info",
-              "message": "版本不一致: 2.1.0-beta 不是最新版本 (最新: 2.1.0)",
-              "details": {
-                "package": "MyApp-2.1.0-beta.1-win-x64.exe",
-                "current_version": "2.1.0-beta",
-                "latest_version": "2.1.0",
-                "version_difference": "版本号相同但预发布标签不同"
-              },
-              "actionable": false
-            }
-          ],
-          "issue_count": 2,
-          "has_blocker": false,
-          "can_publish": false
-        },
-        {
-          "file_name": "MyApp-2.1.0-noplatform.zip",
-          "version": "2.1.0",
-          "platform": null,
-          "issues": [
-            {
-              "type": "unknown_platform",
-              "severity": "warning",
-              "message": "无法识别平台: MyApp-2.1.0-noplatform.zip",
-              "details": {
-                "filename": "MyApp-2.1.0-noplatform.zip"
-              },
-              "actionable": true
-            }
-          ],
-          "issue_count": 1,
-          "has_blocker": false,
-          "can_publish": false
-        },
-        {
-          "file_name": "MyApp-2.1.0-android-arm64.apk",
-          "version": "2.1.0",
-          "platform": "android",
-          "issues": [],
-          "issue_count": 0,
-          "has_blocker": false,
-          "can_publish": true
-        },
-        {
-          "file_name": "MyApp-2.0.9-win-x64.exe",
-          "version": "2.0.9",
-          "platform": "windows",
-          "issues": [
-            {
-              "type": "version_mismatch",
-              "severity": "info",
-              "message": "版本不一致: 2.0.9 不是最新版本 (最新: 2.1.0)",
-              "details": {
-                "package": "MyApp-2.0.9-win-x64.exe",
-                "current_version": "2.0.9",
-                "latest_version": "2.1.0",
-                "version_difference": "次版本落后 1 个小版本"
-              },
-              "actionable": false
-            },
-            {
-              "type": "checksum_expired",
-              "severity": "blocker",
-              "message": "校验和文件过期：已超过 24 小时 (校验和创建于: 2026-06-10 21:11, 已过期 48.1 小时)",
-              "details": {
-                "package": "MyApp-2.0.9-win-x64.exe",
-                "checksum_file": "MyApp-2.0.9-win-x64.exe.sha256",
-                "package_modified": "2026-06-10T21:11:16.833122",
-                "checksum_modified": "2026-06-10T21:11:16.833122",
-                "age_hours": 48.083045920555556,
-                "package_newer": false
-              },
-              "actionable": true
-            }
-          ],
-          "issue_count": 2,
-          "has_blocker": true,
-          "can_publish": false
-        }
-      ],
-      "statistics": {
-        "total_packages": 9,
-        "total_issues": 8,
-        "can_publish": 4,
-        "blocker_count": 3,
-        "warning_count": 2
+        "total_packages": 10,
+        "total_issues": 13,
+        "can_publish": 2,
+        "blocker_count": 5,
+        "warning_count": 3
       }
     }
   ],
-  "last_updated": "2026-06-12T21:16:15.802334"
+  "last_updated": "2026-06-13T07:45:08.342689"
 }

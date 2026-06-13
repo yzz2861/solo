@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Tuple
@@ -146,6 +147,43 @@ class VersionScanner:
             checksums=checksums
         )
 
+    def _is_valid_release_note_content(self, content: str) -> bool:
+        if not content or not content.strip():
+            return False
+
+        stripped = content.lstrip()
+        if stripped.startswith('{') or stripped.startswith('['):
+            return False
+
+        if stripped.startswith('<?xml') or stripped.startswith('<'):
+            return False
+
+        lines = [l.strip() for l in content.split('\n') if l.strip()]
+        if not lines:
+            return False
+
+        has_md_heading = any(l.startswith('#') for l in lines[:10])
+        has_version_pattern = any(
+            config.VERSION_PATTERN.search(l) for l in lines[:20]
+        )
+
+        return has_md_heading or has_version_pattern
+
+    def _is_fix_section_heading(self, text: str) -> bool:
+        text_lower = text.lower()
+        for kw in config.FIX_SECTION_KEYWORDS:
+            if kw.lower() in text_lower:
+                return True
+        return False
+
+    def _is_list_item(self, line: str) -> bool:
+        stripped = line.strip()
+        if stripped.startswith(('- ', '* ', '• ')):
+            return True
+        if re.match(r'^\d+\.\s', stripped):
+            return True
+        return False
+
     def parse_release_note(self, filepath: Path) -> ReleaseNote:
         stat = filepath.stat()
         filename = filepath.name
@@ -158,22 +196,74 @@ class VersionScanner:
             with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
 
-            for line in content.split('\n'):
-                line = line.strip()
-                if not line:
+            if not self._is_valid_release_note_content(content):
+                return ReleaseNote(
+                    file_path=str(filepath),
+                    file_name=filename,
+                    modified_time=datetime.fromtimestamp(stat.st_mtime),
+                    versions=[],
+                    fix_items=[],
+                    has_fix_section=False
+                )
+
+            lines = content.split('\n')
+            in_fix_section = False
+            current_section_level = 99
+
+            for line in lines:
+                stripped = line.strip()
+                if not stripped:
                     continue
 
-                version = self.parse_version(line)
-                if version and version not in versions:
-                    versions.append(version)
+                is_heading = False
+                heading_level = 99
+                heading_text = stripped
 
-                line_lower = line.lower()
-                for keyword in config.FIX_KEYWORDS:
-                    if keyword.lower() in line_lower:
-                        if line not in fix_items:
-                            fix_items.append(line)
+                if stripped.startswith('#'):
+                    is_heading = True
+                    heading_level = len(stripped) - len(stripped.lstrip('#'))
+                    heading_text = stripped.lstrip('#').strip()
+                elif re.match(r'^[=\-~]+$', stripped) and len(stripped) >= 3:
+                    is_heading = True
+                    heading_level = 1
+                    continue
+
+                if is_heading:
+                    version_in_heading = self.parse_version(heading_text)
+                    if version_in_heading and version_in_heading not in versions:
+                        versions.append(version_in_heading)
+
+                    if self._is_fix_section_heading(heading_text):
                         has_fix_section = True
-                        break
+                        in_fix_section = True
+                        current_section_level = heading_level
+                    else:
+                        if heading_level <= current_section_level and in_fix_section:
+                            in_fix_section = False
+
+                if in_fix_section and self._is_list_item(line):
+                    item_text = re.sub(r'^[\-\*\d\.\•]+\s*', '', stripped).strip()
+                    if item_text and item_text not in fix_items:
+                        fix_items.append(item_text)
+
+            if not versions:
+                for line in lines[:30]:
+                    stripped = line.strip()
+                    if not stripped:
+                        continue
+                    version = self.parse_version(stripped)
+                    if version and version not in versions:
+                        versions.append(version)
+
+            if has_fix_section and not fix_items:
+                for line in lines:
+                    stripped = line.strip()
+                    if not stripped:
+                        continue
+                    stripped_lower = stripped.lower()
+                    if any(kw.lower() in stripped_lower for kw in config.FIX_KEYWORDS):
+                        if stripped not in fix_items:
+                            fix_items.append(stripped)
 
         except Exception as e:
             pass

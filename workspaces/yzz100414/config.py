@@ -52,17 +52,33 @@ class Config:
     BETA_TAGS: List[str] = field(default_factory=lambda: ["alpha", "beta", "rc", "pre", "hotfix"])
 
     RELEASE_NOTE_PATTERNS: List[Pattern] = field(default_factory=lambda: [
-        re.compile(r'RELEASE_NOTE[S]?', re.IGNORECASE),
+        re.compile(r'RELEASE[_-]?NOTE[S]?', re.IGNORECASE),
+        re.compile(r'CHANGE[_-]?LOG', re.IGNORECASE),
         re.compile(r'README', re.IGNORECASE),
-        re.compile(r'CHANGELOG', re.IGNORECASE),
-        re.compile(r'VERSION', re.IGNORECASE),
+        re.compile(r'更新说明|发布说明|版本说明', re.IGNORECASE),
     ])
 
     RELEASE_NOTE_EXTENSIONS: List[str] = field(default_factory=lambda: [".md", ".txt", ".rst", ".adoc"])
 
+    RELEASE_NOTE_EXCLUDE_PATTERNS: List[Pattern] = field(default_factory=lambda: [
+        re.compile(r'^\.', re.IGNORECASE),
+        re.compile(r'history', re.IGNORECASE),
+        re.compile(r'cache', re.IGNORECASE),
+        re.compile(r'temp', re.IGNORECASE),
+        re.compile(r'\.json$', re.IGNORECASE),
+        re.compile(r'\.xml$', re.IGNORECASE),
+        re.compile(r'\.yaml$|\.yml$', re.IGNORECASE),
+        re.compile(r'_backup$', re.IGNORECASE),
+    ])
+
     FIX_KEYWORDS: List[str] = field(default_factory=lambda: [
         "fix", "修复", "bug", "问题", "解决", "resolved", "closed",
         "patch", "修补", "修正", "更正"
+    ])
+
+    FIX_SECTION_KEYWORDS: List[str] = field(default_factory=lambda: [
+        "bug修复", "bug fix", "bug fixes", "修复", "fix", "fixes",
+        "问题修复", "缺陷修复", "已知问题修复", "issue fix", "issue fixed"
     ])
 
     CHECKSUM_EXPIRE_HOURS: int = 24
@@ -120,15 +136,25 @@ class Config:
 
     def is_release_note(self, filename: str) -> bool:
         filename_lower = filename.lower()
-        for pattern in self.RELEASE_NOTE_PATTERNS:
+
+        for pattern in self.RELEASE_NOTE_EXCLUDE_PATTERNS:
             if pattern.search(filename):
-                return True
+                return False
+
+        has_valid_ext = any(filename_lower.endswith(ext) for ext in self.RELEASE_NOTE_EXTENSIONS)
+        if not has_valid_ext:
+            return False
+
+        stem_lower = filename_lower
         for ext in self.RELEASE_NOTE_EXTENSIONS:
-            if filename_lower.endswith(ext):
-                for pattern in self.RELEASE_NOTE_PATTERNS:
-                    base = filename_lower.replace(ext, "")
-                    if pattern.search(base):
-                        return True
+            if stem_lower.endswith(ext):
+                stem_lower = stem_lower[:-len(ext)]
+                break
+
+        for pattern in self.RELEASE_NOTE_PATTERNS:
+            if pattern.search(stem_lower):
+                return True
+
         return False
 
     def is_beta_version(self, version_str: str) -> bool:
