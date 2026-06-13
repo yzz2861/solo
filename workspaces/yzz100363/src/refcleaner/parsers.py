@@ -78,6 +78,7 @@ class TextParser:
         text_clean = text
         if entry.doi:
             text_clean = DOI_PATTERN.sub('', text)
+            text_clean = re.sub(r'\bdoi:\s*', '', text_clean, flags=re.IGNORECASE)
 
         title_match = re.search(r'["“《]([^"”》]+)["”》]', text_clean)
         if title_match:
@@ -211,6 +212,8 @@ class TextParser:
             entry.authors = authors
 
     def _parse_english_authors(self, text: str, entry: ReferenceEntry) -> None:
+        text = text.strip().rstrip(',.:;')
+        
         text = re.sub(r'\s*&\s*', '; ', text)
         text = re.sub(r'\s+(?:and|AND|And)\s+', '; ', text)
         
@@ -223,9 +226,27 @@ class TextParser:
                     authors.append('et al.')
                 break
             
-            parsed = self._parse_single_english_author(part)
-            if parsed:
-                authors.extend(parsed)
+            comma_parts = [p.strip() for p in part.split(',') if p.strip()]
+            if len(comma_parts) >= 2:
+                last_name = comma_parts[0].strip()
+                first_part = ' '.join(comma_parts[1:]).strip()
+                
+                initials = '. '.join([p[0].upper() for p in first_part.split() if p])
+                if initials:
+                    authors.append(f"{last_name}, {initials}.")
+                else:
+                    authors.append(f"{last_name}, {first_part}")
+            elif part:
+                words = part.split()
+                if len(words) >= 2:
+                    last_name = words[-1]
+                    initials = '. '.join([w[0].upper() for w in words[:-1] if w])
+                    if initials:
+                        authors.append(f"{last_name}, {initials}.")
+                    else:
+                        authors.append(last_name)
+                elif part:
+                    authors.append(part)
         
         if authors and len(authors) <= 10:
             if len(authors) > 3 and 'et al.' not in authors:
@@ -404,3 +425,172 @@ class BibTeXParser:
         'proceedings': ReferenceType.INPROCEEDINGS,
         'mastersthesis': ReferenceType.THESIS,
         'phdthesis': ReferenceType.THESIS,
+        'thesis': ReferenceType.THESIS,
+        'online': ReferenceType.ONLINE,
+        'misc': ReferenceType.UNKNOWN,
+        'unpublished': ReferenceType.UNKNOWN,
+        'techreport': ReferenceType.UNKNOWN,
+    }
+
+    def parse(self, bibtex_str: str) -> list[ReferenceEntry]:
+        try:
+            import bibtexparser
+            from bibtexparser.bparser import BibTexParser
+            from bibtexparser.customization import convert_to_unicode
+
+            parser = BibTexParser(common_strings=True)
+            parser.customization = convert_to_unicode
+            parser.ignore_nonstandard_types = False
+
+            bib_db = bibtexparser.loads(bibtex_str, parser=parser)
+
+            entries = []
+            for pos, entry in enumerate(bib_db.entries):
+                ref_entry = self._convert_entry(entry, pos)
+                entries.append(ref_entry)
+
+            return entries
+
+        except ImportError:
+            return self._parse_manually(bibtex_str)
+
+    def _parse_manually(self, bibtex_str: str) -> list[ReferenceEntry]:
+        entries = []
+        entry_pattern = re.compile(
+            r'@(\w+)\s*\{\s*([^,]+),\s*(.*?)\n\s*\}',
+            re.DOTALL | re.IGNORECASE,
+        )
+
+        field_pattern = re.compile(r'(\w+)\s*=\s*[\{"](.*?)[\}"]', re.DOTALL)
+
+        for pos, match in enumerate(entry_pattern.finditer(bibtex_str)):
+            entry_type, cite_key, fields_str = match.groups()
+            fields = {}
+
+            for fm in field_pattern.finditer(fields_str):
+                fields[fm.group(1).lower()] = fm.group(2).strip()
+
+            entry = self._create_entry_from_dict(
+                entry_type, cite_key, fields, pos, match.group(0)
+            )
+            entries.append(entry)
+
+        return entries
+
+    def _convert_entry(self, bib_entry: dict, position: int) -> ReferenceEntry:
+        entry_type = bib_entry.get('ENTRYTYPE', 'unknown').lower()
+        cite_key = bib_entry.get('ID', '')
+
+        fields = {
+            k.lower(): v
+            for k, v in bib_entry.items()
+            if k not in ('ENTRYTYPE', 'ID')
+        }
+
+        return self._create_entry_from_dict(
+            entry_type, cite_key, fields, position, str(bib_entry)
+        )
+
+    def _create_entry_from_dict(
+        self,
+        entry_type: str,
+        cite_key: str,
+        fields: dict,
+        position: int,
+        original_text: str,
+    ) -> ReferenceEntry:
+        ref_type = self.TYPE_MAPPING.get(entry_type, ReferenceType.UNKNOWN)
+
+        entry = ReferenceEntry(
+            original_text=original_text,
+            original_position=position,
+            entry_type=ref_type,
+            citation_key=cite_key,
+            raw_fields=fields,
+        )
+
+        author_str = fields.get('author', '') or fields.get('authors', '')
+        if author_str:
+            entry.authors = self._parse_bibtex_authors(author_str)
+
+        entry.title = fields.get('title')
+        entry.journal = fields.get('journal') or fields.get('journaltitle')
+        entry.booktitle = fields.get('booktitle')
+        entry.publisher = fields.get('publisher')
+
+        year_str = fields.get('year', '')
+        if year_str and year_str.isdigit():
+            entry.year = int(year_str)
+
+        entry.volume = fields.get('volume')
+        entry.number = fields.get('number') or fields.get('issue')
+        entry.pages = fields.get('pages')
+        entry.doi = fields.get('doi')
+        entry.url = fields.get('url') or fields.get('link')
+        entry.isbn = fields.get('isbn')
+
+        if not entry.doi:
+            doi_match = DOI_PATTERN.search(original_text)
+            if doi_match:
+                entry.doi = doi_match.group(1).lower()
+
+        return entry
+
+    def _parse_bibtex_authors(self, author_str: str) -> list[str]:
+        author_str = re.sub(r'\s+and\s+', '|', author_str, flags=re.IGNORECASE)
+        raw_authors = [a.strip() for a in author_str.split('|') if a.strip()]
+
+        authors = []
+        for author in raw_authors:
+            author = author.strip().replace('{', '').replace('}', '')
+            if ',' in author:
+                parts = [p.strip() for p in author.split(',', 1)]
+                if len(parts) == 2:
+                    last, first = parts
+                    initials = '. '.join(
+                        [c for c in first if c.isupper()]
+                    )
+                    if initials:
+                        authors.append(f"{last}, {initials}.")
+                    else:
+                        authors.append(f"{last}, {first}")
+                else:
+                    authors.append(author)
+            else:
+                words = author.split()
+                if len(words) > 1:
+                    last = words[-1]
+                    first_initials = '. '.join(
+                        [w[0].upper() for w in words[:-1] if w]
+                    )
+                    if first_initials:
+                        authors.append(f"{last}, {first_initials}.")
+                    else:
+                        authors.append(author)
+                else:
+                    authors.append(author)
+
+        return authors
+
+
+def parse_file(filepath: str | Path) -> list[ReferenceEntry]:
+    path = Path(filepath)
+    content = path.read_text(encoding='utf-8')
+
+    if path.suffix.lower() in ('.bib', '.bibtex'):
+        return BibTeXParser().parse(content)
+    else:
+        return TextParser().parse(content)
+
+
+def parse_text(text: str, input_type: str = 'auto') -> list[ReferenceEntry]:
+    stripped = text.strip()
+
+    if input_type == 'bibtex' or (
+        input_type == 'auto'
+        and stripped.startswith('@')
+        and '@' in stripped[1:50]
+    ):
+        return BibTeXParser().parse(text)
+    else:
+        return TextParser().parse(text)

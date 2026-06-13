@@ -64,17 +64,22 @@ class OutputFormatter:
         if not authors:
             return ""
 
-        display_authors = authors[:max_display]
-        author_str = ', '.join(display_authors)
+        valid_authors = [a for a in authors if a and a.strip() and a.strip().lower() != 'et al.']
+        
+        if 'et al.' in authors:
+            valid_authors = valid_authors[:3]
+            valid_authors.append('et al.')
+        
+        if not valid_authors:
+            return ""
 
-        if len(authors) > max_display:
-            if authors[-1].lower() == 'et al.':
-                pass
-            else:
-                author_str += ', et al.'
-        elif len(authors) > 1:
-            parts = author_str.rsplit(', ', 1)
-            author_str = ', and '.join(parts)
+        display_authors = valid_authors[:max_display]
+        
+        if len(display_authors) == 1:
+            return display_authors[0]
+        
+        author_str = ', '.join(display_authors[:-1])
+        author_str += ', and ' + display_authors[-1]
 
         return author_str
 
