@@ -38,6 +38,8 @@ interface WellState {
 
   setVillages: (v: Village[]) => void;
   setWells: (w: Well[]) => void;
+  upsertVillages: (v: Village[]) => void;
+  upsertWells: (w: Well[]) => void;
   setThresholds: (t: ThresholdConfig) => void;
   setAdviceTemplates: (a: AdviceTemplate[]) => void;
 
@@ -247,5 +249,7 @@ useWellStore.subscribe((state) => {
     (slice as any)[k] = state[k];
   });
   safeWriteStorage(slice);
+  if (!storageSubscriberInitialized) storageSubscriberInitialized = true;
+});
   if (!storageSubscriberInitialized) storageSubscriberInitialized = true;
 });

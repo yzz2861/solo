@@ -66,7 +66,7 @@ export default function HomePage() {
 
   const handleLabImport = (rows: LabImportRow[]) => {
     const transformed: LabResult[] = [];
-    const villageSet = new Set<{ code: string; name: string }>();
+    const villageMap = new Map<string, { code: string; name: string }>();
     const wellSet = new Map<string, Well>();
 
     rows.forEach((r) => {
@@ -482,6 +482,22 @@ export default function HomePage() {
       {mergeStats && (
         <div className="flex items-center gap-4 justify-center">
           <button
+            onClick={() => navigate('/overview')}
+            className="btn-primary shadow-lg shadow-primary-500/25"
+          >
+            🗺️ 卫生院总览地图与趋势
+          </button>
+          <button
+            onClick={() => navigate('/village/all')}
+            className="btn-warn shadow-lg shadow-warn-500/25"
+          >
+            📋 村级三态报告（村干部视图）
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
             onClick={() => navigate('/overview')}
             className="btn-primary shadow-lg shadow-primary-500/25"
           >
