@@ -87,14 +87,13 @@ export const useAnalysisStore = create<AnalysisState>()(
       filters: defaultFilters,
 
       loadMockData: () => {
-        const processed = preprocessAll(
-          JSON.parse(JSON.stringify(mockOrders)),
-          JSON.parse(JSON.stringify(mockGunFaults)),
-          JSON.parse(JSON.stringify(mockElectricityPrices))
-        );
+        const orders = restoreDatesInOrders(JSON.parse(JSON.stringify(mockOrders)));
+        const faults = restoreDatesInFaults(JSON.parse(JSON.stringify(mockGunFaults)));
+        const queueRecordsData = restoreDatesInQueue(JSON.parse(JSON.stringify(mockQueueRecords)));
+        const processed = preprocessAll(orders, faults, JSON.parse(JSON.stringify(mockElectricityPrices)));
         const metrics = computeHourlyMetrics(
           processed.orders,
-          JSON.parse(JSON.stringify(mockQueueRecords)),
+          queueRecordsData,
           processed.faults,
           processed.prices,
           mockAnalysisDate,
@@ -107,7 +106,7 @@ export const useAnalysisStore = create<AnalysisState>()(
 
         set({
           orders: processed.orders,
-          queueRecords,
+          queueRecords: queueRecordsData,
           prices: processed.prices,
           faults: processed.faults,
           gunIds: mockGunIds,
