@@ -446,7 +446,9 @@ export async function getBatches() {
 export async function recallBatch(batchNo: string) {
   const db = await getDB();
   const affectedSql = `
-    SELECT a.*, p.*, pa.follow_up_date
+    SELECT a.id AS att_id, a.code AS att_code, a.batch_no AS att_batch_no,
+           p.id AS patient_id, p.name AS patient_name, p.phone AS patient_phone,
+           pa.follow_up_date AS pa_follow_up_date
     FROM attachments a
     LEFT JOIN patient_attachments pa ON a.id = pa.attachment_id
     LEFT JOIN patients p ON pa.patient_id = p.id
@@ -462,17 +464,15 @@ export async function recallBatch(batchNo: string) {
   const patients = Array.from(new Set(affected.filter((r) => r.patient_id).map((r) => r.patient_id))).map(
     (pid) => {
       const r = affected.find((x) => x.patient_id === pid);
-      return { id: r.patient_id, name: r.name, phone: r.phone, follow_up_date: r.follow_up_date };
+      return { id: r.patient_id, name: r.patient_name, phone: r.patient_phone, follow_up_date: r.pa_follow_up_date };
     }
   );
 
   return {
     batchNo,
     affectedAttachments: affected.map((r) => ({
-      id: r.id,
-      code: r.code,
-      batch_no: r.batch_no,
-      status: 'recalled',
+      id: r.att_id,
+      code: r.att_code,
     })),
     affectedPatients: patients,
   };
@@ -486,6 +486,32 @@ export async function getModels(): Promise<AttachmentModel[]> {
 
 export async function getLocations(): Promise<Location[]> {
   const db = await getDB();
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
+export async function getLocations(): Promise<Location[]> {
+  const db = await getDB();
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
+export async function getLocations(): Promise<Location[]> {
+  const db = await getDB();
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
+export async function getLocations(): Promise<Location[]> {
+  const db = await getDB();
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
+export async function getLocations(): Promise<Location[]> {
+  const db = await getDB();
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
+  const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
+  return getRows<Location>(stmt);
+}
   const stmt = db.prepare('SELECT * FROM locations ORDER BY clinic_room, shelf, slot');
   return getRows<Location>(stmt);
 }

@@ -5,12 +5,10 @@ import {
   AlertTriangle,
   Search,
   ArrowUpDown,
-  Trash2,
   Edit3,
   X,
   AlertCircle,
   Check,
-  ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Attachment, AttachmentModel, Location } from '../../shared/types';

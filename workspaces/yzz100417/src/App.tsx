@@ -6,6 +6,7 @@ import PatientDetail from '@/pages/PatientDetail';
 import Inventory from '@/pages/Inventory';
 import Reports from '@/pages/Reports';
 import Tomorrow from '@/pages/Tomorrow';
+import Patients from '@/pages/Patients';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/tomorrow" element={<Tomorrow />} />
+          <Route path="/patients" element={<Patients />} />
           <Route path="/patient/:id" element={<PatientDetail />} />
           <Route
             path="*"
