@@ -50,8 +50,9 @@ export const detectDuplicateRecords = (
   
   timeMap.forEach((group, time) => {
     if (group.length > 1) {
+      const detectionId = generateDetectionId('duplicate', new Date(time).toISOString());
       results.push({
-        id: generateId(),
+        id: detectionId,
         type: 'duplicate',
         description: `重复记录：在 ${new Date(time).toISOString()} 附近检测到 ${group.length} 条记录`,
         severity: group.length > 2 ? 'high' : 'medium',
@@ -92,8 +93,9 @@ export const detectZoneProximity = (
       if (isInside) {
         if (!warnedPoints.has(`${point.id}-${zone.id}`)) {
           warnedPoints.add(`${point.id}-${zone.id}`);
+          const detectionId = generateDetectionId('proximity', point.id, zone.id, 'inside');
           results.push({
-            id: generateId(),
+            id: detectionId,
             type: 'proximity',
             description: `进入禁区：机器人在 ${point.timestamp} 进入 ${zone.name} 区域`,
             severity: 'high',
@@ -106,8 +108,9 @@ export const detectZoneProximity = (
       } else if (absDistance < zone.warningDistance) {
         if (!warnedPoints.has(`${point.id}-${zone.id}`)) {
           warnedPoints.add(`${point.id}-${zone.id}`);
+          const detectionId = generateDetectionId('proximity', point.id, zone.id, 'near');
           results.push({
-            id: generateId(),
+            id: detectionId,
             type: 'proximity',
             description: `靠近禁区：机器人在 ${point.timestamp} 距离 ${zone.name} 仅 ${absDistance.toFixed(2)} 米，低于安全距离 ${zone.warningDistance} 米`,
             severity: absDistance < zone.warningDistance * 0.5 ? 'high' : 'medium',
@@ -150,8 +153,9 @@ export const detectAbnormalStays = (
       );
       
       if (groupDuration >= minDurationSeconds) {
+        const detectionId = generateDetectionId('abnormalStay', points[groupStartIndex].id, points[groupStartIndex].timestamp);
         results.push({
-          id: generateId(),
+          id: detectionId,
           type: 'abnormalStay',
           description: `异常停留：在位置 (${groupCenter.x.toFixed(1)}, ${groupCenter.z.toFixed(1)}) 停留 ${groupDuration.toFixed(0)} 秒`,
           severity: groupDuration > minDurationSeconds * 3 ? 'high' : groupDuration > minDurationSeconds * 2 ? 'medium' : 'low',
@@ -178,8 +182,9 @@ export const detectAbnormalStays = (
   );
   
   if (groupDuration >= minDurationSeconds) {
+    const detectionId = generateDetectionId('abnormalStay', points[groupStartIndex].id, points[groupStartIndex].timestamp);
     results.push({
-      id: generateId(),
+      id: detectionId,
       type: 'abnormalStay',
       description: `异常停留：在位置 (${groupCenter.x.toFixed(1)}, ${groupCenter.z.toFixed(1)}) 停留 ${groupDuration.toFixed(0)} 秒`,
       severity: groupDuration > minDurationSeconds * 3 ? 'high' : groupDuration > minDurationSeconds * 2 ? 'medium' : 'low',

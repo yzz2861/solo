@@ -2,6 +2,7 @@ import type { PatrolShift, ForbiddenZone, Checkpoint, Annotation } from '@/types
 import patrolShiftsData from '@/data/patrolShifts.json';
 import forbiddenZonesData from '@/data/forbiddenZones.json';
 import checkpointsData from '@/data/checkpoints.json';
+import { runAllDetections } from '@/services/detectionService';
 
 const SHIFTS_STORAGE_KEY = 'patrol-shifts';
 const ZONES_STORAGE_KEY = 'patrol-zones';
@@ -131,6 +132,22 @@ export const exportAllData = (): string => {
   }, null, 2);
 };
 
+export const getDetectionIds = (
+  shifts: PatrolShift[],
+  zones: ForbiddenZone[]
+): string[] => {
+  const detectionIds: string[] = [];
+  
+  shifts.forEach(shift => {
+    const detections = runAllDetections(shift.trajectoryPoints, zones);
+    detections.forEach(detection => {
+      detectionIds.push(detection.id);
+    });
+  });
+  
+  return detectionIds;
+};
+
 export const validateAnnotationTarget = (
   targetId: string,
   targetType: Annotation['targetType'],
@@ -147,8 +164,10 @@ export const validateAnnotationTarget = (
       return shifts.some(shift => 
         shift.trajectoryPoints.some(point => point.id === targetId)
       );
-    case 'detection':
-      return true;
+    case 'detection': {
+      const detectionIds = getDetectionIds(shifts, zones);
+      return detectionIds.includes(targetId);
+    }
     case 'checkpoint':
       return checkpoints.some(cp => cp.id === targetId);
     case 'zone':
