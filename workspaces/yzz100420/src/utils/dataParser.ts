@@ -1,5 +1,16 @@
 import Papa from 'papaparse';
-import type { TemperaturePoint, TemperatureUnit, FiringPlan } from '../types';
+import type {
+  TemperaturePoint,
+  TemperatureUnit,
+  FiringPlan,
+  PlanSegment,
+  SpecialEvent,
+  WorkBatch,
+  StudentWork,
+  GlazeRecipe,
+  SegmentType,
+  ColorDeviation,
+} from '../types';
 import { detectTemperatureUnit, generateId } from './curveCalc';
 
 export interface ParsedResult {
@@ -319,6 +330,27 @@ export const PRESET_PLANS: PresetPlan[] = [
       description: '高温还原气氛烧成，适合瓷器',
       segments: [
         { id: generateId(), type: 'heating', startTime: 0, startTemp: 25, endTime: 4, endTemp: 300, rate: 69, name: '氧化预热' },
+        { id: generateId(), type: 'heating', startTime: 4, startTemp: 300, endTime: 8, endTemp: 900, rate: 150, name: '快速升温' },
+        { id: generateId(), type: 'heating', startTime: 8, startTemp: 900, endTime: 10, endTemp: 1050, rate: 75, name: '强还原开始' },
+        { id: generateId(), type: 'heating', startTime: 10, startTemp: 1050, endTime: 13, endTemp: 1250, rate: 67, name: '弱还原升温' },
+        { id: generateId(), type: 'heating', startTime: 13, startTemp: 1250, endTime: 14, endTemp: 1300, rate: 50, name: '升温至火度' },
+        { id: generateId(), type: 'holding', startTime: 14, startTemp: 1300, endTime: 15.5, endTemp: 1300, rate: 0, tolerance: 5, name: '高温保温' },
+        { id: generateId(), type: 'cooling', startTime: 15.5, startTemp: 1300, endTime: 24, endTemp: 100, rate: -52, name: '控制冷却' },
+      ],
+    },
+  },
+];
+        { id: generateId(), type: 'heating', startTime: 0, startTemp: 25, endTime: 4, endTemp: 300, rate: 69, name: '氧化预热' },
+        { id: generateId(), type: 'heating', startTime: 4, startTemp: 300, endTime: 8, endTemp: 900, rate: 150, name: '快速升温' },
+        { id: generateId(), type: 'heating', startTime: 8, startTemp: 900, endTime: 10, endTemp: 1050, rate: 75, name: '强还原开始' },
+        { id: generateId(), type: 'heating', startTime: 10, startTemp: 1050, endTime: 13, endTemp: 1250, rate: 67, name: '弱还原升温' },
+        { id: generateId(), type: 'heating', startTime: 13, startTemp: 1250, endTime: 14, endTemp: 1300, rate: 50, name: '升温至火度' },
+        { id: generateId(), type: 'holding', startTime: 14, startTemp: 1300, endTime: 15.5, endTemp: 1300, rate: 0, tolerance: 5, name: '高温保温' },
+        { id: generateId(), type: 'cooling', startTime: 15.5, startTemp: 1300, endTime: 24, endTemp: 100, rate: -52, name: '控制冷却' },
+      ],
+    },
+  },
+];
         { id: generateId(), type: 'heating', startTime: 4, startTemp: 300, endTime: 8, endTemp: 900, rate: 150, name: '快速升温' },
         { id: generateId(), type: 'heating', startTime: 8, startTemp: 900, endTime: 10, endTemp: 1050, rate: 75, name: '强还原开始' },
         { id: generateId(), type: 'heating', startTime: 10, startTemp: 1050, endTime: 13, endTemp: 1250, rate: 67, name: '弱还原升温' },

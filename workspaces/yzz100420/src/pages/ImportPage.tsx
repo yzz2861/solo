@@ -17,13 +17,27 @@ import {
   Sparkles,
   Layers,
   Palette,
+  Download,
+  FileUp,
 } from 'lucide-react';
 import { useFiringStore } from '../store/firingStore';
 import { parseKilnCSV, parseKilnJSON, PRESET_PLANS, type PresetPlan } from '../utils/dataParser';
 import { buildCompleteRecord, generateId, formatHours, formatTemp } from '../utils/curveCalc';
-import type { FiringPlan, GlazeRecipe, StudentWork, TemperaturePoint, TemperatureUnit, WorkBatch } from '../types';
+import type {
+  FiringPlan,
+  GlazeRecipe,
+  StudentWork,
+  TemperaturePoint,
+  TemperatureUnit,
+  WorkBatch,
+  PlanSegment,
+  SpecialEvent,
+  SegmentType,
+  ColorDeviation,
+} from '../types';
 import { generateSampleRecord } from '../utils/sampleData';
 import { cn } from '../lib/utils';
+import Papa from 'papaparse';
 
 const ImportPage = () => {
   const navigate = useNavigate();
