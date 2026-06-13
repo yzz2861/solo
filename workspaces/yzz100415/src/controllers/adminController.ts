@@ -564,21 +564,32 @@ export async function getGuardSchedule(req: Request, res: Response) {
       .orderBy('app.returnedTime', 'DESC')
       .getMany();
 
-    const sanitize = (app: SealApplication) => ({
-      id: app.id,
-      materialName: app.materialName,
-      materialType: getMaterialTypeText(app.materialType),
-      borrowType: getBorrowTypeText(app.borrowType),
-      applicantName: app.applicant?.name,
-      department: app.applicant?.department,
-      status: getStatusText(app.status),
-      materialPages: app.materialPages,
-      expectedReturnDate: app.expectedReturnDate,
-      pickedUpTime: app.pickedUpTime,
-      returnedTime: app.returnedTime,
-      pickedUpBy: app.pickedUpByAdmin?.name,
-      returnedBy: app.returnedByAdmin?.name,
-    });
+    const sanitize = (app: SealApplication) => {
+      const statusMap: Record<string, string> = {
+        [ApplicationStatus.PENDING_APPROVAL]: '待审批',
+        [ApplicationStatus.APPROVED]: '待取章',
+        [ApplicationStatus.REJECTED]: '已驳回',
+        [ApplicationStatus.PICKED_UP]: '已取章使用中',
+        [ApplicationStatus.RETURNED]: '已归还',
+        [ApplicationStatus.OVERDUE]: '超期未还',
+        [ApplicationStatus.TRACKING]: '追踪中',
+      };
+      return {
+        id: app.id,
+        borrowType: getBorrowTypeText(app.borrowType),
+        materialType: getMaterialTypeText(app.materialType),
+        status: statusMap[app.status] || getStatusText(app.status),
+        statusCode: app.status,
+        applicantName: app.applicant?.name,
+        department: app.applicant?.department,
+        expectedReturnDate: app.expectedReturnDate,
+        pickedUpTime: app.pickedUpTime,
+        returnedTime: app.returnedTime,
+        pickedUpBy: app.pickedUpByAdmin?.name,
+        returnedBy: app.returnedByAdmin?.name,
+        createdAt: app.createdAt,
+      };
+    };
 
     return res.json({
       code: 200,

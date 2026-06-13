@@ -110,11 +110,12 @@ router.post(
   addTrackingNote
 );
 
-router.get('/applications/:id/history', authMiddleware, getApprovalHistory);
+router.get('/applications/:id/history', authMiddleware, roleMiddleware(UserRole.EMPLOYEE, UserRole.APPROVER, UserRole.ADMIN, UserRole.LEGAL), getApprovalHistory);
 
 router.post(
   '/applications/:id/attachments',
   authMiddleware,
+  roleMiddleware(UserRole.EMPLOYEE, UserRole.APPROVER, UserRole.ADMIN),
   upload.single('file'),
   uploadAttachment
 );

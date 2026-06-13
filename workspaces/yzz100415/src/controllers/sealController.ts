@@ -48,6 +48,61 @@ function sanitizeApplication(app: SealApplication, includeSensitive: boolean = t
   return result;
 }
 
+export function sanitizeForGuard(app: SealApplication) {
+  const borrowTypeText = app.borrowType === BorrowType.TAKE_OUT ? '外借' : '现场用印';
+  const materialTypeMap: Record<string, string> = {
+    [MaterialType.CONTRACT]: '合同',
+    [MaterialType.CERTIFICATE]: '证明',
+    [MaterialType.AGREEMENT]: '协议',
+    [MaterialType.LETTER]: '函件',
+    [MaterialType.OTHER]: '其他',
+  };
+  const materialTypeText = materialTypeMap[app.materialType] || app.materialType;
+  const statusMap: Record<string, string> = {
+    [ApplicationStatus.PENDING_APPROVAL]: '待审批',
+    [ApplicationStatus.APPROVED]: '待取章',
+    [ApplicationStatus.REJECTED]: '已驳回',
+    [ApplicationStatus.PICKED_UP]: '已取章',
+    [ApplicationStatus.RETURNED]: '已归还',
+    [ApplicationStatus.OVERDUE]: '超期未还',
+    [ApplicationStatus.TRACKING]: '追踪中',
+  };
+  const statusText = statusMap[app.status] || app.status;
+
+  return {
+    id: app.id,
+    borrowType: borrowTypeText,
+    materialType: materialTypeText,
+    status: statusText,
+    statusCode: app.status,
+    applicantName: app.applicant?.name,
+    department: app.applicant?.department,
+    expectedReturnDate: app.expectedReturnDate,
+    pickedUpTime: app.pickedUpTime,
+    returnedTime: app.returnedTime,
+    createdAt: app.createdAt,
+  };
+}
+
+export function isGuardAccessibleToday(app: SealApplication): boolean {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(todayStart);
+  todayEnd.setDate(todayEnd.getDate() + 1);
+
+  const pickupToday = app.pickedUpTime &&
+    new Date(app.pickedUpTime) >= todayStart &&
+    new Date(app.pickedUpTime) < todayEnd;
+
+  const returnToday = app.returnedTime &&
+    new Date(app.returnedTime) >= todayStart &&
+    new Date(app.returnedTime) < todayEnd;
+
+  const isApproved = app.status === ApplicationStatus.APPROVED;
+
+  return pickupToday === true || returnToday === true || isApproved === true;
+}
+
 export async function createApplication(req: Request, res: Response) {
   try {
     if (!req.user) return res.status(401).json({ code: 401, message: '未登录' });
@@ -137,6 +192,62 @@ export async function getApplicationList(req: Request, res: Response) {
     if (!req.user) return res.status(401).json({ code: 401, message: '未登录' });
 
     const appRepo = AppDataSource.getRepository(SealApplication);
+
+    if (req.user.role === UserRole.GUARD) {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const todayEnd = new Date(todayStart);
+      todayEnd.setDate(todayEnd.getDate() + 1);
+
+      const allApps = await appRepo.find({
+        where: [
+          { status: ApplicationStatus.APPROVED },
+          { status: ApplicationStatus.PICKED_UP },
+          { status: ApplicationStatus.RETURNED },
+        ],
+        order: { createdAt: 'DESC' },
+      });
+
+      const todayApps = allApps.filter((app) => {
+        const pickupToday = app.pickedUpTime &&
+          new Date(app.pickedUpTime) >= todayStart &&
+          new Date(app.pickedUpTime) < todayEnd;
+
+        const returnToday = app.returnedTime &&
+          new Date(app.returnedTime) >= todayStart &&
+          new Date(app.returnedTime) < todayEnd;
+
+        const approvedPending = app.status === ApplicationStatus.APPROVED;
+
+        return pickupToday === true || returnToday === true || approvedPending === true;
+      });
+
+      const pendingPickup = todayApps.filter(
+        (a) => a.status === ApplicationStatus.APPROVED
+      );
+      const todayPickedUp = todayApps.filter((a) => {
+        if (!a.pickedUpTime) return false;
+        const t = new Date(a.pickedUpTime);
+        return t >= todayStart && t < todayEnd;
+      });
+      const todayReturned = todayApps.filter((a) => {
+        if (!a.returnedTime) return false;
+        const t = new Date(a.returnedTime);
+        return t >= todayStart && t < todayEnd;
+      });
+
+      return res.json({
+        code: 200,
+        data: {
+          date: todayStart.toISOString().split('T')[0],
+          pendingPickup: pendingPickup.map(sanitizeForGuard),
+          todayPickedUp: todayPickedUp.map(sanitizeForGuard),
+          todayReturned: todayReturned.map(sanitizeForGuard),
+          total: todayApps.length,
+        },
+      });
+    }
+
     const {
       status,
       borrowType,
@@ -175,12 +286,10 @@ export async function getApplicationList(req: Request, res: Response) {
       take: Number(pageSize),
     });
 
-    const includeSensitive = req.user.role !== UserRole.GUARD;
-
     return res.json({
       code: 200,
       data: {
-        list: list.map((a) => sanitizeApplication(a, includeSensitive)),
+        list: list.map((a) => sanitizeApplication(a)),
         total,
         page: Number(page),
         pageSize: Number(pageSize),
@@ -204,6 +313,19 @@ export async function getApplicationDetail(req: Request, res: Response) {
       return res.status(404).json({ code: 404, message: '申请不存在' });
     }
 
+    if (req.user.role === UserRole.GUARD) {
+      if (!isGuardAccessibleToday(application)) {
+        return res.status(403).json({
+          code: 403,
+          message: '门卫仅可查看当日取还安排相关的申请',
+        });
+      }
+      return res.json({
+        code: 200,
+        data: sanitizeForGuard(application),
+      });
+    }
+
     if (
       req.user.role === UserRole.EMPLOYEE &&
       application.applicantId !== req.user.userId
@@ -219,11 +341,9 @@ export async function getApplicationDetail(req: Request, res: Response) {
       return res.status(403).json({ code: 403, message: '无权查看此申请' });
     }
 
-    const includeSensitive = req.user.role !== UserRole.GUARD;
-
     return res.json({
       code: 200,
-      data: sanitizeApplication(application, includeSensitive),
+      data: sanitizeApplication(application),
     });
   } catch (error) {
     console.error('Get application detail error:', error);
