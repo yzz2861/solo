@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
-import { Printer, Download, FileText, AlertTriangle, Clock } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Printer, Download, FileText, AlertTriangle, Clock, LogOut } from 'lucide-react';
 import { useBoardingStore } from '@/store/useBoardingStore';
 import { TASK_TYPE_LABELS, TASK_STATUS_LABELS } from '@/types';
-import type { CareTask } from '@/types';
+import type { CareTask, PetBoarding } from '@/types';
+import PickupModal from '@/components/PickupModal';
 
 function formatDateTime(iso: string) {
   if (!iso) return '--';
@@ -35,6 +36,7 @@ function exportCSV(tasks: CareTask[], filename: string) {
 
 export default function Handover() {
   const store = useBoardingStore();
+  const [pickupTarget, setPickupTarget] = useState<PetBoarding | null>(null);
 
   const todayTasks = useMemo(() => store.getTodayTasks(), [store.tasks]);
   const pending = useMemo(() => todayTasks.filter((t) => t.status === 'pending'), [todayTasks]);
@@ -140,7 +142,8 @@ export default function Handover() {
                     <th className="text-left py-2 pr-3">品种</th>
                     <th className="text-left py-2 pr-3">主人</th>
                     <th className="text-left py-2 pr-3">接回日期</th>
-                    <th className="text-left py-2">过敏/备注</th>
+                    <th className="text-left py-2 pr-3">过敏/备注</th>
+                    <th className="text-left py-2">操作</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -151,11 +154,21 @@ export default function Handover() {
                       <td className="py-2 pr-3 text-warm-500">{b.breed || '-'}</td>
                       <td className="py-2 pr-3 text-warm-500">{b.ownerName}</td>
                       <td className="py-2 pr-3 text-warm-500">{b.expectedPickupDate}</td>
-                      <td className="py-2 text-warm-500">
+                      <td className="py-2 pr-3 text-warm-500">
                         {b.allergicFood && (
                           <span className="text-danger-500 mr-1">⚠ {b.allergicFood}</span>
                         )}
                         {b.specialNotes && <span>{b.specialNotes}</span>}
+                      </td>
+                      <td className="py-2">
+                        <button
+                          onClick={() => setPickupTarget(b)}
+                          className="text-danger-400 hover:text-danger-600 p-1 transition-colors inline-flex items-center gap-0.5 text-xs"
+                          title="办理接回"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          接回
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -256,6 +269,14 @@ export default function Handover() {
           </div>
         </div>
       </div>
+
+      {pickupTarget && (
+        <PickupModal
+          boarding={pickupTarget}
+          onClose={() => setPickupTarget(null)}
+          onCompleted={() => setPickupTarget(null)}
+        />
+      )}
     </div>
   );
 }

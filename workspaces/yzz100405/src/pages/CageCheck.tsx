@@ -1,11 +1,14 @@
-import { useMemo } from 'react';
-import { Check, MapPin, AlertTriangle, Clock } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Check, MapPin, AlertTriangle, Clock, LogOut } from 'lucide-react';
 import { useBoardingStore } from '@/store/useBoardingStore';
 import { TASK_TYPE_LABELS, PET_TYPE_LABELS } from '@/types';
+import type { PetBoarding } from '@/types';
+import PickupModal from '@/components/PickupModal';
 
 export default function CageCheck() {
   const store = useBoardingStore();
   const activeBoardings = store.getActiveBoardings();
+  const [pickupTarget, setPickupTarget] = useState<PetBoarding | null>(null);
 
   const tasksByCage = useMemo(() => {
     const todayTasks = store.getTodayTasks();
@@ -140,6 +143,14 @@ export default function CageCheck() {
                         {b.specialNotes && (
                           <span className="text-warm-400">备注：{b.specialNotes}</span>
                         )}
+                        <button
+                          onClick={() => setPickupTarget(b)}
+                          className="ml-auto text-danger-400 hover:text-danger-600 p-0.5 transition-colors flex items-center gap-0.5"
+                          title="办理接回"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          <span className="text-xs">接回</span>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -238,6 +249,13 @@ export default function CageCheck() {
             );
           })}
         </div>
+      )}
+      {pickupTarget && (
+        <PickupModal
+          boarding={pickupTarget}
+          onClose={() => setPickupTarget(null)}
+          onCompleted={() => setPickupTarget(null)}
+        />
       )}
     </div>
   );

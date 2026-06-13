@@ -41,10 +41,21 @@ interface BoardingStore {
   markTaskAbnormal: (id: string, reason: string) => void;
 
   validateBoarding: (boarding: Partial<PetBoarding>, excludeId?: string) => Warning[];
+  validatePickup: (boardingId: string, actualPickupDate: string) => Warning[];
+  pickupBoarding: (boardingId: string, actualPickupDate: string) => void;
+  getPendingTasksByBoardingId: (boardingId: string) => CareTask[];
   getTodayTasks: () => CareTask[];
   getActiveBoardings: () => PetBoarding[];
   getTasksByCage: () => Record<string, CareTask[]>;
   getAbnormalAndDelayed: () => CareTask[];
+
+  _devHydrate: (data: {
+    boardings: PetBoarding[];
+    feedingPlans: FeedingPlan[];
+    medicationPlans: MedicationPlan[];
+    walkPlans: WalkPlan[];
+    tasks: CareTask[];
+  }) => void;
 }
 
 const STORAGE_KEY = 'pet-boarding-store';
@@ -100,6 +111,11 @@ export const useBoardingStore = create<BoardingStore>((set, get) => ({
   medicationPlans: saved.medicationPlans,
   walkPlans: saved.walkPlans,
   tasks: saved.tasks,
+
+  _devHydrate: (data: typeof saved) => {
+    set((s) => ({ ...s, ...data }));
+    persistState({ ...get(), ...data });
+  },
 
   addBoarding: (boarding) => {
     set((s) => {
@@ -341,6 +357,70 @@ export const useBoardingStore = create<BoardingStore>((set, get) => ({
     return warnings;
   },
 
+  validatePickup: (boardingId, actualPickupDate) => {
+    const warnings: Warning[] = [];
+    const state = get();
+    const boarding = state.boardings.find((b) => b.id === boardingId);
+    if (!boarding) return warnings;
+
+    const pendingTasks = state.tasks.filter(
+      (t) => t.boardingId === boardingId && t.status === 'pending'
+    );
+
+    if (actualPickupDate < boarding.expectedPickupDate && pendingTasks.length > 0) {
+      warnings.push({
+        type: 'early_pickup',
+        message: `⚠ 提前接回风险：主人计划 ${boarding.expectedPickupDate} 接回，现提前至 ${actualPickupDate}，但该寄养记录下还有 ${pendingTasks.length} 项未处理任务！`,
+        severity: 'warning',
+        relatedIds: pendingTasks.map((t) => t.id),
+      });
+    }
+
+    if (pendingTasks.length > 0 && actualPickupDate >= boarding.expectedPickupDate) {
+      warnings.push({
+        type: 'early_pickup',
+        message: `接回提醒：该寄养记录下还有 ${pendingTasks.length} 项未处理任务，请确认是否已安排妥当`,
+        severity: 'warning',
+        relatedIds: pendingTasks.map((t) => t.id),
+      });
+    }
+
+    const abnormalTasks = state.tasks.filter(
+      (t) => t.boardingId === boardingId && t.status === 'abnormal'
+    );
+    if (abnormalTasks.length > 0) {
+      warnings.push({
+        type: 'early_pickup',
+        message: `异常任务提醒：该寄养记录下有 ${abnormalTasks.length} 项异常任务未处理，接回前请确认`,
+        severity: 'warning',
+        relatedIds: abnormalTasks.map((t) => t.id),
+      });
+    }
+
+    return warnings;
+  },
+
+  pickupBoarding: (boardingId, actualPickupDate) => {
+    set((s) => {
+      const next = {
+        ...s,
+        boardings: s.boardings.map((b) =>
+          b.id === boardingId
+            ? { ...b, status: 'picked_up' as const, actualPickupDate, updatedAt: new Date().toISOString() }
+            : b
+        ),
+      };
+      persistState(next);
+      return next;
+    });
+  },
+
+  getPendingTasksByBoardingId: (boardingId) => {
+    return get().tasks.filter(
+      (t) => t.boardingId === boardingId && (t.status === 'pending' || t.status === 'abnormal')
+    );
+  },
+
   getTodayTasks: () => {
     const today = todayStr();
     return get().tasks.filter((t) => {
@@ -372,3 +452,7 @@ export const useBoardingStore = create<BoardingStore>((set, get) => ({
     });
   },
 }));
+
+if (typeof window !== 'undefined') {
+  (window as unknown as Record<string, unknown>).__boardingStore = useBoardingStore;
+}

@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
-import { ClipboardList, CheckCircle2, AlertTriangle, Plus } from 'lucide-react';
+import { ClipboardList, CheckCircle2, AlertTriangle, Plus, LogOut, Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBoardingStore } from '@/store/useBoardingStore';
 import TaskCard from '@/components/TaskCard';
-import type { CareTask } from '@/types';
+import PickupModal from '@/components/PickupModal';
+import type { CareTask, PetBoarding } from '@/types';
+import { PET_TYPE_LABELS } from '@/types';
 
 type TabKey = 'pending' | 'completed' | 'abnormal';
 
@@ -11,6 +13,7 @@ export default function Board() {
   const store = useBoardingStore();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>('pending');
+  const [pickupTarget, setPickupTarget] = useState<PetBoarding | null>(null);
 
   const todayTasks = useMemo(() => store.getTodayTasks(), [store.tasks]);
   const pending = useMemo(
@@ -59,6 +62,49 @@ export default function Board() {
         <span>今日任务 {todayTasks.length} 项</span>
       </div>
 
+      {/* Active boardings bar with pickup actions */}
+      {activeBoardings.length > 0 && (
+        <div className="mb-4 p-3 bg-white rounded-xl border border-warm-200 shadow-sm">
+          <div className="text-xs text-warm-400 mb-2 font-medium">在住宠物 · 可办理接回或编辑</div>
+          <div className="flex flex-wrap gap-2">
+            {activeBoardings.map((b) => {
+              const bPending = store.tasks.filter(
+                (t) => t.boardingId === b.id && t.status === 'pending'
+              ).length;
+              return (
+                <div
+                  key={b.id}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-warm-50 rounded-lg border border-warm-100 text-sm"
+                >
+                  <span>{PET_TYPE_LABELS[b.petType].split(' ')[0]}</span>
+                  <span className="font-medium text-warm-700">{b.petName}</span>
+                  <span className="text-xs text-warm-400">笼位{b.cageNumber}</span>
+                  {bPending > 0 && (
+                    <span className="text-xs bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded-full">
+                      {bPending}待做
+                    </span>
+                  )}
+                  <button
+                    onClick={() => navigate(`/register/${b.id}`)}
+                    className="text-warm-400 hover:text-warm-600 p-0.5 transition-colors"
+                    title="编辑"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setPickupTarget(b)}
+                    className="text-danger-400 hover:text-danger-600 p-0.5 transition-colors"
+                    title="办理接回"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-2 mb-6 overflow-x-auto">
         {tabs.map(({ key, label, icon: Icon, count, color }) => (
           <button
@@ -102,6 +148,14 @@ export default function Board() {
             <TaskCard key={task.id} task={task} />
           ))}
         </div>
+      )}
+
+      {pickupTarget && (
+        <PickupModal
+          boarding={pickupTarget}
+          onClose={() => setPickupTarget(null)}
+          onCompleted={() => setPickupTarget(null)}
+        />
       )}
     </div>
   );
