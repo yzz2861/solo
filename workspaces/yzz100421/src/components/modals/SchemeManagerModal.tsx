@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Save, Trash2, Download, Filter } from 'lucide-react';
+import { Save, Trash2, Download, Filter, Copy, RotateCcw } from 'lucide-react';
 import ModalBase from './ModalBase';
 import { useLayoutStore } from '@/store/useLayoutStore';
 import { cn } from '@/lib/utils';
@@ -28,6 +28,8 @@ export default function SchemeManagerModal() {
   const showSchemeManager = useLayoutStore((s) => s.showSchemeManager);
   const toggleSchemeManager = useLayoutStore((s) => s.toggleSchemeManager);
   const saveScheme = useLayoutStore((s) => s.saveScheme);
+  const saveSchemeAs = useLayoutStore((s) => s.saveSchemeAs);
+  const clearActiveScheme = useLayoutStore((s) => s.clearActiveScheme);
   const loadScheme = useLayoutStore((s) => s.loadScheme);
   const deleteScheme = useLayoutStore((s) => s.deleteScheme);
 
@@ -68,6 +70,29 @@ export default function SchemeManagerModal() {
     const name = schemeName.trim() || `方案 ${schemes.length + 1}`;
     saveScheme(name, scenarioType);
     setSchemeName('');
+  };
+
+  // 另存为新方案
+  const handleSaveAs = () => {
+    const name = schemeName.trim() || `方案 ${schemes.length + 1} - 副本`;
+    saveSchemeAs(name, scenarioType);
+    setSchemeName('');
+  };
+
+  // 清空当前方案
+  const handleClearActive = () => {
+    if (window.confirm('确定清空当前编辑的方案吗？\n方案列表不会被删除。')) {
+      clearActiveScheme();
+    }
+  };
+
+  // 列表中另存为方案
+  const handleSaveAsFromList = (scheme: { id: string; name: string; scenarioType: SchemeScenarioType }, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newName = window.prompt('输入新方案名称：', `${scheme.name} - 副本`);
+    if (newName && newName.trim()) {
+      saveSchemeAs(newName.trim(), scheme.scenarioType);
+    }
   };
 
   // 删除方案（带确认）
@@ -120,6 +145,20 @@ export default function SchemeManagerModal() {
           <Save className="h-4 w-4" />
           {activeSchemeId ? '更新方案' : '保存方案'}
         </button>
+        <button
+          type="button"
+          onClick={handleSaveAs}
+          disabled={!activeSchemeId}
+          className={cn(
+            'flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors',
+            activeSchemeId
+              ? 'bg-slate-600 hover:bg-slate-500 active:bg-slate-400'
+              : 'cursor-not-allowed bg-slate-700 text-slate-500',
+          )}
+        >
+          <Copy className="h-4 w-4" />
+          另存为新方案
+        </button>
       </div>
 
       {/* 筛选按钮 */}
@@ -145,6 +184,14 @@ export default function SchemeManagerModal() {
         <span className="ml-auto text-sm text-slate-400">
           共 {filteredSchemes.length} 个方案
         </span>
+        <button
+          type="button"
+          onClick={handleClearActive}
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-slate-400 transition-colors hover:bg-slate-700/50 hover:text-slate-200"
+        >
+          <RotateCcw className="h-4 w-4" />
+          清空当前
+        </button>
       </div>
 
       {/* 方案列表表格 */}
@@ -221,6 +268,14 @@ export default function SchemeManagerModal() {
                       >
                         <Download className="h-3 w-3" />
                         加载
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleSaveAsFromList(scheme, e)}
+                        className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-violet-400 transition-colors hover:bg-violet-500/20"
+                      >
+                        <Copy className="h-3 w-3" />
+                        另存为
                       </button>
                       <button
                         type="button"

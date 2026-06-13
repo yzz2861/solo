@@ -308,6 +308,8 @@ export interface LayoutStoreActions {
 
   // 方案
   saveScheme: (name: string, scenarioType?: SchemeScenarioType) => LayoutScheme
+  saveSchemeAs: (name: string, scenarioType?: SchemeScenarioType) => LayoutScheme
+  clearActiveScheme: () => void
   loadScheme: (id: string) => void
   deleteScheme: (id: string) => void
 
@@ -530,6 +532,48 @@ export const useLayoutStore = create<LayoutStore>((set, get) => ({
     })
     return saved
   },
+
+  saveSchemeAs: (name, scenarioType = 'general'): LayoutScheme => {
+    const { entities, agvParams, corridorParams, sim, schemes } = get()
+    const metrics = computeMetrics(entities, agvParams, sim.overflowWarnings)
+
+    const now = Date.now()
+    const saved: LayoutScheme = {
+      id: generateId('scheme'),
+      name,
+      createdAt: now,
+      updatedAt: now,
+      scenarioType,
+      entities: entities.map((e) => ({ ...e })) as LayoutEntity[],
+      agvParams: { ...agvParams },
+      corridorParams: { ...corridorParams },
+      metrics,
+      notes: '',
+    }
+    const nextSchemes = [...schemes, saved]
+
+    writeSchemesToStorage(nextSchemes)
+    set({
+      schemes: nextSchemes,
+      activeSchemeId: saved.id,
+    })
+    return saved
+  },
+
+  clearActiveScheme: () => {
+    const { validateAll } = get()
+    set({
+      entities: [],
+      selectedEntityId: null,
+      agvParams: { ...DEFAULT_AGV_PARAMS },
+      corridorParams: { ...DEFAULT_CORRIDOR_PARAMS },
+      sim: { ...DEFAULT_SIM_STATE },
+      activeSchemeId: null,
+      toolMode: 'select',
+    })
+    validateAll()
+  },
+
 
   loadScheme: (id) => {
     const { schemes } = get()
