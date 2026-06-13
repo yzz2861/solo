@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    @apply bg-ocean-50 text-ocean-900 antialiased;
+    background-image:
+      radial-gradient(at 20% 10%, rgba(45, 212, 191, 0.08) 0, transparent 50%),
+      radial-gradient(at 80% 90%, rgba(45, 142, 255, 0.08) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'DM Serif Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-[0_1px_2px_rgba(10,37,64,0.06),0_8px_24px_rgba(10,37,64,0.06)] border border-white;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-ocean-900 text-white hover:bg-ocean-800 focus:ring-ocean-500 shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ocean-900 border border-ocean-200 hover:bg-ocean-50 focus:ring-ocean-300;
+  }
+  .btn-warning {
+    @apply btn bg-coral-500 text-white hover:bg-coral-600 focus:ring-coral-400;
+  }
+  .btn-ghost {
+    @apply btn text-ocean-700 hover:bg-ocean-100 focus:ring-ocean-300;
+  }
+  .input {
+    @apply w-full px-3 py-2 rounded-lg border border-ocean-200 bg-white text-sm text-ocean-900 placeholder:text-ocean-400 focus:outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-100 transition;
+  }
+  .label {
+    @apply block text-xs font-medium text-ocean-700 mb-1.5;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-success {
+    @apply badge bg-aqua-50 text-aqua-700 border border-aqua-200;
+  }
+  .badge-warning {
+    @apply badge bg-coral-50 text-coral-700 border border-coral-200;
+  }
+  .badge-info {
+    @apply badge bg-ocean-50 text-ocean-700 border border-ocean-200;
+  }
+  .nav-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ocean-200 hover:bg-ocean-800/60 hover:text-white transition-all;
+  }
+  .nav-link-active {
+    @apply bg-ocean-800/80 text-white shadow-inner;
+  }
+  .section-title {
+    @apply font-display text-xl text-ocean-900;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}
