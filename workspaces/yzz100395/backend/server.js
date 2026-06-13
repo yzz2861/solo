@@ -15,8 +15,11 @@ app.use('/api', sampleRoutes);
 
 app.use(express.static('public'));
 
-initDatabase();
-
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+initDatabase().then(() => {
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}).catch(err => {
+  console.error('Failed to initialize database:', err);
+  process.exit(1);
 });

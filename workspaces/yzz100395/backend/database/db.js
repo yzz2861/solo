@@ -105,7 +105,9 @@ const initDatabase = () => {
         INSERT OR IGNORE INTO schools (name, address, contact) VALUES 
         ('第一中学', '文化路100号', '张主任 13800138001'),
         ('第二小学', '幸福路200号', '李老师 13800138002'),
-        ('第三幼儿园', '阳光街300号', '王园长 13800138003')
+        ('第三幼儿园', '阳光街300号', '王园长 13800138003'),
+        ('第四中学', '人民路400号', '陈主任 13800138004'),
+        ('第五小学', '建设路500号', '赵老师 13800138005')
       `);
 
       db.run(`
@@ -115,7 +117,9 @@ const initDatabase = () => {
         ('番茄炒蛋', '荤素'),
         ('清蒸鱼', '荤菜'),
         ('土豆丝', '素菜'),
-        ('冬瓜汤', '汤类')
+        ('冬瓜汤', '汤类'),
+        ('宫保鸡丁', '荤菜'),
+        ('凉拌黄瓜', '素菜')
       `);
 
       for (let fridge = 1; fridge <= 3; fridge++) {
@@ -124,7 +128,7 @@ const initDatabase = () => {
         }
       }
 
-      console.log('Database initialized');
+      console.log('Database initialized successfully');
       resolve();
     });
   });
