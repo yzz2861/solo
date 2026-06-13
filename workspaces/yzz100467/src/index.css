@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #334155;
+  background-color: #F1F5F9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+@layer components {
+  .app-btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-all duration-150 border;
+  }
+  .app-btn-primary {
+    @apply app-btn bg-brand-600 text-white border-brand-600 hover:bg-brand-700 hover:border-brand-700 active:translate-y-px;
+  }
+  .app-btn-secondary {
+    @apply app-btn bg-white text-brand-700 border-surface-3 hover:bg-surface hover:border-brand-300;
+  }
+  .app-btn-danger {
+    @apply app-btn bg-white text-danger-600 border-danger-500/30 hover:bg-danger-500 hover:text-white hover:border-danger-500;
+  }
+  .app-btn-ghost {
+    @apply app-btn bg-transparent text-surface-text border-transparent hover:bg-surface-2;
+  }
+  .app-card {
+    @apply bg-white rounded-xl2 shadow-card border border-surface-3/50;
+  }
+  .app-input {
+    @apply w-full px-2.5 py-1.5 rounded-md text-sm border border-surface-3 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-400 transition;
+  }
+  .app-label {
+    @apply text-xs font-medium text-surface-muted mb-1 block;
+  }
+  .app-chip {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .app-divider {
+    @apply h-px w-full bg-surface-3 my-3;
+  }
+  .panel-title {
+    @apply text-sm font-semibold text-surface-strong flex items-center gap-1.5;
+  }
+  .nav-tab {
+    @apply px-3 py-1.5 rounded-md text-sm font-medium text-surface-muted hover:bg-surface-2 hover:text-brand-600 transition;
+  }
+  .nav-tab-active {
+    @apply bg-brand-50 text-brand-700;
+  }
+  .status-badge {
+    @apply app-chip border;
+  }
+  .status-pending { @apply bg-surface-2 text-surface-muted border-surface-3; }
+  .status-picked { @apply bg-info-500/10 text-info-600 border-info-500/30; }
+  .status-installed { @apply bg-warning-500/10 text-warning-600 border-warning-500/30; }
+  .status-verified { @apply bg-success-500/10 text-success-600 border-success-500/30; }
+  .warn-error { @apply bg-danger-500/10 text-danger-600 border-danger-500/30; }
+  .warn-warning { @apply bg-warning-500/10 text-warning-600 border-warning-500/30; }
+  .warn-info { @apply bg-info-500/10 text-info-600 border-info-500/30; }
+}
+
+.animate-pulse-soft {
+  animation: pulseSoft 1.8s ease-in-out infinite;
+}
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.04); }
+}
+
+.canvas-host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%);
+}
+.canvas-host canvas {
+  display: block;
+  outline: none;
+}
