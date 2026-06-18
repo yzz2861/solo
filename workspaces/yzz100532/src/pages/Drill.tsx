@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { db } from "@/data/db";
 import type { Scenario, TunnelNode, TunnelEdge, DrillRecord } from "@/types";
 import { aStar } from "@/engine/pathfinding/aStar";
+import { calculateTime } from "@/engine/estimation/timeCalculator";
 
 type DrillState = "ready" | "running" | "paused" | "completed" | "saving";
 
@@ -90,8 +91,14 @@ export default function Drill() {
       .map((nodeId) => nodesData.find((n) => n.id === nodeId))
       .filter((n): n is TunnelNode => n !== undefined);
 
+    const routeEdges = route.edges
+      .map((edgeId) => edgesData.find((e) => e.id === edgeId))
+      .filter((e): e is TunnelEdge => e !== undefined);
+
+    const estTime = calculateTime({ edges: routeEdges });
+
     setRouteNodes(routeNodesList);
-    setEstimatedTime(route.estimatedTime || routeNodesList.length * 60);
+    setEstimatedTime(Math.round(estTime));
   };
 
   const currentNode = routeNodes[currentNodeIndex];

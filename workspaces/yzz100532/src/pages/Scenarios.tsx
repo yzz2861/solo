@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Plus, Edit2, Trash2, Play, X, ChevronDown, Download } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, Play, Timer, X, ChevronDown, Download } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { HudPanel } from '@/components/ui/HudPanel';
 import { IndustrialButton } from '@/components/ui/IndustrialButton';
@@ -321,7 +321,15 @@ export default function Scenarios() {
                         leftIcon={<Play size={14} />}
                         onClick={() => navigate(`/?scenarioId=${scenario.id}`)}
                       >
-                        开始推演
+                        3D推演
+                      </IndustrialButton>
+                      <IndustrialButton
+                        size="sm"
+                        variant="primary"
+                        leftIcon={<Timer size={14} />}
+                        onClick={() => navigate(`/drill/${scenario.id}`)}
+                      >
+                        演练模式
                       </IndustrialButton>
                       <IndustrialButton
                         size="sm"

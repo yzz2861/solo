@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { db } from "@/data/db";
 import type { Scenario, TunnelNode, TunnelEdge } from "@/types";
 import { aStar } from "@/engine/pathfinding/aStar";
+import { calculateTime } from "@/engine/estimation/timeCalculator";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -114,8 +115,13 @@ export default function Export() {
       selectedScenario.accidentType
     );
 
-    return route.estimatedTime || routeNodes.length * 60;
-  }, [selectedScenario, nodes, edges, routeNodes.length]);
+    const routeEdges = route.edges
+      .map((edgeId) => edges.find((e) => e.id === edgeId))
+      .filter((e): e is TunnelEdge => e !== undefined);
+
+    const estTime = calculateTime({ edges: routeEdges });
+    return Math.round(estTime);
+  }, [selectedScenario, nodes, edges]);
 
   const forbiddenAreas = useMemo(() => {
     if (!selectedScenario) return [];
