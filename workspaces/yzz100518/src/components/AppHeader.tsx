@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { BookOpen, LayoutGrid, LineChart, BarChart3, LogIn, LogOut, User } from 'lucide-react';
 import { useAppStore } from '@/stores/app';
 import { cn } from '@/lib/utils';
+import { deriveStudentId } from '@/utils';
 
 const NAV_ITEMS = [
   { path: '/student', label: '学生预约台', icon: BookOpen, role: 'student' as const },
@@ -27,9 +28,11 @@ export function AppHeader() {
 
   const quickLogin = (role: 'student' | 'reception' | 'manager' | 'owner') => {
     const nameMap = { student: '张三', reception: '小林', manager: '王店长', owner: '陈老板' };
+    const name = nameMap[role];
+    const id = role === 'student' ? deriveStudentId(name) : `demo_${role}`;
     setCurrentUser({
-      id: `demo_${role}`,
-      name: nameMap[role],
+      id,
+      name,
       role,
       phone: role === 'student' ? '13800000001' : undefined,
     });

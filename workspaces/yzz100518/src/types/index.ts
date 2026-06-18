@@ -36,6 +36,7 @@ export interface Locker {
   status: LockerStatus;
   seatId?: string;
   studentId?: string;
+  maintenanceNote?: string;
 }
 
 export type ReservationStatus =
@@ -49,14 +50,14 @@ export interface Reservation {
   id: string;
   seatId: string;
   seatCode: string;
-  lockerId: string;
-  lockerCode: string;
+  lockerId?: string;
+  lockerCode?: string;
   studentId: string;
   studentName: string;
-  studentPhone: string;
+  studentPhone?: string;
   status: ReservationStatus;
   reservedAt: number;
-  reservationExpireAt: number;
+  reservationExpireAt?: number;
   checkInAt?: number;
   checkOutAt?: number;
   tempAwayCount: number;

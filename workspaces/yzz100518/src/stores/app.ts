@@ -24,6 +24,7 @@ import {
   generateRuntimeLockers,
 } from '@/data/seed';
 import { genId, todayStr, dayjs, deriveStudentId } from '@/utils';
+import { debouncedSync } from '@/api/client';
 
 export interface Toast {
   id: string;
@@ -702,17 +703,19 @@ export const useAppStore = create<AppState>()(
       getAvailableLockers: (zone) =>
         get().lockers.filter((l) => l.zone === zone && l.status === 'available'),
 
-      getActiveReservationByStudent: (studentId) =>
+      getActiveReservationByStudent: (studentId, studentName?) =>
         get().reservations.find(
           (r) =>
-            r.studentId === studentId &&
+            (r.studentId === studentId ||
+              (studentName && r.studentName && r.studentName.trim() === studentName.trim())) &&
             (r.status === 'pending_checkin' || r.status === 'checked_in' || r.status === 'violation'),
         ),
 
-      getActiveSeatByStudent: (studentId) =>
+      getActiveSeatByStudent: (studentId, studentName?) =>
         get().seats.find(
           (s) =>
-            s.studentId === studentId &&
+            (s.studentId === studentId ||
+              (studentName && s.studentName && s.studentName.trim() === studentName.trim())) &&
             (s.status === 'reserved' ||
               s.status === 'in_use' ||
               s.status === 'temporarily_away' ||
@@ -738,3 +741,32 @@ export const useAppStore = create<AppState>()(
     },
   ),
 );
+
+let _subscribed = false;
+let _lastSig = '';
+function _ensureSubscribed() {
+  if (_subscribed) return;
+  _subscribed = true;
+  const select = (s: AppState) => ({
+    seats: s.seats,
+    lockers: s.lockers,
+    reservations: s.reservations,
+    violations: s.violations,
+    operator: s.currentUser?.name,
+  });
+  useAppStore.subscribe((state) => {
+    const snap = select(state);
+    if (!snap.seats.length) return;
+    const sig = JSON.stringify({
+      s: snap.seats.map((x) => `${x.id}${x.status}${x.studentId ?? ''}${x.lockerId ?? ''}`),
+      l: snap.lockers.map((x) => `${x.id}${x.status}${x.studentId ?? ''}`),
+      r: snap.reservations.map((x) => `${x.id}${x.status}`),
+      v: snap.violations.map((x) => `${x.id}${x.handled ? '1' : '0'}`),
+      o: snap.operator,
+    });
+    if (sig === _lastSig) return;
+    _lastSig = sig;
+    debouncedSync(snap);
+  });
+}
+_ensureSubscribed();

@@ -61,12 +61,13 @@ export function generateViolations(seats: Seat[]): Violation[] {
   return VIOLATION_SEEDS.map((v) => {
     const seat = seats.find((s) => s.code === v.seatCode)!;
     const occurredAt = dayjs().subtract(v.hoursAgo, 'hour').valueOf();
+    const sid = v.studentName ? deriveStudentId(v.studentName) : undefined;
     return {
       id: genId('vio'),
       type: v.type,
       seatId: seat.id,
       seatCode: seat.code,
-      studentId: v.studentName ? `stu_${v.studentName}` : undefined,
+      studentId: sid,
       studentName: v.studentName,
       occurredAt,
       description: v.description,
@@ -150,31 +151,32 @@ export function generateHourlySnapshots(days = 7): HourlySnapshot[] {
 export function generateRuntimeSeats(seats: Seat[]): Seat[] {
   const now = dayjs();
   const runtime: Seat[] = seats.map((s) => ({ ...s }));
-  const assignments: Array<{ code: string; status: Seat['status']; studentName: string; studentId: string }> = [
-    { code: 'A01', status: 'in_use', studentName: '张三', studentId: 'stu_zhangsan' },
-    { code: 'A02', status: 'in_use', studentName: '陈曦', studentId: 'stu_chenxi' },
-    { code: 'A04', status: 'reserved', studentName: '刘畅', studentId: 'stu_liuchang' },
-    { code: 'A06', status: 'temporarily_away', studentName: '赵琳', studentId: 'stu_zhaolin' },
-    { code: 'A10', status: 'in_use', studentName: '周伟', studentId: 'stu_zhouwei' },
-    { code: 'B01', status: 'in_use', studentName: '孙悦', studentId: 'stu_sunyue' },
-    { code: 'B03', status: 'in_use', studentName: '吴昊', studentId: 'stu_wuhao' },
-    { code: 'B05', status: 'temporarily_away', studentName: '郑宇', studentId: 'stu_zhengyu' },
-    { code: 'B08', status: 'reserved', studentName: '冯思远', studentId: 'stu_fengsy' },
-    { code: 'B09', status: 'in_use', studentName: '黄雅', studentId: 'stu_huangya' },
-    { code: 'B12', status: 'violation', studentName: '李四', studentId: 'stu_lisi' },
-    { code: 'C01', status: 'in_use', studentName: '林小婷', studentId: 'stu_linxt' },
-    { code: 'C03', status: 'in_use', studentName: '徐磊', studentId: 'stu_xulei' },
-    { code: 'C06', status: 'in_use', studentName: '何苗', studentId: 'stu_hemiao' },
-    { code: 'C09', status: 'temporarily_away', studentName: '马超', studentId: 'stu_machao' },
-    { code: 'D01', status: 'in_use', studentName: '朱琳', studentId: 'stu_zhulin' },
-    { code: 'D04', status: 'in_use', studentName: '韩梅', studentId: 'stu_hanmei' },
-    { code: 'D07', status: 'reserved', studentName: '高峰', studentId: 'stu_gaofeng' },
-    { code: 'D11', status: 'in_use', studentName: '杨帆', studentId: 'stu_yangfan' },
+  const assignments: Array<{ code: string; status: Seat['status']; studentName: string }> = [
+    { code: 'A01', status: 'in_use', studentName: '张三' },
+    { code: 'A02', status: 'in_use', studentName: '陈曦' },
+    { code: 'A04', status: 'reserved', studentName: '刘畅' },
+    { code: 'A06', status: 'temporarily_away', studentName: '赵琳' },
+    { code: 'A10', status: 'in_use', studentName: '周伟' },
+    { code: 'B01', status: 'in_use', studentName: '孙悦' },
+    { code: 'B03', status: 'in_use', studentName: '吴昊' },
+    { code: 'B05', status: 'temporarily_away', studentName: '郑宇' },
+    { code: 'B08', status: 'reserved', studentName: '冯思远' },
+    { code: 'B09', status: 'in_use', studentName: '黄雅' },
+    { code: 'B12', status: 'violation', studentName: '李四' },
+    { code: 'C01', status: 'in_use', studentName: '林小婷' },
+    { code: 'C03', status: 'in_use', studentName: '徐磊' },
+    { code: 'C06', status: 'in_use', studentName: '何苗' },
+    { code: 'C09', status: 'temporarily_away', studentName: '马超' },
+    { code: 'D01', status: 'in_use', studentName: '朱琳' },
+    { code: 'D04', status: 'in_use', studentName: '韩梅' },
+    { code: 'D07', status: 'reserved', studentName: '高峰' },
+    { code: 'D11', status: 'in_use', studentName: '杨帆' },
   ];
   for (const a of assignments) {
     const s = runtime.find((x) => x.code === a.code)!;
+    const sid = deriveStudentId(a.studentName);
     s.status = a.status;
-    s.studentId = a.studentId;
+    s.studentId = sid;
     s.studentName = a.studentName;
     const locker = `locker_${s.zone}_${parseInt(a.code.slice(1), 10) - 1}`;
     s.lockerId = locker;
