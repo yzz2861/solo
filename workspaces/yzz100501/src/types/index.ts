@@ -13,6 +13,7 @@ export interface Step {
   order: number;
   scene: string;
   choices: Choice[];
+  safetyCategory?: string;
 }
 
 export interface Choice {
@@ -42,6 +43,10 @@ export interface Answer {
   feedback: string;
   correctAction: string;
   screenshotDataUrl?: string;
+  levelId?: string;
+  levelTitle?: string;
+  scene?: string;
+  safetyCategory?: string;
 }
 
 export interface QuizSession {
@@ -65,7 +70,15 @@ export interface ClassStats {
   className: string;
   totalStudents: number;
   completedStudents: number;
-  stepErrorRates: { stepOrder: number; errorRate: number; scene: string }[];
+  stepErrorRates: {
+    levelId: string;
+    levelTitle: string;
+    stepOrder: number;
+    scene: string;
+    errorRate: number;
+    errorCount: number;
+    totalCount: number;
+  }[];
   safetyWeakPoints: { category: string; errorCount: number }[];
 }
 

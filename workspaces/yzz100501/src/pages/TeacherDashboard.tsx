@@ -45,7 +45,7 @@ export default function TeacherDashboard() {
     loadLevels();
   }, [loadSessions, loadLevels]);
 
-  const classNames = useMemo(() => getAllClassNames(), [getAllClassNames, sessions]);
+  const classNames = useMemo(() => getAllClassNames(), [getAllClassNames]);
 
   useEffect(() => {
     if (classNames.length > 0 && !selectedClass) {

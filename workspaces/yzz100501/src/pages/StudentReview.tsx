@@ -85,11 +85,9 @@ function ScreenshotModal({
 
 function StepCard({
   answer,
-  stepIndex,
   onScreenshotClick,
 }: {
   answer: Answer;
-  stepIndex: number;
   onScreenshotClick: (dataUrl: string) => void;
 }) {
   return (
@@ -251,11 +249,10 @@ export default function StudentReview() {
           答题详情
         </h3>
         <div className="space-y-3">
-          {session.answers.map((answer, idx) => (
+          {session.answers.map((answer) => (
             <StepCard
               key={answer.stepOrder}
               answer={answer}
-              stepIndex={idx}
               onScreenshotClick={(url) => setScreenshotUrl(url)}
             />
           ))}

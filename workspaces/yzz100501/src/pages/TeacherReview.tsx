@@ -36,7 +36,7 @@ export default function TeacherReview() {
     loadLevels();
   }, [loadSessions, loadLevels]);
 
-  const classNames = useMemo(() => getAllClassNames(), [getAllClassNames, sessions]);
+  const classNames = useMemo(() => getAllClassNames(), [getAllClassNames]);
 
   const filteredSessions = useMemo(() => {
     let result = [...sessions];

@@ -44,21 +44,29 @@ const useGameStore = create<GameState>()(
         }),
 
       makeChoice: (choice, stepOrder) =>
-        set((state) => ({
-          isShowingFeedback: true,
-          lastChoice: choice,
-          answers: [
-            ...state.answers,
-            {
-              stepOrder,
-              choiceId: choice.id,
-              choiceText: choice.text,
-              isCorrect: choice.isCorrect,
-              feedback: choice.feedback,
-              correctAction: choice.correctAction,
-            },
-          ],
-        })),
+        set((state) => {
+          const { currentLevel, currentStepIndex } = state;
+          const currentStep = currentLevel?.steps[currentStepIndex];
+          return {
+            isShowingFeedback: true,
+            lastChoice: choice,
+            answers: [
+              ...state.answers,
+              {
+                stepOrder,
+                choiceId: choice.id,
+                choiceText: choice.text,
+                isCorrect: choice.isCorrect,
+                feedback: choice.feedback,
+                correctAction: choice.correctAction,
+                levelId: currentLevel?.id,
+                levelTitle: currentLevel?.title,
+                scene: currentStep?.scene,
+                safetyCategory: currentStep?.safetyCategory,
+              },
+            ],
+          };
+        }),
 
       nextStep: () =>
         set((state) => {

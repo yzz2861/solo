@@ -12,6 +12,7 @@ export const defaultLevels: Level[] = [
       {
         order: 1,
         scene: '你走进化学实验室，准备做酸碱中和实验。桌上摆着稀盐酸、氢氧化钠溶液和各种器材。你首先要做什么？',
+        safetyCategory: '防护装备佩戴',
         choices: [
           {
             id: 'ab1a',
@@ -39,6 +40,7 @@ export const defaultLevels: Level[] = [
       {
         order: 2,
         scene: '实验需要稀释浓硫酸。你拿起浓硫酸瓶和烧杯，准备操作。你会怎么做？',
+        safetyCategory: '浓酸稀释',
         choices: [
           {
             id: 'ab2a',
@@ -59,6 +61,7 @@ export const defaultLevels: Level[] = [
       {
         order: 3,
         scene: '实验中你不小心把少量稀盐酸洒在了桌面上。你该怎么处理？',
+        safetyCategory: '酸碱洒液处理',
         choices: [
           {
             id: 'ab3a',
@@ -86,6 +89,7 @@ export const defaultLevels: Level[] = [
       {
         order: 4,
         scene: '你想确认某瓶试剂的气味。正确的闻气味方式是什么？',
+        safetyCategory: '闻气味方法',
         choices: [
           {
             id: 'ab4a',
@@ -116,6 +120,7 @@ export const defaultLevels: Level[] = [
       {
         order: 1,
         scene: '你需要点燃酒精灯进行加热操作。桌上有一盏未点燃的酒精灯和一个打火机。你会怎么做？',
+        safetyCategory: '酒精灯点燃',
         choices: [
           {
             id: 'al1a',
@@ -136,6 +141,7 @@ export const defaultLevels: Level[] = [
       {
         order: 2,
         scene: '酒精灯已点燃，你注意到桌上的纸巾离酒精灯很近。你应该怎么做？',
+        safetyCategory: '火焰旁可燃物清理',
         choices: [
           {
             id: 'al2a',
