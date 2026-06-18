@@ -12,6 +12,7 @@ interface AppointmentStore {
   groomers: Groomer[]
   assistants: Assistant[]
   initialized: boolean
+  schemaVersion: number
 
   initSeed: () => void
   addAppointment: (apt: Appointment) => void
@@ -38,6 +39,8 @@ interface AppointmentStore {
   cancelEarlyArrival: (id: string) => void
 }
 
+const SCHEMA_VERSION = 2
+
 export const useStore = create<AppointmentStore>()(
   persist(
     (set, get) => ({
@@ -47,15 +50,32 @@ export const useStore = create<AppointmentStore>()(
       groomers: SEED_GROOMERS,
       assistants: SEED_ASSISTANTS,
       initialized: false,
+      schemaVersion: SCHEMA_VERSION,
 
       initSeed: () => {
         const state = get()
-        if (!state.initialized) {
+        if (!state.initialized || state.schemaVersion !== SCHEMA_VERSION) {
+          const migratedApts = SEED_APPOINTMENTS.map(a => ({
+            ...a,
+            earlyArrival: a.earlyArrival ?? false,
+          }))
           set({
-            appointments: SEED_APPOINTMENTS,
+            appointments: migratedApts,
             pets: SEED_PETS,
             owners: SEED_OWNERS,
             initialized: true,
+            schemaVersion: SCHEMA_VERSION,
+          })
+          return
+        }
+        const hasMissingField = state.appointments.some(a => a.earlyArrival === undefined)
+        if (hasMissingField) {
+          set({
+            appointments: state.appointments.map(a => ({
+              ...a,
+              earlyArrival: a.earlyArrival ?? false,
+            })),
+            schemaVersion: SCHEMA_VERSION,
           })
         }
       },
@@ -139,6 +159,30 @@ export const useStore = create<AppointmentStore>()(
     }),
     {
       name: 'pet-grooming-store',
+      version: SCHEMA_VERSION,
+      migrate: (persistedState: unknown, version: number): AppointmentStore => {
+        const typed = (persistedState ?? {}) as Partial<AppointmentStore>
+        if (version < 2) {
+          const migratedApts = SEED_APPOINTMENTS.map(a => ({
+            ...a,
+            earlyArrival: a.earlyArrival ?? false,
+          }))
+          return {
+            ...typed,
+            appointments: migratedApts,
+            pets: SEED_PETS,
+            owners: SEED_OWNERS,
+            groomers: SEED_GROOMERS,
+            assistants: SEED_ASSISTANTS,
+            initialized: true,
+            schemaVersion: SCHEMA_VERSION,
+          } as AppointmentStore
+        }
+        return {
+          ...typed,
+          schemaVersion: SCHEMA_VERSION,
+        } as AppointmentStore
+      },
     }
   )
 )
