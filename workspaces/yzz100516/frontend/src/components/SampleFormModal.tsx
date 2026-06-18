@@ -129,12 +129,40 @@ function SampleFormModal({ visible, sample, onCancel, onOk }: Props) {
           <Input placeholder="请输入批次号" maxLength={100} onBlur={(e) => handleBatchChange(e.target.value)} />
         </Form.Item>
 
-        {batchWarning && (
+        {batchWarning && batchInfo && (
           <Alert
-            message={<span><WarningOutlined /> {batchWarning}</span>}
             type="warning"
             showIcon
+            icon={<WarningOutlined />}
             style={{ marginBottom: 16 }}
+            message={batchWarning}
+            description={
+              <div style={{ marginTop: 8 }}>
+                <Space direction="vertical" size={4} style={{ width: '100%' }}>
+                  {batchInfo.existing_samples?.slice(0, 3).map((s: any) => (
+                    <div key={s.id} style={{ fontSize: 12 }}>
+                      <span style={{ marginRight: 8 }}>
+                        <Tag color={statusMap[s.status]?.color} style={{ fontSize: 11 }}>
+                          {statusMap[s.status]?.label}
+                        </Tag>
+                      </span>
+                      <code style={{ background: '#fffbe6', padding: '2px 6px', borderRadius: 3 }}>
+                        {s.sample_no}
+                      </code>
+                      <span style={{ margin: '0 6px', color: '#666' }}>
+                        {s.sample_name}
+                      </span>
+                      <span style={{ color: '#999' }}>- {s.applicant}</span>
+                    </div>
+                  ))}
+                  {batchInfo.existing_samples?.length > 3 && (
+                    <div style={{ fontSize: 12, color: '#999' }}>
+                      还有 {batchInfo.existing_samples.length - 3} 个样品...
+                    </div>
+                  )}
+                </Space>
+              </div>
+            }
           />
         )}
 
