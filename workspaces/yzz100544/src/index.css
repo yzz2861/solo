@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-paper-50 text-brand-900;
+    background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 50%, #f0f4fa 100%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Noto Serif SC', Georgia, serif;
+    @apply text-brand-800;
+  }
+
+  ::selection {
+    @apply bg-brand-600 text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-200 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-400;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 text-white shadow-soft hover:bg-brand-700 hover:shadow-card hover:-translate-y-0.5 focus:ring-brand-600/30;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-brand-700 border border-brand-100 shadow-soft hover:bg-brand-50 hover:-translate-y-0.5 focus:ring-brand-400/30;
+  }
+
+  .btn-ghost {
+    @apply btn text-brand-600 hover:bg-brand-50 focus:ring-brand-400/20;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 focus:ring-red-400/30;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-card border border-white/60;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:shadow-hover hover:-translate-y-1;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl border border-brand-100 bg-white text-brand-800 placeholder:text-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-400/40 focus:border-brand-300 transition-all duration-200 text-sm;
+  }
+
+  .input-lg {
+    @apply input py-3 text-base;
+  }
+
+  .textarea {
+    @apply input resize-none leading-relaxed;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border;
+  }
+
+  .tag {
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium;
+  }
+
+  .section-title {
+    @apply font-serif text-xl font-semibold text-brand-800 mb-4 flex items-center gap-2;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-brand-500 hover:bg-brand-50 hover:text-brand-700 transition-all duration-200;
+  }
+
+  .nav-item-active {
+    @apply nav-item bg-gradient-to-r from-brand-600 to-brand-500 text-white shadow-soft hover:from-brand-700 hover:to-brand-600 hover:text-white;
+  }
+
+  .quote-block {
+    @apply relative pl-4 pr-3 py-3 bg-gradient-to-r from-brand-50 to-transparent rounded-r-xl border-l-4 border-brand-400 text-brand-700 text-sm italic leading-relaxed;
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:shadow-hover;
+  }
+
+  .kanban-col {
+    @apply flex-1 min-w-[280px] bg-paper-50 rounded-2xl p-4 flex flex-col gap-3;
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full bg-brand-100 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+  }
+}
+
+@layer utilities {
+  .animate-stagger-1 { animation-delay: 50ms; }
+  .animate-stagger-2 { animation-delay: 100ms; }
+  .animate-stagger-3 { animation-delay: 150ms; }
+  .animate-stagger-4 { animation-delay: 200ms; }
+  .animate-stagger-5 { animation-delay: 250ms; }
+  .animate-stagger-6 { animation-delay: 300ms; }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+  }
+}
