@@ -63,10 +63,20 @@ export default function TeacherDashboard() {
     return classStats.stepErrorRates
       .sort((a, b) => b.errorRate - a.errorRate)
       .slice(0, 10)
-      .map((s) => ({
-        name: s.scene.length > 8 ? s.scene.slice(0, 8) + '…' : s.scene,
-        errorRate: Math.round(s.errorRate * 100),
-      }));
+      .map((s) => {
+        const shortTitle =
+          s.levelTitle.length > 6
+            ? s.levelTitle.slice(0, 6) + '…'
+            : s.levelTitle;
+        return {
+          label: `${shortTitle}·第${s.stepOrder}步`,
+          fullLabel: `${s.levelTitle} · 第${s.stepOrder}步`,
+          scene: s.scene,
+          errorRate: Math.round(s.errorRate * 100),
+          errorCount: s.errorCount,
+          totalCount: s.totalCount,
+        };
+      });
   }, [classStats]);
 
   const weakPoints = useMemo(() => {
@@ -200,10 +210,14 @@ export default function TeacherDashboard() {
                   <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={chartData}>
                       <XAxis
-                        dataKey="name"
-                        tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
+                        dataKey="label"
+                        tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
                         axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
                         tickLine={false}
+                        interval={0}
+                        angle={-12}
+                        textAnchor="end"
+                        height={50}
                       />
                       <YAxis
                         tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
@@ -219,6 +233,37 @@ export default function TeacherDashboard() {
                           color: '#fff',
                         }}
                         formatter={(value: number) => [`${value}%`, '错误率']}
+                        labelFormatter={(label: string, payload?: unknown[]) => {
+                          if (!payload || payload.length === 0) return label;
+                          const p = payload[0] as {
+                            payload?: {
+                              fullLabel?: string;
+                              errorCount?: number;
+                              totalCount?: number;
+                              scene?: string;
+                            };
+                          };
+                          const data = p.payload;
+                          if (!data) return label;
+                          return (
+                            <div className="space-y-1">
+                              <div className="font-semibold">
+                                {data.fullLabel}
+                              </div>
+                              {data.scene && (
+                                <div className="max-w-[240px] text-xs text-white/60">
+                                  {data.scene}
+                                </div>
+                              )}
+                              {data.errorCount !== undefined &&
+                                data.totalCount !== undefined && (
+                                  <div className="text-xs text-white/60">
+                                    {data.errorCount} / {data.totalCount} 人次错误
+                                  </div>
+                                )}
+                            </div>
+                          );
+                        }}
                       />
                       <Bar dataKey="errorRate" fill="#FF6B35" radius={[4, 4, 0, 0]} />
                     </BarChart>

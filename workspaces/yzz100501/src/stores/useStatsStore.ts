@@ -68,39 +68,70 @@ const useStatsStore = create<StatsState>((set, get) => ({
         .map((s) => s.studentName),
     );
 
+    interface StepKey {
+      levelId: string;
+      stepOrder: number;
+    }
+    const stepKeyToId = (k: StepKey) => `${k.levelId}::${k.stepOrder}`;
+
     const stepErrorMap = new Map<
-      number,
-      { errors: number; total: number; scene: string }
+      string,
+      {
+        levelId: string;
+        levelTitle: string;
+        stepOrder: number;
+        scene: string;
+        errors: number;
+        total: number;
+      }
     >();
+
     for (const session of classSessions) {
       for (const answer of session.answers) {
-        const existing = stepErrorMap.get(answer.stepOrder);
+        const levelId = answer.levelId ?? session.levelId;
+        const levelTitle =
+          answer.levelTitle ?? levelId;
+        const key = stepKeyToId({
+          levelId,
+          stepOrder: answer.stepOrder,
+        });
+        const existing = stepErrorMap.get(key);
+        const scene = answer.scene ?? answer.feedback;
         if (existing) {
           existing.total += 1;
           if (!answer.isCorrect) existing.errors += 1;
+          if (!existing.scene && scene) existing.scene = scene;
         } else {
-          stepErrorMap.set(answer.stepOrder, {
+          stepErrorMap.set(key, {
+            levelId,
+            levelTitle,
+            stepOrder: answer.stepOrder,
+            scene,
             errors: answer.isCorrect ? 0 : 1,
             total: 1,
-            scene: answer.feedback,
           });
         }
       }
     }
 
-    const stepErrorRates = Array.from(stepErrorMap.entries()).map(
-      ([stepOrder, data]) => ({
-        stepOrder,
-        errorRate: data.total > 0 ? data.errors / data.total : 0,
-        scene: data.scene,
-      }),
-    );
+    const stepErrorRates = Array.from(stepErrorMap.values()).map((s) => ({
+      levelId: s.levelId,
+      levelTitle: s.levelTitle,
+      stepOrder: s.stepOrder,
+      scene: s.scene,
+      errorRate: s.total > 0 ? s.errors / s.total : 0,
+      errorCount: s.errors,
+      totalCount: s.total,
+    }));
 
     const categoryErrorMap = new Map<string, number>();
     for (const session of classSessions) {
       for (const answer of session.answers) {
         if (!answer.isCorrect) {
-          const category = 'general';
+          const category =
+            answer.safetyCategory && answer.safetyCategory.trim() !== ''
+              ? answer.safetyCategory
+              : `${answer.levelTitle ?? '未分类'} · 第${answer.stepOrder}步`;
           categoryErrorMap.set(
             category,
             (categoryErrorMap.get(category) ?? 0) + 1,

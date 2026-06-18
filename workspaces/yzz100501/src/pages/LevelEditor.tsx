@@ -336,6 +336,23 @@ export default function LevelEditor() {
                 />
               </div>
 
+              <div className="mb-6">
+                <label className="mb-1 block text-sm text-white/50">
+                  安全类别（用于统计班级薄弱点，例：浓酸稀释、酒精灯点燃、碎玻璃处理）
+                </label>
+                <input
+                  type="text"
+                  value={selectedStep.safetyCategory ?? ''}
+                  onChange={(e) =>
+                    updateStep(selectedStepIndex, {
+                      safetyCategory: e.target.value.trim() || undefined,
+                    })
+                  }
+                  placeholder="安全类别名称"
+                  className="w-full rounded-xl bg-white/10 px-4 py-2 text-sm text-white placeholder-white/30 outline-none border border-white/10 focus:border-[#2ECC71] transition"
+                />
+              </div>
+
               <h3 className="mb-3 text-sm font-semibold text-white/60">
                 选项列表
               </h3>

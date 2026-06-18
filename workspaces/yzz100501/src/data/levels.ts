@@ -162,6 +162,7 @@ export const defaultLevels: Level[] = [
       {
         order: 3,
         scene: '实验结束了，你需要熄灭酒精灯。你会怎么做？',
+        safetyCategory: '酒精灯熄灭',
         choices: [
           {
             id: 'al3a',
@@ -182,6 +183,7 @@ export const defaultLevels: Level[] = [
       {
         order: 4,
         scene: '你发现酒精灯里的酒精不多了，需要添加。正确的做法是什么？',
+        safetyCategory: '酒精灯酒精添加',
         choices: [
           {
             id: 'al4a',
@@ -212,6 +214,7 @@ export const defaultLevels: Level[] = [
       {
         order: 1,
         scene: '实验前你需要检查玻璃仪器。你拿起一个烧杯，发现杯壁上有一条细小裂纹。你该怎么做？',
+        safetyCategory: '破损仪器检查',
         choices: [
           {
             id: 'gw1a',
@@ -232,6 +235,7 @@ export const defaultLevels: Level[] = [
       {
         order: 2,
         scene: '实验中你不小心打碎了一个试管，碎片散落在桌面上。你应该怎么做？',
+        safetyCategory: '碎玻璃处理',
         choices: [
           {
             id: 'gw2a',
@@ -259,6 +263,7 @@ export const defaultLevels: Level[] = [
       {
         order: 3,
         scene: '同学在实验中不小心被碎玻璃割伤了手指，还在流血。你应该怎么做？',
+        safetyCategory: '同学受伤应急处理',
         choices: [
           {
             id: 'gw3a',
@@ -289,6 +294,7 @@ export const defaultLevels: Level[] = [
       {
         order: 1,
         scene: '进入化学实验室前，老师要求大家做好准备工作。以下哪个是正确的？',
+        safetyCategory: '实验前准备',
         choices: [
           {
             id: 'gn1a',
@@ -309,6 +315,7 @@ export const defaultLevels: Level[] = [
       {
         order: 2,
         scene: '实验过程中，你发现旁边的同学在偷偷用手机拍照发朋友圈。你该怎么做？',
+        safetyCategory: '实验纪律与专注',
         choices: [
           {
             id: 'gn2a',
@@ -329,6 +336,7 @@ export const defaultLevels: Level[] = [
       {
         order: 3,
         scene: '实验结束后，你需要清洗用过的玻璃仪器。正确的做法是什么？',
+        safetyCategory: '仪器清洗与废液处理',
         choices: [
           {
             id: 'gn3a',
@@ -356,6 +364,7 @@ export const defaultLevels: Level[] = [
       {
         order: 4,
         scene: '离开实验室前，你该做哪些检查？',
+        safetyCategory: '离室前安全检查',
         choices: [
           {
             id: 'gn4a',
@@ -376,6 +385,7 @@ export const defaultLevels: Level[] = [
       {
         order: 5,
         scene: '实验中突然听到消防警报响了。你应该怎么做？',
+        safetyCategory: '应急撤离',
         choices: [
           {
             id: 'gn5a',
