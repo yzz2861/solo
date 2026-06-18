@@ -10,16 +10,19 @@ interface ValidateContext {
   timeSlot: string;
   isPaid: boolean;
   items: OrderItem[];
+  excludeOrderId?: string;
 }
 
 export class OrderValidator {
   static checkDuplicateOrder(
     customerPhone: string,
     pickupDate: string,
-    orders: Order[]
+    orders: Order[],
+    excludeOrderId?: string
   ): Warning | null {
     const duplicate = orders.find(
-      o => o.customerPhone === customerPhone && 
+      o => o.id !== excludeOrderId &&
+           o.customerPhone === customerPhone && 
            isSameDay(o.pickupDate, pickupDate) &&
            o.status !== 'completed' &&
            o.status !== 'noShow'
@@ -45,10 +48,13 @@ export class OrderValidator {
     pickupDate: string,
     items: OrderItem[],
     orders: Order[],
-    config: AppConfig
+    config: AppConfig,
+    excludeOrderId?: string
   ): Warning | null {
     const requiredCapacity = this.calculateCapacity(items);
-    const dayOrders = orders.filter(o => isSameDay(o.pickupDate, pickupDate));
+    const dayOrders = orders.filter(
+      o => o.id !== excludeOrderId && isSameDay(o.pickupDate, pickupDate)
+    );
     const usedCapacity = dayOrders.reduce((total, o) => {
       return total + this.calculateCapacity(o.items);
     }, 0);
@@ -125,7 +131,8 @@ export class OrderValidator {
     const duplicateWarning = this.checkDuplicateOrder(
       ctx.customerPhone,
       ctx.pickupDate,
-      ctx.orders
+      ctx.orders,
+      ctx.excludeOrderId
     );
     if (duplicateWarning) warnings.push(duplicateWarning);
     
@@ -133,7 +140,8 @@ export class OrderValidator {
       ctx.pickupDate,
       ctx.items,
       ctx.orders,
-      ctx.config
+      ctx.config,
+      ctx.excludeOrderId
     );
     if (capacityWarning) warnings.push(capacityWarning);
     

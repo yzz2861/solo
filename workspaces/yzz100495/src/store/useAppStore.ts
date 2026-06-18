@@ -220,45 +220,68 @@ export const useAppStore = create<AppState & AppActions>((set, get) => {
       const order = state.orders.find(o => o.id === id);
       if (!order) return;
       
-      if (formData.items) {
-        const oldCapacity = BatchAllocator.calculateCapacity(order.items);
-        const newCapacity = BatchAllocator.calculateCapacity(
-          formData.items.map(item => ({
-            id: generateId(),
-            ...item,
-          }))
-        );
-        
-        if (order.batchId) {
-          const batch = state.batches.find(b => b.id === order.batchId);
-          if (batch) {
-            let updatedBatch = BatchAllocator.updateBatchSummary(batch, order.items, false);
-            
-            const newItems: OrderItem[] = formData.items.map(item => ({
-              id: generateId(),
-              ...item,
-            }));
-            updatedBatch = BatchAllocator.updateBatchSummary(updatedBatch, newItems, true);
-            
-            set({
-              batches: state.batches.map(b => b.id === updatedBatch.id ? updatedBatch : b),
-            });
-          }
-        }
-      }
+      const newItems: OrderItem[] = formData.items
+        ? formData.items.map(item => ({ id: generateId(), ...item }))
+        : order.items;
       
-      const timeSlot = formData.pickupTime
+      const newPickupDate = formData.pickupDate || order.pickupDate;
+      const newPickupTime = formData.pickupTime || order.pickupTime;
+      const newTimeSlot = formData.pickupTime
         ? getTimeSlot(formData.pickupTime, state.config.timeSlotDuration)
         : order.timeSlot;
+      
+      const isDateOrTimeChanged = 
+        formData.pickupDate !== undefined || 
+        formData.pickupTime !== undefined;
+      const isItemsChanged = formData.items !== undefined;
+      
+      let batches = [...state.batches];
+      let newBatchId: string | null = order.batchId;
+      
+      if (isDateOrTimeChanged) {
+        if (order.batchId) {
+          const oldBatch = batches.find(b => b.id === order.batchId);
+          if (oldBatch) {
+            const updatedOldBatch = BatchAllocator.updateBatchSummary(oldBatch, order.items, false);
+            batches = batches.map(b => b.id === updatedOldBatch.id ? updatedOldBatch : b);
+          }
+        }
+        
+        const newBatch = BatchAllocator.allocateBatch(
+          newPickupDate,
+          newPickupTime,
+          newItems,
+          batches,
+          state.config
+        );
+        
+        if (newBatch) {
+          if (!batches.find(b => b.id === newBatch.id)) {
+            batches = [...batches, newBatch];
+          }
+          const updatedNewBatch = BatchAllocator.updateBatchSummary(newBatch, newItems, true);
+          batches = batches.map(b => b.id === updatedNewBatch.id ? updatedNewBatch : b);
+          newBatchId = updatedNewBatch.id;
+        } else {
+          newBatchId = null;
+        }
+      } else if (isItemsChanged && order.batchId) {
+        const currentBatch = batches.find(b => b.id === order.batchId);
+        if (currentBatch) {
+          let updatedBatch = BatchAllocator.updateBatchSummary(currentBatch, order.items, false);
+          updatedBatch = BatchAllocator.updateBatchSummary(updatedBatch, newItems, true);
+          batches = batches.map(b => b.id === updatedBatch.id ? updatedBatch : b);
+        }
+      }
       
       const updatedOrder: Order = {
         ...order,
         ...formData,
-        items: formData.items?.map(item => ({
-          id: generateId(),
-          ...item,
-        })) || order.items,
-        timeSlot,
+        items: newItems,
+        timeSlot: newTimeSlot,
+        batchId: newBatchId,
+        pickupDate: newPickupDate,
+        pickupTime: newPickupTime,
         status: formData.isPaid !== undefined 
           ? (formData.isPaid ? 'paid' : 'pending') 
           : order.status,
@@ -267,6 +290,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => {
       
       const newState = {
         orders: state.orders.map(o => o.id === id ? updatedOrder : o),
+        batches,
       };
       set(newState);
       persistToStorage(newState);
