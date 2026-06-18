@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-navy: #1B2A4A;
+  --color-navy-light: #243560;
+  --color-navy-dark: #0F1A30;
+  --color-amber: #E8A838;
+  --color-amber-light: #F0C060;
+  --color-amber-dark: #C08820;
+  --color-teal: #5BC0BE;
+  --color-teal-light: #7DD8D6;
+  --color-canvas: #F5F5F0;
+  --color-canvas-dark: #1A1A2E;
+  --color-text: #3A3A3A;
+  --color-text-light: #9A9A9A;
+  --color-danger: #E85454;
+  --color-success: #4CAF50;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  font-family: var(--font-body);
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-text);
+}
+
+.dark body,
+.dark {
+  background: var(--color-canvas-dark);
+  color: #E0E0E0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #444;
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-200;
+    background: linear-gradient(135deg, var(--color-amber), var(--color-amber-dark));
+    color: var(--color-navy);
+    box-shadow: 0 2px 8px rgba(232, 168, 56, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(232, 168, 56, 0.4);
+  }
+
+  .btn-secondary {
+    @apply px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-200 border;
+    background: transparent;
+    border-color: var(--color-navy);
+    color: var(--color-navy);
+  }
+  .btn-secondary:hover {
+    background: var(--color-navy);
+    color: white;
+  }
+  .dark .btn-secondary {
+    border-color: var(--color-teal);
+    color: var(--color-teal);
+  }
+  .dark .btn-secondary:hover {
+    background: var(--color-teal);
+    color: var(--color-navy-dark);
+  }
+
+  .card {
+    @apply rounded-2xl p-6 transition-all duration-200;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .card:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .dark .card {
+    background: #222240;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200;
+    color: var(--color-text-light);
+  }
+  .sidebar-link:hover {
+    background: rgba(91, 192, 190, 0.1);
+    color: var(--color-teal);
+  }
+  .sidebar-link.active {
+    background: rgba(91, 192, 190, 0.15);
+    color: var(--color-teal);
+  }
+}
