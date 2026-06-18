@@ -13,7 +13,7 @@ interface TradeInStore {
   updateOrder: (id: string, updates: Partial<TradeInOrder>) => void
   getOrderById: (id: string) => TradeInOrder | undefined
   getOrdersByStatus: (status: OrderStatus) => TradeInOrder[]
-  advanceWorkflow: (id: string, remark: string, operator: string) => void
+  advanceWorkflow: (id: string, remark: string, operator: string) => { ok: boolean; reason?: string }
   rejectOrder: (id: string, remark: string, operator: string) => void
   confirmRecycling: (id: string, code: string, operator: string) => boolean
   checkPhotoDuplicate: (hash: string, excludeOrderId?: string) => TradeInOrder | null
@@ -45,7 +45,7 @@ export const useStore = create<TradeInStore>()(
 
       advanceWorkflow: (id, remark, operator) => {
         const order = get().getOrderById(id)
-        if (!order) return
+        if (!order) return { ok: false, reason: "工单不存在" }
 
         const statusFlow: Record<string, OrderStatus> = {
           draft: "assessing",
@@ -63,7 +63,40 @@ export const useStore = create<TradeInStore>()(
         }
 
         const newStatus = statusFlow[order.status]
-        if (!newStatus) return
+        if (!newStatus) return { ok: false, reason: "当前状态无法继续推进" }
+
+        const docs = order.subsidyDocs
+        const missing: string[] = []
+        if (!docs.idCard) missing.push("身份证")
+        if (!docs.purchaseProof) missing.push("购买凭证")
+        if (!docs.subsidyQualification) missing.push("补贴资格证明")
+
+        if (order.status === "reviewing") {
+          if (!docs.isComplete) {
+            return {
+              ok: false,
+              reason: `补贴资料不完整，无法通过审核。缺少：${missing.join("、")}`,
+            }
+          }
+        }
+
+        if (order.status === "approved") {
+          if (!docs.isComplete) {
+            return {
+              ok: false,
+              reason: `补贴资料不完整，无法进入待回收。缺少：${missing.join("、")}`,
+            }
+          }
+        }
+
+        if (order.status === "recycling") {
+          if (!order.recycling.confirmedAt) {
+            return {
+              ok: false,
+              reason: "回收未确认，不能结案。请师傅先完成回收确认",
+            }
+          }
+        }
 
         const now = new Date().toISOString()
         const newWorkflow = order.workflow.map((step) => {
@@ -83,6 +116,8 @@ export const useStore = create<TradeInStore>()(
               : o
           ),
         }))
+
+        return { ok: true }
       },
 
       rejectOrder: (id, remark, operator) => {

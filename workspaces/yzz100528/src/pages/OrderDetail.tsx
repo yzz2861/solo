@@ -46,6 +46,7 @@ export default function OrderDetail() {
   const [confirmCode, setConfirmCode] = useState("")
   const [confirmError, setConfirmError] = useState("")
   const [docWarning, setDocWarning] = useState(false)
+  const [toast, setToast] = useState<{ msg: string; type: "error" | "success" } | null>(null)
 
   const order = getOrderById(id!)
 
@@ -65,8 +66,26 @@ export default function OrderDetail() {
 
   const difficultyLevel = getDifficultyLevel(order.customer.floor, order.customer.hasElevator)
 
+  const missingDocs = (() => {
+    const missing: string[] = []
+    if (!order.subsidyDocs.idCard) missing.push("身份证")
+    if (!order.subsidyDocs.purchaseProof) missing.push("购买凭证")
+    if (!order.subsidyDocs.subsidyQualification) missing.push("补贴资格证明")
+    return missing
+  })()
+
+  const subsidyPassable = order.subsidyDocs.isComplete
+
   const handleAdvance = (remark: string) => {
-    advanceWorkflow(order.id, remark, currentRole === "clerk" ? "店员" : currentRole === "reviewer" ? "审核员" : currentRole)
+    const operator = currentRole === "clerk" ? "店员" : currentRole === "reviewer" ? "审核员" : currentRole === "technician" ? "回收师傅" : "操作员"
+    const res = advanceWorkflow(order.id, remark, operator)
+    if (!res.ok) {
+      setToast({ msg: res.reason ?? "推进失败", type: "error" })
+      setTimeout(() => setToast(null), 4000)
+      return
+    }
+    setToast({ msg: "流程已推进", type: "success" })
+    setTimeout(() => setToast(null), 2500)
   }
 
   const handleReject = () => {
@@ -102,6 +121,25 @@ export default function OrderDetail() {
 
   return (
     <div className="animate-fade-up pb-24">
+      {toast && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 animate-slide-in">
+          <div
+            className={`px-5 py-3 rounded-xl shadow-lg flex items-center gap-2 text-sm font-medium border ${
+              toast.type === "error"
+                ? "bg-danger-50 border-danger-200 text-danger-600"
+                : "bg-success-50 border-success-200 text-success-600"
+            }`}
+          >
+            {toast.type === "error" ? (
+              <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+            ) : (
+              <Check className="h-4 w-4 flex-shrink-0" />
+            )}
+            <span>{toast.msg}</span>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <button className="btn-secondary !px-3 !py-2" onClick={() => navigate(-1)}>
@@ -358,19 +396,47 @@ export default function OrderDetail() {
       {(() => {
         if (currentRole === "reviewer" && order.status === "reviewing") {
           return (
-            <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-surface-200 px-6 py-4 flex items-center justify-end gap-3 z-40">
-              <button className="btn-danger" onClick={() => setShowRejectModal(true)}>
-                驳回
-              </button>
-              <button className="btn-success" onClick={() => handleAdvance("审核通过")}>
-                通过审核
-              </button>
+            <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-surface-200 px-6 py-4 flex flex-wrap items-center justify-between gap-3 z-40">
+              {!subsidyPassable ? (
+                <div className="flex items-start gap-2 max-w-2xl">
+                  <AlertTriangle className="h-5 w-5 text-danger-500 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <span className="font-semibold text-danger-600">补贴资料不完整，无法通过审核。</span>
+                    <span className="text-dark-100 ml-1">
+                      缺少：<span className="font-medium text-danger-600">{missingDocs.join("、")}</span>
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <span className="text-sm text-success-600 flex items-center gap-1.5">
+                  <Check className="h-4 w-4" />
+                  资料齐全，可审核通过
+                </span>
+              )}
+              <div className="flex items-center gap-3 ml-auto">
+                <button className="btn-danger" onClick={() => setShowRejectModal(true)}>
+                  驳回
+                </button>
+                <button
+                  className="btn-success"
+                  disabled={!subsidyPassable}
+                  onClick={() => handleAdvance("审核通过")}
+                >
+                  通过审核
+                </button>
+              </div>
             </div>
           )
         }
         if (currentRole === "technician" && order.status === "recycling") {
           return (
             <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-surface-200 px-6 py-4 flex items-center justify-end gap-3 z-40">
+              {!order.recycling.confirmedAt && (
+                <span className="text-sm text-warning-600 flex items-center gap-1 mr-auto">
+                  <AlertTriangle className="h-4 w-4" />
+                  请师傅输入确认码完成回收；回收未确认不能结案
+                </span>
+              )}
               <button className="btn-success" onClick={() => setShowConfirmModal(true)}>
                 确认回收
               </button>
@@ -388,16 +454,34 @@ export default function OrderDetail() {
         }
         if (currentRole === "clerk" && order.status === "assessing") {
           return (
-            <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-surface-200 px-6 py-4 flex items-center justify-end gap-3 z-40">
+            <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-surface-200 px-6 py-4 flex flex-wrap items-center justify-between gap-3 z-40">
+              {!subsidyPassable ? (
+                <div className="flex items-start gap-2 max-w-2xl">
+                  <AlertTriangle className="h-5 w-5 text-warning-500 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <span className="font-semibold text-warning-600">建议提交前补齐补贴资料。</span>
+                    <span className="text-dark-100 ml-1">
+                      当前缺少：<span className="font-medium text-danger-600">{missingDocs.join("、")}</span>
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <span className="text-sm text-success-600 flex items-center gap-1.5">
+                  <Check className="h-4 w-4" />
+                  资料齐全，可提交审核
+                </span>
+              )}
               {docWarning && !order.subsidyDocs.isComplete && (
-                <span className="flex items-center gap-1 text-danger-500 text-sm">
+                <span className="flex items-center gap-1 text-danger-500 text-sm ml-auto">
                   <AlertTriangle className="h-4 w-4" />
                   补贴资料不完整，无法提交审核
                 </span>
               )}
-              <button className="btn-primary" onClick={handleSubmitAssessing}>
-                提交审核
-              </button>
+              <div className="ml-auto">
+                <button className="btn-primary" onClick={handleSubmitAssessing}>
+                  提交审核
+                </button>
+              </div>
             </div>
           )
         }
