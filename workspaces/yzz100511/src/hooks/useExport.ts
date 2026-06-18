@@ -1,9 +1,115 @@
 import { useCallback, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import type { ExhibitionObject, RiskItem, MallConfig } from '../types';
+import type { ExhibitionObject, RiskItem, MallConfig, PowerCheckpoint } from '../types';
 import { generateLoadBasis, generatePassageBasis, generateRectificationOpinion } from '../utils/riskEngine';
 import { formatWeight, formatArea } from '../utils/unitConversion';
+
+const createPdfContainer = (): HTMLDivElement => {
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    width: 595px;
+    background: #ffffff;
+    padding: 40px 30px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', sans-serif;
+    color: #333333;
+    line-height: 1.6;
+    box-sizing: border-box;
+  `;
+  document.body.appendChild(container);
+  return container;
+};
+
+const removeContainer = (container: HTMLElement) => {
+  if (container && container.parentNode) {
+    container.parentNode.removeChild(container);
+  }
+};
+
+const renderToPdf = async (
+  container: HTMLElement,
+  filename: string,
+  pageOptions: { pageSize?: 'a4'; orientation?: 'p' } = {}
+) => {
+  const { pageSize = 'a4', orientation = 'p' } = pageOptions;
+  
+  const canvas = await html2canvas(container, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    width: 595,
+  });
+  
+  const doc = new jsPDF(orientation, 'mm', pageSize);
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  
+  const imgWidth = pageWidth - 20;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+  let remainingHeight = imgHeight;
+  let currentDrawY = 0;
+  let pageCount = 0;
+  
+  while (remainingHeight > 0) {
+    if (pageCount > 0) {
+      doc.addPage();
+    }
+    
+    const drawHeight = Math.min(remainingHeight, pageHeight - 20);
+    
+    const sliceCanvas = document.createElement('canvas');
+    const srcY = (currentDrawY * canvas.width) / imgWidth;
+    const srcHeight = (drawHeight * canvas.width) / imgWidth;
+    sliceCanvas.width = canvas.width;
+    sliceCanvas.height = Math.max(1, srcHeight);
+    
+    const ctx = sliceCanvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(
+        canvas,
+        0, Math.max(0, srcY),
+        canvas.width, Math.max(1, srcHeight),
+        0, 0,
+        sliceCanvas.width, sliceCanvas.height
+      );
+      
+      const sliceData = sliceCanvas.toDataURL('image/png');
+      doc.addImage(sliceData, 'PNG', 10, 10, imgWidth, drawHeight);
+    }
+    
+    remainingHeight -= drawHeight;
+    currentDrawY += drawHeight;
+    pageCount++;
+  }
+  
+  doc.save(filename);
+};
+
+const getObjectTypeName = (type: string): string => {
+  const typeMap: Record<string, string> = {
+    booth: '展台',
+    car: '车辆',
+    barrier: '围挡',
+    power: '电源点',
+    fire_exit: '消防通道',
+    entrance: '客流入口',
+  };
+  return typeMap[type] || type;
+};
+
+const getSeverityColor = (severity: string): string => {
+  return severity === 'danger' ? '#dc2626' : severity === 'warning' ? '#f59e0b' : '#22c55e';
+};
+
+const escapeHtml = (text: string): string => {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+};
 
 export const useExport = () => {
   const [isExporting, setIsExporting] = useState(false);
@@ -17,41 +123,11 @@ export const useExport = () => {
       date: string;
     }) => {
       setIsExporting(true);
+      const container = createPdfContainer();
+      
       try {
         const canvas = document.querySelector('canvas');
-        const title = `${brandInfo.brandName}_${brandInfo.exhibitionName}_布展方案`;
         
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        let yPosition = 20;
-
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(20);
-        doc.text('布展方案', pageWidth / 2, yPosition, { align: 'center' });
-        yPosition += 15;
-
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`品牌方: ${brandInfo.brandName}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`展会名称: ${brandInfo.exhibitionName}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`联系人: ${brandInfo.contact}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`联系电话: ${brandInfo.phone}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`布展日期: ${brandInfo.date}`, 20, yPosition);
-        yPosition += 15;
-
-        if (canvas) {
-          const canvasDataUrl = canvas.toDataURL('image/png');
-          const imgWidth = 170;
-          const imgHeight = 120;
-          doc.addImage(canvasDataUrl, 'PNG', 20, yPosition, imgWidth, imgHeight);
-          yPosition += imgHeight + 10;
-        }
-
         const riskStore = await import('../store/useRiskStore');
         const risks = riskStore.useRiskStore.getState().risks;
         const objectStore = await import('../store/useObjectStore');
@@ -59,157 +135,147 @@ export const useExport = () => {
         const mallStore = await import('../store/useMallStore');
         const mall = mallStore.useMallStore.getState().config;
 
+        const dangerCount = risks.filter(r => r.severity === 'danger').length;
+        const warningCount = risks.filter(r => r.severity === 'warning').length;
+
+        let sceneImageHtml = '';
+        if (canvas) {
+          const canvasDataUrl = canvas.toDataURL('image/png');
+          sceneImageHtml = `<img src="${canvasDataUrl}" style="width: 100%; max-width: 500px; margin: 15px auto; display: block; border: 1px solid #e5e7eb; border-radius: 8px;" />`;
+        }
+
+        let risksHtml = '';
         if (risks.length > 0) {
-          if (yPosition + 40 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(14);
-          const dangerCount = risks.filter(r => r.severity === 'danger').length;
-          const warningCount = risks.filter(r => r.severity === 'warning').length;
+          risksHtml += `
+            <div style="margin: 20px 0;">
+              <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 12px; border-left: 4px solid #3b82f6; padding-left: 10px;">风险提示</h2>
+          `;
           
           if (dangerCount > 0) {
-            doc.setTextColor(220, 38, 38);
-            doc.text(`⚠️ 需要调整 (${dangerCount}项严重，${warningCount}项警告)`, 20, yPosition);
+            risksHtml += `
+              <p style="color: #dc2626; font-weight: bold; margin: 8px 0;">
+                ⚠️ 需要调整 (${dangerCount}项严重，${warningCount}项警告)
+              </p>
+            `;
           } else {
-            doc.setTextColor(245, 158, 11);
-            doc.text(`⚠️ 建议优化 (${warningCount}项警告)`, 20, yPosition);
+            risksHtml += `
+              <p style="color: #f59e0b; font-weight: bold; margin: 8px 0;">
+                ⚠️ 建议优化 (${warningCount}项警告)
+              </p>
+            `;
           }
-          doc.setTextColor(0, 0, 0);
-          yPosition += 10;
 
-          doc.setFontSize(11);
-          doc.setFont('helvetica', 'normal');
-          
           risks.filter(r => r.severity === 'danger').forEach((risk, idx) => {
-            if (yPosition + 20 > pageHeight) {
-              doc.addPage();
-              yPosition = 20;
-            }
-            
             const obj = objects.find(o => o.id === risk.objectId);
-            doc.setFillColor(254, 202, 202);
-            doc.rect(20, yPosition - 5, 170, 18, 'F');
-            doc.text(`${idx + 1}. 🔴 ${risk.message}`, 25, yPosition + 1);
-            yPosition += 12;
-            doc.setFontSize(9);
-            doc.text(`   涉及: ${obj?.name || '未知'}`, 25, yPosition + 1);
-            yPosition += 7;
-            doc.text(`   建议: ${risk.basis}`, 25, yPosition + 1);
-            if (risk.suggestedPosition) {
-              yPosition += 7;
-              doc.text(`   建议位置: (${risk.suggestedPosition[0].toFixed(1)}, ${risk.suggestedPosition[2].toFixed(1)})`, 25, yPosition + 1);
-            }
-            yPosition += 10;
-            doc.setFontSize(11);
+            risksHtml += `
+              <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 10px 12px; margin: 8px 0; border-radius: 4px;">
+                <p style="font-weight: bold; color: #dc2626; margin: 0 0 4px 0;">${idx + 1}. 🔴 ${escapeHtml(risk.message)}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">涉及物体: ${escapeHtml(obj?.name || '未知')}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">建议: ${escapeHtml(risk.basis)}</p>
+                ${risk.suggestedPosition ? `<p style="font-size: 12px; color: #6b7280; margin: 2px 0;">建议位置: (${risk.suggestedPosition[0].toFixed(1)}, ${risk.suggestedPosition[2].toFixed(1)})</p>` : ''}
+              </div>
+            `;
           });
 
           risks.filter(r => r.severity === 'warning').forEach((risk, idx) => {
-            if (yPosition + 20 > pageHeight) {
-              doc.addPage();
-              yPosition = 20;
-            }
-            
             const obj = objects.find(o => o.id === risk.objectId);
-            doc.setFillColor(254, 215, 170);
-            doc.rect(20, yPosition - 5, 170, 18, 'F');
-            doc.text(`${idx + 1}. 🟡 ${risk.message}`, 25, yPosition + 1);
-            yPosition += 12;
-            doc.setFontSize(9);
-            doc.text(`   涉及: ${obj?.name || '未知'}`, 25, yPosition + 1);
-            yPosition += 7;
-            doc.text(`   建议: ${risk.basis}`, 25, yPosition + 1);
-            yPosition += 10;
-            doc.setFontSize(11);
+            risksHtml += `
+              <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px 12px; margin: 8px 0; border-radius: 4px;">
+                <p style="font-weight: bold; color: #d97706; margin: 0 0 4px 0;">${idx + 1}. 🟡 ${escapeHtml(risk.message)}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">涉及物体: ${escapeHtml(obj?.name || '未知')}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">建议: ${escapeHtml(risk.basis)}</p>
+              </div>
+            `;
           });
-          
-          yPosition += 10;
+
+          risksHtml += '</div>';
         } else {
-          if (yPosition + 20 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          doc.setFontSize(12);
-          doc.setTextColor(34, 197, 94);
-          doc.text('✅ 布展方案符合所有安全规范，可予以通过', 20, yPosition);
-          doc.setTextColor(0, 0, 0);
-          yPosition += 15;
+          risksHtml = `
+            <div style="margin: 20px 0; padding: 15px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 4px;">
+              <p style="color: #15803d; font-weight: bold; margin: 0;">✅ 布展方案符合所有安全规范，可予以通过</p>
+            </div>
+          `;
         }
 
-        doc.addPage();
-        yPosition = 20;
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
-        doc.text('一、展具清单', 20, yPosition);
-        yPosition += 10;
-
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('名称', 20, yPosition);
-        doc.text('类型', 60, yPosition);
-        doc.text('重量', 90, yPosition);
-        doc.text('面积', 130, yPosition);
-        doc.text('位置', 165, yPosition);
-        yPosition += 6;
-        doc.line(20, yPosition, 190, yPosition);
-        yPosition += 8;
-
+        let objectsHtml = `
+          <div style="margin: 20px 0;">
+            <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 12px; border-left: 4px solid #3b82f6; padding-left: 10px;">一、展具清单</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+              <thead>
+                <tr style="background: #f3f4f6;">
+                  <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">名称</th>
+                  <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">类型</th>
+                  <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">重量</th>
+                  <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">面积</th>
+                  <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">位置</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        
         objects.forEach((obj) => {
-          if (yPosition + 15 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-            doc.setFontSize(10);
-          }
-          doc.text(obj.name, 20, yPosition);
-          doc.text(obj.type, 60, yPosition);
-          doc.text(formatWeight(obj.weight, obj.weightUnit), 90, yPosition);
-          doc.text(formatArea(obj.area, obj.areaUnit), 130, yPosition);
-          doc.text(`(${obj.position[0].toFixed(1)}, ${obj.position[2].toFixed(1)})`, 165, yPosition);
-          yPosition += 8;
+          objectsHtml += `
+            <tr>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${escapeHtml(obj.name)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${getObjectTypeName(obj.type)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${formatWeight(obj.weight, obj.weightUnit)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${formatArea(obj.area, obj.areaUnit)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">(${obj.position[0].toFixed(1)}, ${obj.position[2].toFixed(1)})</td>
+            </tr>
+          `;
         });
+        
+        objectsHtml += '</tbody></table></div>';
 
-        doc.addPage();
-        yPosition = 20;
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
-        doc.text('二、承重计算依据', 20, yPosition);
-        yPosition += 10;
+        const loadBasisHtml = `
+          <div style="margin: 20px 0;">
+            <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 12px; border-left: 4px solid #3b82f6; padding-left: 10px;">二、承重计算依据</h2>
+            <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+              ${escapeHtml(generateLoadBasis(objects, mall))}
+            </div>
+          </div>
+        `;
 
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        const loadBasisLines = generateLoadBasis(objects, mall).split('\n');
-        loadBasisLines.forEach((line) => {
-          if (yPosition + 8 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          doc.text(line, 20, yPosition);
-          yPosition += 6;
-        });
+        const passageBasisHtml = `
+          <div style="margin: 20px 0;">
+            <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin-bottom: 12px; border-left: 4px solid #3b82f6; padding-left: 10px;">三、通道检测依据</h2>
+            <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+              ${escapeHtml(generatePassageBasis(risks, objects, mall))}
+            </div>
+          </div>
+        `;
 
-        doc.addPage();
-        yPosition = 20;
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
-        doc.text('三、通道检测依据', 20, yPosition);
-        yPosition += 10;
+        const html = `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 24px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0;">布展方案</h1>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 15px 20px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>品牌方:</strong> ${escapeHtml(brandInfo.brandName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>展会名称:</strong> ${escapeHtml(brandInfo.exhibitionName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>联系人:</strong> ${escapeHtml(brandInfo.contact)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>联系电话:</strong> ${escapeHtml(brandInfo.phone)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>布展日期:</strong> ${escapeHtml(brandInfo.date)}</p>
+          </div>
+          
+          ${sceneImageHtml}
+          ${risksHtml}
+          ${objectsHtml}
+          ${loadBasisHtml}
+          ${passageBasisHtml}
+          
+          <div style="margin-top: 40px; text-align: right; font-size: 12px; color: #6b7280;">
+            <p>物业审批人签字: _______________</p>
+            <p style="margin-top: 8px;">日期: ${escapeHtml(brandInfo.date)}</p>
+          </div>
+        `;
 
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        const passageBasisLines = generatePassageBasis(risks, objects, mall).split('\n');
-        passageBasisLines.forEach((line) => {
-          if (yPosition + 8 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          doc.text(line, 20, yPosition);
-          yPosition += 6;
-        });
-
-        doc.save(`${title}_${brandInfo.date}.pdf`);
+        container.innerHTML = html;
+        
+        const title = `${brandInfo.brandName}_${brandInfo.exhibitionName}_布展方案`;
+        await renderToPdf(container, `${title}_${brandInfo.date}.pdf`);
       } finally {
+        removeContainer(container);
         setIsExporting(false);
       }
     },
@@ -232,101 +298,155 @@ export const useExport = () => {
       }
     ) => {
       setIsExporting(true);
+      const container = createPdfContainer();
+      
       try {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const pageWidth = doc.internal.pageSize.getWidth();
-        let yPosition = 20;
+        const renderOpinion = (text: string): string => {
+          return text.split('\n').map(line => {
+            if (line.startsWith('# ')) {
+              return `<h2 style="font-size: 18px; font-weight: bold; color: #1f2937; margin: 15px 0 10px 0;">${line.replace(/^#\s+/, '')}</h2>`;
+            } else if (line.startsWith('## ')) {
+              return `<h3 style="font-size: 15px; font-weight: bold; color: #374151; margin: 12px 0 8px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">${line.replace(/^##\s+/, '')}</h3>`;
+            } else if (line.startsWith('### ')) {
+              return `<h4 style="font-size: 13px; font-weight: bold; color: #4b5563; margin: 10px 0 6px 0;">${line.replace(/^###\s+/, '')}</h4>`;
+            } else if (line.startsWith('---')) {
+              return '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 15px 0;" />';
+            } else if (line.startsWith('- ')) {
+              return `<p style="margin: 4px 0; padding-left: 20px; text-indent: -15px; font-size: 13px; color: #4b5563;">• ${line.replace(/^-\s+/, '')}</p>`;
+            } else if (line.trim() === '') {
+              return '<p style="margin: 4px 0;">&nbsp;</p>';
+            } else {
+              return `<p style="margin: 6px 0; font-size: 13px; color: #4b5563; line-height: 1.8;">${escapeHtml(line)}</p>`;
+            }
+          }).join('');
+        };
 
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(18);
-        doc.text('布展整改意见', pageWidth / 2, yPosition, { align: 'center' });
-        yPosition += 15;
-
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`品牌方: ${brandInfo.brandName}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`展会名称: ${brandInfo.exhibitionName}`, 20, yPosition);
-        yPosition += 8;
-        doc.text(`出具日期: ${brandInfo.date}`, 20, yPosition);
-        yPosition += 15;
-
-        const opinionLines = basis.rectification.split('\n');
-        
-        opinionLines.forEach((line) => {
-          if (yPosition + 8 > 280) {
-            doc.addPage();
-            yPosition = 20;
-          }
+        const html = `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 22px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0;">布展整改意见</h1>
+          </div>
           
-          if (line.startsWith('# ')) {
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(16);
-            yPosition += 5;
-          } else if (line.startsWith('## ')) {
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(14);
-            yPosition += 3;
-          } else if (line.startsWith('### ')) {
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(12);
-          } else if (line.startsWith('---')) {
-            doc.line(20, yPosition, 190, yPosition);
-            yPosition += 5;
-            return;
-          } else if (line.startsWith('|')) {
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(9);
-          } else {
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(11);
-          }
+          <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>品牌方:</strong> ${escapeHtml(brandInfo.brandName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>展会名称:</strong> ${escapeHtml(brandInfo.exhibitionName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>出具日期:</strong> ${escapeHtml(brandInfo.date)}</p>
+          </div>
           
-          doc.text(line.replace(/^#+\s*/, ''), 20, yPosition);
-          yPosition += line.startsWith('|') ? 7 : 6;
-        });
+          <div style="margin: 20px 0;">
+            ${renderOpinion(basis.rectification)}
+          </div>
+          
+          <div style="margin: 20px 0;">
+            <h3 style="font-size: 14px; font-weight: bold; color: #374151; margin: 12px 0 8px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">承重计算依据</h3>
+            <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+              ${escapeHtml(basis.loadBasis)}
+            </div>
+          </div>
+          
+          <div style="margin: 20px 0;">
+            <h3 style="font-size: 14px; font-weight: bold; color: #374151; margin: 12px 0 8px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">通道检测依据</h3>
+            <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+              ${escapeHtml(basis.passageBasis)}
+            </div>
+          </div>
+          
+          <div style="margin-top: 50px; text-align: right; font-size: 12px; color: #6b7280;">
+            <p style="margin-bottom: 8px;">物业审批人签字: _______________</p>
+            <p>日期: ${escapeHtml(brandInfo.date)}</p>
+          </div>
+        `;
 
-        yPosition += 10;
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text('承重计算依据:', 20, yPosition);
-        yPosition += 8;
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        basis.loadBasis.split('\n').forEach((line) => {
-          if (yPosition + 8 > 280) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          doc.text(line, 20, yPosition);
-          yPosition += 6;
-        });
-
-        yPosition += 10;
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text('通道检测依据:', 20, yPosition);
-        yPosition += 8;
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        basis.passageBasis.split('\n').forEach((line) => {
-          if (yPosition + 8 > 280) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          doc.text(line, 20, yPosition);
-          yPosition += 6;
-        });
-
-        yPosition += 20;
-        doc.line(120, yPosition, 190, yPosition);
-        yPosition += 8;
-        doc.text('物业审批人签字: _______________', 120, yPosition);
-        yPosition += 8;
-        doc.text(`日期: ${brandInfo.date}`, 120, yPosition);
-
-        doc.save(`整改意见_${brandInfo.brandName}_${brandInfo.date}.pdf`);
+        container.innerHTML = html;
+        await renderToPdf(container, `整改意见_${brandInfo.brandName}_${brandInfo.date}.pdf`);
       } finally {
+        removeContainer(container);
+        setIsExporting(false);
+      }
+    },
+    []
+  );
+
+  const exportDismantleReport = useCallback(
+    async (
+      checkpoints: PowerCheckpoint[]
+    ) => {
+      setIsExporting(true);
+      const container = createPdfContainer();
+      
+      try {
+        const checkedCount = checkpoints.filter(c => c.status === 'checked').length;
+        const totalCount = checkpoints.length;
+        
+        let tableRows = '';
+        checkpoints.forEach((cp, idx) => {
+          let statusText = '';
+          let statusColor = '';
+          if (cp.status === 'checked') {
+            statusText = '✓ 已核对';
+            statusColor = '#15803d';
+          } else if (cp.status === 'issue') {
+            statusText = '✗ 有问题';
+            statusColor = '#dc2626';
+          } else {
+            statusText = '○ 待核对';
+            statusColor = '#d97706';
+          }
+          
+          tableRows += `
+            <tr>
+              <td style="border: 1px solid #e5e7eb; padding: 8px; text-align: center;">${idx + 1}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${escapeHtml(cp.name)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${escapeHtml(cp.location)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px; color: ${statusColor}; font-weight: bold;">${statusText}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${escapeHtml(cp.checkedBy || '____')}</td>
+            </tr>
+          `;
+        });
+
+        const progressColor = checkedCount === totalCount ? '#15803d' : '#d97706';
+
+        const html = `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 22px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0;">撤展电源点核对清单</h1>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;">
+              <strong>核对日期:</strong> ${new Date().toLocaleDateString('zh-CN')}
+            </p>
+          </div>
+          
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="background: #f3f4f6;">
+                <th style="border: 1px solid #e5e7eb; padding: 8px; width: 10%;">序号</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; width: 25%;">电源点</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; width: 30%;">位置</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; width: 20%;">状态</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; width: 15%;">核对人</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+          
+          <div style="margin: 20px 0; padding: 15px; background: ${checkedCount === totalCount ? '#f0fdf4' : '#fffbeb'}; border-radius: 8px;">
+            <p style="font-weight: bold; color: ${progressColor}; margin: 0 0 8px 0;">
+              核对进度: ${checkedCount}/${totalCount} 个电源点已完成
+            </p>
+            ${checkedCount === totalCount ? '<p style="color: #15803d; margin: 0;">✅ 所有电源点已核对完成，撤展工作完成</p>' : ''}
+          </div>
+          
+          <div style="margin-top: 50px; text-align: right; font-size: 12px; color: #6b7280;">
+            <p style="margin-bottom: 8px;">物业核对人签字: _______________</p>
+          </div>
+        `;
+
+        container.innerHTML = html;
+        await renderToPdf(container, `撤展电源核对单_${new Date().toISOString().split('T')[0]}.pdf`);
+      } finally {
+        removeContainer(container);
         setIsExporting(false);
       }
     },
@@ -341,177 +461,118 @@ export const useExport = () => {
       mall: MallConfig,
       canvasElement?: HTMLCanvasElement
     ) => {
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      let yPosition = 20;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(20);
-      doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 15;
-
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`商场: ${mall.name}`, 20, yPosition);
-      yPosition += 8;
-      doc.text(`日期: ${new Date().toLocaleDateString('zh-CN')}`, 20, yPosition);
-      yPosition += 15;
-
-      if (canvasElement) {
-        const canvasDataUrl = canvasElement.toDataURL('image/png');
-        const imgWidth = 170;
-        const imgHeight = 120;
-        doc.addImage(canvasDataUrl, 'PNG', 20, yPosition, imgWidth, imgHeight);
-        yPosition += imgHeight + 10;
-      }
-
-      if (risks.length > 0) {
-        if (yPosition + 40 > pageHeight) {
-          doc.addPage();
-          yPosition = 20;
+      setIsExporting(true);
+      const container = createPdfContainer();
+      
+      try {
+        let sceneImageHtml = '';
+        if (canvasElement) {
+          const canvasDataUrl = canvasElement.toDataURL('image/png');
+          sceneImageHtml = `<img src="${canvasDataUrl}" style="width: 100%; max-width: 500px; margin: 15px auto; display: block; border: 1px solid #e5e7eb; border-radius: 8px;" />`;
         }
-        
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
+
         const dangerCount = risks.filter(r => r.severity === 'danger').length;
         const warningCount = risks.filter(r => r.severity === 'warning').length;
-        
-        if (dangerCount > 0) {
-          doc.setTextColor(220, 38, 38);
-          doc.text(`⚠️ 需要调整 (${dangerCount}项严重，${warningCount}项警告)`, 20, yPosition);
+
+        let risksHtml = '';
+        if (risks.length > 0) {
+          risksHtml += `<h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin: 20px 0 12px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">风险提示</h2>`;
+          
+          if (dangerCount > 0) {
+            risksHtml += `<p style="color: #dc2626; font-weight: bold; margin: 8px 0;">⚠️ 需要调整 (${dangerCount}项严重，${warningCount}项警告)</p>`;
+          } else {
+            risksHtml += `<p style="color: #f59e0b; font-weight: bold; margin: 8px 0;">⚠️ 建议优化 (${warningCount}项警告)</p>`;
+          }
+
+          risks.filter(r => r.severity === 'danger').forEach((risk, idx) => {
+            const obj = objects.find(o => o.id === risk.objectId);
+            risksHtml += `
+              <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 10px 12px; margin: 8px 0; border-radius: 4px;">
+                <p style="font-weight: bold; color: #dc2626; margin: 0 0 4px 0;">${idx + 1}. 🔴 ${escapeHtml(risk.message)}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">涉及物体: ${escapeHtml(obj?.name || '未知')}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">建议: ${escapeHtml(risk.basis)}</p>
+              </div>
+            `;
+          });
+
+          risks.filter(r => r.severity === 'warning').forEach((risk, idx) => {
+            const obj = objects.find(o => o.id === risk.objectId);
+            risksHtml += `
+              <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px 12px; margin: 8px 0; border-radius: 4px;">
+                <p style="font-weight: bold; color: #d97706; margin: 0 0 4px 0;">${idx + 1}. 🟡 ${escapeHtml(risk.message)}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">涉及物体: ${escapeHtml(obj?.name || '未知')}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 2px 0;">建议: ${escapeHtml(risk.basis)}</p>
+              </div>
+            `;
+          });
         } else {
-          doc.setTextColor(245, 158, 11);
-          doc.text(`⚠️ 建议优化 (${warningCount}项警告)`, 20, yPosition);
+          risksHtml = `
+            <div style="margin: 20px 0; padding: 15px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 4px;">
+              <p style="color: #15803d; font-weight: bold; margin: 0;">✅ 布展方案符合所有安全规范，可予以通过</p>
+            </div>
+          `;
         }
-        doc.setTextColor(0, 0, 0);
-        yPosition += 10;
 
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'normal');
+        let objectsHtml = `
+          <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin: 20px 0 12px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">展具清单</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="background: #f3f4f6;">
+                <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">名称</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">类型</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">重量</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">面积</th>
+                <th style="border: 1px solid #e5e7eb; padding: 8px; text-align: left;">位置</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
         
-        risks.filter(r => r.severity === 'danger').forEach((risk, idx) => {
-          if (yPosition + 20 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          const obj = objects.find(o => o.id === risk.objectId);
-          doc.setFillColor(254, 202, 202);
-          doc.rect(20, yPosition - 5, 170, 18, 'F');
-          doc.text(`${idx + 1}. 🔴 ${risk.message}`, 25, yPosition + 1);
-          yPosition += 12;
-          doc.setFontSize(9);
-          doc.text(`   涉及: ${obj?.name || '未知'}`, 25, yPosition + 1);
-          yPosition += 7;
-          doc.text(`   建议: ${risk.basis}`, 25, yPosition + 1);
-          yPosition += 10;
-          doc.setFontSize(11);
-        });
-
-        risks.filter(r => r.severity === 'warning').forEach((risk, idx) => {
-          if (yPosition + 20 > pageHeight) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          const obj = objects.find(o => o.id === risk.objectId);
-          doc.setFillColor(254, 215, 170);
-          doc.rect(20, yPosition - 5, 170, 18, 'F');
-          doc.text(`${idx + 1}. 🟡 ${risk.message}`, 25, yPosition + 1);
-          yPosition += 12;
-          doc.setFontSize(9);
-          doc.text(`   涉及: ${obj?.name || '未知'}`, 25, yPosition + 1);
-          yPosition += 7;
-          doc.text(`   建议: ${risk.basis}`, 25, yPosition + 1);
-          yPosition += 10;
-          doc.setFontSize(11);
+        objects.forEach((obj) => {
+          objectsHtml += `
+            <tr>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${escapeHtml(obj.name)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${getObjectTypeName(obj.type)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${formatWeight(obj.weight, obj.weightUnit)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">${formatArea(obj.area, obj.areaUnit)}</td>
+              <td style="border: 1px solid #e5e7eb; padding: 8px;">(${obj.position[0].toFixed(1)}, ${obj.position[2].toFixed(1)})</td>
+            </tr>
+          `;
         });
         
-        yPosition += 10;
-      } else {
-        if (yPosition + 20 > pageHeight) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.setFontSize(12);
-        doc.setTextColor(34, 197, 94);
-        doc.text('✅ 布展方案符合所有安全规范，可予以通过', 20, yPosition);
-        doc.setTextColor(0, 0, 0);
-        yPosition += 15;
+        objectsHtml += '</tbody></table>';
+
+        const html = `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 22px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0;">${escapeHtml(title)}</h1>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 15px 20px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>商场:</strong> ${escapeHtml(mall.name)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #4b5563;"><strong>日期:</strong> ${new Date().toLocaleDateString('zh-CN')}</p>
+          </div>
+          
+          ${sceneImageHtml}
+          ${risksHtml}
+          ${objectsHtml}
+          
+          <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin: 20px 0 12px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">承重计算依据</h2>
+          <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+            ${escapeHtml(generateLoadBasis(objects, mall))}
+          </div>
+          
+          <h2 style="font-size: 16px; font-weight: bold; color: #1f2937; margin: 20px 0 12px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">通道检测依据</h2>
+          <div style="background: #f9fafb; padding: 12px 15px; border-radius: 4px; font-size: 12px; line-height: 1.8; white-space: pre-wrap;">
+            ${escapeHtml(generatePassageBasis(risks, objects, mall))}
+          </div>
+        `;
+
+        container.innerHTML = html;
+        await renderToPdf(container, `${title}_${new Date().toISOString().split('T')[0]}.pdf`);
+      } finally {
+        removeContainer(container);
+        setIsExporting(false);
       }
-
-      doc.addPage();
-      yPosition = 20;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('一、展具清单', 20, yPosition);
-      yPosition += 10;
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text('名称', 20, yPosition);
-      doc.text('类型', 60, yPosition);
-      doc.text('重量', 90, yPosition);
-      doc.text('面积', 130, yPosition);
-      doc.text('位置', 165, yPosition);
-      yPosition += 6;
-      doc.line(20, yPosition, 190, yPosition);
-      yPosition += 8;
-
-      objects.forEach((obj) => {
-        if (yPosition + 15 > pageHeight) {
-          doc.addPage();
-          yPosition = 20;
-          doc.setFontSize(10);
-        }
-        doc.text(obj.name, 20, yPosition);
-        doc.text(obj.type, 60, yPosition);
-        doc.text(formatWeight(obj.weight, obj.weightUnit), 90, yPosition);
-        doc.text(formatArea(obj.area, obj.areaUnit), 130, yPosition);
-        doc.text(`(${obj.position[0].toFixed(1)}, ${obj.position[2].toFixed(1)})`, 165, yPosition);
-        yPosition += 8;
-      });
-
-      doc.addPage();
-      yPosition = 20;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('二、承重计算依据', 20, yPosition);
-      yPosition += 10;
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      const loadBasisLines = generateLoadBasis(objects, mall).split('\n');
-      loadBasisLines.forEach((line) => {
-        if (yPosition + 8 > pageHeight) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.text(line, 20, yPosition);
-        yPosition += 6;
-      });
-
-      doc.addPage();
-      yPosition = 20;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('三、通道检测依据', 20, yPosition);
-      yPosition += 10;
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      const passageBasisLines = generatePassageBasis(risks, objects, mall).split('\n');
-      passageBasisLines.forEach((line) => {
-        if (yPosition + 8 > pageHeight) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.text(line, 20, yPosition);
-        yPosition += 6;
-      });
-
-      doc.save(`${title}_${new Date().toISOString().split('T')[0]}.pdf`);
     },
     []
   );
@@ -524,151 +585,59 @@ export const useExport = () => {
       risks: RiskItem[],
       mall: MallConfig
     ) => {
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      let yPosition = 20;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
-      doc.text('布展整改意见', pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 15;
-
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`方案名称: ${planName}`, 20, yPosition);
-      yPosition += 8;
-      doc.text(`品牌方: ${brandName}`, 20, yPosition);
-      yPosition += 8;
-      doc.text(`出具日期: ${new Date().toLocaleDateString('zh-CN')}`, 20, yPosition);
-      yPosition += 15;
-
-      const opinionLines = generateRectificationOpinion(risks, objects, mall).split('\n');
+      setIsExporting(true);
+      const container = createPdfContainer();
       
-      opinionLines.forEach((line) => {
-        if (yPosition + 8 > 280) {
-          doc.addPage();
-          yPosition = 20;
-        }
+      try {
+        const opinionText = generateRectificationOpinion(risks, objects, mall);
         
-        if (line.startsWith('# ')) {
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(16);
-          yPosition += 5;
-        } else if (line.startsWith('## ')) {
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(14);
-          yPosition += 3;
-        } else if (line.startsWith('### ')) {
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(12);
-        } else if (line.startsWith('---')) {
-          doc.line(20, yPosition, 190, yPosition);
-          yPosition += 5;
-          return;
-        } else if (line.startsWith('|')) {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(9);
-        } else {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(11);
-        }
-        
-        doc.text(line.replace(/^#+\s*/, ''), 20, yPosition);
-        yPosition += line.startsWith('|') ? 7 : 6;
-      });
+        const renderOpinion = (text: string): string => {
+          return text.split('\n').map(line => {
+            if (line.startsWith('# ')) {
+              return `<h2 style="font-size: 18px; font-weight: bold; color: #1f2937; margin: 15px 0 10px 0;">${line.replace(/^#\s+/, '')}</h2>`;
+            } else if (line.startsWith('## ')) {
+              return `<h3 style="font-size: 15px; font-weight: bold; color: #374151; margin: 12px 0 8px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">${line.replace(/^##\s+/, '')}</h3>`;
+            } else if (line.startsWith('### ')) {
+              return `<h4 style="font-size: 13px; font-weight: bold; color: #4b5563; margin: 10px 0 6px 0;">${line.replace(/^###\s+/, '')}</h4>`;
+            } else if (line.startsWith('---')) {
+              return '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 15px 0;" />';
+            } else if (line.startsWith('- ')) {
+              return `<p style="margin: 4px 0; padding-left: 20px; text-indent: -15px; font-size: 13px; color: #4b5563;">• ${line.replace(/^-\s+/, '')}</p>`;
+            } else if (line.trim() === '') {
+              return '<p style="margin: 4px 0;">&nbsp;</p>';
+            } else {
+              return `<p style="margin: 6px 0; font-size: 13px; color: #4b5563; line-height: 1.8;">${escapeHtml(line)}</p>`;
+            }
+          }).join('');
+        };
 
-      yPosition += 20;
-      doc.line(120, yPosition, 190, yPosition);
-      yPosition += 8;
-      doc.text('物业审批人签字: _______________', 120, yPosition);
-      yPosition += 8;
-      doc.text(`日期: ${new Date().toLocaleDateString('zh-CN')}`, 120, yPosition);
+        const html = `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 22px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0;">布展整改意见</h1>
+          </div>
+          
+          <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>方案名称:</strong> ${escapeHtml(planName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>品牌方:</strong> ${escapeHtml(brandName)}</p>
+            <p style="margin: 6px 0; font-size: 13px; color: #991b1b;"><strong>出具日期:</strong> ${new Date().toLocaleDateString('zh-CN')}</p>
+          </div>
+          
+          <div style="margin: 20px 0;">
+            ${renderOpinion(opinionText)}
+          </div>
+          
+          <div style="margin-top: 50px; text-align: right; font-size: 12px; color: #6b7280;">
+            <p style="margin-bottom: 8px;">物业审批人签字: _______________</p>
+            <p>日期: ${new Date().toLocaleDateString('zh-CN')}</p>
+          </div>
+        `;
 
-      doc.save(`整改意见_${brandName}_${planName}.pdf`);
-    },
-    []
-  );
-
-  const exportDismantleReport = useCallback(
-    async (
-      checkpoints: Array<{ name: string; location: string; status: string; checkedBy?: string; checkedAt?: string }>
-    ) => {
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      let yPosition = 20;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
-      doc.text('撤展电源点核对清单', pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 15;
-
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`核对日期: ${new Date().toLocaleDateString('zh-CN')}`, 20, yPosition);
-      yPosition += 15;
-
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('序号', 20, yPosition);
-      doc.text('电源点', 45, yPosition);
-      doc.text('位置', 80, yPosition);
-      doc.text('状态', 150, yPosition);
-      doc.text('核对人', 180, yPosition);
-      yPosition += 6;
-      doc.line(20, yPosition, 190, yPosition);
-      yPosition += 8;
-
-      doc.setFont('helvetica', 'normal');
-      checkpoints.forEach((cp, idx) => {
-        if (yPosition + 15 > 280) {
-          doc.addPage();
-          yPosition = 20;
-          doc.setFontSize(10);
-        }
-        
-        doc.text(String(idx + 1), 20, yPosition);
-        doc.text(cp.name, 45, yPosition);
-        doc.text(cp.location, 80, yPosition);
-        
-        if (cp.status === 'checked') {
-          doc.setTextColor(34, 197, 94);
-          doc.text('✓ 已核对', 150, yPosition);
-        } else if (cp.status === 'disconnected') {
-          doc.setTextColor(234, 179, 8);
-          doc.text('○ 已断电', 150, yPosition);
-        } else {
-          doc.setTextColor(220, 38, 38);
-          doc.text('○ 待核对', 150, yPosition);
-        }
-        doc.setTextColor(0, 0, 0);
-        
-        doc.text(cp.checkedBy || '____', 180, yPosition);
-        yPosition += 8;
-        doc.line(20, yPosition, 115, yPosition);
-        yPosition += 4;
-      });
-
-      const checkedCount = checkpoints.filter(c => c.status === 'checked').length;
-      const totalCount = checkpoints.length;
-      
-      yPosition += 10;
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`核对进度: ${checkedCount}/${totalCount} 个电源点已完成`, 20, yPosition);
-      
-      if (checkedCount === totalCount) {
-        doc.setTextColor(34, 197, 94);
-        yPosition += 8;
-        doc.text('✅ 所有电源点已核对完成，撤展工作完成', 20, yPosition);
-        doc.setTextColor(0, 0, 0);
+        container.innerHTML = html;
+        await renderToPdf(container, `整改意见_${brandName}_${planName}.pdf`);
+      } finally {
+        removeContainer(container);
+        setIsExporting(false);
       }
-
-      yPosition += 20;
-      doc.line(120, yPosition, 190, yPosition);
-      yPosition += 8;
-      doc.text('物业核对人签字: _______________', 120, yPosition);
-
-      doc.save(`撤展电源核对单_${new Date().toISOString().split('T')[0]}.pdf`);
     },
     []
   );
