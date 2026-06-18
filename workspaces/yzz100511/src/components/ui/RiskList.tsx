@@ -6,7 +6,6 @@ import {
   ChevronUp,
   CheckCircle2,
   Target,
-  X,
   Zap,
   Weight,
   Footprints,

@@ -5,8 +5,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   MapPin,
-  Calendar,
-  User,
   Building2,
   FileCheck,
   Loader2,
@@ -33,8 +31,6 @@ export default function Export() {
     date: new Date().toISOString().split('T')[0],
   });
 
-  const dangerRisks = risks.filter((r) => r.severity === 'danger');
-  const warningRisks = risks.filter((r) => r.severity === 'warning');
   const hasIssues = risks.length > 0;
 
   const totalWeight = objects.reduce((sum, o) => {

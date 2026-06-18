@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Car, PanelLeft, Zap, Trash2, RotateCcw, PlusCircle } from 'lucide-react';
+import { Box, Car, PanelLeft, Trash2, RotateCcw, PlusCircle } from 'lucide-react';
 import { useObjectStore } from '../../store/useObjectStore';
 import { cn } from '../../lib/utils';
 import type { ObjectType } from '../../types';

@@ -22,7 +22,7 @@ import { getObjectName } from '../../utils/mockData';
 import type { WeightUnit, AreaUnit } from '../../types';
 
 export const PropertyPanel = () => {
-  const { objects, selectedId, updateObject, removeObject, selectObject } = useObjectStore();
+  const { objects, selectedId, updateObject, removeObject } = useObjectStore();
   const { risks } = useRiskStore();
   const { config } = useMallStore();
   const [isCollapsed, setIsCollapsed] = useState(false);

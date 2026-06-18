@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { Canvas, useThree, ThreeEvent } from '@react-three/fiber';
-import { OrbitControls, Environment, Effects } from '@react-three/drei';
+import { OrbitControls, Effects } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { Atrium } from './Atrium';
@@ -23,9 +23,7 @@ interface SceneProps {
 
 const SceneContent = () => {
   const objects = useObjectStore((state) => state.objects);
-  const selectedId = useObjectStore((state) => state.selectedId);
   const addObject = useObjectStore((state) => state.addObject);
-  const selectObject = useObjectStore((state) => state.selectObject);
   const { config } = useMallStore();
   const { handlePointerMissed } = useDragDrop();
   const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());

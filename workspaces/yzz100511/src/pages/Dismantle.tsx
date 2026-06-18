@@ -8,20 +8,17 @@ import {
   Download,
   Power,
   MapPin,
-  Calendar,
   User,
   RefreshCw,
   FileCheck,
 } from 'lucide-react';
 import { useApprovalStore } from '../store/useApprovalStore';
-import { useMallStore } from '../store/useMallStore';
 import { cn } from '../lib/utils';
 import type { PowerCheckpoint } from '../types';
 
 export default function Dismantle() {
   const { powerCheckpoints, updatePowerCheckpoint, generateDismantleReport } = useApprovalStore();
-  const { config } = useMallStore();
-  const [selectedApprovalId, setSelectedApprovalId] = useState<string | null>(null);
+  const [selectedApprovalId] = useState<string | null>(null);
   const [dismantleInfo, setDismantleInfo] = useState({
     date: new Date().toISOString().split('T')[0],
     operator: '',

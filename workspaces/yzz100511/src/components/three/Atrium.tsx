@@ -8,24 +8,6 @@ export const Atrium = () => {
   const { config } = useMallStore();
   const { width, depth, height } = config.atriumDimensions;
 
-  const gridMaterial = useMemo(() => {
-    const material = new THREE.LineBasicMaterial({
-      color: '#4a90d9',
-      transparent: true,
-      opacity: 0.4,
-    });
-    return material;
-  }, []);
-
-  const gridCenterLineMaterial = useMemo(() => {
-    const material = new THREE.LineBasicMaterial({
-      color: '#2a2a4a',
-      transparent: true,
-      opacity: 0.4,
-    });
-    return material;
-  }, []);
-
   const gridRef = useRef<THREE.GridHelper>(null);
 
   useFrame((state) => {

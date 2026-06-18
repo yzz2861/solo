@@ -8,7 +8,6 @@ export const useDragDrop = () => {
   const planeRef = useRef<THREE.Plane>(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0));
   const offsetRef = useRef<THREE.Vector3>(new THREE.Vector3());
   const intersectionRef = useRef<THREE.Vector3>(new THREE.Vector3());
-  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
 
   const handlePointerDown = useCallback(
     (e: ThreeEvent<PointerEvent>, objectId: string, position: [number, number, number]) => {

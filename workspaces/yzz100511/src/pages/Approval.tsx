@@ -9,7 +9,6 @@ import {
   AlertTriangle,
   Weight,
   Footprints,
-  Zap,
   ChevronDown,
   ChevronUp,
   MessageSquare,
