@@ -52,8 +52,19 @@ function convertFromMgL(valueMgL, targetUnit) {
   }
 }
 
-function formatValue(value, unit, decimals = 2) {
+function formatValue(value, unit, decimals) {
   if (value === null || value === undefined) return '-';
+  if (decimals === undefined) {
+    if (unit === '%') {
+      decimals = 5;
+    } else if (Math.abs(value) >= 100) {
+      decimals = 0;
+    } else if (Math.abs(value) >= 10) {
+      decimals = 1;
+    } else {
+      decimals = 2;
+    }
+  }
   return value.toFixed(decimals) + ' ' + unit;
 }
 
@@ -724,6 +735,12 @@ function buildHistoryComparison(currentResult, forManager = true) {
         trendText = changePercent > 0 ? '略有上升' : '略有下降';
       }
 
+      const histUnit = histMineral.targetUnit || 'mg/L';
+      const currUnit = currentMineral ? (currentMineral.targetUnitDisplay || 'mg/L') : 'mg/L';
+      const histDisplayValue = convertFromMgL(histValue, histUnit);
+      const currDisplayValue = convertFromMgL(currValue, currUnit);
+      const diffDisplayValue = convertFromMgL(Math.abs(diff), currUnit);
+
       rows.push({
         name: histMineral.name,
         histValue,
@@ -732,9 +749,11 @@ function buildHistoryComparison(currentResult, forManager = true) {
         changePercent,
         trend,
         trendText,
-        targetUnit: histMineral.targetUnit || 'mg/L',
-        histUnit: histMineral.targetUnit || 'mg/L',
-        currUnit: currentMineral ? (currentMineral.targetUnitDisplay || 'mg/L') : 'mg/L'
+        histUnit,
+        currUnit,
+        histDisplayValue,
+        currDisplayValue,
+        diffDisplayValue
       });
     } else {
       rows.push({
@@ -810,8 +829,8 @@ function buildHistoryComparison(currentResult, forManager = true) {
         html += `
           <tr>
             <td>${row.name}</td>
-            <td>${formatValue(convertFromMgL(row.histValue, row.histUnit), row.histUnit)}</td>
-            <td><strong>${formatValue(convertFromMgL(row.currValue, row.currUnit), row.currUnit)}</strong></td>
+            <td>${formatValue(row.histDisplayValue, row.histUnit)}</td>
+            <td><strong>${formatValue(row.currDisplayValue, row.currUnit)}</strong></td>
             <td class="${row.trend}">${row.changePercent >= 0 ? '+' : ''}${row.changePercent.toFixed(1)}%</td>
             <td><span class="status-badge ${row.trend === 'stable' ? 'normal' : (row.trend === 'increase' ? 'warning' : 'info')}">${row.trendText}</span></td>
           </tr>
