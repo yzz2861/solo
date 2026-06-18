@@ -54,9 +54,6 @@ function convertFromMgL(valueMgL, targetUnit) {
 
 function formatValue(value, unit, decimals = 2) {
   if (value === null || value === undefined) return '-';
-  if (unit === '%') {
-    return (value * 100).toFixed(decimals) + ' %';
-  }
   return value.toFixed(decimals) + ' ' + unit;
 }
 
@@ -383,6 +380,11 @@ function generateManagerReport(result, alerts) {
   const abnormalCount = result.minerals.filter(m => m.status !== 'normal' && m.status !== undefined).length;
   const missingCount = result.minerals.filter(m => m.isMakeupMissing).length;
   const needRetest = abnormalCount > 0 || missingCount > 0 || alertWarning > 0;
+
+  const historyComparison = buildHistoryComparison(result, true);
+  if (historyComparison.hasComparison) {
+    html += historyComparison.html;
+  }
   
   let conclusionText = '';
   if (abnormalCount > 0) {
@@ -623,10 +625,15 @@ function generateEngineerReport(result, alerts) {
       <p style="margin-top: 8px; font-size: 0.8rem; color: var(--text-muted);">* 标注为估算值（缺测项按原水浓度估算）</p>
     </div>
   `;
+
+  const historyComparison = buildHistoryComparison(result, false);
+  if (historyComparison.hasComparison) {
+    html += historyComparison.html;
+  }
   
   html += `
     <div class="report-section">
-      <h3>五、工程建议</h3>
+      <h3>${historyComparison.hasComparison ? '七' : '六'}、工程建议</h3>
       <div class="conclusion-box">
   `;
   
@@ -671,6 +678,232 @@ function getAlertIcon(type) {
     'success': '✅'
   };
   return icons[type] || '⚠️';
+}
+
+function buildHistoryComparison(currentResult, forManager = true) {
+  if (!historyData || historyData.length === 0) {
+    return { hasComparison: false, html: '', analysis: '' };
+  }
+
+  const latestRecord = historyData[0];
+
+  let totalChange = 0;
+  let comparableCount = 0;
+  let significantChanges = [];
+  let rows = [];
+
+  latestRecord.minerals.forEach(histMineral => {
+    const currentMineral = currentResult
+      ? currentResult.minerals.find(m => m.name === histMineral.name)
+      : null;
+
+    const histValue = histMineral.afterFilterMgL || histMineral.sourceMgL;
+    const currValue = currentMineral
+      ? (currentMineral.afterFilterMgL || currentMineral.sourceMgL)
+      : null;
+
+    if (histValue !== null && histValue !== undefined && currValue !== null && currValue !== undefined) {
+      const diff = currValue - histValue;
+      const changePercent = histValue > 0 ? (diff / histValue) * 100 : 0;
+      totalChange += Math.abs(changePercent);
+      comparableCount++;
+
+      let trend = 'stable';
+      let trendText = '稳定';
+
+      if (Math.abs(changePercent) > 10) {
+        trend = changePercent > 0 ? 'increase' : 'decrease';
+        trendText = changePercent > 0 ? '明显上升' : '明显下降';
+        significantChanges.push({
+          name: histMineral.name,
+          changePercent,
+          direction: changePercent > 0 ? '上升' : '下降'
+        });
+      } else if (Math.abs(changePercent) > 3) {
+        trend = changePercent > 0 ? 'increase' : 'decrease';
+        trendText = changePercent > 0 ? '略有上升' : '略有下降';
+      }
+
+      rows.push({
+        name: histMineral.name,
+        histValue,
+        currValue,
+        diff,
+        changePercent,
+        trend,
+        trendText,
+        targetUnit: histMineral.targetUnit || 'mg/L',
+        histUnit: histMineral.targetUnit || 'mg/L',
+        currUnit: currentMineral ? (currentMineral.targetUnitDisplay || 'mg/L') : 'mg/L'
+      });
+    } else {
+      rows.push({
+        name: histMineral.name,
+        histValue,
+        currValue,
+        incomplete: true
+      });
+    }
+  });
+
+  let analysisText = '';
+  if (comparableCount > 0) {
+    const avgChange = totalChange / comparableCount;
+
+    if (significantChanges.length > 0) {
+      const names = significantChanges.map(s => `${s.name}(${s.direction}${Math.abs(s.changePercent).toFixed(1)}%)`).join('、');
+      analysisText = `与上次记录（${latestRecord.testDate || new Date(latestRecord.date).toLocaleDateString('zh-CN')}）相比，${names} 变化幅度超过 10%，属于显著变化。`;
+
+      if (currentResult && currentResult.makeupVolume > 0) {
+        analysisText += ` 结合本次补水量 ${currentResult.makeupVolume.toFixed(1)} m³（占比 ${((currentResult.makeupVolume / currentResult.poolVolume) * 100).toFixed(1)}%）来看，`;
+
+        const allDecreasing = significantChanges.every(s => s.direction === '下降');
+        const allIncreasing = significantChanges.every(s => s.direction === '上升');
+        if (allDecreasing) {
+          analysisText += '各指标普遍下降，主要原因应为补水稀释作用，属于补水后的正常变化。';
+        } else if (allIncreasing) {
+          analysisText += '各指标普遍上升，可能补水水源矿物质浓度偏高，建议检测补水水质。';
+        } else {
+          analysisText += '指标有升有降，可能同时受补水水质和检测波动影响，建议复测确认。';
+        }
+      }
+    } else if (avgChange > 3) {
+      analysisText = `与上次记录相比，各指标变化幅度在 3-10% 之间，属于轻度波动，可能由检测误差或环境因素引起，建议持续观察。`;
+    } else {
+      analysisText = `与上次记录相比，各指标变化幅度均在 3% 以内，水质基本稳定，变化应属于正常检测波动范围。`;
+    }
+  }
+
+  let html = '';
+
+  if (forManager) {
+    html += `
+      <div class="report-section">
+        <h3>📊 历史水样对比</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">
+          对比记录：${latestRecord.testDate || new Date(latestRecord.date).toLocaleDateString('zh-CN')}
+        </p>
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>指标</th>
+              <th>上次浓度</th>
+              <th>本次浓度</th>
+              <th>变化率</th>
+              <th>趋势</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    rows.forEach(row => {
+      if (row.incomplete) {
+        html += `
+          <tr>
+            <td>${row.name}</td>
+            <td>${row.histValue ? row.histValue.toFixed(2) + ' mg/L' : '-'}</td>
+            <td>${row.currValue ? row.currValue.toFixed(2) + ' mg/L' : '-'}</td>
+            <td colspan="2" style="color: var(--text-muted);">数据不足</td>
+          </tr>
+        `;
+      } else {
+        html += `
+          <tr>
+            <td>${row.name}</td>
+            <td>${formatValue(convertFromMgL(row.histValue, row.histUnit), row.histUnit)}</td>
+            <td><strong>${formatValue(convertFromMgL(row.currValue, row.currUnit), row.currUnit)}</strong></td>
+            <td class="${row.trend}">${row.changePercent >= 0 ? '+' : ''}${row.changePercent.toFixed(1)}%</td>
+            <td><span class="status-badge ${row.trend === 'stable' ? 'normal' : (row.trend === 'increase' ? 'warning' : 'info')}">${row.trendText}</span></td>
+          </tr>
+        `;
+      }
+    });
+
+    html += `
+          </tbody>
+        </table>
+        <div class="conclusion-box" style="margin-top: 12px;">
+          <h4>🔍 变化原因判断</h4>
+          <p>${analysisText || '可对比数据不足，无法进行趋势分析。'}</p>
+          <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-secondary);">
+            💡 补水影响通常表现为各项指标同步变化；检测波动则表现为随机升降，幅度一般在 5-10% 以内。
+          </p>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="report-section">
+        <h3>六、历史水样对比分析</h3>
+        <p style="margin-bottom: 10px; color: var(--text-secondary);">
+          对比基准：最近一次历史记录（${latestRecord.testDate || new Date(latestRecord.date).toLocaleDateString('zh-CN')}，
+          池体 ${latestRecord.poolVolume.toFixed(1)} m³，补水 ${latestRecord.makeupVolume.toFixed(1)} m³）
+        </p>
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>指标</th>
+              <th>历史值 (mg/L)</th>
+              <th>当前值 (mg/L)</th>
+              <th>差值</th>
+              <th>变化率</th>
+              <th>趋势</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    rows.forEach(row => {
+      if (row.incomplete) {
+        html += `
+          <tr>
+            <td>${row.name}</td>
+            <td>${row.histValue !== null && row.histValue !== undefined ? row.histValue.toFixed(2) : '-'}</td>
+            <td>${row.currValue !== null && row.currValue !== undefined ? row.currValue.toFixed(2) : '-'}</td>
+            <td colspan="3" style="color: var(--text-muted);">数据不完整，无法对比</td>
+          </tr>
+        `;
+      } else {
+        html += `
+          <tr>
+            <td>${row.name}</td>
+            <td>${row.histValue.toFixed(2)}</td>
+            <td><strong>${row.currValue.toFixed(2)}</strong></td>
+            <td class="${row.diff >= 0 ? 'increase' : 'decrease'}">${row.diff >= 0 ? '+' : ''}${row.diff.toFixed(2)}</td>
+            <td class="${row.trend}">${row.changePercent >= 0 ? '+' : ''}${row.changePercent.toFixed(2)}%</td>
+            <td><span class="status-badge ${row.trend === 'stable' ? 'normal' : (row.trend === 'increase' ? 'warning' : 'info')}">${row.trendText}</span></td>
+          </tr>
+        `;
+      }
+    });
+
+    html += `
+          </tbody>
+        </table>
+
+        <div class="conclusion-box" style="margin-top: 16px;">
+          <h4>趋势判断与原因分析</h4>
+          <p>${analysisText || '可对比数据不足，无法进行趋势分析。'}</p>
+
+          <p style="margin-top: 10px;"><strong>判断依据说明：</strong></p>
+          <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.85rem;">
+            <li><strong>补水影响：</strong>各项指标呈同步变化趋势（补水稀释则普遍降低，高浓度补水则普遍升高），变化幅度与补水占比正相关。</li>
+            <li><strong>检测波动：</strong>各指标随机升降，无统一方向，变化幅度一般在 5-10% 以内，且绝对值变化较小。</li>
+            <li><strong>混合因素：</strong>部分指标同步变化、部分指标随机波动，可能同时受补水和检测误差影响，建议复测确认。</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  return {
+    hasComparison: comparableCount > 0,
+    html,
+    analysis: analysisText,
+    rows,
+    significantChanges,
+    avgChange: comparableCount > 0 ? totalChange / comparableCount : 0
+  };
 }
 
 // ============================================================
