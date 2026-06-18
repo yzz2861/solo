@@ -9,7 +9,18 @@ import type {
   BorrowRecord,
   WeatherRecord,
   FeeBreakdown,
+  AnomalyType,
 } from '@/types';
+import {
+  computeShortageIndex,
+  computeTransferSuggestions,
+  computeOverdueList,
+  computeRainStopDelay,
+  computeTimeRainMatrix,
+  detectAnomalies,
+  computeCleaningTasks,
+  computeMonthlyReport,
+} from '@/engine';
 
 interface AnalysisState {
   result: AnalysisResult | null;
@@ -33,28 +44,17 @@ interface AnalysisActions {
   ) => void;
   markTransferConfirmed: (suggestionId: string) => void;
   markCleaningTaskDone: (taskId: string, actualRefill: number) => void;
-  generateMonthlyReport: (period: string) => void;
+  generateMonthlyReport: (
+    points: UmbrellaPoint[],
+    records: BorrowRecord[],
+    weather: WeatherRecord[],
+    period: string
+  ) => void;
 }
 
 type AnalysisStore = AnalysisState & AnalysisActions;
 
-const createEmptyResult = (): AnalysisResult => ({
-  generatedAt: new Date().toISOString(),
-  summary: {
-    totalPoints: 0,
-    totalUmbrellas: 0,
-    currentlyBorrowed: 0,
-    activeOverdue: 0,
-    anomalyCount: 0,
-  },
-  overdueItems: [] as OverdueItem[],
-  transferSuggestions: [] as TransferSuggestion[],
-  rainStopDelays: [],
-  timeRainMatrix: [],
-  recommendedActions: [],
-});
-
-export const useAnalysisStore = create<AnalysisStore>((set) => ({
+export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
   result: null,
   cleaningTasks: [],
   monthlyReport: null,
@@ -63,18 +63,31 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
 
   runFullAnalysis: (points, records, weather) => {
     set({ computing: true });
-    // 占位：后续分析引擎填入真正实现
-    const result = createEmptyResult();
-    result.summary.totalPoints = points.length;
-    result.summary.totalUmbrellas = points.reduce((s, p) => s + p.totalUmbrellas, 0);
-    result.summary.currentlyBorrowed = records.filter(
-      (r) => r.status === 'borrowing' || r.status === 'overdue'
-    ).length;
-    result.summary.activeOverdue = records.filter((r) => r.status === 'overdue').length;
-    set({ result, computing: false });
+
+    const freeMin = get().freePenaltyMinutes;
+    const shortageIndex = computeShortageIndex(points, records, weather);
+    const transferSuggestions = computeTransferSuggestions(points, shortageIndex);
+    const overdueList = computeOverdueList(records, points, freeMin);
+    const rainStopDelay = computeRainStopDelay(records, weather);
+    const timeRainMatrix = computeTimeRainMatrix(records, weather, points);
+    const anomalies = detectAnomalies(records, weather, points);
+    const cleaningTasks = computeCleaningTasks(points, shortageIndex);
+
+    const result: AnalysisResult = {
+      shortageIndex,
+      transferSuggestions,
+      overdueList,
+      rainStopDelay,
+      timeRainMatrix,
+      anomalies,
+    };
+
+    set({ result, cleaningTasks, computing: false });
   },
 
-  setFreePenaltyMinutes: (n) => set({ freePenaltyMinutes: n }),
+  setFreePenaltyMinutes: (n) => {
+    set({ freePenaltyMinutes: n });
+  },
 
   updateOverdueFee: (recordId, newFeeBreakdown, waiveFlag) =>
     set((state) => {
@@ -82,9 +95,13 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
       return {
         result: {
           ...state.result,
-          overdueItems: state.result.overdueItems.map((item) =>
+          overdueList: state.result.overdueList.map((item) =>
             item.recordId === recordId
-              ? { ...item, feeBreakdown: newFeeBreakdown, waived: waiveFlag }
+              ? {
+                  ...item,
+                  feeBreakdown: newFeeBreakdown,
+                  totalFee: waiveFlag ? 0 : newFeeBreakdown.baseFee + newFeeBreakdown.tieredFee.reduce((s, t) => s + t.amount, 0) + newFeeBreakdown.crossPointFee - newFeeBreakdown.discount,
+                }
               : item
           ),
         },
@@ -97,10 +114,8 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
       return {
         result: {
           ...state.result,
-          transferSuggestions: state.result.transferSuggestions.map((s) =>
-            s.id === suggestionId
-              ? { ...s, confirmed: true, confirmedAt: new Date().toISOString() }
-              : s
+          transferSuggestions: state.result.transferSuggestions.filter(
+            (s) => s.id !== suggestionId
           ),
         },
       };
@@ -110,31 +125,13 @@ export const useAnalysisStore = create<AnalysisStore>((set) => ({
     set((state) => ({
       cleaningTasks: state.cleaningTasks.map((task) =>
         task.id === taskId
-          ? {
-              ...task,
-              done: true,
-              doneAt: new Date().toISOString(),
-              actualRefill,
-            }
+          ? { ...task, completed: true }
           : task
       ),
     })),
 
-  generateMonthlyReport: (period) => {
-    // 占位：后续实现真正的月度报告生成
-    const report: MonthlyReport = {
-      period,
-      totalBorrows: 0,
-      totalReturns: 0,
-      totalOverdue: 0,
-      totalPenalty: 0,
-      newBorrowers: 0,
-      topPoints: [],
-      weatherCorrelation: { rainyDayBorrows: 0, sunnyDayBorrows: 0 },
-      anomaliesCount: 0,
-      cleaningTasksCompleted: 0,
-      generatedAt: new Date().toISOString(),
-    };
+  generateMonthlyReport: (points, records, weather, period) => {
+    const report = computeMonthlyReport(points, records, weather, period);
     set({ monthlyReport: report });
   },
 }));

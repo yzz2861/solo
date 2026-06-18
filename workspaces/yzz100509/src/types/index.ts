@@ -1,3 +1,5 @@
+export type Role = 'operation' | 'customer_service' | 'cleaning' | 'mall_admin';
+
 export type PointStatus = 'active' | 'temporary_removed' | 'maintenance';
 export type PointArea = 'mall_entrance' | 'subway_exit' | 'bus_station' | 'office_building' | 'school';
 
