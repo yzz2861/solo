@@ -1,0 +1,22 @@
+{
+  "name": "dorm-maintenance-api",
+  "version": "1.0.0",
+  "description": "高校宿舍维修领料管理系统 API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "init-db": "node src/scripts/initDB.js",
+    "seed": "node src/scripts/seedData.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "csv-writer": "^1.6.0",
+    "dayjs": "^1.11.10"
+  }
+}
