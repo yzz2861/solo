@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F5F3EF;
+  color: #1A1A2E;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .stat-card {
+    @apply relative overflow-hidden rounded-xl p-5 bg-white shadow-sm border border-surface-200
+           transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  .stat-card::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-1;
+  }
+
+  .stat-card-orange::after {
+    background: linear-gradient(90deg, #E8652B, #FF7A3D);
+  }
+
+  .stat-card-green::after {
+    background: linear-gradient(90deg, #2ECDA7, #5BDFB3);
+  }
+
+  .stat-card-yellow::after {
+    background: linear-gradient(90deg, #F0A819, #FFC94D);
+  }
+
+  .stat-card-blue::after {
+    background: linear-gradient(90deg, #5B8DEF, #8AABFF);
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-dark-50
+           transition-all duration-200 text-sm font-medium;
+  }
+
+  .sidebar-link:hover {
+    @apply bg-dark-50/20 text-white;
+  }
+
+  .sidebar-link.active {
+    @apply bg-brand-500 text-white shadow-md shadow-brand-500/30;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-brand-500 text-white rounded-lg font-medium text-sm
+           shadow-sm shadow-brand-500/25
+           transition-all duration-200
+           hover:bg-brand-600 hover:shadow-md hover:shadow-brand-500/30
+           active:scale-[0.97]
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:bg-brand-500;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-white text-dark-200 rounded-lg font-medium text-sm
+           border border-surface-300
+           transition-all duration-200
+           hover:bg-surface-50 hover:border-surface-400
+           active:scale-[0.97];
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-danger-500 text-white rounded-lg font-medium text-sm
+           shadow-sm shadow-danger-500/25
+           transition-all duration-200
+           hover:bg-danger-600 hover:shadow-md
+           active:scale-[0.97];
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-success-500 text-white rounded-lg font-medium text-sm
+           shadow-sm shadow-success-500/25
+           transition-all duration-200
+           hover:bg-success-600 hover:shadow-md
+           active:scale-[0.97];
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white border border-surface-300 rounded-lg
+           text-sm text-dark-200 placeholder-surface-400
+           transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-400;
+  }
+
+  .select-field {
+    @apply w-full px-4 py-2.5 bg-white border border-surface-300 rounded-lg
+           text-sm text-dark-200
+           transition-all duration-200 appearance-none
+           focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-400;
+  }
+
+  .card {
+    @apply bg-white rounded-xl border border-surface-200 shadow-sm p-5;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-draft {
+    @apply badge bg-surface-200 text-surface-400;
+  }
+
+  .badge-assessing {
+    @apply badge bg-brand-50 text-brand-600;
+  }
+
+  .badge-reviewing {
+    @apply badge bg-warning-50 text-warning-500;
+  }
+
+  .badge-approved {
+    @apply badge bg-success-50 text-success-600;
+  }
+
+  .badge-recycling {
+    @apply badge bg-brand-100 text-brand-700;
+  }
+
+  .badge-completed {
+    @apply badge bg-success-100 text-success-600;
+  }
+
+  .badge-rejected {
+    @apply badge bg-danger-50 text-danger-500;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+@keyframes fade-up {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.4s ease-out;
+}
