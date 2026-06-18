@@ -139,7 +139,7 @@ function SampleFormModal({ visible, sample, onCancel, onOk }: Props) {
             description={
               <div style={{ marginTop: 8 }}>
                 <Space direction="vertical" size={4} style={{ width: '100%' }}>
-                  {batchInfo.existing_samples?.slice(0, 3).map((s: any) => (
+                  {batchInfo.existing_samples?.slice(0, 3).map((s) => (
                     <div key={s.id} style={{ fontSize: 12 }}>
                       <span style={{ marginRight: 8 }}>
                         <Tag color={statusMap[s.status]?.color} style={{ fontSize: 11 }}>
