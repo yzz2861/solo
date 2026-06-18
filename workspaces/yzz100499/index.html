@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>温泉矿物配比复核系统</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>♨️ 温泉矿物配比复核系统</h1>
+      <p class="subtitle">矿物质浓度变化估算 · 双版本报告 · 历史对比分析</p>
+    </header>
+
+    <main class="main-content">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="input">数据录入</button>
+        <button class="tab-btn" data-tab="report">报告生成</button>
+        <button class="tab-btn" data-tab="history">历史对比</button>
+      </div>
+
+      <!-- 数据录入 Tab -->
+      <section id="tab-input" class="tab-content active">
+        <div class="card">
+          <h2>📐 池体与补水基础信息</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>池体体积 (m³)</label>
+              <input type="number" id="poolVolume" value="100" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label>补水量 (m³)</label>
+              <input type="number" id="makeupVolume" value="10" min="0" step="0.1">
+            </div>
+            <div class="form-group">
+              <label>补水开始时间</label>
+              <input type="datetime-local" id="makeupStartTime">
+            </div>
+            <div class="form-group">
+              <label>补水结束时间</label>
+              <input type="datetime-local" id="makeupEndTime">
+            </div>
+            <div class="form-group">
+              <label>循环过滤时长 (小时)</label>
+              <input type="number" id="filterDuration" value="8" min="0" step="0.5">
+            </div>
+            <div class="form-group">
+              <label>过滤效率 (%)</label>
+              <input type="number" id="filterEfficiency" value="5" min="0" max="100" step="0.5">
+              <small class="hint">过滤对矿物质的去除率，正常约3-8%</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>🧪 主要矿物指标</h2>
+            <button class="btn-secondary" id="addMineralBtn">+ 添加指标</button>
+          </div>
+          <div class="mineral-table-wrapper">
+            <table class="mineral-table" id="mineralTable">
+              <thead>
+                <tr>
+                  <th>指标名称</th>
+                  <th>原水浓度</th>
+                  <th>单位</th>
+                  <th>补水浓度</th>
+                  <th>单位</th>
+                  <th>目标下限</th>
+                  <th>目标上限</th>
+                  <th>单位</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="mineralTableBody">
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="assumeSameAsSource" checked>
+              缺测项默认补水浓度与原水相同
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📋 备注信息</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>化验日期</label>
+              <input type="date" id="testDate">
+            </div>
+            <div class="form-group">
+              <label>取样位置</label>
+              <input type="text" id="sampleLocation" placeholder="如：泡池东北角、出水口等">
+            </div>
+            <div class="form-group full-width">
+              <label>异常说明</label>
+              <textarea id="abnormalNotes" rows="2" placeholder="如有过滤异常、设备故障等请在此说明"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn-primary" id="calculateBtn">🔍 开始复核计算</button>
+          <button class="btn-secondary" id="resetBtn">重置数据</button>
+          <button class="btn-outline" id="saveToHistoryBtn">💾 保存到历史记录</button>
+        </div>
+      </section>
+
+      <!-- 报告生成 Tab -->
+      <section id="tab-report" class="tab-content">
+        <div class="report-tabs">
+          <button class="report-tab-btn active" data-report="manager">👔 店长版</button>
+          <button class="report-tab-btn" data-report="engineer">🔧 工程版</button>
+        </div>
+
+        <div id="report-manager" class="report-content active">
+          <div class="report-card manager-report" id="managerReport">
+            <div class="report-placeholder">
+              <p>请先在「数据录入」页填写数据并点击「开始复核计算」</p>
+            </div>
+          </div>
+          <div class="action-bar">
+            <button class="btn-primary" id="printManagerBtn">📄 打印报告</button>
+          </div>
+        </div>
+
+        <div id="report-engineer" class="report-content">
+          <div class="report-card engineer-report" id="engineerReport">
+            <div class="report-placeholder">
+              <p>请先在「数据录入」页填写数据并点击「开始复核计算」</p>
+            </div>
+          </div>
+          <div class="action-bar">
+            <button class="btn-primary" id="printEngineerBtn">📄 打印报告</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 历史对比 Tab -->
+      <section id="tab-history" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h2>📊 历史水样对比</h2>
+            <button class="btn-secondary" id="clearHistoryBtn">清空历史</button>
+          </div>
+          <div id="historyList" class="history-list">
+            <div class="empty-state">暂无历史记录</div>
+          </div>
+        </div>
+
+        <div class="card" id="comparisonCard" style="display:none;">
+          <h2>🔬 对比分析</h2>
+          <div id="comparisonResult"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 提醒弹窗 -->
+    <div class="modal-overlay" id="alertModal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-icon">⚠️</span>
+          <h3>数据提醒</h3>
+        </div>
+        <div class="modal-body" id="alertModalBody"></div>
+        <div class="modal-footer">
+          <button class="btn-primary" id="alertModalOk">我知道了</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 确认弹窗 -->
+    <div class="modal-overlay" id="confirmModal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-icon">❓</span>
+          <h3>确认操作</h3>
+        </div>
+        <div class="modal-body" id="confirmModalBody"></div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="confirmModalCancel">取消</button>
+          <button class="btn-primary" id="confirmModalOk">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
