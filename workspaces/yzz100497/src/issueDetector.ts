@@ -8,18 +8,21 @@ export interface DetectionResult {
   workIssues: Map<string, Issue[]>;
   photoIssues: Map<string, Issue[]>;
   globalIssues: Issue[];
+  scannerIssues: Issue[];
 }
 
 export function detectAllIssues(
   authors: Author[],
   minImageSize: number = 2,
-  nameThreshold: number = 0.8
+  nameThreshold: number = 0.8,
+  scannerIssues: Issue[] = []
 ): DetectionResult {
   const result: DetectionResult = {
     authorIssues: new Map(),
     workIssues: new Map(),
     photoIssues: new Map(),
-    globalIssues: []
+    globalIssues: [],
+    scannerIssues
   };
 
   const nameIssues = detectNameInconsistencies(authors, nameThreshold);
@@ -180,7 +183,7 @@ export function getIssuesByCategory(issues: Issue[], category: IssueCategory): I
 }
 
 export function collectAllIssues(detection: DetectionResult): Issue[] {
-  const all: Issue[] = [...detection.globalIssues];
+  const all: Issue[] = [...detection.globalIssues, ...detection.scannerIssues];
 
   for (const issues of detection.authorIssues.values()) {
     all.push(...issues);

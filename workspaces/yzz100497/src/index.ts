@@ -88,7 +88,7 @@ program
       organizeSpinner.succeed();
 
       const detectSpinner = ora('正在检测问题...').start();
-      const detection = detectAllIssues(mergedAuthors, minSize, nameThreshold);
+      const detection = detectAllIssues(mergedAuthors, minSize, nameThreshold, rawFiles.issues);
       
       const allIssues = collectAllIssues(detection);
       const errors = allIssues.filter(i => i.severity === 'error').length;
@@ -352,7 +352,7 @@ program
       const orgResult = await organizeSubmissions(rawFiles, organizeOptions, inputDir);
       const mergedAuthors = mergeSimilarAuthors(orgResult.authors, options.nameThreshold || 0.8);
 
-      const detection = detectAllIssues(mergedAuthors, options.minSize || 2, options.nameThreshold || 0.8);
+      const detection = detectAllIssues(mergedAuthors, options.minSize || 2, options.nameThreshold || 0.8, rawFiles.issues);
       const submissions = classifySubmissions(mergedAuthors, detection);
 
       spinner.succeed('扫描完成');

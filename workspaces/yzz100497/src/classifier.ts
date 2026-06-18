@@ -48,20 +48,11 @@ function classifyAuthor(
   const authorIssues = detection.authorIssues.get(author.id) || [];
 
   for (const issue of authorIssues) {
-    if (issue.severity === 'error') {
-      if (isRejectionError(issue, options)) {
-        hasRejectionError = true;
-        reasons.push(`[退回] ${issue.message}`);
-      } else {
-        reasons.push(`[待补] ${issue.message}`);
-        hasWarning = true;
-      }
-    } else if (issue.severity === 'warning') {
-      reasons.push(`[提醒] ${issue.message}`);
-      hasWarning = true;
-    } else {
-      reasons.push(`[信息] ${issue.message}`);
-    }
+    const tag = tagIssue(issue, options);
+    reasons.push(`${tag} ${issue.message}`);
+    if (tag === '[退回]') hasRejectionError = true;
+    else if (tag === '[待补]') hasWarning = true;
+    else if (tag === '[提醒]') hasWarning = true;
   }
 
   for (const work of author.works) {
@@ -74,20 +65,11 @@ function classifyAuthor(
     }
 
     for (const issue of [...workIssues, ...photoIssues]) {
-      if (issue.severity === 'error') {
-        if (isRejectionError(issue, options)) {
-          hasRejectionError = true;
-          reasons.push(`[退回] ${issue.message}`);
-        } else {
-          reasons.push(`[待补] ${issue.message}`);
-          hasWarning = true;
-        }
-      } else if (issue.severity === 'warning') {
-        reasons.push(`[提醒] ${issue.message}`);
-        hasWarning = true;
-      } else {
-        reasons.push(`[信息] ${issue.message}`);
-      }
+      const tag = tagIssue(issue, options);
+      reasons.push(`${tag} ${issue.message}`);
+      if (tag === '[退回]') hasRejectionError = true;
+      else if (tag === '[待补]') hasWarning = true;
+      else if (tag === '[提醒]') hasWarning = true;
     }
   }
 
@@ -108,6 +90,32 @@ function classifyAuthor(
   }
 
   return { status, reasons };
+}
+
+function tagIssue(issue: Issue, options: ClassifyOptions): string {
+  if (issue.severity === 'error') {
+    if (isRejectionError(issue, options)) {
+      return '[退回]';
+    }
+    return '[待补]';
+  }
+  if (issue.severity === 'warning') {
+    if (isActionableWarning(issue)) {
+      return '[待补]';
+    }
+    return '[提醒]';
+  }
+  return '[信息]';
+}
+
+function isActionableWarning(issue: Issue): boolean {
+  return [
+    'missing_document',
+    'missing_statement',
+    'duplicate',
+    'missing_signature',
+    'missing_authorization'
+  ].includes(issue.category);
 }
 
 function isRejectionError(issue: Issue, options: ClassifyOptions): boolean {
@@ -140,9 +148,10 @@ export function generateReplyTemplate(
   let body = '';
   let closing = `\n此致\n敬礼\n\n${exhibitionName}组委会`;
 
-  const errorReasons = reasons.filter(r => r.includes('[退回]'));
-  const pendingReasons = reasons.filter(r => r.includes('[待补]'));
-  const warningReasons = reasons.filter(r => r.includes('[提醒]'));
+  const errorReasons = reasons.filter(r => r.startsWith('[退回]'));
+  const pendingReasons = reasons.filter(r => r.startsWith('[待补]'));
+  const warningReasons = reasons.filter(r => r.startsWith('[提醒]'));
+  const infoReasons = reasons.filter(r => r.startsWith('[信息]'));
 
   switch (status) {
     case 'selected':
@@ -152,9 +161,15 @@ export function generateReplyTemplate(
         body += `- 《${work.title}》 (${work.photos.length}张)\n`;
       }
       if (warningReasons.length > 0) {
-        body += '\n温馨提醒：\n';
+        body += '\n需要注意：\n';
         for (const r of warningReasons) {
           body += `- ${r.replace('[提醒] ', '')}\n`;
+        }
+      }
+      if (infoReasons.length > 0) {
+        body += '\n温馨提示：\n';
+        for (const r of infoReasons) {
+          body += `- ${r.replace('[信息] ', '')}\n`;
         }
       }
       body += '\n我们将尽快与您联系后续参展事宜。';
@@ -182,9 +197,15 @@ export function generateReplyTemplate(
         body += `- ${r.replace('[退回] ', '')}\n`;
       }
       if (pendingReasons.length > 0) {
-        body += '\n其他需要注意的问题：\n';
+        body += '\n其他需要补充的材料：\n';
         for (const r of pendingReasons) {
           body += `- ${r.replace('[待补] ', '')}\n`;
+        }
+      }
+      if (warningReasons.length > 0) {
+        body += '\n同时请注意：\n';
+        for (const r of warningReasons) {
+          body += `- ${r.replace('[提醒] ', '')}\n`;
         }
       }
       body += '\n期待您下次继续参与我们的影展。';
