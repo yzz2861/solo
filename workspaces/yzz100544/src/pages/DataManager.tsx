@@ -28,7 +28,7 @@ const SEVERITY_FILTERS: { value: SeverityLevel | 'all'; label: string }[] = [
 ];
 
 export default function DataManager() {
-  const { feedback, themes, homeworkList, filterFeedback, runClustering, deleteFeedback, batchAddFeedback } = useAppStore();
+  const { feedback, themes, filterFeedback, runClustering, deleteFeedback } = useAppStore();
   const [importOpen, setImportOpen] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [sourceFilter, setSourceFilter] = useState<FeedbackSource | 'all'>('all');

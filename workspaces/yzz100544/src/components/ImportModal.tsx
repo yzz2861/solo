@@ -2,7 +2,8 @@ import React, { useState, useRef } from 'react';
 import { X, Upload, FileText, Users, UserCheck, XCircle, Sparkles } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { parsePlainText, parseCSV, parsedLinesToFeedback } from '@/utils/io';
-import type { FeedbackSource, ParsedLine } from '@/types';
+import type { FeedbackSource } from '@/types';
+import type { ParsedLine } from '@/utils/io';
 import { cn } from '@/lib/utils';
 import { multiLabelClassify } from '@/utils/clustering';
 
@@ -242,7 +243,7 @@ W: 错题统计说明
                   </span>
                   {Object.entries(sourceCounts).map(([k, v]) => (
                     <span key={k} className="badge bg-white text-brand-500 border-brand-100">
-                      {k === 'student' ? '学生' : k === 'ta' ? '助教' : '错题'}: {v}
+                      {k === 'student' ? '学生' : k === 'ta' ? '助教' : '错题'}: {String(v)}
                     </span>
                   ))}
                   <span className="badge bg-emerald-50 text-emerald-600 border-emerald-100">

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { Feedback, Theme, FeedbackThemeRelation, Improvement, Course, FeedbackSource, SeverityLevel, PriorityLevel, ImprovementStatus, ThemeWithStats, ParsedLine } from '@/types';
+import type { Feedback, Theme, FeedbackThemeRelation, Improvement, Course, FeedbackSource, SeverityLevel, PriorityLevel, ImprovementStatus, ThemeWithStats } from '@/types';
+import type { ParsedLine } from '@/utils/io';
 import { db } from '@/db';
 import { DEFAULT_THEMES, buildThemeRelations, determineSeverity, multiLabelClassify, generateId } from '@/utils/clustering';
 import { parsedLinesToFeedback } from '@/utils/io';

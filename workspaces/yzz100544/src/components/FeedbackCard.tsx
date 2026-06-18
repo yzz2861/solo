@@ -12,6 +12,7 @@ interface FeedbackCardProps {
   onEdit?: () => void;
   onDelete?: () => void;
   highlight?: boolean;
+  index?: number;
 }
 
 export function FeedbackCard({ feedback, compact = false, onEdit, onDelete, highlight }: FeedbackCardProps) {

@@ -1,13 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "@/pages/Home";
+import { Routes, Route } from 'react-router-dom';
+import Dashboard from '@/pages/Dashboard';
+import DataManager from '@/pages/DataManager';
+import Clustering from '@/pages/Clustering';
+import Checklist from '@/pages/Checklist';
+import CourseTracker from '@/pages/CourseTracker';
+import Settings from '@/pages/Settings';
 
-export default function App() {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/data" element={<DataManager />} />
+      <Route path="/clustering" element={<Clustering />} />
+      <Route path="/checklist" element={<Checklist />} />
+      <Route path="/courses" element={<CourseTracker />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="*" element={<Dashboard />} />
+    </Routes>
   );
 }
+
+export default App;
