@@ -1,0 +1,46 @@
+import type { AnomalyEvent } from '@/types';
+
+export const mockAnomalies: AnomalyEvent[] = [
+  {
+    id: 'a001',
+    type: 'low_stock',
+    pointId: 'p003',
+    description: '地铁站1号口库存不足5把，高峰时段可能无法满足需求',
+    severity: 'high',
+    status: 'pending',
+    reportedAt: '2026-06-18 08:00:00',
+    reportedBy: 'system',
+  },
+  {
+    id: 'a002',
+    type: 'umbrella_broken',
+    pointId: 'p001',
+    description: '发现2把损坏雨伞待维修，伞骨折断',
+    severity: 'medium',
+    status: 'processing',
+    reportedAt: '2026-06-17 17:30:00',
+    reportedBy: 'e1001',
+    handler: '运营-李明',
+  },
+  {
+    id: 'a003',
+    type: 'umbrella_missing',
+    pointId: 'p002',
+    description: '盘点发现少1把雨伞，编号u099',
+    severity: 'medium',
+    status: 'pending',
+    reportedAt: '2026-06-18 09:15:00',
+    reportedBy: 'e1002',
+  },
+  {
+    id: 'a004',
+    type: 'system_error',
+    description: '扫码设备p004蓝牙连接不稳定，偶发失败',
+    severity: 'low',
+    status: 'resolved',
+    reportedAt: '2026-06-16 14:00:00',
+    reportedBy: 'e1008',
+    resolvedAt: '2026-06-17 10:30:00',
+    handler: '运维-王工',
+  },
+];

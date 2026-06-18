@@ -1,0 +1,95 @@
+/** @type {import('tailwindcss').Config} */
+
+export default {
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    container: {
+      center: true,
+    },
+    extend: {
+      colors: {
+        primary: {
+          50: "#F0F7F9",
+          100: "#DCEEF2",
+          200: "#B7DDE5",
+          300: "#85C3D1",
+          400: "#4E9EB3",
+          500: "#2E7E95",
+          600: "#0F4C5C",
+          700: "#0C3F4D",
+          800: "#0A323E",
+          900: "#07242D",
+        },
+        accent: {
+          50: "#FEF3EC",
+          100: "#FDE4D4",
+          200: "#FBC6A5",
+          300: "#F79F69",
+          400: "#EF7A36",
+          500: "#E36414",
+          600: "#C85410",
+          700: "#A6450E",
+          800: "#85380E",
+          900: "#6C2F0E",
+        },
+        success: {
+          50: "#F2FAF1",
+          100: "#E1F4DF",
+          200: "#C4E8C0",
+          300: "#9CD595",
+          400: "#7DC274",
+          500: "#5FAD56",
+          600: "#488E41",
+          700: "#3B7236",
+          800: "#325B2F",
+          900: "#2A4B28",
+        },
+        warning: {
+          50: "#FEFAEF",
+          100: "#FDF2D4",
+          200: "#FBE4A8",
+          300: "#F8D173",
+          400: "#F5BE54",
+          500: "#F2C14E",
+          600: "#D9A02C",
+          700: "#B47F20",
+          800: "#92651F",
+          900: "#78531E",
+        },
+        danger: {
+          50: "#FBF1F2",
+          100: "#F8DEE1",
+          200: "#F1C0C5",
+          300: "#E6969E",
+          400: "#D76A75",
+          500: "#B23A48",
+          600: "#A1303E",
+          700: "#862834",
+          800: "#6F232E",
+          900: "#5D1F28",
+        },
+      },
+      fontFamily: {
+        display: ["Fraunces", "serif"],
+        body: ["Lora", "serif"],
+        mono: ["JetBrains Mono", "monospace"],
+      },
+      keyframes: {
+        "rain-slow": {
+          "0%": { backgroundPosition: "0px 0px" },
+          "100%": { backgroundPosition: "0px 100px" },
+        },
+        "rain-fast": {
+          "0%": { backgroundPosition: "0px 0px" },
+          "100%": { backgroundPosition: "0px 200px" },
+        },
+      },
+      animation: {
+        "rain-slow": "rain-slow 3s linear infinite",
+        "rain-fast": "rain-fast 1s linear infinite",
+      },
+    },
+  },
+  plugins: [],
+};

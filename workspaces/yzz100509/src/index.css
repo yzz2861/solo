@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    font-family: var(--font-body), 'Lora', serif;
+    background: linear-gradient(
+      to bottom right,
+      #f8fafc 0%,
+      #eff6ff 50%,
+      #f1f5f9 100%
+    );
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M10 0 L120 110 M-10 20 L90 120 M50 0 L120 70 M-10 80 L30 120' stroke='%230F4C5C' stroke-width='0.5' fill='none' opacity='0.03'/%3E%3C/svg%3E"),
+      linear-gradient(
+        to bottom right,
+        #f8fafc 0%,
+        #eff6ff 50%,
+        #f1f5f9 100%
+      );
+    background-attachment: fixed;
+  }
+
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+}
