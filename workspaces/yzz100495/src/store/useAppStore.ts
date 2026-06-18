@@ -38,7 +38,7 @@ interface AppActions {
   updateConfig: (config: Partial<AppConfig>) => void;
   addWarning: (warning: Warning) => void;
   clearWarnings: () => void;
-  validateOrder: (formData: OrderFormData) => Warning[];
+  validateOrder: (formData: OrderFormData, excludeOrderId?: string) => Warning[];
   getOrdersByDate: (date: string) => Order[];
   getBatchesByDate: (date: string) => Batch[];
 }
@@ -118,7 +118,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => {
       set({ editingOrder: order, showOrderModal: true });
     },
 
-    validateOrder: (formData) => {
+    validateOrder: (formData, excludeOrderId?) => {
       const state = get();
       const timeSlot = getTimeSlot(formData.pickupTime, state.config.timeSlotDuration);
       
@@ -135,6 +135,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => {
         timeSlot,
         isPaid: formData.isPaid,
         items,
+        excludeOrderId,
       });
     },
 

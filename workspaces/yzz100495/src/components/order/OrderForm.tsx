@@ -49,12 +49,12 @@ export const OrderForm = ({ onSuccess }: OrderFormProps) => {
   useEffect(() => {
     if (formData.customerName && formData.customerPhone && formData.items.length > 0) {
       const validate = useAppStore.getState().validateOrder;
-      const result = validate(formData);
+      const result = validate(formData, editingOrder?.id);
       setWarnings(result);
     } else {
       setWarnings([]);
     }
-  }, [formData]);
+  }, [formData, editingOrder]);
 
   const handleAddItem = () => {
     setFormData(prev => ({
@@ -103,6 +103,14 @@ export const OrderForm = ({ onSuccess }: OrderFormProps) => {
     const submitData = { ...formData, items: validItems };
 
     if (editingOrder) {
+      const validate = useAppStore.getState().validateOrder;
+      const validationWarnings = validate(submitData, editingOrder.id);
+      if (validationWarnings.some(w => w.severity === 'error')) {
+        setWarnings(validationWarnings);
+        showToast('订单更新失败，请检查错误提示', 'error');
+        return;
+      }
+      setWarnings(validationWarnings);
       updateOrder(editingOrder.id, submitData);
       showToast('订单更新成功', 'success');
     } else {

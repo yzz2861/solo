@@ -89,19 +89,34 @@ export class BatchAllocator {
     };
   }
 
-  static groupOrdersByBatch(orders: Order[], batches: Batch[], date: string): Map<string, Order[]> {
+  static groupOrdersByBatch(
+    orders: Order[], 
+    batches: Batch[], 
+    date: string,
+    config?: AppConfig
+  ): Map<string, Order[]> {
     const grouped = new Map<string, Order[]>();
     
-    const dayOrders = orders.filter(o => o.pickupDate === date);
+    const dayBatches = batches.filter(b => b.bakingDate === date);
+    const dayBatchIds = new Set(dayBatches.map(b => b.id));
     
-    batches
-      .filter(b => b.bakingDate === date)
-      .forEach(batch => {
-        const batchOrders = dayOrders.filter(o => o.batchId === batch.id);
-        grouped.set(batch.id, batchOrders);
-      });
+    const relatedOrders = orders.filter(o => {
+      if (o.batchId && dayBatchIds.has(o.batchId)) {
+        return true;
+      }
+      if (!o.batchId && config) {
+        const bakingDate = this.getBakingDate(o.pickupDate, o.pickupTime, config);
+        return bakingDate === date;
+      }
+      return false;
+    });
     
-    const unassignedOrders = dayOrders.filter(o => !o.batchId);
+    dayBatches.forEach(batch => {
+      const batchOrders = relatedOrders.filter(o => o.batchId === batch.id);
+      grouped.set(batch.id, batchOrders);
+    });
+    
+    const unassignedOrders = relatedOrders.filter(o => !o.batchId);
     if (unassignedOrders.length > 0) {
       grouped.set('unassigned', unassignedOrders);
     }

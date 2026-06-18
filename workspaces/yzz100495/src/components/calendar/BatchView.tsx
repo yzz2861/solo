@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { BATCH_STATUS_INFO, PRODUCT_INFO } from '@/types';
 
 export const BatchView = () => {
-  const { batches, orders, selectedDate, updateBatch, allocateBatch, setEditingOrder } = useAppStore();
+  const { batches, orders, selectedDate, updateBatch, allocateBatch, setEditingOrder, config } = useAppStore();
   const { showToast } = useToast();
 
   const dayBatches = useMemo(() => {
@@ -19,8 +19,8 @@ export const BatchView = () => {
   }, [batches, selectedDate]);
 
   const ordersByBatch = useMemo(() => {
-    return BatchAllocator.groupOrdersByBatch(orders, batches, selectedDate);
-  }, [orders, batches, selectedDate]);
+    return BatchAllocator.groupOrdersByBatch(orders, batches, selectedDate, config);
+  }, [orders, batches, selectedDate, config]);
 
   const unassignedOrders = ordersByBatch.get('unassigned') || [];
 
