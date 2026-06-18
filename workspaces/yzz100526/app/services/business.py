@@ -81,10 +81,11 @@ def create_return(db: Session, data: schemas.ReturnCreate) -> dict:
         Inventory.outlet_id == data.outlet_id,
         Inventory.issue_id == data.issue_id
     ).first()
-    if inv and inv.stock_qty < data.qty:
+    current_stock = inv.stock_qty if inv else 0
+    if current_stock < data.qty:
         return {
             "success": False,
-            "error": f"库存不足，当前库存 {inv.stock_qty} 本",
+            "error": f"库存不足，当前库存 {current_stock} 本",
             "data": None
         }
 
@@ -327,14 +328,18 @@ def update_delivery_status(db: Session, delivery_id: int, data: schemas.Delivery
                         issue.warehouse_stock += ret.qty
 
     if data.status == DeliveryStatus.FAILED:
+        if not data.fail_reason:
+            return {"success": False, "error": "配送单失败必须填写失败原因"}
         delivery.fail_reason = data.fail_reason
         for d_item in delivery.items:
             if d_item.status in [DeliveryStatusDetail.PENDING, DeliveryStatusDetail.LOADED]:
                 d_item.status = DeliveryStatusDetail.FAILED
                 d_item.fail_reason = data.fail_reason
 
-    if data.status == DeliveryStatus.PARTIAL and not data.fail_reason:
-        return {"success": False, "error": "部分完成必须填写失败原因"}
+    if data.status == DeliveryStatus.PARTIAL:
+        if not data.fail_reason:
+            return {"success": False, "error": "部分完成必须填写失败原因"}
+        delivery.fail_reason = data.fail_reason
 
     db.commit()
     db.refresh(delivery)
