@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #1f2937;
+  background-color: #f8faf9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-[10px] text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-br from-court-600 to-court-700 text-white hover:from-court-700 hover:to-court-800 hover:shadow-soft focus:ring-court-500;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-court-700 border border-court-200 hover:bg-court-50 hover:shadow-soft focus:ring-court-300;
+  }
+  .btn-danger {
+    @apply btn bg-gradient-to-br from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 hover:shadow-soft focus:ring-red-400;
+  }
+  .btn-warn {
+    @apply btn bg-gradient-to-br from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 hover:shadow-soft focus:ring-amber-400;
+  }
+  .btn-ghost {
+    @apply btn text-gray-600 hover:bg-gray-100 focus:ring-gray-300;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-card;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 placeholder:text-gray-400 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-court-400 focus:border-court-400;
+  }
+  .select {
+    @apply input appearance-none bg-no-repeat bg-right pr-8;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+  }
+  .label {
+    @apply block text-xs font-medium text-gray-600 mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .badge-normal {
+    @apply badge bg-emerald-50 text-emerald-700 border border-emerald-100;
+  }
+  .badge-stopped {
+    @apply badge bg-red-50 text-red-700 border border-red-100;
+  }
+  .badge-switched {
+    @apply badge bg-court-50 text-court-700 border border-court-100;
+  }
+  .badge-rescheduled {
+    @apply badge bg-amber-50 text-amber-700 border border-amber-100;
+  }
+  .badge-refunded {
+    @apply badge bg-purple-50 text-purple-700 border border-purple-100;
+  }
+
+  .th-cell {
+    @apply px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider;
+  }
+  .td-cell {
+    @apply px-4 py-3.5 text-sm text-gray-700;
+  }
+
+  .tooltip-bubble {
+    @apply absolute z-50 px-2.5 py-1.5 rounded-lg text-xs bg-gray-900 text-white whitespace-nowrap shadow-lg;
+  }
+
+  .divider {
+    @apply border-gray-100;
+  }
+
+  .progress-track {
+    @apply w-full h-2 bg-gray-100 rounded-full overflow-hidden;
+  }
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500 ease-out;
+  }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    padding: 32px;
+    background: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
