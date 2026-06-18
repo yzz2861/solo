@@ -735,11 +735,12 @@ function buildHistoryComparison(currentResult, forManager = true) {
         trendText = changePercent > 0 ? '略有上升' : '略有下降';
       }
 
-      const histUnit = histMineral.targetUnit || 'mg/L';
+      const histUnitOriginal = histMineral.targetUnit || 'mg/L';
       const currUnit = currentMineral ? (currentMineral.targetUnitDisplay || 'mg/L') : 'mg/L';
-      const histDisplayValue = convertFromMgL(histValue, histUnit);
-      const currDisplayValue = convertFromMgL(currValue, currUnit);
-      const diffDisplayValue = convertFromMgL(Math.abs(diff), currUnit);
+      const displayUnit = currUnit;
+      const histDisplayValue = convertFromMgL(histValue, displayUnit);
+      const currDisplayValue = convertFromMgL(currValue, displayUnit);
+      const diffDisplayValue = convertFromMgL(Math.abs(diff), displayUnit);
 
       rows.push({
         name: histMineral.name,
@@ -749,8 +750,9 @@ function buildHistoryComparison(currentResult, forManager = true) {
         changePercent,
         trend,
         trendText,
-        histUnit,
-        currUnit,
+        histUnit: displayUnit,
+        currUnit: displayUnit,
+        displayUnit,
         histDisplayValue,
         currDisplayValue,
         diffDisplayValue
