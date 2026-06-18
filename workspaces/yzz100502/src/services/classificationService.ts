@@ -318,13 +318,12 @@ export const classificationService = {
 
   expandAbbreviations(content: string): string {
     const abbreviations: { pattern: RegExp; replacement: string }[] = [
-      { pattern: /(?<![\\u4e00-\\u9fa5])晕(?![\\u4e00-\\u9fa5]|死)/g, replacement: '头晕' },
-      { pattern: /(?<![\\u4e00-\\u9fa5])肿(?![\\u4e00-\\u9fa5])/g, replacement: '水肿' },
-      { pattern: /(?<![\\u4e00-\\u9fa5])咳(?![\\u4e00-\\u9fa5])/g, replacement: '咳嗽' },
-      { pattern: /(?<![\\u4e00-\\u9fa5])喘(?![\\u4e00-\\u9fa5])/g, replacement: '喘息' },
-      { pattern: /(?<![\\u4e00-\\u9fa5])慌(?![\\u4e00-\\u9fa5])/g, replacement: '心慌' },
-      { pattern: /(?<![\\u4e00-\\u9fa5])闷(?![\\u4e00-\\u9fa5])/g, replacement: '胸闷' },
-      { pattern: /停药/g, replacement: '停药' },
+      { pattern: /(?<!头|眩)晕/g, replacement: '头晕' },
+      { pattern: /(?<!水|浮)肿/g, replacement: '水肿' },
+      { pattern: /(?<!干)咳/g, replacement: '咳嗽' },
+      { pattern: /(?<!气)喘/g, replacement: '喘息' },
+      { pattern: /(?<!心)慌/g, replacement: '心慌' },
+      { pattern: /(?<!胸)闷/g, replacement: '胸闷' },
       { pattern: /加量/g, replacement: '增加剂量' },
       { pattern: /减量/g, replacement: '减少剂量' },
       { pattern: /没药/g, replacement: '没有药物' },
@@ -339,7 +338,7 @@ export const classificationService = {
     return expanded;
   },
 
-  maskContent(content: string): string {
-    return privacyService.maskAll(content);
+  maskContent(content: string, knownNames?: string[]): string {
+    return privacyService.maskAll(content, knownNames);
   },
 };

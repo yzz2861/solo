@@ -18,6 +18,8 @@ const CHINESE_NAME_REGEX = new RegExp(
   'g'
 );
 
+const TITLE_CHARS = /[医护师长局长主任总经干部老大小姐弟姐妹哥嫂婶伯叔爷奶婆属院科室队组]/;
+
 export const privacyService = {
   maskName(name: string): string {
     if (!name || name.length <= 1) return name;
@@ -40,7 +42,7 @@ export const privacyService = {
   maskChineseNamesInText(text: string): string {
     if (!text) return text;
 
-    const matches: { full: string; surname: string; given: string }[] = [];
+    const matches: { full: string; surname: string; given: string; index: number }[] = [];
     let match: RegExpExecArray | null;
 
     const regex = new RegExp(CHINESE_NAME_REGEX.source, 'g');
@@ -54,17 +56,18 @@ export const privacyService = {
       const nextChar = nextIdx < text.length ? text[nextIdx] : '';
 
       const prevIsChinese = /[\u4e00-\u9fa5]/.test(prevChar);
-      const nextIsChinese = /[\u4e00-\u9fa5]/.test(nextChar);
+      if (prevIsChinese) continue;
 
-      if (!prevIsChinese && !nextIsChinese) {
-        matches.push({ full, surname, given });
-      }
+      if (TITLE_CHARS.test(nextChar)) continue;
+
+      matches.push({ full, surname, given, index: match.index });
     }
 
     let result = text;
-    for (const m of matches) {
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const m = matches[i];
       const masked = m.surname + '*'.repeat(m.given.length);
-      result = result.replace(m.full, masked);
+      result = result.substring(0, m.index) + masked + result.substring(m.index + m.full.length);
     }
 
     return result;
