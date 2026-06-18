@@ -1,0 +1,45 @@
+{
+  "name": "photo-exhibition-organizer",
+  "version": "1.0.0",
+  "description": "影展投稿整理器 - 扫描投稿目录，按作者和作品整理，检测问题，导出清单",
+  "main": "dist/index.js",
+  "bin": {
+    "peo": "dist/index.js",
+    "photo-exhibition-organizer": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "photography",
+    "exhibition",
+    "cli",
+    "organizer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "exifreader": "^4.23.0",
+    "sharp": "^0.33.0",
+    "adm-zip": "^0.5.10",
+    "csv-writer": "^1.6.0",
+    "xlsx": "^0.18.5",
+    "string-similarity": "^4.0.4",
+    "pdf-parse": "^1.1.1",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/adm-zip": "^0.5.5",
+    "@types/string-similarity": "^4.0.2",
+    "@types/pdf-parse": "^1.1.4",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.0"
+  }
+}
