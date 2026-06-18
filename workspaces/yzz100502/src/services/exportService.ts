@@ -39,6 +39,7 @@ export const exportService = {
         resultId: result.id,
         patientId: sms?.patientId || '',
         patientName: sms?.patientNameMasked || '',
+        patientRawName: sms?.patientName || '',
         category: result.category,
         categoryLabel: getCategoryLabel(result.category),
         severity: result.severity,
@@ -81,7 +82,10 @@ export const exportService = {
       }
 
       if (options.includeEvidence && item.evidence.length > 0) {
-        row['原句依据'] = item.evidence.join(' | ');
+        const evidenceText = options.maskPrivacy
+          ? item.evidence.map((ev) => privacyService.maskAll(ev, item.patientRawName ? [item.patientRawName] : [])).join(' | ')
+          : item.evidence.join(' | ');
+        row['原句依据'] = evidenceText;
       }
 
       if (item.nurseNote) {
@@ -95,7 +99,7 @@ export const exportService = {
       if (options.includeOriginal) {
         const sms = smsList.find((s) => s.id === results.find((r) => r.id === item.resultId)?.smsId);
         if (sms) {
-          row['原始短信'] = options.maskPrivacy ? privacyService.maskAll(sms.content) : sms.content;
+          row['原始短信'] = options.maskPrivacy ? privacyService.maskAll(sms.content, [sms.patientName]) : sms.content;
         }
       }
 
@@ -197,7 +201,8 @@ export const exportService = {
         doc.setTextColor(100, 100, 100);
         doc.text('原句依据:', margin + 2, evidenceY);
         evidenceY += 6;
-        for (const ev of item.evidence) {
+        for (const rawEv of item.evidence) {
+          const ev = options.maskPrivacy ? privacyService.maskAll(rawEv, item.patientRawName ? [item.patientRawName] : []) : rawEv;
           const splitEv = doc.splitTextToSize(`"${ev}"`, contentWidth - 14);
           for (const line of splitEv) {
             doc.text(line, margin + 4, evidenceY);

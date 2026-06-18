@@ -84,8 +84,9 @@ const familyIndicators = ['我是他', '我是她', '我爸', '我妈', '我爷�
 
 export const classificationService = {
   async classify(sms: SmsRecord): Promise<AnalysisResult> {
-    const content = sms.content + (sms.nurseNote ? ' ' + sms.nurseNote : '');
-    const lowerContent = content.toLowerCase();
+    const rawContent = sms.content + (sms.nurseNote ? ' ' + sms.nurseNote : '');
+    const expandedContent = this.expandAbbreviations(rawContent);
+    const lowerContent = expandedContent.toLowerCase();
 
     const categoryScores: { [key in CategoryType]?: number } = {};
     const matchedKeywords: string[] = [];
@@ -100,10 +101,11 @@ export const classificationService = {
         if (lowerContent.includes(keyword)) {
           score++;
           ruleMatchedKeywords.push(keyword);
-          
-          const sentences = content.split(/[。！？.!?\n]/);
+
+          const sentences = rawContent.split(/[。！？.!?\n]/);
           for (const sentence of sentences) {
-            if (sentence.includes(keyword) && sentence.trim().length > 0) {
+            const expandedSentence = this.expandAbbreviations(sentence);
+            if (expandedSentence.includes(keyword) && sentence.trim().length > 0) {
               ruleMatchedEvidence.push(sentence.trim());
             }
           }
@@ -134,10 +136,10 @@ export const classificationService = {
       category = 'medication_issue';
     }
 
-    const severity = this.calculateSeverity(category, content, matchedKeywords);
-    const confidence = this.calculateConfidence(maxScore, content, matchedKeywords.length);
-    const isAmbiguous = this.checkAmbiguity(content, matchedKeywords, category);
-    const summary = this.generateSummary(category, content, matchedKeywords);
+    const severity = this.calculateSeverity(category, expandedContent, matchedKeywords);
+    const confidence = this.calculateConfidence(maxScore, expandedContent, matchedKeywords.length);
+    const isAmbiguous = this.checkAmbiguity(expandedContent, matchedKeywords, category);
+    const summary = this.generateSummary(category, expandedContent, matchedKeywords);
 
     matchedEvidence = [...new Set(matchedEvidence)].slice(0, 3);
     const uniqueKeywords = [...new Set(matchedKeywords)].slice(0, 5);
@@ -152,7 +154,7 @@ export const classificationService = {
       evidence: matchedEvidence,
       keywords: uniqueKeywords,
       isAmbiguous,
-      ambiguousReason: isAmbiguous ? this.getAmbiguousReason(content, matchedKeywords) : undefined,
+      ambiguousReason: isAmbiguous ? this.getAmbiguousReason(expandedContent, matchedKeywords) : undefined,
       reviewStatus: 'pending',
     };
   },
@@ -315,26 +317,25 @@ export const classificationService = {
   },
 
   expandAbbreviations(content: string): string {
-    const abbreviations: { [key: string]: string } = {
-      '药': '药物',
-      '续': '续药',
-      '加量': '增加剂量',
-      '减量': '减少剂量',
-      '晕': '头晕',
-      '肿': '水肿',
-      '咳': '咳嗽',
-      '喘': '喘息',
-      '慌': '心慌',
-      '闷': '胸闷',
-    };
-    
+    const abbreviations: { pattern: RegExp; replacement: string }[] = [
+      { pattern: /(?<![\\u4e00-\\u9fa5])晕(?![\\u4e00-\\u9fa5]|死)/g, replacement: '头晕' },
+      { pattern: /(?<![\\u4e00-\\u9fa5])肿(?![\\u4e00-\\u9fa5])/g, replacement: '水肿' },
+      { pattern: /(?<![\\u4e00-\\u9fa5])咳(?![\\u4e00-\\u9fa5])/g, replacement: '咳嗽' },
+      { pattern: /(?<![\\u4e00-\\u9fa5])喘(?![\\u4e00-\\u9fa5])/g, replacement: '喘息' },
+      { pattern: /(?<![\\u4e00-\\u9fa5])慌(?![\\u4e00-\\u9fa5])/g, replacement: '心慌' },
+      { pattern: /(?<![\\u4e00-\\u9fa5])闷(?![\\u4e00-\\u9fa5])/g, replacement: '胸闷' },
+      { pattern: /停药/g, replacement: '停药' },
+      { pattern: /加量/g, replacement: '增加剂量' },
+      { pattern: /减量/g, replacement: '减少剂量' },
+      { pattern: /没药/g, replacement: '没有药物' },
+      { pattern: /续药/g, replacement: '续配药物' },
+    ];
+
     let expanded = content;
-    for (const [abbr, full] of Object.entries(abbreviations)) {
-      if (expanded === abbr || expanded.includes(abbr + '，') || expanded.includes(abbr + '。') || expanded.includes(' ' + abbr)) {
-        expanded = expanded.replace(new RegExp(abbr, 'g'), full);
-      }
+    for (const { pattern, replacement } of abbreviations) {
+      expanded = expanded.replace(pattern, replacement);
     }
-    
+
     return expanded;
   },
 
