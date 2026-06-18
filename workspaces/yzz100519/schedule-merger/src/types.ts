@@ -53,6 +53,9 @@ export interface Resolution {
   resolvedBy: string;
   resolvedAt: string;
   note: string;
+  newRoom?: string;
+  newPeriodStart?: number;
+  newPeriodEnd?: number;
   finalEntries: NormalizedEntry[];
 }
 

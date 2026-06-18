@@ -166,7 +166,7 @@ program
         console.log(conflict.description);
         console.log(chalk.gray(`建议: ${conflict.suggestion}`));
 
-        const answers = await inquirer.prompt([
+        const actionAnswer = await inquirer.prompt([
           {
             type: 'list',
             name: 'action',
@@ -180,6 +180,35 @@ program
               { name: '手动处理', value: 'manual' },
             ],
           },
+        ]);
+
+        let newRoom: string | undefined;
+        let newPeriodStart: number | undefined;
+        let newPeriodEnd: number | undefined;
+
+        if (actionAnswer.action === 'reassign_room') {
+          const roomAnswer = await inquirer.prompt([
+            { type: 'input', name: 'newRoom', message: '新教室名称:' },
+          ]);
+          newRoom = roomAnswer.newRoom.trim();
+        }
+
+        if (actionAnswer.action === 'reassign_time') {
+          const timeAnswer = await inquirer.prompt([
+            { type: 'input', name: 'newPeriodStart', message: '新起始节次（如 5）:' },
+          ]);
+          newPeriodStart = parseInt(timeAnswer.newPeriodStart, 10);
+          if (isNaN(newPeriodStart)) newPeriodStart = undefined;
+          const durAnswer = await inquirer.prompt([
+            { type: 'input', name: 'newPeriodEnd', message: `新结束节次（留空则保持连堂长度）:` },
+          ]);
+          if (durAnswer.newPeriodEnd.trim()) {
+            newPeriodEnd = parseInt(durAnswer.newPeriodEnd, 10);
+            if (isNaN(newPeriodEnd)) newPeriodEnd = undefined;
+          }
+        }
+
+        const noteAnswer = await inquirer.prompt([
           {
             type: 'input',
             name: 'note',
@@ -190,14 +219,17 @@ program
 
         const resolution = resolveConflict(
           conflict,
-          answers.action as Resolution['action'],
+          actionAnswer.action as Resolution['action'],
           opts.operator,
-          answers.note,
-          conflict.entries
+          noteAnswer.note,
+          conflict.entries,
+          newRoom,
+          newPeriodStart,
+          newPeriodEnd
         );
         resolutions.push(resolution);
 
-        console.log(chalk.green(`✓ 冲突 ${conflict.id} 已解决 (${answers.action})`));
+        console.log(chalk.green(`✓ 冲突 ${conflict.id} 已解决 (${actionAnswer.action})`));
       }
 
       const newEntries = generateNewSchedule(snapshot.entries, resolutions);
@@ -229,10 +261,11 @@ program
 
 program
   .command('generate')
-  .description('确认后生成新版课表')
+  .description('确认后生成新版课表（有未解决冲突时需加 --force）')
   .option('-o, --output <dir>', '输出目录', DEFAULT_OUTPUT)
   .option('--version <ver>', '基于的版本号（默认最新）')
   .option('--format <fmt>', '输出格式: csv, xlsx, both', 'both')
+  .option('--force', '强制导出，即使存在未解决冲突')
   .action((opts) => {
     try {
       const outputDir = path.resolve(opts.output);
@@ -252,9 +285,14 @@ program
       const unresolved = snapshot.conflicts.filter(
         c => !snapshot.resolutions.some(r => r.conflictId === c.id)
       );
-      if (unresolved.length > 0) {
-        console.log(chalk.yellow(`⚠ 仍有 ${unresolved.length} 个未解决冲突，建议先运行 resolve 命令`));
-        console.log(chalk.yellow('  使用 --force 可强制生成'));
+      if (unresolved.length > 0 && !opts.force) {
+        console.error(chalk.red(`✖ 存在 ${unresolved.length} 个未解决冲突，拒绝导出。`));
+        console.error(chalk.red('  请先运行 resolve 命令解决冲突，或使用 --force 强制导出。'));
+        console.error(chalk.gray('  用法: schedule-merger generate --force'));
+        process.exit(1);
+      }
+      if (unresolved.length > 0 && opts.force) {
+        console.log(chalk.yellow(`⚠ 强制导出：仍有 ${unresolved.length} 个未解决冲突`));
       }
 
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);

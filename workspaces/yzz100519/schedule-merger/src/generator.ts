@@ -5,42 +5,71 @@ import { NormalizedEntry, ClassTimetableView, Resolution } from './types';
 
 const DAY_NAMES = ['', '一', '二', '三', '四', '五', '六', '日'];
 
+function entryKey(e: NormalizedEntry): string {
+  return `${e.className}|${e.courseName}|${e.normalizedTeacher}|${e.normalizedRoom}|${e.weekDay}|${e.periodStart}|${e.periodEnd}|${e.weekStart}|${e.weekEnd}|${e.weekParity}`;
+}
+
 export function generateNewSchedule(
   entries: NormalizedEntry[],
   resolutions: Resolution[]
 ): NormalizedEntry[] {
-  const removedIds = new Set<string>();
-  const modifiedEntries = new Map<string, NormalizedEntry>();
+  const removeKeys = new Set<string>();
+  const replaceMap = new Map<string, NormalizedEntry>();
 
   for (const r of resolutions) {
-    if (r.action === 'keep_first') {
-      if (r.finalEntries.length < 2) {
-        const originalEntries = entries.filter(e =>
-          e.normalizedTeacher === r.finalEntries[0]?.normalizedTeacher
-        );
-        if (originalEntries.length >= 2) {
-          removedIds.add(`${originalEntries[1].source}-${originalEntries[1].courseName}-${originalEntries[1].weekDay}-${originalEntries[1].periodStart}`);
-        }
-      }
+    if (r.finalEntries.length < 2) continue;
+
+    const keyA = entryKey(r.finalEntries[0]);
+    const keyB = entryKey(r.finalEntries[1]);
+
+    switch (r.action) {
+      case 'keep_first':
+        removeKeys.add(keyB);
+        break;
+      case 'keep_second':
+        removeKeys.add(keyA);
+        break;
+      case 'keep_both_with_note':
+        replaceMap.set(keyA, r.finalEntries[0]);
+        replaceMap.set(keyB, r.finalEntries[1]);
+        break;
+      case 'reassign_room':
+      case 'reassign_time':
+        replaceMap.set(keyA, r.finalEntries[0]);
+        replaceMap.set(keyB, r.finalEntries[1]);
+        break;
+      case 'manual':
+        break;
     }
   }
 
-  const merged = new Map<string, NormalizedEntry>();
+  const result: NormalizedEntry[] = [];
+  const seenKeys = new Set<string>();
+
   for (const e of entries) {
-    const key = `${e.source}-${e.courseName}-${e.weekDay}-${e.periodStart}-${e.weekStart}`;
-    if (!removedIds.has(`${e.source}-${e.courseName}-${e.weekDay}-${e.periodStart}`)) {
-      merged.set(key, e);
+    const k = entryKey(e);
+    if (removeKeys.has(k)) continue;
+    if (seenKeys.has(k)) continue;
+
+    if (replaceMap.has(k)) {
+      result.push(replaceMap.get(k)!);
+    } else {
+      result.push(e);
     }
+    seenKeys.add(k);
   }
 
   for (const r of resolutions) {
     for (const fe of r.finalEntries) {
-      const key = `resolved-${r.conflictId}-${fe.courseName}-${fe.weekDay}-${fe.periodStart}`;
-      merged.set(key, { ...fe, source: `resolved:${r.conflictId}` });
+      const fk = entryKey(fe);
+      if (!seenKeys.has(fk)) {
+        result.push(fe);
+        seenKeys.add(fk);
+      }
     }
   }
 
-  return Array.from(merged.values());
+  return result;
 }
 
 export function exportScheduleCSV(

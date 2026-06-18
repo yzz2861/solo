@@ -55,7 +55,10 @@ export function resolveConflict(
   action: Resolution['action'],
   resolvedBy: string,
   note: string,
-  entries: NormalizedEntry[]
+  entries: NormalizedEntry[],
+  newRoom?: string,
+  newPeriodStart?: number,
+  newPeriodEnd?: number
 ): Resolution {
   let finalEntries: NormalizedEntry[];
 
@@ -69,16 +72,36 @@ export function resolveConflict(
     case 'keep_both_with_note':
       finalEntries = entries.map(e => ({ ...e, note: `${e.note}; [保留双课] ${note}`.trim() }));
       break;
-    case 'reassign_room':
-      finalEntries = entries.map((e, i) =>
-        i === 1 ? { ...e, note: `${e.note}; [更换教室] ${note}`.trim() } : e
-      );
+    case 'reassign_room': {
+      const targetRoom = newRoom || note;
+      finalEntries = entries.map((e, i) => {
+        if (i !== 1) return e;
+        return {
+          ...e,
+          roomName: targetRoom,
+          normalizedRoom: targetRoom,
+          note: `${e.note}; [更换教室→${targetRoom}] ${note}`.trim(),
+        };
+      });
       break;
-    case 'reassign_time':
-      finalEntries = entries.map((e, i) =>
-        i === 1 ? { ...e, note: `${e.note}; [调整时间] ${note}`.trim() } : e
-      );
+    }
+    case 'reassign_time': {
+      const original = entries[1];
+      const duration = original.periodEnd - original.periodStart;
+      const ps = newPeriodStart ?? original.periodStart;
+      const pe = newPeriodEnd ?? (ps + duration);
+      finalEntries = entries.map((e, i) => {
+        if (i !== 1) return e;
+        return {
+          ...e,
+          periodStart: ps,
+          periodEnd: pe,
+          isConsecutive: pe > ps,
+          note: `${e.note}; [调整时间→第${ps}-${pe}节] ${note}`.trim(),
+        };
+      });
       break;
+    }
     case 'manual':
       finalEntries = entries;
       break;
@@ -86,7 +109,7 @@ export function resolveConflict(
       finalEntries = entries;
   }
 
-  return {
+  const result: Resolution = {
     conflictId: conflict.id,
     action,
     resolvedBy,
@@ -94,6 +117,12 @@ export function resolveConflict(
     note,
     finalEntries,
   };
+  if (action === 'reassign_room' && newRoom) result.newRoom = newRoom;
+  if (action === 'reassign_time') {
+    if (newPeriodStart !== undefined) result.newPeriodStart = newPeriodStart;
+    if (newPeriodEnd !== undefined) result.newPeriodEnd = newPeriodEnd;
+  }
+  return result;
 }
 
 export function createBeforeSnapshot(
