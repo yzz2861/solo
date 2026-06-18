@@ -14,6 +14,9 @@ from .sample import (
     ComplianceExport,
     SampleAttachment,
     SampleAttachmentCreate,
+    BatchDuplicateCheck,
+    BatchDuplicateItem,
+    SampleCreateResponse,
 )
 
 __all__ = [
@@ -32,4 +35,7 @@ __all__ = [
     "ComplianceExport",
     "SampleAttachment",
     "SampleAttachmentCreate",
+    "BatchDuplicateCheck",
+    "BatchDuplicateItem",
+    "SampleCreateResponse",
 ]

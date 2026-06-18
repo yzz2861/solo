@@ -133,6 +133,20 @@ class BatchDuplicateCheck(BaseModel):
     existing_samples: List[dict]
 
 
+class BatchDuplicateItem(BaseModel):
+    id: int
+    sample_no: str
+    sample_name: str
+    status: str
+    applicant: str
+
+
+class SampleCreateResponse(BaseModel):
+    sample: Sample
+    batch_warning: bool = False
+    batch_duplicate_info: Optional[BatchDuplicateCheck] = None
+
+
 class OverdueSample(BaseModel):
     id: int
     sample_no: str
