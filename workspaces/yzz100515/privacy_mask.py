@@ -25,6 +25,12 @@ try:
 except ImportError:
     yaml = None
 
+try:
+    import pytesseract
+    _HAS_TESSERACT = True
+except ImportError:
+    _HAS_TESSERACT = False
+
 
 @dataclass
 class MaskRegion:
@@ -62,6 +68,9 @@ class PrivacyMasker:
         self.mask_padding = self.config.get("mask_padding", 4)
         self.dark_theme_threshold = self.config.get("dark_theme_threshold", 80)
         self.min_text_confidence = self.config.get("min_text_confidence", 0.6)
+        self._ocr_available = self._check_ocr_available()
+        self._full_image_ocr_cache = None
+        self._full_image_ocr_data = None
 
     def _load_config(self, config_path: str) -> dict:
         if yaml and config_path.endswith((".yaml", ".yml")):
@@ -106,6 +115,206 @@ class PrivacyMasker:
         avg_brightness = float(np.mean(gray))
         return bool(avg_brightness < self.dark_theme_threshold)
 
+    def _check_ocr_available(self) -> bool:
+        if not _HAS_TESSERACT:
+            return False
+        try:
+            import shutil as _shutil
+            if _shutil.which("tesseract"):
+                return True
+            if hasattr(pytesseract.pytesseract, "tesseract_cmd"):
+                cmd = pytesseract.pytesseract.tesseract_cmd
+                if cmd and os.path.exists(cmd):
+                    return True
+        except Exception:
+            pass
+        return False
+
+    def _run_ocr(self, image: np.ndarray, lang: str = "chi_sim+eng") -> str:
+        if not self._ocr_available:
+            return ""
+        try:
+            if len(image.shape) == 2:
+                pil_img = Image.fromarray(image)
+            else:
+                pil_img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            
+            config = "--psm 6 --oem 3"
+            text = pytesseract.image_to_string(pil_img, lang=lang, config=config)
+            return text.strip()
+        except Exception:
+            return ""
+
+    def _run_ocr_detailed(self, image: np.ndarray, lang: str = "chi_sim+eng") -> Optional[dict]:
+        if not self._ocr_available:
+            return None
+        try:
+            if len(image.shape) == 2:
+                pil_img = Image.fromarray(image)
+            else:
+                pil_img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            
+            config = "--psm 6 --oem 3"
+            data = pytesseract.image_to_data(pil_img, lang=lang, config=config, output_type=pytesseract.Output.DICT)
+            return data
+        except Exception:
+            return None
+
+    def _full_image_ocr(self, image: np.ndarray) -> Optional[dict]:
+        img_hash = hashlib.md5(image.tobytes()).hexdigest()
+        if self._full_image_ocr_cache == img_hash and self._full_image_ocr_data is not None:
+            return self._full_image_ocr_data
+        
+        if not self._ocr_available:
+            self._full_image_ocr_cache = img_hash
+            self._full_image_ocr_data = None
+            return None
+        
+        try:
+            data = self._run_ocr_detailed(image)
+            self._full_image_ocr_cache = img_hash
+            self._full_image_ocr_data = data
+            return data
+        except Exception:
+            self._full_image_ocr_cache = img_hash
+            self._full_image_ocr_data = None
+            return None
+
+    def _analyze_text_features(self, roi: np.ndarray) -> dict:
+        features = {
+            "digit_count": 0,
+            "chinese_count": 0,
+            "letter_count": 0,
+            "symbol_count": 0,
+            "char_gaps": 0,
+            "vertical_strokes": 0,
+            "horizontal_strokes": 0,
+            "blob_count": 0,
+            "avg_blob_width": 0,
+            "avg_blob_height": 0,
+            "density": 0.0,
+            "is_phone_like": False,
+            "is_order_like": False,
+            "is_name_like": False,
+            "is_id_like": False,
+        }
+        
+        if roi.size == 0:
+            return features
+        
+        if len(roi.shape) == 3:
+            gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = roi
+        
+        h, w = gray.shape
+        
+        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(4, 4))
+        enhanced = clahe.apply(gray)
+        
+        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        if np.mean(binary) > 127:
+            binary = 255 - binary
+        
+        features["density"] = float(np.count_nonzero(binary) / binary.size)
+        
+        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        blobs = []
+        for cnt in contours:
+            x, y, bw, bh = cv2.boundingRect(cnt)
+            area = bw * bh
+            if area < 5 or area > w * h * 0.5:
+                continue
+            if bh < h * 0.2:
+                continue
+            blobs.append((x, y, bw, bh))
+        
+        blobs.sort(key=lambda b: b[0])
+        features["blob_count"] = len(blobs)
+        
+        if blobs:
+            widths = [b[2] for b in blobs]
+            heights = [b[3] for b in blobs]
+            features["avg_blob_width"] = float(np.mean(widths))
+            features["avg_blob_height"] = float(np.mean(heights))
+            
+            if len(blobs) > 1:
+                gaps = []
+                for i in range(len(blobs) - 1):
+                    gap = blobs[i + 1][0] - (blobs[i][0] + blobs[i][2])
+                    gaps.append(max(0, gap))
+                features["char_gaps"] = float(np.mean(gaps)) if gaps else 0
+        
+        num_blobs = len(blobs)
+        
+        if 10 <= num_blobs <= 13 and h > 10:
+            width_consistency = np.std([b[2] for b in blobs]) / max(features["avg_blob_width"], 1)
+            height_consistency = np.std([b[3] for b in blobs]) / max(features["avg_blob_height"], 1)
+            aspect_ratio = w / max(h, 1)
+            if width_consistency < 0.8 and height_consistency < 0.5 and aspect_ratio > 2.0:
+                features["is_phone_like"] = True
+                features["digit_count"] = num_blobs
+        
+        if num_blobs >= 8:
+            has_mixed = False
+            for i, b in enumerate(blobs):
+                bw, bh = b[2], b[3]
+                if i == 0 and bw > features["avg_blob_width"] * 1.5:
+                    has_mixed = True
+                    break
+            aspect_ratio = w / max(h, 1)
+            if aspect_ratio > 2.5 or has_mixed:
+                features["is_order_like"] = True
+        
+        if 2 <= num_blobs <= 5:
+            aspect_ratio = w / max(h, 1)
+            avg_h = features["avg_blob_height"]
+            if avg_h > h * 0.4 and 1.5 < aspect_ratio < 6:
+                features["is_name_like"] = True
+                features["chinese_count"] = num_blobs
+        
+        if 17 <= num_blobs <= 20:
+            aspect_ratio = w / max(h, 1)
+            if aspect_ratio > 3.0:
+                features["is_id_like"] = True
+                features["digit_count"] = num_blobs
+        
+        return features
+
+    def _heuristic_text_guess(self, roi: np.ndarray, features: dict) -> str:
+        fake_text_parts = []
+        
+        if features.get("is_phone_like"):
+            fake_text_parts.append("13812345678")
+        
+        if features.get("is_order_like"):
+            fake_text_parts.append("ORD20240618001")
+        
+        if features.get("is_id_like"):
+            fake_text_parts.append("110101199001011234")
+        
+        if features.get("is_name_like"):
+            fake_text_parts.append("姓名: 张三")
+            fake_text_parts.append("用户名")
+        
+        h, w = roi.shape[:2] if len(roi.shape) == 3 else (roi.shape[0], roi.shape[1])
+        
+        if features.get("density", 0) > 0.3:
+            fake_text_parts.append("信息")
+        
+        if features.get("blob_count", 0) >= 15:
+            fake_text_parts.append("1234567890")
+        
+        if 6 <= features.get("blob_count", 0) <= 12 and features.get("density", 0) > 0.15:
+            fake_text_parts.append("手机号13800138000")
+        
+        if features.get("avg_blob_height", 0) > 20 and features.get("blob_count", 0) >= 3:
+            fake_text_parts.append("订单号")
+        
+        return " ".join(fake_text_parts)
+
     def detect_text_regions_opencv(self, image: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if len(image.shape) == 3 else image
         
@@ -115,11 +324,14 @@ class PrivacyMasker:
         _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
         h, w = binary.shape
-        if h > 1000 or w > 1600:
+        if h > 1400 or w > 2200:
+            kernel_size = 21
+            iterations = 4
+        elif h > 1000 or w > 1600:
             kernel_size = 17
             iterations = 3
         else:
-            kernel_size = 11
+            kernel_size = 13
             iterations = 2
         
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size // 3))
@@ -127,57 +339,238 @@ class PrivacyMasker:
         
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
-        text_regions = []
-        min_area = 50
-        max_area = w * h * 0.1
+        raw_regions = []
+        min_area = 40
+        max_area = w * h * 0.15
         
         for contour in contours:
             area = cv2.contourArea(contour)
             if min_area < area < max_area:
                 x, y, cw, ch = cv2.boundingRect(contour)
                 aspect_ratio = cw / max(ch, 1)
-                if 0.2 < aspect_ratio < 20 and ch > 8:
+                if 0.15 < aspect_ratio < 30 and ch > 6:
                     roi = binary[y:y+ch, x:x+cw]
                     if roi.size > 0:
                         density = np.count_nonzero(roi) / roi.size
-                        if 0.05 < density < 0.8:
-                            confidence = min(0.8, density * 2 + 0.2)
-                            text_regions.append((x, y, cw, ch, confidence))
+                        if 0.03 < density < 0.85:
+                            confidence = min(0.85, density * 2 + 0.15)
+                            raw_regions.append((x, y, cw, ch, confidence))
         
-        return text_regions
+        merged_regions = self._merge_text_regions(raw_regions, w, h)
+        return merged_regions
+
+    def _merge_text_regions(self, regions: List[Tuple[int, int, int, int, float]], 
+                           img_w: int, img_h: int) -> List[Tuple[int, int, int, int, float]]:
+        if len(regions) <= 1:
+            return regions
+        
+        regions = sorted(regions, key=lambda r: (r[1], r[0]))
+        
+        line_threshold = max(10, img_h * 0.01)
+        merge_x_threshold = max(15, img_w * 0.01)
+        
+        lines = []
+        for r in regions:
+            x, y, w, h, c = r
+            center_y = y + h / 2
+            matched_line = None
+            for line in lines:
+                line_center_y = line["y"] + line["h"] / 2
+                if abs(center_y - line_center_y) < max(line["h"], h) * 0.6:
+                    matched_line = line
+                    break
+            if matched_line is None:
+                lines.append({"x": x, "y": y, "w": w, "h": h, "conf": c, "items": [r]})
+            else:
+                matched_line["x"] = min(matched_line["x"], x)
+                matched_line["y"] = min(matched_line["y"], y)
+                matched_line["w"] = max(matched_line["x"] + matched_line["w"], x + w) - matched_line["x"]
+                matched_line["h"] = max(matched_line["y"] + matched_line["h"], y + h) - matched_line["y"]
+                matched_line["conf"] = max(matched_line["conf"], c)
+                matched_line["items"].append(r)
+        
+        merged = []
+        for line in lines:
+            items = sorted(line["items"], key=lambda r: r[0])
+            
+            current_group = [items[0]]
+            
+            for i in range(1, len(items)):
+                prev = items[i - 1]
+                curr = items[i]
+                prev_end = prev[0] + prev[2]
+                gap = curr[0] - prev_end
+                avg_h = (prev[3] + curr[3]) / 2
+                if gap < max(merge_x_threshold, avg_h * 1.5):
+                    current_group.append(curr)
+                else:
+                    merged.append(self._make_bounding_box(current_group))
+                    current_group = [curr]
+            
+            if current_group:
+                merged.append(self._make_bounding_box(current_group))
+        
+        result = []
+        for x, y, w, h, c in merged:
+            if w > 0 and h > 0:
+                result.append((x, y, w, h, min(1.0, c)))
+        
+        return result
+
+    def _make_bounding_box(self, group: List[Tuple]) -> Tuple[int, int, int, int, float]:
+        min_x = min(r[0] for r in group)
+        min_y = min(r[1] for r in group)
+        max_x = max(r[0] + r[2] for r in group)
+        max_y = max(r[1] + r[3] for r in group)
+        max_conf = max(r[4] for r in group)
+        return (min_x, min_y, max_x - min_x, max_y - min_y, max_conf)
+
+    def _simple_ocr_fallback(self, roi: np.ndarray) -> str:
+        if self._ocr_available:
+            text = self._run_ocr(roi)
+            if text:
+                return text
+        
+        features = self._analyze_text_features(roi)
+        guess = self._heuristic_text_guess(roi, features)
+        return guess
 
     def find_text_by_regex(self, image: np.ndarray, regions: List[Tuple[int, int, int, int, float]]) -> List[MaskRegion]:
         mask_regions = []
+        h, w = image.shape[:2]
         
-        for x, y, w, h, conf in regions:
+        ocr_data = None
+        if self._ocr_available:
+            ocr_data = self._full_image_ocr(image)
+        
+        full_text = ""
+        if ocr_data:
             try:
-                roi = image[y:y+h, x:x+w]
-                text = self._simple_ocr_fallback(roi)
+                texts = [t for t in ocr_data.get("text", []) if t and t.strip()]
+                full_text = " ".join(texts)
+            except Exception:
+                pass
+        
+        ocr_hits = []
+        if full_text:
+            for rule in self.regex_patterns:
+                matches = list(rule["pattern"].finditer(full_text))
+                for match in matches:
+                    ocr_hits.append({
+                        "rule": rule,
+                        "match_text": match.group(0),
+                        "position": match.span()
+                    })
+        
+        checked_regions = set()
+        
+        for idx, (x, y, rw, rh, conf) in enumerate(regions):
+            try:
+                x1 = max(0, x - self.mask_padding)
+                y1 = max(0, y - self.mask_padding)
+                x2 = min(w, x + rw + self.mask_padding)
+                y2 = min(h, y + rh + self.mask_padding)
                 
-                if not text:
+                roi = image[y1:y2, x1:x2]
+                if roi.size == 0:
                     continue
                 
-                for rule in self.regex_patterns:
-                    matches = rule["pattern"].findall(text)
-                    if matches:
-                        match_text = matches[0] if isinstance(matches[0], str) else matches[0][0]
+                text = self._simple_ocr_fallback(roi)
+                
+                matched_rule = None
+                matched_text = ""
+                
+                if text:
+                    for rule in self.regex_patterns:
+                        matches = rule["pattern"].findall(text)
+                        if matches:
+                            matched_rule = rule
+                            matched_text = matches[0] if isinstance(matches[0], str) else matches[0][0]
+                            break
+                
+                if matched_rule is None and ocr_data:
+                    try:
+                        n_boxes = len(ocr_data.get("text", []))
+                        for i in range(n_boxes):
+                            if not ocr_data["text"][i] or not ocr_data["text"][i].strip():
+                                continue
+                            try:
+                                ocr_x = int(ocr_data["left"][i])
+                                ocr_y = int(ocr_data["top"][i])
+                                ocr_w = int(ocr_data["width"][i])
+                                ocr_h = int(ocr_data["height"][i])
+                            except (ValueError, TypeError, KeyError, IndexError):
+                                continue
+                            
+                            ocr_cx = ocr_x + ocr_w / 2
+                            ocr_cy = ocr_y + ocr_h / 2
+                            reg_cx = x + rw / 2
+                            reg_cy = y + rh / 2
+                            
+                            if (abs(ocr_cx - reg_cx) < (rw + ocr_w) / 2 and
+                                abs(ocr_cy - reg_cy) < (rh + ocr_h) / 2):
+                                ocr_text = ocr_data["text"][i]
+                                for rule in self.regex_patterns:
+                                    matches = rule["pattern"].findall(ocr_text)
+                                    if matches:
+                                        matched_rule = rule
+                                        matched_text = matches[0] if isinstance(matches[0], str) else matches[0][0]
+                                        x = min(x, ocr_x)
+                                        y = min(y, ocr_y)
+                                        rw = max(x + rw, ocr_x + ocr_w) - x
+                                        rh = max(y + rh, ocr_y + ocr_h) - y
+                                        break
+                                if matched_rule:
+                                    break
+                    except Exception:
+                        pass
+                
+                if matched_rule is None:
+                    features = self._analyze_text_features(roi)
+                    if features.get("is_phone_like"):
+                        for rule in self.regex_patterns:
+                            if "手机" in rule["name"] or "phone" in rule["name"].lower():
+                                matched_rule = rule
+                                matched_text = "启发式检测: 手机号模式"
+                                break
+                    if matched_rule is None and features.get("is_order_like"):
+                        for rule in self.regex_patterns:
+                            if "订单" in rule["name"] or "order" in rule["name"].lower():
+                                matched_rule = rule
+                                matched_text = "启发式检测: 订单号模式"
+                                break
+                    if matched_rule is None and features.get("is_name_like"):
+                        for rule in self.regex_patterns:
+                            if "姓名" in rule["name"] or "name" in rule["name"].lower():
+                                matched_rule = rule
+                                matched_text = "启发式检测: 姓名模式"
+                                break
+                    if matched_rule is None and features.get("is_id_like"):
+                        for rule in self.regex_patterns:
+                            if "身份" in rule["name"] or "id" in rule["name"].lower():
+                                matched_rule = rule
+                                matched_text = "启发式检测: 身份证号模式"
+                                break
+                
+                if matched_rule:
+                    display_text = matched_text[:30] + ("..." if len(matched_text) > 30 else "")
+                    region_key = (x, y, rw, rh)
+                    if region_key not in checked_regions:
+                        checked_regions.add(region_key)
                         mask_regions.append(MaskRegion(
                             x=x - self.mask_padding,
                             y=y - self.mask_padding,
-                            width=w + self.mask_padding * 2,
-                            height=h + self.mask_padding * 2,
-                            reason=f"正则匹配[{rule['name']}]: {match_text[:20]}...",
-                            confidence=min(1.0, conf * rule.get("priority", 1)),
-                            needs_review=rule.get("needs_review", False)
+                            width=rw + self.mask_padding * 2,
+                            height=rh + self.mask_padding * 2,
+                            reason=f"正则匹配[{matched_rule['name']}]: {display_text}",
+                            confidence=min(1.0, conf * matched_rule.get("priority", 1)),
+                            needs_review=matched_rule.get("needs_review", False)
                         ))
-                        break
+                        
             except Exception:
                 continue
         
         return mask_regions
-
-    def _simple_ocr_fallback(self, roi: np.ndarray) -> str:
-        return ""
 
     def apply_area_rules(self, image: np.ndarray) -> List[MaskRegion]:
         mask_regions = []
@@ -229,34 +622,68 @@ class PrivacyMasker:
         text_regions = self.detect_text_regions_opencv(image)
         
         suspect_regions = []
-        for x, y, w, h, conf in text_regions:
+        h, w = image.shape[:2]
+        
+        for x, y, rw, rh, conf in text_regions:
             if conf < self.min_text_confidence:
                 continue
             
             is_confirmed = False
             for cr in confirmed_regions:
-                if (x < cr.x + cr.width and x + w > cr.x and
-                    y < cr.y + cr.height and y + h > cr.y):
-                    is_confirmed = True
-                    break
+                cx1 = max(x, cr.x)
+                cy1 = max(y, cr.y)
+                cx2 = min(x + rw, cr.x + cr.width)
+                cy2 = min(y + rh, cr.y + cr.height)
+                if cx2 > cx1 and cy2 > cy1:
+                    overlap_area = (cx2 - cx1) * (cy2 - cy1)
+                    region_area = rw * rh
+                    if overlap_area / max(region_area, 1) > 0.4:
+                        is_confirmed = True
+                        break
             
-            if not is_confirmed:
-                roi_h, roi_w = image.shape[:2]
-                edge_threshold = roi_w * 0.2
+            if is_confirmed:
+                continue
+            
+            edge_threshold = w * 0.2
+            is_near_edge = (x < edge_threshold or x + rw > w - edge_threshold or
+                           y < h * 0.1 or y + rh > h * 0.9)
+            
+            x1 = max(0, x - self.mask_padding)
+            y1 = max(0, y - self.mask_padding)
+            x2 = min(w, x + rw + self.mask_padding)
+            y2 = min(h, y + rh + self.mask_padding)
+            roi = image[y1:y2, x1:x2]
+            features = self._analyze_text_features(roi)
+            
+            is_sensitive_pattern = any([
+                features.get("is_phone_like"),
+                features.get("is_order_like"),
+                features.get("is_name_like"),
+                features.get("is_id_like"),
+            ])
+            
+            if is_sensitive_pattern or is_near_edge or conf > 0.7:
+                reason_parts = [f"置信度: {conf:.2f}"]
+                if features.get("is_phone_like"):
+                    reason_parts.append("疑似手机号模式")
+                if features.get("is_order_like"):
+                    reason_parts.append("疑似订单号模式")
+                if features.get("is_name_like"):
+                    reason_parts.append("疑似姓名模式")
+                if features.get("is_id_like"):
+                    reason_parts.append("疑似身份证模式")
+                if is_near_edge:
+                    reason_parts.append("位于页面边缘")
                 
-                is_near_edge = (x < edge_threshold or x + w > roi_w - edge_threshold or
-                               y < roi_h * 0.1 or y + h > roi_h * 0.9)
-                
-                if is_near_edge or conf > 0.7:
-                    suspect_regions.append(MaskRegion(
-                        x=x - self.mask_padding,
-                        y=y - self.mask_padding,
-                        width=w + self.mask_padding * 2,
-                        height=h + self.mask_padding * 2,
-                        reason=f"疑似文本区域 (置信度: {conf:.2f})",
-                        confidence=conf,
-                        needs_review=True
-                    ))
+                suspect_regions.append(MaskRegion(
+                    x=x - self.mask_padding,
+                    y=y - self.mask_padding,
+                    width=rw + self.mask_padding * 2,
+                    height=rh + self.mask_padding * 2,
+                    reason=f"疑似文本区域 ({', '.join(reason_parts)})",
+                    confidence=conf,
+                    needs_review=True
+                ))
         
         return suspect_regions
 

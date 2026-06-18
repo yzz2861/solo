@@ -1,21 +1,21 @@
 {
-  "generate_time": "2026-06-18T09:16:11.423771",
+  "generate_time": "2026-06-18T17:03:48.423377",
   "summary": {
     "total": 5,
     "success": 5,
     "failed": 0,
     "confirmed": 0,
     "needs_review": 5,
-    "total_masks": 33,
-    "confirmed_masks": 5,
-    "suspect_masks": 28,
+    "total_masks": 32,
+    "confirmed_masks": 8,
+    "suspect_masks": 24,
     "dark_theme_count": 2
   },
   "results": [
     {
       "filename": "后台_异常分辨率.png",
       "original_path": "../screenshots/后台_异常分辨率.png",
-      "backup_path": "backup/后台_异常分辨率_backup_20260618_091608.png",
+      "backup_path": "backup/后台_异常分辨率_backup_20260618_170348.png",
       "output_path": "后台_异常分辨率.png",
       "overlay_path": "overlay_后台_异常分辨率.png",
       "status": "success",
@@ -75,26 +75,34 @@
           "needs_review": true
         }
       ],
-      "process_time": "0.59s"
+      "process_time": "0.05s"
     },
     {
       "filename": "后台_数据面板_深色.png",
       "original_path": "../screenshots/后台_数据面板_深色.png",
-      "backup_path": "backup/后台_数据面板_深色_backup_20260618_091609.png",
+      "backup_path": "backup/后台_数据面板_深色_backup_20260618_170348.png",
       "output_path": "后台_数据面板_深色.png",
       "overlay_path": "overlay_后台_数据面板_深色.png",
       "status": "success",
       "needs_review": true,
       "review_reasons": [
         "深色主题，需确认遮罩效果",
-        "4 个区域规则遮罩需确认",
-        "发现 7 个疑似文本区域"
+        "4 个区域规则遮罩需确认"
       ],
       "error_message": "",
       "image_size": "2560x1440",
       "is_dark_theme": true,
-      "mask_count": 12,
+      "mask_count": 6,
       "regions": [
+        {
+          "x": 517,
+          "y": 653,
+          "width": 1578,
+          "height": 583,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.85,
+          "needs_review": false
+        },
         {
           "x": 0,
           "y": 0,
@@ -139,77 +147,14 @@
           "reason": "区域规则: 内部操作按钮区",
           "confidence": 1.0,
           "needs_review": true
-        },
-        {
-          "x": 915,
-          "y": 976,
-          "width": 146,
-          "height": 254,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 575,
-          "y": 875,
-          "width": 146,
-          "height": 355,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 1255,
-          "y": 849,
-          "width": 146,
-          "height": 381,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 745,
-          "y": 798,
-          "width": 146,
-          "height": 432,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 1425,
-          "y": 773,
-          "width": 146,
-          "height": 457,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 1085,
-          "y": 747,
-          "width": 146,
-          "height": 483,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
-        },
-        {
-          "x": 1595,
-          "y": 722,
-          "width": 146,
-          "height": 508,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
-          "needs_review": true
         }
       ],
-      "process_time": "0.43s"
+      "process_time": "0.19s"
     },
     {
       "filename": "后台_用户信息_深色.png",
       "original_path": "../screenshots/后台_用户信息_深色.png",
-      "backup_path": "backup/后台_用户信息_深色_backup_20260618_091609.png",
+      "backup_path": "backup/后台_用户信息_深色_backup_20260618_170348.png",
       "output_path": "后台_用户信息_深色.png",
       "overlay_path": "overlay_后台_用户信息_深色.png",
       "status": "success",
@@ -217,13 +162,59 @@
       "review_reasons": [
         "深色主题，需确认遮罩效果",
         "4 个区域规则遮罩需确认",
+        "3 个正则匹配遮罩需确认",
         "发现 1 个疑似文本区域"
       ],
       "error_message": "",
       "image_size": "1920x1080",
       "is_dark_theme": true,
-      "mask_count": 6,
+      "mask_count": 11,
       "regions": [
+        {
+          "x": 1195,
+          "y": 563,
+          "width": 123,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.3355855855855856,
+          "needs_review": false
+        },
+        {
+          "x": 1195,
+          "y": 623,
+          "width": 167,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 19900101123",
+          "confidence": 0.3454838709677419,
+          "needs_review": false
+        },
+        {
+          "x": 565,
+          "y": 683,
+          "width": 113,
+          "height": 32,
+          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
+          "confidence": 0.2775742574257426,
+          "needs_review": true
+        },
+        {
+          "x": 1194,
+          "y": 683,
+          "width": 110,
+          "height": 33,
+          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
+          "confidence": 0.2871865889212828,
+          "needs_review": true
+        },
+        {
+          "x": 565,
+          "y": 743,
+          "width": 155,
+          "height": 32,
+          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
+          "confidence": 0.3036713286713287,
+          "needs_review": true
+        },
         {
           "x": 0,
           "y": 0,
@@ -272,19 +263,19 @@
         {
           "x": 440,
           "y": 290,
-          "width": 211,
+          "width": 313,
           "height": 175,
-          "reason": "疑似文本区域 (置信度: 0.80)",
-          "confidence": 0.8,
+          "reason": "疑似文本区域 (置信度: 0.85)",
+          "confidence": 0.85,
           "needs_review": true
         }
       ],
-      "process_time": "0.91s"
+      "process_time": "0.07s"
     },
     {
       "filename": "后台_订单列表_浅色.png",
       "original_path": "../screenshots/后台_订单列表_浅色.png",
-      "backup_path": "backup/后台_订单列表_浅色_backup_20260618_091610.png",
+      "backup_path": "backup/后台_订单列表_浅色_backup_20260618_170348.png",
       "output_path": "后台_订单列表_浅色.png",
       "overlay_path": "overlay_后台_订单列表_浅色.png",
       "status": "success",
@@ -343,12 +334,12 @@
           "needs_review": true
         }
       ],
-      "process_time": "0.78s"
+      "process_time": "0.02s"
     },
     {
       "filename": "后台_订单详情_浅色.png",
       "original_path": "../screenshots/后台_订单详情_浅色.png",
-      "backup_path": "backup/后台_订单详情_浅色_backup_20260618_091611.png",
+      "backup_path": "backup/后台_订单详情_浅色_backup_20260618_170348.png",
       "output_path": "后台_订单详情_浅色.png",
       "overlay_path": "overlay_后台_订单详情_浅色.png",
       "status": "success",
@@ -407,7 +398,7 @@
           "needs_review": true
         }
       ],
-      "process_time": "0.23s"
+      "process_time": "0.03s"
     }
   ]
 }
