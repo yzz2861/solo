@@ -53,31 +53,24 @@ export class TunnelDatabase extends Dexie {
       return;
     }
 
-    await this.transaction(
-      'rw',
-      this.tunnels,
-      this.nodes,
-      this.edges,
-      this.facilities,
-      this.scenarios,
-      this.records,
-      async () => {
-        await this.nodes.bulkAdd(mockTunnelNodes);
-        await this.edges.bulkAdd(mockTunnelEdges);
-        await this.facilities.bulkAdd(mockFacilities);
-        await this.scenarios.bulkAdd(mockScenarios);
-        await this.records.bulkAdd(mockDrillRecords);
-        await this.tunnels.add({
-          id: mockTunnelData.tunnelId,
-          name: mockTunnelData.name,
-          nodes: mockTunnelNodes.map((n) => n.id),
-          edges: mockTunnelEdges.map((e) => e.id),
-          facilities: mockFacilities.map((f) => f.id),
-          createdAt: mockTunnelData.createdAt,
-          updatedAt: mockTunnelData.updatedAt,
-        });
-      }
-    );
+    try {
+      await this.nodes.bulkAdd(mockTunnelNodes);
+      await this.edges.bulkAdd(mockTunnelEdges);
+      await this.facilities.bulkAdd(mockFacilities);
+      await this.scenarios.bulkAdd(mockScenarios);
+      await this.records.bulkAdd(mockDrillRecords);
+      await this.tunnels.add({
+        id: mockTunnelData.tunnelId,
+        name: mockTunnelData.name,
+        nodes: mockTunnelNodes.map((n) => n.id),
+        edges: mockTunnelEdges.map((e) => e.id),
+        facilities: mockFacilities.map((f) => f.id),
+        createdAt: mockTunnelData.createdAt,
+        updatedAt: mockTunnelData.updatedAt,
+      });
+    } catch (error) {
+      console.error('Failed to import mock data:', error);
+    }
   }
 
   async getAllTunnels(): Promise<Tunnel[]> {
@@ -256,23 +249,16 @@ export class TunnelDatabase extends Dexie {
   }
 
   async clearAll(): Promise<void> {
-    await this.transaction(
-      'rw',
-      this.tunnels,
-      this.nodes,
-      this.edges,
-      this.facilities,
-      this.scenarios,
-      this.records,
-      async () => {
-        await this.tunnels.clear();
-        await this.nodes.clear();
-        await this.edges.clear();
-        await this.facilities.clear();
-        await this.scenarios.clear();
-        await this.records.clear();
-      }
-    );
+    try {
+      await this.tunnels.clear();
+      await this.nodes.clear();
+      await this.edges.clear();
+      await this.facilities.clear();
+      await this.scenarios.clear();
+      await this.records.clear();
+    } catch (error) {
+      console.error('Failed to clear database:', error);
+    }
   }
 }
 

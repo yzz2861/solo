@@ -5,7 +5,7 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { HudPanel } from '@/components/ui/HudPanel';
 import { IndustrialButton } from '@/components/ui/IndustrialButton';
 import { WarningBadge } from '@/components/ui/WarningBadge';
-import { Empty } from '@/components/Empty';
+import Empty from '@/components/Empty';
 import { db } from '@/data/db';
 import type { Scenario, AccidentType, Constraint, ConstraintType, TunnelNode } from '@/types';
 import { cn } from '@/lib/utils';
