@@ -1,0 +1,85 @@
+evidence_package:
+  version: "1.0.0"
+  id_prefix: "EVI-"
+  id_date_format: "%Y%m%d"
+
+evidence_types:
+  contract_pdf:
+    description: "电子签合同PDF"
+    extensions: [".pdf"]
+    keywords: ["合同", "contract", "签署版", "signed", "签约"]
+    required: true
+
+  sign_log:
+    description: "签署日志"
+    extensions: [".csv", ".xlsx", ".xls", ".txt", ".json", ".log"]
+    keywords: ["日志", "log", "签署记录", "sign_log", "audit"]
+    required: true
+
+  sms_verify:
+    description: "短信验证记录"
+    extensions: [".csv", ".xlsx", ".xls", ".txt", ".json", ".png", ".jpg", ".jpeg", ".pdf"]
+    keywords: ["短信", "sms", "验证码", "verify", "auth"]
+    required: true
+
+  cert_chain:
+    description: "证书链"
+    extensions: [".cer", ".crt", ".pem", ".pfx", ".p12", ".json", ".txt", ".pdf"]
+    keywords: ["证书", "cert", "certificate", "公钥", "数字证书"]
+    required: true
+
+  page_screenshot:
+    description: "页面截图"
+    extensions: [".png", ".jpg", ".jpeg", ".pdf", ".webp"]
+    keywords: ["截图", "screenshot", "snap", "页面", "签署页", "流程"]
+    required: true
+
+  attachment:
+    description: "合同附件"
+    extensions: [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".jpg", ".png", ".jpeg"]
+    keywords: ["附件", "attachment", "appendix", "补充"]
+    required: false
+
+file_naming:
+  contract_id_patterns:
+    - "HT[0-9]{8,}"
+    - "CONTRACT[-_]?[0-9]{6,}"
+    - "[0-9]{4}[-_][0-9]{2}[-_][0-9]{2}[-_][0-9]+"
+
+  signer_name_patterns:
+    - "签署人[:：]?\\s*([\\u4e00-\\u9fa5]{2,10})"
+    - "signer[:：]?\\s*([a-zA-Z\\u4e00-\\u9fa5]+)"
+    - "姓名[:：]?\\s*([\\u4e00-\\u9fa5]{2,10})"
+
+  sign_time_patterns:
+    - "([0-9]{4}[-_/][0-9]{2}[-_/][0-9]{2}[ T][0-9]{2}[:：][0-9]{2}([:：][0-9]{2})?)"
+    - "签署时间[:：]?\\s*([0-9]{4}[-_/][0-9]{2}[-_/][0-9]{2}[ T][0-9]{2}[:：][0-9]{2}([:：][0-9]{2})?)"
+
+timezone:
+  expected_timezone: "Asia/Shanghai"
+  allowed_timezones:
+    - "Asia/Shanghai"
+    - "UTC"
+    - "GMT+8"
+
+validation:
+  certificate_validity_margin_days: 7
+  max_resign_count: 3
+  required_screenshot_keywords:
+    - "签署完成"
+    - "签署成功"
+    - "sign complete"
+    - "签名"
+    - "时间戳"
+
+output:
+  directory_structure:
+    - "01_合同原件"
+    - "02_签署日志"
+    - "03_短信验证"
+    - "04_证书链"
+    - "05_页面截图"
+    - "06_合同附件"
+  manifest_filename: "证据交接清单.xlsx"
+  report_filename: "证据检查报告.md"
+  index_filename: "证据包索引.json"
