@@ -149,6 +149,12 @@ export interface BatchCheckResult {
   }>;
 }
 
+export interface SampleCreateResponse {
+  sample: Sample;
+  batch_warning: boolean;
+  batch_duplicate_info: BatchCheckResult | null;
+}
+
 export interface ComplianceSummary {
   outbound_count: number;
   returned_count: number;

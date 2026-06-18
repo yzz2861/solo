@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Modal, Form, Input, Select, InputNumber, DatePicker, message, Alert } from 'antd';
+import { Modal, Form, Input, Select, InputNumber, DatePicker, message, Alert, Tag, Space } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import type { Sample, SampleCreate, SampleUpdate } from '../types';
+import type { Sample, SampleCreate, SampleUpdate, BatchCheckResult } from '../types';
 import { sampleApi } from '../services/api';
-import { purposeOptions } from '../utils';
+import { purposeOptions, statusMap } from '../utils';
 
 const { TextArea } = Input;
 
@@ -76,8 +76,21 @@ function SampleFormModal({ visible, sample, onCancel, onOk }: Props) {
         await sampleApi.update(sample.id, data as SampleUpdate);
         message.success('更新成功');
       } else {
-        await sampleApi.create(data as SampleCreate);
-        message.success('创建成功');
+        const result = await sampleApi.create(data as SampleCreate);
+        if (result.batch_warning && result.batch_duplicate_info) {
+          message.warning({
+            content: (
+              <span>
+                创建成功！该批次号 <strong>{result.batch_duplicate_info.batch_number}</strong> 已有
+                <strong> {result.batch_duplicate_info.existing_count} </strong>
+                个样品在申请/在外，请留意是否需要合并处理。
+              </span>
+            ),
+            duration: 6,
+          });
+        } else {
+          message.success('创建成功');
+        }
       }
 
       onOk();

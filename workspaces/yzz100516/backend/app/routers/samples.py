@@ -22,6 +22,8 @@ from ..schemas.sample import (
     OutboundRequest,
     OverdueSample,
     SampleAttachment,
+    SampleCreateResponse,
+    BatchDuplicateCheck,
 )
 from ..services import (
     get_samples,
@@ -132,13 +134,33 @@ def get_sample_detail(sample_id: int, db: Session = Depends(get_db)):
     return sample
 
 
-@router.post("", response_model=Sample)
+@router.post("", response_model=SampleCreateResponse)
 def create_new_sample(sample_in: SampleCreate, db: Session = Depends(get_db)):
     existing = check_batch_duplicates(db, sample_in.batch_number)
     sample = create_sample(db, sample_in)
+
+    batch_duplicate_info = None
     if existing:
-        sample._batch_warning = True
-    return sample
+        batch_duplicate_info = BatchDuplicateCheck(
+            batch_number=sample_in.batch_number,
+            existing_count=len(existing),
+            existing_samples=[
+                {
+                    "id": s.id,
+                    "sample_no": s.sample_no,
+                    "sample_name": s.sample_name,
+                    "status": s.status,
+                    "applicant": s.applicant,
+                }
+                for s in existing
+            ],
+        )
+
+    return SampleCreateResponse(
+        sample=sample,
+        batch_warning=len(existing) > 0,
+        batch_duplicate_info=batch_duplicate_info,
+    )
 
 
 @router.put("/{sample_id}", response_model=Sample)

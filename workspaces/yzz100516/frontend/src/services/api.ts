@@ -11,6 +11,7 @@ import type {
   OverdueSample,
   Statistics,
   BatchCheckResult,
+  SampleCreateResponse,
   ComplianceSummary,
 } from '../types';
 
@@ -38,7 +39,7 @@ export const sampleApi = {
   },
 
   create: (data: SampleCreate) => {
-    return api.post<Sample>('/samples', data).then(res => res.data);
+    return api.post<SampleCreateResponse>('/samples', data).then(res => res.data);
   },
 
   update: (id: number, data: SampleUpdate) => {
