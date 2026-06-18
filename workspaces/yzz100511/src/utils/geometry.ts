@@ -1,4 +1,4 @@
-import type { ExhibitionObject, Dimensions, FireExitZone, EntranceZone } from '../types';
+import type { Dimensions } from '../types';
 
 export const getObjectBounds = (obj: { position: [number, number, number]; dimensions: Dimensions }) => {
   const [x, y, z] = obj.position;

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { RiskItem, ExhibitionObject, MallConfig } from '../types';
-import { v4 as uuidv4 } from 'uuid';
 import { detectAllRisks } from '../utils/riskEngine';
 
 interface RiskState {
