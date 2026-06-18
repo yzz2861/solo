@@ -17,26 +17,26 @@ export function generateNewSchedule(
   const replaceMap = new Map<string, NormalizedEntry>();
 
   for (const r of resolutions) {
-    if (r.finalEntries.length < 2) continue;
+    if (r.originalEntries.length < 2) continue;
 
-    const keyA = entryKey(r.finalEntries[0]);
-    const keyB = entryKey(r.finalEntries[1]);
+    const origKeyA = entryKey(r.originalEntries[0]);
+    const origKeyB = entryKey(r.originalEntries[1]);
 
     switch (r.action) {
       case 'keep_first':
-        removeKeys.add(keyB);
+        removeKeys.add(origKeyB);
         break;
       case 'keep_second':
-        removeKeys.add(keyA);
+        removeKeys.add(origKeyA);
         break;
       case 'keep_both_with_note':
-        replaceMap.set(keyA, r.finalEntries[0]);
-        replaceMap.set(keyB, r.finalEntries[1]);
+        replaceMap.set(origKeyA, r.finalEntries[0]);
+        replaceMap.set(origKeyB, r.finalEntries[1]);
         break;
       case 'reassign_room':
       case 'reassign_time':
-        replaceMap.set(keyA, r.finalEntries[0]);
-        replaceMap.set(keyB, r.finalEntries[1]);
+        replaceMap.set(origKeyA, r.finalEntries[0]);
+        replaceMap.set(origKeyB, r.finalEntries[1]);
         break;
       case 'manual':
         break;

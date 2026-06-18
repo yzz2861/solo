@@ -115,6 +115,7 @@ export function resolveConflict(
     resolvedBy,
     resolvedAt: new Date().toISOString(),
     note,
+    originalEntries: entries.map(e => ({ ...e })),
     finalEntries,
   };
   if (action === 'reassign_room' && newRoom) result.newRoom = newRoom;

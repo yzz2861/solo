@@ -56,6 +56,7 @@ export interface Resolution {
   newRoom?: string;
   newPeriodStart?: number;
   newPeriodEnd?: number;
+  originalEntries: NormalizedEntry[];
   finalEntries: NormalizedEntry[];
 }
 
