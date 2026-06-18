@@ -80,11 +80,19 @@ class ArchiveResult:
 
 
 class PackageArchiver:
-    """证据包归档器"""
+    """证据包归档器
+
+    幂等性保证：
+    - 重复执行时，先读取已有索引文件，复用原证据包编号
+    - 已归档的原始文件不再重复归档
+    - 新增文件追加到对应证据包中，不影响原编号和时间线
+    """
 
     def __init__(self, config: Config):
         self.config = config
         self._sequence_counters: Dict[str, int] = {}
+        self._existing_packages: Dict[str, Dict] = {}
+        self._existing_original_paths: Dict[str, str] = {}  # original_path -> archived_path
 
     def generate_package_id(self, contract_id: str) -> str:
         """生成证据包编号"""
@@ -105,9 +113,15 @@ class PackageArchiver:
         output_directory: str,
         copy_files: bool = True,
     ) -> ArchiveResult:
-        """执行归档"""
+        """执行归档
+
+        幂等归档：若输出目录已有索引，则复用证据包编号和已归档文件。
+        """
         output_directory = os.path.abspath(output_directory)
         os.makedirs(output_directory, exist_ok=True)
+
+        index_path = os.path.join(output_directory, self.config.index_filename)
+        self._load_existing_index(index_path)
 
         result = ArchiveResult(output_directory=output_directory)
 
@@ -124,11 +138,41 @@ class PackageArchiver:
                 scan_result.unclassified_files, output_directory, copy_files, result
             )
 
-        index_path = os.path.join(output_directory, self.config.index_filename)
         self._write_index(result, index_path)
         result.index_path = index_path
 
         return result
+
+    def _load_existing_index(self, index_path: str):
+        """加载已有索引，用于幂等归档
+
+        读取之前生成的索引文件，记录：
+        - 每个 contract_id 对应的 package_id
+        - 每个原始文件路径对应的归档路径（避免重复归档）
+        """
+        if not os.path.exists(index_path):
+            return
+
+        try:
+            with open(index_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            packages = data.get("packages", [])
+            for pkg in packages:
+                contract_id = pkg.get("contract_id")
+                package_id = pkg.get("package_id")
+                if contract_id and package_id:
+                    self._existing_packages[contract_id] = pkg
+
+                signer_packages = pkg.get("signer_packages", {})
+                for sp in signer_packages.values():
+                    for file_info in sp.get("files", []):
+                        original_path = file_info.get("original_path")
+                        archived_path = file_info.get("archived_path")
+                        if original_path and archived_path:
+                            self._existing_original_paths[original_path] = archived_path
+        except (json.JSONDecodeError, OSError, IOError):
+            pass
 
     def _archive_contract(
         self,
@@ -136,16 +180,27 @@ class PackageArchiver:
         output_directory: str,
         copy_files: bool,
     ) -> EvidencePackage:
-        """归档单个合同"""
-        package_id = self.generate_package_id(contract.contract_id)
-        package_dir = os.path.join(output_directory, package_id)
+        """归档单个合同
+
+        若合同已有归档记录，则复用原证据包编号，仅追加新文件。
+        """
+        existing = self._existing_packages.get(contract.contract_id)
+        if existing and existing.get("package_id"):
+            package_id = existing["package_id"]
+            package_dir = os.path.join(output_directory, package_id)
+            created_at = datetime.fromisoformat(existing["created_at"]) if existing.get("created_at") else datetime.now()
+        else:
+            package_id = self.generate_package_id(contract.contract_id)
+            package_dir = os.path.join(output_directory, package_id)
+            created_at = datetime.now()
+
         os.makedirs(package_dir, exist_ok=True)
 
         package = EvidencePackage(
             package_id=package_id,
             contract_id=contract.contract_id,
             package_path=package_dir,
-            created_at=datetime.now(),
+            created_at=created_at,
         )
 
         for signer_name, signer in contract.signers.items():
@@ -192,10 +247,26 @@ class PackageArchiver:
         signer_name: str,
         evidence_type: str,
     ) -> Optional[Dict]:
-        """归档单个文件（不修改原件，使用复制或软链接）"""
+        """归档单个文件（不修改原件，使用复制或软链接）
+
+        幂等性：若原始文件路径已在索引中存在，则直接返回已有归档信息，
+        不重复创建文件，保证补证时时间线稳定。
+        """
         src_path = evi_file.original_path
         if not os.path.exists(src_path):
             return None
+
+        if src_path in self._existing_original_paths:
+            archived_path = self._existing_original_paths[src_path]
+            return {
+                "original_path": src_path,
+                "original_name": evi_file.file_name,
+                "archived_path": archived_path,
+                "archived_name": os.path.basename(archived_path),
+                "file_size": evi_file.file_size,
+                "sign_time": evi_file.sign_time.isoformat() if evi_file.sign_time else None,
+                "resign_index": evi_file.resign_index,
+            }
 
         new_filename = self._generate_archive_filename(
             evi_file, package_id, signer_name, evidence_type
@@ -217,6 +288,8 @@ class PackageArchiver:
                 os.symlink(os.path.abspath(src_path), dst_path)
         except (OSError, shutil.Error) as e:
             return None
+
+        self._existing_original_paths[src_path] = dst_path
 
         return {
             "original_path": evi_file.original_path,
@@ -276,7 +349,7 @@ class PackageArchiver:
         copy_files: bool,
         result: ArchiveResult,
     ):
-        """归档未分类文件"""
+        """归档未分类文件（幂等）"""
         unclassified_dir = os.path.join(output_directory, "_未分类")
         os.makedirs(unclassified_dir, exist_ok=True)
 
@@ -285,12 +358,22 @@ class PackageArchiver:
             if not os.path.exists(src_path):
                 continue
 
+            if src_path in self._existing_original_paths:
+                result.total_files_archived += 1
+                continue
+
             dst_path = os.path.join(unclassified_dir, evi_file.file_name)
+            if os.path.exists(dst_path):
+                self._existing_original_paths[src_path] = dst_path
+                result.total_files_archived += 1
+                continue
+
             try:
                 if copy_files:
                     shutil.copy2(src_path, dst_path)
                 else:
                     os.symlink(os.path.abspath(src_path), dst_path)
+                self._existing_original_paths[src_path] = dst_path
                 result.total_files_archived += 1
             except (OSError, shutil.Error):
                 continue

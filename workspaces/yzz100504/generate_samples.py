@@ -87,12 +87,34 @@ def generate_sample_data(output_dir: str):
             f.write(f"此文件用于测试边缘情况识别。\n")
         created_count += 1
 
+    content_only_tests = [
+        ("sms_verify_张三_2025-01-15.txt", "HT2025010001", "张三", "短信验证码: 123456"),
+        ("sms_verify_李四_2025-01-15.txt", "HT2025010001", "李四", "短信验证码: 654321"),
+        ("sms_verify_王五_2025-02-20.txt", "HT2025020003", "王五", "短信验证码: 888888"),
+        ("张三_用户证书_2025-01-15.pem", "HT2025010001", "张三", "-----BEGIN CERTIFICATE-----\nSubject: CN=张三, O=测试公司\n合同编号: HT2025010001\n-----END CERTIFICATE-----"),
+        ("李四_用户证书_2025-01-15.pem", "HT2025010001", "李四", "-----BEGIN CERTIFICATE-----\nSubject: CN=李四, O=测试公司\n合同编号: HT2025010001\n-----END CERTIFICATE-----"),
+        ("王五_用户证书_2025-02-20.pem", "HT2025020003", "王五", "-----BEGIN CERTIFICATE-----\nSubject: CN=王五, O=测试公司\n合同编号: HT2025020003\n-----END CERTIFICATE-----"),
+        ("张三_签署成功页面.jpg", "HT2025010001", "张三", "binary-jpeg-content"),
+        ("李四_签署成功页面.jpg", "HT2025010001", "李四", "binary-jpeg-content"),
+        ("王五_签署成功页面.jpg", "HT2025020003", "王五", "binary-jpeg-content"),
+    ]
+    for filename, contract_id, signer, body in content_only_tests:
+        filepath = os.path.join(output_dir, filename)
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(f"{body}\n")
+            f.write(f"合同编号: {contract_id}\n")
+            f.write(f"签署人: {signer}\n")
+            f.write(f"签署时间: 2025-01-15 10:30:00\n")
+        created_count += 1
+
     print(f"已在 {output_dir} 生成 {created_count} 个示例文件。")
     print()
     print("其中包含:")
     print("  ✓ 2 份合同（HT2025010001、HT2025020003）")
     print("  ✓ 多位签署人（张三、李四、王五）")
     print("  ✓ 完整证据类型（合同PDF、日志、短信、证书、截图、附件）")
+    print("  ✓ 文件名含合同号的文件（用于测试文件名识别）")
+    print("  ✓ 文件名无合同号但内容含合同号的文件（用于测试内容识别）")
     print("  ⚠ 故意缺失中间证书的合同（用于测试证书链检查）")
     print("  ⚠ 截图文件名缺少关键字（用于测试截图检查）")
     print("  ⚠ 存在重签记录（用于测试时间线和重签检查）")

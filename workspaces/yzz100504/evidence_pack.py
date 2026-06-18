@@ -123,7 +123,12 @@ def main():
 
     print("[1/4] 扫描目录并识别证据文件...")
     scanner = DirectoryScanner(cfg)
-    scan_result = scanner.scan(scan_dir)
+
+    exclude_dirs = set()
+    if not args.dry_run:
+        exclude_dirs.add(output_dir)
+
+    scan_result = scanner.scan(scan_dir, exclude_dirs=exclude_dirs)
 
     print(f"      共扫描 {scan_result.total_files} 个文件")
     print(f"      识别到 {len(scan_result.contracts)} 份合同")

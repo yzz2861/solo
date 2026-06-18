@@ -302,3 +302,134 @@ class DirectoryScanner:
                     sorted_files = sorted(files, key=lambda f: f.sign_time or f.modified_time)
                     for idx, f in enumerate(sorted_files):
                         f.resign_index = idx
+
+    def _enrich_from_content(self, evi_file: EvidenceFile):
+        """从文件内容中补充识别缺失的元数据（合同号、签署人、签署时间）
+
+        仅在文件名/路径识别失败时调用，避免不必要的文件读取。
+        """
+        content = self._read_text_content(evi_file.original_path, evi_file.extension)
+        if not content:
+            return
+
+        if not evi_file.contract_id:
+            for pattern in self.config.contract_id_patterns:
+                match = pattern.search(content)
+                if match:
+                    evi_file.contract_id = match.group(0)
+                    break
+
+        if not evi_file.signer_name:
+            for pattern in self.config.signer_name_patterns:
+                match = pattern.search(content)
+                if match and match.groups():
+                    evi_file.signer_name = match.group(1).strip()
+                    break
+
+            if not evi_file.signer_name:
+                label_patterns = [
+                    r"签署人[：:]\s*([\u4e00-\u9fa5]{2,10})",
+                    r"甲方[：:]\s*([\u4e00-\u9fa5]{2,10})",
+                    r"乙方[：:]\s*([\u4e00-\u9fa5]{2,10})",
+                    r"签约方[：:]\s*([\u4e00-\u9fa5]{2,10})",
+                    r"CN\s*[=:]\s*([a-zA-Z\u4e00-\u9fa5 ]{2,40})",
+                    r"Subject.*?CN\s*[=:]\s*([a-zA-Z\u4e00-\u9fa5 ._-]{2,80})",
+                ]
+                for pat in label_patterns:
+                    match = re.search(pat, content, re.IGNORECASE)
+                    if match and match.groups():
+                        name = match.group(1).strip()
+                        if 2 <= len(name) <= 20:
+                            evi_file.signer_name = name
+                            break
+
+        if not evi_file.sign_time:
+            for pattern in self.config.sign_time_patterns:
+                match = pattern.search(content)
+                if match:
+                    time_str = match.group(1)
+                    parsed_time, tz = self._parse_datetime_with_tz(time_str)
+                    if parsed_time:
+                        evi_file.sign_time = parsed_time
+                        if tz:
+                            evi_file.timezone = tz
+                        break
+
+            if not evi_file.sign_time:
+                extra_time_patterns = [
+                    r"签署时间[：:]\s*([0-9]{4}[-_/年][0-9]{1,2}[-_/月][0-9]{1,2}[ 日]*[0-9]{1,2}[：:][0-9]{2}([：:][0-9]{2})?)",
+                    r"签约时间[：:]\s*([0-9]{4}[-_/年][0-9]{1,2}[-_/月][0-9]{1,2})",
+                    r"有效期[从起][始]*[：:]\s*([0-9]{4}[-_/][0-9]{1,2}[-_/][0-9]{1,2})",
+                ]
+                for pat in extra_time_patterns:
+                    match = re.search(pat, content)
+                    if match:
+                        time_str = match.group(1)
+                        time_clean = (
+                            time_str.replace("年", "-")
+                            .replace("月", "-")
+                            .replace("日", "")
+                            .replace("_", "-")
+                        )
+                        try:
+                            if " " in time_clean or ":" in time_clean:
+                                evi_file.sign_time = datetime.strptime(time_clean, "%Y-%m-%d %H:%M:%S")
+                            else:
+                                evi_file.sign_time = datetime.strptime(time_clean, "%Y-%m-%d")
+                            break
+                        except ValueError:
+                            continue
+
+    def _read_text_content(self, filepath: str, extension: str) -> Optional[str]:
+        """读取文件的文本内容用于识别
+
+        - 纯文本类：直接读取前 MAX_READ_BYTES
+        - PEM/证书类：读取并解析文本
+        - PDF/图片等二进制：返回 None（避免误读）
+        """
+        ext = extension.lower()
+
+        if ext in TEXT_READABLE_EXTENSIONS:
+            try:
+                with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+                    return f.read(MAX_READ_BYTES)
+            except (OSError, IOError, UnicodeDecodeError):
+                pass
+
+        if ext in (".csv", ".tsv"):
+            try:
+                with open(filepath, "r", encoding="utf-8-sig", errors="ignore") as f:
+                    return f.read(MAX_READ_BYTES)
+            except (OSError, IOError):
+                pass
+
+        if ext == ".pdf":
+            try:
+                return self._read_pdf_text(filepath)
+            except Exception:
+                return None
+
+        return None
+
+    def _read_pdf_text(self, filepath: str) -> Optional[str]:
+        """尝试读取 PDF 文本内容（轻量实现）
+
+        使用基础的字符串提取方式，不依赖外部库；
+        若环境中有 PyPDF2/pdfplumber 可后续扩展。
+        """
+        try:
+            with open(filepath, "rb") as f:
+                raw = f.read(MAX_READ_BYTES * 8)
+
+            text_parts = []
+            for match in re.finditer(rb"\(([^)]{2,80})\)", raw):
+                try:
+                    text_parts.append(match.group(1).decode("utf-8", errors="ignore"))
+                except UnicodeDecodeError:
+                    continue
+
+            if text_parts:
+                return "\n".join(text_parts)
+            return None
+        except (OSError, IOError):
+            return None
