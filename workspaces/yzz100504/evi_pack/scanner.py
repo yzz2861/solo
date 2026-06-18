@@ -5,9 +5,17 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 from .config import Config, EvidenceTypeConfig
+
+
+TEXT_READABLE_EXTENSIONS = {
+    ".txt", ".csv", ".json", ".log", ".xml", ".html", ".md",
+    ".pem", ".cer", ".crt", ".p12", ".pfx",
+}
+
+MAX_READ_BYTES = 16 * 1024  # 最多读取 16KB 用于识别
 
 
 @dataclass
@@ -88,16 +96,32 @@ class DirectoryScanner:
         self.config = config
         self._file_type_cache: Dict[Tuple[str, str], Optional[str]] = {}
 
-    def scan(self, directory: str) -> ScanResult:
-        """扫描指定目录"""
+    def scan(self, directory: str, exclude_dirs: Optional[Set[str]] = None) -> ScanResult:
+        """扫描指定目录
+
+        Args:
+            directory: 要扫描的目录路径
+            exclude_dirs: 需要排除的目录绝对路径集合（用于跳过输出目录等）
+        """
         directory = os.path.abspath(directory)
         if not os.path.isdir(directory):
             raise ValueError(f"目录不存在: {directory}")
 
+        if exclude_dirs is None:
+            exclude_dirs = set()
+        else:
+            exclude_dirs = {os.path.abspath(d) for d in exclude_dirs}
+
         result = ScanResult(scan_directory=directory)
 
         for root, dirs, files in os.walk(directory):
-            dirs[:] = [d for d in dirs if not d.startswith(".")]
+            root_abs = os.path.abspath(root)
+            dirs[:] = [
+                d for d in dirs
+                if not d.startswith(".")
+                and os.path.abspath(os.path.join(root_abs, d)) not in exclude_dirs
+            ]
+
             for filename in files:
                 if filename.startswith("."):
                     continue
@@ -110,7 +134,12 @@ class DirectoryScanner:
         return result
 
     def _process_file(self, filepath: str) -> EvidenceFile:
-        """处理单个文件，提取元数据"""
+        """处理单个文件，提取元数据
+
+        识别优先级：
+        1. 文件名 / 路径
+        2. 文件内容（文本类、证书类、PDF 文本等）
+        """
         path = Path(filepath)
         stat = path.stat()
 
@@ -129,6 +158,9 @@ class DirectoryScanner:
         evi_file.contract_id = self._extract_contract_id(filename_no_ext, filepath)
         evi_file.signer_name = self._extract_signer_name(filename_no_ext, filepath)
         evi_file.sign_time, evi_file.timezone = self._extract_sign_time(filename_no_ext, filepath)
+
+        if not evi_file.contract_id or not evi_file.signer_name:
+            self._enrich_from_content(evi_file)
 
         return evi_file
 
