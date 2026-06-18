@@ -101,10 +101,6 @@ const getObjectTypeName = (type: string): string => {
   return typeMap[type] || type;
 };
 
-const getSeverityColor = (severity: string): string => {
-  return severity === 'danger' ? '#dc2626' : severity === 'warning' ? '#f59e0b' : '#22c55e';
-};
-
 const escapeHtml = (text: string): string => {
   const div = document.createElement('div');
   div.textContent = text;

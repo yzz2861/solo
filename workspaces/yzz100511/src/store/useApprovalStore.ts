@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ApprovalRecord, PowerCheckpoint, ExhibitionObject, RiskItem, MallConfig } from '../types';
+import type { ApprovalRecord, PowerCheckpoint } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { sampleApprovalRecords, createPowerCheckpoints } from '../utils/mockData';
 import jsPDF from 'jspdf';
@@ -142,13 +142,14 @@ const renderChinesePdf = async (
   }
 };
 
-export const useApprovalStore = create<ApprovalState>((set, get) => {
+export const useApprovalStore = create<ApprovalState>((set) => {
   const initialRecords = loadRecords();
   const initialCheckpoints = loadCheckpoints();
   
   return {
     approvalRecords: initialRecords,
     powerCheckpoints: initialCheckpoints,
+    
     addApprovalRecord: (plan) =>
       set((state) => {
         const newRecord: ApprovalRecord = {
@@ -166,6 +167,7 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
         saveRecords(newRecords);
         return { approvalRecords: newRecords };
       }),
+    
     updateApprovalRecord: (id, updates) =>
       set((state) => {
         const newRecords = state.approvalRecords.map((r) =>
@@ -174,6 +176,7 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
         saveRecords(newRecords);
         return { approvalRecords: newRecords };
       }),
+    
     updatePowerCheckpoint: (id, updates) =>
       set((state) => {
         const newCheckpoints = state.powerCheckpoints.map((c) =>
@@ -182,6 +185,7 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
         saveCheckpoints(newCheckpoints);
         return { powerCheckpoints: newCheckpoints };
       }),
+    
     generateDismantleReport: async (info, checkpoints) => {
       const checkedCount = checkpoints.filter(c => c.status === 'checked').length;
       const totalCount = checkpoints.length;
@@ -213,6 +217,7 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
       });
 
       const progressColor = checkedCount === totalCount ? '#15803d' : '#d97706';
+      const allChecked = checkedCount === totalCount;
 
       const html = `
         <div style="text-align: center; margin-bottom: 20px;">
@@ -240,11 +245,11 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
           </tbody>
         </table>
         
-        <div style="margin: 20px 0; padding: 15px; background: ${checkedCount === totalCount ? '#f0fdf4' : '#fffbeb'}; border-radius: 8px;">
+        <div style="margin: 20px 0; padding: 15px; background: ${allChecked ? '#f0fdf4' : '#fffbeb'}; border-radius: 8px;">
           <p style="font-weight: bold; color: ${progressColor}; margin: 0 0 8px 0;">
             核对进度: ${checkedCount}/${totalCount} 个电源点已完成
           </p>
-          ${checkedCount === totalCount ? '<p style="color: #15803d; margin: 0;">✅ 所有电源点已核对完成，撤展工作完成</p>' : ''}
+          ${allChecked ? '<p style="color: #15803d; margin: 0;">✅ 所有电源点已核对完成，撤展工作完成</p>' : ''}
         </div>
         
         <div style="margin-top: 50px; text-align: right; font-size: 12px; color: #6b7280;">
@@ -255,4 +260,4 @@ export const useApprovalStore = create<ApprovalState>((set, get) => {
       await renderChinesePdf(html, `撤展电源核对单_${info.date}.pdf`);
     },
   };
-};
+});
