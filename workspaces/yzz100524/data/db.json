@@ -49,10 +49,10 @@
       "name": "测试客户",
       "phone": "13900001111",
       "id_card": "110101199001010001",
-      "tags": "",
+      "tags": "动力强劲、减震舒适,雅迪 T9",
       "id": 6,
       "created_at": "2026-06-18T08:19:36.762Z",
-      "updated_at": "2026-06-18T08:19:36.762Z"
+      "updated_at": "2026-06-18T08:22:09.497Z"
     }
   ],
   "vehicles": [
@@ -81,10 +81,10 @@
       "model": "九号 C90",
       "frame_number": "JH20240001",
       "battery_level": 45,
-      "status": "available",
+      "status": "in_use",
       "notes": "银灰",
       "created_at": "2026-06-18T08:07:26.231Z",
-      "updated_at": "2026-06-18T08:07:26.231Z"
+      "updated_at": "2026-06-18T08:20:29.931Z"
     },
     {
       "id": 4,
@@ -104,7 +104,7 @@
       "status": "available",
       "notes": "红色",
       "created_at": "2026-06-18T08:07:26.231Z",
-      "updated_at": "2026-06-18T08:07:26.231Z"
+      "updated_at": "2026-06-18T08:21:16.027Z"
     },
     {
       "id": 6,
@@ -157,14 +157,68 @@
       "updated_at": "2026-06-18T08:07:26.231Z"
     }
   ],
-  "test_rides": [],
-  "feedbacks": [],
+  "test_rides": [
+    {
+      "customer_id": 6,
+      "vehicle_id": 5,
+      "deposit_amount": 500,
+      "deposit_payment_method": "wechat",
+      "route": "环线 5 公里",
+      "planned_duration": 30,
+      "start_time": "2026-06-18T08:20:10.000Z",
+      "expected_return_time": "2026-06-18T08:50:10.000Z",
+      "insurance_confirmed": 1,
+      "deposit_receipt_no": "TR1781770810429",
+      "deposit_status": "refunded",
+      "return_condition": "scratched",
+      "return_notes": "右侧后视镜轻微刮蹭",
+      "deduction_amount": 100,
+      "deduction_reason": "后视镜刮蹭维修费",
+      "id": 1,
+      "created_at": "2026-06-18T08:20:10.432Z",
+      "updated_at": "2026-06-18T08:21:16.027Z",
+      "actual_return_time": "2026-06-18T08:21:16.027Z"
+    },
+    {
+      "customer_id": 5,
+      "vehicle_id": 3,
+      "deposit_amount": 500,
+      "deposit_payment_method": "cash",
+      "route": "门店周边 2 公里",
+      "planned_duration": 30,
+      "start_time": "2026-06-18T08:20:29.000Z",
+      "expected_return_time": "2026-06-18T08:50:29.000Z",
+      "insurance_confirmed": 1,
+      "deposit_receipt_no": "TR1781770829930",
+      "deposit_status": "collected",
+      "return_condition": "normal",
+      "return_notes": "",
+      "deduction_amount": 0,
+      "deduction_reason": "",
+      "id": 2,
+      "created_at": "2026-06-18T08:20:29.931Z",
+      "updated_at": "2026-06-18T08:20:29.931Z"
+    }
+  ],
+  "feedbacks": [
+    {
+      "customer_id": 6,
+      "test_ride_id": 1,
+      "preference": "动力强劲、减震舒适",
+      "satisfaction": "满意",
+      "intended_model": "雅迪 T9",
+      "notes": "客户觉得加速很线性，整体满意",
+      "id": 1,
+      "created_at": "2026-06-18T08:22:09.497Z",
+      "updated_at": "2026-06-18T08:22:09.497Z"
+    }
+  ],
   "vehicle_issues": [],
   "seq": {
     "customers": 6,
     "vehicles": 10,
-    "test_rides": 0,
-    "feedbacks": 0,
+    "test_rides": 2,
+    "feedbacks": 1,
     "vehicle_issues": 0
   }
 }
