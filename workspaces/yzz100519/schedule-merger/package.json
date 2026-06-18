@@ -1,0 +1,28 @@
+{
+  "name": "schedule-merger",
+  "version": "1.0.0",
+  "description": "课表冲突合并器 CLI - 多份课表冲突检测、合并与版本管理",
+  "main": "dist/cli.js",
+  "bin": {
+    "schedule-merger": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "dev": "ts-node src/cli.ts",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "csv-parse": "^5.5.2",
+    "inquirer": "^8.2.6",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
