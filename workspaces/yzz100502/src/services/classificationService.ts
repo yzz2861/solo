@@ -28,7 +28,7 @@ const classificationRules: ClassificationRule[] = [
   },
   {
     category: 'medication_issue',
-    keywords: ['饭前', '饭后', '怎么吃', '吃法', '剂量', '用量', '加量', '减量', '停药', '续药', '开药', '没药了', '吃完了', '快没了'],
+    keywords: ['饭前', '饭后', '怎么吃', '吃法', '剂量', '用量', '加量', '减量', '停药', '续药', '续配药物', '开药', '没药了', '吃完了', '快没了'],
     severityMap: {
       '停药': 'high',
       '加量': 'medium',
@@ -318,16 +318,18 @@ export const classificationService = {
 
   expandAbbreviations(content: string): string {
     const abbreviations: { pattern: RegExp; replacement: string }[] = [
+      { pattern: /(?<!药)药(?!物|片|丸|膏|盒|水|酒|房|店)/g, replacement: '药物' },
+      { pattern: /(?<!续)续(?!药)/g, replacement: '续药' },
+      { pattern: /续药/g, replacement: '续配药物' },
+      { pattern: /加量/g, replacement: '增加剂量' },
+      { pattern: /减量/g, replacement: '减少剂量' },
+      { pattern: /没药/g, replacement: '没有药物' },
       { pattern: /(?<!头|眩)晕/g, replacement: '头晕' },
       { pattern: /(?<!水|浮)肿/g, replacement: '水肿' },
       { pattern: /(?<!干)咳/g, replacement: '咳嗽' },
       { pattern: /(?<!气)喘/g, replacement: '喘息' },
       { pattern: /(?<!心)慌/g, replacement: '心慌' },
       { pattern: /(?<!胸)闷/g, replacement: '胸闷' },
-      { pattern: /加量/g, replacement: '增加剂量' },
-      { pattern: /减量/g, replacement: '减少剂量' },
-      { pattern: /没药/g, replacement: '没有药物' },
-      { pattern: /续药/g, replacement: '续配药物' },
     ];
 
     let expanded = content;

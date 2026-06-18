@@ -18,7 +18,9 @@ const CHINESE_NAME_REGEX = new RegExp(
   'g'
 );
 
-const TITLE_CHARS = /[医护师长局长主任总经干部老大小姐弟姐妹哥嫂婶伯叔爷奶婆属院科室队组]/;
+const TITLE_CHARS = /[医护师长局长主任总经干部老大小姐弟姐妹哥嫂婶伯叔爷奶婆属院科室队组生]/;
+const COMMON_VERBS = /[说是在想来去看问找打给叫让把被给]/;
+const NAME_PREFIXES = /[叫是找看问我你他她它]/;
 
 export const privacyService = {
   maskName(name: string): string {
@@ -52,13 +54,26 @@ export const privacyService = {
       const surname = match[0].charAt(0);
       const given = match[1];
       const prevChar = match.index > 0 ? text[match.index - 1] : '';
+      const prevPrevChar = match.index > 1 ? text[match.index - 2] : '';
       const nextIdx = match.index + full.length;
       const nextChar = nextIdx < text.length ? text[nextIdx] : '';
 
-      const prevIsChinese = /[\u4e00-\u9fa5]/.test(prevChar);
-      if (prevIsChinese) continue;
+      if (full.length === 2 && surname === given) continue;
 
       if (TITLE_CHARS.test(nextChar)) continue;
+
+      const prevIsChinese = /[\u4e00-\u9fa5]/.test(prevChar);
+      const nextIsChinese = /[\u4e00-\u9fa5]/.test(nextChar);
+
+      if (full.length === 3 && nextIsChinese) continue;
+
+      const isAllowedPrefix = NAME_PREFIXES.test(prevChar) ||
+        (prevPrevChar + prevChar === '患者') ||
+        (prevPrevChar + prevChar === '联系') ||
+        (prevPrevChar + prevChar === '找') ||
+        (prevPrevChar + prevChar === '叫');
+
+      if (prevIsChinese && !isAllowedPrefix) continue;
 
       matches.push({ full, surname, given, index: match.index });
     }
@@ -66,7 +81,12 @@ export const privacyService = {
     let result = text;
     for (let i = matches.length - 1; i >= 0; i--) {
       const m = matches[i];
-      const masked = m.surname + '*'.repeat(m.given.length);
+      let masked: string;
+      if (m.full.length === 2) {
+        masked = m.surname + '*';
+      } else {
+        masked = m.surname + '*' + m.given.charAt(m.given.length - 1);
+      }
       result = result.substring(0, m.index) + masked + result.substring(m.index + m.full.length);
     }
 
