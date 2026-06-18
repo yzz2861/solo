@@ -1,0 +1,170 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "name": "张三",
+      "phone": "13800001001",
+      "id_card": "110101199001011234",
+      "tags": "通勤代步",
+      "created_at": "2026-06-18T08:07:26.230Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 2,
+      "name": "李四",
+      "phone": "13800001002",
+      "id_card": "110101199202022345",
+      "tags": "",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 3,
+      "name": "王五",
+      "phone": "13800001003",
+      "id_card": "",
+      "tags": "运动骑行",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 4,
+      "name": "赵六",
+      "phone": "13800001004",
+      "id_card": "",
+      "tags": "",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 5,
+      "name": "孙七",
+      "phone": "13800001005",
+      "id_card": "110101199505055678",
+      "tags": "长续航",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "name": "测试客户",
+      "phone": "13900001111",
+      "id_card": "110101199001010001",
+      "tags": "",
+      "id": 6,
+      "created_at": "2026-06-18T08:19:36.762Z",
+      "updated_at": "2026-06-18T08:19:36.762Z"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": 1,
+      "model": "小牛 N1",
+      "frame_number": "NF20240001",
+      "battery_level": 85,
+      "status": "available",
+      "notes": "白色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 2,
+      "model": "小牛 M1",
+      "frame_number": "NF20240002",
+      "battery_level": 92,
+      "status": "available",
+      "notes": "黑色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 3,
+      "model": "九号 C90",
+      "frame_number": "JH20240001",
+      "battery_level": 45,
+      "status": "available",
+      "notes": "银灰",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 4,
+      "model": "九号 A40",
+      "frame_number": "JH20240002",
+      "battery_level": 15,
+      "status": "low_battery",
+      "notes": "蓝色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 5,
+      "model": "雅迪 G5",
+      "frame_number": "YD20240001",
+      "battery_level": 78,
+      "status": "available",
+      "notes": "红色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 6,
+      "model": "雅迪 T9",
+      "frame_number": "YD20240002",
+      "battery_level": 100,
+      "status": "available",
+      "notes": "白色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 7,
+      "model": "爱玛 A500",
+      "frame_number": "AM20240001",
+      "battery_level": 60,
+      "status": "available",
+      "notes": "绿色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 8,
+      "model": "爱玛 酷迅",
+      "frame_number": "AM20240002",
+      "battery_level": 10,
+      "status": "low_battery",
+      "notes": "橙色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 9,
+      "model": "台铃 超能",
+      "frame_number": "TL20240001",
+      "battery_level": 88,
+      "status": "available",
+      "notes": "蓝色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    },
+    {
+      "id": 10,
+      "model": "绿源 S30",
+      "frame_number": "LY20240001",
+      "battery_level": 72,
+      "status": "available",
+      "notes": "白色",
+      "created_at": "2026-06-18T08:07:26.231Z",
+      "updated_at": "2026-06-18T08:07:26.231Z"
+    }
+  ],
+  "test_rides": [],
+  "feedbacks": [],
+  "vehicle_issues": [],
+  "seq": {
+    "customers": 6,
+    "vehicles": 10,
+    "test_rides": 0,
+    "feedbacks": 0,
+    "vehicle_issues": 0
+  }
+}

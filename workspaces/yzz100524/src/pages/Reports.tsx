@@ -3,7 +3,7 @@ import {
   FileBarChart,
   Download,
   TrendingUp,
-  Bicycle,
+  Bike,
   CircleDollarSign,
   AlertTriangle,
   Calendar,
@@ -198,7 +198,7 @@ function ConversionReport({ data, loading, onExport }: { data: any; loading: boo
       </div>
 
       <div className="grid grid-cols-4 gap-5">
-        <StatCard icon={Bicycle} label="试骑总数" value={data.total_rides} color="bg-primary-500" suffix="次" />
+        <StatCard icon={Bike} label="试骑总数" value={data.total_rides} color="bg-primary-500" suffix="次" />
         <StatCard icon={FileBarChart} label="独立客户" value={data.unique_customers} color="bg-accent-500" suffix="人" />
         <StatCard icon={BarChart3} label="有效反馈" value={data.customers_with_feedback || 0} color="bg-success" suffix="人" />
         <StatCard icon={TrendingUp} label="反馈率" value={conversionRate.toFixed(1)} color="bg-warning" suffix="%" />

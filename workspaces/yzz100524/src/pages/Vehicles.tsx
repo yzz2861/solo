@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Bicycle,
+  Bike,
   Plus,
   Battery,
   Search,
@@ -94,7 +94,7 @@ export default function Vehicles() {
   };
 
   const statusBadge = (v: Vehicle) => {
-    const map: Record<string, { cls: string; text: string } = {
+    const map: Record<string, { cls: string; text: string }> = {
       available: { cls: 'badge-green', text: VEHICLE_STATUS_LABEL[v.status] },
       in_use: { cls: 'badge-blue', text: VEHICLE_STATUS_LABEL[v.status] },
       low_battery: { cls: 'badge-red', text: VEHICLE_STATUS_LABEL[v.status] },
@@ -242,7 +242,7 @@ export default function Vehicles() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
             <div className="p-5 border-b flex items-center justify-between">
               <h3 className="font-bold text-lg flex items-center gap-2">
-                <Bicycle size={20} /> {editId ? '编辑车辆' : '添加车辆'}
+                <Bike size={20} /> {editId ? '编辑车辆' : '添加车辆'}
               </h3>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600">
                 ✕

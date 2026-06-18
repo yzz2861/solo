@@ -10,7 +10,7 @@ import {
   ThumbsDown,
   Meh,
   Star,
-  Bicycle,
+  Bike,
 } from 'lucide-react';
 import { api } from '@/utils/api';
 import { formatDateTime, formatMoney } from '@/utils/format';
@@ -128,7 +128,7 @@ export default function ReturnCheck() {
           <div>
             <div className="text-sm text-white/70">车辆</div>
             <div className="font-bold text-lg mt-1 flex items-center gap-1">
-              <Bicycle size={18} /> {ride.vehicle_model}
+              <Bike size={18} /> {ride.vehicle_model}
             </div>
             <div className="text-xs text-white/70">{ride.vehicle_frame}</div>
           </div>

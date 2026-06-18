@@ -1,200 +1,270 @@
 import { Router, type Request, type Response } from 'express'
-import db from '../db.js'
+import { tables } from '../db.js'
 
 const router = Router()
 
+function getDateStr(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 router.get('/conversion', (req: Request, res: Response) => {
   const { start_date, end_date } = req.query
-  const startDate = start_date || new Date(new Date().setDate(1)).toISOString().split('T')[0]
-  const endDate = end_date || new Date().toISOString().split('T')[0]
+  const startDate = (start_date as string) || getDateStr(new Date(new Date().setDate(1)))
+  const endDate = (end_date as string) || getDateStr(new Date())
 
-  const totalRides = db.prepare(`
-    SELECT COUNT(*) as count FROM test_rides
-    WHERE DATE(start_time) BETWEEN ? AND ?
-  `).get(startDate, endDate) as { count: number }
+  const rides = tables.test_rides.all(
+    (t) => t.start_time >= `${startDate}T00:00:00` && t.start_time <= `${endDate}T23:59:59`
+  )
 
-  const uniqueCustomers = db.prepare(`
-    SELECT COUNT(DISTINCT customer_id) as count FROM test_rides
-    WHERE DATE(start_time) BETWEEN ? AND ?
-  `).get(startDate, endDate) as { count: number }
+  const totalRides = rides.length
+  const uniqueCustomers = new Set(rides.map((r) => r.customer_id)).size
 
-  const customersWithFeedback = db.prepare(`
-    SELECT COUNT(DISTINCT f.customer_id) as count FROM feedbacks f
-    JOIN test_rides tr ON f.test_ride_id = tr.id
-    WHERE DATE(tr.start_time) BETWEEN ? AND ?
-  `).get(startDate, endDate) as { count: number }
+  const feedbacks = tables.feedbacks.all((f) => {
+    if (!f.test_ride_id) return false
+    const ride = tables.test_rides.get(f.test_ride_id)
+    if (!ride) return false
+    return ride.start_time >= `${startDate}T00:00:00` && ride.start_time <= `${endDate}T23:59:59`
+  })
+  const customersWithFeedback = new Set(feedbacks.map((f) => f.customer_id)).size
 
-  const dailyStats = db.prepare(`
-    SELECT DATE(start_time) as date, COUNT(*) as count
-    FROM test_rides
-    WHERE DATE(start_time) BETWEEN ? AND ?
-    GROUP BY DATE(start_time)
-    ORDER BY date
-  `).all(startDate, endDate)
+  const dailyMap = new Map<string, number>()
+  for (const r of rides) {
+    const d = r.start_time.slice(0, 10)
+    dailyMap.set(d, (dailyMap.get(d) || 0) + 1)
+  }
+  const dailyStats = Array.from(dailyMap.entries())
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date))
 
-  const modelStats = db.prepare(`
-    SELECT v.model, COUNT(*) as ride_count
-    FROM test_rides tr
-    JOIN vehicles v ON tr.vehicle_id = v.id
-    WHERE DATE(tr.start_time) BETWEEN ? AND ?
-    GROUP BY v.model
-    ORDER BY ride_count DESC
-  `).all(startDate, endDate)
+  const modelMap = new Map<string, number>()
+  for (const r of rides) {
+    const v = tables.vehicles.get(r.vehicle_id)
+    const model = v?.model || '未知'
+    modelMap.set(model, (modelMap.get(model) || 0) + 1)
+  }
+  const modelStats = Array.from(modelMap.entries())
+    .map(([model, ride_count]) => ({ model, ride_count }))
+    .sort((a, b) => b.ride_count - a.ride_count)
 
   res.json({
     success: true,
     data: {
-      total_rides: totalRides.count,
-      unique_customers: uniqueCustomers.count,
-      customers_with_feedback: customersWithFeedback.count,
+      total_rides: totalRides,
+      unique_customers: uniqueCustomers,
+      customers_with_feedback: customersWithFeedback,
       daily_stats: dailyStats,
       model_stats: modelStats,
-    }
+    },
   })
 })
 
 router.get('/vehicle-issues', (req: Request, res: Response) => {
   const { resolved, start_date, end_date } = req.query
-  const startDate = start_date || new Date(new Date().setDate(1)).toISOString().split('T')[0]
-  const endDate = end_date || new Date().toISOString().split('T')[0]
+  const startDate = (start_date as string) || getDateStr(new Date(new Date().setDate(1)))
+  const endDate = (end_date as string) || getDateStr(new Date())
 
-  let sql = `
-    SELECT vi.*, v.model, v.frame_number,
-      c.name as customer_name
-    FROM vehicle_issues vi
-    JOIN vehicles v ON vi.vehicle_id = v.id
-    LEFT JOIN test_rides tr ON vi.test_ride_id = tr.id
-    LEFT JOIN customers c ON tr.customer_id = c.id
-    WHERE DATE(vi.created_at) BETWEEN ? AND ?
-  `
-  const params: any[] = [startDate, endDate]
+  let issues = tables.vehicle_issues.all(
+    (i) => i.created_at >= `${startDate}T00:00:00` && i.created_at <= `${endDate}T23:59:59`
+  )
 
   if (resolved !== undefined) {
-    sql += ' AND vi.resolved = ?'
-    params.push(resolved === 'true' ? 1 : 0)
+    const isResolved = resolved === 'true'
+    issues = issues.filter((i) => !!i.resolved === isResolved)
   }
 
-  sql += ' ORDER BY vi.created_at DESC'
+  issues = issues.map((i) => {
+    const v = tables.vehicles.get(i.vehicle_id)
+    const ride = i.test_ride_id ? tables.test_rides.get(i.test_ride_id) : undefined
+    const customer = ride ? tables.customers.get(ride.customer_id) : undefined
+    return {
+      ...i,
+      model: v?.model,
+      frame_number: v?.frame_number,
+      customer_name: customer?.name,
+    }
+  }).sort((a, b) => b.created_at.localeCompare(a.created_at))
 
-  const issues = db.prepare(sql).all(...params)
+  const severityMap = new Map<string, number>()
+  for (const i of issues) {
+    severityMap.set(i.severity, (severityMap.get(i.severity) || 0) + 1)
+  }
+  const severityStats = Array.from(severityMap.entries()).map(([severity, count]) => ({
+    severity,
+    count,
+  }))
 
-  const severityStats = db.prepare(`
-    SELECT severity, COUNT(*) as count
-    FROM vehicle_issues
-    WHERE DATE(created_at) BETWEEN ? AND ?
-    GROUP BY severity
-  `).all(startDate, endDate)
-
-  const vehicleIssueCount = db.prepare(`
-    SELECT v.model, COUNT(*) as issue_count
-    FROM vehicle_issues vi
-    JOIN vehicles v ON vi.vehicle_id = v.id
-    WHERE DATE(vi.created_at) BETWEEN ? AND ?
-    GROUP BY vi.vehicle_id
-    ORDER BY issue_count DESC
-  `).all(startDate, endDate)
+  const vehicleMap = new Map<string, number>()
+  for (const i of issues) {
+    const model = i.model || '未知'
+    vehicleMap.set(model, (vehicleMap.get(model) || 0) + 1)
+  }
+  const vehicleIssueCount = Array.from(vehicleMap.entries())
+    .map(([model, issue_count]) => ({ model, issue_count }))
+    .sort((a, b) => b.issue_count - a.issue_count)
 
   res.json({
     success: true,
-    data: { issues, severity_stats: severityStats, vehicle_issue_count: vehicleIssueCount }
+    data: { issues, severity_stats: severityStats, vehicle_issue_count: vehicleIssueCount },
   })
 })
 
 router.get('/deposit-flow', (req: Request, res: Response) => {
   const { start_date, end_date } = req.query
-  const startDate = start_date || new Date(new Date().setDate(1)).toISOString().split('T')[0]
-  const endDate = end_date || new Date().toISOString().split('T')[0]
+  const startDate = (start_date as string) || getDateStr(new Date(new Date().setDate(1)))
+  const endDate = (end_date as string) || getDateStr(new Date())
 
-  const collected = db.prepare(`
-    SELECT SUM(deposit_amount) as total FROM test_rides
-    WHERE DATE(start_time) BETWEEN ? AND ?
-  `).get(startDate, endDate) as { total: number | null }
+  const rides = tables.test_rides.all(
+    (t) => t.start_time >= `${startDate}T00:00:00` && t.start_time <= `${endDate}T23:59:59`
+  )
 
-  const refunded = db.prepare(`
-    SELECT SUM(deposit_amount - deduction_amount) as total FROM test_rides
-    WHERE DATE(actual_return_time) BETWEEN ? AND ? AND deposit_status = 'refunded'
-  `).get(startDate, endDate) as { total: number | null }
+  let collectedTotal = 0
+  for (const r of rides) {
+    collectedTotal += Number(r.deposit_amount) || 0
+  }
 
-  const deductions = db.prepare(`
-    SELECT SUM(deduction_amount) as total FROM test_rides
-    WHERE DATE(actual_return_time) BETWEEN ? AND ? AND deduction_amount > 0
-  `).get(startDate, endDate) as { total: number | null }
+  const returnedRides = rides.filter((r) => r.deposit_status === 'refunded' && r.actual_return_time)
+  let refundedTotal = 0
+  let deductionsTotal = 0
+  for (const r of returnedRides) {
+    const deduct = Number(r.deduction_amount) || 0
+    refundedTotal += Number(r.deposit_amount) - deduct
+    deductionsTotal += deduct
+  }
 
-  const unreturned = db.prepare(`
-    SELECT COUNT(*) as count, SUM(deposit_amount) as total FROM test_rides
-    WHERE deposit_status = 'collected'
-  `).get() as { count: number, total: number | null }
+  const unreturned = rides.filter((r) => r.deposit_status === 'collected')
+  const unreturnedTotal = unreturned.reduce((sum, r) => sum + (Number(r.deposit_amount) || 0), 0)
 
-  const dailyFlow = db.prepare(`
-    SELECT DATE(start_time) as date,
-      SUM(deposit_amount) as collected_amount,
-      SUM(CASE WHEN deposit_status = 'refunded' THEN deposit_amount - deduction_amount ELSE 0 END) as refunded_amount
-    FROM test_rides
-    WHERE DATE(start_time) BETWEEN ? AND ?
-    GROUP BY DATE(start_time)
-    ORDER BY date
-  `).all(startDate, endDate)
+  const dailyMap = new Map<string, { collected_amount: number; refunded_amount: number }>()
+  for (const r of rides) {
+    const d = r.start_time.slice(0, 10)
+    if (!dailyMap.has(d)) {
+      dailyMap.set(d, { collected_amount: 0, refunded_amount: 0 })
+    }
+    const day = dailyMap.get(d)!
+    day.collected_amount += Number(r.deposit_amount) || 0
+    if (r.deposit_status === 'refunded') {
+      day.refunded_amount += Number(r.deposit_amount) - (Number(r.deduction_amount) || 0)
+    }
+  }
+  const dailyFlow = Array.from(dailyMap.entries())
+    .map(([date, v]) => ({ date, ...v }))
+    .sort((a, b) => a.date.localeCompare(b.date))
 
   res.json({
     success: true,
     data: {
-      collected_total: collected.total || 0,
-      refunded_total: refunded.total || 0,
-      deductions_total: deductions.total || 0,
-      unreturned: { count: unreturned.count, total: unreturned.total || 0 },
+      collected_total: collectedTotal,
+      refunded_total: refundedTotal,
+      deductions_total: deductionsTotal,
+      unreturned: { count: unreturned.length, total: unreturnedTotal },
       daily_flow: dailyFlow,
-    }
+    },
   })
 })
 
 router.get('/export/:type', (req: Request, res: Response) => {
   const { type } = req.params
   const { start_date, end_date } = req.query
-  const startDate = start_date || new Date(new Date().setDate(1)).toISOString().split('T')[0]
-  const endDate = end_date || new Date().toISOString().split('T')[0]
+  const startDate = (start_date as string) || getDateStr(new Date(new Date().setDate(1)))
+  const endDate = (end_date as string) || getDateStr(new Date())
 
   res.setHeader('Content-Type', 'application/json')
 
   if (type === 'conversion') {
-    const data = db.prepare(`
-      SELECT tr.id, c.name as customer_name, c.phone, v.model, v.frame_number,
-        tr.deposit_amount, tr.start_time, tr.expected_return_time,
-        tr.actual_return_time, tr.return_condition, tr.deposit_status,
-        f.preference, f.satisfaction, f.intended_model
-      FROM test_rides tr
-      LEFT JOIN customers c ON tr.customer_id = c.id
-      LEFT JOIN vehicles v ON tr.vehicle_id = v.id
-      LEFT JOIN feedbacks f ON f.test_ride_id = tr.id
-      WHERE DATE(tr.start_time) BETWEEN ? AND ?
-      ORDER BY tr.start_time DESC
-    `).all(startDate, endDate)
-    res.json({ success: true, data, export_type: 'conversion', start_date: startDate, end_date: endDate })
+    const rides = tables.test_rides
+      .all((t) => t.start_time >= `${startDate}T00:00:00` && t.start_time <= `${endDate}T23:59:59`)
+      .map((r) => {
+        const c = tables.customers.get(r.customer_id)
+        const v = tables.vehicles.get(r.vehicle_id)
+        const f = tables.feedbacks.findOne((f) => f.test_ride_id === r.id)
+        return {
+          id: r.id,
+          customer_name: c?.name || '',
+          phone: c?.phone || '',
+          model: v?.model || '',
+          frame_number: v?.frame_number || '',
+          deposit_amount: r.deposit_amount,
+          start_time: r.start_time,
+          expected_return_time: r.expected_return_time,
+          actual_return_time: r.actual_return_time || '',
+          return_condition: r.return_condition,
+          deposit_status: r.deposit_status,
+          preference: f?.preference || '',
+          satisfaction: f?.satisfaction || '',
+          intended_model: f?.intended_model || '',
+        }
+      })
+      .sort((a, b) => b.start_time.localeCompare(a.start_time))
+
+    res.json({
+      success: true,
+      data: rides,
+      export_type: 'conversion',
+      start_date: startDate,
+      end_date: endDate,
+    })
   } else if (type === 'vehicle-issues') {
-    const data = db.prepare(`
-      SELECT vi.id, v.model, v.frame_number, vi.issue_type, vi.description,
-        vi.severity, vi.resolved, vi.created_at, vi.resolved_at,
-        c.name as customer_name
-      FROM vehicle_issues vi
-      JOIN vehicles v ON vi.vehicle_id = v.id
-      LEFT JOIN test_rides tr ON vi.test_ride_id = tr.id
-      LEFT JOIN customers c ON tr.customer_id = c.id
-      WHERE DATE(vi.created_at) BETWEEN ? AND ?
-      ORDER BY vi.created_at DESC
-    `).all(startDate, endDate)
-    res.json({ success: true, data, export_type: 'vehicle_issues', start_date: startDate, end_date: endDate })
+    const issues = tables.vehicle_issues
+      .all((i) => i.created_at >= `${startDate}T00:00:00` && i.created_at <= `${endDate}T23:59:59`)
+      .map((i) => {
+        const v = tables.vehicles.get(i.vehicle_id)
+        const ride = i.test_ride_id ? tables.test_rides.get(i.test_ride_id) : undefined
+        const customer = ride ? tables.customers.get(ride.customer_id) : undefined
+        return {
+          id: i.id,
+          model: v?.model || '',
+          frame_number: v?.frame_number || '',
+          issue_type: i.issue_type,
+          description: i.description,
+          severity: i.severity,
+          resolved: !!i.resolved,
+          created_at: i.created_at,
+          resolved_at: i.resolved_at || '',
+          customer_name: customer?.name || '',
+        }
+      })
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+
+    res.json({
+      success: true,
+      data: issues,
+      export_type: 'vehicle_issues',
+      start_date: startDate,
+      end_date: endDate,
+    })
   } else if (type === 'deposit-flow') {
-    const data = db.prepare(`
-      SELECT tr.id, c.name as customer_name, c.phone, v.model,
-        tr.deposit_amount, tr.deposit_payment_method, tr.deposit_status,
-        tr.deduction_amount, tr.deduction_reason,
-        tr.start_time, tr.actual_return_time, tr.deposit_receipt_no
-      FROM test_rides tr
-      LEFT JOIN customers c ON tr.customer_id = c.id
-      LEFT JOIN vehicles v ON tr.vehicle_id = v.id
-      WHERE DATE(tr.start_time) BETWEEN ? AND ?
-      ORDER BY tr.start_time DESC
-    `).all(startDate, endDate)
-    res.json({ success: true, data, export_type: 'deposit_flow', start_date: startDate, end_date: endDate })
+    const rides = tables.test_rides
+      .all((t) => t.start_time >= `${startDate}T00:00:00` && t.start_time <= `${endDate}T23:59:59`)
+      .map((r) => {
+        const c = tables.customers.get(r.customer_id)
+        const v = tables.vehicles.get(r.vehicle_id)
+        return {
+          id: r.id,
+          customer_name: c?.name || '',
+          phone: c?.phone || '',
+          model: v?.model || '',
+          deposit_amount: r.deposit_amount,
+          deposit_payment_method: r.deposit_payment_method,
+          deposit_status: r.deposit_status,
+          deduction_amount: r.deduction_amount || 0,
+          deduction_reason: r.deduction_reason || '',
+          start_time: r.start_time,
+          actual_return_time: r.actual_return_time || '',
+          deposit_receipt_no: r.deposit_receipt_no,
+        }
+      })
+      .sort((a, b) => b.start_time.localeCompare(a.start_time))
+
+    res.json({
+      success: true,
+      data: rides,
+      export_type: 'deposit_flow',
+      start_date: startDate,
+      end_date: endDate,
+    })
   } else {
     res.status(400).json({ success: false, error: '未知导出类型' })
   }

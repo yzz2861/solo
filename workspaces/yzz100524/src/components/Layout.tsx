@@ -2,7 +2,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   ClipboardPlus,
-  Bicycle,
+  Bike,
   Users,
   FileBarChart,
   Battery,
@@ -14,7 +14,7 @@ import { useAppStore } from '@/store/app';
 const navItems = [
   { path: '/', label: '试骑看板', icon: LayoutDashboard },
   { path: '/register', label: '试骑登记', icon: ClipboardPlus },
-  { path: '/vehicles', label: '车辆管理', icon: Bicycle },
+  { path: '/vehicles', label: '车辆管理', icon: Bike },
   { path: '/customers', label: '客户档案', icon: Users },
   { path: '/reports', label: '报表中心', icon: FileBarChart, managerOnly: true },
 ];

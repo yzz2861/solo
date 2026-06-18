@@ -7,7 +7,7 @@ import {
   UserPlus,
   Tag,
   MessageSquare,
-  Bicycle,
+  Bike,
   Calendar,
   CircleDollarSign,
   Edit3,
@@ -152,7 +152,7 @@ export default function Customers() {
             <div className="col-span-2 space-y-6">
               <div className="card">
                 <h3 className="font-semibold text-primary-500 mb-4 flex items-center gap-2">
-                  <Bicycle size={18} /> 试骑历史
+                  <Bike size={18} /> 试骑历史
                 </h3>
                 {(!detail.rides || detail.rides.length === 0) ? (
                   <div className="text-center py-8 text-gray-400">暂无试骑记录</div>
@@ -165,7 +165,7 @@ export default function Customers() {
                       >
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-500 flex items-center justify-center">
-                            <Bicycle size={18} />
+                            <Bike size={18} />
                           </div>
                           <div>
                             <div className="font-medium">
