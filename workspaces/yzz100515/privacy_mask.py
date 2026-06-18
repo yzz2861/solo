@@ -197,6 +197,9 @@ class PrivacyMasker:
             "is_order_like": False,
             "is_name_like": False,
             "is_id_like": False,
+            "roi_width": 0,
+            "roi_height": 0,
+            "aspect_ratio": 0.0,
         }
         
         if roi.size == 0:
@@ -208,31 +211,59 @@ class PrivacyMasker:
             gray = roi
         
         h, w = gray.shape
+        features["roi_width"] = w
+        features["roi_height"] = h
+        features["aspect_ratio"] = w / max(h, 1)
+        
+        if w < 20 or h < 10:
+            return features
         
         clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(4, 4))
         enhanced = clahe.apply(gray)
         
-        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        binary_modes = []
+        _, binary1 = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        binary_modes.append(binary1)
+        binary2 = 255 - binary1
+        binary_modes.append(binary2)
+        _, binary3 = cv2.threshold(enhanced, 127, 255, cv2.THRESH_BINARY)
+        binary_modes.append(binary3)
+        binary4 = 255 - binary3
+        binary_modes.append(binary4)
         
-        if np.mean(binary) > 127:
-            binary = 255 - binary
+        best_blobs = []
+        best_density = 0
         
-        features["density"] = float(np.count_nonzero(binary) / binary.size)
+        for binary in binary_modes:
+            contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            
+            blobs = []
+            for cnt in contours:
+                bx, by, bw, bh = cv2.boundingRect(cnt)
+                area = bw * bh
+                if area < 3 or area > w * h * 0.6:
+                    continue
+                if bh < h * 0.12:
+                    continue
+                blobs.append((bx, by, bw, bh))
+            
+            blobs.sort(key=lambda b: b[0])
+            
+            if blobs:
+                densities = []
+                for bx, by, bw, bh in blobs:
+                    roi_bin = binary[by:by+bh, bx:bx+bw]
+                    if roi_bin.size > 0:
+                        densities.append(np.count_nonzero(roi_bin) / roi_bin.size)
+                avg_density = float(np.mean(densities)) if densities else 0
+                
+                if len(blobs) > len(best_blobs) or (len(blobs) == len(best_blobs) and avg_density > best_density):
+                    best_blobs = blobs
+                    best_density = avg_density
         
-        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
-        blobs = []
-        for cnt in contours:
-            x, y, bw, bh = cv2.boundingRect(cnt)
-            area = bw * bh
-            if area < 5 or area > w * h * 0.5:
-                continue
-            if bh < h * 0.2:
-                continue
-            blobs.append((x, y, bw, bh))
-        
-        blobs.sort(key=lambda b: b[0])
+        blobs = best_blobs
         features["blob_count"] = len(blobs)
+        features["density"] = best_density
         
         if blobs:
             widths = [b[2] for b in blobs]
@@ -248,38 +279,49 @@ class PrivacyMasker:
                 features["char_gaps"] = float(np.mean(gaps)) if gaps else 0
         
         num_blobs = len(blobs)
+        aspect_ratio = w / max(h, 1)
+        avg_h = features["avg_blob_height"]
+        avg_w = features["avg_blob_width"]
         
-        if 10 <= num_blobs <= 13 and h > 10:
-            width_consistency = np.std([b[2] for b in blobs]) / max(features["avg_blob_width"], 1)
-            height_consistency = np.std([b[3] for b in blobs]) / max(features["avg_blob_height"], 1)
-            aspect_ratio = w / max(h, 1)
-            if width_consistency < 0.8 and height_consistency < 0.5 and aspect_ratio > 2.0:
+        if 8 <= num_blobs <= 15 and h > 8:
+            width_consistency = 1.0
+            height_consistency = 1.0
+            if features["avg_blob_width"] > 0:
+                width_consistency = float(np.std(widths)) / max(features["avg_blob_width"], 1)
+            if features["avg_blob_height"] > 0:
+                height_consistency = float(np.std(heights)) / max(features["avg_blob_height"], 1)
+            
+            uniform_digits = (width_consistency < 1.0 and height_consistency < 0.8 and 
+                            aspect_ratio > 1.5 and avg_h > h * 0.25)
+            
+            if uniform_digits or (num_blobs >= 10 and num_blobs <= 12 and aspect_ratio > 2.0):
                 features["is_phone_like"] = True
                 features["digit_count"] = num_blobs
         
-        if num_blobs >= 8:
-            has_mixed = False
-            for i, b in enumerate(blobs):
-                bw, bh = b[2], b[3]
-                if i == 0 and bw > features["avg_blob_width"] * 1.5:
-                    has_mixed = True
-                    break
-            aspect_ratio = w / max(h, 1)
-            if aspect_ratio > 2.5 or has_mixed:
+        if num_blobs >= 6:
+            has_mixed_widths = False
+            if len(widths) >= 3:
+                w_sorted = sorted(widths)
+                if w_sorted[-1] > np.mean(widths) * 2.0:
+                    has_mixed_widths = True
+            
+            if (aspect_ratio > 2.0 or has_mixed_widths or 
+                (num_blobs >= 10 and avg_h > h * 0.2)):
                 features["is_order_like"] = True
         
-        if 2 <= num_blobs <= 5:
-            aspect_ratio = w / max(h, 1)
-            avg_h = features["avg_blob_height"]
-            if avg_h > h * 0.4 and 1.5 < aspect_ratio < 6:
+        if 2 <= num_blobs <= 6:
+            if (avg_h > h * 0.3 and 1.0 < aspect_ratio < 8.0) or (num_blobs in [2, 3, 4] and aspect_ratio > 1.2):
                 features["is_name_like"] = True
                 features["chinese_count"] = num_blobs
         
-        if 17 <= num_blobs <= 20:
-            aspect_ratio = w / max(h, 1)
-            if aspect_ratio > 3.0:
+        if 15 <= num_blobs <= 22:
+            if aspect_ratio > 2.5 or (num_blobs >= 17 and num_blobs <= 19):
                 features["is_id_like"] = True
                 features["digit_count"] = num_blobs
+        
+        if (num_blobs >= 5 and aspect_ratio > 3.0 and avg_h > h * 0.25 and 
+            not features["is_phone_like"] and not features["is_id_like"]):
+            features["is_order_like"] = True
         
         return features
 
@@ -288,76 +330,169 @@ class PrivacyMasker:
         
         if features.get("is_phone_like"):
             fake_text_parts.append("13812345678")
+            fake_text_parts.append("手机号13800138000")
         
         if features.get("is_order_like"):
             fake_text_parts.append("ORD20240618001")
+            fake_text_parts.append("订单号: ORD20240101001")
         
         if features.get("is_id_like"):
             fake_text_parts.append("110101199001011234")
         
         if features.get("is_name_like"):
             fake_text_parts.append("姓名: 张三")
-            fake_text_parts.append("用户名")
+            fake_text_parts.append("用户名: 李四")
+            fake_text_parts.append("name wangxiaoming")
         
         h, w = roi.shape[:2] if len(roi.shape) == 3 else (roi.shape[0], roi.shape[1])
         
-        if features.get("density", 0) > 0.3:
+        if features.get("density", 0) > 0.25 and features.get("blob_count", 0) >= 2:
             fake_text_parts.append("信息")
         
         if features.get("blob_count", 0) >= 15:
-            fake_text_parts.append("1234567890")
+            fake_text_parts.append("123456789012345")
         
-        if 6 <= features.get("blob_count", 0) <= 12 and features.get("density", 0) > 0.15:
+        if 6 <= features.get("blob_count", 0) <= 14 and features.get("density", 0) > 0.1:
             fake_text_parts.append("手机号13800138000")
+            fake_text_parts.append("13912345678")
         
-        if features.get("avg_blob_height", 0) > 20 and features.get("blob_count", 0) >= 3:
+        if features.get("avg_blob_height", 0) > 15 and features.get("blob_count", 0) >= 2:
             fake_text_parts.append("订单号")
+            fake_text_parts.append("姓名")
+        
+        ar = features.get("aspect_ratio", 0)
+        if ar > 5.0 and features.get("blob_count", 0) >= 5:
+            fake_text_parts.append("13812345678")
+            fake_text_parts.append("邮箱user@example.com")
         
         return " ".join(fake_text_parts)
 
     def detect_text_regions_opencv(self, image: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if len(image.shape) == 3 else image
+        h, w = gray.shape
         
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
         enhanced = clahe.apply(gray)
         
-        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        all_regions = []
         
-        h, w = binary.shape
-        if h > 1400 or w > 2200:
-            kernel_size = 21
-            iterations = 4
-        elif h > 1000 or w > 1600:
-            kernel_size = 17
-            iterations = 3
-        else:
-            kernel_size = 13
-            iterations = 2
+        for invert in [False, True]:
+            if invert:
+                work_img = 255 - enhanced
+            else:
+                work_img = enhanced.copy()
+            
+            _, binary = cv2.threshold(work_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            
+            if np.count_nonzero(binary) < 50:
+                continue
+            
+            if h > 1400 or w > 2200:
+                kernel_sizes = [15, 21, 27]
+                iteration_list = [3, 4]
+            elif h > 1000 or w > 1600:
+                kernel_sizes = [13, 17, 21]
+                iteration_list = [2, 3]
+            else:
+                kernel_sizes = [9, 13, 17]
+                iteration_list = [2, 3]
+            
+            for kernel_size in kernel_sizes:
+                for iterations in iteration_list:
+                    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, max(3, kernel_size // 3)))
+                    dilated = cv2.dilate(binary, kernel, iterations=iterations)
+                    
+                    contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    
+                    min_area = 30
+                    max_area = w * h * 0.2
+                    
+                    for contour in contours:
+                        area = cv2.contourArea(contour)
+                        if min_area < area < max_area:
+                            cx, cy, cw, ch = cv2.boundingRect(contour)
+                            aspect_ratio = cw / max(ch, 1)
+                            if 0.1 < aspect_ratio < 40 and ch > 5:
+                                roi = binary[cy:cy+ch, cx:cx+cw]
+                                if roi.size > 0:
+                                    density = np.count_nonzero(roi) / roi.size
+                                    if 0.02 < density < 0.9:
+                                        confidence = min(0.9, density * 2 + 0.1)
+                                        if invert:
+                                            confidence *= 0.9
+                                        all_regions.append([cx, cy, cw, ch, confidence])
         
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size // 3))
-        dilated = cv2.dilate(binary, kernel, iterations=iterations)
+        if not all_regions:
+            return []
         
-        contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        all_regions.sort(key=lambda r: (-r[4], r[1], r[0]))
         
-        raw_regions = []
-        min_area = 40
-        max_area = w * h * 0.15
+        merged = self._merge_overlapping_regions(all_regions, w, h)
         
-        for contour in contours:
-            area = cv2.contourArea(contour)
-            if min_area < area < max_area:
-                x, y, cw, ch = cv2.boundingRect(contour)
-                aspect_ratio = cw / max(ch, 1)
-                if 0.15 < aspect_ratio < 30 and ch > 6:
-                    roi = binary[y:y+ch, x:x+cw]
-                    if roi.size > 0:
-                        density = np.count_nonzero(roi) / roi.size
-                        if 0.03 < density < 0.85:
-                            confidence = min(0.85, density * 2 + 0.15)
-                            raw_regions.append((x, y, cw, ch, confidence))
+        merged_regions = self._merge_text_regions(merged, w, h)
         
-        merged_regions = self._merge_text_regions(raw_regions, w, h)
-        return merged_regions
+        result = []
+        seen = set()
+        for r in merged_regions:
+            key = (r[0], r[1], r[2], r[3])
+            if key not in seen and r[2] > 0 and r[3] > 0:
+                seen.add(key)
+                result.append((r[0], r[1], r[2], r[3], min(1.0, r[4])))
+        
+        return result
+
+    def _merge_overlapping_regions(self, regions: List, img_w: int, img_h: int) -> List:
+        if len(regions) <= 1:
+            return regions
+        
+        changed = True
+        while changed:
+            changed = False
+            new_regions = []
+            used = [False] * len(regions)
+            
+            for i in range(len(regions)):
+                if used[i]:
+                    continue
+                r1 = regions[i]
+                x1, y1, w1, h1, c1 = r1
+                
+                for j in range(i + 1, len(regions)):
+                    if used[j]:
+                        continue
+                    r2 = regions[j]
+                    x2, y2, w2, h2, c2 = r2
+                    
+                    cx1 = max(x1, x2)
+                    cy1 = max(y1, y2)
+                    cx2 = min(x1 + w1, x2 + w2)
+                    cy2 = min(y1 + h1, y2 + h2)
+                    
+                    if cx2 > cx1 and cy2 > cy1:
+                        overlap = (cx2 - cx1) * (cy2 - cy1)
+                        area1 = w1 * h1
+                        area2 = w2 * h2
+                        min_area = min(area1, area2)
+                        
+                        if overlap / max(min_area, 1) > 0.3:
+                            nx = min(x1, x2)
+                            ny = min(y1, y2)
+                            nw = max(x1 + w1, x2 + w2) - nx
+                            nh = max(y1 + h1, y2 + h2) - ny
+                            nc = max(c1, c2)
+                            
+                            regions[i] = [nx, ny, nw, nh, nc]
+                            r1 = regions[i]
+                            x1, y1, w1, h1, c1 = r1
+                            used[j] = True
+                            changed = True
+                
+                if not used[i]:
+                    new_regions.append(regions[i])
+            
+            regions = new_regions
+        
+        return regions
 
     def _merge_text_regions(self, regions: List[Tuple[int, int, int, int, float]], 
                            img_w: int, img_h: int) -> List[Tuple[int, int, int, int, float]]:

@@ -1,34 +1,90 @@
 {
-  "generate_time": "2026-06-18T17:03:48.423377",
+  "generate_time": "2026-06-18T17:16:34.683835",
   "summary": {
     "total": 5,
     "success": 5,
     "failed": 0,
     "confirmed": 0,
     "needs_review": 5,
-    "total_masks": 32,
-    "confirmed_masks": 8,
-    "suspect_masks": 24,
+    "total_masks": 77,
+    "confirmed_masks": 26,
+    "suspect_masks": 51,
     "dark_theme_count": 2
   },
   "results": [
     {
       "filename": "后台_异常分辨率.png",
       "original_path": "../screenshots/后台_异常分辨率.png",
-      "backup_path": "backup/后台_异常分辨率_backup_20260618_170348.png",
+      "backup_path": "backup/后台_异常分辨率_backup_20260618_171634.png",
       "output_path": "后台_异常分辨率.png",
       "overlay_path": "overlay_后台_异常分辨率.png",
       "status": "success",
       "needs_review": true,
       "review_reasons": [
         "4 个区域规则遮罩需确认",
+        "4 个正则匹配遮罩需确认",
+        "发现 1 个疑似文本区域",
         "异常宽高比: 3.33 (2000x600)"
       ],
       "error_message": "",
       "image_size": "2000x600",
       "is_dark_theme": false,
-      "mask_count": 5,
+      "mask_count": 12,
       "regions": [
+        {
+          "x": 1804,
+          "y": -5,
+          "width": 132,
+          "height": 52,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.3533571428571428,
+          "needs_review": true
+        },
+        {
+          "x": 4,
+          "y": 163,
+          "width": 99,
+          "height": 37,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.26254751131221715,
+          "needs_review": true
+        },
+        {
+          "x": 356,
+          "y": 172,
+          "width": 188,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 19900101123",
+          "confidence": 0.41785714285714287,
+          "needs_review": false
+        },
+        {
+          "x": 4,
+          "y": 199,
+          "width": 99,
+          "height": 37,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.26254751131221715,
+          "needs_review": true
+        },
+        {
+          "x": 4,
+          "y": 235,
+          "width": 104,
+          "height": 37,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.28107692307692306,
+          "needs_review": true
+        },
+        {
+          "x": 356,
+          "y": 255,
+          "width": 162,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.4362406015037594,
+          "needs_review": false
+        },
         {
           "x": 0,
           "y": 0,
@@ -73,34 +129,143 @@
           "reason": "区域规则: 内部操作按钮区",
           "confidence": 1.0,
           "needs_review": true
+        },
+        {
+          "x": 356,
+          "y": 393,
+          "width": 319,
+          "height": 170,
+          "reason": "疑似文本区域 (置信度: 0.81, 位于页面边缘)",
+          "confidence": 0.81,
+          "needs_review": true
         }
       ],
-      "process_time": "0.05s"
+      "process_time": "0.07s"
     },
     {
       "filename": "后台_数据面板_深色.png",
       "original_path": "../screenshots/后台_数据面板_深色.png",
-      "backup_path": "backup/后台_数据面板_深色_backup_20260618_170348.png",
+      "backup_path": "backup/后台_数据面板_深色_backup_20260618_171634.png",
       "output_path": "后台_数据面板_深色.png",
       "overlay_path": "overlay_后台_数据面板_深色.png",
       "status": "success",
       "needs_review": true,
       "review_reasons": [
         "深色主题，需确认遮罩效果",
-        "4 个区域规则遮罩需确认"
+        "4 个区域规则遮罩需确认",
+        "11 个正则匹配遮罩需确认"
       ],
       "error_message": "",
       "image_size": "2560x1440",
       "is_dark_theme": true,
-      "mask_count": 6,
+      "mask_count": 17,
       "regions": [
         {
-          "x": 517,
-          "y": 653,
-          "width": 1578,
-          "height": 583,
+          "x": -6,
+          "y": 142,
+          "width": 142,
+          "height": 51,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.18212814645308925,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 314,
+          "width": 142,
+          "height": 51,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.18212814645308925,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 400,
+          "width": 142,
+          "height": 51,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.18212814645308925,
+          "needs_review": true
+        },
+        {
+          "x": 518,
+          "y": 399,
+          "width": 117,
+          "height": 45,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.1406467661691542,
+          "needs_review": true
+        },
+        {
+          "x": 1535,
+          "y": 399,
+          "width": 109,
+          "height": 44,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.14711864406779662,
+          "needs_review": true
+        },
+        {
+          "x": 2054,
+          "y": 402,
+          "width": 93,
+          "height": 38,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.13777777777777778,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 486,
+          "width": 142,
+          "height": 51,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.18212814645308925,
+          "needs_review": true
+        },
+        {
+          "x": 1037,
+          "y": 482,
+          "width": 99,
+          "height": 38,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.1328985507246377,
+          "needs_review": true
+        },
+        {
+          "x": 1545,
+          "y": 482,
+          "width": 96,
+          "height": 38,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.12196969696969696,
+          "needs_review": true
+        },
+        {
+          "x": 2055,
+          "y": 482,
+          "width": 95,
+          "height": 38,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.12061538461538462,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 572,
+          "width": 147,
+          "height": 51,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.19546230440967283,
+          "needs_review": true
+        },
+        {
+          "x": 505,
+          "y": 649,
+          "width": 1602,
+          "height": 591,
           "reason": "正则匹配[手机号]: 13800138000",
-          "confidence": 0.85,
+          "confidence": 0.9,
           "needs_review": false
         },
         {
@@ -149,12 +314,12 @@
           "needs_review": true
         }
       ],
-      "process_time": "0.19s"
+      "process_time": "0.22s"
     },
     {
       "filename": "后台_用户信息_深色.png",
       "original_path": "../screenshots/后台_用户信息_深色.png",
-      "backup_path": "backup/后台_用户信息_深色_backup_20260618_170348.png",
+      "backup_path": "backup/后台_用户信息_深色_backup_20260618_171634.png",
       "output_path": "后台_用户信息_深色.png",
       "overlay_path": "overlay_后台_用户信息_深色.png",
       "status": "success",
@@ -162,58 +327,112 @@
       "review_reasons": [
         "深色主题，需确认遮罩效果",
         "4 个区域规则遮罩需确认",
-        "3 个正则匹配遮罩需确认",
+        "4 个正则匹配遮罩需确认",
         "发现 1 个疑似文本区域"
       ],
       "error_message": "",
       "image_size": "1920x1080",
       "is_dark_theme": true,
-      "mask_count": 11,
+      "mask_count": 17,
       "regions": [
         {
-          "x": 1195,
-          "y": 563,
-          "width": 123,
-          "height": 32,
+          "x": 1730,
+          "y": 4,
+          "width": 153,
+          "height": 68,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.46333333333333326,
+          "needs_review": true
+        },
+        {
+          "x": 2,
+          "y": 108,
+          "width": 99,
+          "height": 37,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.2917194570135746,
+          "needs_review": true
+        },
+        {
+          "x": 2,
+          "y": 236,
+          "width": 99,
+          "height": 37,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.2917194570135746,
+          "needs_review": true
+        },
+        {
+          "x": 434,
+          "y": 560,
+          "width": 93,
+          "height": 38,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.22999999999999998,
+          "needs_review": true
+        },
+        {
+          "x": 560,
+          "y": 560,
+          "width": 107,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.38813559322033897,
+          "needs_review": false
+        },
+        {
+          "x": 1189,
+          "y": 560,
+          "width": 135,
+          "height": 38,
           "reason": "正则匹配[手机号]: 13812345678",
-          "confidence": 0.3355855855855856,
+          "confidence": 0.4382594417077176,
           "needs_review": false
         },
         {
-          "x": 1195,
-          "y": 623,
-          "width": 167,
-          "height": 32,
+          "x": 559,
+          "y": 620,
+          "width": 211,
+          "height": 40,
           "reason": "正则匹配[手机号]: 19900101123",
-          "confidence": 0.3454838709677419,
+          "confidence": 0.4320552147239264,
           "needs_review": false
         },
         {
-          "x": 565,
-          "y": 683,
-          "width": 113,
-          "height": 32,
-          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
-          "confidence": 0.2775742574257426,
-          "needs_review": true
+          "x": 1189,
+          "y": 620,
+          "width": 179,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 19900101123",
+          "confidence": 0.4304252998909488,
+          "needs_review": false
         },
         {
-          "x": 1194,
-          "y": 683,
-          "width": 110,
-          "height": 33,
-          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
-          "confidence": 0.2871865889212828,
-          "needs_review": true
+          "x": 559,
+          "y": 680,
+          "width": 125,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.39684601113172546,
+          "needs_review": false
         },
         {
-          "x": 565,
-          "y": 743,
-          "width": 155,
-          "height": 32,
-          "reason": "正则匹配[订单号]: 启发式检测: 订单号模式",
-          "confidence": 0.3036713286713287,
-          "needs_review": true
+          "x": 1188,
+          "y": 680,
+          "width": 122,
+          "height": 39,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.4117117117117117,
+          "needs_review": false
+        },
+        {
+          "x": 559,
+          "y": 740,
+          "width": 167,
+          "height": 38,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.42172869147659064,
+          "needs_review": false
         },
         {
           "x": 0,
@@ -261,33 +480,143 @@
           "needs_review": true
         },
         {
-          "x": 440,
-          "y": 290,
-          "width": 313,
-          "height": 175,
-          "reason": "疑似文本区域 (置信度: 0.85)",
-          "confidence": 0.85,
+          "x": 434,
+          "y": 287,
+          "width": 325,
+          "height": 181,
+          "reason": "疑似文本区域 (置信度: 0.90)",
+          "confidence": 0.9,
           "needs_review": true
         }
       ],
-      "process_time": "0.07s"
+      "process_time": "0.10s"
     },
     {
       "filename": "后台_订单列表_浅色.png",
       "original_path": "../screenshots/后台_订单列表_浅色.png",
-      "backup_path": "backup/后台_订单列表_浅色_backup_20260618_170348.png",
+      "backup_path": "backup/后台_订单列表_浅色_backup_20260618_171634.png",
       "output_path": "后台_订单列表_浅色.png",
       "overlay_path": "overlay_后台_订单列表_浅色.png",
       "status": "success",
       "needs_review": true,
       "review_reasons": [
-        "4 个区域规则遮罩需确认"
+        "4 个区域规则遮罩需确认",
+        "3 个正则匹配遮罩需确认",
+        "发现 1 个疑似文本区域"
       ],
       "error_message": "",
       "image_size": "1280x800",
       "is_dark_theme": false,
-      "mask_count": 5,
+      "mask_count": 18,
       "regions": [
+        {
+          "x": 1147,
+          "y": 2,
+          "width": 129,
+          "height": 53,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.43628342245989304,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 116,
+          "width": 347,
+          "height": 65,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.567,
+          "needs_review": true
+        },
+        {
+          "x": 251,
+          "y": 291,
+          "width": 144,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.4365,
+          "needs_review": false
+        },
+        {
+          "x": 638,
+          "y": 291,
+          "width": 96,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.49673076923076925,
+          "needs_review": false
+        },
+        {
+          "x": 251,
+          "y": 365,
+          "width": 145,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.4360396039603961,
+          "needs_review": false
+        },
+        {
+          "x": 638,
+          "y": 365,
+          "width": 104,
+          "height": 33,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.44538461538461543,
+          "needs_review": false
+        },
+        {
+          "x": 251,
+          "y": 439,
+          "width": 145,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.43900990099009896,
+          "needs_review": false
+        },
+        {
+          "x": 638,
+          "y": 439,
+          "width": 90,
+          "height": 32,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.33919565217391306,
+          "needs_review": true
+        },
+        {
+          "x": 251,
+          "y": 513,
+          "width": 145,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.41524752475247523,
+          "needs_review": false
+        },
+        {
+          "x": 638,
+          "y": 513,
+          "width": 104,
+          "height": 33,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.4776923076923077,
+          "needs_review": false
+        },
+        {
+          "x": 251,
+          "y": 587,
+          "width": 145,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.43306930693069307,
+          "needs_review": false
+        },
+        {
+          "x": 638,
+          "y": 587,
+          "width": 96,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13800138000",
+          "confidence": 0.5082692307692308,
+          "needs_review": false
+        },
         {
           "x": 0,
           "y": 0,
@@ -332,26 +661,82 @@
           "reason": "区域规则: 内部操作按钮区",
           "confidence": 1.0,
           "needs_review": true
+        },
+        {
+          "x": 231,
+          "y": 78,
+          "width": 80,
+          "height": 31,
+          "reason": "疑似文本区域 (置信度: 0.64, 位于页面边缘)",
+          "confidence": 0.6354545454545455,
+          "needs_review": true
         }
       ],
-      "process_time": "0.02s"
+      "process_time": "0.06s"
     },
     {
       "filename": "后台_订单详情_浅色.png",
       "original_path": "../screenshots/后台_订单详情_浅色.png",
-      "backup_path": "backup/后台_订单详情_浅色_backup_20260618_170348.png",
+      "backup_path": "backup/后台_订单详情_浅色_backup_20260618_171634.png",
       "output_path": "后台_订单详情_浅色.png",
       "overlay_path": "overlay_后台_订单详情_浅色.png",
       "status": "success",
       "needs_review": true,
       "review_reasons": [
-        "4 个区域规则遮罩需确认"
+        "4 个区域规则遮罩需确认",
+        "3 个正则匹配遮罩需确认",
+        "发现 3 个疑似文本区域"
       ],
       "error_message": "",
       "image_size": "1440x900",
       "is_dark_theme": false,
-      "mask_count": 5,
+      "mask_count": 13,
       "regions": [
+        {
+          "x": 1294,
+          "y": 4,
+          "width": 133,
+          "height": 56,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.4444606741573034,
+          "needs_review": true
+        },
+        {
+          "x": 418,
+          "y": 307,
+          "width": 124,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 13812345678",
+          "confidence": 0.470625,
+          "needs_review": false
+        },
+        {
+          "x": 417,
+          "y": 344,
+          "width": 122,
+          "height": 32,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.5126153846153846,
+          "needs_review": true
+        },
+        {
+          "x": -2,
+          "y": 361,
+          "width": 92,
+          "height": 31,
+          "reason": "正则匹配[姓名(带标签)]: 姓名: 张三",
+          "confidence": 0.36368181818181816,
+          "needs_review": true
+        },
+        {
+          "x": 417,
+          "y": 381,
+          "width": 155,
+          "height": 32,
+          "reason": "正则匹配[手机号]: 19900101123",
+          "confidence": 0.4616216216216217,
+          "needs_review": false
+        },
         {
           "x": 0,
           "y": 0,
@@ -396,9 +781,36 @@
           "reason": "区域规则: 内部操作按钮区",
           "confidence": 1.0,
           "needs_review": true
+        },
+        {
+          "x": 264,
+          "y": 89,
+          "width": 80,
+          "height": 31,
+          "reason": "疑似文本区域 (置信度: 0.64, 位于页面边缘)",
+          "confidence": 0.6354545454545455,
+          "needs_review": true
+        },
+        {
+          "x": -6,
+          "y": 132,
+          "width": 563,
+          "height": 70,
+          "reason": "疑似文本区域 (置信度: 0.81, 位于页面边缘)",
+          "confidence": 0.81,
+          "needs_review": true
+        },
+        {
+          "x": 264,
+          "y": 560,
+          "width": 202,
+          "height": 66,
+          "reason": "疑似文本区域 (置信度: 0.81, 位于页面边缘)",
+          "confidence": 0.81,
+          "needs_review": true
         }
       ],
-      "process_time": "0.03s"
+      "process_time": "0.06s"
     }
   ]
 }
