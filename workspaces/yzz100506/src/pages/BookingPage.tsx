@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom'
 import {
   ChevronLeft, Save, Dog, Scissors, Truck, AlertTriangle,
-  Clock, Plus
+  Clock, Plus, UserCheck, X
 } from 'lucide-react'
 import { useStore } from '@/store/useStore'
 import {
@@ -47,6 +47,8 @@ export default function BookingPage() {
   const getOwnerById = useStore(s => s.getOwnerById)
   const getConflicts = useStore(s => s.getConflicts)
   const appointments = useStore(s => s.appointments)
+  const markEarlyArrival = useStore(s => s.markEarlyArrival)
+  const cancelEarlyArrival = useStore(s => s.cancelEarlyArrival)
 
   const [selectedPetId, setSelectedPetId] = useState('')
   const [petName, setPetName] = useState('')
@@ -225,6 +227,7 @@ export default function BookingPage() {
     }))
 
     const aptId = isEditing ? editId! : uid()
+    const existingApt = isEditing ? appointments.find(a => a.id === editId) : null
     const appointmentPayload = {
       petId,
       groomerId: selectedGroomerId,
@@ -241,6 +244,8 @@ export default function BookingPage() {
       createdAt: new Date().toISOString(),
       services: services.map(s => ({ ...s, appointmentId: aptId })),
       assistants: [] as string[],
+      earlyArrival: isEditing ? (existingApt?.earlyArrival ?? false) : false,
+      arrivedAt: isEditing ? existingApt?.arrivedAt : undefined,
     }
 
     if (isEditing) {
@@ -261,9 +266,44 @@ export default function BookingPage() {
         >
           <ChevronLeft className="w-5 h-5 text-brand-700" />
         </button>
-        <h1 className="text-xl font-semibold text-brand-800 font-serif">
-          {isEditing ? '编辑预约' : '新建预约'}
-        </h1>
+        <div className="flex items-center gap-3 flex-wrap">
+          <h1 className="text-xl font-semibold text-brand-800 font-serif">
+            {isEditing ? '编辑预约' : '新建预约'}
+          </h1>
+          {isEditing && (() => {
+            const apt = appointments.find(a => a.id === editId)
+            if (!apt) return null
+            const canMarkArrival = apt.status === 'pending'
+            return (
+              <>
+                {apt.earlyArrival ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400 text-yellow-900 text-xs font-bold shadow-sm animate-pulse">
+                    <UserCheck className="w-3.5 h-3.5" />
+                    等待中 · 到店 {apt.arrivedAt}
+                  </span>
+                ) : null}
+                {canMarkArrival && !apt.earlyArrival && (
+                  <button
+                    onClick={() => markEarlyArrival(apt.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border-yellow-200 text-xs font-medium transition-colors"
+                  >
+                    <UserCheck className="w-3.5 h-3.5" />
+                    标记主人到店
+                  </button>
+                )}
+                {apt.earlyArrival && (
+                  <button
+                    onClick={() => cancelEarlyArrival(apt.id)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border bg-white text-gray-500 hover:bg-gray-50 border-gray-200 text-xs font-medium transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    取消到店
+                  </button>
+                )}
+              </>
+            )
+          })()}
+        </div>
       </div>
 
       <div className="flex flex-col gap-5">

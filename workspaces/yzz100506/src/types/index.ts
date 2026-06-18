@@ -66,6 +66,8 @@ export interface Appointment {
   createdAt: string
   services: ServiceItem[]
   assistants: string[]
+  earlyArrival: boolean
+  arrivedAt?: string
 }
 
 export interface Alert {

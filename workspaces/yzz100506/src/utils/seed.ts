@@ -49,6 +49,7 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's1', appointmentId: 'apt1', type: 'wash', duration: 90, price: 80 },
     ],
     assistants: ['a1'],
+    earlyArrival: false,
   },
   {
     id: 'apt2', petId: 'p2', groomerId: 'g1', date: getToday(), startTime: '10:30', endTime: '11:30',
@@ -59,6 +60,8 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's3', appointmentId: 'apt2', type: 'nail', duration: 10, price: 30 },
     ],
     assistants: [],
+    earlyArrival: true,
+    arrivedAt: '09:45',
   },
   {
     id: 'apt3', petId: 'p3', groomerId: 'g2', date: getToday(), startTime: '09:00', endTime: '11:30',
@@ -69,6 +72,7 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's5', appointmentId: 'apt3', type: 'shave', duration: 60, price: 100 },
     ],
     assistants: ['a1', 'a2'],
+    earlyArrival: false,
   },
   {
     id: 'apt4', petId: 'p4', groomerId: 'g3', date: getToday(), startTime: '14:00', endTime: '15:15',
@@ -79,6 +83,7 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's7', appointmentId: 'apt4', type: 'nail', duration: 15, price: 30 },
     ],
     assistants: ['a3'],
+    earlyArrival: false,
   },
   {
     id: 'apt5', petId: 'p5', groomerId: 'g2', date: getTomorrow(), startTime: '10:00', endTime: '10:50',
@@ -89,6 +94,7 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's9', appointmentId: 'apt5', type: 'nail', duration: 10, price: 30 },
     ],
     assistants: [],
+    earlyArrival: false,
   },
   {
     id: 'apt6', petId: 'p6', groomerId: 'g1', date: getTomorrow(), startTime: '14:00', endTime: '15:30',
@@ -98,5 +104,6 @@ export const SEED_APPOINTMENTS: Appointment[] = [
       { id: 's10', appointmentId: 'apt6', type: 'wash', duration: 90, price: 80 },
     ],
     assistants: ['a2'],
+    earlyArrival: false,
   },
 ]

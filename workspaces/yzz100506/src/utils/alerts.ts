@@ -8,6 +8,17 @@ export function getAlertsForAppointment(
 ): Alert[] {
   const alerts: Alert[] = []
 
+  if (appointment.earlyArrival && appointment.status !== 'completed' && appointment.status !== 'in-progress') {
+    alerts.push({
+      id: `early-${appointment.id}`,
+      type: 'early-arrival',
+      severity: 'low',
+      message: '主人已提前到店等待',
+      details: `预约时间 ${appointment.startTime}，到店时间 ${appointment.arrivedAt ?? '未知'}，请尽快安排服务`,
+      appointmentId: appointment.id,
+    })
+  }
+
   if (pet && pet.size === 'large' && appointment.estimatedDuration < 90) {
     alerts.push({
       id: `duration-${appointment.id}`,
@@ -63,25 +74,7 @@ export function getAlertsForAppointment(
   return alerts
 }
 
-export function getEarlyArrivalAlert(
-  appointment: Appointment,
-  currentTime: string
-): Alert | null {
-  if (appointment.status === 'completed') return null
-  if (timeToMinutes(currentTime) < timeToMinutes(appointment.startTime)) {
-    return {
-      id: `early-${appointment.id}`,
-      type: 'early-arrival',
-      severity: 'low',
-      message: '主人提前到达',
-      details: `预约时间 ${appointment.startTime}，主人已提前到店`,
-      appointmentId: appointment.id,
-    }
-  }
-  return null
-}
-
-function timeToMinutes(time: string): number {
-  const [h, m] = time.split(':').map(Number)
-  return h * 60 + m
+export function getCurrentHHMM(): string {
+  const d = new Date()
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }

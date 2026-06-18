@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   XCircle,
   Play,
+  X,
+  AlertCircle,
 } from 'lucide-react'
 import { useStore } from '@/store/useStore'
 import AlertBanner from '@/components/alerts/AlertBanner'
@@ -52,6 +54,8 @@ export default function GroomerPage() {
   const getGroomerById = useStore((s) => s.getGroomerById)
   const updateAppointment = useStore((s) => s.updateAppointment)
   const appointments = useStore((s) => s.appointments)
+  const markEarlyArrival = useStore((s) => s.markEarlyArrival)
+  const cancelEarlyArrival = useStore((s) => s.cancelEarlyArrival)
 
   const [selectedGroomerId, setSelectedGroomerId] = useState(groomers[0]?.id ?? '')
   const [selectedDate, setSelectedDate] = useState(() => toDateStr(new Date()))
@@ -185,13 +189,23 @@ export default function GroomerPage() {
               .filter(Boolean)
             const needsExperienced =
               pet?.personality === 'nervous' || pet?.personality === 'aggressive'
+            const isEarlyArrival = apt.earlyArrival
+            const canMarkArrival = apt.status === 'pending'
+            const arrivalRing = isEarlyArrival ? 'ring-2 ring-yellow-400 ring-offset-1 bg-yellow-50/50' : ''
 
             return (
               <div
                 key={apt.id}
-                className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                className={`bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow relative ${arrivalRing}`}
               >
-                <div className="flex items-start justify-between gap-3">
+                {isEarlyArrival && (
+                  <div className="absolute -top-3 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400 text-yellow-900 text-xs font-bold shadow-sm animate-pulse z-10">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    等待中 · {pet?.name} · {apt.arrivedAt} 到店
+                  </div>
+                )}
+
+                <div className="flex items-start justify-between gap-3 mt-1">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       <Clock className="w-4 h-4 text-brand-500" />
@@ -296,6 +310,26 @@ export default function GroomerPage() {
                   </div>
 
                   <div className="flex flex-col gap-1 shrink-0">
+                    {canMarkArrival && !isEarlyArrival && (
+                      <button
+                        onClick={() => markEarlyArrival(apt.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border-yellow-200 transition-colors"
+                        title="标记主人已提前到店"
+                      >
+                        <UserCheck className="w-3.5 h-3.5" />
+                        到店
+                      </button>
+                    )}
+                    {isEarlyArrival && (
+                      <button
+                        onClick={() => cancelEarlyArrival(apt.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border bg-white text-gray-500 hover:bg-gray-50 border-gray-200 transition-colors"
+                        title="取消到店标记"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                        取消到店
+                      </button>
+                    )}
                     {nextStatuses.map((ns) => {
                       const icon =
                         ns === 'in-progress' ? (

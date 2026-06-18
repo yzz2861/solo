@@ -33,6 +33,9 @@ interface AppointmentStore {
   getConflicts: (groomerId: string, date: string, start: string, end: string, excludeId?: string) => Appointment[]
   getAlerts: (appointment: Appointment) => Alert[]
   getAllAlertsForDate: (date: string) => Alert[]
+
+  markEarlyArrival: (id: string) => void
+  cancelEarlyArrival: (id: string) => void
 }
 
 export const useStore = create<AppointmentStore>()(
@@ -112,6 +115,27 @@ export const useStore = create<AppointmentStore>()(
         const apts = get().getAppointmentsByDate(date)
         return apts.flatMap((apt) => get().getAlerts(apt))
       },
+
+      markEarlyArrival: (id) => {
+        const d = new Date()
+        const hhmm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+        set((state) => ({
+          appointments: state.appointments.map((apt) =>
+            apt.id === id
+              ? { ...apt, earlyArrival: true, arrivedAt: apt.arrivedAt ?? hhmm }
+              : apt
+          ),
+        }))
+      },
+
+      cancelEarlyArrival: (id) =>
+        set((state) => ({
+          appointments: state.appointments.map((apt) =>
+            apt.id === id
+              ? { ...apt, earlyArrival: false, arrivedAt: undefined }
+              : apt
+          ),
+        })),
     }),
     {
       name: 'pet-grooming-store',
