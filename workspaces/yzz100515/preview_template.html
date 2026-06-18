@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>截图隐私遮罩 - 预览清单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-hover: #30363d;
+            --border-color: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-tertiary: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #a371f7;
+            --accent-orange: #db6d28;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .app-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .app-header h1 .icon {
+            font-size: 32px;
+        }
+
+        .app-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .summary-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .summary-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .summary-card.total { border-left: 3px solid var(--accent-blue); }
+        .summary-card.success { border-left: 3px solid var(--accent-green); }
+        .summary-card.confirmed { border-left: 3px solid var(--accent-green); }
+        .summary-card.review { border-left: 3px solid var(--accent-yellow); }
+        .summary-card.failed { border-left: 3px solid var(--accent-red); }
+        .summary-card.masks { border-left: 3px solid var(--accent-purple); }
+
+        .summary-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .summary-card.total .summary-value { color: var(--accent-blue); }
+        .summary-card.success .summary-value { color: var(--accent-green); }
+        .summary-card.confirmed .summary-value { color: var(--accent-green); }
+        .summary-card.review .summary-value { color: var(--accent-yellow); }
+        .summary-card.failed .summary-value { color: var(--accent-red); }
+        .summary-card.masks .summary-value { color: var(--accent-purple); }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .filter-btn .count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .view-btn.active {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .image-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .image-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .image-card.status-success { border-top: 3px solid var(--accent-green); }
+        .image-card.status-review { border-top: 3px solid var(--accent-yellow); }
+        .image-card.status-failed { border-top: 3px solid var(--accent-red); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-filename {
+            font-weight: 500;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 12px;
+            font-family: ui-monospace, SFMono-Regular, monospace;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .status-badge.success {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .status-badge.review {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-yellow);
+        }
+
+        .status-badge.failed {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-red);
+        }
+
+        .image-container {
+            position: relative;
+            aspect-ratio: 16/10;
+            background: var(--bg-primary);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        .image-zoom-hint {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .image-container:hover .image-zoom-hint {
+            opacity: 1;
+        }
+
+        .view-switcher {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: flex;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .view-switcher button {
+            padding: 4px 8px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .view-switcher button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .view-switcher button.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .card-meta {
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .meta-label {
+            color: var(--text-tertiary);
+        }
+
+        .meta-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .review-section {
+            padding: 12px 16px;
+            background: rgba(210, 153, 34, 0.05);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-section h4 {
+            color: var(--accent-yellow);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .review-list {
+            list-style: none;
+        }
+
+        .review-list li {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .review-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-yellow);
+        }
+
+        .regions-list {
+            padding: 12px 16px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .regions-list h4 {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .region-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        .region-item .region-name {
+            color: var(--text-primary);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .region-item.suspect {
+            border-left: 2px solid var(--accent-yellow);
+        }
+
+        .region-item.confirmed {
+            border-left: 2px solid var(--accent-green);
+        }
+
+        .region-item .region-conf {
+            color: var(--text-tertiary);
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        .card-actions {
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .action-btn.primary {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #388bfd;
+        }
+
+        .action-btn.success {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .action-btn.success:hover {
+            background: #2ea043;
+        }
+
+        .action-btn.warning {
+            background: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            color: #1a1a1a;
+        }
+
+        .action-btn.warning:hover {
+            background: #bb8009;
+        }
+
+        .error-display {
+            padding: 24px;
+            text-align: center;
+            color: var(--accent-red);
+            font-size: 13px;
+        }
+
+        .error-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 95vw;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: -40px;
+            right: 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .app-footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 12px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 16px;
+            }
+
+            .images-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>
+                <span class="icon">🔒</span>
+                截图隐私遮罩 - 预览清单
+            </h1>
+            <p class="subtitle">生成时间: {{GENERATE_TIME}}</p>
+        </header>
+
+        <section class="summary-section">
+            <div class="summary-card total">
+                <div class="summary-value" id="summary-total">0</div>
+                <div class="summary-label">总图片数</div>
+            </div>
+            <div class="summary-card success">
+                <div class="summary-value" id="summary-success">0</div>
+                <div class="summary-label">处理成功</div>
+            </div>
+            <div class="summary-card confirmed">
+                <div class="summary-value" id="summary-confirmed">0</div>
+                <div class="summary-label">已确认</div>
+            </div>
+            <div class="summary-card review">
+                <div class="summary-value" id="summary-review">0</div>
+                <div class="summary-label">待人工复查</div>
+            </div>
+            <div class="summary-card failed">
+                <div class="summary-value" id="summary-failed">0</div>
+                <div class="summary-label">处理失败</div>
+            </div>
+            <div class="summary-card masks">
+                <div class="summary-value" id="summary-masks">0</div>
+                <div class="summary-label">确认遮罩/总数</div>
+            </div>
+        </section>
+
+        <div class="toolbar">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">
+                    全部 <span class="count" id="count-all">0</span>
+                </button>
+                <button class="filter-btn" data-filter="success">
+                    处理成功 <span class="count" id="count-success">0</span>
+                </button>
+                <button class="filter-btn" data-filter="confirmed">
+                    已确认 <span class="count" id="count-confirmed">0</span>
+                </button>
+                <button class="filter-btn" data-filter="review">
+                    待复查 <span class="count" id="count-review">0</span>
+                </button>
+                <button class="filter-btn" data-filter="failed">
+                    处理失败 <span class="count" id="count-failed">0</span>
+                </button>
+            </div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid">网格视图</button>
+                <button class="view-btn" data-view="list">列表视图</button>
+            </div>
+        </div>
+
+        <div class="images-grid" id="images-grid">
+        </div>
+
+        <footer class="app-footer">
+            <p>桌面截图隐私遮罩工具 | 产品经理确认模式 | 所有原图已自动备份</p>
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="image-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">✕</button>
+            <img src="" alt="" class="modal-image" id="modal-image">
+            <div class="modal-info" id="modal-info"></div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-out">−</button>
+                <button class="zoom-btn" id="zoom-reset">⟲</button>
+                <button class="zoom-btn" id="zoom-in">+</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RESULTS = {{RESULTS_JSON}};
+        const SUMMARY = {{SUMMARY_JSON}};
+
+        let currentFilter = 'all';
+        let currentView = 'grid';
+        let imageViewModes = {};
+        let confirmedStatus = {};
+        let modalZoom = 1;
+
+        function init() {
+            updateSummary();
+            updateCounts();
+            renderImages();
+            setupEventListeners();
+            loadConfirmedStatus();
+        }
+
+        function updateSummary() {
+            document.getElementById('summary-total').textContent = SUMMARY.total;
+            document.getElementById('summary-success').textContent = SUMMARY.success;
+            document.getElementById('summary-confirmed').textContent = SUMMARY.confirmed;
+            document.getElementById('summary-review').textContent = SUMMARY.needs_review;
+            document.getElementById('summary-failed').textContent = SUMMARY.failed;
+            document.getElementById('summary-masks').textContent = 
+                `${SUMMARY.confirmed_masks} / ${SUMMARY.total_masks}`;
+        }
+
+        function updateCounts() {
+            const all = RESULTS.length;
+            const success = RESULTS.filter(r => r.status === 'success').length;
+            const confirmed = RESULTS.filter(r => r.status === 'success' && !r.needs_review).length;
+            const review = RESULTS.filter(r => r.needs_review).length;
+            const failed = RESULTS.filter(r => r.status === 'failed').length;
+
+            document.getElementById('count-all').textContent = all;
+            document.getElementById('count-success').textContent = success;
+            document.getElementById('count-confirmed').textContent = confirmed;
+            document.getElementById('count-review').textContent = review;
+            document.getElementById('count-failed').textContent = failed;
+        }
+
+        function getFilteredResults() {
+            switch(currentFilter) {
+                case 'success':
+                    return RESULTS.filter(r => r.status === 'success');
+                case 'confirmed':
+                    return RESULTS.filter(r => r.status === 'success' && 
+                        (confirmedStatus[r.filename] || !r.needs_review));
+                case 'review':
+                    return RESULTS.filter(r => r.needs_review && 
+                        !confirmedStatus[r.filename]);
+                case 'failed':
+                    return RESULTS.filter(r => r.status === 'failed');
+                default:
+                    return RESULTS;
+            }
+        }
+
+        function renderImages() {
+            const grid = document.getElementById('images-grid');
+            const filtered = getFilteredResults();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-icon">📭</div>
+                        <p>没有符合筛选条件的图片</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map((result, index) => {
+                const isConfirmed = confirmedStatus[result.filename] || !result.needs_review;
+                const statusClass = result.status === 'failed' ? 'failed' : 
+                    (isConfirmed ? 'success' : 'review');
+                const statusText = result.status === 'failed' ? '处理失败' :
+                    (isConfirmed ? '已确认' : '待复查');
+
+                if (!imageViewModes[result.filename]) {
+                    imageViewModes[result.filename] = 'overlay';
+                }
+
+                const viewMode = imageViewModes[result.filename];
+                const imageSrc = viewMode === 'original' ? result.original_path :
+                    viewMode === 'output' ? result.output_path : result.overlay_path;
+
+                let regionsHtml = '';
+                if (result.regions && result.regions.length > 0) {
+                    regionsHtml = '<div class="regions-list"><h4>遮罩区域 (' + result.regions.length + ')</h4>';
+                    result.regions.forEach(region => {
+                        const isSuspect = region.needs_review;
+                        const confClass = isSuspect ? 'suspect' : 'confirmed';
+                        const confText = isSuspect ? '疑似' : '确认';
+                        regionsHtml += `
+                            <div class="region-item ${confClass}">
+                                <span class="region-name">${escapeHtml(region.reason)}</span>
+                                <span class="region-conf">${confText} ${(region.confidence * 100).toFixed(0)}%</span>
+                            </div>
+                        `;
+                    });
+                    regionsHtml += '</div>';
+                }
+
+                let reviewHtml = '';
+                if (result.review_reasons && result.review_reasons.length > 0) {
+                    reviewHtml = `
+                        <div class="review-section">
+                            <h4>⚠️ 待确认原因</h4>
+                            <ul class="review-list">
+                                ${result.review_reasons.map(r => `<li>${escapeHtml(r)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                let errorHtml = '';
+                if (result.status === 'failed') {
+                    errorHtml = `
+                        <div class="error-display">
+                            <div class="error-icon">❌</div>
+                            <p>${escapeHtml(result.error_message)}</p>
+                        </div>
+                    `;
+                }
+
+                let imageHtml = '';
+                if (result.status === 'success') {
+                    imageHtml = `
+                        <div class="image-container" onclick="openModal('${result.filename}')">
+                            <div class="view-switcher" onclick="event.stopPropagation()">
+                                <button class="${viewMode === 'overlay' ? 'active' : ''}" 
+                                        onclick="switchImageView('${result.filename}', 'overlay')">叠加</button>
+                                <button class="${viewMode === 'output' ? 'active' : ''}" 
+                                        onclick="switchImageView('${result.filename}', 'output')">遮罩</button>
+                                <button class="${viewMode === 'original' ? 'active' : ''}" 
+                                        onclick="switchImageView('${result.filename}', 'original')">原图</button>
+                            </div>
+                            <img src="${imageSrc}" alt="${escapeHtml(result.filename)}" loading="lazy">
+                            <div class="image-zoom-hint">点击放大查看</div>
+                        </div>
+                    `;
+                }
+
+                let actionsHtml = '';
+                if (result.status === 'success' && result.needs_review) {
+                    if (isConfirmed) {
+                        actionsHtml = `
+                            <div class="card-actions">
+                                <button class="action-btn" onclick="toggleConfirm('${result.filename}')">
+                                    ↩️ 取消确认
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        actionsHtml = `
+                            <div class="card-actions">
+                                <button class="action-btn success" onclick="toggleConfirm('${result.filename}')">
+                                    ✓ 确认无误
+                                </button>
+                                <button class="action-btn warning" onclick="flagForEdit('${result.filename}')">
+                                    ✏️ 需要调整
+                                </button>
+                            </div>
+                        `;
+                    }
+                }
+
+                return `
+                    <div class="image-card status-${statusClass}" data-filename="${result.filename}">
+                        <div class="card-header">
+                            <span class="card-filename" title="${escapeHtml(result.filename)}">
+                                ${escapeHtml(result.filename)}
+                            </span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        ${imageHtml}
+                        ${errorHtml}
+                        ${result.status === 'success' ? `
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">尺寸</span>
+                                <span class="meta-value">${result.image_size}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">遮罩数</span>
+                                <span class="meta-value">${result.mask_count}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">深色主题</span>
+                                <span class="meta-value">${result.is_dark_theme ? '是' : '否'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">处理时间</span>
+                                <span class="meta-value">${result.process_time}</span>
+                            </div>
+                        </div>
+                        ` : ''}
+                        ${reviewHtml}
+                        ${regionsHtml}
+                        ${actionsHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function switchImageView(filename, mode) {
+            imageViewModes[filename] = mode;
+            const card = document.querySelector(`[data-filename="${filename}"]`);
+            if (card) {
+                const result = RESULTS.find(r => r.filename === filename);
+                const imageSrc = mode === 'original' ? result.original_path :
+                    mode === 'output' ? result.output_path : result.overlay_path;
+                
+                const img = card.querySelector('.image-container img');
+                if (img) img.src = imageSrc;
+
+                const buttons = card.querySelectorAll('.view-switcher button');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.textContent === (mode === 'overlay' ? '叠加' : mode === 'output' ? '遮罩' : '原图')) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        function toggleConfirm(filename) {
+            if (confirmedStatus[filename]) {
+                delete confirmedStatus[filename];
+            } else {
+                confirmedStatus[filename] = true;
+            }
+            saveConfirmedStatus();
+            renderImages();
+            updateCounts();
+        }
+
+        function flagForEdit(filename) {
+            alert('已标记为需要调整：' + filename + '\n\n请在配置文件中调整遮罩规则后重新运行脚本。');
+        }
+
+        function saveConfirmedStatus() {
+            try {
+                localStorage.setItem('privacyMaskConfirmed', JSON.stringify(confirmedStatus));
+            } catch(e) {}
+        }
+
+        function loadConfirmedStatus() {
+            try {
+                const saved = localStorage.getItem('privacyMaskConfirmed');
+                if (saved) {
+                    confirmedStatus = JSON.parse(saved);
+                }
+            } catch(e) {}
+        }
+
+        function openModal(filename) {
+            const result = RESULTS.find(r => r.filename === filename);
+            if (!result) return;
+
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-image');
+            const modalInfo = document.getElementById('modal-info');
+
+            const viewMode = imageViewModes[filename] || 'overlay';
+            const imageSrc = viewMode === 'original' ? result.original_path :
+                viewMode === 'output' ? result.output_path : result.overlay_path;
+
+            modalImg.src = imageSrc;
+            modalInfo.textContent = `${result.filename} | ${result.image_size} | ${result.mask_count} 个遮罩`;
+            modalZoom = 1;
+            modalImg.style.transform = 'scale(1)';
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function zoomIn() {
+            modalZoom = Math.min(modalZoom * 1.2, 5);
+            updateModalZoom();
+        }
+
+        function zoomOut() {
+            modalZoom = Math.max(modalZoom / 1.2, 0.2);
+            updateModalZoom();
+        }
+
+        function zoomReset() {
+            modalZoom = 1;
+            updateModalZoom();
+        }
+
+        function updateModalZoom() {
+            const modalImg = document.getElementById('modal-image');
+            modalImg.style.transform = `scale(${modalZoom})`;
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderImages();
+                });
+            });
+
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentView = btn.dataset.view;
+                    const grid = document.getElementById('images-grid');
+                    if (currentView === 'list') {
+                        grid.style.gridTemplateColumns = '1fr';
+                    } else {
+                        grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(340px, 1fr))';
+                    }
+                });
+            });
+
+            document.getElementById('modal-close').addEventListener('click', closeModal);
+            document.getElementById('image-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'image-modal') closeModal();
+            });
+            document.getElementById('zoom-in').addEventListener('click', zoomIn);
+            document.getElementById('zoom-out').addEventListener('click', zoomOut);
+            document.getElementById('zoom-reset').addEventListener('click', zoomReset);
+
+            document.addEventListener('keydown', (e) => {
+                const modal = document.getElementById('image-modal');
+                if (!modal.classList.contains('active')) return;
+
+                switch(e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case '+':
+                    case '=':
+                        zoomIn();
+                        break;
+                    case '-':
+                        zoomOut();
+                        break;
+                    case '0':
+                        zoomReset();
+                        break;
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

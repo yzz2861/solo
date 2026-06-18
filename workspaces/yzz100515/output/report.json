@@ -1,0 +1,413 @@
+{
+  "generate_time": "2026-06-18T09:16:11.423771",
+  "summary": {
+    "total": 5,
+    "success": 5,
+    "failed": 0,
+    "confirmed": 0,
+    "needs_review": 5,
+    "total_masks": 33,
+    "confirmed_masks": 5,
+    "suspect_masks": 28,
+    "dark_theme_count": 2
+  },
+  "results": [
+    {
+      "filename": "后台_异常分辨率.png",
+      "original_path": "../screenshots/后台_异常分辨率.png",
+      "backup_path": "backup/后台_异常分辨率_backup_20260618_091608.png",
+      "output_path": "后台_异常分辨率.png",
+      "overlay_path": "overlay_后台_异常分辨率.png",
+      "status": "success",
+      "needs_review": true,
+      "review_reasons": [
+        "4 个区域规则遮罩需确认",
+        "异常宽高比: 3.33 (2000x600)"
+      ],
+      "error_message": "",
+      "image_size": "2000x600",
+      "is_dark_theme": false,
+      "mask_count": 5,
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 2000,
+          "height": 42,
+          "reason": "区域规则: 顶部用户信息栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 120,
+          "reason": "区域规则: 左侧用户信息区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 558,
+          "width": 2000,
+          "height": 42,
+          "reason": "区域规则: 底部状态栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 1700,
+          "y": 0,
+          "width": 300,
+          "height": 48,
+          "reason": "区域规则: 右上角用户区",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        {
+          "x": 1500,
+          "y": 48,
+          "width": 500,
+          "height": 48,
+          "reason": "区域规则: 内部操作按钮区",
+          "confidence": 1.0,
+          "needs_review": true
+        }
+      ],
+      "process_time": "0.59s"
+    },
+    {
+      "filename": "后台_数据面板_深色.png",
+      "original_path": "../screenshots/后台_数据面板_深色.png",
+      "backup_path": "backup/后台_数据面板_深色_backup_20260618_091609.png",
+      "output_path": "后台_数据面板_深色.png",
+      "overlay_path": "overlay_后台_数据面板_深色.png",
+      "status": "success",
+      "needs_review": true,
+      "review_reasons": [
+        "深色主题，需确认遮罩效果",
+        "4 个区域规则遮罩需确认",
+        "发现 7 个疑似文本区域"
+      ],
+      "error_message": "",
+      "image_size": "2560x1440",
+      "is_dark_theme": true,
+      "mask_count": 12,
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 2560,
+          "height": 100,
+          "reason": "区域规则: 顶部用户信息栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 460,
+          "height": 288,
+          "reason": "区域规则: 左侧用户信息区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 1339,
+          "width": 2560,
+          "height": 100,
+          "reason": "区域规则: 底部状态栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 2176,
+          "y": 0,
+          "width": 384,
+          "height": 115,
+          "reason": "区域规则: 右上角用户区",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        {
+          "x": 1920,
+          "y": 115,
+          "width": 640,
+          "height": 115,
+          "reason": "区域规则: 内部操作按钮区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 915,
+          "y": 976,
+          "width": 146,
+          "height": 254,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 575,
+          "y": 875,
+          "width": 146,
+          "height": 355,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 1255,
+          "y": 849,
+          "width": 146,
+          "height": 381,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 745,
+          "y": 798,
+          "width": 146,
+          "height": 432,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 1425,
+          "y": 773,
+          "width": 146,
+          "height": 457,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 1085,
+          "y": 747,
+          "width": 146,
+          "height": 483,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        },
+        {
+          "x": 1595,
+          "y": 722,
+          "width": 146,
+          "height": 508,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        }
+      ],
+      "process_time": "0.43s"
+    },
+    {
+      "filename": "后台_用户信息_深色.png",
+      "original_path": "../screenshots/后台_用户信息_深色.png",
+      "backup_path": "backup/后台_用户信息_深色_backup_20260618_091609.png",
+      "output_path": "后台_用户信息_深色.png",
+      "overlay_path": "overlay_后台_用户信息_深色.png",
+      "status": "success",
+      "needs_review": true,
+      "review_reasons": [
+        "深色主题，需确认遮罩效果",
+        "4 个区域规则遮罩需确认",
+        "发现 1 个疑似文本区域"
+      ],
+      "error_message": "",
+      "image_size": "1920x1080",
+      "is_dark_theme": true,
+      "mask_count": 6,
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 75,
+          "reason": "区域规则: 顶部用户信息栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 345,
+          "height": 216,
+          "reason": "区域规则: 左侧用户信息区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 1004,
+          "width": 1920,
+          "height": 75,
+          "reason": "区域规则: 底部状态栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 1632,
+          "y": 0,
+          "width": 288,
+          "height": 86,
+          "reason": "区域规则: 右上角用户区",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        {
+          "x": 1440,
+          "y": 86,
+          "width": 480,
+          "height": 86,
+          "reason": "区域规则: 内部操作按钮区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 440,
+          "y": 290,
+          "width": 211,
+          "height": 175,
+          "reason": "疑似文本区域 (置信度: 0.80)",
+          "confidence": 0.8,
+          "needs_review": true
+        }
+      ],
+      "process_time": "0.91s"
+    },
+    {
+      "filename": "后台_订单列表_浅色.png",
+      "original_path": "../screenshots/后台_订单列表_浅色.png",
+      "backup_path": "backup/后台_订单列表_浅色_backup_20260618_091610.png",
+      "output_path": "后台_订单列表_浅色.png",
+      "overlay_path": "overlay_后台_订单列表_浅色.png",
+      "status": "success",
+      "needs_review": true,
+      "review_reasons": [
+        "4 个区域规则遮罩需确认"
+      ],
+      "error_message": "",
+      "image_size": "1280x800",
+      "is_dark_theme": false,
+      "mask_count": 5,
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 56,
+          "reason": "区域规则: 顶部用户信息栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 230,
+          "height": 160,
+          "reason": "区域规则: 左侧用户信息区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 744,
+          "width": 1280,
+          "height": 56,
+          "reason": "区域规则: 底部状态栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 1088,
+          "y": 0,
+          "width": 192,
+          "height": 64,
+          "reason": "区域规则: 右上角用户区",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        {
+          "x": 960,
+          "y": 64,
+          "width": 320,
+          "height": 64,
+          "reason": "区域规则: 内部操作按钮区",
+          "confidence": 1.0,
+          "needs_review": true
+        }
+      ],
+      "process_time": "0.78s"
+    },
+    {
+      "filename": "后台_订单详情_浅色.png",
+      "original_path": "../screenshots/后台_订单详情_浅色.png",
+      "backup_path": "backup/后台_订单详情_浅色_backup_20260618_091611.png",
+      "output_path": "后台_订单详情_浅色.png",
+      "overlay_path": "overlay_后台_订单详情_浅色.png",
+      "status": "success",
+      "needs_review": true,
+      "review_reasons": [
+        "4 个区域规则遮罩需确认"
+      ],
+      "error_message": "",
+      "image_size": "1440x900",
+      "is_dark_theme": false,
+      "mask_count": 5,
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 63,
+          "reason": "区域规则: 顶部用户信息栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 259,
+          "height": 180,
+          "reason": "区域规则: 左侧用户信息区",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 0,
+          "y": 837,
+          "width": 1440,
+          "height": 63,
+          "reason": "区域规则: 底部状态栏",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        {
+          "x": 1224,
+          "y": 0,
+          "width": 216,
+          "height": 72,
+          "reason": "区域规则: 右上角用户区",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        {
+          "x": 1080,
+          "y": 72,
+          "width": 360,
+          "height": 72,
+          "reason": "区域规则: 内部操作按钮区",
+          "confidence": 1.0,
+          "needs_review": true
+        }
+      ],
+      "process_time": "0.23s"
+    }
+  ]
+}
