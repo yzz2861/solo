@@ -38,7 +38,7 @@ interface DataState {
   addAlert: (alert: Alert) => void;
   markAlertRead: (alertId: string) => void;
   markAllAlertsRead: () => void;
-  verifySpecialMeal: (id: string, verifiedBy: string) => void;
+  verifySpecialMeal: (idOrOrderId: string, verifiedBy: string) => void;
   importOrders: (orders: Order[]) => { count: number; specialCount: number; alerts: Alert[] };
   importRefunds: (refunds: Refund[]) => { count: number; updatedOrders: number; alerts: Alert[] };
   importWardCounts: (counts: WardCount[]) => { count: number; alerts: Alert[] };
@@ -133,9 +133,9 @@ export const useDataStore = create<DataState>((set, get) => ({
     alerts: state.alerts.map(a => ({ ...a, isRead: true }))
   })),
 
-  verifySpecialMeal: (id, verifiedBy) => set((state) => ({
+  verifySpecialMeal: (idOrOrderId, verifiedBy) => set((state) => ({
     specialMeals: state.specialMeals.map(sm =>
-      sm.id === id
+      (sm.id === idOrOrderId || sm.orderId === idOrOrderId)
         ? { ...sm, isVerified: true, verifiedBy, verifiedAt: new Date().toISOString() }
         : sm
     )
