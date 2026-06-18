@@ -19,7 +19,7 @@ function SampleFormModal({ visible, sample, onCancel, onOk }: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [batchWarning, setBatchWarning] = useState<string | null>(null);
-  const [batchInfo, setBatchInfo] = useState<any>(null);
+  const [batchInfo, setBatchInfo] = useState<BatchCheckResult | null>(null);
 
   useEffect(() => {
     if (visible) {
