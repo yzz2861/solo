@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FacilityPanel } from "@/components/dashboard/FacilityPanel";
 import { SimulationPanel } from "@/components/dashboard/SimulationPanel";
@@ -7,10 +8,53 @@ import { StatusBar } from "@/components/dashboard/StatusBar";
 import TunnelScene from "@/components/3d/TunnelScene";
 import { useSceneStore } from "@/store/useSceneStore";
 import { useScenarioStore } from "@/store/useScenarioStore";
+import { db } from "@/data/db";
+import type { Scenario } from "@/types";
 
 export default function Dashboard() {
+  const [searchParams] = useSearchParams();
   const setRoute = useSceneStore((state) => state.setRoute);
+  const nodes = useSceneStore((state) => state.nodes);
+  const edges = useSceneStore((state) => state.edges);
   const calculatedRoute = useScenarioStore((state) => state.calculatedRoute);
+  const setScenario = useScenarioStore((state) => state.setScenario);
+  const calculateRoute = useScenarioStore((state) => state.calculateRoute);
+  const [loadedScenario, setLoadedScenario] = useState<Scenario | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const scenarioId = searchParams.get("scenarioId");
+    if (scenarioId && !loadedScenario) {
+      loadScenario(scenarioId);
+    }
+  }, [searchParams, loadedScenario]);
+
+  const loadScenario = async (scenarioId: string) => {
+    setIsLoading(true);
+    try {
+      const scenario = await db.getScenarioById(scenarioId);
+      if (scenario) {
+        setLoadedScenario(scenario);
+        setScenario(scenario);
+      }
+    } catch (error) {
+      console.error("加载方案失败:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (loadedScenario && nodes.length > 0 && edges.length > 0 && !calculatedRoute) {
+      calculateRoute(
+        nodes,
+        edges,
+        loadedScenario.startNodeId,
+        loadedScenario.endNodeId,
+        loadedScenario.accidentType
+      );
+    }
+  }, [loadedScenario, nodes, edges, calculatedRoute, calculateRoute]);
 
   useEffect(() => {
     setRoute(calculatedRoute);

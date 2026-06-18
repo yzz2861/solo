@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Plus, Edit2, Trash2, Play, X, ChevronDown } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, Play, X, ChevronDown, Download } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { HudPanel } from '@/components/ui/HudPanel';
 import { IndustrialButton } from '@/components/ui/IndustrialButton';
@@ -47,6 +48,7 @@ const itemVariants = {
 };
 
 export default function Scenarios() {
+  const navigate = useNavigate();
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [nodes, setNodes] = useState<TunnelNode[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -317,8 +319,17 @@ export default function Scenarios() {
                         size="sm"
                         variant="success"
                         leftIcon={<Play size={14} />}
+                        onClick={() => navigate(`/?scenarioId=${scenario.id}`)}
                       >
                         开始推演
+                      </IndustrialButton>
+                      <IndustrialButton
+                        size="sm"
+                        variant="default"
+                        leftIcon={<Download size={14} />}
+                        onClick={() => navigate(`/export?scenarioId=${scenario.id}`)}
+                      >
+                        导出
                       </IndustrialButton>
                     </div>
                   </div>

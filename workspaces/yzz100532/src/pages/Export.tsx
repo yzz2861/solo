@@ -1,4 +1,5 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -16,8 +17,9 @@ import {
 import { PageLayout } from "@/components/layout/PageLayout";
 import { IndustrialButton } from "@/components/ui/IndustrialButton";
 import { cn } from "@/lib/utils";
-import { mockScenarios, mockTunnelNodes, mockTunnelEdges, mockFacilities } from "@/data/mock/tunnelData";
+import { db } from "@/data/db";
 import type { Scenario, TunnelNode, TunnelEdge } from "@/types";
+import { aStar } from "@/engine/pathfinding/aStar";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -34,46 +36,92 @@ const accidentTypeMap: Record<string, string> = {
 };
 
 export default function Export() {
-  const [selectedScenarioId, setSelectedScenarioId] = useState(mockScenarios[0].id);
+  const [searchParams] = useSearchParams();
+  const [scenarios, setScenarios] = useState<Scenario[]>([]);
+  const [nodes, setNodes] = useState<TunnelNode[]>([]);
+  const [edges, setEdges] = useState<TunnelEdge[]>([]);
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>("");
   const [exportFormat, setExportFormat] = useState<ExportFormat>("pdf");
   const [paperSize, setPaperSize] = useState<PaperSize>("a4");
   const [orientation, setOrientation] = useState<PaperOrientation>("portrait");
   const [version, setVersion] = useState<ExportVersion>("full");
   const [zoom, setZoom] = useState(1);
   const [isExporting, setIsExporting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const previewRef = useRef<HTMLDivElement>(null);
   const scenarioDropdownRef = useRef<HTMLDivElement>(null);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const [scenariosData, nodesData, edgesData] = await Promise.all([
+        db.getAllScenarios(),
+        db.getAllNodes(),
+        db.getAllEdges(),
+      ]);
+      setScenarios(scenariosData);
+      setNodes(nodesData);
+      setEdges(edgesData);
+
+      const urlScenarioId = searchParams.get("scenarioId");
+      if (urlScenarioId && scenariosData.some((s) => s.id === urlScenarioId)) {
+        setSelectedScenarioId(urlScenarioId);
+      } else if (scenariosData.length > 0) {
+        setSelectedScenarioId(scenariosData[0].id);
+      }
+    } catch (error) {
+      console.error("加载数据失败:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const selectedScenario = useMemo(
-    () => mockScenarios.find((s) => s.id === selectedScenarioId) || mockScenarios[0],
-    [selectedScenarioId]
+    () => scenarios.find((s) => s.id === selectedScenarioId) || null,
+    [scenarios, selectedScenarioId]
   );
 
   const routeNodes = useMemo(() => {
-    const nodes: TunnelNode[] = [];
-    const startNode = mockTunnelNodes.find((n) => n.id === selectedScenario.startNodeId);
-    const endNode = mockTunnelNodes.find((n) => n.id === selectedScenario.endNodeId);
-    if (startNode) nodes.push(startNode);
+    if (!selectedScenario || nodes.length === 0 || edges.length === 0) return [];
 
-    const midNodes = mockTunnelNodes.filter(
-      (n) => n.id !== selectedScenario.startNodeId && n.id !== selectedScenario.endNodeId
+    const route = aStar(
+      nodes,
+      edges,
+      selectedScenario.startNodeId,
+      selectedScenario.endNodeId,
+      selectedScenario.accidentType
     );
-    nodes.push(...midNodes.slice(0, 4));
 
-    if (endNode) nodes.push(endNode);
-    return nodes;
-  }, [selectedScenario]);
+    return route.nodes
+      .map((nodeId) => nodes.find((n) => n.id === nodeId))
+      .filter((n): n is TunnelNode => n !== undefined);
+  }, [selectedScenario, nodes, edges]);
 
   const estimatedTime = useMemo(() => {
-    const baseTime = routeNodes.length * 60;
-    const penalty = selectedScenario.constraints.length * 30;
-    return baseTime + penalty;
-  }, [routeNodes, selectedScenario]);
+    if (!selectedScenario || nodes.length === 0 || edges.length === 0) return 0;
+
+    const route = aStar(
+      nodes,
+      edges,
+      selectedScenario.startNodeId,
+      selectedScenario.endNodeId,
+      selectedScenario.accidentType
+    );
+
+    return route.estimatedTime || routeNodes.length * 60;
+  }, [selectedScenario, nodes, edges, routeNodes.length]);
 
   const forbiddenAreas = useMemo(() => {
-    return selectedScenario.constraints.filter((c) => c.type === "blocked" || c.type === "closed");
+    if (!selectedScenario) return [];
+    return selectedScenario.constraints.filter(
+      (c) => c.type === "blocked" || c.type === "closed"
+    );
   }, [selectedScenario]);
 
   const handleExportPDF = async () => {
@@ -112,7 +160,7 @@ export default function Export() {
         heightLeft -= pageHeight - 20;
       }
 
-      pdf.save(`${selectedScenario.name}-应急预案.pdf`);
+      pdf.save(`${selectedScenario?.name || "预案"}-应急预案.pdf`);
     } catch (error) {
       console.error("PDF导出失败:", error);
     } finally {
@@ -136,7 +184,7 @@ export default function Export() {
       });
 
       const link = document.createElement("a");
-      link.download = `${selectedScenario.name}-应急预案.png`;
+      link.download = `${selectedScenario?.name || "预案"}-应急预案.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch (error) {
@@ -152,13 +200,27 @@ export default function Export() {
     return `${mins}分${secs}秒`;
   };
 
+  const getNodeName = (nodeId: string) => {
+    const node = nodes.find((n) => n.id === nodeId);
+    return node?.name || nodeId;
+  };
+
+  const getEdgeName = (edgeId: string | undefined) => {
+    if (!edgeId) return "";
+    const edge = edges.find((e) => e.id === edgeId);
+    if (!edge) return "";
+    const fromNode = nodes.find((n) => n.id === edge.from);
+    const toNode = nodes.find((n) => n.id === edge.to);
+    return `${fromNode?.name || edge.from} - ${toNode?.name || edge.to}`;
+  };
+
   const renderRouteSVG = () => {
     const padding = 40;
     const width = 500;
     const height = 350;
 
-    const xs = mockTunnelNodes.map((n) => n.x);
-    const ys = mockTunnelNodes.map((n) => n.y);
+    const xs = nodes.map((n) => n.x);
+    const ys = nodes.map((n) => n.y);
     const minX = Math.min(...xs);
     const maxX = Math.max(...xs);
     const minY = Math.min(...ys);
@@ -177,7 +239,7 @@ export default function Export() {
     const routeNodeIds = routeNodes.map((n) => n.id);
     const routeEdgeIds: string[] = [];
     for (let i = 0; i < routeNodeIds.length - 1; i++) {
-      const edge = mockTunnelEdges.find(
+      const edge = edges.find(
         (e) =>
           (e.from === routeNodeIds[i] && e.to === routeNodeIds[i + 1]) ||
           (e.to === routeNodeIds[i] && e.from === routeNodeIds[i + 1])
@@ -214,9 +276,9 @@ export default function Export() {
 
         <rect width="100%" height="100%" fill="url(#grid)" />
 
-        {mockTunnelEdges.map((edge) => {
-          const fromNode = mockTunnelNodes.find((n) => n.id === edge.from);
-          const toNode = mockTunnelNodes.find((n) => n.id === edge.to);
+        {edges.map((edge) => {
+          const fromNode = nodes.find((n) => n.id === edge.from);
+          const toNode = nodes.find((n) => n.id === edge.to);
           if (!fromNode || !toNode) return null;
 
           const isRoute = routeEdgeIds.includes(edge.id);
@@ -253,9 +315,9 @@ export default function Export() {
           );
         })}
 
-        {mockTunnelNodes.map((node) => {
-          const isStart = node.id === selectedScenario.startNodeId;
-          const isEnd = node.id === selectedScenario.endNodeId;
+        {nodes.map((node) => {
+          const isStart = node.id === selectedScenario?.startNodeId;
+          const isEnd = node.id === selectedScenario?.endNodeId;
           const isRoute = routeNodeIds.includes(node.id);
 
           let fillColor = "#6b7280";
@@ -299,24 +361,73 @@ export default function Export() {
         })}
 
         <g transform="translate(10, 10)">
-          <rect x="0" y="0" width="120" height="80" fill="white" fillOpacity="0.9" rx="4" stroke="#e5e7eb" />
+          <rect
+            x="0"
+            y="0"
+            width="120"
+            height="80"
+            fill="white"
+            fillOpacity="0.9"
+            rx="4"
+            stroke="#e5e7eb"
+          />
           <circle cx="15" cy="18" r="5" fill="#22c55e" stroke="white" strokeWidth="1" />
-          <text x="25" y="22" fontSize="10" fill="#374151">起点</text>
+          <text x="25" y="22" fontSize="10" fill="#374151">
+            起点
+          </text>
           <circle cx="15" cy="38" r="5" fill="#f97316" stroke="white" strokeWidth="1" />
-          <text x="25" y="42" fontSize="10" fill="#374151">安全出口</text>
-          <line x1="8" y1="58" x2="22" y2="58" stroke="#00d4ff" strokeWidth="3" strokeLinecap="round" />
-          <text x="28" y="62" fontSize="10" fill="#374151">撤离路线</text>
-          <line x1="8" y1="73" x2="22" y2="73" stroke="#ef4444" strokeWidth="3" strokeDasharray="4 2" strokeLinecap="round" />
-          <text x="28" y="77" fontSize="10" fill="#374151">禁入区域</text>
+          <text x="25" y="42" fontSize="10" fill="#374151">
+            安全出口
+          </text>
+          <line
+            x1="8"
+            y1="58"
+            x2="22"
+            y2="58"
+            stroke="#00d4ff"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <text x="28" y="62" fontSize="10" fill="#374151">
+            撤离路线
+          </text>
+          <line
+            x1="8"
+            y1="73"
+            x2="22"
+            y2="73"
+            stroke="#ef4444"
+            strokeWidth="3"
+            strokeDasharray="4 2"
+            strokeLinecap="round"
+          />
+          <text x="28" y="77" fontSize="10" fill="#374151">
+            禁入区域
+          </text>
         </g>
       </svg>
     );
   };
 
+  if (isLoading) {
+    return (
+      <PageLayout title="预案导出">
+        <div className="h-full flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-pulse text-tech-cyan mb-4">加载中...</div>
+            <p className="text-gray-400">正在加载预案数据</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
   const leftPanel = (
     <div className="space-y-4">
       <div>
-        <h3 className="text-sm font-orbitron font-semibold text-tech-cyan mb-2">方案选择</h3>
+        <h3 className="text-sm font-orbitron font-semibold text-tech-cyan mb-2">
+          方案选择
+        </h3>
         <div className="relative" ref={scenarioDropdownRef}>
           <button
             onClick={() => setShowDropdown(!showDropdown)}
@@ -326,70 +437,87 @@ export default function Export() {
               "hover:border-tech-cyan/50 transition-colors"
             )}
           >
-            <span className="text-white">{selectedScenario.name}</span>
-            <ChevronDown size={18} className="text-gray-400" />
+            <span className="text-white truncate">
+              {selectedScenario?.name || "请选择方案"}
+            </span>
+            <ChevronDown size={18} className="text-gray-400 shrink-0" />
           </button>
           {showDropdown && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-mine-blue-dark border border-tech-cyan/30 rounded z-10 max-h-60 overflow-auto">
-              {mockScenarios.map((scenario) => (
-                <button
-                  key={scenario.id}
-                  onClick={() => {
-                    setSelectedScenarioId(scenario.id);
-                    setShowDropdown(false);
-                  }}
-                  className={cn(
-                    "w-full px-4 py-2 text-left hover:bg-tech-cyan/10 transition-colors",
-                    scenario.id === selectedScenarioId ? "text-tech-cyan" : "text-gray-300"
-                  )}
-                >
-                  {scenario.name}
-                </button>
-              ))}
+              {scenarios.length === 0 ? (
+                <div className="px-4 py-3 text-gray-500 text-sm">暂无方案</div>
+              ) : (
+                scenarios.map((scenario) => (
+                  <button
+                    key={scenario.id}
+                    onClick={() => {
+                      setSelectedScenarioId(scenario.id);
+                      setShowDropdown(false);
+                    }}
+                    className={cn(
+                      "w-full px-4 py-2 text-left hover:bg-tech-cyan/10 transition-colors",
+                      scenario.id === selectedScenarioId
+                        ? "text-tech-cyan"
+                        : "text-gray-300"
+                    )}
+                  >
+                    <div className="text-sm truncate">{scenario.name}</div>
+                    <div className="text-xs text-gray-500">
+                      {accidentTypeMap[scenario.accidentType] || scenario.accidentType}
+                    </div>
+                  </button>
+                ))
+              )}
             </div>
           )}
         </div>
       </div>
 
-      <div className="hud-border p-4 rounded">
-        <div className="corner-tr" />
-        <div className="corner-bl" />
-        <h4 className="text-sm font-orbitron font-semibold text-tech-cyan mb-3">方案信息</h4>
-        <div className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-400">方案名称</span>
-            <span className="text-white">{selectedScenario.name}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">事故类型</span>
-            <span className="text-warning-orange">
-              {accidentTypeMap[selectedScenario.accidentType]}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">起始位置</span>
-            <span className="text-white">
-              {mockTunnelNodes.find((n) => n.id === selectedScenario.startNodeId)?.name}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">安全出口</span>
-            <span className="text-safety-green">
-              {mockTunnelNodes.find((n) => n.id === selectedScenario.endNodeId)?.name}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">约束条件</span>
-            <span className="text-alert-red">{selectedScenario.constraints.length} 项</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">创建时间</span>
-            <span className="text-gray-300">
-              {new Date(selectedScenario.createdAt).toLocaleDateString("zh-CN")}
-            </span>
+      {selectedScenario && (
+        <div className="hud-border p-4 rounded">
+          <div className="corner-tr" />
+          <div className="corner-bl" />
+          <h4 className="text-sm font-orbitron font-semibold text-tech-cyan mb-3">
+            方案信息
+          </h4>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-400">方案名称</span>
+              <span className="text-white">{selectedScenario.name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">事故类型</span>
+              <span className="text-warning-orange">
+                {accidentTypeMap[selectedScenario.accidentType]}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">起始位置</span>
+              <span className="text-white">
+                {getNodeName(selectedScenario.startNodeId)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">安全出口</span>
+              <span className="text-safety-green">
+                {getNodeName(selectedScenario.endNodeId)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">约束条件</span>
+              <span className="text-alert-red">
+                {selectedScenario.constraints.length} 项
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">创建时间</span>
+              <span className="text-gray-300">
+                {new Date(selectedScenario.createdAt).toLocaleDateString("zh-CN")}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="hud-border p-4 rounded">
         <div className="corner-tr" />
@@ -508,7 +636,7 @@ export default function Export() {
           fullWidth
           leftIcon={<Download size={18} />}
           onClick={handleExportPDF}
-          disabled={isExporting}
+          disabled={isExporting || !selectedScenario}
         >
           {isExporting ? "导出中..." : "导出 PDF"}
         </IndustrialButton>
@@ -518,6 +646,7 @@ export default function Export() {
           fullWidth
           leftIcon={<Printer size={16} />}
           onClick={handlePrint}
+          disabled={!selectedScenario}
         >
           打印预案
         </IndustrialButton>
@@ -527,7 +656,7 @@ export default function Export() {
           fullWidth
           leftIcon={<Image size={16} />}
           onClick={handleDownloadImage}
-          disabled={isExporting}
+          disabled={isExporting || !selectedScenario}
         >
           下载图片
         </IndustrialButton>
@@ -582,175 +711,182 @@ export default function Export() {
                     : "w-[420mm] min-h-[297mm]"
                 )}
               >
-                <div className="p-8">
-                  <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                      应急撤离预案
-                    </h1>
-                    <p className="text-gray-600">{selectedScenario.name}</p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
-                    <div className="bg-gray-50 p-3 rounded">
-                      <span className="text-gray-500">事故类型：</span>
-                      <span className="font-bold text-alert-red">
-                        {accidentTypeMap[selectedScenario.accidentType]}
-                      </span>
+                {selectedScenario ? (
+                  <div className="p-8">
+                    <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
+                      <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                        应急撤离预案
+                      </h1>
+                      <p className="text-gray-600">{selectedScenario.name}</p>
                     </div>
-                    <div className="bg-gray-50 p-3 rounded">
-                      <span className="text-gray-500">预计撤离时间：</span>
-                      <span className="font-bold text-gray-800">
-                        {formatTime(estimatedTime)}
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="mb-6">
-                    <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                      <FileText size={16} />
-                      路线示意图
-                    </h3>
-                    <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
-                      <div className="aspect-[4/3]">{renderRouteSVG()}</div>
-                    </div>
-                  </div>
-
-                  {version === "full" && (
-                    <div className="mb-6">
-                      <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <MapPin size={16} />
-                        途经节点列表
-                      </h3>
-                      <div className="border border-gray-200 rounded overflow-hidden">
-                        <table className="w-full text-sm">
-                          <thead className="bg-gray-100">
-                            <tr>
-                              <th className="px-3 py-2 text-left font-semibold text-gray-700">
-                                序号
-                              </th>
-                              <th className="px-3 py-2 text-left font-semibold text-gray-700">
-                                节点名称
-                              </th>
-                              <th className="px-3 py-2 text-left font-semibold text-gray-700">
-                                类型
-                              </th>
-                              <th className="px-3 py-2 text-left font-semibold text-gray-700">
-                                备注
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {routeNodes.map((node, index) => (
-                              <tr
-                                key={node.id}
-                                className={cn(
-                                  "border-t border-gray-200",
-                                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                )}
-                              >
-                                <td className="px-3 py-2 text-gray-600">{index + 1}</td>
-                                <td className="px-3 py-2 font-medium text-gray-800">
-                                  {node.name || node.id}
-                                </td>
-                                <td className="px-3 py-2 text-gray-600">
-                                  {node.type === "entrance"
-                                    ? "入口"
-                                    : node.type === "exit"
-                                    ? "出口"
-                                    : node.type === "junction"
-                                    ? "交叉口"
-                                    : "设施"}
-                                </td>
-                                <td className="px-3 py-2">
-                                  {index === 0 && (
-                                    <span className="text-safety-green font-medium">起点</span>
-                                  )}
-                                  {index === routeNodes.length - 1 && (
-                                    <span className="text-warning-orange font-medium">
-                                      安全出口
-                                    </span>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                    <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+                      <div className="bg-gray-50 p-3 rounded">
+                        <span className="text-gray-500">事故类型：</span>
+                        <span className="font-bold text-alert-red">
+                          {accidentTypeMap[selectedScenario.accidentType]}
+                        </span>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded">
+                        <span className="text-gray-500">预计撤离时间：</span>
+                        <span className="font-bold text-gray-800">
+                          {formatTime(estimatedTime)}
+                        </span>
                       </div>
                     </div>
-                  )}
 
-                  {forbiddenAreas.length > 0 && (
                     <div className="mb-6">
                       <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <AlertTriangle size={16} className="text-alert-red" />
-                        禁止进入区域
+                        <FileText size={16} />
+                        路线示意图
                       </h3>
-                      <div className="bg-alert-red/5 border border-alert-red/20 rounded-lg p-4">
-                        <ul className="space-y-2 text-sm">
-                          {forbiddenAreas.map((area) => {
-                            const edge = mockTunnelEdges.find((e) => e.id === area.edgeId);
-                            const fromNode = edge
-                              ? mockTunnelNodes.find((n) => n.id === edge.from)
-                              : null;
-                            const toNode = edge
-                              ? mockTunnelNodes.find((n) => n.id === edge.to)
-                              : null;
-                            return (
+                      <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                        <div className="aspect-[4/3]">{renderRouteSVG()}</div>
+                      </div>
+                    </div>
+
+                    {version === "full" && routeNodes.length > 0 && (
+                      <div className="mb-6">
+                        <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                          <MapPin size={16} />
+                          途经节点列表
+                        </h3>
+                        <div className="border border-gray-200 rounded overflow-hidden">
+                          <table className="w-full text-sm">
+                            <thead className="bg-gray-100">
+                              <tr>
+                                <th className="px-3 py-2 text-left font-semibold text-gray-700">
+                                  序号
+                                </th>
+                                <th className="px-3 py-2 text-left font-semibold text-gray-700">
+                                  节点名称
+                                </th>
+                                <th className="px-3 py-2 text-left font-semibold text-gray-700">
+                                  类型
+                                </th>
+                                <th className="px-3 py-2 text-left font-semibold text-gray-700">
+                                  备注
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {routeNodes.map((node, index) => (
+                                <tr
+                                  key={node.id}
+                                  className={cn(
+                                    "border-t border-gray-200",
+                                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                  )}
+                                >
+                                  <td className="px-3 py-2 text-gray-600">
+                                    {index + 1}
+                                  </td>
+                                  <td className="px-3 py-2 font-medium text-gray-800">
+                                    {node.name || node.id}
+                                  </td>
+                                  <td className="px-3 py-2 text-gray-600">
+                                    {node.type === "entrance"
+                                      ? "入口"
+                                      : node.type === "exit"
+                                      ? "出口"
+                                      : node.type === "junction"
+                                      ? "交叉口"
+                                      : "设施"}
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    {index === 0 && (
+                                      <span className="text-safety-green font-medium">
+                                        起点
+                                      </span>
+                                    )}
+                                    {index === routeNodes.length - 1 && (
+                                      <span className="text-warning-orange font-medium">
+                                        安全出口
+                                      </span>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+
+                    {forbiddenAreas.length > 0 && (
+                      <div className="mb-6">
+                        <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                          <AlertTriangle size={16} className="text-alert-red" />
+                          禁止进入区域
+                        </h3>
+                        <div className="bg-alert-red/5 border border-alert-red/20 rounded-lg p-4">
+                          <ul className="space-y-2 text-sm">
+                            {forbiddenAreas.map((area) => (
                               <li key={area.id} className="flex items-start gap-2">
                                 <span className="text-alert-red mt-0.5">●</span>
                                 <span className="text-gray-700">
-                                  {fromNode?.name || ""} - {toNode?.name || ""}：
+                                  {getEdgeName(area.edgeId)}：
                                   {area.description}
                                 </span>
                               </li>
-                            );
-                          })}
-                        </ul>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {version === "full" && (
-                    <div>
-                      <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <AlertTriangle size={16} className="text-warning-orange" />
-                        注意事项
-                      </h3>
-                      <div className="bg-warning-orange/5 border border-warning-orange/20 rounded-lg p-4">
-                        <ul className="space-y-2 text-sm text-gray-700">
-                          <li className="flex items-start gap-2">
-                            <span className="text-warning-orange mt-0.5">1.</span>
-                            <span>撤离时请保持冷静，沿指定路线有序撤离，切勿拥挤。</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-warning-orange mt-0.5">2.</span>
-                            <span>经过积水区域时请注意脚下，防止滑倒。</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-warning-orange mt-0.5">3.</span>
-                            <span>如遇烟雾，请尽量压低身体前进，必要时使用湿毛巾捂住口鼻。</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-warning-orange mt-0.5">4.</span>
-                            <span>到达安全出口后，请在指定区域集合，等待清点人数。</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-warning-orange mt-0.5">5.</span>
-                            <span>禁止进入标注为红色的封闭/危险区域。</span>
-                          </li>
-                        </ul>
+                    {version === "full" && (
+                      <div>
+                        <h3 className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+                          <AlertTriangle size={16} className="text-warning-orange" />
+                          注意事项
+                        </h3>
+                        <div className="bg-warning-orange/5 border border-warning-orange/20 rounded-lg p-4">
+                          <ul className="space-y-2 text-sm text-gray-700">
+                            <li className="flex items-start gap-2">
+                              <span className="text-warning-orange mt-0.5">1.</span>
+                              <span>
+                                撤离时请保持冷静，沿指定路线有序撤离，切勿拥挤。
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-warning-orange mt-0.5">2.</span>
+                              <span>经过积水区域时请注意脚下，防止滑倒。</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-warning-orange mt-0.5">3.</span>
+                              <span>
+                                如遇烟雾，请尽量压低身体前进，必要时使用湿毛巾捂住口鼻。
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-warning-orange mt-0.5">4.</span>
+                              <span>
+                                到达安全出口后，请在指定区域集合，等待清点人数。
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-warning-orange mt-0.5">5.</span>
+                              <span>禁止进入标注为红色的封闭/危险区域。</span>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {version === "full" && (
-                    <div className="mt-8 pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
-                      <p>预案编号：{selectedScenario.id}</p>
-                      <p>生成时间：{new Date().toLocaleString("zh-CN")}</p>
-                      <p className="mt-1">本预案为系统自动生成，请结合实际情况使用</p>
-                    </div>
-                  )}
-                </div>
+                    {version === "full" && (
+                      <div className="mt-8 pt-4 border-t border-gray-300 text-xs text-gray-500 text-center">
+                        <p>预案编号：{selectedScenario.id}</p>
+                        <p>生成时间：{new Date().toLocaleString("zh-CN")}</p>
+                        <p className="mt-1">本预案为系统自动生成，请结合实际情况使用</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="p-8 flex items-center justify-center min-h-[400px]">
+                    <p className="text-gray-400">请选择一个方案</p>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

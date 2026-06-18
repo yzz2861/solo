@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Play,
@@ -14,13 +15,15 @@ import {
   CheckCircle,
   ArrowRight,
   Home,
+  Save,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockScenarios, mockTunnelNodes, mockTunnelEdges } from "@/data/mock/tunnelData";
-import type { Scenario, TunnelNode, TunnelEdge } from "@/types";
-import { useNavigate, useParams } from "react-router-dom";
+import { db } from "@/data/db";
+import type { Scenario, TunnelNode, TunnelEdge, DrillRecord } from "@/types";
+import { aStar } from "@/engine/pathfinding/aStar";
 
-type DrillState = "ready" | "running" | "paused" | "completed";
+type DrillState = "ready" | "running" | "paused" | "completed" | "saving";
 
 interface NodeTimestamp {
   nodeId: string;
@@ -32,27 +35,13 @@ export default function Drill() {
   const navigate = useNavigate();
   const { scenarioId } = useParams<{ scenarioId?: string }>();
 
-  const scenario = useMemo(
-    () =>
-      mockScenarios.find((s) => s.id === scenarioId) ||
-      mockScenarios[0],
-    [scenarioId]
-  );
-
-  const routeNodes = useMemo(() => {
-    const nodes: TunnelNode[] = [];
-    const startNode = mockTunnelNodes.find((n) => n.id === scenario.startNodeId);
-    const endNode = mockTunnelNodes.find((n) => n.id === scenario.endNodeId);
-    if (startNode) nodes.push(startNode);
-
-    const midNodes = mockTunnelNodes.filter(
-      (n) => n.id !== scenario.startNodeId && n.id !== scenario.endNodeId
-    );
-    nodes.push(...midNodes.slice(0, 5));
-
-    if (endNode) nodes.push(endNode);
-    return nodes;
-  }, [scenario]);
+  const [scenario, setScenario] = useState<Scenario | null>(null);
+  const [nodes, setNodes] = useState<TunnelNode[]>([]);
+  const [edges, setEdges] = useState<TunnelEdge[]>([]);
+  const [routeNodes, setRouteNodes] = useState<TunnelNode[]>([]);
+  const [estimatedTime, setEstimatedTime] = useState(0);
+  const [participantName, setParticipantName] = useState("");
+  const [showNameInput, setShowNameInput] = useState(false);
 
   const [drillState, setDrillState] = useState<DrillState>("ready");
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -63,21 +52,66 @@ export default function Drill() {
   const pausedTimeRef = useRef<number>(0);
   const animationFrameRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    loadData();
+  }, [scenarioId]);
+
+  const loadData = async () => {
+    const [nodesData, edgesData] = await Promise.all([
+      db.getAllNodes(),
+      db.getAllEdges(),
+    ]);
+    setNodes(nodesData);
+    setEdges(edgesData);
+
+    if (scenarioId) {
+      const scenarioData = await db.getScenarioById(scenarioId);
+      if (scenarioData) {
+        setScenario(scenarioData);
+        calculateRouteNodes(scenarioData, nodesData, edgesData);
+      }
+    }
+  };
+
+  const calculateRouteNodes = (
+    scenarioData: Scenario,
+    nodesData: TunnelNode[],
+    edgesData: TunnelEdge[]
+  ) => {
+    const route = aStar(
+      nodesData,
+      edgesData,
+      scenarioData.startNodeId,
+      scenarioData.endNodeId,
+      scenarioData.accidentType
+    );
+
+    const routeNodesList = route.nodes
+      .map((nodeId) => nodesData.find((n) => n.id === nodeId))
+      .filter((n): n is TunnelNode => n !== undefined);
+
+    setRouteNodes(routeNodesList);
+    setEstimatedTime(route.estimatedTime || routeNodesList.length * 60);
+  };
+
   const currentNode = routeNodes[currentNodeIndex];
   const nextNode = routeNodes[currentNodeIndex + 1];
-  const progress = routeNodes.length > 1 ? (currentNodeIndex / (routeNodes.length - 1)) * 100 : 0;
+  const progress =
+    routeNodes.length > 1
+      ? (currentNodeIndex / (routeNodes.length - 1)) * 100
+      : 0;
 
   const warnings = useMemo(() => {
-    if (!nextNode) return [];
+    if (!scenario || !nextNode || !currentNode) return [];
     return scenario.constraints.filter((c) => {
-      const edge = mockTunnelEdges.find((e) => e.id === c.edgeId);
+      const edge = edges.find((e) => e.id === c.edgeId);
       if (!edge) return false;
       return (
-        (edge.from === currentNode?.id && edge.to === nextNode.id) ||
-        (edge.to === currentNode?.id && edge.from === nextNode.id)
+        (edge.from === currentNode.id && edge.to === nextNode.id) ||
+        (edge.to === currentNode.id && edge.from === nextNode.id)
       );
     });
-  }, [scenario, currentNode, nextNode]);
+  }, [scenario, currentNode, nextNode, edges]);
 
   const updateTimer = useCallback(() => {
     if (drillState === "running") {
@@ -156,6 +190,50 @@ export default function Drill() {
     }
   };
 
+  const calculateScore = (actual: number, estimated: number): number => {
+    const ratio = actual / estimated;
+    if (ratio <= 1) return 95 + Math.floor((1 - ratio) * 10);
+    if (ratio <= 1.2) return 85 - Math.floor((ratio - 1) * 50);
+    if (ratio <= 1.5) return 70 - Math.floor((ratio - 1.2) * 100);
+    return Math.max(50, 60 - Math.floor((ratio - 1.5) * 20));
+  };
+
+  const handleSaveRecord = async () => {
+    if (!scenario || !participantName.trim()) {
+      alert("请输入演练人员姓名");
+      return;
+    }
+
+    setDrillState("saving");
+
+    try {
+      const score = calculateScore(elapsedTime, estimatedTime);
+      const record: DrillRecord = {
+        id: `R-${Date.now()}`,
+        scenarioId: scenario.id,
+        participantName: participantName.trim(),
+        actualTime: elapsedTime,
+        estimatedTime: estimatedTime,
+        score: score,
+        timestamps: timestamps.map((ts) => ({
+          nodeId: ts.nodeId,
+          time: ts.time,
+          event: ts.event,
+        })),
+        completedAt: new Date().toISOString(),
+      };
+
+      await db.addRecord(record);
+      setShowNameInput(false);
+      setDrillState("completed");
+      navigate("/records");
+    } catch (error) {
+      console.error("保存记录失败:", error);
+      alert("保存记录失败，请重试");
+      setDrillState("completed");
+    }
+  };
+
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -203,8 +281,8 @@ export default function Drill() {
     const height = 500;
     const padding = 60;
 
-    const xs = mockTunnelNodes.map((n) => n.x);
-    const ys = mockTunnelNodes.map((n) => n.y);
+    const xs = nodes.map((n) => n.x);
+    const ys = nodes.map((n) => n.y);
     const minX = Math.min(...xs);
     const maxX = Math.max(...xs);
     const minY = Math.min(...ys);
@@ -223,7 +301,7 @@ export default function Drill() {
     const routeNodeIds = routeNodes.map((n) => n.id);
     const routeEdgeIds: string[] = [];
     for (let i = 0; i < routeNodeIds.length - 1; i++) {
-      const edge = mockTunnelEdges.find(
+      const edge = edges.find(
         (e) =>
           (e.from === routeNodeIds[i] && e.to === routeNodeIds[i + 1]) ||
           (e.to === routeNodeIds[i] && e.from === routeNodeIds[i + 1])
@@ -233,7 +311,7 @@ export default function Drill() {
 
     const visitedEdgeIds: string[] = [];
     for (let i = 0; i < currentNodeIndex; i++) {
-      const edge = mockTunnelEdges.find(
+      const edge = edges.find(
         (e) =>
           (e.from === routeNodeIds[i] && e.to === routeNodeIds[i + 1]) ||
           (e.to === routeNodeIds[i] && e.from === routeNodeIds[i + 1])
@@ -241,10 +319,12 @@ export default function Drill() {
       if (edge) visitedEdgeIds.push(edge.id);
     }
 
-    const forbiddenEdgeIds = scenario.constraints
-      .filter((c) => c.type === "blocked" || c.type === "closed")
-      .map((c) => c.edgeId)
-      .filter((id): id is string => id !== undefined);
+    const forbiddenEdgeIds = scenario
+      ? scenario.constraints
+          .filter((c) => c.type === "blocked" || c.type === "closed")
+          .map((c) => c.edgeId)
+          .filter((id): id is string => id !== undefined)
+      : [];
 
     return (
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -275,9 +355,9 @@ export default function Drill() {
 
         <rect width="100%" height="100%" fill="url(#drillGrid)" />
 
-        {mockTunnelEdges.map((edge) => {
-          const fromNode = mockTunnelNodes.find((n) => n.id === edge.from);
-          const toNode = mockTunnelNodes.find((n) => n.id === edge.to);
+        {edges.map((edge) => {
+          const fromNode = nodes.find((n) => n.id === edge.from);
+          const toNode = nodes.find((n) => n.id === edge.to);
           if (!fromNode || !toNode) return null;
 
           const isRoute = routeEdgeIds.includes(edge.id);
@@ -376,19 +456,20 @@ export default function Drill() {
                 strokeWidth="3"
                 filter={filter}
               />
-              {(isCurrent || isNext || index === 0 || index === routeNodes.length - 1) && node.name && (
-                <text
-                  x={toSvgX(node.x)}
-                  y={toSvgY(node.y) - radius - 10}
-                  textAnchor="middle"
-                  fontSize="14"
-                  fill="white"
-                  fontWeight="bold"
-                  style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}
-                >
-                  {node.name}
-                </text>
-              )}
+              {(isCurrent || isNext || index === 0 || index === routeNodes.length - 1) &&
+                node.name && (
+                  <text
+                    x={toSvgX(node.x)}
+                    y={toSvgY(node.y) - radius - 10}
+                    textAnchor="middle"
+                    fontSize="14"
+                    fill="white"
+                    fontWeight="bold"
+                    style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}
+                  >
+                    {node.name}
+                  </text>
+                )}
             </g>
           );
         })}
@@ -432,6 +513,17 @@ export default function Drill() {
     );
   };
 
+  if (!scenario) {
+    return (
+      <div className="h-screen w-screen bg-mine-blue-dark text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-pulse text-tech-cyan mb-4">加载中...</div>
+          <p className="text-gray-400">正在加载演练方案</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen w-screen bg-mine-blue-dark text-white overflow-hidden flex flex-col">
       <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-tech-cyan" />
@@ -442,11 +534,11 @@ export default function Drill() {
       <header className="relative z-10 px-6 py-4 border-b border-tech-cyan/30 bg-mine-blue/80 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/scenarios")}
             className="flex items-center gap-2 text-gray-400 hover:text-tech-cyan transition-colors"
           >
             <Home size={24} />
-            <span className="text-sm font-medium">返回首页</span>
+            <span className="text-sm font-medium">返回方案管理</span>
           </button>
 
           <div className="text-center">
@@ -470,7 +562,12 @@ export default function Drill() {
                   ? "text-tech-cyan"
                   : "text-gray-300"
               )}
-              style={{ textShadow: drillState === "running" ? "0 0 30px rgba(0, 212, 255, 0.5)" : "none" }}
+              style={{
+                textShadow:
+                  drillState === "running"
+                    ? "0 0 30px rgba(0, 212, 255, 0.5)"
+                    : "none",
+              }}
             >
               {formatTime(elapsedTime)}
             </div>
@@ -523,12 +620,31 @@ export default function Drill() {
           )}
 
           {drillState === "completed" && (
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleReset}
+                className="group relative px-8 py-4 bg-gradient-to-b from-tech-cyan-dark to-tech-cyan-dark border-2 border-tech-cyan text-white text-lg font-orbitron font-bold rounded-lg shadow-lg hover:shadow-glow-cyan transition-all hover:scale-105 active:scale-95"
+              >
+                <RotateCcw size={24} className="inline mr-2" />
+                重新开始
+              </button>
+              <button
+                onClick={() => setShowNameInput(true)}
+                className="group relative px-8 py-4 bg-gradient-to-b from-safety-green to-safety-green-dark border-2 border-safety-green text-white text-lg font-orbitron font-bold rounded-lg shadow-lg hover:shadow-glow-green transition-all hover:scale-105 active:scale-95"
+              >
+                <Save size={24} className="inline mr-2" />
+                保存记录
+              </button>
+            </div>
+          )}
+
+          {drillState === "saving" && (
             <button
-              onClick={handleReset}
-              className="group relative px-10 py-4 bg-gradient-to-b from-tech-cyan-dark to-tech-cyan-dark border-2 border-tech-cyan text-white text-xl font-orbitron font-bold rounded-lg shadow-lg hover:shadow-glow-cyan transition-all hover:scale-105 active:scale-95"
+              disabled
+              className="group relative px-8 py-4 bg-gradient-to-b from-metal-gray to-metal-gray-dark border-2 border-metal-gray text-white text-lg font-orbitron font-bold rounded-lg shadow-lg opacity-70"
             >
-              <RotateCcw size={28} className="inline mr-3" />
-              重新开始
+              <Save size={24} className="inline mr-2 animate-spin" />
+              保存中...
             </button>
           )}
         </div>
@@ -592,7 +708,9 @@ export default function Drill() {
                     {getDirectionArrow()}
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-white">{nextNode.name || nextNode.id}</div>
+                    <div className="text-xl font-bold text-white">
+                      {nextNode.name || nextNode.id}
+                    </div>
                     <div className="text-sm text-gray-400">继续前进</div>
                   </div>
                 </div>
@@ -613,10 +731,15 @@ export default function Drill() {
                     className="bg-alert-red/10 border border-alert-red/30 rounded-lg p-4"
                   >
                     <div className="flex items-start gap-3">
-                      <AlertTriangle size={20} className="text-alert-red shrink-0 mt-0.5" />
+                      <AlertTriangle
+                        size={20}
+                        className="text-alert-red shrink-0 mt-0.5"
+                      />
                       <div>
                         <div className="text-alert-red font-semibold">注意</div>
-                        <div className="text-sm text-gray-300 mt-1">{warning.description}</div>
+                        <div className="text-sm text-gray-300 mt-1">
+                          {warning.description}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -625,7 +748,7 @@ export default function Drill() {
             </div>
           )}
 
-          {drillState === "completed" && (
+          {drillState === "completed" && !showNameInput && (
             <div className="p-6 border-b border-tech-cyan/20">
               <div className="hud-border p-6 rounded-lg border-safety-green/30 text-center">
                 <div className="corner-tr border-safety-green/50" />
@@ -638,7 +761,46 @@ export default function Drill() {
                   总用时：{formatTime(elapsedTime)}
                 </div>
                 <div className="text-gray-400">
+                  预计用时：{formatTime(estimatedTime)}
+                </div>
+                <div className="text-gray-400">
                   途经节点：{routeNodes.length} 个
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showNameInput && drillState === "completed" && (
+            <div className="p-6 border-b border-tech-cyan/20">
+              <div className="hud-border p-4 rounded-lg border-tech-cyan/30">
+                <div className="corner-tr border-tech-cyan/50" />
+                <div className="corner-bl border-tech-cyan/50" />
+                <h3 className="text-lg font-orbitron font-semibold text-tech-cyan mb-4">
+                  <User size={18} className="inline mr-2" />
+                  填写演练人员
+                </h3>
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    value={participantName}
+                    onChange={(e) => setParticipantName(e.target.value)}
+                    placeholder="请输入演练人员姓名"
+                    className="w-full px-3 py-2.5 bg-mine-blue-dark border border-metal-gray text-white placeholder-gray-500 focus:outline-none focus:border-tech-cyan focus:shadow-glow-cyan transition-all rounded"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowNameInput(false)}
+                      className="flex-1 py-2 bg-mine-blue-dark border border-metal-gray text-gray-400 rounded hover:text-white hover:border-tech-cyan/50 transition-colors"
+                    >
+                      取消
+                    </button>
+                    <button
+                      onClick={handleSaveRecord}
+                      className="flex-1 py-2 bg-safety-green/20 border border-safety-green text-safety-green rounded hover:bg-safety-green/30 transition-colors font-medium"
+                    >
+                      确认保存
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -651,7 +813,7 @@ export default function Drill() {
             </h3>
             <div className="space-y-2">
               {timestamps.map((ts, index) => {
-                const node = mockTunnelNodes.find((n) => n.id === ts.nodeId);
+                const node = nodes.find((n) => n.id === ts.nodeId);
                 return (
                   <motion.div
                     key={`${ts.nodeId}-${index}`}
@@ -737,11 +899,15 @@ export default function Drill() {
 
           <button
             onClick={handleNextNode}
-            disabled={currentNodeIndex >= routeNodes.length - 1 || drillState !== "running"}
+            disabled={
+              currentNodeIndex >= routeNodes.length - 1 ||
+              drillState !== "running"
+            }
             className={cn(
               "px-10 py-3 rounded-lg font-orbitron font-bold text-lg transition-all",
               "border-2 flex items-center gap-2",
-              currentNodeIndex >= routeNodes.length - 1 || drillState !== "running"
+              currentNodeIndex >= routeNodes.length - 1 ||
+              drillState !== "running"
                 ? "border-metal-gray bg-mine-blue-dark text-gray-600 cursor-not-allowed"
                 : "border-safety-green bg-gradient-to-b from-safety-green to-safety-green-dark text-white hover:shadow-glow-green hover:scale-105 active:scale-95"
             )}
