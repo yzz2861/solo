@@ -613,7 +613,15 @@ export default function RegistrationDetail() {
                 finalPaymentDueDate: new Date(new Date(newTrip.startDate).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
               };
               try {
-                const newTotal = calculateTotalAmount(registration.members.length, newTrip.basePrice, registration.insurance?.totalPremium || 0, registration.roomBooking.roomPrice * registration.roomBooking.roomCount);
+                const insurancePremiumPerPerson = registration.insurance?.premiumPerPerson || 0;
+                const newTotal = calculateTotalAmount(
+                  newTrip.basePrice, 
+                  registration.members.length, 
+                  insurancePremiumPerPerson, 
+                  registration.roomBooking.roomPrice, 
+                  registration.roomBooking.roomCount,
+                  registration.roomBooking.hasExtraBed
+                );
                 updates.totalAmount = newTotal;
                 updates.depositAmount = Math.round(newTotal * 0.3);
                 updates.finalPaymentAmount = newTotal - Math.round(newTotal * 0.3);
