@@ -17,6 +17,7 @@ interface AppState {
   noteAnalyses: NoteAnalysis[]
   anomalies: AnomalyWarning[]
   marks: PracticeMark[]
+  pendingMarks: PracticeMark[]
   isAnalyzing: boolean
   playbackTime: number
   zoomLevel: number
@@ -52,6 +53,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   noteAnalyses: [],
   anomalies: [],
   marks: [],
+  pendingMarks: [],
   isAnalyzing: false,
   playbackTime: 0,
   zoomLevel: 1,
@@ -66,7 +68,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       const blob = new Blob([await file.arrayBuffer()], { type: file.type })
       const url = URL.createObjectURL(blob)
       const audioBuffer = await decodeAudioFile(file)
-      set({ audioBuffer, audioBlob: blob, audioUrl: url, pitchFrames: [], noteAnalyses: [], anomalies: [], marks: [] })
+      set({ audioBuffer, audioBlob: blob, audioUrl: url, pitchFrames: [], noteAnalyses: [], anomalies: [], marks: [], pendingMarks: [] })
     } finally {
       set({ isAnalyzing: false })
     }
@@ -88,15 +90,18 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   saveCurrentRecord: async (studentName: string) => {
-    const { audioBlob, selectedScale, pitchFrames, noteAnalyses, anomalies, marks } = get()
+    const { audioBlob, selectedScale, pitchFrames, noteAnalyses, anomalies, marks, pendingMarks } = get()
     if (!audioBlob || !selectedScale) return
 
     const audioBlobKey = `audio-${uuid()}`
     await saveAudioBlob(audioBlobKey, audioBlob)
 
     const overallScore = computeOverallScore(noteAnalyses)
+    const recordId = uuid()
+    const allMarks = [...pendingMarks, ...marks.filter((m) => !pendingMarks.some((pm) => pm.id === m.id))]
+
     const record: PracticeRecord = {
-      id: uuid(),
+      id: recordId,
       date: new Date().toISOString(),
       studentName,
       audioBlobKey,
@@ -104,12 +109,17 @@ export const useAppStore = create<AppState>((set, get) => ({
       pitchFrames,
       noteAnalyses,
       anomalies,
-      marks,
+      marks: allMarks,
       overallScore,
     }
 
     await savePracticeRecord(record)
-    set({ currentRecord: record })
+
+    for (const mark of pendingMarks) {
+      await savePracticeMark({ ...mark, recordId })
+    }
+
+    set({ currentRecord: record, marks: allMarks, pendingMarks: [] })
     await get().loadAllRecords()
   },
 
@@ -124,30 +134,37 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   addMark: async (startTime: number, endTime: number, label: string, color: string) => {
-    const { currentRecord } = get()
-    if (!currentRecord) return
-
-    const mark: PracticeMark & { recordId: string } = {
+    const { currentRecord, pendingMarks, marks } = get()
+    const mark: PracticeMark = {
       id: uuid(),
       startTime,
       endTime,
       label,
       color,
       createdBy: 'teacher',
-      recordId: currentRecord.id,
     }
 
-    await savePracticeMark(mark)
-    const marks = await getPracticeMarks(currentRecord.id)
-    set({ marks })
+    if (currentRecord) {
+      await savePracticeMark({ ...mark, recordId: currentRecord.id })
+      const dbMarks = await getPracticeMarks(currentRecord.id)
+      set({ marks: dbMarks, pendingMarks: [] })
+    } else {
+      set({ pendingMarks: [...pendingMarks, mark], marks: [...marks, mark] })
+    }
   },
 
   removeMark: async (markId: string) => {
-    const { currentRecord } = get()
-    if (!currentRecord) return
-    await deletePracticeMark(markId)
-    const marks = await getPracticeMarks(currentRecord.id)
-    set({ marks })
+    const { currentRecord, pendingMarks, marks } = get()
+    if (currentRecord) {
+      await deletePracticeMark(markId)
+      const dbMarks = await getPracticeMarks(currentRecord.id)
+      set({ marks: dbMarks, pendingMarks: [] })
+    } else {
+      set({
+        pendingMarks: pendingMarks.filter((m) => m.id !== markId),
+        marks: marks.filter((m) => m.id !== markId),
+      })
+    }
   },
 
   loadMarks: async (recordId: string) => {
@@ -161,6 +178,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     const url = URL.createObjectURL(blob)
     const file = new File([blob], 'audio.wav', { type: blob.type })
     const audioBuffer = await decodeAudioFile(file)
+    const dbMarks = await getPracticeMarks(record.id)
     set({
       currentRecord: record,
       audioBuffer,
@@ -169,7 +187,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       pitchFrames: record.pitchFrames,
       noteAnalyses: record.noteAnalyses,
       anomalies: record.anomalies,
-      marks: record.marks,
+      marks: dbMarks,
+      pendingMarks: [],
     })
   },
 
@@ -188,6 +207,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       noteAnalyses: [],
       anomalies: [],
       marks: [],
+      pendingMarks: [],
       playbackTime: 0,
     })
   },

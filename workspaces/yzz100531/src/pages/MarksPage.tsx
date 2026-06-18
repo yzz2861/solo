@@ -4,23 +4,24 @@ import { Bookmark, Play, Trash2, Eye, AlertCircle } from 'lucide-react'
 import type { PracticeRecord } from '@/types'
 
 export default function MarksPage() {
-  const { allRecords, loadAllRecords, currentRecord, loadAudioForRecord, marks, removeMark, playSegment, role } = useAppStore()
+  const { allRecords, loadAllRecords, loadAudioForRecord, loadMarks, marks, removeMark, playSegment, role } = useAppStore()
   const [activeRecord, setActiveRecord] = useState<PracticeRecord | null>(null)
 
   useEffect(() => {
     loadAllRecords()
   }, [loadAllRecords])
 
-  useEffect(() => {
-    if (currentRecord) {
-      const rec = allRecords.find((r) => r.id === currentRecord.id)
-      if (rec) setActiveRecord(rec)
-    }
-  }, [currentRecord, allRecords, marks])
-
   const handleSelectRecord = async (record: PracticeRecord) => {
     await loadAudioForRecord(record)
+    await loadMarks(record.id)
     setActiveRecord(record)
+  }
+
+  const handleRemoveMark = async (markId: string) => {
+    await removeMark(markId)
+    if (activeRecord) {
+      await loadMarks(activeRecord.id)
+    }
   }
 
   return (
@@ -121,7 +122,7 @@ export default function MarksPage() {
                   </span>
                 </div>
 
-                {(marks.length === 0 && (!activeRecord.marks || activeRecord.marks.length === 0)) ? (
+                {marks.length === 0 ? (
                   <div className="py-12 text-center text-navy/30 dark:text-white/30">
                     <Bookmark className="w-10 h-10 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">暂无标记</p>
@@ -131,7 +132,7 @@ export default function MarksPage() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {(marks.length > 0 ? marks : activeRecord.marks || []).map((mark) => (
+                    {marks.map((mark) => (
                       <div
                         key={mark.id}
                         className="p-4 rounded-xl border transition-all"
@@ -165,7 +166,7 @@ export default function MarksPage() {
                               </button>
                               {role === 'teacher' && (
                                 <button
-                                  onClick={() => removeMark(mark.id)}
+                                  onClick={() => handleRemoveMark(mark.id)}
                                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-danger hover:bg-danger/10 transition-colors"
                                 >
                                   <Trash2 className="w-3 h-3" />
