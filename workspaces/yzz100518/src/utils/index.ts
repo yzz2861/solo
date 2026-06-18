@@ -44,6 +44,17 @@ export function genId(prefix = 'id'): string {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
+export function deriveStudentId(name: string): string {
+  const trimmed = name.trim();
+  if (!trimmed) return `stu_anon_${Date.now().toString(36)}`;
+  let hash = 0;
+  for (let i = 0; i < trimmed.length; i++) {
+    hash = (hash << 5) - hash + trimmed.charCodeAt(i);
+    hash |= 0;
+  }
+  return `stu_${trimmed.toLowerCase().replace(/\s+/g, '_')}_${Math.abs(hash).toString(36)}`;
+}
+
 export function downloadCSV(filename: string, rows: Array<Record<string, unknown>>): void {
   if (rows.length === 0) return;
   const headers = Object.keys(rows[0]);

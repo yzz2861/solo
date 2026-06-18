@@ -18,7 +18,7 @@ import {
   Lock,
   RefreshCw as SwapIcon,
 } from 'lucide-react';
-import { dayjs, formatCountdown, formatDateTime, formatMinutes } from '@/utils';
+import { dayjs, formatCountdown, formatDateTime, formatMinutes, deriveStudentId } from '@/utils';
 import { cn } from '@/lib/utils';
 
 function useCountdown(target?: number) {
@@ -56,25 +56,32 @@ export default function StudentPage() {
   const [swapError, setSwapError] = useState('');
 
   const studentId = useMemo(
-    () => currentUser?.role === 'student' ? currentUser.id : 'stu_zhangsan',
-    [currentUser],
+    () => {
+      const name = currentUser?.role === 'student' ? currentUser.name : studentName;
+      const base = currentUser?.role === 'student' ? currentUser.id : 'stu_zhangsan';
+      const canonical = deriveStudentId(name);
+      return base.startsWith('stu_') ? base : canonical;
+    },
+    [currentUser, studentName],
   );
   const displayName = useMemo(
     () => currentUser?.role === 'student' ? currentUser.name : studentName,
     [currentUser, studentName],
   );
+  const canonicalId = useMemo(() => deriveStudentId(displayName), [displayName]);
 
   const mySeat = useMemo(
     () =>
       seats.find(
         (s) =>
-          s.studentId === studentId &&
+          (s.studentId === studentId || s.studentId === canonicalId ||
+            (s.studentName && s.studentName.trim() === displayName.trim())) &&
           (s.status === 'reserved' ||
             s.status === 'in_use' ||
             s.status === 'temporarily_away' ||
             s.status === 'violation'),
       ),
-    [seats, studentId],
+    [seats, studentId, canonicalId, displayName],
   );
 
   const myReservation = useMemo(() => {

@@ -1,5 +1,5 @@
 import type { Seat, Locker, HourlySnapshot, Violation, LostItem, Clearance, Zone, Floor } from '@/types';
-import { todayStr, genId, dayjs } from '@/utils';
+import { todayStr, genId, dayjs, deriveStudentId } from '@/utils';
 
 const zones: { zone: Zone; floor: Floor }[] = [
   { zone: 'A', floor: 1 },

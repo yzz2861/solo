@@ -23,7 +23,7 @@ import {
   generateRuntimeSeats,
   generateRuntimeLockers,
 } from '@/data/seed';
-import { genId, todayStr, dayjs } from '@/utils';
+import { genId, todayStr, dayjs, deriveStudentId } from '@/utils';
 
 export interface Toast {
   id: string;
@@ -209,9 +209,23 @@ export const useAppStore = create<AppState>()(
 
       reserveSeat: ({ seatId, studentId, studentName, studentPhone }) => {
         const s = get();
-        const existingSeat = s.getActiveSeatByStudent(studentId);
-        if (existingSeat) {
-          return { ok: false, error: `您已经占用座位 ${existingSeat.code}，不能同时预约多个座位` };
+        const canonicalId = deriveStudentId(studentName);
+        const byId = s.getActiveSeatByStudent(studentId);
+        const byName = s.seats.find(
+          (x) =>
+            x.studentName &&
+            x.studentName.trim() === studentName.trim() &&
+            (x.status === 'reserved' ||
+              x.status === 'in_use' ||
+              x.status === 'temporarily_away' ||
+              x.status === 'violation'),
+        );
+        const blocker = byId || byName;
+        if (blocker) {
+          return {
+            ok: false,
+            error: `${studentName} 已经占用座位 ${blocker.code}，同一人不能同时预约多个座位`,
+          };
         }
         const seat = s.seats.find((x) => x.id === seatId);
         if (!seat || seat.status !== 'available') {
@@ -224,14 +238,15 @@ export const useAppStore = create<AppState>()(
         const locker = availLockers[0];
         const now = dayjs().valueOf();
         const expire = now + 30 * 60 * 1000;
+        const effectiveStudentId = studentId && studentId.startsWith('stu_') ? studentId : canonicalId;
         const reservation: Reservation = {
           id: genId('res'),
           seatId,
           seatCode: seat.code,
           lockerId: locker.id,
           lockerCode: locker.code,
-          studentId,
-          studentName,
+          studentId: effectiveStudentId,
+          studentName: studentName.trim(),
           studentPhone,
           status: 'pending_checkin',
           reservedAt: now,
@@ -245,8 +260,8 @@ export const useAppStore = create<AppState>()(
               ? {
                   ...x,
                   status: 'reserved',
-                  studentId,
-                  studentName,
+                  studentId: effectiveStudentId,
+                  studentName: studentName.trim(),
                   lockerId: locker.id,
                   reservationExpireAt: expire,
                 }
@@ -254,7 +269,7 @@ export const useAppStore = create<AppState>()(
           ),
           lockers: st.lockers.map((l) =>
             l.id === locker.id
-              ? { ...l, status: 'in_use', seatId, studentId }
+              ? { ...l, status: 'in_use', seatId, studentId: effectiveStudentId }
               : l,
           ),
           reservations: [...st.reservations, reservation],
@@ -445,9 +460,11 @@ export const useAppStore = create<AppState>()(
         const expiredReservations: string[] = [];
         const expiredTempAway: string[] = [];
         const newViolations: Violation[] = [];
+        const lockerReleases: string[] = [];
         const updatedSeats = s.seats.map((seat) => {
           if (seat.status === 'reserved' && seat.reservationExpireAt && seat.reservationExpireAt <= nowTs) {
             expiredReservations.push(seat.id);
+            if (seat.lockerId) lockerReleases.push(seat.lockerId);
             newViolations.push({
               id: genId('vio'),
               type: 'no_show',
@@ -485,15 +502,8 @@ export const useAppStore = create<AppState>()(
           }
           return seat;
         });
-        const expiredLockerIds = updatedSeats
-          .filter((seat, i) => {
-            const prev = s.seats[i];
-            return prev.status !== 'available' && seat.status === 'available';
-          })
-          .map((x) => x.lockerId)
-          .filter(Boolean);
         const updatedLockers = s.lockers.map((l) =>
-          expiredLockerIds.includes(l.id)
+          lockerReleases.includes(l.id)
             ? { ...l, status: 'available' as const, seatId: undefined, studentId: undefined }
             : l,
         );
