@@ -60,6 +60,7 @@ export default function Rooming() {
       .map(member => ({
         id: member.id,
         name: member.name,
+        gender: member.gender,
         relation: member.relation,
         family: reg.familyName,
         age: calculateAge(member.birthDate),

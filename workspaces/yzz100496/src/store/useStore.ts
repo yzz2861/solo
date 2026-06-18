@@ -13,7 +13,7 @@ interface AppState {
   busAssignments: BusAssignment[];
   currentTripId: string | null;
   
-  addRegistration: (reg: Omit<Registration, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  addRegistration: (reg: Omit<Registration, 'id' | 'createdAt' | 'updatedAt'>) => Registration;
   updateRegistration: (id: string, updates: Partial<Registration>) => void;
   deleteRegistration: (id: string) => void;
   getRegistration: (id: string) => Registration | undefined;

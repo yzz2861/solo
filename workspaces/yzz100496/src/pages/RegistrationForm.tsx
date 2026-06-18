@@ -171,12 +171,16 @@ export default function RegistrationForm() {
     if (isEdit && existingReg) {
       updateRegistration(existingReg.id, regData as any);
       alert('报名信息已更新');
+      navigate(`/registration/${existingReg.id}`);
     } else {
-      addRegistration(regData as any);
+      const newReg = addRegistration(regData as any);
       alert('报名创建成功');
+      if (newReg && (newReg as any).id) {
+        navigate(`/registration/${(newReg as any).id}`);
+      } else {
+        navigate('/registrations');
+      }
     }
-    
-    navigate('/list');
   };
 
   const handleAddMember = () => {
@@ -614,7 +618,7 @@ export default function RegistrationForm() {
                         name="contract"
                         value={option.value}
                         checked={contractStatus === option.value}
-                        onChange={(e) => setContractStatus(e.target.value)}
+                        onChange={(e) => setContractStatus(e.target.value as 'unsigned' | 'signed' | 'waived')}
                         className="w-4 h-4 text-primary-600"
                       />
                       <span className="text-warm-700">{option.label}</span>

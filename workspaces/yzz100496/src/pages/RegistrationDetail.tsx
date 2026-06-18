@@ -17,7 +17,8 @@ import {
   Check,
   User,
   Phone,
-  FileX
+  FileX,
+  FilePlus
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { 
@@ -35,6 +36,7 @@ import {
   formatDate, 
   formatDateTime,
   calculateRefund,
+  calculateTotalAmount,
   maskIdNumber,
   calculateAge
 } from '@/utils';
@@ -49,6 +51,7 @@ export default function RegistrationDetail() {
     addPayment, 
     cancelRegistration,
     deleteRegistration,
+    updateRegistration,
     trips
   } = useStore();
   
@@ -57,12 +60,13 @@ export default function RegistrationDetail() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [showSupplementModal, setShowSupplementModal] = useState(false);
 
   if (!registration) {
     return (
       <div className="text-center py-12">
         <p className="text-warm-500">报名记录不存在</p>
-        <Link to="/list" className="btn-primary mt-4">
+        <Link to="/registrations" className="btn-primary mt-4">
           返回列表
         </Link>
       </div>
@@ -76,7 +80,7 @@ export default function RegistrationDetail() {
   const handleDelete = () => {
     if (confirm('确定要删除这条报名记录吗？此操作不可恢复。')) {
       deleteRegistration(registration.id);
-      navigate('/list');
+      navigate('/registrations');
     }
   };
 
@@ -121,7 +125,7 @@ export default function RegistrationDetail() {
         
         <div className="flex items-center gap-2">
           <button 
-            onClick={() => navigate(`/register/${registration.id}`)}
+            onClick={() => navigate(`/registration/${registration.id}/edit`)}
             className="btn-secondary"
           >
             <Edit size={16} />
@@ -540,6 +544,13 @@ export default function RegistrationDetail() {
                 申请改期
               </button>
               <button 
+                onClick={() => setShowSupplementModal(true)}
+                className="btn-secondary w-full"
+              >
+                <FilePlus size={16} />
+                补材料
+              </button>
+              <button 
                 onClick={() => setShowCancelModal(true)}
                 className="btn-danger w-full"
               >
@@ -591,6 +602,39 @@ export default function RegistrationDetail() {
           registration={registration}
           trips={trips}
           onClose={() => setShowRescheduleModal(false)}
+          onSave={(newTripId) => {
+            const newTrip = trips.find(t => t.id === newTripId);
+            if (newTrip) {
+              const updates: any = {
+                tripId: newTrip.id,
+                tripName: newTrip.name,
+                departureDate: newTrip.startDate,
+                returnDate: newTrip.endDate,
+                finalPaymentDueDate: new Date(new Date(newTrip.startDate).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              };
+              try {
+                const newTotal = calculateTotalAmount(registration.members.length, newTrip.basePrice, registration.insurance?.totalPremium || 0, registration.roomBooking.roomPrice * registration.roomBooking.roomCount);
+                updates.totalAmount = newTotal;
+                updates.depositAmount = Math.round(newTotal * 0.3);
+                updates.finalPaymentAmount = newTotal - Math.round(newTotal * 0.3);
+              } catch(e) {}
+              updateRegistration(registration.id, updates);
+              alert('改期成功！费用信息请根据实际情况调整。');
+              setShowRescheduleModal(false);
+            }
+          }}
+        />
+      )}
+
+      {showSupplementModal && (
+        <SupplementModal 
+          registration={registration}
+          onClose={() => setShowSupplementModal(false)}
+          onSave={(supplementData) => {
+            updateRegistration(registration.id, supplementData);
+            alert('材料补充成功！');
+            setShowSupplementModal(false);
+          }}
         />
       )}
     </div>
@@ -832,10 +876,11 @@ function CancelModal({ registration, onClose, onConfirm }: {
   );
 }
 
-function RescheduleModal({ registration, trips, onClose }: {
+function RescheduleModal({ registration, trips, onClose, onSave }: {
   registration: any;
   trips: any[];
   onClose: () => void;
+  onSave?: (newTripId: string) => void;
 }) {
   const [newTripId, setNewTripId] = useState('');
   
@@ -879,13 +924,133 @@ function RescheduleModal({ registration, trips, onClose }: {
           </button>
           <button 
             onClick={() => {
-              alert('改期功能演示中，实际使用时将更新报名信息');
-              onClose();
+              if (onSave) onSave(newTripId);
             }} 
             className="btn-primary"
             disabled={!newTripId}
           >
             确认改期
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SupplementModal({ registration, onClose, onSave }: {
+  registration: any;
+  onClose: () => void;
+  onSave: (data: any) => void;
+}) {
+  const [supplementType, setSupplementType] = useState<'id_card' | 'contract' | 'insurance' | 'other'>('id_card');
+  const [notes, setNotes] = useState('');
+  const [signedBy, setSignedBy] = useState('');
+
+  const handleSubmit = () => {
+    const updates: any = {};
+
+    if (supplementType === 'contract') {
+      updates.contract = {
+        ...registration.contract,
+        status: 'signed',
+        signedDate: new Date().toISOString().split('T')[0],
+        signedBy: signedBy || registration.familyName,
+        contractNo: registration.contract?.contractNo || `HT${Date.now()}`,
+      };
+    } else if (supplementType === 'insurance') {
+      // 保险信息需要在编辑页面补充
+      alert('请进入编辑页面补充保险信息');
+      return;
+    } else if (supplementType === 'id_card') {
+      // 证件信息需要在编辑页面补录
+      alert('请进入编辑页面补充证件信息');
+      return;
+    }
+
+    if (notes.trim()) {
+      updates.specialNotes = registration.specialNotes 
+        ? `${registration.specialNotes}\n[${formatDate(new Date())}] ${notes}`
+        : `[${formatDate(new Date())}] ${notes}`;
+    }
+
+    onSave(updates);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-lg animate-slide-up">
+        <div className="p-6 border-b border-warm-100">
+          <h3 className="text-lg font-semibold text-warm-800">补充材料</h3>
+          <p className="text-sm text-warm-500 mt-1">{registration.familyName}</p>
+        </div>
+        
+        <div className="p-6 space-y-5">
+          <div>
+            <label className="label">补充类型</label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: 'id_card', label: '补录证件', desc: '进入编辑页面' },
+                { value: 'contract', label: '补签合同', desc: '设置为已签署' },
+                { value: 'insurance', label: '补充保险', desc: '进入编辑页面' },
+                { value: 'other', label: '补充备注', desc: '添加备注' },
+              ].map(opt => (
+                <label 
+                  key={opt.value}
+                  className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                    supplementType === opt.value
+                      ? 'border-primary-400 bg-primary-50'
+                      : 'border-warm-200 hover:border-warm-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="radio"
+                      name="supplementType"
+                      checked={supplementType === opt.value}
+                      onChange={() => setSupplementType(opt.value as any)}
+                      className="w-4 h-4 text-primary-600"
+                    />
+                    <div>
+                      <p className="font-medium text-warm-800 text-sm">{opt.label}</p>
+                      <p className="text-xs text-warm-500">{opt.desc}</p>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {supplementType === 'contract' && (
+            <div>
+              <label className="label">签署人姓名</label>
+              <input 
+                type="text"
+                value={signedBy}
+                onChange={(e) => setSignedBy(e.target.value)}
+                placeholder="请输入签署人姓名"
+                className="input"
+              />
+            </div>
+          )}
+          
+          <div>
+            <label className="label">补充说明（可选）</label>
+            <textarea 
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+              placeholder="请输入补充说明内容..."
+              className="input resize-none"
+            />
+          </div>
+        </div>
+        
+        <div className="p-6 border-t border-warm-100 flex justify-end gap-3">
+          <button onClick={onClose} className="btn-secondary">
+            取消
+          </button>
+          <button onClick={handleSubmit} className="btn-primary">
+            保存补充
           </button>
         </div>
       </div>
