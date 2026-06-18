@@ -1,0 +1,9 @@
+﻿姓名,邮箱,手机号,客户等级,客户经理,备注,退信分类,退信次数,最近退信时间,退信原因,错误码,是否建议清理,是否需客户经理联系,原活动
+张三,zhangsan@old-company.cn,13800000001,VIP,王经理,原华东区大客户,硬退,1,2026-06-10 09:15:22,收件人不存在（5.1.1）；smtp; 550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown；smtp; 550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown,5.1.1,是,,
+李四,lisi@vip-customer.com,13800000002,钻石,李经理,长期合作客户,软退,3,2026-06-12 09:05:33,邮箱已满（临时，建议稍后重试）（4.2.2）；邮箱已满，超过配额限制,4.2.2,,是,
+王五,wangwu@antispam-example.com,13800000003,白金,张经理,金融行业客户,黑名单,1,2026-06-10 12:03:11,被策略/安全规则拒绝（未授权）（5.7.1）；smtp; 550 5.7.23 IP blacklisted (spamhaus SBL)；smtp; 550 5.7.23 IP blacklisted (spamhaus SBL),5.7.1;5.7.23,是,,
+赵六,zhaoliu_inactive@dead-domain.com,13800000004,普通,陈经理,2024年沉睡客户,硬退,1,,路由无法到达收件域（5.4.4）；域名不存在，DNS解析失败（NXDOMAIN）,5.4.4,是,,
+客户A,customer_forward@old-domain.cn,13800000005,VIP,王经理,使用转发邮箱,需要人工联系,1,2026-06-08 10:11:00,[转发失败] 路由无法到达收件域（5.4.4）；smtp; 550 5.4.4 forwarding failed - destination domain unreachable；smtp; 550 5.4.4 forwarding failed - destination domain unreachable,5.4.4,,是,活动
+无名,nobody@spam-trap.example,13800000006,普通,陈经理,来源不详,黑名单,1,,被策略/安全规则拒绝（未授权）（5.7.1）,5.7.1,是,,
+新客户甲,new_customer@active-mail.com,13800000007,普通,李经理,本次新注册,,,,,,,,
+新客户乙,another_active@company.cn,13800000008,白金,张经理,上月刚签约,,,,,,,,

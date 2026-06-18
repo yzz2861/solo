@@ -1,0 +1,8 @@
+﻿收件人邮箱,分类,退回次数,首次退回时间,最近退回时间,错误码,退信原因,原活动,原邮件主题,是否转发失败,是否建议清理,合并说明,来源文件
+nobody@spam-trap.example,黑名单,1,,,5.7.1,被策略/安全规则拒绝（未授权）（5.7.1）,,【618年中大促】专享折扣活动邀请,否,是,,samples/bounces/bounce_batch.log
+wangwu@antispam-example.com,黑名单,1,2026-06-10 12:03:11,2026-06-10 12:03:11,5.7.1;5.7.23,被策略/安全规则拒绝（未授权）（5.7.1）；smtp; 550 5.7.23 IP blacklisted (spamhaus SBL)；smtp; 550 5.7.23 IP blacklisted (spamhaus SBL),,【品,否,是,,samples/bounces/bounce_blacklist_ip.eml
+zhangsan@old-company.cn,硬退,1,2026-06-10 09:15:22,2026-06-10 09:15:22,5.1.1,收件人不存在（5.1.1）；smtp; 550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown；smtp; 550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown,,【6,否,是,,samples/bounces/bounce_hard_user_unknown.eml
+zhaoliu_inactive@dead-domain.com,硬退,1,,,5.4.4,路由无法到达收件域（5.4.4）；域名不存在，DNS解析失败（NXDOMAIN）,,,否,是,,samples/bounces/bounce_batch.log
+customer_forward@old-domain.cn,需要人工联系,1,2026-06-08 10:11:00,2026-06-08 10:11:00,5.4.4,[转发失败] 路由无法到达收件域（5.4.4）；smtp; 550 5.4.4 forwarding failed - destination domain unreachable；smtp; 550 5.4.4 forwarding failed - destination domain unreachable,活动,【季,是,否,,samples/bounces/bounce_manual_forward_fail.eml
+lisi@vip-customer.com,软退,3,2026-06-09 15:32:01,2026-06-12 09:05:33,4.2.2,邮箱已满（临时，建议稍后重试）（4.2.2）；邮箱已满，超过配额限制,,������������������������������������,否,否,"2026-06-11 14:20 | 邮箱已满（临时，建议稍后重试）（4.2.2）；收件人邮箱空间不足（超过配额），请稍后重试
+2026-06-12 09:05 | 邮箱已满（临时，建议稍后重试）（4.2.2）；收件方邮箱存储已经超过上限，暂时无法接收新邮件",samples/bounces/bounce_soft_quota_full.eml

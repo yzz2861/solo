@@ -1,0 +1,24 @@
+From: "Mail System" <postmaster@barracuda.antispam.com>
+To: marketing@company.com
+Date: Wed, 10 Jun 2026 12:03:11 +0800
+Subject: Undelivered Mail: rejected by policy (blacklist)
+
+Host: mx.antispam.example
+Your message was blocked and could not be delivered.
+
+<wangwu@antispam-example.com>: host mx.antispam.example[9.9.9.9] said:
+    550 5.7.1 Service unavailable; Client host [company-smtp-ip] blocked
+    using spamhaus.org SBL; https://www.spamhaus.org/sbl/query/SBLXXXXXX
+    Your IP 1.2.3.4 is listed in Spamhaus SBL / DROP list.
+    发件方IP信誉低，命中黑名单（Spamhaus / Barracuda / SURBL）。
+
+Final-Recipient: rfc822; wangwu@antispam-example.com
+Action: failed
+Status: 5.7.23
+Diagnostic-Code: smtp; 550 5.7.23 IP blacklisted (spamhaus SBL)
+Remote-Mta: dns; mx.antispam.example
+
+---------- Original Message ----------
+From: marketing@company.com
+To: wangwu@antispam-example.com
+Subject: 【品牌周年庆】老客户回馈活动 - 专属优惠券

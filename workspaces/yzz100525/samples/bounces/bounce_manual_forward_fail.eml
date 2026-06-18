@@ -1,0 +1,28 @@
+From: mailer-daemon@forwarding-service.net
+To: campaign@company.com
+Date: Mon, 8 Jun 2026 10:11:00 +0800
+Subject: Mail forwarding failure: unable to forward
+
+This message was created automatically by the mail forwarding system.
+
+A message that you sent could not be delivered to one or more of its
+recipients because forwarding failed for the following address:
+
+  -> customer_forward@old-domain.cn (forward to: personal@unknown-mail-xyz.biz)
+
+Forward failure:
+The forwarding target domain 'unknown-mail-xyz.biz' could not be resolved
+(DNS lookup failure / no MX record). The alias / forward was set up by the
+recipient and may no longer be valid.
+
+Suggested action:
+Please contact the recipient to confirm their current primary email address.
+
+Final-Recipient: rfc822; customer_forward@old-domain.cn
+Status: 5.4.4 (forward destination unreachable)
+Diagnostic-Code: smtp; 550 5.4.4 forwarding failed - destination domain unreachable
+
+---------- Original Message ----------
+From: "运营部" <campaign@company.com>
+To: "客户A" <customer_forward@old-domain.cn>
+Subject: 【季度活动】Q2客户满意度调研问卷

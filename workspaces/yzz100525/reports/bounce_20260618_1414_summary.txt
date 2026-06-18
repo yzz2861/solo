@@ -1,0 +1,34 @@
+============================================================
+邮件退信分类总结报告
+生成时间: 2026-06-18 14:14:52
+============================================================
+
+【总体统计】
+  - 黑名单: 2
+  - 硬退: 2
+  - 需要人工联系: 1
+  - 软退: 1
+  - 总计: 6
+  - 需清理(硬退+黑名单): 4
+  - 需客户经理联系: 2
+  - 出现≥3次退回: 1
+
+【建议运营清理的地址】 (硬退 + 黑名单)
+  - nobody@spam-trap.example  [黑名单]  原因: 被策略/安全规则拒绝（未授权）（5.7.1）
+  - wangwu@antispam-example.com  [黑名单]  原因: 被策略/安全规则拒绝（未授权）（5.7.1）；smtp; 550 5.7.23 IP blacklisted (spam
+  - zhangsan@old-company.cn  [硬退]  原因: 收件人不存在（5.1.1）；smtp; 550 5.1.1 <zhangsan@old-company.cn>: Rec
+  - zhaoliu_inactive@dead-domain.com  [硬退]  原因: 路由无法到达收件域（5.4.4）；域名不存在，DNS解析失败（NXDOMAIN）
+
+【需客户经理电话确认】 (需人工联系 / 多次软退 / 转发失败)
+  - customer_forward@old-domain.cn  [转发失败]  [转发失败] 路由无法到达收件域（5.4.4）；smtp; 550 5.4.4 forwarding
+  - lisi@vip-customer.com  [3次退回]  邮箱已满（临时，建议稍后重试）（4.2.2）；邮箱已满，超过配额限制
+
+【生成文件】
+  - 统计: ./reports/bounce_20260618_1414_stats.csv
+  - 全部退信: ./reports/bounce_20260618_1414_all.csv
+  - 建议清理: ./reports/bounce_20260618_1414_cleanup.csv
+  - 客户经理-电话确认: ./reports/bounce_20260618_1414_manager.csv
+  - 分类-硬退: ./reports/bounce_20260618_1414_硬退.csv
+  - 分类-软退: ./reports/bounce_20260618_1414_软退.csv
+  - 分类-黑名单: ./reports/bounce_20260618_1414_黑名单.csv
+  - 分类-需要人工联系: ./reports/bounce_20260618_1414_需要人工联系.csv

@@ -1,0 +1,26 @@
+From: Mail Delivery Subsystem <mailer-daemon@example.com>
+To: marketing@company.com
+Date: Wed, 10 Jun 2026 09:15:22 +0800
+Subject: Returned mail: User unknown 5.1.1
+
+This is the mail system at host example.com.
+
+I'm sorry to have to inform you that your message could not be
+delivered to one or more recipients. It's attached below.
+
+<zhangsan@old-company.cn>: host mail.old-company.cn[10.0.0.1] said:
+    550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown
+    in local recipient table (in reply to RCPT TO command)
+
+Final-Recipient: rfc822; zhangsan@old-company.cn
+Original-Recipient: rfc822; zhangsan@old-company.cn
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: smtp; 550 5.1.1 <zhangsan@old-company.cn>: Recipient address rejected: User unknown
+Remote-Mta: dns; mail.old-company.cn
+
+---------- Original Message ----------
+From: "运营部" <marketing@company.com>
+To: "张三" <zhangsan@old-company.cn>
+Subject: 【618年中大促】专享折扣活动邀请
+Date: Tue, 9 Jun 2026 18:00:00 +0800
