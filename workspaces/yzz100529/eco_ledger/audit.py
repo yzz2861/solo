@@ -33,6 +33,7 @@ class AuditTrail:
             if entry.manifest_no:
                 new_id = entry.new_id or entry.original_id
                 self.manifest_links[new_id] = entry.manifest_no
+                self.manifest_links[entry.original_id] = entry.manifest_no
 
     def lookup_original_id(self, new_id: str) -> str | None:
         return self.original_id_mapping.get(new_id)
@@ -40,8 +41,14 @@ class AuditTrail:
     def lookup_new_id(self, original_id: str) -> str | None:
         return self.id_mapping.get(original_id)
 
-    def lookup_manifest(self, new_id: str) -> str | None:
-        return self.manifest_links.get(new_id)
+    def lookup_manifest(self, identifier: str) -> str | None:
+        manifest = self.manifest_links.get(identifier)
+        if manifest:
+            return manifest
+        new_id = self.id_mapping.get(identifier)
+        if new_id:
+            return self.manifest_links.get(new_id)
+        return None
 
     def trace(self, identifier: str) -> dict:
         info: dict = {"查询编号": identifier}
@@ -49,13 +56,16 @@ class AuditTrail:
         if identifier in self.original_id_mapping:
             info["类型"] = "重排后编号"
             info["原始编号"] = self.original_id_mapping[identifier]
+            resolved_id = identifier
         elif identifier in self.id_mapping:
             info["类型"] = "原始编号"
-            info["重排后编号"] = self.id_mapping[identifier]
+            resolved_id = self.id_mapping[identifier]
+            info["重排后编号"] = resolved_id
         else:
             info["类型"] = "未知"
+            resolved_id = None
 
-        manifest = self.manifest_links.get(identifier)
+        manifest = self.lookup_manifest(identifier)
         if manifest:
             info["关联联单"] = manifest
 
