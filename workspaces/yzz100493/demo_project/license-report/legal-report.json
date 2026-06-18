@@ -1,0 +1,758 @@
+{
+  "timestamp": "2026-06-18 00:25:19",
+  "baseline_timestamp": null,
+  "summary": {
+    "total": 12,
+    "by_category": {
+      "限制许可证": 1,
+      "双许可-全部限制": 0,
+      "缺失许可证": 3,
+      "存疑/未知": 1,
+      "双许可-部分合规": 1,
+      "双许可-全部合规": 1,
+      "白名单": 5
+    },
+    "license_distribution": {
+      "MIT": 7,
+      "UNKNOWN": 3,
+      "GPL-3.0": 2,
+      "Apache-2.0": 1,
+      "MySecretLicense": 1
+    },
+    "need_confirmation": 2,
+    "risks": 6,
+    "new_risks_vs_baseline": 6,
+    "resolved_vs_baseline": 0
+  },
+  "by_category": {
+    "限制许可证": [
+      {
+        "name": "some-gpl-lib",
+        "version": "1.0.0",
+        "manager": "npm",
+        "license": {
+          "raw": "GPL-3.0",
+          "identifiers": [
+            "GPL-3.0"
+          ],
+          "category": "restricted",
+          "is_dual": false,
+          "note": "许可证 GPL-3.0 属于限制类"
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ],
+    "双许可-全部限制": [],
+    "缺失许可证": [
+      {
+        "name": "unknown-license",
+        "version": "0.1.0",
+        "manager": "npm",
+        "license": {
+          "raw": "",
+          "identifiers": [
+            "UNKNOWN"
+          ],
+          "category": "missing",
+          "is_dual": false,
+          "note": "未声明许可证"
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      },
+      {
+        "name": "requests",
+        "version": "2.31.0",
+        "manager": "pip",
+        "license": {
+          "raw": "",
+          "identifiers": [
+            "UNKNOWN"
+          ],
+          "category": "missing",
+          "is_dual": false,
+          "note": "未声明许可证"
+        },
+        "dep_type": "production",
+        "source": "requests==2.31.0",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      },
+      {
+        "name": "flask",
+        "version": "2.3.3",
+        "manager": "pip",
+        "license": {
+          "raw": "",
+          "identifiers": [
+            "UNKNOWN"
+          ],
+          "category": "missing",
+          "is_dual": false,
+          "note": "未声明许可证"
+        },
+        "dep_type": "production",
+        "source": "flask==2.3.3",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ],
+    "存疑/未知": [
+      {
+        "name": "weird-pkg",
+        "version": "0.0.1",
+        "manager": "npm",
+        "license": {
+          "raw": "MySecretLicense",
+          "identifiers": [
+            "MySecretLicense"
+          ],
+          "category": "uncertain",
+          "is_dual": false,
+          "note": "许可证 MySecretLicense 未在白名单中，需法务确认"
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ],
+    "双许可-部分合规": [
+      {
+        "name": "dual-risk",
+        "version": "1.0.0",
+        "manager": "npm",
+        "license": {
+          "raw": "GPL-3.0 OR MIT",
+          "identifiers": [
+            "GPL-3.0",
+            "MIT"
+          ],
+          "category": "dual_mixed",
+          "is_dual": true,
+          "note": "双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支"
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ],
+    "双许可-全部合规": [
+      {
+        "name": "dual-pkg",
+        "version": "2.0.0",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT OR Apache-2.0",
+          "identifiers": [
+            "MIT",
+            "Apache-2.0"
+          ],
+          "category": "dual_approved",
+          "is_dual": true,
+          "note": "双许可全部合规: MIT, Apache-2.0"
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ],
+    "白名单": [
+      {
+        "name": "lodash",
+        "version": "4.17.21",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT",
+          "identifiers": [
+            "MIT"
+          ],
+          "category": "approved",
+          "is_dual": false,
+          "note": ""
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": true,
+        "from_exception": false,
+        "issues": []
+      },
+      {
+        "name": "react",
+        "version": "18.2.0",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT",
+          "identifiers": [
+            "MIT"
+          ],
+          "category": "approved",
+          "is_dual": false,
+          "note": ""
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      },
+      {
+        "name": "loose-envify",
+        "version": "1.4.0",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT",
+          "identifiers": [
+            "MIT"
+          ],
+          "category": "approved",
+          "is_dual": false,
+          "note": ""
+        },
+        "dep_type": "production",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      },
+      {
+        "name": "jest",
+        "version": "29.7.0",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT",
+          "identifiers": [
+            "MIT"
+          ],
+          "category": "approved",
+          "is_dual": false,
+          "note": ""
+        },
+        "dep_type": "development",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": true,
+        "from_exception": false,
+        "issues": [
+          "该包声明为开发依赖，但检测到进入了构建产物"
+        ]
+      },
+      {
+        "name": "eslint",
+        "version": "8.57.0",
+        "manager": "npm",
+        "license": {
+          "raw": "MIT",
+          "identifiers": [
+            "MIT"
+          ],
+          "category": "approved",
+          "is_dual": false,
+          "note": ""
+        },
+        "dep_type": "development",
+        "source": "",
+        "homepage": "",
+        "repository": "",
+        "author": "",
+        "description": "",
+        "parents": [
+          "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+        ],
+        "in_artifact": false,
+        "from_exception": false,
+        "issues": []
+      }
+    ]
+  },
+  "by_license": {
+    "MIT": [
+      "npm:lodash@4.17.21",
+      "npm:react@18.2.0",
+      "npm:loose-envify@1.4.0",
+      "npm:jest@29.7.0",
+      "npm:eslint@8.57.0",
+      "npm:dual-pkg@2.0.0",
+      "npm:dual-risk@1.0.0"
+    ],
+    "GPL-3.0": [
+      "npm:some-gpl-lib@1.0.0",
+      "npm:dual-risk@1.0.0"
+    ],
+    "UNKNOWN": [
+      "npm:unknown-license@0.1.0",
+      "pip:requests@2.31.0",
+      "pip:flask@2.3.3"
+    ],
+    "Apache-2.0": [
+      "npm:dual-pkg@2.0.0"
+    ],
+    "MySecretLicense": [
+      "npm:weird-pkg@0.0.1"
+    ]
+  },
+  "need_confirmation": [
+    {
+      "name": "dual-risk",
+      "version": "1.0.0",
+      "manager": "npm",
+      "license": {
+        "raw": "GPL-3.0 OR MIT",
+        "identifiers": [
+          "GPL-3.0",
+          "MIT"
+        ],
+        "category": "dual_mixed",
+        "is_dual": true,
+        "note": "双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "weird-pkg",
+      "version": "0.0.1",
+      "manager": "npm",
+      "license": {
+        "raw": "MySecretLicense",
+        "identifiers": [
+          "MySecretLicense"
+        ],
+        "category": "uncertain",
+        "is_dual": false,
+        "note": "许可证 MySecretLicense 未在白名单中，需法务确认"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    }
+  ],
+  "risks": [
+    {
+      "name": "some-gpl-lib",
+      "version": "1.0.0",
+      "manager": "npm",
+      "license": {
+        "raw": "GPL-3.0",
+        "identifiers": [
+          "GPL-3.0"
+        ],
+        "category": "restricted",
+        "is_dual": false,
+        "note": "许可证 GPL-3.0 属于限制类"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "unknown-license",
+      "version": "0.1.0",
+      "manager": "npm",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "dual-risk",
+      "version": "1.0.0",
+      "manager": "npm",
+      "license": {
+        "raw": "GPL-3.0 OR MIT",
+        "identifiers": [
+          "GPL-3.0",
+          "MIT"
+        ],
+        "category": "dual_mixed",
+        "is_dual": true,
+        "note": "双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "weird-pkg",
+      "version": "0.0.1",
+      "manager": "npm",
+      "license": {
+        "raw": "MySecretLicense",
+        "identifiers": [
+          "MySecretLicense"
+        ],
+        "category": "uncertain",
+        "is_dual": false,
+        "note": "许可证 MySecretLicense 未在白名单中，需法务确认"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "requests",
+      "version": "2.31.0",
+      "manager": "pip",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "requests==2.31.0",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "flask",
+      "version": "2.3.3",
+      "manager": "pip",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "flask==2.3.3",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    }
+  ],
+  "new_risks_vs_baseline": [
+    {
+      "name": "some-gpl-lib",
+      "version": "1.0.0",
+      "manager": "npm",
+      "license": {
+        "raw": "GPL-3.0",
+        "identifiers": [
+          "GPL-3.0"
+        ],
+        "category": "restricted",
+        "is_dual": false,
+        "note": "许可证 GPL-3.0 属于限制类"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "unknown-license",
+      "version": "0.1.0",
+      "manager": "npm",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "dual-risk",
+      "version": "1.0.0",
+      "manager": "npm",
+      "license": {
+        "raw": "GPL-3.0 OR MIT",
+        "identifiers": [
+          "GPL-3.0",
+          "MIT"
+        ],
+        "category": "dual_mixed",
+        "is_dual": true,
+        "note": "双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "weird-pkg",
+      "version": "0.0.1",
+      "manager": "npm",
+      "license": {
+        "raw": "MySecretLicense",
+        "identifiers": [
+          "MySecretLicense"
+        ],
+        "category": "uncertain",
+        "is_dual": false,
+        "note": "许可证 MySecretLicense 未在白名单中，需法务确认"
+      },
+      "dep_type": "production",
+      "source": "",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/package-lock.json"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "requests",
+      "version": "2.31.0",
+      "manager": "pip",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "requests==2.31.0",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    },
+    {
+      "name": "flask",
+      "version": "2.3.3",
+      "manager": "pip",
+      "license": {
+        "raw": "",
+        "identifiers": [
+          "UNKNOWN"
+        ],
+        "category": "missing",
+        "is_dual": false,
+        "note": "未声明许可证"
+      },
+      "dep_type": "production",
+      "source": "flask==2.3.3",
+      "homepage": "",
+      "repository": "",
+      "author": "",
+      "description": "",
+      "parents": [
+        "/Users/bill/Documents/solo/workspaces/yzz100493/demo_project/requirements.txt"
+      ],
+      "in_artifact": false,
+      "from_exception": false,
+      "issues": []
+    }
+  ],
+  "resolved_vs_baseline": []
+}

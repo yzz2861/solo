@@ -1,0 +1,7 @@
+﻿序号,风险级别,包管理器,包名,版本,依赖类型,进入产物,许可证分类,许可证原文,标准化标识符,说明,是否需法务确认
+1,高,npm,some-gpl-lib,1.0.0,生产依赖,否,限制许可证,GPL-3.0,GPL-3.0,许可证 GPL-3.0 属于限制类,
+2,中,npm,dual-risk,1.0.0,生产依赖,否,双许可-部分合规,GPL-3.0 OR MIT,"GPL-3.0, MIT","双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支",是
+3,中,npm,weird-pkg,0.0.1,生产依赖,否,存疑/未知,MySecretLicense,MySecretLicense,许可证 MySecretLicense 未在白名单中，需法务确认,是
+4,中,npm,unknown-license,0.1.0,生产依赖,否,缺失许可证,(缺失),UNKNOWN,未声明许可证,
+5,中,pip,flask,2.3.3,生产依赖,否,缺失许可证,(缺失),UNKNOWN,未声明许可证,
+6,中,pip,requests,2.31.0,生产依赖,否,缺失许可证,(缺失),UNKNOWN,未声明许可证,

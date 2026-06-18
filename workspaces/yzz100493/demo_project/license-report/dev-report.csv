@@ -1,0 +1,7 @@
+﻿风险等级,包管理器,包名,版本,依赖类型,许可证分类,许可证原文,标准化标识符,进入产物,说明,修复建议
+高,npm,some-gpl-lib,1.0.0,生产依赖,限制许可证,GPL-3.0,GPL-3.0,否,许可证 GPL-3.0 属于限制类,评估是否可替换为白名单许可证的等价库；联系法务评审 GPL/AGPL/SSPL 等传染型许可证的合规边界；如必须使用，启动法务审批并在 package_exceptions 中登记例外
+中,npm,unknown-license,0.1.0,生产依赖,缺失许可证,,UNKNOWN,否,未声明许可证,在 package.json / pyproject.toml 中显式声明 license 字段；检查 LICENSE 文件并在元数据中同步；确认项目是否有 LICENSE 文件，补入对应 SPDX 标识符
+中,npm,dual-risk,1.0.0,生产依赖,双许可-部分合规,GPL-3.0 OR MIT,"GPL-3.0, MIT",否,"双许可存在合规分支但含限制/存疑项: GPL-3.0, MIT，需法务确认是否选用合规分支",明确项目采用双许可证中的哪一个分支（通常 OR 任取其一）；优先选择合规分支并在文档/配置中记录；向法务确认双许可的可接受方案；查阅官方仓库 LICENSE 文件确认准确的 SPDX 标识符；在 issue/邮件中向维护者确认许可证；无法确认时向法务提交需确认包名单
+中,npm,weird-pkg,0.0.1,生产依赖,存疑/未知,MySecretLicense,MySecretLicense,否,许可证 MySecretLicense 未在白名单中，需法务确认,查阅官方仓库 LICENSE 文件确认准确的 SPDX 标识符；在 issue/邮件中向维护者确认许可证；无法确认时向法务提交需确认包名单
+中,pip,requests,2.31.0,生产依赖,缺失许可证,,UNKNOWN,否,未声明许可证,在 package.json / pyproject.toml 中显式声明 license 字段；检查 LICENSE 文件并在元数据中同步；确认项目是否有 LICENSE 文件，补入对应 SPDX 标识符
+中,pip,flask,2.3.3,生产依赖,缺失许可证,,UNKNOWN,否,未声明许可证,在 package.json / pyproject.toml 中显式声明 license 字段；检查 LICENSE 文件并在元数据中同步；确认项目是否有 LICENSE 文件，补入对应 SPDX 标识符
