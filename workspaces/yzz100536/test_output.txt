@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Users/bill/Documents/solo/workspaces/yzz100536/invoice_checker/__init__.py", line 11, in <module>
+    from .verifier import InvoiceVerifier
+  File "/Users/bill/Documents/solo/workspaces/yzz100536/invoice_checker/verifier.py", line 18, in <module>
+    from .reimbursement_reader import ReimbursementReader
+  File "/Users/bill/Documents/solo/workspaces/yzz100536/invoice_checker/reimbursement_reader.py", line 7, in <module>
+    import pandas as pd
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pandas/__init__.py", line 23, in <module>
+    from pandas.compat import (
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pandas/compat/__init__.py", line 27, in <module>
+    from pandas.compat.pyarrow import (
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pandas/compat/pyarrow.py", line 8, in <module>
+    import pyarrow as pa
+  File "/Users/bill/Library/Python/3.9/lib/python/site-packages/pyarrow/__init__.py", line 65, in <module>
+    import pyarrow.lib as _lib
+  File "pyarrow/compat.pxi", line 37, in init pyarrow.lib
+  File "<frozen importlib._bootstrap>", line 1002, in _find_and_load
+KeyboardInterrupt
