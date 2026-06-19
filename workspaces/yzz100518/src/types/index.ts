@@ -21,9 +21,11 @@ export interface Seat {
   lockerId?: string;
   reservationExpireAt?: number;
   checkInAt?: number;
+  checkOutAt?: number;
   tempAwayAt?: number;
   tempAwayExpireAt?: number;
   tempAwayExtensionsLeft?: number;
+  totalMinutes?: number;
 }
 
 export type LockerStatus = 'available' | 'in_use' | 'maintenance';

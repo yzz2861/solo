@@ -102,9 +102,9 @@ interface AppState {
 
   getAvailableLockers: (zone: Zone) => Locker[];
 
-  getActiveReservationByStudent: (studentId: string) => Reservation | undefined;
+  getActiveReservationByStudent: (studentId: string, studentName?: string) => Reservation | undefined;
 
-  getActiveSeatByStudent: (studentId: string) => Seat | undefined;
+  getActiveSeatByStudent: (studentId: string, studentName?: string) => Seat | undefined;
 }
 
 function createFreshState(): Partial<AppState> {
@@ -723,7 +723,8 @@ export const useAppStore = create<AppState>()(
         ),
     }),
     {
-      name: 'study-room-app-state-v1',
+      name: 'study-room-app-state-v2',
+      version: 2,
       partialize: (s) => ({
         _initialized: s._initialized,
         seats: s.seats,
@@ -736,7 +737,13 @@ export const useAppStore = create<AppState>()(
         currentUser: s.currentUser,
       }),
       onRehydrateStorage: () => (state) => {
-        if (state) state._initialized = true;
+        if (!state) return;
+        if (!state.seats || state.seats.length === 0) {
+          const fresh = createFreshState();
+          Object.assign(state, fresh, { _initialized: true });
+        } else {
+          state._initialized = true;
+        }
       },
     },
   ),

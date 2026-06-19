@@ -34,7 +34,7 @@ const DB_PATH = path.join(DATA_DIR, 'study-room.db');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const app = express();
-const PORT = Number(process.env.PORT) || 5174;
+const PORT = Number(process.env.PORT) || 5184;
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
@@ -49,7 +49,8 @@ db.exec(`
     code TEXT NOT NULL,
     zone TEXT NOT NULL,
     floor INTEGER NOT NULL,
-    position TEXT NOT NULL,
+    row INTEGER NOT NULL,
+    col INTEGER NOT NULL,
     status TEXT NOT NULL DEFAULT 'available',
     studentId TEXT,
     studentName TEXT,
@@ -84,8 +85,8 @@ db.exec(`
     studentPhone TEXT,
     status TEXT NOT NULL DEFAULT 'pending_checkin',
     reservedAt INTEGER NOT NULL,
-    checkedInAt INTEGER,
-    checkedOutAt INTEGER,
+    checkInAt INTEGER,
+    checkOutAt INTEGER,
     reservationExpireAt INTEGER,
     tempAwayCount INTEGER DEFAULT 0,
     totalMinutes INTEGER DEFAULT 0,
@@ -109,15 +110,13 @@ db.exec(`
     clearanceId TEXT,
     seatId TEXT,
     seatCode TEXT,
-    studentId TEXT,
-    studentName TEXT,
     type TEXT NOT NULL,
     description TEXT,
     foundAt INTEGER NOT NULL,
-    status TEXT DEFAULT 'unclaimed',
+    claimed INTEGER DEFAULT 0,
     claimedBy TEXT,
     claimedAt INTEGER,
-    storedLocation TEXT
+    photoUrl TEXT
   );
   CREATE TABLE IF NOT EXISTS clearances (
     id TEXT PRIMARY KEY,
@@ -127,24 +126,18 @@ db.exec(`
     operatorName TEXT,
     seatsChecked TEXT,
     lostItemsFound INTEGER DEFAULT 0,
-    seatsReleased INTEGER DEFAULT 0,
-    notes TEXT
+    seatsReleased INTEGER DEFAULT 0
   );
   CREATE TABLE IF NOT EXISTS hourly_snapshots (
     id TEXT PRIMARY KEY,
     date TEXT NOT NULL,
     hour INTEGER NOT NULL,
-    zone TEXT NOT NULL,
     totalSeats INTEGER NOT NULL,
-    inUse INTEGER NOT NULL,
-    reserved INTEGER NOT NULL,
-    tempAway INTEGER NOT NULL,
-    available INTEGER NOT NULL,
-    violation INTEGER NOT NULL,
-    maintenance INTEGER NOT NULL,
-    occupancyRate REAL NOT NULL,
-    timestamp INTEGER NOT NULL,
-    UNIQUE(date, hour, zone)
+    occupiedSeats INTEGER NOT NULL,
+    tempAwaySeats INTEGER NOT NULL,
+    violationCount INTEGER NOT NULL,
+    recordedAt INTEGER NOT NULL,
+    UNIQUE(date, hour)
   );
   CREATE TABLE IF NOT EXISTS event_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -173,40 +166,80 @@ function seedIfEmpty() {
   const snapshots = generateHourlySnapshots(7);
 
   const insSeat = db.prepare(
-    `INSERT INTO seats VALUES (@id,@code,@zone,@floor,@position,@status,@studentId,@studentName,@lockerId,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayAt,@tempAwayExpireAt,@tempAwayExtensionsLeft,@totalMinutes,@notes)`,
+    `INSERT INTO seats VALUES (@id,@code,@zone,@floor,@row,@col,@status,@studentId,@studentName,@lockerId,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayAt,@tempAwayExpireAt,@tempAwayExtensionsLeft,@totalMinutes,@notes)`,
   );
   const insLocker = db.prepare(
     `INSERT INTO lockers VALUES (@id,@code,@zone,@floor,@status,@seatId,@studentId,@maintenanceNote)`,
   );
   const insRes = db.prepare(
-    `INSERT INTO reservations VALUES (@id,@seatId,@seatCode,@lockerId,@lockerCode,@studentId,@studentName,@studentPhone,@status,@reservedAt,@checkedInAt,@checkedOutAt,@reservationExpireAt,@tempAwayCount,@totalMinutes,@notes)`,
+    `INSERT INTO reservations VALUES (@id,@seatId,@seatCode,@lockerId,@lockerCode,@studentId,@studentName,@studentPhone,@status,@reservedAt,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayCount,@totalMinutes,@notes)`,
   );
   const insVio = db.prepare(
     `INSERT INTO violations VALUES (@id,@type,@seatId,@seatCode,@studentId,@studentName,@occurredAt,@description,@handled,@handledBy,@handledAt)`,
   );
   const insLost = db.prepare(
-    `INSERT INTO lost_items VALUES (@id,@clearanceId,@seatId,@seatCode,@studentId,@studentName,@type,@description,@foundAt,@status,@claimedBy,@claimedAt,@storedLocation)`,
+    `INSERT INTO lost_items VALUES (@id,@clearanceId,@seatId,@seatCode,@type,@description,@foundAt,@claimed,@claimedBy,@claimedAt,@photoUrl)`,
   );
   const insClear = db.prepare(
-    `INSERT INTO clearances VALUES (@id,@date,@startedAt,@completedAt,@operatorName,@seatsChecked,@lostItemsFound,@seatsReleased,@notes)`,
+    `INSERT INTO clearances VALUES (@id,@date,@startedAt,@completedAt,@operatorName,@seatsChecked,@lostItemsFound,@seatsReleased)`,
   );
   const insSnap = db.prepare(
-    `INSERT INTO hourly_snapshots VALUES (@id,@date,@hour,@zone,@totalSeats,@inUse,@reserved,@tempAway,@available,@violation,@maintenance,@occupancyRate,@timestamp)`,
+    `INSERT INTO hourly_snapshots VALUES (@id,@date,@hour,@totalSeats,@occupiedSeats,@tempAwaySeats,@violationCount,@recordedAt)`,
   );
 
   const tx = db.transaction(() => {
     for (const s of seats) {
-      insSeat.run({ ...s, notes: null });
+      insSeat.run({
+        ...s,
+        studentId: s.studentId ?? null,
+        studentName: s.studentName ?? null,
+        lockerId: s.lockerId ?? null,
+        checkInAt: s.checkInAt ?? null,
+        checkOutAt: s.checkOutAt ?? null,
+        reservationExpireAt: s.reservationExpireAt ?? null,
+        tempAwayAt: s.tempAwayAt ?? null,
+        tempAwayExpireAt: s.tempAwayExpireAt ?? null,
+        tempAwayExtensionsLeft: s.tempAwayExtensionsLeft ?? 0,
+        totalMinutes: s.totalMinutes ?? 0,
+        notes: null,
+      });
     }
     for (const l of lockers) {
-      insLocker.run({ ...l, maintenanceNote: null });
+      insLocker.run({
+        ...l,
+        seatId: l.seatId ?? null,
+        studentId: l.studentId ?? null,
+        maintenanceNote: l.maintenanceNote ?? null,
+      });
     }
     for (const v of violations) {
-      insVio.run(v);
+      insVio.run({
+        ...v,
+        studentId: v.studentId ?? null,
+        studentName: v.studentName ?? null,
+        description: v.description ?? null,
+        handled: v.handled ? 1 : 0,
+        handledBy: v.handledBy ?? null,
+        handledAt: v.handledAt ?? null,
+      });
     }
-    insClear.run({ ...clearance, completedAt: null, seatsChecked: JSON.stringify(clearance.seatsChecked), notes: null });
+    insClear.run({
+      ...clearance,
+      completedAt: clearance.completedAt ?? null,
+      seatsChecked: JSON.stringify(clearance.seatsChecked),
+    });
     for (const it of lostItems) {
-      insLost.run({ ...it, status: 'unclaimed', claimedBy: null, claimedAt: null, storedLocation: null });
+      insLost.run({
+        ...it,
+        clearanceId: it.clearanceId ?? null,
+        seatId: it.seatId ?? null,
+        seatCode: it.seatCode ?? null,
+        description: it.description ?? null,
+        claimed: it.claimed ? 1 : 0,
+        claimedBy: it.claimedBy ?? null,
+        claimedAt: it.claimedAt ?? null,
+        photoUrl: it.photoUrl ?? null,
+      });
     }
     for (const sp of snapshots) {
       insSnap.run(sp);
@@ -243,13 +276,19 @@ app.get('/api/state', (_req, res) => {
   const seats = rows<Seat>(db.prepare('SELECT * FROM seats ORDER BY code'));
   const lockers = rows<Locker>(db.prepare('SELECT * FROM lockers ORDER BY code'));
   const reservations = rows<Reservation>(db.prepare('SELECT * FROM reservations ORDER BY reservedAt DESC'));
-  const violations = rows<Violation>(db.prepare('SELECT * FROM violations ORDER BY occurredAt DESC'));
-  const lostItems = rows<LostItem>(db.prepare('SELECT * FROM lost_items ORDER BY foundAt DESC'));
+  const violations = rows<any>(db.prepare('SELECT * FROM violations ORDER BY occurredAt DESC')).map((v) => ({
+    ...v,
+    handled: !!v.handled,
+  })) as Violation[];
+  const lostItems = rows<any>(db.prepare('SELECT * FROM lost_items ORDER BY foundAt DESC')).map((l) => ({
+    ...l,
+    claimed: !!l.claimed,
+  })) as LostItem[];
   const clearances = rows<any>(db.prepare('SELECT * FROM clearances ORDER BY date DESC')).map((c) => ({
     ...c,
     seatsChecked: c.seatsChecked ? JSON.parse(c.seatsChecked) : [],
   })) as Clearance[];
-  const snapshots = rows<HourlySnapshot>(db.prepare('SELECT * FROM hourly_snapshots ORDER BY timestamp ASC'));
+  const snapshots = rows<HourlySnapshot>(db.prepare('SELECT * FROM hourly_snapshots ORDER BY recordedAt ASC'));
   res.json({ ok: true, data: { seats, lockers, reservations, violations, lostItems, clearances, snapshots } });
 });
 
@@ -322,8 +361,8 @@ app.post('/api/reserve', (req, res) => {
     ).run(sid, name, locker.id, expire, seatId);
     db.prepare("UPDATE lockers SET status='in_use', seatId=?, studentId=? WHERE id=?").run(seatId, sid, locker.id);
     db.prepare(
-      'INSERT INTO reservations VALUES (@id,@seatId,@seatCode,@lockerId,@lockerCode,@studentId,@studentName,@studentPhone,@status,@reservedAt,@checkedInAt,@checkedOutAt,@reservationExpireAt,@tempAwayCount,@totalMinutes,@notes)',
-    ).run({ ...reservation, checkedInAt: null, checkedOutAt: null, notes: null });
+      'INSERT INTO reservations VALUES (@id,@seatId,@seatCode,@lockerId,@lockerCode,@studentId,@studentName,@studentPhone,@status,@reservedAt,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayCount,@totalMinutes,@notes)',
+    ).run({ ...reservation, checkInAt: null, checkOutAt: null, notes: null });
     logEvent('reserve', operator ?? name, reservation);
   });
   tx();
@@ -342,7 +381,7 @@ app.post('/api/checkin', (req, res) => {
   const tx = db.transaction(() => {
     db.prepare("UPDATE seats SET status='in_use', checkInAt=?, reservationExpireAt=NULL WHERE id=?").run(now, seatId);
     db.prepare(
-      "UPDATE reservations SET status='checked_in', checkedInAt=? WHERE seatId=? AND status='pending_checkin'",
+      "UPDATE reservations SET status='checked_in', checkInAt=? WHERE seatId=? AND status='pending_checkin'",
     ).run(now, seatId);
     logEvent('checkin', operator ?? 'system', { seatId, code: seat.code });
   });
@@ -372,7 +411,7 @@ app.post('/api/checkout', (req, res) => {
       db.prepare("UPDATE lockers SET status='available', seatId=NULL, studentId=NULL WHERE id=?").run(lockerId);
     }
     db.prepare(
-      "UPDATE reservations SET status='checked_out', checkedOutAt=?, totalMinutes=? WHERE seatId=? AND status IN ('checked_in','violation','pending_checkin')",
+      "UPDATE reservations SET status='checked_out', checkOutAt=?, totalMinutes=? WHERE seatId=? AND status IN ('checked_in','violation','pending_checkin')",
     ).run(now, total, seatId);
     logEvent('checkout', operator ?? 'system', { seatId, code: seat.code, total, reason });
   });
@@ -461,7 +500,7 @@ app.post('/api/release', (req, res) => {
       db.prepare("UPDATE lockers SET status='available', seatId=NULL, studentId=NULL WHERE id=?").run(lockerId);
     }
     db.prepare(
-      "UPDATE reservations SET status='cancelled', checkedOutAt=? WHERE seatId=? AND status IN ('pending_checkin','checked_in','violation')",
+      "UPDATE reservations SET status='cancelled', checkOutAt=? WHERE seatId=? AND status IN ('pending_checkin','checked_in','violation')",
     ).run(now, seatId);
     if (studentName) {
       const vId = genId('vio');
@@ -508,15 +547,30 @@ app.post('/api/sync', (req, res) => {
   const tx = db.transaction(() => {
     if (payload.seats?.length) {
       const stmt = db.prepare(
-        `INSERT INTO seats (id,code,zone,floor,position,status,studentId,studentName,lockerId,checkInAt,checkOutAt,reservationExpireAt,tempAwayAt,tempAwayExpireAt,tempAwayExtensionsLeft,totalMinutes,notes)
-         VALUES (@id,@code,@zone,@floor,@position,@status,@studentId,@studentName,@lockerId,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayAt,@tempAwayExpireAt,@tempAwayExtensionsLeft,@totalMinutes,@notes)
+        `INSERT INTO seats (id,code,zone,floor,row,col,status,studentId,studentName,lockerId,checkInAt,checkOutAt,reservationExpireAt,tempAwayAt,tempAwayExpireAt,tempAwayExtensionsLeft,totalMinutes,notes)
+         VALUES (@id,@code,@zone,@floor,@row,@col,@status,@studentId,@studentName,@lockerId,@checkInAt,@checkOutAt,@reservationExpireAt,@tempAwayAt,@tempAwayExpireAt,@tempAwayExtensionsLeft,@totalMinutes,@notes)
          ON CONFLICT(id) DO UPDATE SET
            status=excluded.status, studentId=excluded.studentId, studentName=excluded.studentName, lockerId=excluded.lockerId,
            checkInAt=excluded.checkInAt, checkOutAt=excluded.checkOutAt, reservationExpireAt=excluded.reservationExpireAt,
            tempAwayAt=excluded.tempAwayAt, tempAwayExpireAt=excluded.tempAwayExpireAt,
            tempAwayExtensionsLeft=excluded.tempAwayExtensionsLeft, totalMinutes=excluded.totalMinutes`,
       );
-      for (const s of payload.seats) stmt.run({ ...s, notes: null });
+      for (const s of payload.seats) {
+        stmt.run({
+          ...s,
+          studentId: s.studentId ?? null,
+          studentName: s.studentName ?? null,
+          lockerId: s.lockerId ?? null,
+          checkInAt: s.checkInAt ?? null,
+          checkOutAt: s.checkOutAt ?? null,
+          reservationExpireAt: s.reservationExpireAt ?? null,
+          tempAwayAt: s.tempAwayAt ?? null,
+          tempAwayExpireAt: s.tempAwayExpireAt ?? null,
+          tempAwayExtensionsLeft: s.tempAwayExtensionsLeft ?? 0,
+          totalMinutes: s.totalMinutes ?? 0,
+          notes: null,
+        });
+      }
     }
     if (payload.lockers?.length) {
       const stmt = db.prepare(
@@ -524,7 +578,14 @@ app.post('/api/sync', (req, res) => {
          VALUES (@id,@code,@zone,@floor,@status,@seatId,@studentId,@maintenanceNote)
          ON CONFLICT(id) DO UPDATE SET status=excluded.status, seatId=excluded.seatId, studentId=excluded.studentId, maintenanceNote=excluded.maintenanceNote`,
       );
-      for (const l of payload.lockers) stmt.run({ ...l, maintenanceNote: l.maintenanceNote ?? null });
+      for (const l of payload.lockers) {
+        stmt.run({
+          ...l,
+          seatId: l.seatId ?? null,
+          studentId: l.studentId ?? null,
+          maintenanceNote: l.maintenanceNote ?? null,
+        });
+      }
     }
     if (payload.reservations?.length) {
       const stmt = db.prepare(
@@ -534,7 +595,16 @@ app.post('/api/sync', (req, res) => {
            reservationExpireAt=excluded.reservationExpireAt, tempAwayCount=excluded.tempAwayCount, totalMinutes=excluded.totalMinutes`,
       );
       for (const r of payload.reservations) {
-        stmt.run({ ...r, checkInAt: r.checkInAt ?? null, checkOutAt: r.checkOutAt ?? null, notes: null });
+        stmt.run({
+          ...r,
+          lockerId: r.lockerId ?? null,
+          lockerCode: r.lockerCode ?? null,
+          studentPhone: r.studentPhone ?? null,
+          reservationExpireAt: r.reservationExpireAt ?? null,
+          checkInAt: r.checkInAt ?? null,
+          checkOutAt: r.checkOutAt ?? null,
+          notes: null,
+        });
       }
     }
     if (payload.violations?.length) {
@@ -547,6 +617,9 @@ app.post('/api/sync', (req, res) => {
         stmt.run({
           ...v,
           studentId: v.studentId ?? null,
+          studentName: v.studentName ?? null,
+          description: v.description ?? null,
+          handled: v.handled ? 1 : 0,
           handledBy: v.handledBy ?? null,
           handledAt: v.handledAt ?? null,
         });
@@ -566,8 +639,8 @@ app.post('/api/sync', (req, res) => {
 app.get('/api/export/utilization', (_req, res) => {
   const rows = db
     .prepare(
-      `SELECT date,hour,zone,totalSeats,inUse,reserved,tempAway,available,violation,occupancyRate,timestamp
-       FROM hourly_snapshots ORDER BY timestamp DESC`,
+      `SELECT date,hour,totalSeats,occupiedSeats,tempAwaySeats,violationCount,recordedAt
+       FROM hourly_snapshots ORDER BY recordedAt DESC`,
     )
     .all();
   res.json({ ok: true, data: rows });
