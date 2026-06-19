@@ -6,8 +6,11 @@ Usage:
   /Users/lzy/pro/solo/update.py /Users/lzy/pro/solo/result/zy10270.xlsx
   /Users/lzy/pro/solo/update.py /Users/lzy/pro/solo/result/zy10270.xlsx /Users/lzy/pro/solo/result/zy10271.xlsx
 
-The script upserts by "Trae Session ID". The workbook's "截图" column is ignored
-because this Base table no longer needs screenshot attachments.
+The script updates by "Trae Session ID". When a session does not already exist,
+it fills the first unclaimed empty slot instead of creating a new Base record:
+"状态" == "未领取", and "Trae Session ID", "轮次", "业务领域" are all empty.
+The workbook's "截图" column is ignored because this Base table no longer needs
+screenshot attachments.
 """
 
 from __future__ import annotations
@@ -37,6 +40,9 @@ DEFAULT_VIEW_ID = "vewKdKoVia"
 
 KEY_FIELD = "Trae Session ID"
 ATTACHMENT_FIELD = "截图"
+STATUS_FIELD = "状态"
+UNCLAIMED_STATUS = "未领取"
+FILL_SLOT_EMPTY_FIELDS = (KEY_FIELD, "轮次", "业务领域")
 
 HEADER_MAP = {
     "session_id": "Trae Session ID",
@@ -50,6 +56,8 @@ HEADER_MAP = {
     "任务是否完成": "任务是否完成",
     "产物及过程是否满意": "产物及过程是否满意",
     "不满意原因": "不满意原因",
+    "commit id": "commit id",
+    "commit_id": "commit id",
     "远端Github地址": "github地址",
     "远端 GitHub 地址": "github地址",
     "github地址": "github地址",
@@ -203,9 +211,11 @@ def value_to_text(value: Any) -> str:
     return str(value).strip()
 
 
-def is_blank_record(record: dict[str, Any], writable_names: set[str]) -> bool:
+def is_fillable_unclaimed_slot(record: dict[str, Any]) -> bool:
     fields = record.get("fields", {})
-    return not any(value_to_text(fields.get(name)) for name in writable_names)
+    if value_to_text(fields.get(STATUS_FIELD)) != UNCLAIMED_STATUS:
+        return False
+    return all(not value_to_text(fields.get(name)) for name in FILL_SLOT_EMPTY_FIELDS)
 
 
 def read_workbook_rows(path: Path) -> list[dict[str, Any]]:
@@ -245,6 +255,25 @@ def build_fields(row: dict[str, Any], writable_field_names: set[str]) -> dict[st
 
 
 def record_upsert(base_token: str, table_id: str, fields: dict[str, Any], record_id: str | None = None) -> str:
+    if record_id:
+        data = run_lark(
+            [
+                "base",
+                "+record-batch-update",
+                "--as",
+                "user",
+                "--base-token",
+                base_token,
+                "--table-id",
+                table_id,
+                "--json",
+                json.dumps({"record_id_list": [record_id], "patch": fields}, ensure_ascii=False),
+            ]
+        )
+        if not data.get("ok"):
+            raise UploadError(f"record-batch-update failed: {data}")
+        return record_id
+
     args = [
         "base",
         "+record-upsert",
@@ -257,8 +286,6 @@ def record_upsert(base_token: str, table_id: str, fields: dict[str, Any], record
         "--json",
         json.dumps(fields, ensure_ascii=False),
     ]
-    if record_id:
-        args.extend(["--record-id", record_id])
     data = run_lark(args)
     if not data.get("ok"):
         raise UploadError(f"record-upsert failed: {data}")
@@ -285,12 +312,12 @@ def load_table_context(args: argparse.Namespace) -> dict[str, Any]:
         for record in existing_records
         if value_to_text(record.get("fields", {}).get(KEY_FIELD))
     }
-    blank_records = [record for record in existing_records if is_blank_record(record, writable_names)]
+    fillable_records = [record for record in existing_records if is_fillable_unclaimed_slot(record)]
     return {
         "field_id_to_name": field_id_to_name,
         "writable_names": writable_names,
         "by_key": by_key,
-        "blank_records": blank_records,
+        "fillable_records": fillable_records,
     }
 
 
@@ -300,10 +327,9 @@ def upload_workbook(args: argparse.Namespace, table_context: dict[str, Any] | No
         raise UploadError(f"workbook not found: {workbook_path}")
 
     context = table_context or load_table_context(args)
-    field_id_to_name = context["field_id_to_name"]
     writable_names = context["writable_names"]
     by_key = context["by_key"]
-    blank_records = context["blank_records"]
+    fillable_records = context["fillable_records"]
 
     workbook_rows = read_workbook_rows(workbook_path)
     result = {
@@ -311,6 +337,7 @@ def upload_workbook(args: argparse.Namespace, table_context: dict[str, Any] | No
         "rows": len(workbook_rows),
         "created": 0,
         "updated": 0,
+        "filled_existing": 0,
         "reused_blank": 0,
         "attachments_uploaded": 0,
         "attachments_skipped": 0,
@@ -328,11 +355,14 @@ def upload_workbook(args: argparse.Namespace, table_context: dict[str, Any] | No
         fields_to_write[KEY_FIELD] = key
 
         if args.dry_run:
+            record = by_key.get(key)
+            action = "updated" if record else "filled_existing" if fillable_records else "missing_fillable_slot"
             result["records"].append(
                 {
                     "row": index,
-                    "action": "dry-run",
+                    "action": f"dry-run:{action}",
                     "key": key,
+                    "record_id": record.get("record_id", "") if record else "",
                     "fields": sorted(fields_to_write),
                 }
             )
@@ -346,30 +376,19 @@ def upload_workbook(args: argparse.Namespace, table_context: dict[str, Any] | No
             record_upsert(args.base_token, args.table_id, fields_to_write, record_id=record_id)
             result["updated"] += 1
             action = "updated"
-        elif blank_records:
-            record = blank_records.pop(0)
+        elif fillable_records:
+            record = fillable_records.pop(0)
             record_id = record["record_id"]
             record_upsert(args.base_token, args.table_id, fields_to_write, record_id=record_id)
             result["updated"] += 1
+            result["filled_existing"] += 1
             result["reused_blank"] += 1
-            action = "reused_blank"
+            action = "filled_existing"
         else:
-            record_id = record_upsert(args.base_token, args.table_id, fields_to_write)
-            if not record_id:
-                refreshed = list_records(args.base_token, args.table_id, field_id_to_name)
-                context["by_key"] = {
-                    value_to_text(candidate.get("fields", {}).get(KEY_FIELD)): candidate
-                    for candidate in refreshed
-                    if value_to_text(candidate.get("fields", {}).get(KEY_FIELD))
-                }
-                by_key = context["by_key"]
-                for candidate in refreshed:
-                    if value_to_text(candidate.get("fields", {}).get(KEY_FIELD)) == key:
-                        record_id = candidate.get("record_id", "")
-                        break
-            if not record_id:
-                raise UploadError(f"created row for key but could not resolve record_id: {key}")
-            result["created"] += 1
+            raise UploadError(
+                f"no fillable Feishu row for {key}: require {STATUS_FIELD}={UNCLAIMED_STATUS}, "
+                f"{KEY_FIELD}/轮次/业务领域 all empty"
+            )
 
         by_key[key] = {"record_id": record_id, "fields": fields_to_write}
 
@@ -400,6 +419,7 @@ def main() -> int:
         "rows": 0,
         "created": 0,
         "updated": 0,
+        "filled_existing": 0,
         "reused_blank": 0,
         "attachments_uploaded": 0,
         "attachments_skipped": 0,
@@ -417,7 +437,7 @@ def main() -> int:
         try:
             report = upload_workbook(args, table_context)
             reports.append(report)
-            for key in ("rows", "created", "updated", "reused_blank", "attachments_uploaded", "attachments_skipped"):
+            for key in ("rows", "created", "updated", "filled_existing", "reused_blank", "attachments_uploaded", "attachments_skipped"):
                 totals[key] += int(report.get(key, 0))
             totals["attachments_missing"] += len(report.get("attachments_missing", []))
             totals["skipped"] += len(report.get("skipped", []))
