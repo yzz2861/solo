@@ -1,0 +1,68 @@
+{
+  "projectRoot": "../test-project",
+  "framework": "vue",
+  "route": {
+    "files": [
+      "src/router/**/*.{js,ts}"
+    ],
+    "dynamicRoutePatterns": [
+      ":id",
+      ":orderId",
+      ":[a-z]+Id$"
+    ],
+    "lazyLoadPatterns": [
+      "component:\\s*\\(\\)\\s*=>"
+    ]
+  },
+  "menu": {
+    "files": [
+      "src/config/menu.{js,ts,json}"
+    ],
+    "pathKey": ["path", "route", "url", "href"],
+    "nameKey": ["name", "title", "label"],
+    "permissionKey": ["permission", "roles", "auth"],
+    "childrenKey": ["children", "subMenu", "items"]
+  },
+  "permission": {
+    "files": [
+      "src/config/permission.{js,ts,json}"
+    ],
+    "routeKey": ["route", "path", "resource"],
+    "roleKey": ["role", "roles"],
+    "adminRoles": ["admin", "superAdmin", "root", "administrator"]
+  },
+  "links": {
+    "scanFiles": [
+      "src/**/*.{vue,js,ts,jsx,tsx}",
+      "!src/router/**"
+    ],
+    "linkPatterns": [],
+    "externalLinkPattern": "^https?://",
+    "internalLinkBasePath": "/"
+  },
+  "ignore": {
+    "paths": [
+      "/login",
+      "/404",
+      "/403",
+      "/500",
+      "/redirect"
+    ],
+    "pathPatterns": [],
+    "files": []
+  },
+  "history": {
+    "enabled": false,
+    "file": "./.route-scout-history.json",
+    "maxHistory": 30
+  },
+  "report": {
+    "outputDir": "./test-reports",
+    "formats": ["console", "json", "html"],
+    "views": ["frontend", "test", "product"]
+  },
+  "logging": {
+    "level": "info",
+    "verbose": true
+  }
+}

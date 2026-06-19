@@ -1,0 +1,1513 @@
+{
+  "generatedAt": "2026-06-18T18:48:51.995Z",
+  "comparison": {
+    "isFirstRun": true,
+    "newIssues": [
+      {
+        "signature": "deadLink:/legacy-function:src/views/Dashboard.vue:34",
+        "type": "deadLink",
+        "path": "/legacy-function",
+        "name": "",
+        "sourceFile": "src/views/Dashboard.vue",
+        "line": 34,
+        "description": "代码中引用的路径不存在于路由定义中"
+      },
+      {
+        "signature": "deadLink:/old-page:src/views/Dashboard.vue:10",
+        "type": "deadLink",
+        "path": "/old-page",
+        "name": "",
+        "sourceFile": "src/views/Dashboard.vue",
+        "line": 10,
+        "description": "代码中引用的路径不存在于路由定义中"
+      },
+      {
+        "signature": "deadLink:/nonexistent:src/views/Dashboard.vue:11",
+        "type": "deadLink",
+        "path": "/nonexistent",
+        "name": "",
+        "sourceFile": "src/views/Dashboard.vue",
+        "line": 11,
+        "description": "代码中引用的路径不存在于路由定义中"
+      },
+      {
+        "signature": "orphanPage:/orphan-page:src/router/index.js:77",
+        "type": "orphanPage",
+        "path": "/orphan-page",
+        "name": "OrphanPage",
+        "sourceFile": "src/router/index.js",
+        "line": 77,
+        "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+      },
+      {
+        "signature": "orphanPage:/duplicate:src/router/index.js:89",
+        "type": "orphanPage",
+        "path": "/duplicate",
+        "name": "Duplicate1",
+        "sourceFile": "src/router/index.js",
+        "line": 89,
+        "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+      },
+      {
+        "signature": "orphanPage:/duplicate:src/router/index.js:95",
+        "type": "orphanPage",
+        "path": "/duplicate",
+        "name": "Duplicate2",
+        "sourceFile": "src/router/index.js",
+        "line": 95,
+        "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+      },
+      {
+        "signature": "duplicateRoute:/duplicate::0",
+        "type": "duplicateRoute",
+        "path": "/duplicate",
+        "name": "",
+        "sourceFile": "",
+        "line": 0,
+        "description": "该路径在 2 个地方被定义"
+      },
+      {
+        "signature": "invalidPermission:/old-permission-page::0",
+        "type": "invalidPermission",
+        "path": "/old-permission-page",
+        "name": "",
+        "sourceFile": "",
+        "line": 0,
+        "description": "权限配置中的路径不存在于路由定义中"
+      },
+      {
+        "signature": "invalidPermission:/obsolete-route::0",
+        "type": "invalidPermission",
+        "path": "/obsolete-route",
+        "name": "",
+        "sourceFile": "",
+        "line": 0,
+        "description": "权限配置中的路径不存在于路由定义中"
+      },
+      {
+        "signature": "externalLinkIssue: htt p:// broken-link.com/test:src/views/Dashboard.vue:40",
+        "type": "externalLinkIssue",
+        "path": " htt p:// broken-link.com/test",
+        "name": "",
+        "sourceFile": "src/views/Dashboard.vue",
+        "line": 40,
+        "description": "协议缺失，应为 http:// 或 https://; 链接中包含空白字符"
+      },
+      {
+        "signature": "legacyMenuItem:/old-user-page:src/config/menu.js:0",
+        "type": "legacyMenuItem",
+        "path": "/old-user-page",
+        "name": "旧用户页面",
+        "sourceFile": "src/config/menu.js",
+        "line": 0,
+        "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+      },
+      {
+        "signature": "legacyMenuItem:/deprecated-page:src/config/menu.js:0",
+        "type": "legacyMenuItem",
+        "path": "/deprecated-page",
+        "name": "已废弃页面",
+        "sourceFile": "src/config/menu.js",
+        "line": 0,
+        "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+      }
+    ],
+    "fixedIssues": [],
+    "unchangedIssues": []
+  },
+  "rawResults": {
+    "summary": {
+      "totalRoutes": 15,
+      "totalMenus": 11,
+      "totalPermissions": 13,
+      "totalCodeLinks": 12,
+      "dynamicRoutes": 3,
+      "lazyLoadedRoutes": 15,
+      "adminOnlyRoutes": 6,
+      "issues": {
+        "error": 4,
+        "warning": 8,
+        "total": 12
+      }
+    },
+    "dynamicRoutes": [
+      {
+        "path": "/user/:id",
+        "name": "UserDetail",
+        "params": [
+          "id"
+        ],
+        "component": "@/views/user/Detail.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 25
+      },
+      {
+        "path": "/order/:orderId",
+        "name": "OrderDetail",
+        "params": [
+          "orderId"
+        ],
+        "component": "@/views/order/Detail.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 45
+      },
+      {
+        "path": "/product/:id/edit",
+        "name": "ProductEdit",
+        "params": [
+          "id"
+        ],
+        "component": "@/views/product/Edit.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 59
+      }
+    ],
+    "lazyLoadedRoutes": [
+      {
+        "path": "/",
+        "name": "Home",
+        "component": "@/views/Home.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 7
+      },
+      {
+        "path": "/dashboard",
+        "name": "Dashboard",
+        "component": "@/views/Dashboard.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 13
+      },
+      {
+        "path": "/user",
+        "name": "User",
+        "component": "@/views/user/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 19
+      },
+      {
+        "path": "/user/:id",
+        "name": "UserDetail",
+        "component": "@/views/user/Detail.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 25
+      },
+      {
+        "path": "/user/list",
+        "name": "UserList",
+        "component": "@/views/user/List.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 31
+      },
+      {
+        "path": "/order",
+        "name": "Order",
+        "component": "@/views/order/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 39
+      },
+      {
+        "path": "/order/:orderId",
+        "name": "OrderDetail",
+        "component": "@/views/order/Detail.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 45
+      },
+      {
+        "path": "/product",
+        "name": "Product",
+        "component": "@/views/product/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 53
+      },
+      {
+        "path": "/product/:id/edit",
+        "name": "ProductEdit",
+        "component": "@/views/product/Edit.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 59
+      },
+      {
+        "path": "/report",
+        "name": "Report",
+        "component": "@/views/report/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 65
+      },
+      {
+        "path": "/hidden-page",
+        "name": "HiddenPage",
+        "component": "@/views/HiddenPage.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 71
+      },
+      {
+        "path": "/orphan-page",
+        "name": "OrphanPage",
+        "component": "@/views/OrphanPage.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 77
+      },
+      {
+        "path": "/admin-only",
+        "name": "AdminOnly",
+        "component": "@/views/AdminOnly.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 83
+      },
+      {
+        "path": "/duplicate",
+        "name": "Duplicate1",
+        "component": "@/views/Duplicate.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 89
+      },
+      {
+        "path": "/duplicate",
+        "name": "Duplicate2",
+        "component": "@/views/Duplicate2.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 95
+      }
+    ],
+    "adminOnlyRoutes": [
+      {
+        "path": "/user",
+        "name": "User",
+        "roles": [
+          "admin"
+        ],
+        "component": "@/views/user/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 19,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      },
+      {
+        "path": "/user/:id",
+        "name": "UserDetail",
+        "roles": [
+          "admin"
+        ],
+        "component": "@/views/user/Detail.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 25,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      },
+      {
+        "path": "/user/list",
+        "name": "UserList",
+        "roles": [
+          "admin"
+        ],
+        "component": "@/views/user/List.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 31,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      },
+      {
+        "path": "/report",
+        "name": "Report",
+        "roles": [
+          "admin",
+          "superAdmin"
+        ],
+        "component": "@/views/report/Index.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 65,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      },
+      {
+        "path": "/hidden-page",
+        "name": "HiddenPage",
+        "roles": [
+          "admin"
+        ],
+        "component": "@/views/HiddenPage.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 71,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      },
+      {
+        "path": "/admin-only",
+        "name": "AdminOnly",
+        "roles": [
+          "admin"
+        ],
+        "component": "@/views/AdminOnly.vue",
+        "sourceFile": "src/router/index.js",
+        "line": 83,
+        "isAdminOnly": true,
+        "description": "该路由仅管理员可访问，可能被误判为死链"
+      }
+    ]
+  },
+  "views": {
+    "frontend": {
+      "title": "前端开发视角报告",
+      "summary": {
+        "totalRoutes": 15,
+        "totalMenus": 11,
+        "totalPermissions": 13,
+        "totalCodeLinks": 12,
+        "dynamicRoutes": 3,
+        "lazyLoadedRoutes": 15,
+        "adminOnlyRoutes": 6,
+        "issues": {
+          "error": 4,
+          "warning": 8,
+          "total": 12
+        },
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "代码死链接 (严重)",
+          "key": "deadLinks",
+          "items": [
+            {
+              "path": "/legacy-function",
+              "originalPath": "/legacy-function",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 34,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            },
+            {
+              "path": "/old-page",
+              "originalPath": "/old-page",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 10,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            },
+            {
+              "path": "/nonexistent",
+              "originalPath": "/nonexistent",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 11,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            }
+          ],
+          "description": "代码中跳转到不存在路径的链接"
+        },
+        {
+          "name": "重复路由定义 (严重)",
+          "key": "duplicateRoutes",
+          "items": [
+            {
+              "path": "/duplicate",
+              "count": 2,
+              "occurrences": [
+                {
+                  "sourceFile": "src/router/index.js",
+                  "line": 89,
+                  "name": "Duplicate1",
+                  "component": "@/views/Duplicate.vue"
+                },
+                {
+                  "sourceFile": "src/router/index.js",
+                  "line": 95,
+                  "name": "Duplicate2",
+                  "component": "@/views/Duplicate2.vue"
+                }
+              ],
+              "type": "duplicate",
+              "severity": "error",
+              "description": "该路径在 2 个地方被定义"
+            }
+          ],
+          "description": "同一路径被多次定义"
+        },
+        {
+          "name": "外链格式问题",
+          "key": "externalLinkIssues",
+          "items": [
+            {
+              "path": " htt p:// broken-link.com/test",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 40,
+              "issues": [
+                "协议缺失，应为 http:// 或 https://",
+                "链接中包含空白字符"
+              ],
+              "type": "external-link",
+              "severity": "warning",
+              "description": "协议缺失，应为 http:// 或 https://; 链接中包含空白字符"
+            }
+          ],
+          "description": "外链协议、字符、格式问题"
+        },
+        {
+          "name": "无入口页面",
+          "key": "orphanPages",
+          "items": [
+            {
+              "path": "/orphan-page",
+              "name": "OrphanPage",
+              "component": "@/views/OrphanPage.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 77,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate1",
+              "component": "@/views/Duplicate.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 89,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate2",
+              "component": "@/views/Duplicate2.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 95,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            }
+          ],
+          "description": "有路由定义但无法通过正常途径访问的页面"
+        },
+        {
+          "name": "无效权限配置",
+          "key": "invalidPermissions",
+          "items": [
+            {
+              "path": "/old-permission-page",
+              "roles": [
+                "admin"
+              ],
+              "sources": [
+                {
+                  "sourceFile": "src/config/permission.js",
+                  "line": 0
+                }
+              ],
+              "type": "invalid-permission",
+              "severity": "warning",
+              "description": "权限配置中的路径不存在于路由定义中"
+            },
+            {
+              "path": "/obsolete-route",
+              "roles": [
+                "admin",
+                "user"
+              ],
+              "sources": [
+                {
+                  "sourceFile": "src/config/permission.js",
+                  "line": 0
+                }
+              ],
+              "type": "invalid-permission",
+              "severity": "warning",
+              "description": "权限配置中的路径不存在于路由定义中"
+            }
+          ],
+          "description": "权限配置指向不存在的路由"
+        },
+        {
+          "name": "旧菜单保留项",
+          "key": "legacyMenuItems",
+          "items": [
+            {
+              "path": "/old-user-page",
+              "name": "旧用户页面",
+              "permissions": [],
+              "parentPath": "/user",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            },
+            {
+              "path": "/deprecated-page",
+              "name": "已废弃页面",
+              "permissions": [],
+              "parentPath": "",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            }
+          ],
+          "description": "菜单配置指向不存在的路由，可能是历史遗留"
+        },
+        {
+          "name": "动态路由列表",
+          "key": "dynamicRoutes",
+          "items": [
+            {
+              "path": "/user/:id",
+              "name": "UserDetail",
+              "params": [
+                "id"
+              ],
+              "component": "@/views/user/Detail.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 25
+            },
+            {
+              "path": "/order/:orderId",
+              "name": "OrderDetail",
+              "params": [
+                "orderId"
+              ],
+              "component": "@/views/order/Detail.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 45
+            },
+            {
+              "path": "/product/:id/edit",
+              "name": "ProductEdit",
+              "params": [
+                "id"
+              ],
+              "component": "@/views/product/Edit.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 59
+            }
+          ],
+          "description": "带参数的动态路由，需要特别注意匹配"
+        },
+        {
+          "name": "懒加载路由列表",
+          "key": "lazyLoadedRoutes",
+          "items": [
+            {
+              "path": "/",
+              "name": "Home",
+              "component": "@/views/Home.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 7
+            },
+            {
+              "path": "/dashboard",
+              "name": "Dashboard",
+              "component": "@/views/Dashboard.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 13
+            },
+            {
+              "path": "/user",
+              "name": "User",
+              "component": "@/views/user/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 19
+            },
+            {
+              "path": "/user/:id",
+              "name": "UserDetail",
+              "component": "@/views/user/Detail.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 25
+            },
+            {
+              "path": "/user/list",
+              "name": "UserList",
+              "component": "@/views/user/List.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 31
+            },
+            {
+              "path": "/order",
+              "name": "Order",
+              "component": "@/views/order/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 39
+            },
+            {
+              "path": "/order/:orderId",
+              "name": "OrderDetail",
+              "component": "@/views/order/Detail.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 45
+            },
+            {
+              "path": "/product",
+              "name": "Product",
+              "component": "@/views/product/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 53
+            },
+            {
+              "path": "/product/:id/edit",
+              "name": "ProductEdit",
+              "component": "@/views/product/Edit.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 59
+            },
+            {
+              "path": "/report",
+              "name": "Report",
+              "component": "@/views/report/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 65
+            },
+            {
+              "path": "/hidden-page",
+              "name": "HiddenPage",
+              "component": "@/views/HiddenPage.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 71
+            },
+            {
+              "path": "/orphan-page",
+              "name": "OrphanPage",
+              "component": "@/views/OrphanPage.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 77
+            },
+            {
+              "path": "/admin-only",
+              "name": "AdminOnly",
+              "component": "@/views/AdminOnly.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 83
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate1",
+              "component": "@/views/Duplicate.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 89
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate2",
+              "component": "@/views/Duplicate2.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 95
+            }
+          ],
+          "description": "使用懒加载的路由组件"
+        }
+      ]
+    },
+    "test": {
+      "title": "测试视角报告",
+      "summary": {
+        "totalIssues": 12,
+        "realDeadLinks": 3,
+        "adminOnlyDeadLinks": 0,
+        "realOrphanPages": 3,
+        "adminOnlyOrphans": 0,
+        "realLegacyItems": 2,
+        "adminOnlyLegacy": 0,
+        "duplicateRoutes": 1,
+        "externalLinkIssues": 1,
+        "invalidPermissions": 2,
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "真实死链接 (需优先处理)",
+          "key": "realDeadLinks",
+          "items": [
+            {
+              "path": "/legacy-function",
+              "originalPath": "/legacy-function",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 34,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            },
+            {
+              "path": "/old-page",
+              "originalPath": "/old-page",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 10,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            },
+            {
+              "path": "/nonexistent",
+              "originalPath": "/nonexistent",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 11,
+              "type": "code",
+              "severity": "error",
+              "inPermissions": false,
+              "inMenus": false,
+              "description": "代码中引用的路径不存在于路由定义中"
+            }
+          ],
+          "description": "普通用户也会遇到的死链接",
+          "priority": "high"
+        },
+        {
+          "name": "重复路由 (需优先处理)",
+          "key": "duplicateRoutes",
+          "items": [
+            {
+              "path": "/duplicate",
+              "count": 2,
+              "occurrences": [
+                {
+                  "sourceFile": "src/router/index.js",
+                  "line": 89,
+                  "name": "Duplicate1",
+                  "component": "@/views/Duplicate.vue"
+                },
+                {
+                  "sourceFile": "src/router/index.js",
+                  "line": 95,
+                  "name": "Duplicate2",
+                  "component": "@/views/Duplicate2.vue"
+                }
+              ],
+              "type": "duplicate",
+              "severity": "error",
+              "description": "该路径在 2 个地方被定义"
+            }
+          ],
+          "description": "同一路径被多次定义，可能导致非预期行为",
+          "priority": "high"
+        },
+        {
+          "name": "外链格式问题",
+          "key": "externalLinkIssues",
+          "items": [
+            {
+              "path": " htt p:// broken-link.com/test",
+              "sourceFile": "src/views/Dashboard.vue",
+              "line": 40,
+              "issues": [
+                "协议缺失，应为 http:// 或 https://",
+                "链接中包含空白字符"
+              ],
+              "type": "external-link",
+              "severity": "warning",
+              "description": "协议缺失，应为 http:// 或 https://; 链接中包含空白字符"
+            }
+          ],
+          "description": "外链可能无法正常打开",
+          "priority": "medium"
+        },
+        {
+          "name": "无效权限配置",
+          "key": "invalidPermissions",
+          "items": [
+            {
+              "path": "/old-permission-page",
+              "roles": [
+                "admin"
+              ],
+              "sources": [
+                {
+                  "sourceFile": "src/config/permission.js",
+                  "line": 0
+                }
+              ],
+              "type": "invalid-permission",
+              "severity": "warning",
+              "description": "权限配置中的路径不存在于路由定义中"
+            },
+            {
+              "path": "/obsolete-route",
+              "roles": [
+                "admin",
+                "user"
+              ],
+              "sources": [
+                {
+                  "sourceFile": "src/config/permission.js",
+                  "line": 0
+                }
+              ],
+              "type": "invalid-permission",
+              "severity": "warning",
+              "description": "权限配置中的路径不存在于路由定义中"
+            }
+          ],
+          "description": "权限配置指向不存在的路由",
+          "priority": "medium"
+        },
+        {
+          "name": "真实无入口页面",
+          "key": "realOrphanPages",
+          "items": [
+            {
+              "path": "/orphan-page",
+              "name": "OrphanPage",
+              "component": "@/views/OrphanPage.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 77,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate1",
+              "component": "@/views/Duplicate.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 89,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate2",
+              "component": "@/views/Duplicate2.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 95,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            }
+          ],
+          "description": "普通用户无法通过正常途径访问的页面",
+          "priority": "medium"
+        },
+        {
+          "name": "真实旧菜单残留",
+          "key": "realLegacyItems",
+          "items": [
+            {
+              "path": "/old-user-page",
+              "name": "旧用户页面",
+              "permissions": [],
+              "parentPath": "/user",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            },
+            {
+              "path": "/deprecated-page",
+              "name": "已废弃页面",
+              "permissions": [],
+              "parentPath": "",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            }
+          ],
+          "description": "普通用户可见的旧菜单残留项",
+          "priority": "medium"
+        },
+        {
+          "name": "仅管理员可见问题 (可能是正常)",
+          "key": "adminOnlyIssues",
+          "items": [],
+          "description": "这些路径仅管理员可见，可能是有意保留的功能入口，请与产品确认",
+          "priority": "low",
+          "isAdminOnly": true
+        },
+        {
+          "name": "仅管理员可见路由列表",
+          "key": "adminOnlyRoutes",
+          "items": [
+            {
+              "path": "/user",
+              "name": "User",
+              "roles": [
+                "admin"
+              ],
+              "component": "@/views/user/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 19,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            },
+            {
+              "path": "/user/:id",
+              "name": "UserDetail",
+              "roles": [
+                "admin"
+              ],
+              "component": "@/views/user/Detail.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 25,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            },
+            {
+              "path": "/user/list",
+              "name": "UserList",
+              "roles": [
+                "admin"
+              ],
+              "component": "@/views/user/List.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 31,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            },
+            {
+              "path": "/report",
+              "name": "Report",
+              "roles": [
+                "admin",
+                "superAdmin"
+              ],
+              "component": "@/views/report/Index.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 65,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            },
+            {
+              "path": "/hidden-page",
+              "name": "HiddenPage",
+              "roles": [
+                "admin"
+              ],
+              "component": "@/views/HiddenPage.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 71,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            },
+            {
+              "path": "/admin-only",
+              "name": "AdminOnly",
+              "roles": [
+                "admin"
+              ],
+              "component": "@/views/AdminOnly.vue",
+              "sourceFile": "src/router/index.js",
+              "line": 83,
+              "isAdminOnly": true,
+              "description": "该路由仅管理员可访问，可能被误判为死链"
+            }
+          ],
+          "description": "仅供参考的管理员专属路由",
+          "priority": "low",
+          "isAdminOnly": true
+        }
+      ]
+    },
+    "product": {
+      "title": "产品经理视角报告",
+      "summary": {
+        "totalPages": 15,
+        "pagesWithEntry": 12,
+        "orphanPages": 3,
+        "menuItems": 11,
+        "legacyMenuItems": 2,
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "无入口页面 (重点关注)",
+          "key": "orphanPages",
+          "items": [
+            {
+              "path": "/orphan-page",
+              "name": "OrphanPage",
+              "component": "@/views/OrphanPage.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 77,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate1",
+              "component": "@/views/Duplicate.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 89,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            },
+            {
+              "path": "/duplicate",
+              "name": "Duplicate2",
+              "component": "@/views/Duplicate2.vue",
+              "isDynamic": false,
+              "isLazy": true,
+              "sourceFile": "src/router/index.js",
+              "line": 95,
+              "permissions": [],
+              "type": "orphan",
+              "severity": "warning",
+              "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+            }
+          ],
+          "description": "这些页面存在路由但用户无法通过菜单或导航访问，可能是功能漏配或已废弃"
+        },
+        {
+          "name": "旧菜单残留项",
+          "key": "legacyMenuItems",
+          "items": [
+            {
+              "path": "/old-user-page",
+              "name": "旧用户页面",
+              "permissions": [],
+              "parentPath": "/user",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            },
+            {
+              "path": "/deprecated-page",
+              "name": "已废弃页面",
+              "permissions": [],
+              "parentPath": "",
+              "sourceFile": "src/config/menu.js",
+              "line": 0,
+              "type": "legacy-menu",
+              "severity": "warning",
+              "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+            }
+          ],
+          "description": "菜单配置中指向不存在路由的项，可能是已下线功能未清理"
+        },
+        {
+          "name": "路由总览",
+          "key": "allRoutes",
+          "items": [
+            {
+              "category": "普通页面",
+              "count": 9
+            },
+            {
+              "category": "管理员专属页面",
+              "count": 6
+            },
+            {
+              "category": "带参数动态路由",
+              "count": 3
+            },
+            {
+              "category": "懒加载页面",
+              "count": 15
+            }
+          ],
+          "description": "页面构成统计"
+        }
+      ]
+    }
+  },
+  "view": {
+    "title": "前端开发视角报告",
+    "summary": {
+      "totalRoutes": 15,
+      "totalMenus": 11,
+      "totalPermissions": 13,
+      "totalCodeLinks": 12,
+      "dynamicRoutes": 3,
+      "lazyLoadedRoutes": 15,
+      "adminOnlyRoutes": 6,
+      "issues": {
+        "error": 4,
+        "warning": 8,
+        "total": 12
+      },
+      "comparison": null
+    },
+    "sections": [
+      {
+        "name": "代码死链接 (严重)",
+        "key": "deadLinks",
+        "items": [
+          {
+            "path": "/legacy-function",
+            "originalPath": "/legacy-function",
+            "sourceFile": "src/views/Dashboard.vue",
+            "line": 34,
+            "type": "code",
+            "severity": "error",
+            "inPermissions": false,
+            "inMenus": false,
+            "description": "代码中引用的路径不存在于路由定义中"
+          },
+          {
+            "path": "/old-page",
+            "originalPath": "/old-page",
+            "sourceFile": "src/views/Dashboard.vue",
+            "line": 10,
+            "type": "code",
+            "severity": "error",
+            "inPermissions": false,
+            "inMenus": false,
+            "description": "代码中引用的路径不存在于路由定义中"
+          },
+          {
+            "path": "/nonexistent",
+            "originalPath": "/nonexistent",
+            "sourceFile": "src/views/Dashboard.vue",
+            "line": 11,
+            "type": "code",
+            "severity": "error",
+            "inPermissions": false,
+            "inMenus": false,
+            "description": "代码中引用的路径不存在于路由定义中"
+          }
+        ],
+        "description": "代码中跳转到不存在路径的链接"
+      },
+      {
+        "name": "重复路由定义 (严重)",
+        "key": "duplicateRoutes",
+        "items": [
+          {
+            "path": "/duplicate",
+            "count": 2,
+            "occurrences": [
+              {
+                "sourceFile": "src/router/index.js",
+                "line": 89,
+                "name": "Duplicate1",
+                "component": "@/views/Duplicate.vue"
+              },
+              {
+                "sourceFile": "src/router/index.js",
+                "line": 95,
+                "name": "Duplicate2",
+                "component": "@/views/Duplicate2.vue"
+              }
+            ],
+            "type": "duplicate",
+            "severity": "error",
+            "description": "该路径在 2 个地方被定义"
+          }
+        ],
+        "description": "同一路径被多次定义"
+      },
+      {
+        "name": "外链格式问题",
+        "key": "externalLinkIssues",
+        "items": [
+          {
+            "path": " htt p:// broken-link.com/test",
+            "sourceFile": "src/views/Dashboard.vue",
+            "line": 40,
+            "issues": [
+              "协议缺失，应为 http:// 或 https://",
+              "链接中包含空白字符"
+            ],
+            "type": "external-link",
+            "severity": "warning",
+            "description": "协议缺失，应为 http:// 或 https://; 链接中包含空白字符"
+          }
+        ],
+        "description": "外链协议、字符、格式问题"
+      },
+      {
+        "name": "无入口页面",
+        "key": "orphanPages",
+        "items": [
+          {
+            "path": "/orphan-page",
+            "name": "OrphanPage",
+            "component": "@/views/OrphanPage.vue",
+            "isDynamic": false,
+            "isLazy": true,
+            "sourceFile": "src/router/index.js",
+            "line": 77,
+            "permissions": [],
+            "type": "orphan",
+            "severity": "warning",
+            "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+          },
+          {
+            "path": "/duplicate",
+            "name": "Duplicate1",
+            "component": "@/views/Duplicate.vue",
+            "isDynamic": false,
+            "isLazy": true,
+            "sourceFile": "src/router/index.js",
+            "line": 89,
+            "permissions": [],
+            "type": "orphan",
+            "severity": "warning",
+            "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+          },
+          {
+            "path": "/duplicate",
+            "name": "Duplicate2",
+            "component": "@/views/Duplicate2.vue",
+            "isDynamic": false,
+            "isLazy": true,
+            "sourceFile": "src/router/index.js",
+            "line": 95,
+            "permissions": [],
+            "type": "orphan",
+            "severity": "warning",
+            "description": "该路由没有菜单入口、没有权限配置，也没有代码引用"
+          }
+        ],
+        "description": "有路由定义但无法通过正常途径访问的页面"
+      },
+      {
+        "name": "无效权限配置",
+        "key": "invalidPermissions",
+        "items": [
+          {
+            "path": "/old-permission-page",
+            "roles": [
+              "admin"
+            ],
+            "sources": [
+              {
+                "sourceFile": "src/config/permission.js",
+                "line": 0
+              }
+            ],
+            "type": "invalid-permission",
+            "severity": "warning",
+            "description": "权限配置中的路径不存在于路由定义中"
+          },
+          {
+            "path": "/obsolete-route",
+            "roles": [
+              "admin",
+              "user"
+            ],
+            "sources": [
+              {
+                "sourceFile": "src/config/permission.js",
+                "line": 0
+              }
+            ],
+            "type": "invalid-permission",
+            "severity": "warning",
+            "description": "权限配置中的路径不存在于路由定义中"
+          }
+        ],
+        "description": "权限配置指向不存在的路由"
+      },
+      {
+        "name": "旧菜单保留项",
+        "key": "legacyMenuItems",
+        "items": [
+          {
+            "path": "/old-user-page",
+            "name": "旧用户页面",
+            "permissions": [],
+            "parentPath": "/user",
+            "sourceFile": "src/config/menu.js",
+            "line": 0,
+            "type": "legacy-menu",
+            "severity": "warning",
+            "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+          },
+          {
+            "path": "/deprecated-page",
+            "name": "已废弃页面",
+            "permissions": [],
+            "parentPath": "",
+            "sourceFile": "src/config/menu.js",
+            "line": 0,
+            "type": "legacy-menu",
+            "severity": "warning",
+            "description": "菜单项引用的路径不存在于路由定义中，可能是旧菜单残留"
+          }
+        ],
+        "description": "菜单配置指向不存在的路由，可能是历史遗留"
+      },
+      {
+        "name": "动态路由列表",
+        "key": "dynamicRoutes",
+        "items": [
+          {
+            "path": "/user/:id",
+            "name": "UserDetail",
+            "params": [
+              "id"
+            ],
+            "component": "@/views/user/Detail.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 25
+          },
+          {
+            "path": "/order/:orderId",
+            "name": "OrderDetail",
+            "params": [
+              "orderId"
+            ],
+            "component": "@/views/order/Detail.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 45
+          },
+          {
+            "path": "/product/:id/edit",
+            "name": "ProductEdit",
+            "params": [
+              "id"
+            ],
+            "component": "@/views/product/Edit.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 59
+          }
+        ],
+        "description": "带参数的动态路由，需要特别注意匹配"
+      },
+      {
+        "name": "懒加载路由列表",
+        "key": "lazyLoadedRoutes",
+        "items": [
+          {
+            "path": "/",
+            "name": "Home",
+            "component": "@/views/Home.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 7
+          },
+          {
+            "path": "/dashboard",
+            "name": "Dashboard",
+            "component": "@/views/Dashboard.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 13
+          },
+          {
+            "path": "/user",
+            "name": "User",
+            "component": "@/views/user/Index.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 19
+          },
+          {
+            "path": "/user/:id",
+            "name": "UserDetail",
+            "component": "@/views/user/Detail.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 25
+          },
+          {
+            "path": "/user/list",
+            "name": "UserList",
+            "component": "@/views/user/List.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 31
+          },
+          {
+            "path": "/order",
+            "name": "Order",
+            "component": "@/views/order/Index.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 39
+          },
+          {
+            "path": "/order/:orderId",
+            "name": "OrderDetail",
+            "component": "@/views/order/Detail.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 45
+          },
+          {
+            "path": "/product",
+            "name": "Product",
+            "component": "@/views/product/Index.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 53
+          },
+          {
+            "path": "/product/:id/edit",
+            "name": "ProductEdit",
+            "component": "@/views/product/Edit.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 59
+          },
+          {
+            "path": "/report",
+            "name": "Report",
+            "component": "@/views/report/Index.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 65
+          },
+          {
+            "path": "/hidden-page",
+            "name": "HiddenPage",
+            "component": "@/views/HiddenPage.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 71
+          },
+          {
+            "path": "/orphan-page",
+            "name": "OrphanPage",
+            "component": "@/views/OrphanPage.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 77
+          },
+          {
+            "path": "/admin-only",
+            "name": "AdminOnly",
+            "component": "@/views/AdminOnly.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 83
+          },
+          {
+            "path": "/duplicate",
+            "name": "Duplicate1",
+            "component": "@/views/Duplicate.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 89
+          },
+          {
+            "path": "/duplicate",
+            "name": "Duplicate2",
+            "component": "@/views/Duplicate2.vue",
+            "sourceFile": "src/router/index.js",
+            "line": 95
+          }
+        ],
+        "description": "使用懒加载的路由组件"
+      }
+    ]
+  }
+}

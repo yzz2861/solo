@@ -1,0 +1,273 @@
+{
+  "generatedAt": "2026-06-18T18:57:20.732Z",
+  "comparison": {
+    "isFirstRun": true,
+    "newIssues": [],
+    "fixedIssues": [],
+    "unchangedIssues": []
+  },
+  "rawResults": {
+    "summary": {
+      "totalRoutes": 0,
+      "totalMenus": 0,
+      "totalPermissions": 0,
+      "totalCodeLinks": 0,
+      "dynamicRoutes": 0,
+      "lazyLoadedRoutes": 0,
+      "adminOnlyRoutes": 0,
+      "issues": {
+        "error": 0,
+        "warning": 0,
+        "total": 0
+      }
+    },
+    "dynamicRoutes": [],
+    "lazyLoadedRoutes": [],
+    "adminOnlyRoutes": []
+  },
+  "views": {
+    "frontend": {
+      "title": "前端开发视角报告",
+      "summary": {
+        "totalRoutes": 0,
+        "totalMenus": 0,
+        "totalPermissions": 0,
+        "totalCodeLinks": 0,
+        "dynamicRoutes": 0,
+        "lazyLoadedRoutes": 0,
+        "adminOnlyRoutes": 0,
+        "issues": {
+          "error": 0,
+          "warning": 0,
+          "total": 0
+        },
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "代码死链接 (严重)",
+          "key": "deadLinks",
+          "items": [],
+          "description": "代码中跳转到不存在路径的链接"
+        },
+        {
+          "name": "重复路由定义 (严重)",
+          "key": "duplicateRoutes",
+          "items": [],
+          "description": "同一路径被多次定义"
+        },
+        {
+          "name": "外链格式问题",
+          "key": "externalLinkIssues",
+          "items": [],
+          "description": "外链协议、字符、格式问题"
+        },
+        {
+          "name": "无入口页面",
+          "key": "orphanPages",
+          "items": [],
+          "description": "有路由定义但无法通过正常途径访问的页面"
+        },
+        {
+          "name": "无效权限配置",
+          "key": "invalidPermissions",
+          "items": [],
+          "description": "权限配置指向不存在的路由"
+        },
+        {
+          "name": "旧菜单保留项",
+          "key": "legacyMenuItems",
+          "items": [],
+          "description": "菜单配置指向不存在的路由，可能是历史遗留"
+        },
+        {
+          "name": "动态路由列表",
+          "key": "dynamicRoutes",
+          "items": [],
+          "description": "带参数的动态路由，需要特别注意匹配"
+        },
+        {
+          "name": "懒加载路由列表",
+          "key": "lazyLoadedRoutes",
+          "items": [],
+          "description": "使用懒加载的路由组件"
+        }
+      ]
+    },
+    "test": {
+      "title": "测试视角报告",
+      "summary": {
+        "totalIssues": 0,
+        "realDeadLinks": 0,
+        "adminOnlyDeadLinks": 0,
+        "realOrphanPages": 0,
+        "adminOnlyOrphans": 0,
+        "realLegacyItems": 0,
+        "adminOnlyLegacy": 0,
+        "duplicateRoutes": 0,
+        "externalLinkIssues": 0,
+        "invalidPermissions": 0,
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "真实死链接 (需优先处理)",
+          "key": "realDeadLinks",
+          "items": [],
+          "description": "普通用户也会遇到的死链接",
+          "priority": "high"
+        },
+        {
+          "name": "重复路由 (需优先处理)",
+          "key": "duplicateRoutes",
+          "items": [],
+          "description": "同一路径被多次定义，可能导致非预期行为",
+          "priority": "high"
+        },
+        {
+          "name": "外链格式问题",
+          "key": "externalLinkIssues",
+          "items": [],
+          "description": "外链可能无法正常打开",
+          "priority": "medium"
+        },
+        {
+          "name": "无效权限配置",
+          "key": "invalidPermissions",
+          "items": [],
+          "description": "权限配置指向不存在的路由",
+          "priority": "medium"
+        },
+        {
+          "name": "真实无入口页面",
+          "key": "realOrphanPages",
+          "items": [],
+          "description": "普通用户无法通过正常途径访问的页面",
+          "priority": "medium"
+        },
+        {
+          "name": "真实旧菜单残留",
+          "key": "realLegacyItems",
+          "items": [],
+          "description": "普通用户可见的旧菜单残留项",
+          "priority": "medium"
+        },
+        {
+          "name": "仅管理员可见问题 (可能是正常)",
+          "key": "adminOnlyIssues",
+          "items": [],
+          "description": "这些路径仅管理员可见，可能是有意保留的功能入口，请与产品确认",
+          "priority": "low",
+          "isAdminOnly": true
+        },
+        {
+          "name": "仅管理员可见路由列表",
+          "key": "adminOnlyRoutes",
+          "items": [],
+          "description": "仅供参考的管理员专属路由",
+          "priority": "low",
+          "isAdminOnly": true
+        }
+      ]
+    },
+    "product": {
+      "title": "产品经理视角报告",
+      "summary": {
+        "totalPages": 0,
+        "pagesWithEntry": 0,
+        "orphanPages": 0,
+        "menuItems": 0,
+        "legacyMenuItems": 0,
+        "comparison": null
+      },
+      "sections": [
+        {
+          "name": "无入口页面 (重点关注)",
+          "key": "orphanPages",
+          "items": [],
+          "description": "这些页面存在路由但用户无法通过菜单或导航访问，可能是功能漏配或已废弃"
+        },
+        {
+          "name": "旧菜单残留项",
+          "key": "legacyMenuItems",
+          "items": [],
+          "description": "菜单配置中指向不存在路由的项，可能是已下线功能未清理"
+        },
+        {
+          "name": "路由总览",
+          "key": "allRoutes",
+          "items": [],
+          "description": "页面构成统计"
+        }
+      ]
+    }
+  },
+  "view": {
+    "title": "前端开发视角报告",
+    "summary": {
+      "totalRoutes": 0,
+      "totalMenus": 0,
+      "totalPermissions": 0,
+      "totalCodeLinks": 0,
+      "dynamicRoutes": 0,
+      "lazyLoadedRoutes": 0,
+      "adminOnlyRoutes": 0,
+      "issues": {
+        "error": 0,
+        "warning": 0,
+        "total": 0
+      },
+      "comparison": null
+    },
+    "sections": [
+      {
+        "name": "代码死链接 (严重)",
+        "key": "deadLinks",
+        "items": [],
+        "description": "代码中跳转到不存在路径的链接"
+      },
+      {
+        "name": "重复路由定义 (严重)",
+        "key": "duplicateRoutes",
+        "items": [],
+        "description": "同一路径被多次定义"
+      },
+      {
+        "name": "外链格式问题",
+        "key": "externalLinkIssues",
+        "items": [],
+        "description": "外链协议、字符、格式问题"
+      },
+      {
+        "name": "无入口页面",
+        "key": "orphanPages",
+        "items": [],
+        "description": "有路由定义但无法通过正常途径访问的页面"
+      },
+      {
+        "name": "无效权限配置",
+        "key": "invalidPermissions",
+        "items": [],
+        "description": "权限配置指向不存在的路由"
+      },
+      {
+        "name": "旧菜单保留项",
+        "key": "legacyMenuItems",
+        "items": [],
+        "description": "菜单配置指向不存在的路由，可能是历史遗留"
+      },
+      {
+        "name": "动态路由列表",
+        "key": "dynamicRoutes",
+        "items": [],
+        "description": "带参数的动态路由，需要特别注意匹配"
+      },
+      {
+        "name": "懒加载路由列表",
+        "key": "lazyLoadedRoutes",
+        "items": [],
+        "description": "使用懒加载的路由组件"
+      }
+    ]
+  }
+}

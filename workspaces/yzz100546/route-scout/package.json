@@ -1,0 +1,27 @@
+{
+  "name": "route-scout",
+  "version": "1.0.0",
+  "description": "前端路由死链巡查工具 - 扫描路由、菜单、权限，检测死链、无入口页面、重复路由和外链问题",
+  "main": "bin/index.js",
+  "bin": {
+    "route-scout": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node bin/index.js",
+    "test": "node bin/index.js --config ./config.example.json"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "commander": "^11.1.0",
+    "glob": "^8.1.0",
+    "jsonc-parser": "^3.2.0",
+    "vue-template-compiler": "^2.7.16",
+    "yaml": "^2.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

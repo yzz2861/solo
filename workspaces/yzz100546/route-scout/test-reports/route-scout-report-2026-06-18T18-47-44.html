@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前端路由死链巡查报告</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; color: #303133; line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+  .header h1 { font-size: 24px; margin-bottom: 8px; }
+  .header .time { opacity: 0.85; font-size: 14px; }
+  .comparison-bar { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; display: flex; gap: 24px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .comparison-item { display: flex; flex-direction: column; align-items: center; padding: 0 20px; border-right: 1px solid #ebeef5; }
+  .comparison-item:last-of-type { border-right: none; }
+  .comparison-item .label { font-size: 12px; color: #909399; }
+  .comparison-item .value { font-size: 24px; font-weight: bold; margin-top: 4px; }
+  .comparison-item.new .value { color: #e6a23c; }
+  .comparison-item.fixed .value { color: #67c23a; }
+  .comparison-item.remaining .value { color: #909399; }
+  .comparison-time { margin-left: auto; color: #909399; font-size: 13px; }
+  .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .nav-tab { flex: 1; text-align: center; padding: 12px; text-decoration: none; color: #606266; border-radius: 6px; transition: all 0.2s; }
+  .nav-tab:hover { background: #f5f7fa; color: #667eea; }
+  .view-section { background: white; border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .view-section h2 { font-size: 20px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #ebeef5; color: #303133; }
+  .section-card { padding: 20px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #dcdfe6; background: #fafbfc; }
+  .section-card.error { border-left-color: #f56c6c; background: #fef0f0; }
+  .section-card.warning { border-left-color: #e6a23c; background: #fdf6ec; }
+  .section-card.info { border-left-color: #409eff; background: #ecf5ff; }
+  .section-card.success { border-left-color: #67c23a; background: #f0f9eb; }
+  .section-card.admin { border-left-color: #909399; background: #f4f4f5; }
+  .section-card h3 { font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .section-desc { color: #909399; font-size: 13px; margin-bottom: 16px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 500; }
+  .badge.error { background: #f56c6c; color: white; }
+  .badge.warning { background: #e6a23c; color: white; }
+  .badge.info { background: #409eff; color: white; }
+  .badge.success { background: #67c23a; color: white; }
+  .badge.admin { background: #909399; color: white; }
+  .empty-state { text-align: center; padding: 20px; color: #67c23a; font-size: 14px; }
+  .issues-list { display: flex; flex-direction: column; gap: 10px; }
+  .issue-item { background: white; padding: 12px 16px; border-radius: 6px; border: 1px solid #ebeef5; }
+  .issue-header { display: flex; align-items: center; gap: 8px; }
+  .issue-idx { color: #909399; font-size: 13px; min-width: 24px; }
+  .issue-path { font-family: "SF Mono", Monaco, Consolas, monospace; color: #303133; font-weight: 500; flex: 1; }
+  .item-category { font-weight: 500; }
+  .item-count { margin-left: auto; font-weight: bold; color: #667eea; font-size: 16px; }
+  .item-desc { font-size: 13px; color: #606266; margin-top: 6px; margin-left: 32px; }
+  .item-roles { font-size: 12px; color: #909399; margin-top: 4px; margin-left: 32px; }
+  .location { font-size: 12px; color: #c0c4cc; margin-top: 4px; margin-left: 32px; display: block; font-family: "SF Mono", Monaco, Consolas, monospace; }
+  .more-hint { text-align: center; color: #909399; font-size: 12px; padding: 12px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>前端路由死链巡查报告</h1>
+    <div class="time">生成时间: 2026/6/19 02:47:44</div>
+  </div>
+  
+  <div class="nav-tabs"><a href="#view-frontend" class="nav-tab">前端开发</a><a href="#view-test" class="nav-tab">测试</a><a href="#view-product" class="nav-tab">产品经理</a></div>
+  
+        <div class="view-section" id="view-frontend">
+          <h2>前端开发视角</h2>
+          
+          <div class="section-card info">
+            <h3>代码死链接 (严重) <span class="badge info">3</span></h3>
+            <p class="section-desc">代码中跳转到不存在路径的链接</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/legacy-function</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:34</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/old-page</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:10</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/nonexistent</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:11</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>重复路由定义 (严重) <span class="badge info">1</span></h3>
+            <p class="section-desc">同一路径被多次定义</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/duplicate</span>
+                <span class="item-count">2</span>
+              </div>
+              <div class="item-desc">该路径在 2 个地方被定义</div>
+              
+              
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>外链格式问题 <span class="badge info">1</span></h3>
+            <p class="section-desc">外链协议、字符、格式问题</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path"> htt p:// broken-link.com/test</span>
+                
+              </div>
+              <div class="item-desc">协议缺失，应为 http:// 或 https://; 链接中包含空白字符</div>
+              
+              <span class="location">src/views/Dashboard.vue:40</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>无入口页面 <span class="badge info">3</span></h3>
+            <p class="section-desc">有路由定义但无法通过正常途径访问的页面</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/orphan-page</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:77</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:89</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:95</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>无效权限配置 <span class="badge info">2</span></h3>
+            <p class="section-desc">权限配置指向不存在的路由</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/old-permission-page</span>
+                
+              </div>
+              <div class="item-desc">权限配置中的路径不存在于路由定义中</div>
+              <div class="item-roles">权限: admin</div>
+              
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/obsolete-route</span>
+                
+              </div>
+              <div class="item-desc">权限配置中的路径不存在于路由定义中</div>
+              <div class="item-roles">权限: admin, user</div>
+              
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>旧菜单保留项 <span class="badge info">2</span></h3>
+            <p class="section-desc">菜单配置指向不存在的路由，可能是历史遗留</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/old-user-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/deprecated-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>动态路由列表 <span class="badge info">3</span></h3>
+            <p class="section-desc">带参数的动态路由，需要特别注意匹配</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/user/:id</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:25</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/order/:orderId</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:45</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/product/:id/edit</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:59</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>懒加载路由列表 <span class="badge info">15</span></h3>
+            <p class="section-desc">使用懒加载的路由组件</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:7</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/dashboard</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:13</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/user</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:19</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">4.</span>
+                <span class="issue-path">/user/:id</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:25</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">5.</span>
+                <span class="issue-path">/user/list</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:31</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">6.</span>
+                <span class="issue-path">/order</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:39</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">7.</span>
+                <span class="issue-path">/order/:orderId</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:45</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">8.</span>
+                <span class="issue-path">/product</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:53</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">9.</span>
+                <span class="issue-path">/product/:id/edit</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:59</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">10.</span>
+                <span class="issue-path">/report</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:65</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">11.</span>
+                <span class="issue-path">/hidden-page</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:71</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">12.</span>
+                <span class="issue-path">/orphan-page</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:77</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">13.</span>
+                <span class="issue-path">/admin-only</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:83</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">14.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:89</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">15.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              
+              
+              <span class="location">src/router/index.js:95</span>
+            </div></div>
+            
+          </div>
+        </div>
+        <div class="view-section" id="view-test">
+          <h2>测试视角</h2>
+          
+          <div class="section-card error">
+            <h3>真实死链接 (需优先处理) <span class="badge error">3</span></h3>
+            <p class="section-desc">普通用户也会遇到的死链接</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/legacy-function</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:34</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/old-page</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:10</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/nonexistent</span>
+                
+              </div>
+              <div class="item-desc">代码中引用的路径不存在于路由定义中</div>
+              
+              <span class="location">src/views/Dashboard.vue:11</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card error">
+            <h3>重复路由 (需优先处理) <span class="badge error">1</span></h3>
+            <p class="section-desc">同一路径被多次定义，可能导致非预期行为</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/duplicate</span>
+                <span class="item-count">2</span>
+              </div>
+              <div class="item-desc">该路径在 2 个地方被定义</div>
+              
+              
+            </div></div>
+            
+          </div>
+          <div class="section-card warning">
+            <h3>外链格式问题 <span class="badge warning">1</span></h3>
+            <p class="section-desc">外链可能无法正常打开</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path"> htt p:// broken-link.com/test</span>
+                
+              </div>
+              <div class="item-desc">协议缺失，应为 http:// 或 https://; 链接中包含空白字符</div>
+              
+              <span class="location">src/views/Dashboard.vue:40</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card warning">
+            <h3>无效权限配置 <span class="badge warning">2</span></h3>
+            <p class="section-desc">权限配置指向不存在的路由</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/old-permission-page</span>
+                
+              </div>
+              <div class="item-desc">权限配置中的路径不存在于路由定义中</div>
+              <div class="item-roles">权限: admin</div>
+              
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/obsolete-route</span>
+                
+              </div>
+              <div class="item-desc">权限配置中的路径不存在于路由定义中</div>
+              <div class="item-roles">权限: admin, user</div>
+              
+            </div></div>
+            
+          </div>
+          <div class="section-card warning">
+            <h3>真实无入口页面 <span class="badge warning">3</span></h3>
+            <p class="section-desc">普通用户无法通过正常途径访问的页面</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/orphan-page</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:77</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:89</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:95</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card warning">
+            <h3>真实旧菜单残留 <span class="badge warning">2</span></h3>
+            <p class="section-desc">普通用户可见的旧菜单残留项</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/old-user-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/deprecated-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div></div>
+            
+          </div>
+            <div class="section-card success">
+              <h3>仅管理员可见问题 (可能是正常) <span class="badge success">0</span></h3>
+              <p class="section-desc">这些路径仅管理员可见，可能是有意保留的功能入口，请与产品确认</p>
+              <div class="empty-state">✓ 无问题</div>
+            </div>
+          <div class="section-card admin">
+            <h3>仅管理员可见路由列表 <span class="badge admin">6</span></h3>
+            <p class="section-desc">仅供参考的管理员专属路由</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/user</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin</div>
+              <span class="location">src/router/index.js:19</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/user/:id</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin</div>
+              <span class="location">src/router/index.js:25</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/user/list</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin</div>
+              <span class="location">src/router/index.js:31</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">4.</span>
+                <span class="issue-path">/report</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin, superAdmin</div>
+              <span class="location">src/router/index.js:65</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">5.</span>
+                <span class="issue-path">/hidden-page</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin</div>
+              <span class="location">src/router/index.js:71</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">6.</span>
+                <span class="issue-path">/admin-only</span>
+                
+              </div>
+              <div class="item-desc">该路由仅管理员可访问，可能被误判为死链</div>
+              <div class="item-roles">权限: admin</div>
+              <span class="location">src/router/index.js:83</span>
+            </div></div>
+            
+          </div>
+        </div>
+        <div class="view-section" id="view-product">
+          <h2>产品经理视角</h2>
+          
+          <div class="section-card info">
+            <h3>无入口页面 (重点关注) <span class="badge info">3</span></h3>
+            <p class="section-desc">这些页面存在路由但用户无法通过菜单或导航访问，可能是功能漏配或已废弃</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/orphan-page</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:77</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:89</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path">/duplicate</span>
+                
+              </div>
+              <div class="item-desc">该路由没有菜单入口、没有权限配置，也没有代码引用</div>
+              
+              <span class="location">src/router/index.js:95</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>旧菜单残留项 <span class="badge info">2</span></h3>
+            <p class="section-desc">菜单配置中指向不存在路由的项，可能是已下线功能未清理</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path">/old-user-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path">/deprecated-page</span>
+                
+              </div>
+              <div class="item-desc">菜单项引用的路径不存在于路由定义中，可能是旧菜单残留</div>
+              
+              <span class="location">src/config/menu.js</span>
+            </div></div>
+            
+          </div>
+          <div class="section-card info">
+            <h3>路由总览 <span class="badge info">4</span></h3>
+            <p class="section-desc">页面构成统计</p>
+            <div class="issues-list">
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">1.</span>
+                <span class="issue-path"><span class="item-category">普通页面</span></span>
+                <span class="item-count">9</span>
+              </div>
+              
+              
+              
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">2.</span>
+                <span class="issue-path"><span class="item-category">管理员专属页面</span></span>
+                <span class="item-count">6</span>
+              </div>
+              
+              
+              
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">3.</span>
+                <span class="issue-path"><span class="item-category">带参数动态路由</span></span>
+                <span class="item-count">3</span>
+              </div>
+              
+              
+              
+            </div>
+            <div class="issue-item">
+              <div class="issue-header">
+                <span class="issue-idx">4.</span>
+                <span class="issue-path"><span class="item-category">懒加载页面</span></span>
+                <span class="item-count">15</span>
+              </div>
+              
+              
+              
+            </div></div>
+            
+          </div>
+        </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+{
+  "projectRoot": "../",
+  "framework": "vue",
+  "route": {
+    "files": [
+      "src/router/**/*.{js,ts}",
+      "src/router/index.{js,ts}"
+    ],
+    "dynamicRoutePatterns": [
+      ":id",
+      ":userId",
+      ":projectId",
+      "[a-z]+Id$"
+    ],
+    "lazyLoadPatterns": [
+      "()\\s*=>\\s*import\\(",
+      "component:\\s*\\(\\)\\s*=>"
+    ]
+  },
+  "menu": {
+    "files": [
+      "src/config/menu.{js,ts,json}",
+      "src/menu/**/*.{js,ts,json}"
+    ],
+    "pathKey": ["path", "route", "url", "href"],
+    "nameKey": ["name", "title", "label"],
+    "permissionKey": ["permission", "roles", "auth"],
+    "childrenKey": ["children", "subMenu", "items"]
+  },
+  "permission": {
+    "files": [
+      "src/config/permission.{js,ts,json}",
+      "src/permission/**/*.{js,ts,json}"
+    ],
+    "routeKey": ["route", "path", "resource"],
+    "roleKey": ["role", "roles"],
+    "adminRoles": ["admin", "superAdmin", "root", "administrator"]
+  },
+  "links": {
+    "scanFiles": [
+      "src/**/*.{vue,js,ts,jsx,tsx}",
+      "!src/**/*.d.ts",
+      "!node_modules/**"
+    ],
+    "linkPatterns": [
+      "this\\.\\$router\\.push\\(['\"`]([^'\"`]+)['\"`]",
+      "router\\.push\\(['\"`]([^'\"`]+)['\"`]",
+      "<router-link[^>]*to=['\"`]([^'\"`]+)['\"`]",
+      "this\\.\\$router\\.replace\\(['\"`]([^'\"`]+)['\"`]",
+      "router\\.replace\\(['\"`]([^'\"`]+)['\"`]",
+      "useRouter\\(\\)\\.push\\(['\"`]([^'\"`]+)['\"`]",
+      "navigateTo\\(['\"`]([^'\"`]+)['\"`]",
+      "window\\.location\\.(href|assign|replace)\\s*=\\s*['\"`]([^'\"`]+)['\"`]"
+    ],
+    "externalLinkPattern": "^https?://",
+    "internalLinkBasePath": "/"
+  },
+  "ignore": {
+    "paths": [
+      "/login",
+      "/404",
+      "/403",
+      "/500",
+      "/redirect"
+    ],
+    "pathPatterns": [
+      "^/test/",
+      "^/demo/",
+      "^/dev/"
+    ],
+    "files": [
+      "**/*.test.{js,ts}",
+      "**/*.spec.{js,ts}",
+      "**/mock/**"
+    ]
+  },
+  "history": {
+    "enabled": true,
+    "file": "./.route-scout-history.json",
+    "maxHistory": 30
+  },
+  "report": {
+    "outputDir": "./reports",
+    "formats": ["console", "json", "html"],
+    "views": ["frontend", "test", "product"]
+  },
+  "logging": {
+    "level": "info",
+    "verbose": false
+  }
+}
