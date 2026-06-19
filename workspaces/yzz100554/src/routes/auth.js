@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const db = require('../config/database');
+const { get, run } = require('../config/database');
 const { authenticate } = require('../middleware/auth');
 const { auditLog } = require('../middleware/audit');
 
@@ -14,7 +14,7 @@ router.post('/login',
     body('password').notEmpty().withMessage('密码不能为空')
   ],
   auditLog('login', 'users'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -22,7 +22,7 @@ router.post('/login',
 
     const { username, password } = req.body;
 
-    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+    const user = await get('SELECT * FROM users WHERE username = ?', [username]);
     
     if (!user) {
       return res.status(401).json({ message: '用户名或密码错误' });
@@ -72,7 +72,7 @@ router.post('/change-password',
     body('oldPassword').notEmpty().withMessage('旧密码不能为空'),
     body('newPassword').isLength({ min: 6 }).withMessage('新密码至少6位')
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -80,7 +80,7 @@ router.post('/change-password',
 
     const { oldPassword, newPassword } = req.body;
 
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
+    const user = await get('SELECT * FROM users WHERE id = ?', [req.user.id]);
     const isValidPassword = bcrypt.compareSync(oldPassword, user.password_hash);
     
     if (!isValidPassword) {
@@ -88,8 +88,8 @@ router.post('/change-password',
     }
 
     const hashedPassword = bcrypt.hashSync(newPassword, 10);
-    db.prepare('UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?')
-      .run(hashedPassword, req.user.id);
+    await run('UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      [hashedPassword, req.user.id]);
 
     res.json({ message: '密码修改成功' });
   }

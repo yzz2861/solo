@@ -1,16 +1,16 @@
 const express = require('express');
 const moment = require('moment');
-const db = require('../config/database');
+const { run, get, all } = require('../config/database');
 const { authenticate, requireBoss, requireBossOrClerk } = require('../middleware/auth');
 const { round2, formatDate } = require('../utils/helpers');
 
 const router = express.Router();
 
-router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => {
+router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, async (req, res) => {
   const { farmerId } = req.params;
   const { season_id, start_date, end_date } = req.query;
   
-  const farmer = db.prepare('SELECT * FROM farmers WHERE id = ?').get(farmerId);
+  const farmer = await get('SELECT * FROM farmers WHERE id = ?', [farmerId]);
   if (!farmer) {
     return res.status(404).json({ message: '农户不存在' });
   }
@@ -33,7 +33,7 @@ router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => 
     orderParams.push(end_date);
   }
   
-  const orders = db.prepare(`
+  const orders = await all(`
     SELECT so.*, s.name as season_name, s.due_date as season_due_date,
            u.name as creator_name, su.name as settler_name
     FROM sales_orders so
@@ -42,7 +42,7 @@ router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => 
     LEFT JOIN users su ON so.settled_by = su.id
     WHERE ${orderWhere}
     ORDER BY so.sale_date DESC
-  `).all(...orderParams);
+  `, orderParams);
   
   const orderIds = orders.map(o => o.id);
   
@@ -53,23 +53,23 @@ router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => 
   if (orderIds.length > 0) {
     const placeholders = orderIds.map(() => '?').join(',');
     
-    orderItems = db.prepare(`
+    orderItems = await all(`
       SELECT soi.*, p.name as product_name, p.category as product_category, p.unit as product_unit
       FROM sales_order_items soi
       LEFT JOIN products p ON soi.product_id = p.id
       WHERE soi.sales_order_id IN (${placeholders})
       ORDER BY soi.sales_order_id, soi.id
-    `).all(...orderIds);
+    `, orderIds);
     
-    repayments = db.prepare(`
+    repayments = await all(`
       SELECT r.*, u.name as creator_name
       FROM repayments r
       LEFT JOIN users u ON r.created_by = u.id
       WHERE r.farmer_id = ?
       ORDER BY r.repayment_date DESC, r.created_at DESC
-    `).all(farmerId);
+    `, [farmerId]);
     
-    returns = db.prepare(`
+    returns = await all(`
       SELECT rt.*, p.name as product_name, u.name as creator_name
       FROM returns rt
       LEFT JOIN sales_orders so ON rt.sales_order_id = so.id
@@ -77,7 +77,7 @@ router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => 
       LEFT JOIN users u ON rt.created_by = u.id
       WHERE so.farmer_id = ?
       ORDER BY rt.return_date DESC, rt.created_at DESC
-    `).all(farmerId);
+    `, [farmerId]);
   }
   
   const ordersWithDetails = orders.map(order => ({
@@ -108,11 +108,11 @@ router.get('/farmer/:farmerId/ledger', authenticate, requireBoss, (req, res) => 
   });
 });
 
-router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, (req, res) => {
+router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, async (req, res) => {
   const { farmerId } = req.params;
   const { start_date, end_date } = req.query;
   
-  const farmer = db.prepare('SELECT * FROM farmers WHERE id = ?').get(farmerId);
+  const farmer = await get('SELECT * FROM farmers WHERE id = ?', [farmerId]);
   if (!farmer) {
     return res.status(404).json({ message: '农户不存在' });
   }
@@ -131,13 +131,13 @@ router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, (req, re
     orderParams.push(end_date);
   }
   
-  const orders = db.prepare(`
+  const orders = await all(`
     SELECT so.*, s.name as season_name, u.name as creator_name
     FROM sales_orders so
     LEFT JOIN seasons s ON so.season_id = s.id
     LEFT JOIN users u ON so.created_by = u.id
     WHERE ${orderWhere}
-  `).all(...orderParams);
+  `, orderParams);
   
   orders.forEach(order => {
     transactions.push({
@@ -167,13 +167,13 @@ router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, (req, re
     repaymentParams.push(end_date);
   }
   
-  const repayments = db.prepare(`
+  const repayments = await all(`
     SELECT r.*, so.order_no, u.name as creator_name
     FROM repayments r
     LEFT JOIN sales_orders so ON r.sales_order_id = so.id
     LEFT JOIN users u ON r.created_by = u.id
     WHERE ${repaymentWhere}
-  `).all(...repaymentParams);
+  `, repaymentParams);
   
   repayments.forEach(r => {
     transactions.push({
@@ -204,14 +204,14 @@ router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, (req, re
     returnParams.push(end_date);
   }
   
-  const returns = db.prepare(`
+  const returns = await all(`
     SELECT rt.*, so.order_no, p.name as product_name, u.name as creator_name
     FROM returns rt
     LEFT JOIN sales_orders so ON rt.sales_order_id = so.id
     LEFT JOIN products p ON rt.product_id = p.id
     LEFT JOIN users u ON rt.created_by = u.id
     WHERE ${returnWhere}
-  `).all(...returnParams);
+  `, returnParams);
   
   returns.forEach(rt => {
     transactions.push({
@@ -256,7 +256,7 @@ router.get('/farmer/:farmerId/transactions', authenticate, requireBoss, (req, re
   });
 });
 
-router.get('/today/collections', authenticate, requireBossOrClerk, (req, res) => {
+router.get('/today/collections', authenticate, requireBossOrClerk, async (req, res) => {
   const todayStr = moment().format('YYYY-MM-DD');
   
   let whereClause = 'r.repayment_date = ?';
@@ -267,7 +267,7 @@ router.get('/today/collections', authenticate, requireBossOrClerk, (req, res) =>
     params.push(req.user.id);
   }
   
-  const repayments = db.prepare(`
+  const repayments = await all(`
     SELECT r.*, f.name as farmer_name, f.phone as farmer_phone,
            so.order_no, u.name as creator_name
     FROM repayments r
@@ -276,28 +276,28 @@ router.get('/today/collections', authenticate, requireBossOrClerk, (req, res) =>
     LEFT JOIN users u ON r.created_by = u.id
     WHERE ${whereClause}
     ORDER BY r.created_at DESC
-  `).all(...params);
+  `, params);
   
-  const totalByMethod = db.prepare(`
+  const totalByMethod = await all(`
     SELECT payment_method, COUNT(*) as count, SUM(amount) as total
     FROM repayments r
     WHERE ${whereClause}
     GROUP BY payment_method
     ORDER BY total DESC
-  `).all(...params);
+  `, params);
   
-  const { total_amount } = db.prepare(`
+  const { total_amount } = await get(`
     SELECT COALESCE(SUM(amount), 0) as total_amount FROM repayments r WHERE ${whereClause}
-  `).get(...params);
+  `, params);
   
-  const byCreator = db.prepare(`
+  const byCreator = await all(`
     SELECT u.id, u.name, COUNT(*) as count, SUM(r.amount) as total
     FROM repayments r
     LEFT JOIN users u ON r.created_by = u.id
     WHERE ${whereClause}
     GROUP BY u.id, u.name
     ORDER BY total DESC
-  `).all(...params);
+  `, params);
   
   res.json({
     data: repayments,
@@ -320,20 +320,20 @@ router.get('/today/collections', authenticate, requireBossOrClerk, (req, res) =>
   });
 });
 
-router.get('/farmer/autocomplete', authenticate, requireBossOrClerk, (req, res) => {
+router.get('/farmer/autocomplete', authenticate, requireBossOrClerk, async (req, res) => {
   const { q, limit = 20 } = req.query;
   
   if (!q || q.length < 1) {
     return res.json({ data: [] });
   }
   
-  const farmers = db.prepare(`
+  const farmers = await all(`
     SELECT id, name, phone, village, address
     FROM farmers
     WHERE name LIKE ? OR phone LIKE ? OR village LIKE ?
     ORDER BY name
     LIMIT ?
-  `).all(`%${q}%`, `%${q}%`, `%${q}%`, parseInt(limit));
+  `, [`%${q}%`, `%${q}%`, `%${q}%`, parseInt(limit)]);
   
   res.json({ data: farmers });
 });

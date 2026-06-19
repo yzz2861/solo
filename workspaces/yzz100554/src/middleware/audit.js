@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const { run } = require('../config/database');
 
 const auditLog = (action, tableName) => {
   return (req, res, next) => {
@@ -10,12 +10,10 @@ const auditLog = (action, tableName) => {
           const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
           const recordId = parsedData?.data?.id || parsedData?.id || req.params?.id || null;
           
-          const stmt = db.prepare(`
+          run(`
             INSERT INTO audit_logs (user_id, action, table_name, record_id, new_values, ip_address, user_agent)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-          `);
-          
-          stmt.run(
+          `, [
             req.user.id,
             action,
             tableName,
@@ -23,7 +21,9 @@ const auditLog = (action, tableName) => {
             JSON.stringify(req.body),
             req.ip,
             req.headers['user-agent']
-          );
+          ]).catch(err => {
+            console.error('审计日志记录失败:', err);
+          });
         } catch (err) {
           console.error('审计日志记录失败:', err);
         }
@@ -36,21 +36,19 @@ const auditLog = (action, tableName) => {
   };
 };
 
-const logAction = (action, tableName, recordId, oldValues = null, newValues = null, userId) => {
+const logAction = async (action, tableName, recordId, oldValues = null, newValues = null, userId) => {
   try {
-    const stmt = db.prepare(`
+    await run(`
       INSERT INTO audit_logs (user_id, action, table_name, record_id, old_values, new_values)
       VALUES (?, ?, ?, ?, ?, ?)
-    `);
-    
-    stmt.run(
+    `, [
       userId,
       action,
       tableName,
       recordId,
       oldValues ? JSON.stringify(oldValues) : null,
       newValues ? JSON.stringify(newValues) : null
-    );
+    ]);
   } catch (err) {
     console.error('审计日志记录失败:', err);
   }

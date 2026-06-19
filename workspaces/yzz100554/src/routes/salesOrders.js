@@ -1,31 +1,31 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const db = require('../config/database');
+const { run, get, all, beginTransaction, commitTransaction, rollbackTransaction } = require('../config/database');
 const { authenticate, requireBossOrClerk, requireBoss } = require('../middleware/auth');
 const { auditLog, logAction } = require('../middleware/audit');
 const { generateOrderNo, round2 } = require('../utils/helpers');
 
 const router = express.Router();
 
-const checkOrderSettled = (orderId) => {
-  const order = db.prepare('SELECT status FROM sales_orders WHERE id = ?').get(orderId);
+const checkOrderSettled = async (orderId) => {
+  const order = await get('SELECT status FROM sales_orders WHERE id = ?', [orderId]);
   return order && order.status === 'settled';
 };
 
-const updateOrderBalance = (orderId, userId) => {
-  const order = db.prepare(`
+const updateOrderBalance = async (orderId, userId) => {
+  const order = await get(`
     SELECT 
       COALESCE(SUM(amount), 0) as total_amount,
       COALESCE(SUM(returned_quantity * unit_price), 0) as returned_amount
     FROM sales_order_items 
     WHERE sales_order_id = ?
-  `).get(orderId);
+  `, [orderId]);
   
-  const payments = db.prepare(`
+  const payments = await get(`
     SELECT COALESCE(SUM(amount), 0) as paid_amount
     FROM repayments 
     WHERE sales_order_id = ?
-  `).get(orderId);
+  `, [orderId]);
   
   const totalAmount = round2(order.total_amount);
   const paidAmount = round2(payments.paid_amount);
@@ -42,35 +42,35 @@ const updateOrderBalance = (orderId, userId) => {
     settledBy = userId;
   }
   
-  const currentOrder = db.prepare('SELECT status FROM sales_orders WHERE id = ?').get(orderId);
+  const currentOrder = await get('SELECT status FROM sales_orders WHERE id = ?', [orderId]);
   
   if (currentOrder.status === 'settled' && status === 'settled') {
-    db.prepare(`
+    await run(`
       UPDATE sales_orders 
       SET total_amount = ?, paid_amount = ?, returned_amount = ?, balance = ?, 
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).run(totalAmount, paidAmount, returnedAmount, balance, orderId);
+    `, [totalAmount, paidAmount, returnedAmount, balance, orderId]);
   } else if (status === 'settled') {
-    db.prepare(`
+    await run(`
       UPDATE sales_orders 
       SET total_amount = ?, paid_amount = ?, returned_amount = ?, balance = ?, status = ?,
           settled_at = CURRENT_TIMESTAMP, settled_by = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).run(totalAmount, paidAmount, returnedAmount, balance, status, userId, orderId);
+    `, [totalAmount, paidAmount, returnedAmount, balance, status, userId, orderId]);
   } else {
-    db.prepare(`
+    await run(`
       UPDATE sales_orders 
       SET total_amount = ?, paid_amount = ?, returned_amount = ?, balance = ?, status = ?,
           settled_at = NULL, settled_by = NULL, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).run(totalAmount, paidAmount, returnedAmount, balance, status, orderId);
+    `, [totalAmount, paidAmount, returnedAmount, balance, status, orderId]);
   }
   
   return { totalAmount, paidAmount, returnedAmount, balance, status };
 };
 
-router.get('/', authenticate, requireBossOrClerk, (req, res) => {
+router.get('/', authenticate, requireBossOrClerk, async (req, res) => {
   const { farmer_id, season_id, status, start_date, end_date, page = 1, pageSize = 20 } = req.query;
   const offset = (page - 1) * pageSize;
   
@@ -102,7 +102,7 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
     params.push(end_date);
   }
   
-  const orders = db.prepare(`
+  const orders = await all(`
     SELECT so.*, f.name as farmer_name, s.name as season_name, 
            u.name as creator_name, su.name as settler_name
     FROM sales_orders so
@@ -113,11 +113,11 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
     ${whereClause}
     ORDER BY so.created_at DESC
     LIMIT ? OFFSET ?
-  `).all(...params, parseInt(pageSize), parseInt(offset));
+  `, [...params, parseInt(pageSize), parseInt(offset)]);
   
-  const { total } = db.prepare(`
+  const { total } = await get(`
     SELECT COUNT(*) as total FROM sales_orders so ${whereClause}
-  `).get(...params);
+  `, params);
   
   res.json({
     data: orders,
@@ -125,8 +125,8 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
   });
 });
 
-router.get('/:id', authenticate, requireBossOrClerk, (req, res) => {
-  const order = db.prepare(`
+router.get('/:id', authenticate, requireBossOrClerk, async (req, res) => {
+  const order = await get(`
     SELECT so.*, f.name as farmer_name, f.phone as farmer_phone, 
            s.name as season_name, s.due_date as season_due_date,
            u.name as creator_name, su.name as settler_name
@@ -136,35 +136,35 @@ router.get('/:id', authenticate, requireBossOrClerk, (req, res) => {
     LEFT JOIN users u ON so.created_by = u.id
     LEFT JOIN users su ON so.settled_by = su.id
     WHERE so.id = ?
-  `).get(req.params.id);
+  `, [req.params.id]);
   
   if (!order) {
     return res.status(404).json({ message: '销售单不存在' });
   }
   
-  const items = db.prepare(`
+  const items = await all(`
     SELECT soi.*, p.name as product_name, p.category as product_category, p.unit as product_unit
     FROM sales_order_items soi
     LEFT JOIN products p ON soi.product_id = p.id
     WHERE soi.sales_order_id = ?
-  `).all(req.params.id);
+  `, [req.params.id]);
   
-  const repayments = db.prepare(`
+  const repayments = await all(`
     SELECT r.*, u.name as creator_name
     FROM repayments r
     LEFT JOIN users u ON r.created_by = u.id
     WHERE r.sales_order_id = ?
     ORDER BY r.created_at DESC
-  `).all(req.params.id);
+  `, [req.params.id]);
   
-  const returns = db.prepare(`
+  const returns = await all(`
     SELECT rt.*, p.name as product_name, u.name as creator_name
     FROM returns rt
     LEFT JOIN products p ON rt.product_id = p.id
     LEFT JOIN users u ON rt.created_by = u.id
     WHERE rt.sales_order_id = ?
     ORDER BY rt.created_at DESC
-  `).all(req.params.id);
+  `, [req.params.id]);
   
   res.json({
     data: {
@@ -189,7 +189,7 @@ router.post('/',
     body('items.*.unit_price').isFloat({ min: 0 }).withMessage('单价不能小于0')
   ],
   auditLog('create', 'sales_orders'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -197,73 +197,70 @@ router.post('/',
 
     const { farmer_id, season_id, sale_date, remark, items } = req.body;
 
-    const farmer = db.prepare('SELECT id FROM farmers WHERE id = ?').get(farmer_id);
+    const farmer = await get('SELECT id FROM farmers WHERE id = ?', [farmer_id]);
     if (!farmer) {
       return res.status(400).json({ message: '农户不存在' });
     }
 
-    const season = db.prepare('SELECT id FROM seasons WHERE id = ?').get(season_id);
+    const season = await get('SELECT id FROM seasons WHERE id = ?', [season_id]);
     if (!season) {
       return res.status(400).json({ message: '作物季不存在' });
     }
 
     const orderNo = generateOrderNo('SO');
     
-    const insertOrderStmt = db.prepare(`
-      INSERT INTO sales_orders (order_no, farmer_id, season_id, sale_date, remark, created_by)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-    
-    const insertItemStmt = db.prepare(`
-      INSERT INTO sales_order_items (sales_order_id, product_id, quantity, unit_price, amount, remark)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-
-    const tx = db.transaction(() => {
-      const orderResult = insertOrderStmt.run(orderNo, farmer_id, season_id, sale_date, remark, req.user.id);
-      const orderId = orderResult.lastInsertRowid;
+    let orderId;
+    try {
+      await beginTransaction();
+      
+      const orderResult = await run(`
+        INSERT INTO sales_orders (order_no, farmer_id, season_id, sale_date, remark, created_by)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [orderNo, farmer_id, season_id, sale_date, remark, req.user.id]);
+      
+      orderId = orderResult.lastID;
       
       let totalAmount = 0;
       for (const item of items) {
         const amount = round2(item.quantity * item.unit_price);
         totalAmount += amount;
-        insertItemStmt.run(orderId, item.product_id, item.quantity, item.unit_price, amount, item.remark);
+        await run(`
+          INSERT INTO sales_order_items (sales_order_id, product_id, quantity, unit_price, amount, remark)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `, [orderId, item.product_id, item.quantity, item.unit_price, amount, item.remark]);
       }
       
-      updateOrderBalance(orderId, req.user.id);
+      await updateOrderBalance(orderId, req.user.id);
       
-      return orderId;
-    });
-    
-    try {
-      const orderId = tx();
-      
-      const order = db.prepare(`
-        SELECT so.*, f.name as farmer_name, s.name as season_name
-        FROM sales_orders so
-        LEFT JOIN farmers f ON so.farmer_id = f.id
-        LEFT JOIN seasons s ON so.season_id = s.id
-        WHERE so.id = ?
-      `).get(orderId);
-      
-      const orderItems = db.prepare(`
-        SELECT soi.*, p.name as product_name
-        FROM sales_order_items soi
-        LEFT JOIN products p ON soi.product_id = p.id
-        WHERE soi.sales_order_id = ?
-      `).all(orderId);
-      
-      res.status(201).json({
-        message: '销售单创建成功',
-        data: {
-          ...order,
-          items: orderItems
-        }
-      });
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       console.error(err);
-      res.status(500).json({ message: '创建销售单失败', error: err.message });
+      return res.status(500).json({ message: '创建销售单失败', error: err.message });
     }
+    
+    const order = await get(`
+      SELECT so.*, f.name as farmer_name, s.name as season_name
+      FROM sales_orders so
+      LEFT JOIN farmers f ON so.farmer_id = f.id
+      LEFT JOIN seasons s ON so.season_id = s.id
+      WHERE so.id = ?
+    `, [orderId]);
+    
+    const orderItems = await all(`
+      SELECT soi.*, p.name as product_name
+      FROM sales_order_items soi
+      LEFT JOIN products p ON soi.product_id = p.id
+      WHERE soi.sales_order_id = ?
+    `, [orderId]);
+    
+    res.status(201).json({
+      message: '销售单创建成功',
+      data: {
+        ...order,
+        items: orderItems
+      }
+    });
   }
 );
 
@@ -274,7 +271,7 @@ router.put('/:id',
     body('items').optional().isArray({ min: 1 }).withMessage('至少需要一个商品')
   ],
   auditLog('update', 'sales_orders'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -282,20 +279,22 @@ router.put('/:id',
 
     const orderId = parseInt(req.params.id);
     
-    if (checkOrderSettled(orderId)) {
+    if (await checkOrderSettled(orderId)) {
       return res.status(400).json({ message: '该销售单已结清，无法修改' });
     }
 
-    const oldOrder = db.prepare('SELECT * FROM sales_orders WHERE id = ?').get(orderId);
+    const oldOrder = await get('SELECT * FROM sales_orders WHERE id = ?', [orderId]);
     if (!oldOrder) {
       return res.status(404).json({ message: '销售单不存在' });
     }
 
     const { farmer_id, season_id, sale_date, remark, items } = req.body;
 
-    const tx = db.transaction(() => {
+    try {
+      await beginTransaction();
+      
       if (farmer_id || season_id || sale_date || remark !== undefined) {
-        db.prepare(`
+        await run(`
           UPDATE sales_orders 
           SET farmer_id = COALESCE(?, farmer_id),
               season_id = COALESCE(?, season_id),
@@ -303,57 +302,54 @@ router.put('/:id',
               remark = COALESCE(?, remark),
               updated_at = CURRENT_TIMESTAMP
           WHERE id = ?
-        `).run(farmer_id, season_id, sale_date, remark, orderId);
+        `, [farmer_id, season_id, sale_date, remark, orderId]);
       }
       
       if (items) {
-        db.prepare('DELETE FROM sales_order_items WHERE sales_order_id = ?').run(orderId);
-        
-        const insertItemStmt = db.prepare(`
-          INSERT INTO sales_order_items (sales_order_id, product_id, quantity, unit_price, amount, remark)
-          VALUES (?, ?, ?, ?, ?, ?)
-        `);
+        await run('DELETE FROM sales_order_items WHERE sales_order_id = ?', [orderId]);
         
         for (const item of items) {
           const amount = round2(item.quantity * item.unit_price);
-          insertItemStmt.run(orderId, item.product_id, item.quantity, item.unit_price, amount, item.remark);
+          await run(`
+            INSERT INTO sales_order_items (sales_order_id, product_id, quantity, unit_price, amount, remark)
+            VALUES (?, ?, ?, ?, ?, ?)
+          `, [orderId, item.product_id, item.quantity, item.unit_price, amount, item.remark]);
         }
       }
       
-      updateOrderBalance(orderId, req.user.id);
-    });
-    
-    try {
-      tx();
+      await updateOrderBalance(orderId, req.user.id);
       
-      logAction('update', 'sales_orders', orderId, oldOrder, req.body, req.user.id);
-      
-      const order = db.prepare(`
-        SELECT so.*, f.name as farmer_name, s.name as season_name
-        FROM sales_orders so
-        LEFT JOIN farmers f ON so.farmer_id = f.id
-        LEFT JOIN seasons s ON so.season_id = s.id
-        WHERE so.id = ?
-      `).get(orderId);
-      
-      const orderItems = db.prepare(`
-        SELECT soi.*, p.name as product_name
-        FROM sales_order_items soi
-        LEFT JOIN products p ON soi.product_id = p.id
-        WHERE soi.sales_order_id = ?
-      `).all(orderId);
-      
-      res.json({
-        message: '销售单更新成功',
-        data: {
-          ...order,
-          items: orderItems
-        }
-      });
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       console.error(err);
-      res.status(500).json({ message: '更新销售单失败', error: err.message });
+      return res.status(500).json({ message: '更新销售单失败', error: err.message });
     }
+    
+    await logAction('update', 'sales_orders', orderId, oldOrder, req.body, req.user.id);
+    
+    const order = await get(`
+      SELECT so.*, f.name as farmer_name, s.name as season_name
+      FROM sales_orders so
+      LEFT JOIN farmers f ON so.farmer_id = f.id
+      LEFT JOIN seasons s ON so.season_id = s.id
+      WHERE so.id = ?
+    `, [orderId]);
+    
+    const orderItems = await all(`
+      SELECT soi.*, p.name as product_name
+      FROM sales_order_items soi
+      LEFT JOIN products p ON soi.product_id = p.id
+      WHERE soi.sales_order_id = ?
+    `, [orderId]);
+    
+    res.json({
+      message: '销售单更新成功',
+      data: {
+        ...order,
+        items: orderItems
+      }
+    });
   }
 );
 
@@ -361,14 +357,14 @@ router.post('/:id/void',
   authenticate,
   requireBoss,
   auditLog('void', 'sales_orders'),
-  (req, res) => {
+  async (req, res) => {
     const orderId = parseInt(req.params.id);
     
-    if (checkOrderSettled(orderId)) {
+    if (await checkOrderSettled(orderId)) {
       return res.status(400).json({ message: '该销售单已结清，无法作废' });
     }
 
-    const order = db.prepare('SELECT * FROM sales_orders WHERE id = ?').get(orderId);
+    const order = await get('SELECT * FROM sales_orders WHERE id = ?', [orderId]);
     if (!order) {
       return res.status(404).json({ message: '销售单不存在' });
     }
@@ -377,19 +373,19 @@ router.post('/:id/void',
       return res.status(400).json({ message: '该销售单已作废' });
     }
 
-    db.prepare(`
+    await run(`
       UPDATE sales_orders 
       SET status = 'voided', updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `).run(orderId);
+    `, [orderId]);
 
-    const updatedOrder = db.prepare(`
+    const updatedOrder = await get(`
       SELECT so.*, f.name as farmer_name, s.name as season_name
       FROM sales_orders so
       LEFT JOIN farmers f ON so.farmer_id = f.id
       LEFT JOIN seasons s ON so.season_id = s.id
       WHERE so.id = ?
-    `).get(orderId);
+    `, [orderId]);
 
     res.json({
       message: '销售单已作废',

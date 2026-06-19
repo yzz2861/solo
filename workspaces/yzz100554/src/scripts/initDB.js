@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const sqlite3 = require('sqlite3').verbose();
 
 const dbPath = path.resolve('./data/agricultural_credit.db');
 const dataDir = path.dirname(dbPath);
@@ -13,12 +14,12 @@ if (fs.existsSync(dbPath)) {
   fs.unlinkSync(dbPath);
 }
 
-const Database = require('better-sqlite3');
-const db = new Database(dbPath);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+const db = new sqlite3.Database(dbPath);
 
-db.exec(`
+const init = async () => {
+  await new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.exec(`
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
@@ -148,62 +149,73 @@ CREATE INDEX idx_repayments_date ON repayments(repayment_date);
 CREATE INDEX idx_returns_order ON returns(sales_order_id);
 CREATE INDEX idx_audit_logs_user ON audit_logs(user_id);
 CREATE INDEX idx_audit_logs_action ON audit_logs(action);
-`);
+      `, (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+  });
 
-const hashedBossPassword = bcrypt.hashSync('boss123456', 10);
-const hashedClerkPassword = bcrypt.hashSync('clerk123456', 10);
+  const hashedBossPassword = bcrypt.hashSync('boss123456', 10);
+  const hashedClerkPassword = bcrypt.hashSync('clerk123456', 10);
 
-const insertUser = db.prepare(`
-  INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)
-`);
+  const insertUser = db.prepare(`
+    INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)
+  `);
 
-insertUser.run('boss', hashedBossPassword, '张老板', 'boss');
-insertUser.run('clerk', hashedClerkPassword, '李店员', 'clerk');
+  insertUser.run('boss', hashedBossPassword, '张老板', 'boss');
+  insertUser.run('clerk', hashedClerkPassword, '李店员', 'clerk');
 
-const insertProduct = db.prepare(`
-  INSERT INTO products (name, category, unit, price, specification) VALUES (?, ?, ?, ?, ?)
-`);
+  const insertProduct = db.prepare(`
+    INSERT INTO products (name, category, unit, price, specification) VALUES (?, ?, ?, ?, ?)
+  `);
 
-const products = [
-  ['杂交水稻种子', '种子', '公斤', 60, '5kg/袋'],
-  ['玉米种子', '种子', '公斤', 45, '2kg/袋'],
-  ['复合肥(15-15-15)', '肥料', '袋', 180, '40kg/袋'],
-  ['尿素', '肥料', '袋', 120, '40kg/袋'],
-  ['钾肥', '肥料', '袋', 200, '25kg/袋'],
-  ['草甘膦除草剂', '农药', '瓶', 45, '1L/瓶'],
-  ['杀虫剂', '农药', '瓶', 80, '500ml/瓶'],
-  ['水稻专用肥', '肥料', '袋', 195, '40kg/袋']
-];
+  const products = [
+    ['杂交水稻种子', '种子', '公斤', 60, '5kg/袋'],
+    ['玉米种子', '种子', '公斤', 45, '2kg/袋'],
+    ['复合肥(15-15-15)', '肥料', '袋', 180, '40kg/袋'],
+    ['尿素', '肥料', '袋', 120, '40kg/袋'],
+    ['钾肥', '肥料', '袋', 200, '25kg/袋'],
+    ['草甘膦除草剂', '农药', '瓶', 45, '1L/瓶'],
+    ['杀虫剂', '农药', '瓶', 80, '500ml/瓶'],
+    ['水稻专用肥', '肥料', '袋', 195, '40kg/袋']
+  ];
 
-products.forEach(p => insertProduct.run(...p));
+  products.forEach(p => insertProduct.run(...p));
 
-const insertSeason = db.prepare(`
-  INSERT INTO seasons (name, year, crop_type, start_date, end_date, due_date, created_by)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
-`);
+  const insertSeason = db.prepare(`
+    INSERT INTO seasons (name, year, crop_type, start_date, end_date, due_date, created_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
 
-insertSeason.run('2026年早稻', 2026, '水稻', '2026-03-01', '2026-07-15', '2026-08-30', 1);
-insertSeason.run('2026年晚稻', 2026, '水稻', '2026-07-10', '2026-11-15', '2026-12-30', 1);
-insertSeason.run('2026年玉米', 2026, '玉米', '2026-04-01', '2026-08-20', '2026-09-30', 1);
+  insertSeason.run('2026年早稻', 2026, '水稻', '2026-03-01', '2026-07-15', '2026-08-30', 1);
+  insertSeason.run('2026年晚稻', 2026, '水稻', '2026-07-10', '2026-11-15', '2026-12-30', 1);
+  insertSeason.run('2026年玉米', 2026, '玉米', '2026-04-01', '2026-08-20', '2026-09-30', 1);
 
-const insertFarmer = db.prepare(`
-  INSERT INTO farmers (name, phone, id_card, address, village, created_by)
-  VALUES (?, ?, ?, ?, ?, ?)
-`);
+  const insertFarmer = db.prepare(`
+    INSERT INTO farmers (name, phone, id_card, address, village, created_by)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
 
-const farmers = [
-  ['王大春', '13800138001', '440101198001010001', '幸福村1组', '幸福村', 1],
-  ['李秋收', '13800138002', '440101198102020002', '幸福村2组', '幸福村', 1],
-  ['张丰收', '13800138003', '440101198203030003', '富裕村1组', '富裕村', 1],
-  ['刘满仓', '13800138004', '440101198304040004', '富裕村2组', '富裕村', 1],
-  ['陈稻花', '13800138005', '440101198405050005', '丰收村1组', '丰收村', 1]
-];
+  const farmers = [
+    ['王大春', '13800138001', '440101198001010001', '幸福村1组', '幸福村', 1],
+    ['李秋收', '13800138002', '440101198102020002', '幸福村2组', '幸福村', 1],
+    ['张丰收', '13800138003', '440101198203030003', '富裕村1组', '富裕村', 1],
+    ['刘满仓', '13800138004', '440101198304040004', '富裕村2组', '富裕村', 1],
+    ['陈稻花', '13800138005', '440101198405050005', '丰收村1组', '丰收村', 1]
+  ];
 
-farmers.forEach(f => insertFarmer.run(...f));
+  farmers.forEach(f => insertFarmer.run(...f));
 
-console.log('数据库初始化完成！');
-console.log('默认账号：');
-console.log('  老板: boss / boss123456');
-console.log('  店员: clerk / clerk123456');
+  console.log('数据库初始化完成！');
+  console.log('默认账号：');
+  console.log('  老板: boss / boss123456');
+  console.log('  店员: clerk / clerk123456');
 
-db.close();
+  db.close();
+};
+
+init().catch(err => {
+  console.error('数据库初始化失败:', err);
+  process.exit(1);
+});

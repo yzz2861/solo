@@ -1,7 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const moment = require('moment');
-const db = require('../config/database');
+const { run, get, all, beginTransaction, commitTransaction, rollbackTransaction } = require('../config/database');
 const { authenticate, requireBossOrClerk, requireBoss } = require('../middleware/auth');
 const { auditLog } = require('../middleware/audit');
 const { generateRepaymentNo, isToday, round2 } = require('../utils/helpers');
@@ -9,19 +9,19 @@ const { updateOrderBalance, checkOrderSettled } = require('./salesOrders');
 
 const router = express.Router();
 
-const checkDuplicateRepayment = (farmerId, amount, repaymentDate, createdBy) => {
-  const existing = db.prepare(`
+const checkDuplicateRepayment = async (farmerId, amount, repaymentDate, createdBy) => {
+  const existing = await get(`
     SELECT id, repayment_no, amount, repayment_date, created_at
     FROM repayments 
     WHERE farmer_id = ? AND amount = ? AND repayment_date = ? AND created_by = ?
     ORDER BY created_at DESC
     LIMIT 1
-  `).get(farmerId, amount, repaymentDate, createdBy);
+  `, [farmerId, amount, repaymentDate, createdBy]);
   
   return existing;
 };
 
-router.get('/', authenticate, requireBossOrClerk, (req, res) => {
+router.get('/', authenticate, requireBossOrClerk, async (req, res) => {
   const { farmer_id, sales_order_id, start_date, end_date, created_by, today, page = 1, pageSize = 20 } = req.query;
   const offset = (page - 1) * pageSize;
   
@@ -65,7 +65,7 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
     params.push(todayStr, req.user.id);
   }
   
-  const repayments = db.prepare(`
+  const repayments = await all(`
     SELECT r.*, f.name as farmer_name, so.order_no as order_no,
            u.name as creator_name
     FROM repayments r
@@ -75,15 +75,15 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
     ${whereClause}
     ORDER BY r.created_at DESC
     LIMIT ? OFFSET ?
-  `).all(...params, parseInt(pageSize), parseInt(offset));
+  `, [...params, parseInt(pageSize), parseInt(offset)]);
   
-  const { total } = db.prepare(`
+  const { total } = await get(`
     SELECT COUNT(*) as total FROM repayments r ${whereClause}
-  `).get(...params);
+  `, params);
   
-  const { total_amount } = db.prepare(`
+  const { total_amount } = await get(`
     SELECT COALESCE(SUM(amount), 0) as total_amount FROM repayments r ${whereClause}
-  `).get(...params);
+  `, params);
   
   res.json({
     data: repayments,
@@ -91,7 +91,7 @@ router.get('/', authenticate, requireBossOrClerk, (req, res) => {
   });
 });
 
-router.get('/today', authenticate, requireBossOrClerk, (req, res) => {
+router.get('/today', authenticate, requireBossOrClerk, async (req, res) => {
   const todayStr = moment().format('YYYY-MM-DD');
   
   let whereClause = 'WHERE r.repayment_date = ?';
@@ -102,7 +102,7 @@ router.get('/today', authenticate, requireBossOrClerk, (req, res) => {
     params.push(req.user.id);
   }
   
-  const repayments = db.prepare(`
+  const repayments = await all(`
     SELECT r.*, f.name as farmer_name, so.order_no as order_no,
            u.name as creator_name
     FROM repayments r
@@ -111,11 +111,11 @@ router.get('/today', authenticate, requireBossOrClerk, (req, res) => {
     LEFT JOIN users u ON r.created_by = u.id
     ${whereClause}
     ORDER BY r.created_at DESC
-  `).all(...params);
+  `, params);
   
-  const { total_amount } = db.prepare(`
+  const { total_amount } = await get(`
     SELECT COALESCE(SUM(amount), 0) as total_amount FROM repayments r ${whereClause}
-  `).get(...params);
+  `, params);
   
   res.json({
     data: repayments,
@@ -127,8 +127,8 @@ router.get('/today', authenticate, requireBossOrClerk, (req, res) => {
   });
 });
 
-router.get('/:id', authenticate, requireBossOrClerk, (req, res) => {
-  const repayment = db.prepare(`
+router.get('/:id', authenticate, requireBossOrClerk, async (req, res) => {
+  const repayment = await get(`
     SELECT r.*, f.name as farmer_name, f.phone as farmer_phone,
            so.order_no as order_no, so.total_amount as order_total,
            u.name as creator_name
@@ -137,7 +137,7 @@ router.get('/:id', authenticate, requireBossOrClerk, (req, res) => {
     LEFT JOIN sales_orders so ON r.sales_order_id = so.id
     LEFT JOIN users u ON r.created_by = u.id
     WHERE r.id = ?
-  `).get(req.params.id);
+  `, [req.params.id]);
   
   if (!repayment) {
     return res.status(404).json({ message: '还款记录不存在' });
@@ -155,7 +155,7 @@ router.post('/',
     body('repayment_date').isDate().withMessage('还款日期不能为空')
   ],
   auditLog('create', 'repayments'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -167,13 +167,13 @@ router.post('/',
       return res.status(403).json({ message: '店员只能录入当天的还款记录' });
     }
 
-    const farmer = db.prepare('SELECT id, name FROM farmers WHERE id = ?').get(farmer_id);
+    const farmer = await get('SELECT id, name FROM farmers WHERE id = ?', [farmer_id]);
     if (!farmer) {
       return res.status(400).json({ message: '农户不存在' });
     }
 
     if (sales_order_id) {
-      const order = db.prepare('SELECT id, status FROM sales_orders WHERE id = ?').get(sales_order_id);
+      const order = await get('SELECT id, status FROM sales_orders WHERE id = ?', [sales_order_id]);
       if (!order) {
         return res.status(400).json({ message: '销售单不存在' });
       }
@@ -185,7 +185,7 @@ router.post('/',
       }
     }
 
-    const duplicate = checkDuplicateRepayment(farmer_id, amount, repayment_date, req.user.id);
+    const duplicate = await checkDuplicateRepayment(farmer_id, amount, repayment_date, req.user.id);
     if (duplicate) {
       return res.status(409).json({
         message: '检测到可能的重复还款',
@@ -202,47 +202,47 @@ router.post('/',
 
     const repaymentNo = generateRepaymentNo();
 
-    const tx = db.transaction(() => {
-      const stmt = db.prepare(`
+    let repaymentId;
+    try {
+      await beginTransaction();
+      
+      const result = await run(`
         INSERT INTO repayments (repayment_no, farmer_id, sales_order_id, amount, 
                                 repayment_date, payment_method, remark, created_by)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `);
+      `, [repaymentNo, farmer_id, sales_order_id, parseFloat(amount),
+          repayment_date, payment_method, remark, req.user.id]);
       
-      const result = stmt.run(repaymentNo, farmer_id, sales_order_id, parseFloat(amount),
-                              repayment_date, payment_method, remark, req.user.id);
+      repaymentId = result.lastID;
       
       if (sales_order_id) {
-        updateOrderBalance(sales_order_id, req.user.id);
+        await updateOrderBalance(sales_order_id, req.user.id);
       }
       
-      return result.lastInsertRowid;
-    });
-    
-    try {
-      const repaymentId = tx();
-      
-      const repayment = db.prepare(`
-        SELECT r.*, f.name as farmer_name, so.order_no as order_no,
-               u.name as creator_name
-        FROM repayments r
-        LEFT JOIN farmers f ON r.farmer_id = f.id
-        LEFT JOIN sales_orders so ON r.sales_order_id = so.id
-        LEFT JOIN users u ON r.created_by = u.id
-        WHERE r.id = ?
-      `).get(repaymentId);
-      
-      res.status(201).json({
-        message: '还款记录创建成功',
-        data: repayment
-      });
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
         return res.status(409).json({ message: '该还款记录已存在（重复录入）' });
       }
       console.error(err);
-      res.status(500).json({ message: '创建还款记录失败', error: err.message });
+      return res.status(500).json({ message: '创建还款记录失败', error: err.message });
     }
+    
+    const repayment = await get(`
+      SELECT r.*, f.name as farmer_name, so.order_no as order_no,
+             u.name as creator_name
+      FROM repayments r
+      LEFT JOIN farmers f ON r.farmer_id = f.id
+      LEFT JOIN sales_orders so ON r.sales_order_id = so.id
+      LEFT JOIN users u ON r.created_by = u.id
+      WHERE r.id = ?
+    `, [repaymentId]);
+    
+    res.status(201).json({
+      message: '还款记录创建成功',
+      data: repayment
+    });
   }
 );
 
@@ -255,7 +255,7 @@ router.post('/:id/confirm-duplicate',
     body('repayment_date').isDate().withMessage('还款日期不能为空')
   ],
   auditLog('create_force', 'repayments'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -267,53 +267,53 @@ router.post('/:id/confirm-duplicate',
       return res.status(403).json({ message: '店员只能录入当天的还款记录' });
     }
 
-    const farmer = db.prepare('SELECT id, name FROM farmers WHERE id = ?').get(farmer_id);
+    const farmer = await get('SELECT id, name FROM farmers WHERE id = ?', [farmer_id]);
     if (!farmer) {
       return res.status(400).json({ message: '农户不存在' });
     }
 
     const repaymentNo = generateRepaymentNo();
 
-    const tx = db.transaction(() => {
-      const stmt = db.prepare(`
-        INSERT INTO repayments (repayment_no, farmer_id, sales_order_id, amount, 
-                                repayment_date, payment_method, remark, created_by)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `);
+    let repaymentId;
+    try {
+      await beginTransaction();
       
       const finalRemark = remark ? `${remark} (确认非重复录入)` : '(确认非重复录入)';
       
-      const result = stmt.run(repaymentNo, farmer_id, sales_order_id, parseFloat(amount),
-                              repayment_date, payment_method, finalRemark, req.user.id);
+      const result = await run(`
+        INSERT INTO repayments (repayment_no, farmer_id, sales_order_id, amount, 
+                                repayment_date, payment_method, remark, created_by)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `, [repaymentNo, farmer_id, sales_order_id, parseFloat(amount),
+          repayment_date, payment_method, finalRemark, req.user.id]);
+      
+      repaymentId = result.lastID;
       
       if (sales_order_id) {
-        updateOrderBalance(sales_order_id, req.user.id);
+        await updateOrderBalance(sales_order_id, req.user.id);
       }
       
-      return result.lastInsertRowid;
-    });
-    
-    try {
-      const repaymentId = tx();
-      
-      const repayment = db.prepare(`
-        SELECT r.*, f.name as farmer_name, so.order_no as order_no,
-               u.name as creator_name
-        FROM repayments r
-        LEFT JOIN farmers f ON r.farmer_id = f.id
-        LEFT JOIN sales_orders so ON r.sales_order_id = so.id
-        LEFT JOIN users u ON r.created_by = u.id
-        WHERE r.id = ?
-      `).get(repaymentId);
-      
-      res.status(201).json({
-        message: '还款记录创建成功（已确认非重复）',
-        data: repayment
-      });
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       console.error(err);
-      res.status(500).json({ message: '创建还款记录失败', error: err.message });
+      return res.status(500).json({ message: '创建还款记录失败', error: err.message });
     }
+    
+    const repayment = await get(`
+      SELECT r.*, f.name as farmer_name, so.order_no as order_no,
+             u.name as creator_name
+      FROM repayments r
+      LEFT JOIN farmers f ON r.farmer_id = f.id
+      LEFT JOIN sales_orders so ON r.sales_order_id = so.id
+      LEFT JOIN users u ON r.created_by = u.id
+      WHERE r.id = ?
+    `, [repaymentId]);
+    
+    res.status(201).json({
+      message: '还款记录创建成功（已确认非重复）',
+      data: repayment
+    });
   }
 );
 
@@ -321,22 +321,22 @@ router.put('/:id',
   authenticate,
   requireBoss,
   auditLog('update', 'repayments'),
-  (req, res) => {
+  async (req, res) => {
     const repaymentId = parseInt(req.params.id);
-    const repayment = db.prepare('SELECT * FROM repayments WHERE id = ?').get(repaymentId);
+    const repayment = await get('SELECT * FROM repayments WHERE id = ?', [repaymentId]);
     
     if (!repayment) {
       return res.status(404).json({ message: '还款记录不存在' });
     }
 
-    if (repayment.sales_order_id && checkOrderSettled(repayment.sales_order_id)) {
+    if (repayment.sales_order_id && await checkOrderSettled(repayment.sales_order_id)) {
       return res.status(400).json({ message: '关联的销售单已结清，无法修改还款记录' });
     }
 
     const { sales_order_id, amount, repayment_date, payment_method, remark } = req.body;
 
     if (sales_order_id) {
-      const order = db.prepare('SELECT id, status FROM sales_orders WHERE id = ?').get(sales_order_id);
+      const order = await get('SELECT id, status FROM sales_orders WHERE id = ?', [sales_order_id]);
       if (!order) {
         return res.status(400).json({ message: '销售单不存在' });
       }
@@ -345,52 +345,53 @@ router.put('/:id',
       }
     }
 
-    const tx = db.transaction(() => {
+    try {
+      await beginTransaction();
+      
       const oldOrderId = repayment.sales_order_id;
       
-      db.prepare(`
+      await run(`
         UPDATE repayments 
         SET sales_order_id = ?, amount = ?, repayment_date = ?, 
             payment_method = ?, remark = ?
         WHERE id = ?
-      `).run(
+      `, [
         sales_order_id ?? repayment.sales_order_id,
         amount !== undefined ? parseFloat(amount) : repayment.amount,
         repayment_date ?? repayment.repayment_date,
         payment_method ?? repayment.payment_method,
         remark ?? repayment.remark,
         repaymentId
-      );
+      ]);
       
       if (oldOrderId) {
-        updateOrderBalance(oldOrderId, req.user.id);
+        await updateOrderBalance(oldOrderId, req.user.id);
       }
       if (sales_order_id && sales_order_id !== oldOrderId) {
-        updateOrderBalance(sales_order_id, req.user.id);
+        await updateOrderBalance(sales_order_id, req.user.id);
       }
-    });
-    
-    try {
-      tx();
       
-      const updatedRepayment = db.prepare(`
-        SELECT r.*, f.name as farmer_name, so.order_no as order_no,
-               u.name as creator_name
-        FROM repayments r
-        LEFT JOIN farmers f ON r.farmer_id = f.id
-        LEFT JOIN sales_orders so ON r.sales_order_id = so.id
-        LEFT JOIN users u ON r.created_by = u.id
-        WHERE r.id = ?
-      `).get(repaymentId);
-      
-      res.json({
-        message: '还款记录更新成功',
-        data: updatedRepayment
-      });
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       console.error(err);
-      res.status(500).json({ message: '更新还款记录失败', error: err.message });
+      return res.status(500).json({ message: '更新还款记录失败', error: err.message });
     }
+    
+    const updatedRepayment = await get(`
+      SELECT r.*, f.name as farmer_name, so.order_no as order_no,
+             u.name as creator_name
+      FROM repayments r
+      LEFT JOIN farmers f ON r.farmer_id = f.id
+      LEFT JOIN sales_orders so ON r.sales_order_id = so.id
+      LEFT JOIN users u ON r.created_by = u.id
+      WHERE r.id = ?
+    `, [repaymentId]);
+    
+    res.json({
+      message: '还款记录更新成功',
+      data: updatedRepayment
+    });
   }
 );
 
@@ -398,33 +399,35 @@ router.delete('/:id',
   authenticate,
   requireBoss,
   auditLog('delete', 'repayments'),
-  (req, res) => {
+  async (req, res) => {
     const repaymentId = parseInt(req.params.id);
-    const repayment = db.prepare('SELECT * FROM repayments WHERE id = ?').get(repaymentId);
+    const repayment = await get('SELECT * FROM repayments WHERE id = ?', [repaymentId]);
     
     if (!repayment) {
       return res.status(404).json({ message: '还款记录不存在' });
     }
 
-    if (repayment.sales_order_id && checkOrderSettled(repayment.sales_order_id)) {
+    if (repayment.sales_order_id && await checkOrderSettled(repayment.sales_order_id)) {
       return res.status(400).json({ message: '关联的销售单已结清，无法删除还款记录' });
     }
 
-    const tx = db.transaction(() => {
-      db.prepare('DELETE FROM repayments WHERE id = ?').run(repaymentId);
+    try {
+      await beginTransaction();
+      
+      await run('DELETE FROM repayments WHERE id = ?', [repaymentId]);
       
       if (repayment.sales_order_id) {
-        updateOrderBalance(repayment.sales_order_id, req.user.id);
+        await updateOrderBalance(repayment.sales_order_id, req.user.id);
       }
-    });
-    
-    try {
-      tx();
-      res.json({ message: '还款记录删除成功' });
+      
+      await commitTransaction();
     } catch (err) {
+      await rollbackTransaction();
       console.error(err);
-      res.status(500).json({ message: '删除还款记录失败', error: err.message });
+      return res.status(500).json({ message: '删除还款记录失败', error: err.message });
     }
+    
+    res.json({ message: '还款记录删除成功' });
   }
 );
 

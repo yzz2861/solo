@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+const { get } = require('../config/database');
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -12,7 +12,7 @@ const authenticate = (req, res, next) => {
   
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = db.prepare('SELECT id, username, name, role FROM users WHERE id = ?').get(decoded.userId);
+    const user = await get('SELECT id, username, name, role FROM users WHERE id = ?', [decoded.userId]);
     
     if (!user) {
       return res.status(401).json({ message: '用户不存在' });
