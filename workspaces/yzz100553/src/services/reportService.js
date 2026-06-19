@@ -1,50 +1,52 @@
 const { createObjectCsvStringifier } = require('csv-writer');
 const db = require('../config/database');
 
-const generateMonthlyReport = (startDate, endDate) => {
-  const overview = db.prepare(`
-    SELECT
-      COUNT(*) as total_reservations,
-      SUM(CASE WHEN status IN ('checked_in', 'completed') THEN 1 ELSE 0 END) as used_count,
-      SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_count,
-      SUM(CASE WHEN status = 'released' THEN 1 ELSE 0 END) as released_count
-    FROM reservations
-    WHERE DATE(start_time) BETWEEN DATE(?) AND DATE(?)
-  `).get(startDate, endDate);
+const generateMonthlyReport = async (startDate, endDate) => {
+  const overview = await db.get(
+    `SELECT
+       COUNT(*) as total_reservations,
+       SUM(CASE WHEN status IN ('checked_in', 'completed') THEN 1 ELSE 0 END) as used_count,
+       SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_count,
+       SUM(CASE WHEN status = 'released' THEN 1 ELSE 0 END) as released_count
+     FROM reservations
+     WHERE DATE(start_time) BETWEEN DATE(?) AND DATE(?)`,
+    startDate, endDate
+  );
 
-  const noShowCount = db.prepare(`
-    SELECT COUNT(*) as count FROM violations
-    WHERE type = 'no_show'
-      AND DATE(recorded_at) BETWEEN DATE(?) AND DATE(?)
-  `).get(startDate, endDate).count;
+  const noShowRow = await db.get(
+    `SELECT COUNT(*) as count FROM violations
+     WHERE type = 'no_show' AND DATE(recorded_at) BETWEEN DATE(?) AND DATE(?)`,
+    startDate, endDate
+  );
 
-  const manualReleaseCount = db.prepare(`
-    SELECT COUNT(*) as count FROM release_logs
-    WHERE release_type = 'manual_release'
-      AND DATE(released_at) BETWEEN DATE(?) AND DATE(?)
-  `).get(startDate, endDate).count;
+  const manualReleaseRow = await db.get(
+    `SELECT COUNT(*) as count FROM release_logs
+     WHERE release_type = 'manual_release' AND DATE(released_at) BETWEEN DATE(?) AND DATE(?)`,
+    startDate, endDate
+  );
 
   return {
     overview: {
       ...overview,
-      no_show_count: noShowCount,
-      manual_release_count: manualReleaseCount,
+      no_show_count: noShowRow.count,
+      manual_release_count: manualReleaseRow.count,
     },
   };
 };
 
-const exportReservationsCsv = (startDate, endDate) => {
-  const reservations = db.prepare(`
-    SELECT r.id, ro.name as room_name, u.name as user_name, u.username,
-      r.contact_name, r.contact_phone, r.group_size,
-      r.start_time, r.end_time, r.status, r.checked_in_at,
-      r.purpose, r.created_at
-    FROM reservations r
-    JOIN rooms ro ON r.room_id = ro.id
-    JOIN users u ON r.user_id = u.id
-    WHERE DATE(r.start_time) BETWEEN DATE(?) AND DATE(?)
-    ORDER BY r.start_time ASC
-  `).all(startDate, endDate);
+const exportReservationsCsv = async (startDate, endDate) => {
+  const reservations = await db.all(
+    `SELECT r.id, ro.name as room_name, u.name as user_name, u.username,
+       r.contact_name, r.contact_phone, r.group_size,
+       r.start_time, r.end_time, r.status, r.checked_in_at,
+       r.purpose, r.created_at
+     FROM reservations r
+     JOIN rooms ro ON r.room_id = ro.id
+     JOIN users u ON r.user_id = u.id
+     WHERE DATE(r.start_time) BETWEEN DATE(?) AND DATE(?)
+     ORDER BY r.start_time ASC`,
+    startDate, endDate
+  );
 
   const csvStringifier = createObjectCsvStringifier({
     header: [
@@ -80,18 +82,19 @@ const exportReservationsCsv = (startDate, endDate) => {
   return '\uFEFF' + csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
 };
 
-const exportViolationsCsv = (startDate, endDate) => {
-  const violations = db.prepare(`
-    SELECT v.id, u.name as user_name, u.username,
-      ro.name as room_name, r.start_time, r.end_time,
-      v.type, v.description, v.recorded_at
-    FROM violations v
-    JOIN users u ON v.user_id = u.id
-    JOIN reservations r ON v.reservation_id = r.id
-    JOIN rooms ro ON r.room_id = ro.id
-    WHERE DATE(v.recorded_at) BETWEEN DATE(?) AND DATE(?)
-    ORDER BY v.recorded_at ASC
-  `).all(startDate, endDate);
+const exportViolationsCsv = async (startDate, endDate) => {
+  const violations = await db.all(
+    `SELECT v.id, u.name as user_name, u.username,
+       ro.name as room_name, r.start_time, r.end_time,
+       v.type, v.description, v.recorded_at
+     FROM violations v
+     JOIN users u ON v.user_id = u.id
+     JOIN reservations r ON v.reservation_id = r.id
+     JOIN rooms ro ON r.room_id = ro.id
+     WHERE DATE(v.recorded_at) BETWEEN DATE(?) AND DATE(?)
+     ORDER BY v.recorded_at ASC`,
+    startDate, endDate
+  );
 
   const csvStringifier = createObjectCsvStringifier({
     header: [
@@ -122,21 +125,22 @@ const exportViolationsCsv = (startDate, endDate) => {
   return '\uFEFF' + csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
 };
 
-const exportReleaseLogsCsv = (startDate, endDate) => {
-  const logs = db.prepare(`
-    SELECT rl.id, ro.name as room_name,
-      res_u.name as user_name, res_u.username,
-      res.start_time, res.end_time,
-      rl.release_type, rl.reason, rl.remark,
-      u.name as released_by_name, rl.released_at
-    FROM release_logs rl
-    JOIN reservations res ON rl.reservation_id = res.id
-    JOIN rooms ro ON res.room_id = ro.id
-    JOIN users res_u ON res.user_id = res_u.id
-    LEFT JOIN users u ON rl.released_by = u.id
-    WHERE DATE(rl.released_at) BETWEEN DATE(?) AND DATE(?)
-    ORDER BY rl.released_at ASC
-  `).all(startDate, endDate);
+const exportReleaseLogsCsv = async (startDate, endDate) => {
+  const logs = await db.all(
+    `SELECT rl.id, ro.name as room_name,
+       res_u.name as user_name, res_u.username,
+       res.start_time, res.end_time,
+       rl.release_type, rl.reason, rl.remark,
+       u.name as released_by_name, rl.released_at
+     FROM release_logs rl
+     JOIN reservations res ON rl.reservation_id = res.id
+     JOIN rooms ro ON res.room_id = ro.id
+     JOIN users res_u ON res.user_id = res_u.id
+     LEFT JOIN users u ON rl.released_by = u.id
+     WHERE DATE(rl.released_at) BETWEEN DATE(?) AND DATE(?)
+     ORDER BY rl.released_at ASC`,
+    startDate, endDate
+  );
 
   const csvStringifier = createObjectCsvStringifier({
     header: [

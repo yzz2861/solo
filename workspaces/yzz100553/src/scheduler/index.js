@@ -6,9 +6,9 @@ const db = require('../config/database');
 const startScheduledTasks = () => {
   console.log('定时任务已启动');
 
-  cron.schedule(config.cron.checkExpiredReservations, () => {
+  cron.schedule(config.cron.checkExpiredReservations, async () => {
     try {
-      const count = reservationService.checkAndReleaseExpired();
+      const count = await reservationService.checkAndReleaseExpired();
       if (count > 0) {
         console.log(`[定时任务] 自动释放 ${count} 个未签到预约`);
       }
@@ -17,18 +17,17 @@ const startScheduledTasks = () => {
     }
   });
 
-  cron.schedule('0 0 * * *', () => {
+  cron.schedule('0 0 * * *', async () => {
     try {
-      const now = new Date().toISOString();
-      const updated = db.prepare(`
+      const result = await db.run(`
         UPDATE reservations
         SET status = 'completed', updated_at = CURRENT_TIMESTAMP
         WHERE status = 'checked_in'
           AND end_time <= datetime('now')
-      `).run();
+      `);
 
-      if (updated.changes > 0) {
-        console.log(`[定时任务] 标记 ${updated.changes} 个已结束预约为完成状态`);
+      if (result.changes > 0) {
+        console.log(`[定时任务] 标记 ${result.changes} 个已结束预约为完成状态`);
       }
     } catch (err) {
       console.error('[定时任务] 更新已结束预约失败:', err);

@@ -22,7 +22,24 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 db.get = promisify(db.get).bind(db);
 db.all = promisify(db.all).bind(db);
-db.run = promisify(db.run).bind(db);
 db.exec = promisify(db.exec).bind(db);
+
+const originalRun = db.run.bind(db);
+db.run = function(sql, ...params) {
+  return new Promise((resolve, reject) => {
+    const callback = function(err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ lastID: this.lastID, changes: this.changes });
+      }
+    };
+    if (params.length === 0) {
+      originalRun(sql, callback);
+    } else {
+      originalRun(sql, ...params, callback);
+    }
+  });
+};
 
 module.exports = db;

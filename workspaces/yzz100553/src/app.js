@@ -48,6 +48,8 @@ app.listen(PORT, () => {
   console.log(`\n  测试账号:`);
   console.log(`    馆员: librarian / 123456`);
   console.log(`    学生: student1 / 123456`);
+  console.log(`    学生: student2 / 123456`);
+  console.log(`    学生: student3 / 123456`);
   console.log(`\n  提示: 首次运行请先执行 npm run init-db 初始化数据库\n`);
 
   startScheduledTasks();
