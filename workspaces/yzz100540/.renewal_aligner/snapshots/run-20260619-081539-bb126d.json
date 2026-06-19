@@ -1,0 +1,723 @@
+{
+  "run_id": "run-20260619-081539-bb126d",
+  "run_time": "2026-06-19T08:15:39.617400",
+  "baseline_date": "2026-06-19",
+  "previous_run_id": null,
+  "records": {
+    "阿里巴巴": {
+      "canonical_customer_name": "阿里巴巴",
+      "highest_risk_level": "high",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "high",
+          "message": "合同70天后到期，需尽快启动续签讨论",
+          "key": "expiring_soon|合同70天后到期，需尽快启动续签讨论",
+          "details": {
+            "days_left": 70,
+            "contract_id": "HT202400001"
+          }
+        },
+        {
+          "risk_type": "zero_usage_with_pilot",
+          "risk_level": "high",
+          "message": "使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "key": "zero_usage_with_pilot|使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "details": {
+            "pilot_features": "高级API,数据大屏",
+            "total_licenses": 100
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有1个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有1个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 1
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "low",
+          "message": "预测金额(￥250,000)高于合同额(￥80,000)，可能是增购，需与销售确认",
+          "key": "forecast_mismatch|预测金额(￥250,000)高于合同额(￥80,000)，可能是增购，需与销售确认",
+          "details": {
+            "contract_value": 80000.0,
+            "committed_forecast": 250000.0,
+            "ratio": 3.125
+          }
+        }
+      ],
+      "csm_owner": "张明",
+      "sales_owner": "周强",
+      "contract_value": 80000.0,
+      "upcoming_end_date": "2026-08-28",
+      "all_names": [
+        "Alibaba",
+        "阿里巴巴集团控股有限公司"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内启动续费会议，确认客户续约意向（剩余70天）；核查试点项目落地情况，必要时升级为商务问题与决策层沟通；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-24"
+    },
+    "腾讯": {
+      "canonical_customer_name": "腾讯",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "low_usage",
+          "risk_level": "critical",
+          "message": "使用率仅12%，远低于正常水平",
+          "key": "low_usage|使用率仅12%，远低于正常水平",
+          "details": {
+            "utilization_rate": 0.12,
+            "active_users": 12,
+            "total_licenses": 100
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有2个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有2个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 2,
+            "samples": [
+              "培训咨询问题 - 需要支持",
+              "集成对接问题 - 报错"
+            ]
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "critical",
+          "message": "当前6个未关闭工单，远超正常水平",
+          "key": "high_tickets|当前6个未关闭工单，远超正常水平",
+          "details": {
+            "open_count": 6,
+            "high_priority": 1
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有1个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有1个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 1
+          }
+        }
+      ],
+      "csm_owner": "李华",
+      "sales_owner": "吴磊",
+      "contract_value": 80000.0,
+      "upcoming_end_date": "2026-11-16",
+      "all_names": [
+        "Tencent",
+        "腾讯",
+        "腾讯科技（深圳）有限公司"
+      ],
+      "was_renamed": false,
+      "next_action": "安排客户成功拜访，了解使用障碍，制定激活/培训计划；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；复盘重开工单根本原因，指派资深工程师彻底解决",
+      "follow_up_date": "2026-06-22"
+    },
+    "百度": {
+      "canonical_customer_name": "百度",
+      "highest_risk_level": "high",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "high",
+          "message": "合同45天后到期，需尽快启动续签讨论",
+          "key": "expiring_soon|合同45天后到期，需尽快启动续签讨论",
+          "details": {
+            "days_left": 45,
+            "contract_id": "HT202400003"
+          }
+        },
+        {
+          "risk_type": "zero_usage_with_pilot",
+          "risk_level": "high",
+          "message": "使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "key": "zero_usage_with_pilot|使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "details": {
+            "pilot_features": "AI模型训练模块",
+            "total_licenses": 200
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有1个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有1个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 1,
+            "samples": [
+              "登录问题问题 - 配置问题"
+            ]
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有2个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有2个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 2
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "low",
+          "message": "预测金额(￥180,000)高于合同额(￥50,000)，可能是增购，需与销售确认",
+          "key": "forecast_mismatch|预测金额(￥180,000)高于合同额(￥50,000)，可能是增购，需与销售确认",
+          "details": {
+            "contract_value": 50000.0,
+            "committed_forecast": 180000.0,
+            "ratio": 3.6
+          }
+        }
+      ],
+      "csm_owner": "王芳",
+      "sales_owner": "郑雪",
+      "contract_value": 50000.0,
+      "upcoming_end_date": "2026-08-03",
+      "all_names": [
+        "百度在线网络技术（北京）有限公司"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内启动续费会议，确认客户续约意向（剩余45天）；核查试点项目落地情况，必要时升级为商务问题与决策层沟通；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；复盘重开工单根本原因，指派资深工程师彻底解决；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-24"
+    },
+    "字节跳动": {
+      "canonical_customer_name": "字节跳动",
+      "highest_risk_level": "high",
+      "risks": [
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有1个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有1个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 1
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "low",
+          "message": "预测金额(￥1,200,000)高于合同额(￥120,000)，可能是增购，需与销售确认",
+          "key": "forecast_mismatch|预测金额(￥1,200,000)高于合同额(￥120,000)，可能是增购，需与销售确认",
+          "details": {
+            "contract_value": 120000.0,
+            "committed_forecast": 1200000.0,
+            "ratio": 10.0
+          }
+        }
+      ],
+      "csm_owner": "陈静",
+      "sales_owner": "孙涛",
+      "contract_value": 120000.0,
+      "upcoming_end_date": "2026-11-16",
+      "all_names": [
+        "字节跳动有限公司",
+        "字节"
+      ],
+      "was_renamed": false,
+      "next_action": "拉通产品和技术负责人，集中解决积压工单，与客户同步进度；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-22"
+    },
+    "美团": {
+      "canonical_customer_name": "美团",
+      "highest_risk_level": "high",
+      "risks": [
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有1个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有1个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 1,
+            "samples": [
+              "数据导出问题 - 报错"
+            ]
+          }
+        }
+      ],
+      "csm_owner": "刘洋",
+      "sales_owner": "马丽",
+      "contract_value": 80000.0,
+      "upcoming_end_date": "2026-11-16",
+      "all_names": [
+        "美团",
+        "Meituan"
+      ],
+      "was_renamed": false,
+      "next_action": "复盘重开工单根本原因，指派资深工程师彻底解决",
+      "follow_up_date": "2026-06-22"
+    },
+    "京东": {
+      "canonical_customer_name": "京东",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "critical",
+          "message": "合同12天内到期，极度紧急，尚未启动续签",
+          "key": "expiring_soon|合同12天内到期，极度紧急，尚未启动续签",
+          "details": {
+            "days_left": 12,
+            "contract_id": "HT202400006"
+          }
+        },
+        {
+          "risk_type": "low_usage",
+          "risk_level": "critical",
+          "message": "使用量为零且无试点，客户完全未使用产品，流失风险极高",
+          "key": "low_usage|使用量为零且无试点，客户完全未使用产品，流失风险极高",
+          "details": {
+            "total_licenses": 50,
+            "login_last_30d": 0
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有1个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有1个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 1,
+            "samples": [
+              "性能问题问题 - 配置问题"
+            ]
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "high",
+          "message": "预测金额(￥360,000)低于合同额(￥800,000)的90%，可能缩量或流失",
+          "key": "forecast_mismatch|预测金额(￥360,000)低于合同额(￥800,000)的90%，可能缩量或流失",
+          "details": {
+            "contract_value": 800000.0,
+            "committed_forecast": 360000.0,
+            "ratio": 0.45
+          }
+        }
+      ],
+      "csm_owner": "张明",
+      "sales_owner": "周强",
+      "contract_value": 800000.0,
+      "upcoming_end_date": "2026-07-01",
+      "all_names": [
+        "京东集团股份有限公司",
+        "JD"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内与客户完成续费谈判并签单（剩余12天，极度紧急）；安排客户成功拜访，了解使用障碍，制定激活/培训计划；复盘重开工单根本原因，指派资深工程师彻底解决；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-21"
+    },
+    "拼多多": {
+      "canonical_customer_name": "拼多多",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "critical",
+          "message": "合同12天内到期，极度紧急，尚未启动续签",
+          "key": "expiring_soon|合同12天内到期，极度紧急，尚未启动续签",
+          "details": {
+            "days_left": 12,
+            "contract_id": "HT202400007"
+          }
+        },
+        {
+          "risk_type": "zero_usage_with_pilot",
+          "risk_level": "high",
+          "message": "使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "key": "zero_usage_with_pilot|使用量为零但有试点项目：需确认试点是否真正落地，避免试点变永久零使用",
+          "details": {
+            "pilot_features": "高级API,数据大屏",
+            "total_licenses": 100
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有1个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有1个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 1,
+            "samples": [
+              "登录问题问题 - 需要支持"
+            ]
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "当前3个未关闭工单，较多",
+          "key": "high_tickets|当前3个未关闭工单，较多",
+          "details": {
+            "open_count": 3,
+            "high_priority": 0
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "high",
+          "message": "合同12天内到期，但预测中没有WON/COMMITTED商机，续费概率存疑",
+          "key": "forecast_mismatch|合同12天内到期，但预测中没有WON/COMMITTED商机，续费概率存疑",
+          "details": {
+            "contract_value": 180000.0,
+            "forecasts": [
+              {
+                "category": "pipeline",
+                "amount": 0.0,
+                "stage": "初步接触"
+              }
+            ]
+          }
+        }
+      ],
+      "csm_owner": "李华",
+      "sales_owner": "吴磊",
+      "contract_value": 180000.0,
+      "upcoming_end_date": "2026-07-01",
+      "all_names": [
+        "PDD",
+        "拼多多",
+        "拼多多信息技术有限公司"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内与客户完成续费谈判并签单（剩余12天，极度紧急）；核查试点项目落地情况，必要时升级为商务问题与决策层沟通；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；复盘重开工单根本原因，指派资深工程师彻底解决；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-21"
+    },
+    "小米": {
+      "canonical_customer_name": "小米",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "high",
+          "message": "合同70天后到期，需尽快启动续签讨论",
+          "key": "expiring_soon|合同70天后到期，需尽快启动续签讨论",
+          "details": {
+            "days_left": 70,
+            "contract_id": "HT202400008"
+          }
+        },
+        {
+          "risk_type": "low_usage",
+          "risk_level": "critical",
+          "message": "使用率仅12%，远低于正常水平",
+          "key": "low_usage|使用率仅12%，远低于正常水平",
+          "details": {
+            "utilization_rate": 0.12,
+            "active_users": 12,
+            "total_licenses": 100
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "high",
+          "message": "合同70天内到期，但预测中没有WON/COMMITTED商机，续费概率存疑",
+          "key": "forecast_mismatch|合同70天内到期，但预测中没有WON/COMMITTED商机，续费概率存疑",
+          "details": {
+            "contract_value": 80000.0,
+            "forecasts": [
+              {
+                "category": "best_case",
+                "amount": 45000.0,
+                "stage": "需求确认"
+              }
+            ]
+          }
+        }
+      ],
+      "csm_owner": "王芳",
+      "sales_owner": "郑雪",
+      "contract_value": 80000.0,
+      "upcoming_end_date": "2026-08-28",
+      "all_names": [
+        "小米科技有限责任公司",
+        "小米"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内启动续费会议，确认客户续约意向（剩余70天）；安排客户成功拜访，了解使用障碍，制定激活/培训计划；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-24"
+    },
+    "华为": {
+      "canonical_customer_name": "华为",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "contract_renewal_pending",
+          "risk_level": "medium",
+          "message": "续签进行中但仅剩-10天到期，需加快推进",
+          "key": "contract_renewal_pending|续签进行中但仅剩-10天到期，需加快推进",
+          "details": {
+            "days_left": -10,
+            "contract_id": "HT202400009"
+          }
+        },
+        {
+          "risk_type": "low_usage",
+          "risk_level": "high",
+          "message": "使用率仅35%，低于警戒线(40%)",
+          "key": "low_usage|使用率仅35%，低于警戒线(40%)",
+          "details": {
+            "utilization_rate": 0.35,
+            "active_users": 35,
+            "total_licenses": 100
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有4个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有4个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 4,
+            "samples": [
+              "功能异常问题 - 需要支持",
+              "性能问题问题 - 报错",
+              "集成对接问题 - 配置问题"
+            ]
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "critical",
+          "message": "当前6个未关闭工单，远超正常水平",
+          "key": "high_tickets|当前6个未关闭工单，远超正常水平",
+          "details": {
+            "open_count": 6,
+            "high_priority": 4
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有4个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有4个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 4
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "low",
+          "message": "预测金额(￥500,000)高于合同额(￥250,000)，可能是增购，需与销售确认",
+          "key": "forecast_mismatch|预测金额(￥500,000)高于合同额(￥250,000)，可能是增购，需与销售确认",
+          "details": {
+            "contract_value": 250000.0,
+            "committed_forecast": 500000.0,
+            "ratio": 2.0
+          }
+        }
+      ],
+      "csm_owner": "陈静",
+      "sales_owner": "孙涛",
+      "contract_value": 250000.0,
+      "upcoming_end_date": "2026-06-09",
+      "all_names": [
+        "Huawei",
+        "华为技术有限公司",
+        "华为"
+      ],
+      "was_renamed": false,
+      "next_action": "跟进续签进度，与法务和客户确认合同条款细节；安排客户成功拜访，了解使用障碍，制定激活/培训计划；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；复盘重开工单根本原因，指派资深工程师彻底解决；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-22"
+    },
+    "网易": {
+      "canonical_customer_name": "网易",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "critical",
+          "message": "合同已过期10天，未续签也未关闭",
+          "key": "expiring_soon|合同已过期10天，未续签也未关闭",
+          "details": {
+            "days_overdue": 10,
+            "contract_id": "HT202400010"
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有1个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有1个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 1
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "high",
+          "message": "预测金额(￥250,000)低于合同额(￥500,000)的90%，可能缩量或流失",
+          "key": "forecast_mismatch|预测金额(￥250,000)低于合同额(￥500,000)的90%，可能缩量或流失",
+          "details": {
+            "contract_value": 500000.0,
+            "committed_forecast": 250000.0,
+            "ratio": 0.5
+          }
+        }
+      ],
+      "csm_owner": "刘洋",
+      "sales_owner": "马丽",
+      "contract_value": 500000.0,
+      "upcoming_end_date": "2026-06-09",
+      "all_names": [
+        "网易",
+        "网易（杭州）网络有限公司"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内与客户完成续费谈判并签单（剩余-10天，极度紧急）；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-21"
+    },
+    "滴滴": {
+      "canonical_customer_name": "滴滴",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "low_usage",
+          "risk_level": "critical",
+          "message": "使用率仅2%，远低于正常水平",
+          "key": "low_usage|使用率仅2%，远低于正常水平",
+          "details": {
+            "utilization_rate": 0.016,
+            "active_users": 8,
+            "total_licenses": 500
+          }
+        },
+        {
+          "risk_type": "ticket_reopened",
+          "risk_level": "high",
+          "message": "有2个工单关闭后又重开，说明问题未根本解决",
+          "key": "ticket_reopened|有2个工单关闭后又重开，说明问题未根本解决",
+          "details": {
+            "reopened_count": 2,
+            "samples": [
+              "数据导出问题 - 无法操作",
+              "功能异常问题 - 配置问题"
+            ]
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "critical",
+          "message": "当前6个未关闭工单，远超正常水平",
+          "key": "high_tickets|当前6个未关闭工单，远超正常水平",
+          "details": {
+            "open_count": 6,
+            "high_priority": 2
+          }
+        },
+        {
+          "risk_type": "high_tickets",
+          "risk_level": "high",
+          "message": "有2个高优先级未关闭工单，需立即处理",
+          "key": "high_tickets|有2个高优先级未关闭工单，需立即处理",
+          "details": {
+            "high_priority": 2
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "low",
+          "message": "预测金额(￥234,000)高于合同额(￥50,000)，可能是增购，需与销售确认",
+          "key": "forecast_mismatch|预测金额(￥234,000)高于合同额(￥50,000)，可能是增购，需与销售确认",
+          "details": {
+            "contract_value": 50000.0,
+            "committed_forecast": 234000.0,
+            "ratio": 4.68
+          }
+        }
+      ],
+      "csm_owner": "张明",
+      "sales_owner": "周强",
+      "contract_value": 50000.0,
+      "upcoming_end_date": "2026-09-27",
+      "all_names": [
+        "滴滴出行科技有限公司",
+        "滴滴",
+        "Didi"
+      ],
+      "was_renamed": false,
+      "next_action": "安排客户成功拜访，了解使用障碍，制定激活/培训计划；拉通产品和技术负责人，集中解决积压工单，与客户同步进度；复盘重开工单根本原因，指派资深工程师彻底解决；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-22"
+    },
+    "顺丰": {
+      "canonical_customer_name": "顺丰",
+      "highest_risk_level": "critical",
+      "risks": [
+        {
+          "risk_type": "expiring_soon",
+          "risk_level": "critical",
+          "message": "合同已过期10天，未续签也未关闭",
+          "key": "expiring_soon|合同已过期10天，未续签也未关闭",
+          "details": {
+            "days_overdue": 10,
+            "contract_id": "HT202400012"
+          }
+        },
+        {
+          "risk_type": "low_usage",
+          "risk_level": "critical",
+          "message": "使用量为零且无试点，客户完全未使用产品，流失风险极高",
+          "key": "low_usage|使用量为零且无试点，客户完全未使用产品，流失风险极高",
+          "details": {
+            "total_licenses": 50,
+            "login_last_30d": 0
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "high",
+          "message": "预测金额(￥120,000)低于合同额(￥360,000)的90%，可能缩量或流失",
+          "key": "forecast_mismatch|预测金额(￥120,000)低于合同额(￥360,000)的90%，可能缩量或流失",
+          "details": {
+            "contract_value": 360000.0,
+            "committed_forecast": 120000.0,
+            "ratio": 0.3333333333333333
+          }
+        },
+        {
+          "risk_type": "forecast_mismatch",
+          "risk_level": "medium",
+          "message": "预测商机关单日晚于合同到期日190天，时间线不一致",
+          "key": "forecast_mismatch|预测商机关单日晚于合同到期日190天，时间线不一致",
+          "details": {
+            "contract_end": "2026-06-09",
+            "forecast_close": "2026-12-16",
+            "delta_days": 190,
+            "opportunity_id": "OPP2012"
+          }
+        }
+      ],
+      "csm_owner": "李华",
+      "sales_owner": "吴磊",
+      "contract_value": 360000.0,
+      "upcoming_end_date": "2026-06-09",
+      "all_names": [
+        "SF",
+        "顺丰"
+      ],
+      "was_renamed": false,
+      "next_action": "本周内与客户完成续费谈判并签单（剩余-10天，极度紧急）；安排客户成功拜访，了解使用障碍，制定激活/培训计划；与销售对齐预测金额和时间线，确认是增购、缩量还是流失",
+      "follow_up_date": "2026-06-21"
+    }
+  },
+  "risk_summary": {
+    "high": 4,
+    "critical": 8,
+    "type:high_tickets": 8,
+    "type:zero_usage_with_pilot": 3,
+    "type:expiring_soon": 7,
+    "type:forecast_mismatch": 10,
+    "type:low_usage": 6,
+    "type:ticket_reopened": 7,
+    "type:contract_renewal_pending": 1
+  }
+}

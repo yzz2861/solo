@@ -1,0 +1,23 @@
+{
+  "runs": [
+    {
+      "run_id": "run-20260619-081525-2a6484",
+      "run_time": "2026-06-19T08:15:25.344732",
+      "baseline_date": "2026-06-19",
+      "total_customers": 12,
+      "risk_summary": {
+        "high": 4,
+        "critical": 8,
+        "type:forecast_mismatch": 10,
+        "type:expiring_soon": 7,
+        "type:zero_usage_with_pilot": 3,
+        "type:high_tickets": 8,
+        "type:low_usage": 6,
+        "type:ticket_reopened": 7,
+        "type:contract_renewal_pending": 1
+      },
+      "file": "test_output/snapshots/run-20260619-081525-2a6484.json",
+      "pkl": "test_output/snapshots/run-20260619-081525-2a6484.pkl"
+    }
+  ]
+}
