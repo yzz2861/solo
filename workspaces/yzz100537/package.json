@@ -1,0 +1,19 @@
+{
+  "name": "studio-sample-borrow-api",
+  "version": "1.0.0",
+  "description": "影棚样品保险借用管理API - 珠宝、腕表、限量包借用管理系统",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node tests/api.test.js",
+    "reminder": "node src/jobs/reminder.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^11.3.0",
+    "multer": "^1.4.5-lts.1",
+    "dayjs": "^1.11.10",
+    "uuid": "^9.0.1"
+  }
+}
