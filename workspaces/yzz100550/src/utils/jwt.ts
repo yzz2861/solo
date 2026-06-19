@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jwt = require('jsonwebtoken');
 import { UserRole } from '../entities/User';
 
 export interface JwtPayload {
@@ -9,11 +9,11 @@ export interface JwtPayload {
   tenantId?: string;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'visitor-wifi-jwt-secret-key-2024';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET || 'visitor-wifi-jwt-secret-key-2024';
+const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || '24h';
 
 export function signToken(payload: JwtPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign(payload as object, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
 }
 
 export function verifyToken(token: string): JwtPayload | null {

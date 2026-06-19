@@ -4,7 +4,7 @@ import {
   ApplicationStatus,
 } from '../entities/WifiApplication';
 import { AppDataSource } from '../config/database';
-import * as dayjs from 'dayjs';
+import dayjs = require('dayjs');
 
 export interface ApplicationQuery {
   status?: ApplicationStatus | ApplicationStatus[];

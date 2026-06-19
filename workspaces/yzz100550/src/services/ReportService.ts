@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs = require('dayjs');
 import { createObjectCsvStringifier } from 'csv-writer';
 import { WifiApplicationRepository } from '../repositories/WifiApplicationRepository';
 import { OperationLogRepository } from '../repositories/OperationLogRepository';

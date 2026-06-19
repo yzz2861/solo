@@ -14,7 +14,7 @@ if (!fs.existsSync(dbDir)) {
 }
 
 export const AppDataSource = new DataSource({
-  type: 'better-sqlite3',
+  type: 'sqlite',
   database: process.env.DB_PATH || './data/visitor_wifi.db',
   entities: [User, Tenant, Visitor, WifiApplication, OperationLog],
   synchronize: true,

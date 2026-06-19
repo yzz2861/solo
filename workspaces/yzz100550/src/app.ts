@@ -1,11 +1,11 @@
-import * as express from 'express';
-import { json, urlencoded } from 'express';
+import express = require('express');
+import { json, urlencoded, Request, Response, NextFunction } from 'express';
 import { authRoutes } from './routes/auth';
 import { tenantRoutes } from './routes/tenant';
 import { applicationRoutes } from './routes/application';
 import { reportRoutes } from './routes/report';
 
-const app = express();
+const app: express.Express = express();
 
 app.use(json({ limit: '10mb' }));
 app.use(urlencoded({ extended: true, limit: '10mb' }));
@@ -42,7 +42,7 @@ app.use((req, res) => {
   });
 });
 
-app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error('[Unhandled]', err.stack || err.message);
   res.status(500).json({
     code: 500,

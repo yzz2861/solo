@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as dayjs from 'dayjs';
+import dayjs = require('dayjs');
 import { ReportService } from '../services/ReportService';
 import { success, handleError } from '../utils/response';
 import { AuthRequest, authMiddleware, requireRole } from '../middleware/auth';

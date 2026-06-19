@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs = require('dayjs');
 import { VisitorRepository } from '../repositories/VisitorRepository';
 import { WifiApplicationRepository, ApplicationQuery } from '../repositories/WifiApplicationRepository';
 import { TenantRepository } from '../repositories/TenantRepository';
@@ -119,7 +119,7 @@ export class WifiApplicationService {
     if (shouldActivateNow) {
       application.wifiUsername = generateWifiUsername(visitor.name, visitor.phone);
       application.wifiPassword = generateWifiPassword();
-      application.reviewedBy = operatorId;
+      application.reviewedBy = operatorId as string;
       application.reviewedAt = new Date();
       application.status = 'active';
       await this.appRepo.update(application.id, {
