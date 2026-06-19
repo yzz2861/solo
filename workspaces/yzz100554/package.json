@@ -1,0 +1,22 @@
+{
+  "name": "agricultural-credit-service",
+  "version": "1.0.0",
+  "description": "农资赊销还款服务API",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "init-db": "node src/scripts/initDB.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express-validator": "^7.0.1",
+    "csv-writer": "^1.6.0",
+    "moment": "^2.30.1",
+    "dotenv": "^16.4.5"
+  }
+}
