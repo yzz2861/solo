@@ -3,12 +3,181 @@
 @tailwind utilities;
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.5;
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
+  color: #0A1B3C;
+  background: #F0F4FA;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .font-mono-digits {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .param-input {
+    @apply w-full h-12 px-4 rounded-lg border-2 border-industrial-100 bg-white text-industrial-800 font-mono-digits text-lg outline-none transition-all;
+  }
+  .param-input:focus {
+    @apply border-aqua-400 shadow-glow-sm;
+  }
+
+  .gauge-line {
+    position: relative;
+  }
+  .gauge-line::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #FF5630, #FFAB00 35%, #36B37E 70%, #00B8D9);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .gauge-line:focus-within::after {
+    transform: scaleX(1);
+  }
+
+  .industrial-card {
+    @apply bg-white rounded-2xl shadow-card border border-industrial-50 transition-all duration-300;
+  }
+  .industrial-card:hover {
+    @apply shadow-card-hover -translate-y-1;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg font-medium text-white transition-all duration-200;
+    background: linear-gradient(135deg, #0A2540 0%, #16336B 100%);
+    box-shadow: 0 4px 14px rgba(10, 37, 64, 0.25);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(10, 37, 64, 0.35);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg font-medium text-white transition-all duration-200;
+    background: linear-gradient(135deg, #FF5630 0%, #DE350B 100%);
+    box-shadow: 0 4px 14px rgba(255, 86, 48, 0.3);
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg font-medium text-white transition-all duration-200;
+    background: linear-gradient(135deg, #36B37E 0%, #00875A 100%);
+    box-shadow: 0 4px 14px rgba(54, 179, 126, 0.3);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-lg font-medium transition-all duration-200 border-2;
+  }
+
+  .tab-btn {
+    @apply relative px-5 py-3 rounded-lg font-medium transition-all duration-200;
+  }
+  .tab-btn.active {
+    @apply bg-white text-industrial-800 shadow-md;
+  }
+  .tab-btn:not(.active) {
+    @apply text-white/70 hover:text-white hover:bg-white/10;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium;
+  }
+}
+
+@layer utilities {
+  .bg-industrial-gradient {
+    background: linear-gradient(135deg, #0A2540 0%, #16336B 40%, #1E4087 100%);
+  }
+  .bg-aqua-gradient {
+    background: linear-gradient(135deg, #00B8D9 0%, #007A96 100%);
+  }
+  .bg-success-gradient {
+    background: linear-gradient(135deg, #36B37E 0%, #00875A 100%);
+  }
+  .bg-warning-gradient {
+    background: linear-gradient(135deg, #FFAB00 0%, #FF8B00 100%);
+  }
+  .bg-danger-gradient {
+    background: linear-gradient(135deg, #FF5630 0%, #DE350B 100%);
+  }
+
+  .text-gradient-aqua {
+    background: linear-gradient(135deg, #00B8D9, #007A96);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bubble-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(0, 184, 217, 0.12), transparent 70%);
+  }
+
+  .stagger-1 { animation-delay: 50ms; }
+  .stagger-2 { animation-delay: 120ms; }
+  .stagger-3 { animation-delay: 200ms; }
+  .stagger-4 { animation-delay: 280ms; }
+  .stagger-5 { animation-delay: 360ms; }
+  .stagger-6 { animation-delay: 440ms; }
+  .stagger-7 { animation-delay: 520ms; }
+  .stagger-8 { animation-delay: 600ms; }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #E6EEF8;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #94B1DA;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5F86C3;
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316336B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px !important;
+}
+
+/* 时间输入自定义 */
+input[type="time"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(35%) sepia(85%) saturate(800%) hue-rotate(165deg) brightness(90%);
+  cursor: pointer;
 }
