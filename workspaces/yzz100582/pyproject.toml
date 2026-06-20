@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sample-validator"
+version = "0.1.0"
+description = "科研样本编号校验器 - 冻存样本管理工具"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Lab Admin" }
+]
+dependencies = [
+    "click>=8.1.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+    "jinja2>=3.1.0",
+]
+
+[project.scripts]
+sample-validator = "sample_validator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

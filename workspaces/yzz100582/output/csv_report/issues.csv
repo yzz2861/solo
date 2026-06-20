@@ -1,0 +1,13 @@
+﻿严重性,问题类型,样本号,盒号,孔位,描述,详情
+high,duplicate_id_multi_pos,ABC-0002,,,样本号重复且分布在不同位置: ABC-0002,"count: 2; positions: BOX-001:A2, BOX-002:B2; rows: 3, 32"
+high,invalid_position,ABC-0033,BOX-001,Z9,"样本 ""ABC-0033"" 孔位无效: Z9",box_rows: 9; box_cols: 9; row: 49
+high,position_conflict,ABC-0002,BOX-002,B2,盒位冲突: BOX-002 盒 B2 位置有 2 个样本,"samples: ABC-0002, ABC-0025; count: 2; rows: 32, 33; statuses: active, active"
+medium,id_format,abc-0011,,,"样本号 ""abc-0011"" 不符合规范格式","expected_pattern: ^[A-Z]{2,3}-\d{4,6}$; row: 12; raw_id: abc-0011"
+medium,id_format,XYZ-999,,,"样本号 ""XYZ-999"" 不符合规范格式","expected_pattern: ^[A-Z]{2,3}-\d{4,6}$; row: 50; raw_id: XYZ-999"
+medium,id_format,INVALID,,,"样本号 ""INVALID"" 不符合规范格式","expected_pattern: ^[A-Z]{2,3}-\d{4,6}$; row: 52; raw_id: INVALID"
+low,unknown_batch,XYZ-999,,,未知批次: BATCH-UNKNOWN (样本 XYZ-999),batch_id: BATCH-UNKNOWN; row: 50
+low,whitespace,ABC-0030,,,"样本号包含首尾空格: ""  ABC-0030 """,raw: '  ABC-0030 '; row: 46
+info,destroyed_samples,,,,共有 1 个已销毁样本记录,count: 1; samples: ABC-0009; truncated: False
+info,low_occupancy,,BOX-002,,"冻存盒 BOX-002 空位较多 (占用 23/81, 28%)",used: 23; total: 81; free: 58; rate: 28.4%
+info,low_occupancy,,BOX-003,,"冻存盒 BOX-003 空位较多 (占用 1/81, 1%)",used: 1; total: 81; free: 80; rate: 1.2%
+info,temporary_samples,,,,共有 2 个临时样本需关注,"count: 2; samples: ABC-0004, DEF-1009; truncated: False"

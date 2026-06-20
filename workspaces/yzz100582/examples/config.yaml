@@ -1,0 +1,46 @@
+# 冻存盒和批次配置
+# 科研样本编号校验器配置文件
+
+# 默认盒子尺寸（未特别指定的盒子使用此默认值）
+default_rows: 9
+default_cols: 9
+
+# 样本号格式规则
+id_format:
+  pattern: '^[A-Z]{2,3}-\d{4,6}$'
+  description: "样本号格式：2-3位字母前缀 + 连字符 + 4-6位数字"
+  case_sensitive: true
+  trim_whitespace: true
+
+# 冻存盒列表
+boxes:
+  - id: BOX-001
+    rows: 9
+    cols: 9
+    description: "1号冻存盒 - 血清和组织样本"
+
+  - id: BOX-002
+    rows: 9
+    cols: 9
+    description: "2号冻存盒 - 核酸样本 (DNA/RNA)"
+
+  - id: BOX-003
+    rows: 9
+    cols: 9
+    description: "3号冻存盒 - 备用"
+
+# 批次规则
+batches:
+  - id: BATCH-2024-01
+    pattern: '^(ABC|DEF)-\d{4}$'
+    start_date: '2024-01-01'
+    end_date: '2024-06-30'
+    expected_count: 80
+    description: "2024年上半年样本批次"
+
+  - id: BATCH-2024-02
+    pattern: '^GHI-\d{4}$'
+    start_date: '2024-07-01'
+    end_date: '2024-12-31'
+    expected_count: 50
+    description: "2024年下半年样本批次"

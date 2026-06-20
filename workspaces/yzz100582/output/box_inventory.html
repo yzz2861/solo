@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>冻存盒清单 - 2026-06-20 12:07:01</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 20px;
+    font-size: 12px;
+    color: #333;
+    background: #f5f5f5;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+  }
+  .header h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .header .meta {
+    font-size: 12px;
+    color: #666;
+  }
+  .summary {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  .summary-item {
+    text-align: center;
+  }
+  .summary-item .num {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2563eb;
+  }
+  .summary-item .label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+  .box-section {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+  }
+  .box-header {
+    background: #f0f4ff;
+    padding: 10px 16px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .box-header h2 {
+    font-size: 16px;
+    color: #1e40af;
+  }
+  .box-header .box-desc {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+  }
+  .box-stats {
+    font-size: 12px;
+    color: #666;
+  }
+  .box-stats .rate {
+    font-weight: bold;
+    margin-left: 4px;
+  }
+  .rate-high { color: #dc2626; }
+  .rate-mid { color: #d97706; }
+  .rate-low { color: #16a34a; }
+  .grid-container {
+    padding: 12px 16px;
+    overflow-x: auto;
+  }
+  table.grid {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 11px;
+  }
+  table.grid th {
+    background: #f3f4f6;
+    font-weight: 600;
+    color: #374151;
+    padding: 6px 4px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    min-width: 28px;
+  }
+  table.grid th.row-label {
+    min-width: 24px;
+    width: 24px;
+  }
+  table.grid td {
+    border: 1px solid #d1d5db;
+    padding: 4px;
+    text-align: center;
+    height: 32px;
+    vertical-align: middle;
+    position: relative;
+  }
+  .cell-empty {
+    background: #f9fafb;
+    color: #d1d5db;
+    font-size: 10px;
+  }
+  .cell-occupied {
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .cell-temp {
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 500;
+  }
+  .cell-conflict {
+    background: #fee2e2;
+    color: #dc2626;
+    font-weight: bold;
+  }
+  .cell-sample-id {
+    font-size: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60px;
+    display: block;
+  }
+  .sample-list {
+    padding: 10px 16px;
+    border-top: 1px solid #eee;
+  }
+  .sample-list h3 {
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+  .sample-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .sample-table th {
+    background: #f3f4f6;
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid #d1d5db;
+  }
+  .sample-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .legend {
+    display: flex;
+    gap: 16px;
+    padding: 8px 16px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+    font-size: 11px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-box {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+  }
+  .free-positions {
+    padding: 10px 16px;
+    border-top: 1px solid #eee;
+    font-size: 11px;
+  }
+  .free-positions h3 {
+    font-size: 12px;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+  .free-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .free-tag {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
+  .footer {
+    text-align: center;
+    color: #999;
+    font-size: 10px;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  @media print {
+    body {
+      background: #fff;
+      padding: 10mm;
+      font-size: 10px;
+    }
+    .box-section {
+      page-break-inside: avoid;
+    }
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+  }
+  .warnings-section {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  .warnings-section h2 {
+    font-size: 14px;
+    color: #c2410c;
+    margin-bottom: 8px;
+  }
+  .warning-item {
+    padding: 4px 0;
+    font-size: 12px;
+    color: #92400e;
+    border-bottom: 1px dashed #fed7aa;
+  }
+  .warning-item:last-child {
+    border-bottom: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>实验室冻存盒清单</h1>
+  <div class="meta">
+    生成时间: 2026-06-20 12:07:01 |
+    总样本: 51 |
+    冻存盒: 3
+  </div>
+</div>
+
+
+<div class="warnings-section">
+  <h2>⚠ 高风险问题 (3)</h2>
+  
+  <div class="warning-item">样本号重复且分布在不同位置: ABC-0002 [duplicate_id_multi_pos]</div>
+  
+  <div class="warning-item">样本 "ABC-0033" 孔位无效: Z9 [invalid_position]</div>
+  
+  <div class="warning-item">盒位冲突: BOX-002 盒 B2 位置有 2 个样本 [position_conflict]</div>
+  
+</div>
+
+
+<div class="summary">
+  <div class="summary-item">
+    <div class="num">51</div>
+    <div class="label">总样本数</div>
+  </div>
+  <div class="summary-item">
+    <div class="num">48</div>
+    <div class="label">在库样本</div>
+  </div>
+  <div class="summary-item">
+    <div class="num">2</div>
+    <div class="label">临时样本</div>
+  </div>
+  <div class="summary-item">
+    <div class="num">3</div>
+    <div class="label">冻存盒数</div>
+  </div>
+  <div class="summary-item">
+    <div class="num" style="color: red">
+      3
+    </div>
+    <div class="label">高风险问题</div>
+  </div>
+</div>
+
+
+
+<div class="box-section">
+  <div class="box-header">
+    <div>
+      <h2>BOX-001</h2>
+      <span class="box-desc">1号冻存盒 - 血清和组织样本</span>
+    </div>
+    <div class="box-stats">
+      25 / 81
+      <span class="rate rate-low">
+        (30.9%)
+      </span>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th class="row-label"></th>
+          
+          <th>1</th>
+          
+          <th>2</th>
+          
+          <th>3</th>
+          
+          <th>4</th>
+          
+          <th>5</th>
+          
+          <th>6</th>
+          
+          <th>7</th>
+          
+          <th>8</th>
+          
+          <th>9</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <th class="row-label">A</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0001">ABC-0001</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0002">ABC-0002</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0003">ABC-0003</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-temp">
+            <span class="cell-sample-id" title="ABC-0004">ABC-0004</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0005">ABC-0005</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0006">ABC-0006</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0007">ABC-0007</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0008">ABC-0008</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">B</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0010">ABC-0010</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="abc-0011">abc-0011</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0012">ABC-0012</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0013">ABC-0013</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0014">ABC-0014</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0015">ABC-0015</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0016">ABC-0016</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0017">ABC-0017</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0018">ABC-0018</span>
+          </td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">C</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0019">ABC-0019</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0020">ABC-0020</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0030">ABC-0030</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0031">ABC-0031</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-0032">ABC-0032</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">D</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="XYZ-999">XYZ-999</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="INVALID">INVALID</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">E</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">F</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">G</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">H</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">I</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I9</td>
+          
+          
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-box" style="background: #dbeafe;"></div>
+      <span>在库样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fef3c7;"></div>
+      <span>临时样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fee2e2;"></div>
+      <span>冲突位置</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #f9fafb;"></div>
+      <span>空位 (56)</span>
+    </div>
+  </div>
+
+  <div class="free-positions">
+    <h3>可用空位 (56 个)</h3>
+    <div class="free-tags">
+      
+      <span class="free-tag">A9</span>
+      
+      <span class="free-tag">C6</span>
+      
+      <span class="free-tag">C7</span>
+      
+      <span class="free-tag">C8</span>
+      
+      <span class="free-tag">C9</span>
+      
+      <span class="free-tag">D3</span>
+      
+      <span class="free-tag">D4</span>
+      
+      <span class="free-tag">D5</span>
+      
+      <span class="free-tag">D6</span>
+      
+      <span class="free-tag">D7</span>
+      
+      <span class="free-tag">D8</span>
+      
+      <span class="free-tag">D9</span>
+      
+      <span class="free-tag">E1</span>
+      
+      <span class="free-tag">E2</span>
+      
+      <span class="free-tag">E3</span>
+      
+      <span class="free-tag">E4</span>
+      
+      <span class="free-tag">E5</span>
+      
+      <span class="free-tag">E6</span>
+      
+      <span class="free-tag">E7</span>
+      
+      <span class="free-tag">E8</span>
+      
+      <span class="free-tag">E9</span>
+      
+      <span class="free-tag">F1</span>
+      
+      <span class="free-tag">F2</span>
+      
+      <span class="free-tag">F3</span>
+      
+      <span class="free-tag">F4</span>
+      
+      <span class="free-tag">F5</span>
+      
+      <span class="free-tag">F6</span>
+      
+      <span class="free-tag">F7</span>
+      
+      <span class="free-tag">F8</span>
+      
+      <span class="free-tag">F9</span>
+      
+      <span class="free-tag">G1</span>
+      
+      <span class="free-tag">G2</span>
+      
+      <span class="free-tag">G3</span>
+      
+      <span class="free-tag">G4</span>
+      
+      <span class="free-tag">G5</span>
+      
+      <span class="free-tag">G6</span>
+      
+      <span class="free-tag">G7</span>
+      
+      <span class="free-tag">G8</span>
+      
+      <span class="free-tag">G9</span>
+      
+      <span class="free-tag">H1</span>
+      
+      <span class="free-tag">H2</span>
+      
+      <span class="free-tag">H3</span>
+      
+      <span class="free-tag">H4</span>
+      
+      <span class="free-tag">H5</span>
+      
+      <span class="free-tag">H6</span>
+      
+      <span class="free-tag">H7</span>
+      
+      <span class="free-tag">H8</span>
+      
+      <span class="free-tag">H9</span>
+      
+      <span class="free-tag">I1</span>
+      
+      <span class="free-tag">I2</span>
+      
+      <span class="free-tag">I3</span>
+      
+      <span class="free-tag">I4</span>
+      
+      <span class="free-tag">I5</span>
+      
+      <span class="free-tag">I6</span>
+      
+      <span class="free-tag">I7</span>
+      
+      <span class="free-tag">I8</span>
+      
+      <span class="free-tag">I9</span>
+      
+    </div>
+  </div>
+
+</div>
+
+
+<div class="box-section">
+  <div class="box-header">
+    <div>
+      <h2>BOX-002</h2>
+      <span class="box-desc">2号冻存盒 - 核酸样本 (DNA/RNA)</span>
+    </div>
+    <div class="box-stats">
+      23 / 81
+      <span class="rate rate-low">
+        (28.4%)
+      </span>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th class="row-label"></th>
+          
+          <th>1</th>
+          
+          <th>2</th>
+          
+          <th>3</th>
+          
+          <th>4</th>
+          
+          <th>5</th>
+          
+          <th>6</th>
+          
+          <th>7</th>
+          
+          <th>8</th>
+          
+          <th>9</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <th class="row-label">A</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1001">DEF-1001</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1002">DEF-1002</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1003">DEF-1003</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1004">DEF-1004</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1005">DEF-1005</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1006">DEF-1006</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1007">DEF-1007</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1008">DEF-1008</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-temp">
+            <span class="cell-sample-id" title="DEF-1009">DEF-1009</span>
+          </td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">B</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1010">DEF-1010</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-conflict">
+            <span class="cell-sample-id" title="ABC-0002">ABC-0002</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B3</td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1013">DEF-1013</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1014">DEF-1014</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1015">DEF-1015</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1016">DEF-1016</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1017">DEF-1017</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1018">DEF-1018</span>
+          </td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">C</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1019">DEF-1019</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1020">DEF-1020</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1021">DEF-1021</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1022">DEF-1022</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1023">DEF-1023</span>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="DEF-1024">DEF-1024</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">D</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">E</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">F</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">G</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">H</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">I</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I9</td>
+          
+          
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-box" style="background: #dbeafe;"></div>
+      <span>在库样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fef3c7;"></div>
+      <span>临时样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fee2e2;"></div>
+      <span>冲突位置</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #f9fafb;"></div>
+      <span>空位 (58)</span>
+    </div>
+  </div>
+
+  <div class="free-positions">
+    <h3>可用空位 (58 个)</h3>
+    <div class="free-tags">
+      
+      <span class="free-tag">B3</span>
+      
+      <span class="free-tag">C7</span>
+      
+      <span class="free-tag">C8</span>
+      
+      <span class="free-tag">C9</span>
+      
+      <span class="free-tag">D1</span>
+      
+      <span class="free-tag">D2</span>
+      
+      <span class="free-tag">D3</span>
+      
+      <span class="free-tag">D4</span>
+      
+      <span class="free-tag">D5</span>
+      
+      <span class="free-tag">D6</span>
+      
+      <span class="free-tag">D7</span>
+      
+      <span class="free-tag">D8</span>
+      
+      <span class="free-tag">D9</span>
+      
+      <span class="free-tag">E1</span>
+      
+      <span class="free-tag">E2</span>
+      
+      <span class="free-tag">E3</span>
+      
+      <span class="free-tag">E4</span>
+      
+      <span class="free-tag">E5</span>
+      
+      <span class="free-tag">E6</span>
+      
+      <span class="free-tag">E7</span>
+      
+      <span class="free-tag">E8</span>
+      
+      <span class="free-tag">E9</span>
+      
+      <span class="free-tag">F1</span>
+      
+      <span class="free-tag">F2</span>
+      
+      <span class="free-tag">F3</span>
+      
+      <span class="free-tag">F4</span>
+      
+      <span class="free-tag">F5</span>
+      
+      <span class="free-tag">F6</span>
+      
+      <span class="free-tag">F7</span>
+      
+      <span class="free-tag">F8</span>
+      
+      <span class="free-tag">F9</span>
+      
+      <span class="free-tag">G1</span>
+      
+      <span class="free-tag">G2</span>
+      
+      <span class="free-tag">G3</span>
+      
+      <span class="free-tag">G4</span>
+      
+      <span class="free-tag">G5</span>
+      
+      <span class="free-tag">G6</span>
+      
+      <span class="free-tag">G7</span>
+      
+      <span class="free-tag">G8</span>
+      
+      <span class="free-tag">G9</span>
+      
+      <span class="free-tag">H1</span>
+      
+      <span class="free-tag">H2</span>
+      
+      <span class="free-tag">H3</span>
+      
+      <span class="free-tag">H4</span>
+      
+      <span class="free-tag">H5</span>
+      
+      <span class="free-tag">H6</span>
+      
+      <span class="free-tag">H7</span>
+      
+      <span class="free-tag">H8</span>
+      
+      <span class="free-tag">H9</span>
+      
+      <span class="free-tag">I1</span>
+      
+      <span class="free-tag">I2</span>
+      
+      <span class="free-tag">I3</span>
+      
+      <span class="free-tag">I4</span>
+      
+      <span class="free-tag">I5</span>
+      
+      <span class="free-tag">I6</span>
+      
+      <span class="free-tag">I7</span>
+      
+      <span class="free-tag">I8</span>
+      
+      <span class="free-tag">I9</span>
+      
+    </div>
+  </div>
+
+</div>
+
+
+<div class="box-section">
+  <div class="box-header">
+    <div>
+      <h2>BOX-003</h2>
+      <span class="box-desc">3号冻存盒 - 备用</span>
+    </div>
+    <div class="box-stats">
+      1 / 81
+      <span class="rate rate-low">
+        (1.2%)
+      </span>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <table class="grid">
+      <thead>
+        <tr>
+          <th class="row-label"></th>
+          
+          <th>1</th>
+          
+          <th>2</th>
+          
+          <th>3</th>
+          
+          <th>4</th>
+          
+          <th>5</th>
+          
+          <th>6</th>
+          
+          <th>7</th>
+          
+          <th>8</th>
+          
+          <th>9</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <th class="row-label">A</th>
+          
+          
+          
+          
+          
+          
+          <td class="cell-occupied">
+            <span class="cell-sample-id" title="ABC-2000">ABC-2000</span>
+          </td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">A9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">B</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">B9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">C</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">C9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">D</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">D9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">E</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">E9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">F</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">F9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">G</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">G9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">H</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">H9</td>
+          
+          
+        </tr>
+        
+        <tr>
+          <th class="row-label">I</th>
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I1</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I2</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I3</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I4</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I5</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I6</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I7</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I8</td>
+          
+          
+          
+          
+          
+          <td class="cell-empty" title="空位">I9</td>
+          
+          
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-box" style="background: #dbeafe;"></div>
+      <span>在库样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fef3c7;"></div>
+      <span>临时样本</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #fee2e2;"></div>
+      <span>冲突位置</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background: #f9fafb;"></div>
+      <span>空位 (80)</span>
+    </div>
+  </div>
+
+  <div class="free-positions">
+    <h3>可用空位 (80 个)</h3>
+    <div class="free-tags">
+      
+      <span class="free-tag">A2</span>
+      
+      <span class="free-tag">A3</span>
+      
+      <span class="free-tag">A4</span>
+      
+      <span class="free-tag">A5</span>
+      
+      <span class="free-tag">A6</span>
+      
+      <span class="free-tag">A7</span>
+      
+      <span class="free-tag">A8</span>
+      
+      <span class="free-tag">A9</span>
+      
+      <span class="free-tag">B1</span>
+      
+      <span class="free-tag">B2</span>
+      
+      <span class="free-tag">B3</span>
+      
+      <span class="free-tag">B4</span>
+      
+      <span class="free-tag">B5</span>
+      
+      <span class="free-tag">B6</span>
+      
+      <span class="free-tag">B7</span>
+      
+      <span class="free-tag">B8</span>
+      
+      <span class="free-tag">B9</span>
+      
+      <span class="free-tag">C1</span>
+      
+      <span class="free-tag">C2</span>
+      
+      <span class="free-tag">C3</span>
+      
+      <span class="free-tag">C4</span>
+      
+      <span class="free-tag">C5</span>
+      
+      <span class="free-tag">C6</span>
+      
+      <span class="free-tag">C7</span>
+      
+      <span class="free-tag">C8</span>
+      
+      <span class="free-tag">C9</span>
+      
+      <span class="free-tag">D1</span>
+      
+      <span class="free-tag">D2</span>
+      
+      <span class="free-tag">D3</span>
+      
+      <span class="free-tag">D4</span>
+      
+      <span class="free-tag">D5</span>
+      
+      <span class="free-tag">D6</span>
+      
+      <span class="free-tag">D7</span>
+      
+      <span class="free-tag">D8</span>
+      
+      <span class="free-tag">D9</span>
+      
+      <span class="free-tag">E1</span>
+      
+      <span class="free-tag">E2</span>
+      
+      <span class="free-tag">E3</span>
+      
+      <span class="free-tag">E4</span>
+      
+      <span class="free-tag">E5</span>
+      
+      <span class="free-tag">E6</span>
+      
+      <span class="free-tag">E7</span>
+      
+      <span class="free-tag">E8</span>
+      
+      <span class="free-tag">E9</span>
+      
+      <span class="free-tag">F1</span>
+      
+      <span class="free-tag">F2</span>
+      
+      <span class="free-tag">F3</span>
+      
+      <span class="free-tag">F4</span>
+      
+      <span class="free-tag">F5</span>
+      
+      <span class="free-tag">F6</span>
+      
+      <span class="free-tag">F7</span>
+      
+      <span class="free-tag">F8</span>
+      
+      <span class="free-tag">F9</span>
+      
+      <span class="free-tag">G1</span>
+      
+      <span class="free-tag">G2</span>
+      
+      <span class="free-tag">G3</span>
+      
+      <span class="free-tag">G4</span>
+      
+      <span class="free-tag">G5</span>
+      
+      <span class="free-tag">G6</span>
+      
+      <span class="free-tag">G7</span>
+      
+      <span class="free-tag">G8</span>
+      
+      <span class="free-tag">G9</span>
+      
+      <span class="free-tag">H1</span>
+      
+      <span class="free-tag">H2</span>
+      
+      <span class="free-tag">H3</span>
+      
+      <span class="free-tag">H4</span>
+      
+      <span class="free-tag">H5</span>
+      
+      <span class="free-tag">H6</span>
+      
+      <span class="free-tag">H7</span>
+      
+      <span class="free-tag">H8</span>
+      
+      <span class="free-tag">H9</span>
+      
+      <span class="free-tag">I1</span>
+      
+      <span class="free-tag">I2</span>
+      
+      <span class="free-tag">I3</span>
+      
+      <span class="free-tag">I4</span>
+      
+      <span class="free-tag">I5</span>
+      
+      <span class="free-tag">I6</span>
+      
+      <span class="free-tag">I7</span>
+      
+      <span class="free-tag">I8</span>
+      
+      <span class="free-tag">I9</span>
+      
+    </div>
+  </div>
+
+</div>
+
+
+<div class="footer">
+  本清单由样本编号校验器自动生成 | 打印前请确认数据为最新版本
+</div>
+
+</body>
+</html>
