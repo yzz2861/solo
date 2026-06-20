@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans SC', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 50%, #F5EBE0 100%);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-warm overflow-hidden transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-warm-lg;
+  }
+
+  .card-header {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-4;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-warm-100 bg-warm-50/50
+           text-warm-800 placeholder-warm-300
+           focus:outline-none focus:border-primary-400 focus:bg-white
+           transition-all duration-200;
+  }
+
+  .input-field.error {
+    @apply border-danger-500 bg-red-50;
+  }
+
+  .input-field.warning {
+    @apply border-warning-500 bg-amber-50;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium
+           px-6 py-3 rounded-xl transition-all duration-200
+           hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply bg-warm-100 hover:bg-warm-200 text-warm-700 font-medium
+           px-6 py-3 rounded-xl transition-all duration-200;
+  }
+
+  .stat-card {
+    @apply bg-gradient-to-br from-white to-warm-50 rounded-xl p-4 border border-warm-100;
+  }
+
+  .stat-number {
+    @apply font-mono text-3xl font-bold text-primary-600;
+  }
+
+  .stat-label {
+    @apply text-sm text-warm-500 mt-1;
+  }
+}
