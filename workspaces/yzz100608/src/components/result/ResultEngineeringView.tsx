@@ -200,12 +200,11 @@ export const ResultEngineeringView: React.FC = () => {
           formula={`${formatWh(result.availableCapacityWh_typical)} ÷ ${formatNumber(result.avgPowerDrawW_typical, 4)} W`}
           result={formatNumber(result.typicalHours, 3)}
           unit="小时"
-          resultDetail={`= ${(
-            <span dangerouslySetInnerHTML={{
-              __html: result.typicalHours >= 1
-                ? `${formatNumber(result.typicalHours, 3)} h ≈ ${Math.floor(result.typicalHours)}h ${Math.round((result.typicalHours % 1) * 60)}min`
-                : `${formatNumber(result.typicalHours * 60, 1)} 分钟`
-            } as any)} />` as any}
+          resultDetail={`= ${
+            result.typicalHours >= 1
+              ? `${formatNumber(result.typicalHours, 3)} h ≈ ${Math.floor(result.typicalHours)}h ${Math.round((result.typicalHours % 1) * 60)}min`
+              : `${formatNumber(result.typicalHours * 60, 1)} 分钟`
+          }`}
           color="--success"
           detail={`≈ ${Math.floor(result.typicalHours * 60)} 分钟 · ${result.typicalHours >= 24 ? formatNumber(result.typicalHours / 24, 2) + ' 天' : ''}`}
         />

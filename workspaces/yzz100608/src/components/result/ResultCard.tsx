@@ -53,7 +53,7 @@ export const ResultCard: React.FC = () => {
       }
     >
       {!canCompute ? (
-        <EmptyResultState hasError={hasError} />
+        <EmptyResultState hasError={hasError} alerts={alerts} />
       ) : resultViewMode === 'pm' ? (
         <ResultPMView />
       ) : (
@@ -63,7 +63,7 @@ export const ResultCard: React.FC = () => {
   );
 };
 
-const EmptyResultState: React.FC<{ hasError: boolean }> = ({ hasError }) => (
+const EmptyResultState: React.FC<{ hasError: boolean; alerts: any[] }> = ({ hasError, alerts }) => (
   <div className="flex flex-col items-center justify-center py-10 text-center">
     <div className="relative mb-4">
       <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20 border border-accent-primary/30 flex items-center justify-center animate-pulse-glow">
@@ -83,9 +83,9 @@ const EmptyResultState: React.FC<{ hasError: boolean }> = ({ hasError }) => (
     </p>
     <div className="mt-5 grid grid-cols-3 gap-3 w-full max-w-sm">
       {[
-        { label: '电池', icon: '🔋', done: !alerts.some((a) => a.anchor === '#battery') },
-        { label: '负载', icon: '📊', done: !alerts.some((a) => a.anchor?.startsWith('#phase') && a.level === 'error') },
-        { label: '修正', icon: '🌡️', done: !alerts.some((a) => a.anchor === '#corrections' && a.level === 'error') },
+        { label: '电池', icon: '🔋', done: !alerts.some((a: any) => a.anchor === '#battery') },
+        { label: '负载', icon: '📊', done: !alerts.some((a: any) => a.anchor?.startsWith('#phase') && a.level === 'error') },
+        { label: '修正', icon: '🌡️', done: !alerts.some((a: any) => a.anchor === '#corrections' && a.level === 'error') },
       ].map((s) => (
         <div
           key={s.label}

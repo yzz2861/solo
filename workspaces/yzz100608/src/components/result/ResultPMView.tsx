@@ -165,7 +165,7 @@ const DurationCard: React.FC<{
   gradient: string;
   borderColor: string;
   ringColor: string;
-}> = ({ label, hours, icon, gradient, borderColor, ringColor }) => {
+}> = ({ label, hours, color, icon, gradient, borderColor, ringColor }) => {
   const textColor = color === 'success' ? 'text-success' : 'text-danger';
   return (
     <motion.div
