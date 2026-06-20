@@ -1,7 +1,5 @@
-import React from 'react';
 import { X, TrendingUp, TrendingDown, Minus, DollarSign, Package } from 'lucide-react';
 import { ReplacementImpact } from '@/types';
-import { useCalculatorStore } from '@/store/useCalculatorStore';
 
 interface ReplaceImpactModalProps {
   impact: ReplacementImpact;

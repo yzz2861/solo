@@ -13,7 +13,6 @@ export const PlanComparison: React.FC = () => {
     removeComparisonPlan,
     calculateComparisonPlan,
     updateComparisonPlan,
-    updateFormulaItem,
   } = useCalculatorStore();
 
   const allResults: (CalculationResult | null)[] = [
@@ -26,7 +25,7 @@ export const PlanComparison: React.FC = () => {
   const planNames = ['当前方案', ...comparisonPlans.map((p) => p.name)];
 
   const handleCopyCurrent = (planId: string) => {
-    const { currentFormula, calculate } = useCalculatorStore.getState();
+    const { currentFormula } = useCalculatorStore.getState();
     updateComparisonPlan(planId, {
       formula: {
         ...currentFormula,

@@ -75,7 +75,7 @@ export function calculateNutrition(
 export function calculateDetails(
   formula: Formula,
   ingredients: Ingredient[],
-  standard: NutritionStandard
+  _standard: NutritionStandard
 ): CalculationDetail[] {
   return formula.items.map(item => {
     const ingredient = ingredients.find(i => i.id === item.ingredientId);
