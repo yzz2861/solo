@@ -11,6 +11,12 @@ export interface BridgePoint {
   name: string;
   code?: string;
   district?: string;
+  location?: string;
+  length?: number;
+  lanes?: number;
+  height?: number;
+  area?: number;
+  notes?: string;
 }
 
 export interface RiskInput {
@@ -67,15 +73,25 @@ export interface RiskResult {
 export interface SaltRecord {
   id: string;
   vehiclePlate: string;
+  plateNumber?: string;
   bridgeId: string;
   bridgeName: string;
   startTime: string;
   endTime: string;
+  departureTime?: string;
+  arrivalTime?: string;
   saltKg: number;
+  saltAmount?: number;
   saltPerSqm: number;
+  gramsPerSqm?: number;
+  bridgeArea?: number;
   airTempAtSite: number;
+  temperature?: number;
   operator: string;
+  executor?: string;
   weatherNote?: string;
+  remark?: string;
+  notes?: string;
   photos?: string[];
   createdAt: number;
 }

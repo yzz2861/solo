@@ -331,7 +331,7 @@ export default function ThresholdDocs() {
               <div className="mt-5 pt-4 border-t border-dashed border-slate-300">
                 <p className="text-xs text-slate-600 leading-relaxed">
                   <strong className="text-slate-800">图例说明：</strong>
-                  <span className="inline-flex items-center gap-1.5 ml-3"><span className="w-3 h-3 rounded bg-amber-400" /> 不足（<30g/㎡）</span>
+                  <span className="inline-flex items-center gap-1.5 ml-3"><span className="w-3 h-3 rounded bg-amber-400" /> 不足（{'<'}30g/㎡）</span>
                   <span className="inline-flex items-center gap-1.5 ml-3"><span className="w-3 h-3 rounded bg-emerald-400" /> 推荐（30-80g/㎡）</span>
                   <span className="inline-flex items-center gap-1.5 ml-3"><span className="w-3 h-3 rounded bg-ice-primary" /> 足量（≥80g/㎡）</span>
                   &nbsp;· 推荐撒盐量 30-60 g/㎡，超过 150 g/㎡ 收益可忽略。
@@ -347,14 +347,11 @@ export default function ThresholdDocs() {
             <div className="rounded-xl border-2 border-dashed border-ice-accent/40 bg-sky-50/50 p-5 space-y-4">
               <div>
                 <h4 className="text-sm font-bold text-ice-primary mb-2">MISSING_ROAD_TEMP — 路表温度缺失估算</h4>
-                <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-slate-100 overflow-x-auto">
-                  <span className="text-purple-400">const</span> <span className="text-sky-300">MISSING_ROAD_TEMP</span> = <span className="text-emerald-300">(airTemp: number) => number</span> = {'{'}
-                  <br />
-                  &nbsp;&nbsp;<span className="text-slate-400">// 桥面温度通常比气温低 1℃ ~ 2℃，冬季取保守值 -1.5℃</span>
-                  <br />
-                  &nbsp;&nbsp;<span className="text-purple-400">return</span> airTemp * <span className="text-amber-300">0.5</span> - <span className="text-amber-300">1.5</span>;
-                  <br />
-                  {'}'};
+                <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-slate-100 overflow-x-auto whitespace-pre">
+<span className="text-purple-400">const</span> <span className="text-sky-300">MISSING_ROAD_TEMP</span> = <span className="text-emerald-300">(airTemp: number) {'=>'} number</span> = {'{'}
+  <span className="text-slate-400">// 桥面温度通常比气温低 1℃ ~ 2℃，冬季取保守值 -1.5℃</span>
+  <span className="text-purple-400">return</span> airTemp * <span className="text-amber-300">0.5</span> - <span className="text-amber-300">1.5</span>;
+{'}'};
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -442,36 +439,36 @@ export default function ThresholdDocs() {
               以下伪代码完整描述风险评分计算流程。所有实现在 <code className="px-1.5 py-0.5 bg-slate-100 rounded text-rose-600 font-mono text-xs">src/lib/risk.ts</code> 中均以 TypeScript 呈现。
             </p>
             <pre className="bg-slate-900 rounded-xl p-6 overflow-x-auto text-[13px] leading-relaxed shadow-inner border border-slate-800">
-<code className="font-mono text-slate-100">
+<code className="font-mono text-slate-100 whitespace-pre">
 <span className="text-purple-400">function</span> <span className="text-sky-300">calcIceRiskScore</span>(input: <span className="text-amber-300">RiskInput</span>): <span className="text-amber-300">RiskResult</span> {'{'}
-{'\n'}  <span className="text-slate-500">// === 1. 缺值填补 ===</span>
-{'\n'}  <span className="text-purple-400">const</span> roadTemp = input.roadTemp
-{'\n'}    ?? MISSING_ROAD_TEMP(input.airTemp);
-{'\n'}  <span className="text-purple-400">const</span> precip   = input.precipitation ?? 0;
-{'\n'}
-{'\n'}  <span className="text-slate-500">// === 2. 各项打分（见各章节阈值表） ===</span>
-{'\n'}  <span className="text-purple-400">const</span> tempScore   = lookup(tempTable, roadTemp);
-{'\n'}  <span className="text-purple-400">const</span> humidScore  = lookup(humidTable, input.humidity);
-{'\n'}  <span className="text-purple-400">const</span> windScore   = lookup(windTable, input.windSpeed);
-{'\n'}  <span className="text-purple-400">const</span> precipScore = lookup(precipTable, precip);
-{'\n'}
-{'\n'}  <span className="text-slate-500">// === 3. 基础总分（上限 100） ===</span>
-{'\n'}  <span className="text-purple-400">let</span> raw = clamp(tempScore + humidScore + windScore + precipScore, 0, 100);
-{'\n'}
-{'\n'}  <span className="text-slate-500">// === 4. 撒盐抵消（若存在撒盐记录） ===</span>
-{'\n'}  <span className="text-purple-400">if</span> (input.saltGPerSqm > 0) {'{'}
-{'\n'}    <span className="text-purple-400">const</span> reduction = lookup(saltModel, input.saltGPerSqm);
-{'\n'}    raw = clamp(raw - reduction, 0, 100);
-{'\n'}  {'}'}
-{'\n'}
-{'\n'}  <span className="text-slate-500">// === 5. 映射到等级 ===</span>
-{'\n'}  <span className="text-purple-400">const</span> level = raw <= 24 ? <span className="text-emerald-300">'SAFE'</span>
-{'\n'}              : raw <= 49 ? <span className="text-amber-300">'CAUTION'</span>
-{'\n'}              : raw <= 74 ? <span className="text-orange-300">'WARNING'</span>
-{'\n'}              :             <span className="text-red-400">'DANGER'</span>;
-{'\n'}
-{'\n'}  <span className="text-purple-400">return</span> {'{'} raw, level {'}'};
-{'\n'}{'}'}
+  <span className="text-slate-500">// === 1. 缺值填补 ===</span>
+  <span className="text-purple-400">const</span> roadTemp = input.roadTemp
+    ?? MISSING_ROAD_TEMP(input.airTemp);
+  <span className="text-purple-400">const</span> precip   = input.precipitation ?? 0;
+
+  <span className="text-slate-500">// === 2. 各项打分（见各章节阈值表） ===</span>
+  <span className="text-purple-400">const</span> tempScore   = lookup(tempTable, roadTemp);
+  <span className="text-purple-400">const</span> humidScore  = lookup(humidTable, input.humidity);
+  <span className="text-purple-400">const</span> windScore   = lookup(windTable, input.windSpeed);
+  <span className="text-purple-400">const</span> precipScore = lookup(precipTable, precip);
+
+  <span className="text-slate-500">// === 3. 基础总分（上限 100） ===</span>
+  <span className="text-purple-400">let</span> raw = clamp(tempScore + humidScore + windScore + precipScore, 0, 100);
+
+  <span className="text-slate-500">// === 4. 撒盐抵消（若存在撒盐记录） ===</span>
+  <span className="text-purple-400">if</span> (input.saltGPerSqm {'>'} 0) {'{'}
+    <span className="text-purple-400">const</span> reduction = lookup(saltModel, input.saltGPerSqm);
+    raw = clamp(raw - reduction, 0, 100);
+  {'}'}
+
+  <span className="text-slate-500">// === 5. 映射到等级 ===</span>
+  <span className="text-purple-400">const</span> level = raw {'<='} 24 ? <span className="text-emerald-300">'SAFE'</span>
+              : raw {'<='} 49 ? <span className="text-amber-300">'CAUTION'</span>
+              : raw {'<='} 74 ? <span className="text-orange-300">'WARNING'</span>
+              :             <span className="text-red-400">'DANGER'</span>;
+
+  <span className="text-purple-400">return</span> {'{'} raw, level {'}'};
+{'}'}
 </code>
             </pre>
           </Section>
