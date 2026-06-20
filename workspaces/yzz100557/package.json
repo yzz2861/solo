@@ -1,0 +1,24 @@
+{
+  "name": "catering-inspection-api",
+  "version": "1.0.0",
+  "description": "餐饮来料验收退货API - 中央厨房采购验收管理系统",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node src/app.js",
+    "seed": "node src/seed/seed.js",
+    "test": "node tests/api.test.js",
+    "init-db": "node src/db/init.js"
+  },
+  "keywords": ["catering", "inspection", "purchase", "restaurant"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "sql.js": "^1.10.3",
+    "xlsx": "^0.18.5"
+  }
+}
