@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photo-organizer"
+version = "1.0.0"
+description = "工程照片命名整理器 - 按项目、楼栋、楼层、部位和拍摄日期自动整理现场照片"
+requires-python = ">=3.8"
+dependencies = [
+    "Pillow>=9.0.0",
+    "click>=8.0.0",
+    "openpyxl>=3.0.0",
+]
+
+[project.scripts]
+photo-organizer = "photo_organizer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["photo_organizer*"]
