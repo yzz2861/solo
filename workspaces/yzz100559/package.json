@@ -1,0 +1,18 @@
+{
+  "name": "parking-monthly-card-extension",
+  "version": "1.0.0",
+  "description": "写字楼停车月卡延期服务API",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node tests/run-tests.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7",
+    "csv-writer": "^1.6.0",
+    "moment": "^2.30.1",
+    "uuid": "^9.0.1"
+  }
+}
