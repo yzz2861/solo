@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: '"Noto Serif SC"', serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: '"Noto Sans SC"', sans-serif;
+  }
+
+  .font-mono {
+    font-family: '"JetBrains Mono"', monospace;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-lg;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-field to-white;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-wheat-green text-white hover:bg-wheat-green/90 active:scale-95 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-soil-brown text-white hover:bg-soil-brown/90 active:scale-95 shadow-md;
+  }
+
+  .btn-outline {
+    @apply border-2 border-wheat-green text-wheat-green hover:bg-wheat-green/10 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply text-gray-600 hover:bg-gray-100 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply bg-warning-red text-white hover:bg-warning-red/90 active:scale-95;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wheat-green/50 focus:border-wheat-green outline-none transition-all;
+  }
+
+  .input-sm {
+    @apply px-2 py-1 text-sm;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .progress-bar {
+    @apply h-3 bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-1000 ease-out;
+  }
+
+  .progress-fill.pass {
+    @apply bg-success-green;
+  }
+
+  .progress-fill.warn {
+    @apply bg-caution-orange;
+  }
+
+  .progress-fill.fail {
+    @apply bg-warning-red;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+
+  .status-badge.pass {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .status-badge.warn {
+    @apply bg-orange-100 text-orange-800;
+  }
+
+  .status-badge.fail {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .tab {
+    @apply px-4 py-2 font-medium border-b-2 border-transparent cursor-pointer transition-colors;
+  }
+
+  .tab.active {
+    @apply border-wheat-green text-wheat-green;
+  }
+
+  .tab:not(.active):hover {
+    @apply text-wheat-green/70;
+  }
+
+  .gauge-container {
+    @apply relative w-full aspect-square max-w-[120px];
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-pulse-warning {
+    animation: pulseWarning 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseWarning {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(244, 67, 54, 0);
+    }
+  }
+
+  .highlight-best {
+    animation: highlightBest 1.5s ease-in-out infinite;
+  }
+
+  @keyframes highlightBest {
+    0%, 100% {
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    50% {
+      border-color: #81C784;
+      box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
+    }
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
