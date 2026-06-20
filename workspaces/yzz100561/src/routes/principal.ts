@@ -4,19 +4,25 @@ import { ExportService } from '../services/exportService'
 const router = Router()
 const exportService = new ExportService()
 
+function setDownloadHeader(res: Response, filename: string, term: string) {
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  )
+  const name = `${filename}_${term}.xlsx`
+  const encoded = encodeURIComponent(name)
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename*=UTF-8''${encoded}`
+  )
+}
+
 router.get('/export/shortage.xlsx', async (req: Request, res: Response) => {
   try {
     const { term } = req.query
     if (!term) throw new Error('缺少学期参数 term')
     const buffer = await exportService.exportShortage(term as string)
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="缺书清单_${term}.xlsx"`
-    )
+    setDownloadHeader(res, 'shortage-list', term as string)
     res.send(buffer)
   } catch (e: any) {
     res.status(400).json({ code: 1, message: e.message })
@@ -28,14 +34,7 @@ router.get('/export/returns.xlsx', async (req: Request, res: Response) => {
     const { term } = req.query
     if (!term) throw new Error('缺少学期参数 term')
     const buffer = await exportService.exportReturns(term as string)
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="退订明细_${term}.xlsx"`
-    )
+    setDownloadHeader(res, 'returns-detail', term as string)
     res.send(buffer)
   } catch (e: any) {
     res.status(400).json({ code: 1, message: e.message })
@@ -47,14 +46,7 @@ router.get('/export/supplier-diff.xlsx', async (req: Request, res: Response) => 
     const { term } = req.query
     if (!term) throw new Error('缺少学期参数 term')
     const buffer = await exportService.exportSupplierDiff(term as string)
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="供应商到货差异_${term}.xlsx"`
-    )
+    setDownloadHeader(res, 'supplier-diff', term as string)
     res.send(buffer)
   } catch (e: any) {
     res.status(400).json({ code: 1, message: e.message })
@@ -66,14 +58,7 @@ router.get('/export/transfers.xlsx', async (req: Request, res: Response) => {
     const { term } = req.query
     if (!term) throw new Error('缺少学期参数 term')
     const buffer = await exportService.exportTransfers(term as string)
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="转学生名单_${term}.xlsx"`
-    )
+    setDownloadHeader(res, 'transfer-students', term as string)
     res.send(buffer)
   } catch (e: any) {
     res.status(400).json({ code: 1, message: e.message })

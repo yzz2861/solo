@@ -1,5 +1,5 @@
 import prisma from '../prisma'
-import { OrderStatus, ChangeType, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 export interface CreateOrderDto {
   term: string
@@ -64,11 +64,11 @@ export class OrderService {
             textbookId: item.textbookId,
             originalQty: item.qty,
             finalQty: item.qty,
-            status: OrderStatus.SUBMITTED,
+            status: 'SUBMITTED',
             remark: dto.remark,
             changes: {
               create: {
-                changeType: ChangeType.INITIAL,
+                changeType: 'INITIAL',
                 beforeQty: 0,
                 afterQty: item.qty,
                 operator: dto.operator,
@@ -100,7 +100,7 @@ export class OrderService {
       if (dto.qty <= 0) throw new Error('补订数量必须大于0')
 
       const lastSupplement = order.changes.find(
-        (c) => c.changeType === ChangeType.SUPPLEMENT
+        (c) => c.changeType === 'SUPPLEMENT'
       )
       if (lastSupplement && dto.reason === '合并补订') {
         const newAfterQty = lastSupplement.afterQty + dto.qty
@@ -128,7 +128,7 @@ export class OrderService {
       const change = await tx.orderChange.create({
         data: {
           orderId: dto.orderId,
-          changeType: ChangeType.SUPPLEMENT,
+          changeType: 'SUPPLEMENT',
           beforeQty: beforeFinalQty,
           afterQty: newFinalQty,
           operator: dto.operator,
@@ -187,7 +187,7 @@ export class OrderService {
       await tx.orderChange.create({
         data: {
           orderId: dto.orderId,
-          changeType: ChangeType.RETURN,
+          changeType: 'RETURN',
           beforeQty: beforeFinalQty,
           afterQty: newFinalQty,
           operator: dto.operator,
@@ -251,7 +251,7 @@ export class OrderService {
       const versionChange = await tx.orderChange.create({
         data: {
           orderId: dto.orderId,
-          changeType: ChangeType.EDITION_CHANGE,
+          changeType: 'EDITION_CHANGE',
           beforeQty: oldFinalQty,
           afterQty: oldFinalQty,
           beforeEditionId: oldEditionId,
@@ -299,7 +299,7 @@ export class OrderService {
 
     const traces: any[] = []
     for (const change of order.changes) {
-      if (change.changeType === ChangeType.EDITION_CHANGE) {
+      if (change.changeType === 'EDITION_CHANGE') {
         traces.push({
           type: '版本变更',
           from: change.beforeEdition,

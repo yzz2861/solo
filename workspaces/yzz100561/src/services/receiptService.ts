@@ -82,11 +82,11 @@ export class ReceiptService {
         (i) => i.actualQty > 0 && i.actualQty < i.expectedQty
       )
 
-      let status: ReceiptStatus = ReceiptStatus.PENDING
+      let status: string = 'PENDING'
       if (allShortageZero && allItems.length > 0) {
-        status = ReceiptStatus.COMPLETED
+        status = 'COMPLETED'
       } else if (anyPartial) {
-        status = ReceiptStatus.PARTIAL
+        status = 'PARTIAL'
       }
 
       const transferMarked = allItems.some((i) => i.isTransfer)
@@ -118,7 +118,7 @@ export class ReceiptService {
       data: {
         signedBy: dto.signedBy,
         signedAt: dto.signedAt ? new Date(dto.signedAt) : new Date(),
-        status: ReceiptStatus.COMPLETED,
+        status: 'COMPLETED',
       },
       include: {
         class: { include: { grade: true } },

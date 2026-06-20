@@ -34,7 +34,7 @@ router.get('/deliveries', async (req: Request, res: Response) => {
         items: {
           include: {
             textbook: { include: { course: true } },
-            order: { include: { class: { include: { grade: true } } },
+            order: { include: { class: { include: { grade: true } } } },
           },
         },
       },

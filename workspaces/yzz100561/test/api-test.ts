@@ -74,7 +74,7 @@ async function testAdmin() {
   log('🏫 第二步：教务端核心功能测试')
   let r
 
-  r = await request('GET', '/api/admin/orders?term=2025秋季')
+  r = await request('GET', '/api/admin/orders?term=' + encodeURIComponent('2025秋季'))
   print('查询订单列表（2025秋季）', r)
   cache.orders = r.data.data
 
@@ -91,10 +91,10 @@ async function testAdmin() {
   cache.order2 = order_class1_1_math
   cache.order3 = order_class2_1_chn
 
-  r = await request('GET', `/api/admin/classes/${cache.class1_1.id}/progress?term=2025秋季`)
+  r = await request('GET', `/api/admin/classes/${cache.class1_1.id}/progress?term=` + encodeURIComponent('2025秋季'))
   print('查询一(1)班教材征订进度', r)
 
-  r = await request('GET', '/api/admin/progress/summary?term=2025秋季')
+  r = await request('GET', '/api/admin/progress/summary?term=' + encodeURIComponent('2025秋季'))
   print('教务汇总：各年级进度统计', r)
 
   r = await request('POST', '/api/admin/orders/supplement', {
@@ -147,7 +147,7 @@ async function testTeacher() {
   }
 
   const TERM = '2025秋季'
-  r = await request('GET', `/api/admin/orders?term=${TERM}&classId=${cache.class2_1.id}`)
+  r = await request('GET', `/api/admin/orders?term=${encodeURIComponent(TERM)}&classId=${cache.class2_1.id}`)
   const ordersToSign = r.data.data.filter((o: any) => o.deliveredQty > 0)
   const signItems = ordersToSign.map((o: any) => ({
     orderId: o.id, textbookId: o.textbookId,
@@ -189,26 +189,26 @@ async function testPrincipal() {
   log('🎓 第五步：校长端汇总与导出')
   let r
 
-  r = await request('GET', '/api/principal/dashboard/summary?term=2025秋季')
+  r = await request('GET', '/api/principal/dashboard/summary?term=' + encodeURIComponent('2025秋季'))
   print('校长总览仪表盘', r)
   console.log(JSON.stringify(r.data.data, null, 4).split('\n').map(l => '    ' + l).join('\n'))
 
-  r = await request('GET', '/api/principal/dashboard/by-course?term=2025秋季')
+  r = await request('GET', '/api/principal/dashboard/by-course?term=' + encodeURIComponent('2025秋季'))
   print('按课程维度汇总征订、补订、退订、缺书', r)
   for (const c of r.data.data) {
     console.log(`    ${c.course.padEnd(4)} | 订${String(c.finalQty).padEnd(4)} 补${String(c.supplementQty).padEnd(3)} 退${String(c.returnQty).padEnd(3)} 缺${String(c.shortageQty).padEnd(3)}`)
   }
 
-  r = await request('GET', '/api/principal/export/shortage.xlsx?term=2025秋季')
+  r = await request('GET', '/api/principal/export/shortage.xlsx?term=' + encodeURIComponent('2025秋季'))
   console.log(`\n    📊 缺书清单 Excel: ${r.status === 200 ? '✅ 导出成功' : '❌ 失败'} 长度=${Buffer.isBuffer(r.data) ? r.data.length : typeof r.data}`)
 
-  r = await request('GET', '/api/principal/export/returns.xlsx?term=2025秋季')
+  r = await request('GET', '/api/principal/export/returns.xlsx?term=' + encodeURIComponent('2025秋季'))
   console.log(`    📊 退订明细 Excel: ${r.status === 200 ? '✅ 导出成功' : '❌ 失败'}`)
 
-  r = await request('GET', '/api/principal/export/supplier-diff.xlsx?term=2025秋季')
+  r = await request('GET', '/api/principal/export/supplier-diff.xlsx?term=' + encodeURIComponent('2025秋季'))
   console.log(`    📊 供应商差异 Excel: ${r.status === 200 ? '✅ 导出成功' : '❌ 失败'}`)
 
-  r = await request('GET', '/api/principal/export/transfers.xlsx?term=2025秋季')
+  r = await request('GET', '/api/principal/export/transfers.xlsx?term=' + encodeURIComponent('2025秋季'))
   console.log(`    📊 转学生名单 Excel: ${r.status === 200 ? '✅ 导出成功' : '❌ 失败'}`)
 }
 

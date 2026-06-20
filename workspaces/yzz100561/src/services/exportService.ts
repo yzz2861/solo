@@ -121,7 +121,7 @@ export class ExportService {
         items: {
           include: {
             textbook: { include: { course: true } },
-            order: { where: { term } },
+            order: true,
           },
         },
       },
@@ -143,7 +143,7 @@ export class ExportService {
 
     for (const d of deliveries) {
       for (const item of d.items) {
-        if (!item.order) continue
+        if (!item.order || item.order.term !== term) continue
         sheet.addRow({
           supplier: d.supplier.name,
           deliveryNo: d.deliveryNo,
