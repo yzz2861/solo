@@ -1,0 +1,787 @@
+<!DOCTYPE html>jiao
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>执法记录摘要脱敏系统</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1f2937; line-height: 1.6; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 20px 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(30,64,175,0.2); }
+header h1 { font-size: 22px; font-weight: 600; }
+header p { opacity: 0.9; font-size: 13px; margin-top: 4px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }
+.card-header { padding: 14px 18px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; background: #fafbfc; }
+.card-header h2 { font-size: 15px; font-weight: 600; color: #374151; }
+.card-body { padding: 18px; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-amber { background: #fef3c7; color: #b45309; }
+.badge-green { background: #d1fae5; color: #047857; }
+.badge-red { background: #fee2e2; color: #b91c1c; }
+.badge-gray { background: #f3f4f6; color: #4b5563; }
+textarea, input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; font-family: inherit; resize: vertical; transition: border-color 0.2s; }
+textarea:focus, input[type="text"]:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+textarea { min-height: 180px; line-height: 1.7; }
+.btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: #3b82f6; color: white; }
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: #f3f4f6; color: #374151; }
+.btn-secondary:hover { background: #e5e7eb; }
+.btn-success { background: #10b981; color: white; }
+.btn-success:hover { background: #059669; }
+.btn-warning { background: #f59e0b; color: white; }
+.btn-warning:hover { background: #d97706; }
+.btn-danger { background: #ef4444; color: white; }
+.btn-danger:hover { background: #dc2626; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.field-group { margin-bottom: 14px; }
+.field-label { font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.highlight-text { line-height: 1.9; font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+.mask-person { background: #fecaca; color: #b91c1c; padding: 1px 4px; border-radius: 3px; cursor: pointer; text-decoration: line-through; text-decoration-color: transparent; }
+.mask-company { background: #fed7aa; color: #c2410c; padding: 1px 4px; border-radius: 3px; cursor: pointer; }
+.mask-phone { background: #c7d2fe; color: #3730a3; padding: 1px 4px; border-radius: 3px; cursor: pointer; }
+.mask-address { background: #a7f3d0; color: #065f46; padding: 1px 4px; border-radius: 3px; cursor: pointer; }
+.mask-plate { background: #e9d5ff; color: #6b21a8; padding: 1px 4px; border-radius: 3px; cursor: pointer; }
+.mask-quote { background: #fef08a; color: #854d0e; padding: 1px 4px; border-radius: 3px; cursor: pointer; font-style: italic; }
+.mask-uncertain { background: #fef9c3; color: #854d0e; padding: 1px 4px; border-radius: 3px; cursor: pointer; border-bottom: 2px dashed #eab308; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+.type-legend { display: flex; gap: 10px; flex-wrap: wrap; padding: 12px; background: #f9fafb; border-radius: 8px; margin-bottom: 14px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+.legend-swatch { width: 16px; height: 16px; border-radius: 3px; }
+.review-list { max-height: 340px; overflow-y: auto; }
+.review-item { padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 10px; background: #fafbfc; }
+.review-item.uncertain { border-left: 4px solid #f59e0b; background: #fffbeb; }
+.review-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.review-original { font-size: 13px; color: #374151; font-weight: 500; }
+.review-masked { font-size: 13px; color: #6b7280; font-family: monospace; background: #f3f4f6; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+.review-controls { margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.review-controls select, .review-controls input { padding: 5px 8px; font-size: 12px; border: 1px solid #d1d5db; border-radius: 6px; }
+.summary-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px; font-size: 13px; line-height: 1.8; }
+.summary-box strong { color: #1f2937; }
+.tab-bar { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 14px; }
+.tab-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: #6b7280; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+.tab-btn:hover { color: #3b82f6; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.audit-log { font-size: 12px; color: #6b7280; }
+.audit-item { padding: 8px 0; border-bottom: 1px dashed #e5e7eb; }
+.audit-item:last-child { border-bottom: none; }
+.audit-time { color: #9ca3af; font-size: 11px; }
+.empty-state { text-align: center; padding: 40px 20px; color: #9ca3af; }
+.empty-state svg { width: 48px; height: 48px; opacity: 0.5; margin-bottom: 10px; }
+.progress-bar { height: 4px; background: #e5e7eb; border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.3s; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+@media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { background: #f9fafb; padding: 12px; border-radius: 8px; text-align: center; }
+.stat-value { font-size: 22px; font-weight: 700; color: #1f2937; }
+.stat-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+.divider { height: 1px; background: #e5e7eb; margin: 14px 0; }
+.tooltip { position: relative; }
+.tooltip:hover::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 10; }
+details summary { cursor: pointer; font-size: 12px; color: #6b7280; padding: 6px 0; user-select: none; }
+details summary:hover { color: #3b82f6; }
+.internal-hidden { filter: blur(4px); user-select: none; }
+.internal-hidden:hover { filter: blur(2px); }
+.reveal-btn { margin-left: 8px; }
+.full-width { grid-column: 1 / -1; }
+.sample-btn { background: #e0e7ff; color: #4338ca; }
+.sample-btn:hover { background: #c7d2fe; }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🛡️ 执法记录摘要脱敏系统</h1>
+<p>导入巡查记录 → 智能提取信息 → 自动脱敏 → 人工复核 → 双版本导出</p>
+</header>
+
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<h2>📝 原始记录导入</h2>
+<div class="btn-row">
+<button class="btn btn-sm sample-btn" onclick="loadSample()">加载示例</button>
+<button class="btn btn-sm btn-secondary" onclick="clearAll()">清空</button>
+</div>
+</div>
+<div class="card-body">
+<div class="field-group">
+<label class="field-label">巡查记录原文</label>
+<textarea id="rawInput" placeholder="在此粘贴执法巡查记录文本，例如：&#10;&#10;2024年3月15日 14:30，执法人员张建国、李明前往东城区和平路88号开展日常巡查。&#10;当事人王某某（电话：13800138000）在其经营的\"东城阳光便利店\"（门牌号A-15）门口占道经营。&#10;现场发现水果摊位占用公共通道约2平方米，车牌京A·12345货车正在卸货。&#10;当事人称：\"我刚摆出来5分钟，马上收。\"&#10;处理结果：责令立即整改，现场清理完毕，开具警告通知书（编号：CZ20240315001）。&#10;待办：3月18日前复查整改情况，由李明负责跟进。"></textarea>
+</div>
+<div class="btn-row">
+<button class="btn btn-primary" onclick="processRecord()">🔍 智能解析与脱敏</button>
+</div>
+<div class="progress-bar" id="progressBar" style="display:none;"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<h2>📊 提取字段</h2>
+<span class="badge badge-blue" id="extractBadge">待解析</span>
+</div>
+<div class="card-body">
+<div class="stats" id="statsBox" style="display:none;">
+<div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总脱敏项</div></div>
+<div class="stat-card"><div class="stat-value" id="statConfirmed">0</div><div class="stat-label">已确认</div></div>
+<div class="stat-card"><div class="stat-value" id="statReview">0</div><div class="stat-label">待复核</div></div>
+<div class="stat-card"><div class="stat-value" id="statFields">0</div><div class="stat-label">已提取字段</div></div>
+</div>
+<div class="field-group">
+<label class="field-label">巡查时间</label>
+<input type="text" id="fieldTime" placeholder="自动提取，可手动修改">
+</div>
+<div class="field-group">
+<label class="field-label">巡查地点</label>
+<input type="text" id="fieldLocation" placeholder="自动提取，可手动修改">
+</div>
+<div class="field-group">
+<label class="field-label">事项摘要</label>
+<textarea id="fieldMatter" rows="2" placeholder="自动提取，可手动修改"></textarea>
+</div>
+<div class="field-group">
+<label class="field-label">处理结果</label>
+<textarea id="fieldResult" rows="2" placeholder="自动提取，可手动修改"></textarea>
+</div>
+<div class="field-group">
+<label class="field-label">待办事项</label>
+<textarea id="fieldTodo" rows="2" placeholder="自动提取，可手动修改"></textarea>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<h2>🎯 脱敏标注预览</h2>
+<span class="badge badge-gray" id="maskBadge">待处理</span>
+</div>
+<div class="card-body">
+<div class="type-legend">
+<div class="legend-item"><span class="legend-swatch" style="background:#fecaca"></span>个人姓名</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#fed7aa"></span>公司/店铺</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#c7d2fe"></span>电话号码</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#a7f3d0"></span>地址/门牌号</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#e9d5ff"></span>车牌号</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#fef08a"></span>引用原话</div>
+<div class="legend-item"><span class="legend-swatch" style="background:#fef9c3;border-bottom:2px dashed #eab308"></span>待复核</div>
+</div>
+<div id="highlightPreview" class="highlight-text">
+<div class="empty-state">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+<p>导入并解析记录后，此处显示脱敏标注</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<h2>✅ 脱敏复核</h2>
+<span class="badge badge-amber" id="reviewBadge">0项待复核</span>
+</div>
+<div class="card-body">
+<div id="reviewList" class="review-list">
+<div class="empty-state">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+<p>暂无需要复核的脱敏项</p>
+</div>
+</div>
+<div class="divider"></div>
+<div class="btn-row" style="justify-content:flex-end;">
+<button class="btn btn-success" onclick="confirmAll()">✅ 全部确认通过</button>
+</div>
+</div>
+</div>
+
+<div class="card full-width">
+<div class="card-header">
+<h2>📤 导出与预览</h2>
+<div class="tab-bar">
+<button class="tab-btn active" onclick="switchTab('summary')">📋 上级摘要版</button>
+<button class="tab-btn" onclick="switchTab('internal')">🔒 内部复核版</button>
+<button class="tab-btn" onclick="switchTab('audit')">📜 修改记录</button>
+</div>
+</div>
+<div class="card-body">
+<div id="tab-summary" class="tab-content active">
+<div class="field-group">
+<label class="field-label">导出选项</label>
+<div class="btn-row">
+<button class="btn btn-sm btn-secondary tooltip" data-tip="简短摘要，不含任何敏感信息" onclick="generateSummary('short')">生成极简摘要</button>
+<button class="btn btn-sm btn-secondary tooltip" data-tip="标准摘要，包含处理结果和待办" onclick="generateSummary('standard')">生成标准摘要</button>
+<button class="btn btn-sm btn-primary" onclick="exportSummary()">⬇️ 导出TXT</button>
+<button class="btn btn-sm btn-secondary" onclick="copySummary()">📋 复制到剪贴板</button>
+</div>
+</div>
+<div class="summary-box" id="summaryOutput">解析并确认后，此处生成上级摘要</div>
+</div>
+
+<div id="tab-internal" class="tab-content">
+<div class="field-group">
+<label class="field-label">脱敏对照表（默认隐藏敏感信息，点击显示）</label>
+<div class="btn-row" style="margin-bottom:10px;">
+<button class="btn btn-sm btn-warning" onclick="toggleInternal()">👁️ 显示/隐藏原始信息</button>
+<button class="btn btn-sm btn-primary" onclick="exportInternal()">⬇️ 导出内部复核表</button>
+</div>
+<div id="internalTable" style="font-size:13px;">
+<div class="empty-state">
+<p>解析后生成脱敏对照表</p>
+</div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="field-group">
+<label class="field-label">带位置标记的原文（保留修改记录）</label>
+<div class="summary-box" id="markedOutput" style="font-family:monospace;font-size:12px;">解析后显示带位置标记的原文</div>
+</div>
+</div>
+
+<div id="tab-audit" class="tab-content">
+<div class="btn-row" style="margin-bottom:10px;">
+<button class="btn btn-sm btn-secondary" onclick="exportAudit()">⬇️ 导出修改日志</button>
+</div>
+<div class="audit-log" id="auditLog">
+<div class="empty-state"><p>修改记录将在此显示</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const MaskType = {
+  PERSON: { key: 'person', label: '个人姓名', css: 'mask-person', maskFn: v => v.charAt(0) + '*'.repeat(Math.max(1, v.length - 1)) },
+  COMPANY: { key: 'company', label: '公司/店铺', css: 'mask-company', maskFn: v => v.length > 4 ? v.slice(0,2) + '*'.repeat(v.length-4) + v.slice(-2) : '*'.repeat(v.length) },
+  PHONE: { key: 'phone', label: '电话号码', css: 'mask-phone', maskFn: v => v.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') },
+  ADDRESS: { key: 'address', label: '地址/门牌号', css: 'mask-address', maskFn: v => v.replace(/\d+号?|\d+栋|\d+单元|\d+室|[A-Z]-?\d+/gi, m => '*'.repeat(Math.max(2, m.length))) },
+  PLATE: { key: 'plate', label: '车牌号', css: 'mask-plate', maskFn: v => v.slice(0,3) + '*'.repeat(Math.max(2, v.length - 4)) + v.slice(-1) },
+  QUOTE: { key: 'quote', label: '引用原话', css: 'mask-quote', maskFn: v => '"' + v.slice(0, 3) + '...' + (v.length > 6 ? v.slice(-2) : '') + '"' },
+  UNCERTAIN: { key: 'uncertain', label: '待复核', css: 'mask-uncertain', maskFn: v => '[?]' }
+};
+
+let state = {
+  rawText: '',
+  entities: [],
+  fields: { time: '', location: '', matter: '', result: '', todo: '' },
+  auditLog: [],
+  summaryText: '',
+  internalVisible: false
+};
+
+function logAudit(action, detail) {
+  state.auditLog.unshift({ time: new Date().toLocaleString('zh-CN'), action, detail });
+  renderAuditLog();
+}
+
+function loadSample() {
+  document.getElementById('rawInput').value = `2024年3月15日 14:30，执法人员张建国、李明前往东城区和平路88号开展日常巡查。
+当事人王某某（电话：13800138000）在其经营的"东城阳光便利店"（门牌号A-15）门口占道经营。
+现场发现水果摊位占用公共通道约2平方米，车牌京A·12345货车正在卸货。
+另有市民举报该店夜间噪音问题，举报人联系电话13912345678。
+当事人称："我刚摆出来5分钟，马上收，以后不会了。"
+执法员张建国告知相关规定并制作现场笔录。
+处理结果：责令立即整改，现场清理完毕，开具警告通知书（编号：CZ20240315001）。
+待办：3月18日前由李明对东城区和平路88号复查整改情况；跟踪举报人反馈。`;
+  logAudit('加载示例', '加载默认巡查记录示例');
+}
+
+function clearAll() {
+  document.getElementById('rawInput').value = '';
+  state = { rawText: '', entities: [], fields: { time: '', location: '', matter: '', result: '', todo: '' }, auditLog: [], summaryText: '', internalVisible: false };
+  ['fieldTime','fieldLocation','fieldMatter','fieldResult','fieldTodo'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('highlightPreview').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><p>导入并解析记录后，此处显示脱敏标注</p></div>';
+  document.getElementById('reviewList').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><p>暂无需要复核的脱敏项</p></div>';
+  document.getElementById('summaryOutput').textContent = '解析并确认后，此处生成上级摘要';
+  document.getElementById('internalTable').innerHTML = '<div class="empty-state"><p>解析后生成脱敏对照表</p></div>';
+  document.getElementById('markedOutput').textContent = '解析后显示带位置标记的原文';
+  document.getElementById('auditLog').innerHTML = '<div class="empty-state"><p>修改记录将在此显示</p></div>';
+  document.getElementById('statsBox').style.display = 'none';
+  document.getElementById('extractBadge').className = 'badge badge-blue';
+  document.getElementById('extractBadge').textContent = '待解析';
+  document.getElementById('maskBadge').className = 'badge badge-gray';
+  document.getElementById('maskBadge').textContent = '待处理';
+  document.getElementById('reviewBadge').textContent = '0项待复核';
+  logAudit('清空', '清空所有数据');
+}
+
+function extractFields(text) {
+  const fields = { time: '', location: '', matter: '', result: '', todo: '' };
+  const timeMatch = text.match(/(\d{4}年\d{1,2}月\d{1,2}日\s*\d{1,2}:\d{2}|\d{4}[-\/]\d{1,2}[-\/]\d{1,2}\s*\d{1,2}:\d{2}|\d{1,2}月\d{1,2}日\s*\d{1,2}:\d{2})/);
+  if (timeMatch) fields.time = timeMatch[0].trim();
+  const goMatch = text.match(/前往\s*([\u4e00-\u9fa5]{2,}(?:区|县|市|路|街|道|巷|镇|乡)[^，。；\n]*?(?:\d+号?|\d+栋|\d+单元|[A-Z]-?\d+)?)/);
+  if (goMatch) {
+    fields.location = goMatch[1].trim();
+  } else {
+    const addrPatterns = [/([\u4e00-\u9fa5]{2,}(?:区|县|市|路|街|道|巷|镇|乡)[^，。；\n]*?(?:\d+号?|\d+栋|\d+单元|[A-Z]-?\d+)?)/g, /(?:位于|地址[:：])\s*([^，。；\n]{3,})/g];
+    for (const p of addrPatterns) {
+      const m = text.match(p);
+      if (m) { fields.location = m[0].replace(/^(?:位于|地址[:：])\s*/, '').trim(); break; }
+    }
+  }
+  const matterKeywords = /(?:占道经营|夜间噪音|违规经营|违法|日常巡查|联合检查|群众举报|市民举报|投诉举报|安全隐患|责令整改|行政处罚|立案查处)[^。；\n]{0,40}/;
+  const matterMatch = text.match(matterKeywords);
+  if (matterMatch) fields.matter = matterMatch[0].trim();
+  else {
+    const lines = text.split(/\n/).filter(l => l.trim());
+    fields.matter = lines.slice(0, 2).map(l => l.trim()).join('；').slice(0, 100);
+  }
+  const resultMatch = text.match(/处理结果[：:]\s*([^。\n]+(?:。[^。\n]*)*?)(?=\n待办|$)/s);
+  if (resultMatch) fields.result = resultMatch[1].trim();
+  else {
+    const r2 = text.match(/(?:责令|开具|处罚|警告|整改|清理|约谈|移送)[^。\n]{3,}/);
+    if (r2) fields.result = r2[0].trim();
+  }
+  const todoMatch = text.match(/待办[：:]\s*([^$]+)$/s) || text.match(/(?:待办|后续|跟进|复查|复核)[：:]?\s*([^。\n]{5,}(?:。[^。\n]*)*)/s);
+  if (todoMatch) fields.todo = todoMatch[1].trim();
+  return fields;
+}
+
+function findEntities(text) {
+  const entities = [];
+  const BLACKLIST_WORDS = new Set(['联系', '联系电', '电话', '手机', '反馈', '跟进', '负责', '告知', '约谈', '整改', '复查', '责令', '警告', '处罚', '清理', '现场', '发现', '摊位', '通道', '占道', '经营', '噪音', '举报人', '另有', '另有市民举报该店', '市民', '该店', '门口', '门口占道经营', '正在', '卸货', '货车', '水果', '公共', '占用', '约', '平方米', '立即', '完毕', '开具', '通知书', '编号', '日常', '开展', '执法', '人员', '前往', '当事人', '制作', '笔录', '规定', '相关', '问题', '夜间', '跟踪', '现场发现水果摊位占用公共通道约2平方米', '现场发现水果摊位占用公共通道约**平方米', '李明前', '联系电']);
+
+  const add = (start, end, type, original, confidence) => {
+    if (start < 0 || end <= start || end > text.length) return;
+    if (BLACKLIST_WORDS.has(original) || original.length <= 1) return;
+    for (const e of entities) {
+      if (start < e.end && end > e.start) {
+        if (end - start > e.end - e.start) return;
+        else { e.start = start; e.end = end; e.type = type; e.original = original; e.confidence = confidence; e.maskedValue = MaskType[type].maskFn(original); e.reviewed = confidence >= 0.8; return; }
+      }
+    }
+    entities.push({ id: Date.now() + Math.random(), start, end, type, original, confidence, reviewed: confidence >= 0.8, maskedValue: MaskType[type].maskFn(original) });
+  };
+
+  let m;
+  const phoneRe = /(?:电话|联系电话|手机|Tel)[:：]?\s*1[3-9]\d{9}|1[3-9]\d{9}(?=\D|$)/g;
+  while ((m = phoneRe.exec(text)) !== null) {
+    const val = m[0].replace(/^(?:电话|联系电话|手机|Tel)[:：]?\s*/, '');
+    const s = m.index + (m[0].length - val.length);
+    add(s, s + val.length, 'PHONE', val, 0.95);
+  }
+
+  const plateRe = /[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][·．.\- ]?[A-Z0-9]{4,6}[A-Z0-9挂学警港澳]?/g;
+  while ((m = plateRe.exec(text)) !== null) {
+    add(m.index, m.index + m[0].length, 'PLATE', m[0], 0.92);
+  }
+
+  const quoteRe = /["""'']([^"""'']{3,80})["""'']/g;
+  while ((m = quoteRe.exec(text)) !== null) {
+    add(m.index + 1, m.index + 1 + m[1].length, 'QUOTE', m[1], 0.88);
+  }
+
+  const companyRe = /[""'']([^"""'']{2,20}(?:公司|店|超市|商场|市场|厂|站|部|中心|机构|集团|有限|股份))[""'']/g;
+  while ((m = companyRe.exec(text)) !== null) {
+    const val = m[1];
+    if (!BLACKLIST_WORDS.has(val)) {
+      const s = m.index + m[0].indexOf(val);
+      add(s, s + val.length, 'COMPANY', val, 0.85);
+    }
+  }
+
+  const personRe = /(?:执法人员|当事人|举报人|负责人|经营者|法定代表人)[:：]?\s*([\u4e00-\u9fa5]{2,3}(?:某{1,2})?(?:、[\u4e00-\u9fa5]{2,3}(?:某{1,2})?)*)(?=[，。；：\s（(]|$|前往|开展|进行|制作|告知)|(?:由|对|向)\s*([\u4e00-\u9fa5]{2,3}(?:某{1,2})?)(?=[^，。；：\u4e00-\u9fa5]|负责|跟进|告知|约谈)/g;
+  while ((m = personRe.exec(text)) !== null) {
+    const val = m[1] || m[2];
+    if (!val || val.length < 2) continue;
+    const s = m.index + m[0].indexOf(val);
+    if (val.includes('、')) {
+      val.split('、').forEach((name) => {
+        if (name.length >= 2 && !BLACKLIST_WORDS.has(name)) {
+          const ns = s + val.indexOf(name);
+          add(ns, ns + name.length, 'PERSON', name, 0.82);
+        }
+      });
+    } else {
+      if (!BLACKLIST_WORDS.has(val)) add(s, s + val.length, 'PERSON', val, 0.82);
+    }
+  }
+
+  const doorRe = /(?:门牌号|门牌)[:：]?\s*([A-Za-z]?\-?\d+[A-Za-z]?(?:\-\d+)*)|\d+号(?=[，。；\s\n]|$)/g;
+  while ((m = doorRe.exec(text)) !== null) {
+    const val = m[1] || m[0];
+    if (!val || val.length < 2) continue;
+    const s = m.index + (m[0].indexOf(val));
+    add(s, s + val.length, 'ADDRESS', val, 0.75);
+  }
+
+  const addrKeywords = /[\u4e00-\u9fa5]{2,}(?:区|县|市|路|街|道|巷|镇|乡|村|小区|花园|大厦|楼|院)\d*/;
+  const looseAddrRe = /[\u4e00-\u9fa5]{2,}(?:区|县|市|路|街|道|巷|镇|乡|村|小区|花园|大厦|楼|院)\d*(?:\d+号?|\d+栋|\d+单元|[A-Z]-?\d+)?(?=[，。；：\s\n]|$)/g;
+  while ((m = looseAddrRe.exec(text)) !== null) {
+    let overlaps = false;
+    for (const e of entities) {
+      if (m.index < e.end && m.index + m[0].length > e.start) { overlaps = true; break; }
+    }
+    if (!overlaps && m[0].length >= 4 && addrKeywords.test(m[0])) {
+      add(m.index, m.index + m[0].length, 'ADDRESS', m[0], 0.7);
+    }
+  }
+
+  const standalonePerson = text.matchAll(/(?<![\u4e00-\u9fa5])([张王李赵刘陈杨黄周吴徐孙马朱胡郭何高林罗郑梁谢宋唐许韩冯邓曹彭曾萧田董袁潘蒋蔡余杜叶程苏魏吕丁任沈姚卢傅钟姜崔谭廖范汪陆金石戴贾韦夏邱方侯邹熊孟秦阎薛尹段雷黎史龙贺倪汤滕殷罗毕郝邬安常乐于时傅皮卞齐康伍余元卜顾孟平黄和穆萧尹姚邵湛汪祁毛禹狄米贝明臧计伏成戴谈宋茅庞熊纪舒屈项祝董梁杜阮蓝闵席季麻强贾路娄危江童颜郭梅盛林刁钟徐邱骆高夏蔡田樊胡凌霍虞万支柯昝管卢莫经房裘缪干解应宗丁宣贲邓郁单杭洪包诸左石崔吉钮龚程嵇邢滑裴陆荣翁荀羊於惠甄曲家封芮羿储靳汲邴糜松井段富巫乌焦巴弓牧隗山谷车侯宓蓬全郗班仰秋仲伊宫宁仇栾暴甘钭厉戎祖武符刘景詹束龙叶幸司韶郜黎蓟薄印宿白怀蒲邰从鄂索咸籍赖卓蔺屠蒙池乔阴郁胥能苍双闻莘党翟谭贡劳逄姬申扶堵冉宰郦雍却璩桑桂濮牛寿通边扈燕冀郏浦尚农温别庄晏柴瞿阎充慕连茹习宦艾鱼容向古易慎戈廖庾终暨居衡步都耿满弘匡国文寇广禄阙东欧殳沃利蔚越夔隆师巩厍聂晁勾敖融冷訾辛阚那简饶空曾毋沙乜养鞠须丰巢关蒯相查后荆红游竺权逯盖益桓公][\u4e00-\u9fa5]{1,2}(?:某{1,2})?)(?![\u4e00-\u9fa5])/g);
+  for (const m2 of standalonePerson) {
+    let overlaps = false;
+    for (const e of entities) {
+      if (m2.index < e.end && m2.index + m2[0].length > e.start) { overlaps = true; break; }
+    }
+    if (!overlaps && m2[1] && m2[1].length >= 2 && !BLACKLIST_WORDS.has(m2[1])) {
+      add(m2.index, m2.index + m2[1].length, 'PERSON', m2[1], 0.5);
+    }
+  }
+
+  entities.sort((a, b) => a.start - b.start);
+  return entities;
+}
+
+async function processRecord() {
+  const text = document.getElementById('rawInput').value.trim();
+  if (!text) { alert('请先输入巡查记录文本'); return; }
+  state.rawText = text;
+
+  document.getElementById('progressBar').style.display = 'block';
+  document.getElementById('progressFill').style.width = '10%';
+  await new Promise(r => setTimeout(r, 150));
+
+  const fields = extractFields(text);
+  state.fields = fields;
+  document.getElementById('fieldTime').value = fields.time;
+  document.getElementById('fieldLocation').value = fields.location;
+  document.getElementById('fieldMatter').value = fields.matter;
+  document.getElementById('fieldResult').value = fields.result;
+  document.getElementById('fieldTodo').value = fields.todo;
+  document.getElementById('progressFill').style.width = '40%';
+  await new Promise(r => setTimeout(r, 150));
+
+  const entities = findEntities(text);
+  state.entities = entities;
+  document.getElementById('progressFill').style.width = '80%';
+  await new Promise(r => setTimeout(r, 150));
+
+  renderHighlight();
+  renderReview();
+  renderStats();
+  updateBadges();
+  logAudit('智能解析', `提取${entities.length}个脱敏项，识别${Object.values(fields).filter(v=>v).length}个字段`);
+  document.getElementById('progressFill').style.width = '100%';
+  setTimeout(() => { document.getElementById('progressBar').style.display = 'none'; document.getElementById('progressFill').style.width = '0%'; }, 400);
+}
+
+function renderStats() {
+  document.getElementById('statsBox').style.display = 'grid';
+  document.getElementById('statTotal').textContent = state.entities.length;
+  document.getElementById('statConfirmed').textContent = state.entities.filter(e => e.reviewed).length;
+  document.getElementById('statReview').textContent = state.entities.filter(e => !e.reviewed).length;
+  document.getElementById('statFields').textContent = Object.values(state.fields).filter(v => v).length;
+}
+
+function updateBadges() {
+  const extracted = Object.values(state.fields).filter(v => v).length;
+  document.getElementById('extractBadge').className = 'badge ' + (extracted >= 3 ? 'badge-green' : 'badge-amber');
+  document.getElementById('extractBadge').textContent = extracted >= 3 ? `已提取${extracted}项` : `仅${extracted}项，建议补全`;
+  const reviewed = state.entities.filter(e => e.reviewed).length;
+  const total = state.entities.length;
+  document.getElementById('maskBadge').className = 'badge ' + (total === 0 ? 'badge-gray' : (reviewed === total ? 'badge-green' : 'badge-amber'));
+  document.getElementById('maskBadge').textContent = total === 0 ? '待处理' : (reviewed === total ? `已脱敏${total}项` : `${reviewed}/${total}已确认`);
+  document.getElementById('reviewBadge').textContent = `${state.entities.filter(e => !e.reviewed).length}项待复核`;
+  document.getElementById('reviewBadge').className = 'badge ' + (state.entities.filter(e => !e.reviewed).length > 0 ? 'badge-amber' : 'badge-green');
+}
+
+function renderHighlight() {
+  const text = state.rawText;
+  const sorted = [...state.entities].sort((a, b) => a.start - b.start);
+  let html = '';
+  let last = 0;
+  for (const e of sorted) {
+    html += escapeHtml(text.slice(last, e.start));
+    const typeObj = e.reviewed ? MaskType[e.type] : MaskType.UNCERTAIN;
+    html += `<span class="${typeObj.css}" data-id="${e.id}" onclick="quickReview(${e.id})" title="类型：${MaskType[e.type].label}，置信度：${Math.round(e.confidence*100)}%，点击复核">${escapeHtml(e.reviewed ? e.maskedValue : e.original + ' ⚠️')}</span>`;
+    last = e.end;
+  }
+  html += escapeHtml(text.slice(last));
+  document.getElementById('highlightPreview').innerHTML = html;
+}
+
+function renderReview() {
+  const list = document.getElementById('reviewList');
+  if (state.entities.length === 0) {
+    list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><p>暂无需要复核的脱敏项</p></div>';
+    return;
+  }
+  list.innerHTML = state.entities.map((e, i) => {
+    const typeObj = MaskType[e.type];
+    return `<div class="review-item ${e.reviewed ? '' : 'uncertain'}" data-id="${e.id}">
+      <div class="review-item-header">
+        <div>
+          <span class="badge ${e.reviewed ? 'badge-green' : 'badge-amber'}">${e.reviewed ? '已确认' : '待复核'}</span>
+          <span class="badge badge-gray" style="margin-left:6px;">${typeObj.label}</span>
+          <span class="badge badge-gray" style="margin-left:4px;">置信度 ${Math.round(e.confidence*100)}%</span>
+          <span class="badge badge-gray" style="margin-left:4px;">位置 ${e.start}-${e.end}</span>
+        </div>
+      </div>
+      <div>
+        <div class="review-original">原文：<code>${escapeHtml(e.original)}</code></div>
+        <div>脱敏后：<span class="review-masked" id="masked-${i}">${escapeHtml(e.maskedValue)}</span></div>
+      </div>
+      <div class="review-controls">
+        <label style="font-size:12px;color:#6b7280;">类型：</label>
+        <select onchange="changeEntityType(${i}, this.value)">
+          ${Object.entries(MaskType).filter(([k])=>k!=='UNCERTAIN').map(([k,v])=>`<option value="${k}" ${e.type===k?'selected':''}>${v.label}</option>`).join('')}
+          <option value="REMOVE">移除此项（非敏感）</option>
+        </select>
+        <label style="font-size:12px;color:#6b7280;">自定义脱敏：</label>
+        <input type="text" value="${escapeHtml(e.maskedValue)}" onchange="changeEntityMask(${i}, this.value)" style="width:120px;">
+        ${e.reviewed ? `<button class="btn btn-sm btn-secondary" onclick="unconfirm(${i})">撤销确认</button>` : `<button class="btn btn-sm btn-success" onclick="confirmOne(${i})">确认通过</button>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function quickReview(id) {
+  const idx = state.entities.findIndex(e => e.id === id);
+  if (idx === -1) return;
+  const item = document.querySelector(`.review-item[data-id="${id}"]`);
+  if (item) {
+    item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    item.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.3)';
+    setTimeout(() => item.style.boxShadow = '', 1500);
+  }
+}
+
+function changeEntityType(i, newType) {
+  if (newType === 'REMOVE') {
+    const old = state.entities[i];
+    logAudit('移除脱敏项', `移除"${old.original}"（原类型：${MaskType[old.type].label}）`);
+    state.entities.splice(i, 1);
+  } else {
+    const old = state.entities[i];
+    state.entities[i].type = newType;
+    state.entities[i].maskedValue = MaskType[newType].maskFn(old.original);
+    logAudit('修改脱敏类型', `"${old.original}": ${MaskType[old.type].label} → ${MaskType[newType].label}`);
+  }
+  renderAll();
+}
+
+function changeEntityMask(i, val) {
+  const old = state.entities[i].maskedValue;
+  state.entities[i].maskedValue = val;
+  logAudit('修改脱敏值', `"${old}" → "${val}"（原文：${state.entities[i].original}）`);
+  renderAll();
+}
+
+function confirmOne(i) {
+  state.entities[i].reviewed = true;
+  logAudit('确认脱敏项', `"${state.entities[i].original}" → "${state.entities[i].maskedValue}"`);
+  renderAll();
+}
+
+function unconfirm(i) {
+  state.entities[i].reviewed = false;
+  logAudit('撤销确认', `"${state.entities[i].original}"`);
+  renderAll();
+}
+
+function confirmAll() {
+  const n = state.entities.filter(e => !e.reviewed).length;
+  if (n === 0) { alert('所有项已确认'); return; }
+  state.entities.forEach(e => e.reviewed = true);
+  logAudit('批量确认', `一键确认${n}项脱敏`);
+  renderAll();
+}
+
+function renderAll() {
+  renderHighlight();
+  renderReview();
+  renderStats();
+  updateBadges();
+  renderInternal();
+  renderMarked();
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function applyMaskToText(text, entities) {
+  const reviewed = entities.filter(e => e.reviewed);
+  reviewed.sort((a, b) => b.original.length - a.original.length);
+  let result = text;
+  const used = new Set();
+  for (const e of reviewed) {
+    if (used.has(e.original)) continue;
+    const escaped = e.original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(escaped, 'g');
+    result = result.replace(re, e.maskedValue);
+    used.add(e.original);
+  }
+  return result;
+}
+
+function generateSummary(mode) {
+  ['time','location','matter','result','todo'].forEach(k => { state.fields[k] = document.getElementById('field' + k.charAt(0).toUpperCase() + k.slice(1)).value.trim(); });
+  const unreviewed = state.entities.filter(e => !e.reviewed).length;
+  if (unreviewed > 0) {
+    if (!confirm(`还有${unreviewed}项脱敏待确认，是否继续生成？`)) return;
+  }
+  const f = state.fields;
+  let summary = '';
+  if (mode === 'short') {
+    summary = `【执法巡查摘要】${f.time || '[时间]'} | ${f.location || '[地点]'} | ${f.matter || '[事项]'} | ${f.result || '[处理结果]'}${f.todo ? ' | 待办：' + f.todo : ''}`;
+  } else {
+    summary = `【执法巡查摘要】
+巡查时间：${f.time || '（待补）'}
+巡查地点：${f.location || '（待补）'}
+事项：${f.matter || '（待补）'}
+处理结果：${f.result || '（待补）'}
+待办：${f.todo || '无'}`;
+  }
+  const summaryMasked = applyMaskToText(summary, state.entities);
+  state.summaryText = summaryMasked;
+  document.getElementById('summaryOutput').innerHTML = summaryMasked.split('\n').map(l => l.replace(/【(.+?)】/, '<strong>【$1】</strong>').replace(/^([^：:]+[：:])/, '<strong>$1</strong>')).join('<br>');
+  logAudit('生成摘要', `模式：${mode === 'short' ? '极简' : '标准'}，${unreviewed > 0 ? '含未确认项' : '全部确认'}`);
+}
+
+function copySummary() {
+  if (!state.summaryText) { alert('请先生成摘要'); return; }
+  navigator.clipboard.writeText(state.summaryText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ 已复制';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+function exportSummary() {
+  if (!state.summaryText) { alert('请先生成摘要'); return; }
+  downloadFile(`执法摘要_${Date.now()}.txt`, state.summaryText, 'text/plain');
+  logAudit('导出摘要', '上级摘要版TXT');
+}
+
+function renderInternal() {
+  const box = document.getElementById('internalTable');
+  if (state.entities.length === 0) {
+    box.innerHTML = '<div class="empty-state"><p>解析后生成脱敏对照表</p></div>';
+    return;
+  }
+  const visible = state.internalVisible;
+  box.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead><tr style="background:#f3f4f6;">
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">序号</th>
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">类型</th>
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">原文${visible?'':'<button class="btn btn-sm reveal-btn" onclick="toggleInternal()">显示</button>'}</th>
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">脱敏后</th>
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">位置</th>
+      <th style="padding:8px;text-align:left;border:1px solid #e5e7eb;">状态</th>
+    </tr></thead>
+    <tbody>
+      ${state.entities.map((e,i)=>`
+        <tr>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;">${i+1}</td>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;"><span class="badge badge-gray">${MaskType[e.type].label}</span></td>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;font-family:monospace;"><span class="${visible?'':'internal-hidden'}">${escapeHtml(e.original)}</span></td>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;font-family:monospace;color:#1d4ed8;">${escapeHtml(e.maskedValue)}</td>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;color:#6b7280;">${e.start}-${e.end}</td>
+          <td style="padding:6px 8px;border:1px solid #e5e7eb;"><span class="badge ${e.reviewed?'badge-green':'badge-amber'}">${e.reviewed?'已确认':'待复核'}</span></td>
+        </tr>
+      `).join('')}
+    </tbody></table>`;
+}
+
+function toggleInternal() {
+  if (!state.internalVisible && state.entities.length > 0) {
+    if (!confirm('即将显示完整敏感信息，请确认在安全环境下操作，是否继续？')) return;
+  }
+  state.internalVisible = !state.internalVisible;
+  renderInternal();
+  logAudit(state.internalVisible ? '显示原始信息' : '隐藏原始信息', '内部复核表可见性切换');
+}
+
+function renderMarked() {
+  const text = state.rawText;
+  if (!text) { document.getElementById('markedOutput').textContent = '解析后显示带位置标记的原文'; return; }
+  const sorted = [...state.entities].sort((a, b) => a.start - b.start);
+  let html = '';
+  let last = 0;
+  for (const e of sorted) {
+    html += escapeHtml(text.slice(last, e.start));
+    html += `<mark style="background:${e.reviewed?'#d1fae5':'#fef3c7'};padding:2px 3px;border-radius:3px;" title="[${e.start}-${e.end}] ${MaskType[e.type].label}${e.reviewed?'':' ⚠️待复核'}">${escapeHtml(e.original)}</mark><sub style="color:#9ca3af;font-size:10px;">[${e.start}]</sub>`;
+    last = e.end;
+  }
+  html += escapeHtml(text.slice(last));
+  document.getElementById('markedOutput').innerHTML = html;
+}
+
+function renderAuditLog() {
+  const box = document.getElementById('auditLog');
+  if (state.auditLog.length === 0) {
+    box.innerHTML = '<div class="empty-state"><p>修改记录将在此显示</p></div>';
+    return;
+  }
+  box.innerHTML = state.auditLog.map(l => `
+    <div class="audit-item">
+      <div><strong>${l.action}</strong> — ${l.detail}</div>
+      <div class="audit-time">${l.time}</div>
+    </div>
+  `).join('');
+}
+
+function exportInternal() {
+  if (state.entities.length === 0) { alert('暂无内容可导出'); return; }
+  const rows = state.entities.map((e,i) => [i+1, MaskType[e.type].label, e.original, e.maskedValue, `${e.start}-${e.end}`, e.confidence, e.reviewed?'已确认':'待复核']);
+  let csv = '序号,类型,原文,脱敏后,位置,置信度,状态\n' + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  csv = '\uFEFF' + csv;
+  downloadFile(`内部脱敏对照表_${Date.now()}.csv`, csv, 'text/csv');
+  logAudit('导出内部表', 'CSV格式脱敏对照表');
+}
+
+function exportAudit() {
+  if (state.auditLog.length === 0) { alert('暂无修改记录'); return; }
+  const text = state.auditLog.map(l => `[${l.time}] ${l.action}: ${l.detail}`).join('\n');
+  downloadFile(`修改日志_${Date.now()}.txt`, text, 'text/plain');
+  logAudit('导出日志', '操作修改记录');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'internal') { renderInternal(); renderMarked(); }
+  if (name === 'summary' && state.summaryText) {
+    document.getElementById('summaryOutput').innerHTML = state.summaryText.split('\n').map(l => l.replace(/【(.+?)】/, '<strong>【$1】</strong>').replace(/^([^：:]+[：:])/, '<strong>$1</strong>')).join('<br>');
+  }
+}
+
+function downloadFile(filename, content, mime) {
+  const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+['fieldTime','fieldLocation','fieldMatter','fieldResult','fieldTodo'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    const map = { fieldTime: 'time', fieldLocation: 'location', fieldMatter: 'matter', fieldResult: 'result', fieldTodo: 'todo' };
+    const key = map[id];
+    logAudit('手动编辑字段', `${key}: "${state.fields[key]}" → "${document.getElementById(id).value}"`);
+    state.fields[key] = document.getElementById(id).value;
+  });
+});
+
+logAudit('系统初始化', '执法记录摘要脱敏系统已加载');
+</script>
+</body>
+</html>
