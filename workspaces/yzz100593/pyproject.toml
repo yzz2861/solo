@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "order-template-checker"
+version = "1.0.0"
+description = "医嘱模板变量检查 CLI — 检查未闭合变量、默认值缺失、剂量单位不一致和禁用表述"
+requires-python = ">=3.9"
+dependencies = [
+    "pyyaml>=6.0",
+    "click>=8.0",
+    "rich>=13.0",
+]
+
+[project.scripts]
+otc = "checker.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["checker*"]

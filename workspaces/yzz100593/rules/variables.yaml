@@ -1,0 +1,83 @@
+variables:
+  - name: 患者姓名
+    required: true
+    default: null
+    description: 患者全名
+
+  - name: 年龄
+    required: true
+    default: null
+    description: 患者年龄
+
+  - name: 体重
+    required: true
+    default: null
+    allowed_units: ["kg", "g"]
+    description: 患者体重，用于剂量计算
+
+  - name: 用药剂量
+    required: true
+    default: null
+    allowed_units: ["mg", "g", "ml", "IU", "U"]
+    description: 单次用药剂量
+
+  - name: 给药途径
+    required: true
+    default: "口服"
+    description: 给药方式
+
+  - name: 用药频次
+    required: true
+    default: "qd"
+    description: 每日用药次数
+
+  - name: 疗程天数
+    required: false
+    default: "7"
+    description: 治疗持续天数
+
+  - name: 皮试结果
+    required: false
+    default: null
+    description: 青霉素等药物皮试结果
+
+  - name: 药品名称
+    required: true
+    default: null
+    description: 处方药品通用名
+
+  - name: 科室
+    required: false
+    default: null
+    description: 开单科室
+
+  - name: 床号
+    required: false
+    default: null
+    description: 患者床号
+
+  - name: 住院号
+    required: true
+    default: null
+    description: 患者住院编号
+
+  - name: 医生签名
+    required: true
+    default: null
+    description: 开单医生签名
+
+similar_drugs:
+  - canonical: 头孢曲松
+    variants: ["头孢三嗪", "罗氏芬"]
+
+  - canonical: 阿莫西林
+    variants: ["阿莫仙", "弗莱莫星"]
+
+  - canonical: 奥美拉唑
+    variants: ["洛赛克", "奥克"]
+
+  - canonical: 地塞米松
+    variants: ["氟美松"]
+
+  - canonical: 胰岛素
+    variants: ["正规胰岛素", "普通胰岛素"]

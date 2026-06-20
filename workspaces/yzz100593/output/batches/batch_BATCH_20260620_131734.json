@@ -1,0 +1,472 @@
+{
+  "batch_id": "BATCH_20260620_131734",
+  "timestamp": "20260620_131734",
+  "total_templates": 7,
+  "active_count": 5,
+  "discontinued_count": 2,
+  "total_issues": 65,
+  "error_count": 15,
+  "warning_count": 50,
+  "templates": [
+    {
+      "path": "sample/阿莫西林口服方案.order",
+      "name": "阿莫西林口服方案",
+      "department": "呼吸内科",
+      "status": "active",
+      "risk_score": 106,
+      "issue_count": 12,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '医生签名' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 8,
+          "message": "发现占位符/禁用表述: 连续占位符 XXX → 'XXX'"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 11,
+          "message": "发现占位符/禁用表述: 待填写占位符 → '待填写'"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 14,
+          "message": "发现占位符/禁用表述: 待填写占位符 → '待填写'"
+        },
+        {
+          "kind": "unit_inconsistent",
+          "severity": "error",
+          "line": 16,
+          "message": "药品 '阿莫西林' 存在不一致的单位: g, mg"
+        },
+        {
+          "kind": "unit_inconsistent",
+          "severity": "error",
+          "line": 17,
+          "message": "药品 '阿莫西林' 存在不一致的单位: g, mg"
+        }
+      ]
+    },
+    {
+      "path": "sample/头孢曲松标准方案.order",
+      "name": "头孢曲松标准方案",
+      "department": "感染科",
+      "status": "active",
+      "risk_score": 71,
+      "issue_count": 10,
+      "issues": [
+        {
+          "kind": "unclosed_var",
+          "severity": "error",
+          "line": 8,
+          "message": "未闭合的变量括号 '【'，缺少闭合符号 '】'"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 7,
+          "message": "必填变量 '药品名称' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 14,
+          "message": "必填变量 '医生签名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "unit_inconsistent",
+          "severity": "error",
+          "line": 17,
+          "message": "药品 '头孢曲松' 存在不一致的单位: g, mg"
+        },
+        {
+          "kind": "unit_inconsistent",
+          "severity": "error",
+          "line": 18,
+          "message": "药品 '头孢曲松' 存在不一致的单位: g, mg"
+        }
+      ]
+    },
+    {
+      "path": "sample/胰岛素皮下注射方案.order",
+      "name": "胰岛素皮下注射方案",
+      "department": "内分泌科",
+      "status": "active",
+      "risk_score": 55,
+      "issue_count": 9,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 8,
+          "message": "必填变量 '用药剂量' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 13,
+          "message": "变量 '请填写监测频次' 不在变量规则定义中，无法确认是否有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 15,
+          "message": "必填变量 '医生签名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 13,
+          "message": "发现占位符/禁用表述: 请填写提示占位符 → '请填写'"
+        }
+      ]
+    },
+    {
+      "path": "sample/奥美拉唑静脉方案.order",
+      "name": "奥美拉唑静脉方案",
+      "department": "消化内科",
+      "status": "active",
+      "risk_score": 50,
+      "issue_count": 8,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 13,
+          "message": "必填变量 '医生签名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 15,
+          "message": "禁用表述: 引用外部说明，模板应自含剂量信息 → '按说明书'"
+        }
+      ]
+    },
+    {
+      "path": "sample/地塞米松冲击方案.order",
+      "name": "地塞米松冲击方案",
+      "department": "风湿免疫科",
+      "status": "active",
+      "risk_score": 35,
+      "issue_count": 7,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 3,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 15,
+          "message": "必填变量 '医生签名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        }
+      ]
+    },
+    {
+      "path": "sample/废弃止痛模板.order",
+      "name": "废弃止痛模板",
+      "department": "疼痛科",
+      "status": "discontinued",
+      "risk_score": 80,
+      "issue_count": 10,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '年龄' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '体重' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '医生签名' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 5,
+          "message": "发现占位符/禁用表述: 连续占位符 XXX → 'XXX'"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 6,
+          "message": "禁用表述: 模糊表述，临床应明确剂量 → '酌情'"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 7,
+          "message": "禁用表述: 待定表述，应填写明确值 → '待定'"
+        }
+      ]
+    },
+    {
+      "path": "sample/旧版抗菌方案.order",
+      "name": "旧版抗菌方案",
+      "department": "感染科",
+      "status": "discontinued",
+      "risk_score": 65,
+      "issue_count": 9,
+      "issues": [
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '患者姓名' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 4,
+          "message": "必填变量 '住院号' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 5,
+          "message": "必填变量 '年龄' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 5,
+          "message": "必填变量 '体重' 没有默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '用药剂量' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '药品名称' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "default_missing",
+          "severity": "warning",
+          "line": 0,
+          "message": "规则要求的变量 '医生签名' 在模板中未出现且无默认值"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 9,
+          "message": "禁用表述: 循环引用，医嘱模板不应引用自身 → '遵医嘱'"
+        },
+        {
+          "kind": "forbidden_expr",
+          "severity": "error",
+          "line": 11,
+          "message": "禁用表述: 复制模板遗留，应写明具体值 → '同前'"
+        }
+      ]
+    }
+  ]
+}

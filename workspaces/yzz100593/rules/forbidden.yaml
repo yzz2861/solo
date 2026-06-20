@@ -1,0 +1,36 @@
+forbidden:
+  - pattern: "XX"
+    reason: "占位符，复制模板遗留"
+    is_regex: false
+
+  - pattern: "待定"
+    reason: "待定表述，应填写明确值"
+    is_regex: false
+
+  - pattern: "参见"
+    reason: "引用表述，应写明具体内容"
+    is_regex: false
+
+  - pattern: "酌情"
+    reason: "模糊表述，临床应明确剂量"
+    is_regex: false
+
+  - pattern: "按说明书"
+    reason: "引用外部说明，模板应自含剂量信息"
+    is_regex: false
+
+  - pattern: "同前"
+    reason: "复制模板遗留，应写明具体值"
+    is_regex: false
+
+  - pattern: "遵医嘱"
+    reason: "循环引用，医嘱模板不应引用自身"
+    is_regex: false
+
+  - pattern: "\\[.*?\\]"
+    reason: "方括号占位符，应替换为实际值"
+    is_regex: true
+
+  - pattern: "<.*?>"
+    reason: "尖括号占位符，应替换为实际值"
+    is_regex: true
