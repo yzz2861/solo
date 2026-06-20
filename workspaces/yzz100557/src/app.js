@@ -69,13 +69,12 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/health', (req, res) => {
+app.get('/health', async (req, res) => {
   let dbOk = false;
   try {
-    const { getDb } = require('./db/init');
-    const db = getDb();
+    const { getDB } = require('./db/singleton');
+    const db = await getDB();
     db.prepare('SELECT 1').get();
-    db.close();
     dbOk = true;
   } catch (e) { /* ignore */ }
   res.json({
@@ -111,38 +110,43 @@ function ensureData() {
 }
 
 ensureData();
-initDatabase();
 
-const dbExists = fs.existsSync(DB_PATH);
-const { getDb } = require('./db/init');
-const tempDb = getDb();
-const userCount = tempDb.prepare('SELECT COUNT(*) as cnt FROM users').get().cnt;
-tempDb.close();
+(async function bootstrap() {
+  try {
+    const { getDB } = require('./db/singleton');
+    const db = await getDB();
 
-if (userCount === 0) {
-  console.log('数据库为空，正在初始化种子数据...');
-  require('./seed/seed').seed();
-}
+    const userRow = db.prepare('SELECT COUNT(*) as cnt FROM users').get();
+    const userCount = Number(userRow?.cnt || 0);
+    if (userCount === 0) {
+      console.log('数据库为空，正在初始化种子数据...');
+      await require('./seed/seed').seed();
+    }
 
-app.listen(PORT, () => {
-  console.log('');
-  console.log('╔══════════════════════════════════════════════════════════════╗');
-  console.log('║       餐饮来料验收退货API系统 v1.0.0                         ║');
-  console.log('╠══════════════════════════════════════════════════════════════╣');
-  console.log(`║  服务地址:   http://localhost:${PORT}                          ║`);
-  console.log(`║  健康检查:   http://localhost:${PORT}/health                   ║`);
-  console.log(`║  API首页:    http://localhost:${PORT}/                         ║`);
-  console.log(`║  数据库:     ${DB_PATH.padEnd(44)}║`);
-  console.log('╠══════════════════════════════════════════════════════════════╣');
-  console.log('║  测试账号:                                                     ║');
-  console.log('║  admin / admin123        (系统管理员)                         ║');
-  console.log('║  inspector1 / inspect123 (验收员 王验收)                      ║');
-  console.log('║  buyer1 / buyer123       (采购员 赵采购)                      ║');
-  console.log('║  finance1 / finance123   (财务   周会计)                      ║');
-  console.log('║  chef1 / chef123         (厨师长 钱厨师长)                    ║');
-  console.log('║  sup_veg001 / supplier123 (供应商 绿源蔬菜)                   ║');
-  console.log('╚══════════════════════════════════════════════════════════════╝');
-  console.log('');
-});
+    app.listen(PORT, () => {
+      console.log('');
+      console.log('╔══════════════════════════════════════════════════════════════╗');
+      console.log('║       餐饮来料验收退货API系统 v1.0.0                         ║');
+      console.log('╠══════════════════════════════════════════════════════════════╣');
+      console.log(`║  服务地址:   http://localhost:${PORT}                          ║`);
+      console.log(`║  健康检查:   http://localhost:${PORT}/health                   ║`);
+      console.log(`║  API首页:    http://localhost:${PORT}/                         ║`);
+      console.log(`║  数据库:     ${DB_PATH.padEnd(44)}║`);
+      console.log('╠══════════════════════════════════════════════════════════════╣');
+      console.log('║  测试账号:                                                     ║');
+      console.log('║  admin / admin123        (系统管理员)                         ║');
+      console.log('║  inspector1 / inspect123 (验收员 王验收)                      ║');
+      console.log('║  buyer1 / buyer123       (采购员 赵采购)                      ║');
+      console.log('║  finance1 / finance123   (财务   周会计)                      ║');
+      console.log('║  chef1 / chef123         (厨师长 钱厨师长)                    ║');
+      console.log('║  sup_veg001 / supplier123 (供应商 绿源蔬菜)                   ║');
+      console.log('╚══════════════════════════════════════════════════════════════╝');
+      console.log('');
+    });
+  } catch (e) {
+    console.error('启动失败:', e);
+    process.exit(1);
+  }
+})();
 
 module.exports = app;

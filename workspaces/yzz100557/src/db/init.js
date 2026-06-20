@@ -15,7 +15,7 @@ function ensureDir() {
 async function getSqlEngine() {
   if (!SQL) {
     SQL = await initSqlJs({
-      locateFile: file => path.join(path.dirname(require.resolve('sql.js')), 'dist', file)
+      locateFile: file => path.join(path.dirname(require.resolve('sql.js')), file)
     });
   }
   return SQL;
@@ -57,7 +57,6 @@ class Statement {
     try {
       while (this._stmt.step()) {}
     } catch (e) {}
-    this._stmt.free();
     const info = this._db._db.exec('SELECT last_insert_rowid() as id, changes() as changes')[0];
     const row = info?.values?.[0] || [0, 0];
     return { lastInsertRowid: row[0], changes: row[1] };
@@ -97,7 +96,6 @@ class Statement {
     while (this._stmt.step()) {
       results.push(this._stmt.getAsObject());
     }
-    this._stmt.free();
     return results;
   }
 

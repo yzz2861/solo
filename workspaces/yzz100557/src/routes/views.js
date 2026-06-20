@@ -1,6 +1,6 @@
 const express = require('express');
 const XLSX = require('xlsx');
-const { getDb } = require('../db/init');
+const { getDB } = require('../db/singleton');
 const { authRequired, roleRequired, supplierOnly } = require('../middleware/auth');
 const { todayStr, BusinessError } = require('../utils/business');
 
@@ -15,10 +15,9 @@ function handleError(res, err) {
   res.status(500).json({ error: '服务器内部错误', detail: err.message });
 }
 
-// ==================== 采购员视图 - 待处理看板 ====================
-router.get('/buyer/dashboard', roleRequired('buyer', 'admin'), (req, res) => {
+router.get('/buyer/dashboard', roleRequired('buyer', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const buyerId = req.user.role === 'admin' ? null : req.user.id;
     const date = req.query.date || todayStr();
 
@@ -76,7 +75,7 @@ router.get('/buyer/dashboard', roleRequired('buyer', 'admin'), (req, res) => {
       JOIN suppliers s ON r.supplier_id = s.id
       JOIN deliveries d ON r.delivery_id = d.id
       JOIN purchase_orders po ON d.po_id = po.id
-      WHERE r.status = 'pending' AND r.supplier_signed = 0
+      WHERE r.status = 'pending' AND (r.supplier_signed = 0 OR r.supplier_signed IS NULL)
       ORDER BY r.created_at DESC LIMIT 100
     `).all();
 
@@ -98,10 +97,9 @@ router.get('/buyer/dashboard', roleRequired('buyer', 'admin'), (req, res) => {
       today_delivery_count: todaysDeliveries.length,
       unsigned_return_count: unsignReturns.length,
       expected_delivery_count: expectedDeliveries.length,
-      total_pending_value: pendingDeductions.reduce((s, d) => s + (d.deduction_value || 0), 0)
+      total_pending_value: pendingDeductions.reduce((s, d) => s + Number(d.deduction_value || 0), 0)
     };
 
-    db.close();
     res.json({
       summary,
       pending_deductions: pendingDeductions,
@@ -113,12 +111,11 @@ router.get('/buyer/dashboard', roleRequired('buyer', 'admin'), (req, res) => {
   } catch (err) { handleError(res, err); }
 });
 
-// 采购追补送 - 查看待补送扣量详情（不用翻照片）
-router.get('/buyer/deductions-trace', roleRequired('buyer', 'admin'), (req, res) => {
+router.get('/buyer/deductions-trace', roleRequired('buyer', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const { status } = req.query;
-    const sql = `SELECT
+    let sql = `SELECT
       ded.id, ded.deduction_no, ded.material_code, ded.material_name, ded.unit,
       ded.deduction_qty, ded.replaced_qty, ded.remaining_replace_qty,
       ded.deduction_value, ded.reason, ded.description, ded.photo_urls, ded.status, ded.created_at,
@@ -140,28 +137,26 @@ router.get('/buyer/deductions-trace', roleRequired('buyer', 'admin'), (req, res)
     }
     sql += ' ORDER BY ded.created_at DESC LIMIT 500';
     const rows = db.prepare(sql).all(...params);
-    rows.forEach(r => {
+    for (const r of rows) {
       r.replacements = db.prepare(`SELECT rp.replace_no, rp.replace_qty, rp.remaining_replace_qty,
         rp.status, rp.follow_up_date, rp.remarks, rp.created_at,
         u.name as buyer_name
         FROM replacements rp LEFT JOIN users u ON rp.buyer_id = u.id
         WHERE rp.original_deduction_id = ? ORDER BY rp.created_at DESC`).all(r.id);
-      r.replacements.forEach(rp => {
+      for (const rp of r.replacements) {
         rp.deliveries = db.prepare(`SELECT rd.delivered_qty, rd.received_qty, rd.re_deduction_qty,
           d.batch_no, d.delivery_date
           FROM replace_deliveries rd JOIN deliveries d ON rd.delivery_id = d.id
           WHERE rd.replacement_id = (SELECT id FROM replacements WHERE replace_no = ?)`).all(rp.replace_no);
-      });
-    });
-    db.close();
+      }
+    }
     res.json(rows);
   } catch (err) { handleError(res, err); }
 });
 
-// ==================== 财务视图 - 扣款导出 ====================
-router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) => {
+router.get('/finance/deductions', roleRequired('finance', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const { period, supplier_id, status, date_from, date_to, format } = req.query;
     let sql = `SELECT
       fd.id, fd.period, fd.supplier_id, s.name as supplier_name, s.code as supplier_code,
@@ -211,14 +206,12 @@ router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) =
       }
       const g = bySupplier[r.supplier_id];
       g.deduction_count++;
-      g.total_deduction_qty += r.deduction_qty;
-      g.total_deduction_value += r.deduction_value;
-      if (r.settle_status === 'settled') g.settled_value += r.deduction_value;
-      else g.unsettled_value += r.deduction_value;
+      g.total_deduction_qty += Number(r.deduction_qty);
+      g.total_deduction_value += Number(r.deduction_value);
+      if (r.settle_status === 'settled') g.settled_value += Number(r.deduction_value);
+      else g.unsettled_value += Number(r.deduction_value);
       g.details.push(r);
     });
-
-    db.close();
 
     if (format === 'excel' || format === 'xlsx') {
       const wb = XLSX.utils.book_new();
@@ -234,7 +227,7 @@ router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) =
         '扣量数量': r.deduction_qty,
         '单位': r.unit,
         '单价': r.unit_price,
-        '扣减金额(元)': r.deduction_value,
+        '扣减金额(元)': Number(r.deduction_value).toFixed(2),
         '扣量原因': r.reason_cn,
         '说明': r.description || '',
         '结算状态': r.settle_status === 'settled' ? '已结算' : r.settle_status === 'waived' ? '已豁免' : '未结算',
@@ -249,9 +242,9 @@ router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) =
         '供应商名称': g.supplier_name,
         '扣量笔数': g.deduction_count,
         '扣量总数量': g.total_deduction_qty,
-        '扣款总金额(元)': g.total_deduction_value,
-        '未结算金额(元)': g.unsettled_value,
-        '已结算金额(元)': g.settled_value
+        '扣款总金额(元)': g.total_deduction_value.toFixed(2),
+        '未结算金额(元)': g.unsettled_value.toFixed(2),
+        '已结算金额(元)': g.settled_value.toFixed(2)
       }));
       const ws2 = XLSX.utils.json_to_sheet(summary);
       XLSX.utils.book_append_sheet(wb, ws2, '按供应商汇总');
@@ -260,15 +253,15 @@ router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) =
       const filename = `deductions_${period || todayStr()}.xlsx`;
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-      return res.send(buf);
+      return res.send(Buffer.from(buf));
     }
 
     const totals = {
       deduction_count: rows.length,
-      total_deduction_qty: rows.reduce((s, r) => s + r.deduction_qty, 0),
-      total_deduction_value: rows.reduce((s, r) => s + r.deduction_value, 0),
-      unsettled_value: rows.filter(r => r.settle_status === 'unsettled').reduce((s, r) => s + r.deduction_value, 0),
-      settled_value: rows.filter(r => r.settle_status === 'settled').reduce((s, r) => s + r.deduction_value, 0)
+      total_deduction_qty: rows.reduce((s, r) => s + Number(r.deduction_qty), 0),
+      total_deduction_value: rows.reduce((s, r) => s + Number(r.deduction_value), 0),
+      unsettled_value: rows.filter(r => r.settle_status === 'unsettled').reduce((s, r) => s + Number(r.deduction_value), 0),
+      settled_value: rows.filter(r => r.settle_status === 'settled').reduce((s, r) => s + Number(r.deduction_value), 0)
     };
 
     res.json({
@@ -280,39 +273,62 @@ router.get('/finance/deductions', roleRequired('finance', 'admin'), (req, res) =
   } catch (err) { handleError(res, err); }
 });
 
-// 财务标记扣款已结算
-router.post('/finance/deductions/:id/settle', roleRequired('finance', 'admin'), (req, res) => {
+router.post('/finance/deductions/:id/settle', roleRequired('finance', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const fd = db.prepare('SELECT * FROM finance_deductions WHERE id = ?').get(req.params.id);
-    if (!fd) { db.close(); return res.status(404).json({ error: '财务扣款记录不存在' }); }
+    if (!fd) return res.status(404).json({ error: '财务扣款记录不存在' });
     const { status } = req.body;
     const s = status === 'waived' ? 'waived' : 'settled';
     db.prepare(`UPDATE finance_deductions SET status = ?, settled_at = datetime('now') WHERE id = ?`).run(s, req.params.id);
     const updated = db.prepare('SELECT * FROM finance_deductions WHERE id = ?').get(req.params.id);
-    db.close();
     res.json({ message: s === 'waived' ? '已标记豁免' : '已标记结算', ...updated });
   } catch (err) { handleError(res, err); }
 });
 
-// ==================== 厨师长视图 - 当天可用库存 + 质量问题 ====================
-router.get('/chef/dashboard', roleRequired('chef', 'admin'), (req, res) => {
+router.get('/chef/dashboard', roleRequired('chef', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const date = req.query.date || todayStr();
 
-    const stock = db.prepare(`SELECT
+    const stockRaw = db.prepare(`SELECT
       material_code, material_name, category, unit,
-      SUM(available_qty) as available_qty,
-      SUM(quality_issue_qty) as quality_issue_qty,
-      SUM(in_inspection_qty) as in_inspection_qty,
-      COUNT(DISTINCT batch_no) as batch_count,
-      GROUP_CONCAT(DISTINCT batch_no, '; ') as batch_nos,
-      GROUP_CONCAT(DISTINCT po_no, '; ') as po_nos
+      available_qty, quality_issue_qty, in_inspection_qty,
+      batch_no, po_no
       FROM stock_snapshots
       WHERE snapshot_date = ?
-      GROUP BY material_code, material_name, category, unit
       ORDER BY category, material_name`).all(date);
+
+    const stockMap = {};
+    stockRaw.forEach(r => {
+      const key = r.material_code;
+      if (!stockMap[key]) {
+        stockMap[key] = {
+          material_code: r.material_code,
+          material_name: r.material_name,
+          category: r.category,
+          unit: r.unit,
+          available_qty: 0,
+          quality_issue_qty: 0,
+          in_inspection_qty: 0,
+          _batches: new Set(),
+          _pos: new Set()
+        };
+      }
+      const s = stockMap[key];
+      s.available_qty += Number(r.available_qty);
+      s.quality_issue_qty += Number(r.quality_issue_qty);
+      s.in_inspection_qty += Number(r.in_inspection_qty);
+      if (r.batch_no) s._batches.add(r.batch_no);
+      if (r.po_no) s._pos.add(r.po_no);
+    });
+    const stock = Object.values(stockMap).map(s => {
+      s.batch_count = s._batches.size;
+      s.batch_nos = [...s._batches].join('; ');
+      s.po_nos = [...s._pos].join('; ');
+      delete s._batches; delete s._pos;
+      return s;
+    });
 
     const todayIssues = db.prepare(`SELECT
       ded.id, ded.deduction_no, ded.material_code, ded.material_name, ded.category,
@@ -331,7 +347,7 @@ router.get('/chef/dashboard', roleRequired('chef', 'admin'), (req, res) => {
       s.name as supplier_name, s.category as supplier_category,
       po.po_no, u.name as inspector_name,
       (SELECT COUNT(*) FROM delivery_items di WHERE di.delivery_id = d.id) as item_count,
-      (SELECT COUNT(*) FROM delivery_items di WHERE di.delivery_id = d.id AND di.has_quality_issue = 1) as issue_count
+      (SELECT COUNT(*) FROM delivery_items di WHERE di.delivery_id = d.id AND (di.has_quality_issue = 1 OR di.has_quality_issue = '1')) as issue_count
       FROM deliveries d
       JOIN suppliers s ON d.supplier_id = s.id
       JOIN purchase_orders po ON d.po_id = po.id
@@ -344,8 +360,8 @@ router.get('/chef/dashboard', roleRequired('chef', 'admin'), (req, res) => {
       const cat = s.category;
       if (!categorySummary[cat]) categorySummary[cat] = { category: cat, item_count: 0, total_available: 0, total_quality_issue: 0 };
       categorySummary[cat].item_count++;
-      categorySummary[cat].total_available += s.available_qty;
-      categorySummary[cat].total_quality_issue += s.quality_issue_qty;
+      categorySummary[cat].total_available += Number(s.available_qty);
+      categorySummary[cat].total_quality_issue += Number(s.quality_issue_qty);
     });
 
     const reasonMap = {
@@ -359,16 +375,15 @@ router.get('/chef/dashboard', roleRequired('chef', 'admin'), (req, res) => {
       const r = i.reason_cn;
       if (!issueByReason[r]) issueByReason[r] = { reason: r, count: 0, total_qty: 0, total_value: 0 };
       issueByReason[r].count++;
-      issueByReason[r].total_qty += i.deduction_qty;
-      issueByReason[r].total_value += i.deduction_value;
+      issueByReason[r].total_qty += Number(i.deduction_qty);
+      issueByReason[r].total_value += Number(i.deduction_value);
     });
 
-    db.close();
     res.json({
       date,
       stock_summary: {
         total_item_types: stock.length,
-        total_batches: stock.reduce((s, r) => s + r.batch_count, 0),
+        total_batches: stock.reduce((s, r) => s + Number(r.batch_count), 0),
         total_available_value: 'N/A',
         total_quality_issue_count: todayIssues.length
       },
@@ -382,10 +397,9 @@ router.get('/chef/dashboard', roleRequired('chef', 'admin'), (req, res) => {
   } catch (err) { handleError(res, err); }
 });
 
-// 厨师长：按物料查看历史批次和质量趋势
-router.get('/chef/material-history', roleRequired('chef', 'admin'), (req, res) => {
+router.get('/chef/material-history', roleRequired('chef', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const { material_code, days } = req.query;
     if (!material_code) throw new BusinessError('请指定物料编码');
     const d = Number(days) || 30;
@@ -394,26 +408,24 @@ router.get('/chef/material-history', roleRequired('chef', 'admin'), (req, res) =
       ded.deduction_count, ded.deduction_qty_total, ded.deduction_value_total
       FROM stock_snapshots ss
       LEFT JOIN (
-        SELECT DATE(dd.delivery_date) as ddate, ded.material_code,
+        SELECT DATE(dd.delivery_date) as ddate, ded_inner.material_code,
           COUNT(*) as deduction_count,
-          SUM(ded.deduction_qty) as deduction_qty_total,
-          SUM(ded.deduction_value) as deduction_value_total
-        FROM deductions ded
-        JOIN deliveries dd ON ded.delivery_id = dd.id
-        WHERE ded.material_code = ? AND DATE(dd.delivery_date) >= DATE('now', ?)
-        GROUP BY DATE(dd.delivery_date), ded.material_code
+          COALESCE(SUM(ded_inner.deduction_qty), 0) as deduction_qty_total,
+          COALESCE(SUM(ded_inner.deduction_value), 0) as deduction_value_total
+        FROM deductions ded_inner
+        JOIN deliveries dd ON ded_inner.delivery_id = dd.id
+        WHERE ded_inner.material_code = ? AND DATE(dd.delivery_date) >= DATE('now', ?)
+        GROUP BY DATE(dd.delivery_date), ded_inner.material_code
       ) ded ON ded.ddate = ss.snapshot_date AND ded.material_code = ss.material_code
       WHERE ss.material_code = ? AND ss.snapshot_date >= DATE('now', ?)
       ORDER BY ss.snapshot_date DESC`).all(material_code, `-${d} days`, material_code, `-${d} days`);
-    db.close();
     res.json(history);
   } catch (err) { handleError(res, err); }
 });
 
-// ==================== 验收员视图 - 下班前按供应商汇总 ====================
-router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), (req, res) => {
+router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const date = req.query.date || todayStr();
     const inspectorId = req.user.role === 'admin' ? null : req.user.id;
 
@@ -480,27 +492,27 @@ router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), (req,
       }
       const g = bySupplier[d.supplier_id];
       g.delivery_count++;
-      if (d.is_final === 1) g.final_count++;
+      if (Number(d.is_final) === 1) g.final_count++;
       const items = diMap[d.id] || [];
       const deds = dedMap[d.id] || [];
       const rets = retMap[d.id] || [];
 
-      items.forEach(di => {
-        g.total_delivered_value += (di.delivered_qty || 0) * (di.unit_price || 0);
-        g.total_accepted_value += (di.actual_accepted_qty || 0) * (di.unit_price || 0);
-        if (di.has_quality_issue) g.quality_issue_count++;
-      });
-      deds.forEach(ded => {
+      for (const di of items) {
+        g.total_delivered_value += Number(di.delivered_qty || 0) * Number(di.unit_price || 0);
+        g.total_accepted_value += Number(di.actual_accepted_qty || 0) * Number(di.unit_price || 0);
+        if (Number(di.has_quality_issue) === 1) g.quality_issue_count++;
+      }
+      for (const ded of deds) {
         g.total_deduction_count++;
-        g.total_deduction_qty += ded.deduction_qty;
-        g.total_deduction_value += ded.deduction_value;
-      });
-      rets.forEach(r => {
+        g.total_deduction_qty += Number(ded.deduction_qty);
+        g.total_deduction_value += Number(ded.deduction_value);
+      }
+      for (const r of rets) {
         g.return_count++;
-        g.total_return_qty += r.total_qty;
-        g.total_return_value += r.total_value || 0;
-        if (r.supplier_signed === 0) g.unsigned_return_count++;
-      });
+        g.total_return_qty += Number(r.total_qty);
+        g.total_return_value += Number(r.total_value || 0);
+        if (Number(r.supplier_signed) === 0) g.unsigned_return_count++;
+      }
 
       g.deliveries.push({
         ...d,
@@ -513,7 +525,7 @@ router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), (req,
     const grandTotal = {
       total_suppliers: Object.keys(bySupplier).length,
       total_deliveries: deliveries.length,
-      total_final_deliveries: deliveries.filter(d => d.is_final === 1).length,
+      total_final_deliveries: deliveries.filter(d => Number(d.is_final) === 1).length,
       total_deduction_count: Object.values(bySupplier).reduce((s, g) => s + g.total_deduction_count, 0),
       total_deduction_value: Object.values(bySupplier).reduce((s, g) => s + g.total_deduction_value, 0),
       total_return_count: Object.values(bySupplier).reduce((s, g) => s + g.return_count, 0),
@@ -524,7 +536,6 @@ router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), (req,
       total_delivered_value: Object.values(bySupplier).reduce((s, g) => s + g.total_delivered_value, 0)
     };
 
-    db.close();
     res.json({
       date,
       inspector: inspectorId ? { id: req.user.id, name: req.user.name } : null,
@@ -534,10 +545,9 @@ router.get('/inspector/daily-summary', roleRequired('inspector', 'admin'), (req,
   } catch (err) { handleError(res, err); }
 });
 
-// 验收员：下载日汇总 Excel
-router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin'), (req, res) => {
+router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin'), async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const date = req.query.date || todayStr();
     const inspectorId = req.user.role === 'admin' ? null : req.user.id;
 
@@ -582,7 +592,6 @@ router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin')
         JOIN purchase_orders po ON d.po_id = po.id
         WHERE r.delivery_id IN (${q})`).all(...ids);
     }
-    db.close();
 
     const reasonMap = {
       rotten: '腐烂变质', weight_insufficient: '重量不足', damaged: '破损',
@@ -595,8 +604,8 @@ router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin')
       '供应商': i.supplier_name, '物料编码': i.material_code, '物料名称': i.material_name,
       '类别': i.category, '送货数量': i.delivered_qty, '实收数量': i.actual_accepted_qty,
       '扣量数量': i.deduction_qty, '单位': i.unit, '单价': i.unit_price,
-      '金额': (i.actual_accepted_qty * i.unit_price).toFixed(2),
-      '有质量问题': i.has_quality_issue ? '是' : '否',
+      '金额': (Number(i.actual_accepted_qty || 0) * Number(i.unit_price || 0)).toFixed(2),
+      '有质量问题': Number(i.has_quality_issue) === 1 ? '是' : '否',
       '质量详情': i.quality_detail || '', '扣量原因': i.deduction_reason || ''
     })));
     XLSX.utils.book_append_sheet(wb, ws1, '送货明细');
@@ -607,7 +616,7 @@ router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin')
       '物料编码': d.material_code, '物料名称': d.material_name,
       '类别': d.category, '订单数量': d.expected_qty, '送货数量': d.delivered_qty,
       '扣量数量': d.deduction_qty, '单位': d.unit, '单价': d.unit_price,
-      '扣减金额(元)': d.deduction_value.toFixed(2),
+      '扣减金额(元)': Number(d.deduction_value || 0).toFixed(2),
       '扣量原因': reasonMap[d.reason] || d.reason, '说明': d.description || '',
       '状态': d.status, '已补送': d.replaced_qty, '待补送': d.remaining_replace_qty
     })));
@@ -618,9 +627,9 @@ router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin')
       '采购单号': r.po_no, '供应商': r.supplier_name,
       '物料编码': r.material_code, '物料名称': r.material_name,
       '退货数量': r.return_qty, '单位': r.unit,
-      '退货金额(元)': (r.return_value || 0).toFixed(2),
+      '退货金额(元)': Number(r.return_value || 0).toFixed(2),
       '退货原因': r.reason, '退货类型': r.return_type,
-      '供应商已签收': r.supplier_signed ? '是' : '否',
+      '供应商已签收': Number(r.supplier_signed) === 1 ? '是' : '否',
       '签收时间': r.supplier_signed_at || '', '状态': r.status
     })));
     XLSX.utils.book_append_sheet(wb, ws3, '退货明细');
@@ -629,14 +638,13 @@ router.get('/inspector/daily-summary/export', roleRequired('inspector', 'admin')
     const filename = `inspector_summary_${date}.xlsx`;
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.send(buf);
+    res.send(Buffer.from(buf));
   } catch (err) { handleError(res, err); }
 });
 
-// ==================== 供应商视图 - 签收退货 + 我的扣量和补送 ====================
-router.get('/supplier/dashboard', supplierOnly, (req, res) => {
+router.get('/supplier/dashboard', supplierOnly, async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const supplierId = req.user.role === 'admin' ? (req.query.supplier_id ? Number(req.query.supplier_id) : null) : req.user.supplier_id;
     if (!supplierId) throw new BusinessError('未指定供应商');
 
@@ -647,12 +655,15 @@ router.get('/supplier/dashboard', supplierOnly, (req, res) => {
 
     const summary = {};
     summary.deliveries_today = db.prepare(`SELECT COUNT(*) as cnt FROM deliveries WHERE supplier_id = ? AND delivery_date = ?`).get(supplierId, date).cnt;
-    summary.deductions_pending_replace = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(remaining_replace_qty),0) as qty, COALESCE(SUM(deduction_value),0) as val
+    const dpr = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(remaining_replace_qty),0) as qty, COALESCE(SUM(deduction_value),0) as val
       FROM deductions WHERE supplier_id = ? AND status IN ('pending_replace','partial_replaced')`).get(supplierId);
-    summary.replacements_pending = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(remaining_replace_qty),0) as qty
+    summary.deductions_pending_replace = dpr;
+    const rpp = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(remaining_replace_qty),0) as qty
       FROM replacements WHERE supplier_id = ? AND status IN ('pending','partial_delivered')`).get(supplierId);
-    summary.returns_pending_sign = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(total_qty),0) as qty, COALESCE(SUM(total_value),0) as val
-      FROM returns WHERE supplier_id = ? AND supplier_signed = 0 AND status = 'pending'`).get(supplierId);
+    summary.replacements_pending = rpp;
+    const rps = db.prepare(`SELECT COUNT(*) as cnt, COALESCE(SUM(total_qty),0) as qty, COALESCE(SUM(total_value),0) as val
+      FROM returns WHERE supplier_id = ? AND (supplier_signed = 0 OR supplier_signed IS NULL) AND status = 'pending'`).get(supplierId);
+    summary.returns_pending_sign = rps;
 
     const pendingReturns = db.prepare(`SELECT
       r.id, r.return_no, r.return_date, r.return_type, r.total_qty, r.total_value,
@@ -661,14 +672,14 @@ router.get('/supplier/dashboard', supplierOnly, (req, res) => {
       FROM returns r
       JOIN deliveries d ON r.delivery_id = d.id
       JOIN purchase_orders po ON d.po_id = po.id
-      WHERE r.supplier_id = ? AND r.supplier_signed = 0 AND r.status = 'pending'
+      WHERE r.supplier_id = ? AND (r.supplier_signed = 0 OR r.supplier_signed IS NULL) AND r.status = 'pending'
       ORDER BY r.created_at DESC LIMIT 200`).all(supplierId);
-    pendingReturns.forEach(r => {
+    for (const r of pendingReturns) {
       r.items = db.prepare(`SELECT ri.*, ded.deduction_qty as original_deduction_qty,
         ded.reason as deduction_reason, ded.description as deduction_description, ded.photo_urls as deduction_photos
         FROM return_items ri LEFT JOIN deductions ded ON ri.deduction_id = ded.id
         WHERE ri.return_id = ?`).all(r.id);
-    });
+    }
 
     const myDeductions = db.prepare(`SELECT
       ded.id, ded.deduction_no, ded.material_code, ded.material_name, ded.unit,
@@ -703,7 +714,6 @@ router.get('/supplier/dashboard', supplierOnly, (req, res) => {
       WHERE r.supplier_id = ?
       ORDER BY r.created_at DESC LIMIT 300`).all(supplierId);
 
-    db.close();
     res.json({
       supplier,
       date,
@@ -721,10 +731,9 @@ router.get('/supplier/dashboard', supplierOnly, (req, res) => {
   } catch (err) { handleError(res, err); }
 });
 
-// 供应商：查看退货单详情（含对应的扣量照片和原因）
-router.get('/supplier/returns/:id', supplierOnly, (req, res) => {
+router.get('/supplier/returns/:id', supplierOnly, async (req, res) => {
   try {
-    const db = getDb();
+    const db = await getDB();
     const supplierId = req.user.role === 'admin' ? null : req.user.supplier_id;
     const r = db.prepare(`SELECT
       r.*, s.name as supplier_name, s.code as supplier_code,
@@ -736,9 +745,9 @@ router.get('/supplier/returns/:id', supplierOnly, (req, res) => {
       JOIN purchase_orders po ON d.po_id = po.id
       LEFT JOIN users u ON r.handler_id = u.id
       WHERE r.id = ?`).get(req.params.id);
-    if (!r) { db.close(); return res.status(404).json({ error: '退货单不存在' }); }
-    if (supplierId && r.supplier_id !== supplierId) {
-      db.close(); return res.status(403).json({ error: '只能查看本供应商的退货单' });
+    if (!r) return res.status(404).json({ error: '退货单不存在' });
+    if (supplierId && Number(r.supplier_id) !== Number(supplierId)) {
+      return res.status(403).json({ error: '只能查看本供应商的退货单' });
     }
     r.items = db.prepare(`SELECT
       ri.*,
@@ -748,7 +757,6 @@ router.get('/supplier/returns/:id', supplierOnly, (req, res) => {
       FROM return_items ri
       LEFT JOIN deductions ded ON ri.deduction_id = ded.id
       WHERE ri.return_id = ?`).all(r.id);
-    db.close();
     res.json(r);
   } catch (err) { handleError(res, err); }
 });
