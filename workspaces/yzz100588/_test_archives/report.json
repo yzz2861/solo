@@ -1,0 +1,703 @@
+{
+  "scanned_at": "2026-06-20T12:14:38",
+  "root": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives",
+  "max_file_size": 1048576,
+  "total": 11,
+  "return_required": 10,
+  "reports": [
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectA-zhangsan-v1.zip",
+      "project": "ProjectA",
+      "submitter": "zhangsan",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "README.md",
+          "size": 27,
+          "size_h": "27B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "f3bacba4c6e0b4b40abf059ec91a04ad"
+        },
+        {
+          "name": "src/main.py",
+          "size": 15,
+          "size_h": "15B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "100e360cc768f15a35ed9ddf05e354ce"
+        },
+        {
+          "name": "src/utils.py",
+          "size": 25,
+          "size_h": "25B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "980358ca1b581d33dae851b68151c6f5"
+        },
+        {
+          "name": "docs/spec.pdf",
+          "size": 25,
+          "size_h": "25B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "3ccac8e71027b96bce700ca3451d87fa"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)",
+          "file": "README.md"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectA-zhangsan-v2.zip",
+      "project": "ProjectA",
+      "submitter": "zhangsan",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "contract.pdf",
+          "size": 36,
+          "size_h": "36B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "f975c0623bb012e0371b5e8dcd75b85e"
+        },
+        {
+          "name": "notes.txt",
+          "size": 14,
+          "size_h": "14B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "f782d0cfc87a077258fbd3311b80adb7"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)",
+          "file": "contract.pdf"
+        },
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)",
+          "file": "notes.txt"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectA-zhaoliu-v2.zip",
+      "project": "ProjectA",
+      "submitter": "zhaoliu",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "README.md",
+          "size": 5,
+          "size_h": "5B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "5d41402abc4b2a76b9719d911017c592"
+        },
+        {
+          "name": "empty_folder/",
+          "size": 0,
+          "size_h": "0B",
+          "mtime": "1980-01-01T00:00:00",
+          "is_dir": true,
+          "md5": null
+        },
+        {
+          "name": "assets/images/",
+          "size": 0,
+          "size_h": "0B",
+          "mtime": "1980-01-01T00:00:00",
+          "is_dir": true,
+          "md5": null
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "EMPTY_DIR",
+          "message": "检测到空目录: empty_folder/",
+          "file": "empty_folder/"
+        },
+        {
+          "level": "WARN",
+          "code": "EMPTY_DIR",
+          "message": "检测到空目录: assets/images/",
+          "file": "assets/images/"
+        },
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)",
+          "file": "README.md"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectB-lisi-v2.zip",
+      "project": "ProjectB",
+      "submitter": "lisi",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "说明文档/需求.txt",
+          "size": 18,
+          "size_h": "18B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "02a364c6517f32de394971d28b61f562"
+        },
+        {
+          "name": "data.xlsx",
+          "size": 9,
+          "size_h": "9B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "6f0b05c15f887a0df820b8d30a92f943"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "CHINESE_PATH",
+          "message": "路径/文件名包含中文: 说明文档/需求.txt",
+          "file": "说明文档/需求.txt"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectB-lisi-v3.zip",
+      "project": "ProjectB",
+      "submitter": "lisi",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "contract.pdf",
+          "size": 52,
+          "size_h": "52B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "072e6400f9f7c60956a0f02e7852b1b1"
+        },
+        {
+          "name": "notes.txt",
+          "size": 22,
+          "size_h": "22B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "627641a4a26253c1d592d85e83ee3450"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)",
+          "file": "contract.pdf"
+        },
+        {
+          "level": "WARN",
+          "code": "SAME_NAME_DIFF_CONTENT",
+          "message": "同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)",
+          "file": "notes.txt"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectC-wangwu-v1.zip",
+      "project": "ProjectC",
+      "submitter": "wangwu",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "code.py",
+          "size": 5,
+          "size_h": "5B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "d37ffc54b67ce8de1f01efb1f2e33689"
+        },
+        {
+          "name": ".DS_Store",
+          "size": 11,
+          "size_h": "11B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "93c81ba18ea8e29d756a178bbc760bd9"
+        },
+        {
+          "name": "__MACOSX/code.py._",
+          "size": 17,
+          "size_h": "17B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "0e9af4722fcfe787145ec71cdd5657a7"
+        },
+        {
+          "name": "Thumbs.db",
+          "size": 13,
+          "size_h": "13B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "5bddb8b8e174e572dfcac5229d4581c4"
+        },
+        {
+          "name": "code.bak",
+          "size": 11,
+          "size_h": "11B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "05217dd038cf19366660ce016ef1c620"
+        },
+        {
+          "name": "code.tmp",
+          "size": 9,
+          "size_h": "9B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "7a7d8299d51a07ce172810dc52d46e5f"
+        },
+        {
+          "name": ".env",
+          "size": 10,
+          "size_h": "10B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "287c216ed48c389b22ec7561691fec00"
+        },
+        {
+          "name": "~$report.xlsx",
+          "size": 16,
+          "size_h": "16B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "c7c71f0c30eaf1d1faca10532f1c0dfb"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "HIDDEN_FILE",
+          "message": "检测到隐藏文件/目录: .DS_Store",
+          "file": ".DS_Store"
+        },
+        {
+          "level": "WARN",
+          "code": "TEMP_FILE",
+          "message": "检测到临时/系统文件: .DS_Store",
+          "file": ".DS_Store"
+        },
+        {
+          "level": "WARN",
+          "code": "TEMP_FILE",
+          "message": "检测到临时/系统文件: __MACOSX/code.py._",
+          "file": "__MACOSX/code.py._"
+        },
+        {
+          "level": "WARN",
+          "code": "TEMP_FILE",
+          "message": "检测到临时/系统文件: Thumbs.db",
+          "file": "Thumbs.db"
+        },
+        {
+          "level": "WARN",
+          "code": "TEMP_FILE",
+          "message": "检测到临时/系统文件: code.bak",
+          "file": "code.bak"
+        },
+        {
+          "level": "WARN",
+          "code": "TEMP_FILE",
+          "message": "检测到临时/系统文件: code.tmp",
+          "file": "code.tmp"
+        },
+        {
+          "level": "WARN",
+          "code": "HIDDEN_FILE",
+          "message": "检测到隐藏文件/目录: .env",
+          "file": ".env"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectD-chenqi-v1.zip",
+      "project": "ProjectD",
+      "submitter": "chenqi",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "huge.bin",
+          "size": 2097152,
+          "size_h": "2.0MB",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "c13369100e17ae3d24907265500bc591"
+        },
+        {
+          "name": "small.txt",
+          "size": 10,
+          "size_h": "10B",
+          "mtime": "2026-06-20T12:14:36",
+          "is_dir": false,
+          "md5": "e8760f5b177c12079c2690c5713a7786"
+        }
+      ],
+      "issues": [
+        {
+          "level": "ERROR",
+          "code": "FILE_TOO_LARGE",
+          "message": "文件超过大小限制 2.0MB > 1.0MB: huge.bin",
+          "file": "huge.bin"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectE-sunba-v1.zip",
+      "project": "ProjectE",
+      "submitter": "sunba",
+      "archive_type": "zip",
+      "ok": false,
+      "should_return": true,
+      "entries": [],
+      "issues": [
+        {
+          "level": "ERROR",
+          "code": "BAD_ARCHIVE",
+          "message": "损坏的 ZIP 文件: File is not a zip file"
+        },
+        {
+          "level": "WARN",
+          "code": "NO_FILES",
+          "message": "压缩包内没有任何文件"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectF-zhoujiu-v1.tar.gz",
+      "project": "ProjectF",
+      "submitter": "zhoujiu",
+      "archive_type": "tar",
+      "ok": true,
+      "should_return": false,
+      "entries": [
+        {
+          "name": "app.py",
+          "size": 16,
+          "size_h": "16B",
+          "mtime": "2026-06-20T12:14:37",
+          "is_dir": false,
+          "md5": "7d1c663b0473e431297bb3ddaf8ab654"
+        },
+        {
+          "name": "lib/helper.js",
+          "size": 22,
+          "size_h": "22B",
+          "mtime": "2026-06-20T12:14:37",
+          "is_dir": false,
+          "md5": "46f2ecda1535c15f84c355211e60138f"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectG-wushi-v1.tar",
+      "project": "ProjectG",
+      "submitter": "wushi",
+      "archive_type": "tar",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "real.txt",
+          "size": 8,
+          "size_h": "8B",
+          "mtime": "2026-06-20T12:14:37",
+          "is_dir": false,
+          "md5": "dea23ae84a241d663d39969f43ccd10e"
+        },
+        {
+          "name": "link.txt",
+          "size": 0,
+          "size_h": "0B",
+          "mtime": "2026-06-20T12:14:37",
+          "is_dir": false,
+          "md5": "dea23ae84a241d663d39969f43ccd10e"
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "SYMLINK",
+          "message": "检测到符号链接/硬链接: link.txt",
+          "file": "link.txt"
+        }
+      ]
+    },
+    {
+      "path": "/Users/bill/Documents/solo/workspaces/yzz100588/_test_archives/ProjectH-wuwei-v1.zip",
+      "project": "ProjectH",
+      "submitter": "wuwei",
+      "archive_type": "zip",
+      "ok": true,
+      "should_return": true,
+      "entries": [
+        {
+          "name": "only_dir/",
+          "size": 0,
+          "size_h": "0B",
+          "mtime": "1980-01-01T00:00:00",
+          "is_dir": true,
+          "md5": null
+        }
+      ],
+      "issues": [
+        {
+          "level": "WARN",
+          "code": "EMPTY_DIR",
+          "message": "检测到空目录: only_dir/",
+          "file": "only_dir/"
+        },
+        {
+          "level": "WARN",
+          "code": "NO_FILES",
+          "message": "压缩包内没有任何文件"
+        }
+      ]
+    }
+  ],
+  "by_project": {
+    "ProjectA": {
+      "zhangsan": [
+        {
+          "archive": "ProjectA-zhangsan-v1.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)",
+              "file": "README.md"
+            }
+          ]
+        },
+        {
+          "archive": "ProjectA-zhangsan-v2.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)",
+              "file": "contract.pdf"
+            },
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)",
+              "file": "notes.txt"
+            }
+          ]
+        }
+      ],
+      "zhaoliu": [
+        {
+          "archive": "ProjectA-zhaoliu-v2.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "EMPTY_DIR",
+              "message": "检测到空目录: empty_folder/",
+              "file": "empty_folder/"
+            },
+            {
+              "level": "WARN",
+              "code": "EMPTY_DIR",
+              "message": "检测到空目录: assets/images/",
+              "file": "assets/images/"
+            },
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)",
+              "file": "README.md"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectB": {
+      "lisi": [
+        {
+          "archive": "ProjectB-lisi-v2.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "CHINESE_PATH",
+              "message": "路径/文件名包含中文: 说明文档/需求.txt",
+              "file": "说明文档/需求.txt"
+            }
+          ]
+        },
+        {
+          "archive": "ProjectB-lisi-v3.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)",
+              "file": "contract.pdf"
+            },
+            {
+              "level": "WARN",
+              "code": "SAME_NAME_DIFF_CONTENT",
+              "message": "同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)",
+              "file": "notes.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectC": {
+      "wangwu": [
+        {
+          "archive": "ProjectC-wangwu-v1.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "HIDDEN_FILE",
+              "message": "检测到隐藏文件/目录: .DS_Store",
+              "file": ".DS_Store"
+            },
+            {
+              "level": "WARN",
+              "code": "TEMP_FILE",
+              "message": "检测到临时/系统文件: .DS_Store",
+              "file": ".DS_Store"
+            },
+            {
+              "level": "WARN",
+              "code": "TEMP_FILE",
+              "message": "检测到临时/系统文件: __MACOSX/code.py._",
+              "file": "__MACOSX/code.py._"
+            },
+            {
+              "level": "WARN",
+              "code": "TEMP_FILE",
+              "message": "检测到临时/系统文件: Thumbs.db",
+              "file": "Thumbs.db"
+            },
+            {
+              "level": "WARN",
+              "code": "TEMP_FILE",
+              "message": "检测到临时/系统文件: code.bak",
+              "file": "code.bak"
+            },
+            {
+              "level": "WARN",
+              "code": "TEMP_FILE",
+              "message": "检测到临时/系统文件: code.tmp",
+              "file": "code.tmp"
+            },
+            {
+              "level": "WARN",
+              "code": "HIDDEN_FILE",
+              "message": "检测到隐藏文件/目录: .env",
+              "file": ".env"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectD": {
+      "chenqi": [
+        {
+          "archive": "ProjectD-chenqi-v1.zip",
+          "issues": [
+            {
+              "level": "ERROR",
+              "code": "FILE_TOO_LARGE",
+              "message": "文件超过大小限制 2.0MB > 1.0MB: huge.bin",
+              "file": "huge.bin"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectE": {
+      "sunba": [
+        {
+          "archive": "ProjectE-sunba-v1.zip",
+          "issues": [
+            {
+              "level": "ERROR",
+              "code": "BAD_ARCHIVE",
+              "message": "损坏的 ZIP 文件: File is not a zip file"
+            },
+            {
+              "level": "WARN",
+              "code": "NO_FILES",
+              "message": "压缩包内没有任何文件"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectG": {
+      "wushi": [
+        {
+          "archive": "ProjectG-wushi-v1.tar",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "SYMLINK",
+              "message": "检测到符号链接/硬链接: link.txt",
+              "file": "link.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "ProjectH": {
+      "wuwei": [
+        {
+          "archive": "ProjectH-wuwei-v1.zip",
+          "issues": [
+            {
+              "level": "WARN",
+              "code": "EMPTY_DIR",
+              "message": "检测到空目录: only_dir/",
+              "file": "only_dir/"
+            },
+            {
+              "level": "WARN",
+              "code": "NO_FILES",
+              "message": "压缩包内没有任何文件"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,267 @@
+
+=================================  压缩包清单审计报告  ==================================
+扫描目录: /Users/bill/Documents/solo/workspaces/yzz100588/_test_archives
+扫描时间: 2026-06-20 12:14:38
+压缩包总数: 11
+需退回修改: 10
+正常通过:   1
+
+==========================  ProjectA-zhangsan-v1.zip  ==========================
+项目:     ProjectA
+提交人:   zhangsan
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 4
+文件总大小: 92B
+
+-- 文件清单 --
+  [F] README.md
+         大小: 27B  修改时间: 2026-06-20 12:14:36  MD5: f3bacba4c6e0b4b40abf059ec91a04ad
+  [F] src/main.py
+         大小: 15B  修改时间: 2026-06-20 12:14:36  MD5: 100e360cc768f15a35ed9ddf05e354ce
+  [F] src/utils.py
+         大小: 25B  修改时间: 2026-06-20 12:14:36  MD5: 980358ca1b581d33dae851b68151c6f5
+  [F] docs/spec.pdf
+         大小: 25B  修改时间: 2026-06-20 12:14:36  MD5: 3ccac8e71027b96bce700ca3451d87fa
+
+-- 问题与退回原因 --
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)
+
+==========================  ProjectA-zhangsan-v2.zip  ==========================
+项目:     ProjectA
+提交人:   zhangsan
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 2
+文件总大小: 50B
+
+-- 文件清单 --
+  [F] contract.pdf
+         大小: 36B  修改时间: 2026-06-20 12:14:36  MD5: f975c0623bb012e0371b5e8dcd75b85e
+  [F] notes.txt
+         大小: 14B  修改时间: 2026-06-20 12:14:36  MD5: f782d0cfc87a077258fbd3311b80adb7
+
+-- 问题与退回原因 --
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)
+
+==========================  ProjectA-zhaoliu-v2.zip  ===========================
+项目:     ProjectA
+提交人:   zhaoliu
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 3
+文件总大小: 5B
+
+-- 文件清单 --
+  [F] README.md
+         大小: 5B  修改时间: 2026-06-20 12:14:36  MD5: 5d41402abc4b2a76b9719d911017c592
+  [D] empty_folder/
+         大小: 0B  修改时间: 1980-01-01 00:00:00
+  [D] assets/images/
+         大小: 0B  修改时间: 1980-01-01 00:00:00
+
+-- 问题与退回原因 --
+  [WARN ] [EMPTY_DIR] 检测到空目录: empty_folder/
+  [WARN ] [EMPTY_DIR] 检测到空目录: assets/images/
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)
+
+============================  ProjectB-lisi-v2.zip  ============================
+项目:     ProjectB
+提交人:   lisi
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 2
+文件总大小: 27B
+
+-- 文件清单 --
+  [F] 说明文档/需求.txt
+         大小: 18B  修改时间: 2026-06-20 12:14:36  MD5: 02a364c6517f32de394971d28b61f562
+  [F] data.xlsx
+         大小: 9B  修改时间: 2026-06-20 12:14:36  MD5: 6f0b05c15f887a0df820b8d30a92f943
+
+-- 问题与退回原因 --
+  [WARN ] [CHINESE_PATH] 路径/文件名包含中文: 说明文档/需求.txt
+
+============================  ProjectB-lisi-v3.zip  ============================
+项目:     ProjectB
+提交人:   lisi
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 2
+文件总大小: 74B
+
+-- 文件清单 --
+  [F] contract.pdf
+         大小: 52B  修改时间: 2026-06-20 12:14:36  MD5: 072e6400f9f7c60956a0f02e7852b1b1
+  [F] notes.txt
+         大小: 22B  修改时间: 2026-06-20 12:14:36  MD5: 627641a4a26253c1d592d85e83ee3450
+
+-- 问题与退回原因 --
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'contract.pdf'，涉及: ProjectA-zhangsan-v2.zip/contract.pdf(36B); ProjectB-lisi-v3.zip/contract.pdf(52B)
+  [WARN ] [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)
+
+===========================  ProjectC-wangwu-v1.zip  ===========================
+项目:     ProjectC
+提交人:   wangwu
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 8
+文件总大小: 92B
+
+-- 文件清单 --
+  [F] code.py
+         大小: 5B  修改时间: 2026-06-20 12:14:36  MD5: d37ffc54b67ce8de1f01efb1f2e33689
+  [F] .DS_Store
+         大小: 11B  修改时间: 2026-06-20 12:14:36  MD5: 93c81ba18ea8e29d756a178bbc760bd9
+  [F] __MACOSX/code.py._
+         大小: 17B  修改时间: 2026-06-20 12:14:36  MD5: 0e9af4722fcfe787145ec71cdd5657a7
+  [F] Thumbs.db
+         大小: 13B  修改时间: 2026-06-20 12:14:36  MD5: 5bddb8b8e174e572dfcac5229d4581c4
+  [F] code.bak
+         大小: 11B  修改时间: 2026-06-20 12:14:36  MD5: 05217dd038cf19366660ce016ef1c620
+  [F] code.tmp
+         大小: 9B  修改时间: 2026-06-20 12:14:36  MD5: 7a7d8299d51a07ce172810dc52d46e5f
+  [F] .env
+         大小: 10B  修改时间: 2026-06-20 12:14:36  MD5: 287c216ed48c389b22ec7561691fec00
+  [F] ~$report.xlsx
+         大小: 16B  修改时间: 2026-06-20 12:14:36  MD5: c7c71f0c30eaf1d1faca10532f1c0dfb
+
+-- 问题与退回原因 --
+  [WARN ] [HIDDEN_FILE] 检测到隐藏文件/目录: .DS_Store
+  [WARN ] [TEMP_FILE] 检测到临时/系统文件: .DS_Store
+  [WARN ] [TEMP_FILE] 检测到临时/系统文件: __MACOSX/code.py._
+  [WARN ] [TEMP_FILE] 检测到临时/系统文件: Thumbs.db
+  [WARN ] [TEMP_FILE] 检测到临时/系统文件: code.bak
+  [WARN ] [TEMP_FILE] 检测到临时/系统文件: code.tmp
+  [WARN ] [HIDDEN_FILE] 检测到隐藏文件/目录: .env
+
+===========================  ProjectD-chenqi-v1.zip  ===========================
+项目:     ProjectD
+提交人:   chenqi
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 2
+文件总大小: 2.0MB
+
+-- 文件清单 --
+  [F] huge.bin
+         大小: 2.0MB  修改时间: 2026-06-20 12:14:36  MD5: c13369100e17ae3d24907265500bc591
+  [F] small.txt
+         大小: 10B  修改时间: 2026-06-20 12:14:36  MD5: e8760f5b177c12079c2690c5713a7786
+
+-- 问题与退回原因 --
+  [ERROR] [FILE_TOO_LARGE] 文件超过大小限制 2.0MB > 1.0MB: huge.bin
+
+===========================  ProjectE-sunba-v1.zip  ============================
+项目:     ProjectE
+提交人:   sunba
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 0
+文件总大小: 0B
+
+-- 文件清单 --
+  (无)
+
+-- 问题与退回原因 --
+  [ERROR] [BAD_ARCHIVE] 损坏的 ZIP 文件: File is not a zip file
+  [WARN ] [NO_FILES] 压缩包内没有任何文件
+
+=========================  ProjectF-zhoujiu-v1.tar.gz  =========================
+项目:     ProjectF
+提交人:   zhoujiu
+类型:     tar
+状态:     ✅ 正常
+条目总数: 2
+文件总大小: 38B
+
+-- 文件清单 --
+  [F] app.py
+         大小: 16B  修改时间: 2026-06-20 12:14:37  MD5: 7d1c663b0473e431297bb3ddaf8ab654
+  [F] lib/helper.js
+         大小: 22B  修改时间: 2026-06-20 12:14:37  MD5: 46f2ecda1535c15f84c355211e60138f
+
+-- 问题与退回原因 --
+  ✅ 无问题
+
+===========================  ProjectG-wushi-v1.tar  ============================
+项目:     ProjectG
+提交人:   wushi
+类型:     tar
+状态:     ⚠️ 需退回
+条目总数: 2
+文件总大小: 8B
+
+-- 文件清单 --
+  [F] real.txt
+         大小: 8B  修改时间: 2026-06-20 12:14:37  MD5: dea23ae84a241d663d39969f43ccd10e
+  [F] link.txt
+         大小: 0B  修改时间: 2026-06-20 12:14:37  MD5: dea23ae84a241d663d39969f43ccd10e
+
+-- 问题与退回原因 --
+  [WARN ] [SYMLINK] 检测到符号链接/硬链接: link.txt
+
+===========================  ProjectH-wuwei-v1.zip  ============================
+项目:     ProjectH
+提交人:   wuwei
+类型:     zip
+状态:     ⚠️ 需退回
+条目总数: 1
+文件总大小: 0B
+
+-- 文件清单 --
+  [D] only_dir/
+         大小: 0B  修改时间: 1980-01-01 00:00:00
+
+-- 问题与退回原因 --
+  [WARN ] [EMPTY_DIR] 检测到空目录: only_dir/
+  [WARN ] [NO_FILES] 压缩包内没有任何文件
+
+==================================  按项目退回汇总  ===================================
+
+【项目: ProjectA】
+  → 退回给: zhangsan
+      压缩包: ProjectA-zhangsan-v1.zip
+        - [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)
+      压缩包: ProjectA-zhangsan-v2.zip
+        - [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)
+  → 退回给: zhaoliu
+      压缩包: ProjectA-zhaoliu-v2.zip
+        - [EMPTY_DIR] 检测到空目录: assets/images/
+        - [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'README.md'，涉及: ProjectA-zhangsan-v1.zip/README.md(27B); ProjectA-zhaoliu-v2.zip/README.md(5B)
+
+【项目: ProjectB】
+  → 退回给: lisi
+      压缩包: ProjectB-lisi-v2.zip
+        - [CHINESE_PATH] 路径/文件名包含中文: 说明文档/需求.txt
+      压缩包: ProjectB-lisi-v3.zip
+        - [SAME_NAME_DIFF_CONTENT] 同名但内容不同的文件 'notes.txt'，涉及: ProjectA-zhangsan-v2.zip/notes.txt(14B); ProjectB-lisi-v3.zip/notes.txt(22B)
+
+【项目: ProjectC】
+  → 退回给: wangwu
+      压缩包: ProjectC-wangwu-v1.zip
+        - [HIDDEN_FILE] 检测到隐藏文件/目录: .env
+        - [TEMP_FILE] 检测到临时/系统文件: code.tmp
+
+【项目: ProjectD】
+  → 退回给: chenqi
+      压缩包: ProjectD-chenqi-v1.zip
+        - [FILE_TOO_LARGE] 文件超过大小限制 2.0MB > 1.0MB: huge.bin
+
+【项目: ProjectE】
+  → 退回给: sunba
+      压缩包: ProjectE-sunba-v1.zip
+        - [BAD_ARCHIVE] 损坏的 ZIP 文件: File is not a zip file
+        - [NO_FILES] 压缩包内没有任何文件
+
+【项目: ProjectG】
+  → 退回给: wushi
+      压缩包: ProjectG-wushi-v1.tar
+        - [SYMLINK] 检测到符号链接/硬链接: link.txt
+
+【项目: ProjectH】
+  → 退回给: wuwei
+      压缩包: ProjectH-wuwei-v1.zip
+        - [EMPTY_DIR] 检测到空目录: only_dir/
+        - [NO_FILES] 压缩包内没有任何文件
