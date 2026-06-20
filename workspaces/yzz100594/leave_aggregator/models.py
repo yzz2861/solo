@@ -21,6 +21,7 @@ class AnomalyType(str, Enum):
     HOMONYM = "姓名同音"
     HALF_DAY = "半天假歧义"
     TYPE_CONFLICT = "病假转事假"
+    TYPE_MISMATCH = "类型不一致"
     NO_LETTER = "缺勤无请假条"
     DUPLICATE = "重复记录"
 

@@ -164,15 +164,86 @@ def find_homonym_groups(names: List[str]) -> List[List[str]]:
 
 
 def extract_name(text: str) -> Optional[str]:
+    text = text.strip()
+
     patterns = [
-        r"([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)?[，,]?(?:今天|今日|明天|请假|因|由于)",
-        r"(?:我家|我的|我们家)([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)?",
-        r"^([\u4e00-\u9fa5]{2,4})[，,:：]",
-        r"学生[:：]?([\u4e00-\u9fa5]{2,4})",
-        r"姓名[:：]?([\u4e00-\u9fa5]{2,4})",
+        r"(?:我家|我的|我们家|孩子叫?|小孩叫?|我儿子叫?|我女儿叫?)([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)?",
+        r"(?:学生|孩子|小朋友)(?:姓名)?[:：]\s*([\u4e00-\u9fa5]{2,4})",
+        r"(?:^|[,，])姓名[:：]\s*([\u4e00-\u9fa5]{2,4})",
+        r"(\d{1,2}月\d{1,2}[日号])[\s，,]*([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)?[，,。\s]",
     ]
+
     for pattern in patterns:
         match = re.search(pattern, text)
         if match:
-            return match.group(1)
+            name = match.group(match.lastindex)
+            if _is_valid_name(name):
+                return name
+
+    date_pattern = r"\d{1,2}月\d{1,2}[日号]"
+    date_match = re.search(date_pattern, text)
+    if date_match:
+        after_date = text[date_match.end():]
+        name_match = re.search(r"([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)", after_date)
+        if name_match and _is_valid_name(name_match.group(1)):
+            return name_match.group(1)
+        name_match = re.search(r"([\u4e00-\u9fa5]{2,4})(?:今天|今日|明天|因|由于|参加|需要|请假)", after_date)
+        if name_match and _is_valid_name(name_match.group(1)):
+            return name_match.group(1)
+
+    greeting_patterns = [
+        r"^(?:王老师|李老师|张老师|刘老师|陈老师|杨老师|黄老师|周老师|吴老师|赵老师|班主任|老师您好?)[，,。]?\s*",
+        r"^[您你]好[，,。]\s*",
+    ]
+    for gp in greeting_patterns:
+        match = re.match(gp, text)
+        if match:
+            after_greeting = text[match.end():]
+            date_match = re.search(date_pattern, after_greeting)
+            if date_match:
+                after_date = after_greeting[date_match.end():]
+                name_match = re.search(r"([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)", after_date)
+                if name_match and _is_valid_name(name_match.group(1)):
+                    return name_match.group(1)
+                name_match = re.search(r"([\u4e00-\u9fa5]{2,4})(?:今天|今日|明天|因|由于|参加|需要|请假)", after_date)
+                if name_match and _is_valid_name(name_match.group(1)):
+                    return name_match.group(1)
+
+            name_match = re.search(r"([\u4e00-\u9fa5]{2,4})(?:同学|小朋友)", after_greeting)
+            if name_match and _is_valid_name(name_match.group(1)):
+                return name_match.group(1)
+
+    if re.match(r"^[\u4e00-\u9fa5]{2,4}[，,:：]", text):
+        name_match = re.match(r"^([\u4e00-\u9fa5]{2,4})[，,:：]", text)
+        if name_match:
+            name = name_match.group(1)
+            if _is_valid_name(name) and "请假" in text:
+                return name
+
     return None
+
+
+def _is_valid_name(name: str) -> bool:
+    if not name or len(name) < 2 or len(name) > 4:
+        return False
+
+    stop_words = {
+        "老师", "班主任", "今天", "明天", "昨天", "上午", "下午", "全天",
+        "请假", "同学", "小朋友", "家长", "您好", "你好", "老师好",
+        "家里", "家中", "学校", "医院", "看病", "就医", "住院",
+        "参加", "因为", "由于", "需要", "所以", "但是", "然后",
+        "今天上午", "今天下午", "明天上午", "明天下午",
+        "我家", "我的", "我们家", "孩子", "小孩", "儿子", "女儿",
+        "发烧", "感冒", "咳嗽", "头痛", "肚子痛", "胃痛", "牙痛",
+        "呕吐", "腹泻", "过敏", "发炎", "扭伤", "骨折",
+        "身体", "不舒服", "不适",
+    }
+    if name in stop_words:
+        return False
+
+    for w in stop_words:
+        if name.startswith(w) or name.endswith(w):
+            if len(name) == len(w) + 1 and name[-1] in "好的了":
+                return False
+
+    return True
