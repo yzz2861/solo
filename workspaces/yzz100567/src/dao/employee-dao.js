@@ -1,8 +1,8 @@
-const BaseDao = require('./base-dao');
+const { get, all } = require('../config/database');
 
-class EmployeeDao extends BaseDao {
-  findByEmployeeId(employeeId) {
-    return this.get(
+class EmployeeDao {
+  async findByEmployeeId(employeeId) {
+    return await get(
       `SELECT e.*, d.name as department_name, d.manager_employee_id, d.assistant_employee_id
        FROM employees e LEFT JOIN departments d ON e.department_id = d.id
        WHERE e.employee_id = ?`,
@@ -10,16 +10,16 @@ class EmployeeDao extends BaseDao {
     );
   }
 
-  findById(id) {
-    return this.get(
+  async findById(id) {
+    return await get(
       `SELECT e.*, d.name as department_name FROM employees e
        LEFT JOIN departments d ON e.department_id = d.id WHERE e.id = ?`,
       [id]
     );
   }
 
-  findByDepartment(departmentId) {
-    return this.all(
+  async findByDepartment(departmentId) {
+    return await all(
       `SELECT e.*, d.name as department_name FROM employees e
        LEFT JOIN departments d ON e.department_id = d.id
        WHERE e.department_id = ? ORDER BY e.employee_id`,
@@ -27,22 +27,22 @@ class EmployeeDao extends BaseDao {
     );
   }
 
-  findAll() {
-    return this.all(
+  async findAll() {
+    return await all(
       `SELECT e.*, d.name as department_name FROM employees e
        LEFT JOIN departments d ON e.department_id = d.id ORDER BY e.employee_id`
     );
   }
 
-  findByDepartmentManager(managerEmployeeId) {
-    return this.get(
+  async findByDepartmentManager(managerEmployeeId) {
+    return await get(
       `SELECT d.* FROM departments d WHERE d.manager_employee_id = ?`,
       [managerEmployeeId]
     );
   }
 
-  findByDepartmentAssistant(assistantEmployeeId) {
-    return this.get(
+  async findByDepartmentAssistant(assistantEmployeeId) {
+    return await get(
       `SELECT d.* FROM departments d WHERE d.assistant_employee_id = ?`,
       [assistantEmployeeId]
     );

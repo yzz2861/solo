@@ -1,9 +1,7 @@
-const { getDb, closeDb } = require('../config/database');
+const { getDb, closeDb, exec, run, get, all } = require('../config/database');
 
-function initDatabase() {
-  const db = getDb();
-
-  db.exec(`
+async function initDatabase() {
+  await exec(`
     CREATE TABLE IF NOT EXISTS departments (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL UNIQUE,
@@ -103,27 +101,27 @@ function initDatabase() {
   console.log('数据库表结构初始化完成');
 }
 
-function seedTestData() {
-  const db = getDb();
-
-  const deptCount = db.prepare('SELECT COUNT(*) as cnt FROM departments').get().cnt;
+async function seedTestData() {
+  const deptCount = (await get('SELECT COUNT(*) as cnt FROM departments')).cnt;
   if (deptCount > 0) {
     console.log('测试数据已存在，跳过初始化');
     return;
   }
 
-  const insertDept = db.prepare(
-    'INSERT INTO departments (name, manager_employee_id, assistant_employee_id) VALUES (?, ?, ?)'
-  );
-  insertDept.run('技术研发部', 'M001', 'A001');
-  insertDept.run('市场销售部', 'M002', 'A002');
-  insertDept.run('人力资源部', 'M003', 'A003');
-  insertDept.run('财务部', 'M004', 'A004');
+  const departments = [
+    ['技术研发部', 'M001', 'A001'],
+    ['市场销售部', 'M002', 'A002'],
+    ['人力资源部', 'M003', 'A003'],
+    ['财务部', 'M004', 'A004'],
+  ];
+  for (const d of departments) {
+    await run(
+      'INSERT INTO departments (name, manager_employee_id, assistant_employee_id) VALUES (?, ?, ?)',
+      d
+    );
+  }
   console.log('部门数据初始化完成');
 
-  const insertEmp = db.prepare(
-    'INSERT INTO employees (employee_id, name, department_id, email, phone, position) VALUES (?, ?, ?, ?, ?, ?)'
-  );
   const employees = [
     ['M001', '张三', 1, 'zhangsan@company.com', '13800000001', '研发总监'],
     ['A001', '李四', 1, 'lisi@company.com', '13800000002', '研发部助理'],
@@ -141,36 +139,42 @@ function seedTestData() {
     ['A004', '沈十六', 4, 'shenshiliu@company.com', '13800000014', '财务助理'],
     ['E006', '韩十七', 4, 'hanshiqi@company.com', '13800000015', '会计'],
   ];
-  employees.forEach(e => insertEmp.run(...e));
+  for (const e of employees) {
+    await run(
+      'INSERT INTO employees (employee_id, name, department_id, email, phone, position) VALUES (?, ?, ?, ?, ?, ?)',
+      e
+    );
+  }
   console.log('员工数据初始化完成');
 
-  const insertCourse = db.prepare(
-    'INSERT INTO courses (course_code, course_name, pass_score, max_retake_count, description) VALUES (?, ?, ?, ?, ?)'
-  );
   const courses = [
     ['C001', '网络安全合规培训', 80, 2, '全员必修的网络安全合规课程'],
     ['C002', '数据隐私保护培训', 75, 2, '涉及客户数据处理岗位必修'],
     ['C003', '反商业贿赂培训', 70, 3, '全员每年必修合规课程'],
     ['C004', '信息安全等级保护', 80, 2, '技术岗位必修课程'],
   ];
-  courses.forEach(c => insertCourse.run(...c));
+  for (const c of courses) {
+    await run(
+      'INSERT INTO courses (course_code, course_name, pass_score, max_retake_count, description) VALUES (?, ?, ?, ?, ?)',
+      c
+    );
+  }
   console.log('课程数据初始化完成');
 
-  const insertBatch = db.prepare(
-    'INSERT INTO retake_batches (batch_code, course_id, batch_name, exam_date, registration_start, registration_end, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
-  );
   const batches = [
     ['B202606_C001', 1, '2026年6月C001补考第一批', '2026-06-25', '2026-06-15', '2026-06-23', 'open'],
     ['B202606_C002', 2, '2026年6月C002补考第一批', '2026-06-26', '2026-06-15', '2026-06-24', 'open'],
     ['B202606_C003', 3, '2026年6月C003补考第一批', '2026-06-27', '2026-06-15', '2026-06-25', 'open'],
     ['B202607_C001', 1, '2026年7月C001补考第二批', '2026-07-10', '2026-07-01', '2026-07-08', 'open'],
   ];
-  batches.forEach(b => insertBatch.run(...b));
+  for (const b of batches) {
+    await run(
+      'INSERT INTO retake_batches (batch_code, course_id, batch_name, exam_date, registration_start, registration_end, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      b
+    );
+  }
   console.log('补考批次数据初始化完成');
 
-  const insertScore = db.prepare(
-    'INSERT INTO original_scores (employee_id, course_id, score, is_passed, exam_date, exam_batch, remark) VALUES (?, ?, ?, ?, ?, ?, ?)'
-  );
   const scores = [
     [3, 1, 72, 0, '2026-06-10', '2026-Q2-01', '未通过'],
     [4, 1, 58, 0, '2026-06-10', '2026-Q2-01', '未通过'],
@@ -184,23 +188,30 @@ function seedTestData() {
     [5, 4, 70, 0, '2026-06-10', '2026-Q2-01', '未通过'],
     [8, 1, 90, 1, '2026-06-10', '2026-Q2-01', '已通过'],
   ];
-  scores.forEach(s => insertScore.run(...s));
+  for (const s of scores) {
+    await run(
+      'INSERT INTO original_scores (employee_id, course_id, score, is_passed, exam_date, exam_batch, remark) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      s
+    );
+  }
   console.log('原始成绩数据初始化完成');
 
   console.log('\n测试数据初始化全部完成！');
 }
 
 if (require.main === module) {
-  try {
-    initDatabase();
-    seedTestData();
-    console.log('\n数据库初始化成功！');
-    closeDb();
-    process.exit(0);
-  } catch (error) {
-    console.error('数据库初始化失败:', error.message);
-    process.exit(1);
-  }
+  (async () => {
+    try {
+      await initDatabase();
+      await seedTestData();
+      console.log('\n数据库初始化成功！');
+      await closeDb();
+      process.exit(0);
+    } catch (error) {
+      console.error('数据库初始化失败:', error.message);
+      process.exit(1);
+    }
+  })();
 }
 
 module.exports = { initDatabase, seedTestData };

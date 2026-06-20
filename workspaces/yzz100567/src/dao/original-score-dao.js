@@ -1,8 +1,8 @@
-const BaseDao = require('./base-dao');
+const { get, all } = require('../config/database');
 
-class OriginalScoreDao extends BaseDao {
-  findByEmployeeAndCourse(employeeId, courseId) {
-    return this.all(
+class OriginalScoreDao {
+  async findByEmployeeAndCourse(employeeId, courseId) {
+    return await all(
       `SELECT os.*, c.course_name, c.course_code, c.pass_score, c.max_retake_count
        FROM original_scores os
        JOIN courses c ON os.course_id = c.id
@@ -12,8 +12,8 @@ class OriginalScoreDao extends BaseDao {
     );
   }
 
-  findLatestByEmployeeAndCourse(employeeId, courseId) {
-    return this.get(
+  async findLatestByEmployeeAndCourse(employeeId, courseId) {
+    return await get(
       `SELECT os.*, c.course_name, c.course_code, c.pass_score, c.max_retake_count
        FROM original_scores os
        JOIN courses c ON os.course_id = c.id
@@ -23,8 +23,8 @@ class OriginalScoreDao extends BaseDao {
     );
   }
 
-  hasPassed(employeeId, courseId) {
-    const result = this.get(
+  async hasPassed(employeeId, courseId) {
+    const result = await get(
       `SELECT 1 FROM original_scores
        WHERE employee_id = ? AND course_id = ? AND is_passed = 1
        LIMIT 1`,
@@ -33,8 +33,8 @@ class OriginalScoreDao extends BaseDao {
     return !!result;
   }
 
-  findById(id) {
-    return this.get(
+  async findById(id) {
+    return await get(
       `SELECT os.*, c.course_name, c.course_code, c.pass_score, c.max_retake_count
        FROM original_scores os
        JOIN courses c ON os.course_id = c.id
@@ -43,8 +43,8 @@ class OriginalScoreDao extends BaseDao {
     );
   }
 
-  findUnpassedByDepartment(departmentId) {
-    return this.all(
+  async findUnpassedByDepartment(departmentId) {
+    return await all(
       `SELECT DISTINCT
          os.id, os.employee_id, os.course_id, os.score, os.is_passed, os.exam_date,
          e.employee_id as emp_code, e.name as employee_name,

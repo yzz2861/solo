@@ -1,8 +1,8 @@
-const BaseDao = require('./base-dao');
+const { get, all } = require('../config/database');
 
-class RetakeBatchDao extends BaseDao {
-  findByCode(batchCode) {
-    return this.get(
+class RetakeBatchDao {
+  async findByCode(batchCode) {
+    return await get(
       `SELECT rb.*, c.course_code, c.course_name, c.pass_score, c.max_retake_count
        FROM retake_batches rb JOIN courses c ON rb.course_id = c.id
        WHERE rb.batch_code = ?`,
@@ -10,8 +10,8 @@ class RetakeBatchDao extends BaseDao {
     );
   }
 
-  findById(id) {
-    return this.get(
+  async findById(id) {
+    return await get(
       `SELECT rb.*, c.course_code, c.course_name, c.pass_score, c.max_retake_count
        FROM retake_batches rb JOIN courses c ON rb.course_id = c.id
        WHERE rb.id = ?`,
@@ -19,8 +19,8 @@ class RetakeBatchDao extends BaseDao {
     );
   }
 
-  findByCourse(courseId) {
-    return this.all(
+  async findByCourse(courseId) {
+    return await all(
       `SELECT rb.*, c.course_code, c.course_name
        FROM retake_batches rb JOIN courses c ON rb.course_id = c.id
        WHERE rb.course_id = ? ORDER BY rb.registration_start DESC`,
@@ -28,7 +28,7 @@ class RetakeBatchDao extends BaseDao {
     );
   }
 
-  findOpenBatches(courseId = null) {
+  async findOpenBatches(courseId = null) {
     let sql = `SELECT rb.*, c.course_code, c.course_name, c.pass_score, c.max_retake_count
                FROM retake_batches rb JOIN courses c ON rb.course_id = c.id
                WHERE rb.status = 'open'`;
@@ -38,11 +38,11 @@ class RetakeBatchDao extends BaseDao {
       params.push(courseId);
     }
     sql += ' ORDER BY rb.registration_start DESC';
-    return this.all(sql, params);
+    return await all(sql, params);
   }
 
-  findAll() {
-    return this.all(
+  async findAll() {
+    return await all(
       `SELECT rb.*, c.course_code, c.course_name
        FROM retake_batches rb JOIN courses c ON rb.course_id = c.id
        ORDER BY rb.created_at DESC`
