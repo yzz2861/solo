@@ -1,0 +1,190 @@
+import { GradingRule } from '../types';
+
+export const GRADING_RULES: GradingRule[] = [
+  {
+    id: 'emergency-selfharm',
+    name: '自伤自杀倾向',
+    level: 'emergency',
+    keywords: [
+      '自杀', '割腕', '跳楼', '跳河', '割脉', '不想活', '活不下去',
+      '结束生命', '轻生', '自残', '自伤', '自虐',
+      '吃安眠药', '想不开', '死了算了', '一死了之',
+    ],
+    patterns: [],
+    weight: 100,
+    enabled: true,
+  },
+  {
+    id: 'emergency-health',
+    name: '严重身体不适',
+    level: 'emergency',
+    keywords: [
+      '胸口痛', '胸闷', '呼吸困难', '喘不上气', '心悸', '心绞痛',
+      '心梗', '中风', '晕倒', '昏迷', '抽搐', '癫痫',
+      '大出血', '失血',
+    ],
+    patterns: [],
+    weight: 90,
+    enabled: true,
+  },
+  {
+    id: 'emergency-danger',
+    name: '遭遇危险',
+    level: 'emergency',
+    keywords: [
+      '被打', '被欺负', '被威胁', '被敲诈', '被勒索',
+      '校园暴力', '校园霸凌', '霸凌', '暴力',
+      '性侵犯', '性骚扰', '猥亵',
+    ],
+    patterns: [],
+    weight: 95,
+    enabled: true,
+  },
+  {
+    id: 'psychology-depression',
+    name: '抑郁情绪',
+    level: 'psychology',
+    keywords: [
+      '抑郁', '抑郁症', '情绪低落', '心情低落', '低落',
+      '绝望', '无助', '无力', '空虚', '麻木',
+      '哭', '失眠', '睡不着', '早醒', '睡眠不好',
+      '没胃口', '不想吃饭', '体重下降',
+    ],
+    patterns: [],
+    weight: 70,
+    enabled: true,
+  },
+  {
+    id: 'psychology-anxiety',
+    name: '焦虑症状',
+    level: 'psychology',
+    keywords: [
+      '焦虑', '焦虑症', '紧张', '心慌', '恐慌', '恐惧',
+      '害怕', '担心', '忧虑', '坐立不安',
+      '强迫症', '强迫',
+    ],
+    patterns: [],
+    weight: 65,
+    enabled: true,
+  },
+  {
+    id: 'psychology-trauma',
+    name: '心理创伤',
+    level: 'psychology',
+    keywords: [
+      '创伤', '噩梦', '闪回', '噩梦', '惊醒',
+      '创伤后', 'ptsd',
+    ],
+    patterns: [],
+    weight: 75,
+    enabled: true,
+  },
+  {
+    id: 'headteacher-dorm',
+    name: '宿舍矛盾',
+    level: 'headteacher',
+    keywords: [
+      '宿舍', '室友', '舍友', '寝室',
+      '矛盾', '吵架', '冷战', '孤立',
+      '排挤', '孤立我', '针对我',
+      '生活习惯', '打呼噜', '晚睡', '早起',
+    ],
+    patterns: [],
+    weight: 50,
+    enabled: true,
+  },
+  {
+    id: 'headteacher-academic',
+    name: '学业压力',
+    level: 'headteacher',
+    keywords: [
+      '学习压力', '学业压力', '学习太累', '学习跟不上',
+      '成绩', '考试', '考不好', '退步',
+      '跟不上', '听不懂',
+    ],
+    patterns: [],
+    weight: 45,
+    enabled: true,
+  },
+  {
+    id: 'headteacher-relation',
+    name: '人际关系',
+    level: 'headteacher',
+    keywords: [
+      '同学关系', '朋友', '谈恋爱', '分手',
+      '老师', '班主任', '骂我',
+      '不公平', '被误解', '被冤枉',
+    ],
+    patterns: [],
+    weight: 40,
+    enabled: true,
+  },
+  {
+    id: 'headteacher-family',
+    name: '家庭问题',
+    level: 'headteacher',
+    keywords: [
+      '爸妈', '父母', '家里', '家庭',
+      '吵架', '离婚', '家暴',
+      '压力大', '压力太大',
+    ],
+    patterns: [],
+    weight: 55,
+    enabled: true,
+  },
+  {
+    id: 'general-consult',
+    name: '普通咨询',
+    level: 'general',
+    keywords: [
+      '请问', '咨询', '想知道', '了解',
+      '建议', '意见',
+    ],
+    patterns: [],
+    weight: 10,
+    enabled: true,
+  },
+  {
+    id: 'general-life',
+    name: '生活问题',
+    level: 'general',
+    keywords: [
+      '食堂', '饭', '吃饭',
+      '空调', '热水', '厕所',
+    ],
+    patterns: [],
+    weight: 15,
+    enabled: true,
+  },
+  {
+    id: 'review-joke',
+    name: '玩笑调侃',
+    level: 'review',
+    keywords: [
+      '哈哈', '开玩笑', '段子', '随便写的', '随便发',
+      '测试', '试试', '玩', '搞笑', '娱乐',
+    ],
+    patterns: [],
+    weight: 80,
+    enabled: true,
+  },
+  {
+    id: 'review-other',
+    name: '转述他人情况',
+    level: 'review',
+    keywords: [
+      '我同学', '我朋友', '我室友', '我同桌',
+      '我们班', '有人', '别人', '朋友',
+      '听说', '据说',
+    ],
+    patterns: [],
+    weight: 75,
+    enabled: true,
+  },
+];
+
+export const REVIEW_KEYWORDS = {
+  emergency: ['紧急', '立刻', '马上', '现在', '很急', '救命', '求助'],
+};
+
+export const MIN_CONTENT_LENGTH = 20;
