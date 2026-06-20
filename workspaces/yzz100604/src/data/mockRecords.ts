@@ -1,0 +1,67 @@
+import type { SaltRecord } from '@/store/useAppStore'
+
+const now = Date.now()
+const day = 24 * 3600 * 1000
+
+export const mockRecords: SaltRecord[] = [
+  {
+    id: 'r001',
+    bridgeId: 'b001',
+    bridgeName: '南京长江大桥',
+    timestamp: now - 2 * day,
+    temperature: -3.2,
+    humidity: 86,
+    windSpeed: 5.8,
+    saltAmount: 120,
+    operator: '张建国',
+    notes: '凌晨气温骤降，桥面出现薄冰，已撒盐2吨',
+  },
+  {
+    id: 'r002',
+    bridgeId: 'b004',
+    bridgeName: '苏通长江公路大桥',
+    timestamp: now - 5 * day,
+    temperature: -1.8,
+    humidity: 78,
+    windSpeed: 8.2,
+    saltAmount: 280,
+    operator: '李明辉',
+    notes: '桥面风力大，配合除冰车联合作业',
+  },
+  {
+    id: 'r003',
+    bridgeId: 'b005',
+    bridgeName: '江阴长江公路大桥',
+    timestamp: now - 8 * day,
+    temperature: -4.5,
+    humidity: 90,
+    windSpeed: 6.5,
+    saltAmount: 220,
+    operator: '王海涛',
+    notes: '大范围降雪后首次撒盐，双向6车道全覆盖',
+  },
+  {
+    id: 'r004',
+    bridgeId: 'b002',
+    bridgeName: '南京长江二桥',
+    timestamp: now - 12 * day,
+    temperature: -0.6,
+    humidity: 72,
+    windSpeed: 4.3,
+    saltAmount: 90,
+    operator: '赵志强',
+    notes: '预防性撒盐，预报夜间气温降至-2℃',
+  },
+  {
+    id: 'r005',
+    bridgeId: 'b009',
+    bridgeName: '沪苏通长江公铁大桥',
+    timestamp: now - 18 * day,
+    temperature: -5.1,
+    humidity: 82,
+    windSpeed: 7.6,
+    saltAmount: 310,
+    operator: '孙德明',
+    notes: '严重冰冻天气，分两次撒盐，累计310公斤/车道·公里',
+  },
+]
