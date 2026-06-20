@@ -1,0 +1,41 @@
+services:
+  order-service:
+    port: 8080
+    log_level: info
+    debug_enabled: "false"
+    database:
+      host: db-test.example.com
+      port: 5432
+      user: order_app
+      password: TestPass_123
+      max_connections: 20
+    rate_limiting:
+      enabled: yes
+      max_requests: 1000
+      window_seconds: 60
+    redis:
+      host: redis-test.local
+      port: 6379
+      db: 0
+    replicas: 2
+    feature_flags:
+      new_checkout: off
+      dark_mode: on
+    allowed_ips:
+      - "10.0.0.0/8"
+      - "192.168.1.0/24"
+      - "172.16.0.0/12"
+
+  payment-service:
+    port: 9090
+    timeout_ms: 5000
+    retry_attempts: 3
+    api_keys:
+      stripe: sk_test_abc123def456
+    payment_gateway:
+      sandbox: true
+      concurrency: 10
+    providers:
+      - alipay
+      - wechat
+      - unionpay

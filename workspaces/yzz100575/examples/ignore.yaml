@@ -1,0 +1,10 @@
+paths:
+  - "order-service.redis.db"
+  - "payment-service.providers"
+
+patterns:
+  - "*.feature_flags.*"
+  - "*.log_level"
+
+ignore:
+  - "*.allowed_ips"

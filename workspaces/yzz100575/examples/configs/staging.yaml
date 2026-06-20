@@ -1,0 +1,41 @@
+services:
+  order-service:
+    port: 8080
+    log_level: info
+    debug_enabled: "false"
+    database:
+      host: db-staging.example.com
+      port: 5432
+      user: order_app
+      password: StagingPass_456!
+      max_connections: 50
+    rate_limiting:
+      enabled: "true"
+      max_requests: 500
+      window_seconds: 60
+    redis:
+      host: redis-staging.local
+      port: 6379
+      db: 1
+    replicas: 3
+    feature_flags:
+      new_checkout: on
+      dark_mode: true
+    allowed_ips:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.1.0/24"
+
+  payment-service:
+    port: 9090
+    timeout_ms: 3000
+    retry_attempts: 5
+    api_keys:
+      stripe: sk_staging_xyz789aaa
+    payment_gateway:
+      sandbox: "yes"
+      concurrency: 20
+    providers:
+      - wechat
+      - alipay
+      - unionpay

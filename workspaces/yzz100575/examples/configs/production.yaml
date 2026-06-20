@@ -1,0 +1,42 @@
+services:
+  order-service:
+    port: 8080
+    log_level: warn
+    debug_enabled: false
+    database:
+      host: db-prod.example.com
+      port: 5432
+      user: order_app
+      password: ProdPass_Secure_789!@#
+      max_connections: 200
+    rate_limiting:
+      enabled: true
+      max_requests: 5000
+      window_seconds: 60
+    redis:
+      host: redis-prod.example.com
+      port: 6379
+      db: 0
+    replicas: 10
+    feature_flags:
+      new_checkout: false
+      dark_mode: off
+    allowed_ips:
+      - "10.0.0.0/8"
+      - "192.168.1.0/24"
+      - "172.16.0.0/12"
+
+  payment-service:
+    port: 9090
+    timeout_ms: 3000
+    retry_attempts: 2
+    api_keys:
+      stripe: sk_live_realproductionkey12345
+    payment_gateway:
+      sandbox: false
+      concurrency: 100
+    providers:
+      - alipay
+      - wechat
+      - unionpay
+      - applepay
