@@ -1,0 +1,48 @@
+{
+  "suppliers": {
+    "SUPPLIER_A": {
+      "name": "华东制药",
+      "prefix": "HA",
+      "length": 16,
+      "check_digit": {
+        "algorithm": "mod10",
+        "position": -1
+      },
+      "batch_date": {
+        "start": 2,
+        "end": 8,
+        "format": "%y%m%d"
+      },
+      "production_date": {
+        "start": 8,
+        "end": 14,
+        "format": "%y%m%d"
+      },
+      "sample_ratio": 1.0
+    },
+    "SUPPLIER_B": {
+      "name": "南方器械",
+      "prefix": "SB",
+      "length": 14,
+      "check_digit": {
+        "algorithm": "none"
+      },
+      "batch_date": {
+        "start": 2,
+        "end": 8,
+        "format": "%y%m%d"
+      },
+      "sample_ratio": 0.3
+    },
+    "SUPPLIER_C": {
+      "name": "北方耗材",
+      "prefix": "NC",
+      "length_range": [12, 18],
+      "check_digit": {
+        "algorithm": "mod11",
+        "position": -1
+      },
+      "sample_ratio": 0.5
+    }
+  }
+}
