@@ -114,7 +114,7 @@ export default function ThresholdDocs() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const Section = ({ id, title, icon: Icon, children }: { id: string; title: string; icon: any; children: React.ReactNode }) => (
+  const Section = ({ id, label, title, icon: Icon, children }: { id: string; label?: string; title: string; icon: any; children: React.ReactNode }) => (
     <section id={id} className="scroll-mt-24 space-y-4 pb-12 border-b border-slate-200 last:border-0">
       <div className="flex items-center gap-3 pb-2 border-b-2 border-slate-800/90">
         <div className="w-9 h-9 rounded-lg bg-ice-primary text-white flex items-center justify-center shrink-0 shadow-md">

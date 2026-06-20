@@ -29,7 +29,7 @@ interface AppState {
   addToReviewList: (bridgeId: string, bridgeName: string, note?: string) => void;
   removeFromReviewList: (bridgeId: string) => void;
 
-  addSaltRecord: (data: Omit<SaltRecord, 'id' | 'createdAt'>) => string;
+  addSaltRecord: (data: Partial<SaltRecord> & { bridgeId: string; bridgeName: string }) => string;
 
   initMockData: () => void;
 }
@@ -120,11 +120,32 @@ export const useAppStore = create<AppState>()(
         set((s) => ({ reviewList: s.reviewList.filter((r) => r.bridgeId !== bridgeId) }));
       },
 
-      addSaltRecord: (data) => {
+      addSaltRecord: (data: Partial<SaltRecord> & { bridgeId: string; bridgeName: string }) => {
         const id = genId('SR');
+        const startTime = (data as any).startTime || (data as any).departureTime || new Date().toISOString();
+        const endTime = (data as any).endTime || (data as any).arrivalTime || startTime;
+        const saltKg = (data as any).saltKg ?? (data as any).saltAmount ?? 0;
+        const gramsPerSqm = (data as any).saltPerSqm ?? (data as any).gramsPerSqm ?? 0;
         const record: SaltRecord = {
           ...data,
           id,
+          vehiclePlate: (data as any).vehiclePlate || (data as any).plateNumber || '',
+          plateNumber: (data as any).plateNumber || (data as any).vehiclePlate,
+          startTime,
+          endTime,
+          departureTime: (data as any).departureTime || startTime,
+          arrivalTime: (data as any).arrivalTime || endTime,
+          saltKg,
+          saltAmount: (data as any).saltAmount ?? saltKg,
+          saltPerSqm: gramsPerSqm,
+          gramsPerSqm,
+          airTempAtSite: (data as any).airTempAtSite ?? (data as any).temperature ?? 0,
+          temperature: (data as any).temperature ?? (data as any).airTempAtSite,
+          operator: (data as any).operator || (data as any).executor || '',
+          executor: (data as any).executor || (data as any).operator,
+          weatherNote: (data as any).weatherNote || (data as any).remark,
+          remark: (data as any).remark || (data as any).weatherNote,
+          notes: (data as any).notes || (data as any).remark,
           createdAt: Date.now(),
         };
         set((s) => ({ saltRecords: [record, ...s.saltRecords] }));
