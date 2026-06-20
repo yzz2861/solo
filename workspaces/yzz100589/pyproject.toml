@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trim-merger"
+version = "0.1.0"
+description = "服装辅料采购单合并器 - 多款式辅料需求归并、MOQ校验、异常报告、缺口分析"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "click>=8.1.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.scripts]
+trim-merger = "trim_merger.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
