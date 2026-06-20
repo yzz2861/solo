@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inventory-allocate"
+version = "0.1.0"
+description = "库存调拨单生成器 - 连锁小店智能补货调拨工具"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Inventory Allocate Team" }]
+license = { text = "MIT" }
+dependencies = [
+    "click>=8.1.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "pydantic>=2.0.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+allocate = "inventory_allocate.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
