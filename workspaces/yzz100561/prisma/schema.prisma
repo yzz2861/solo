@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Grade {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  classes   Class[]
+  orders    Order[]
+}
+
+model Class {
+  id        String   @id @default(cuid())
+  name      String
+  gradeId   String
+  headTeacher String
+  studentCount Int @default(0)
+  createdAt DateTime @default(now())
+  grade     Grade    @relation(fields: [gradeId], references: [id])
+  orders    Order[]
+  transfers TransferStudent[]
+  receipts  Receipt[]
+  @@unique([gradeId, name])
+}
+
+model Course {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  textbooks Textbook[]
+}
+
+model Supplier {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  contact   String?
+  phone     String?
+  createdAt DateTime @default(now())
+  textbooks Textbook[]
+  deliveries Delivery[]
+}
+
+model Textbook {
+  id         String   @id @default(cuid())
+  courseId   String
+  edition    String
+  isbn       String?
+  price      Float    @default(0)
+  supplierId String?
+  createdAt  DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  orders     Order[]
+  deliveriesItems DeliveryItem[]
+  receiptItems ReceiptItem[]
+  beforeEditionChanges OrderChange[] @relation("BeforeEdition")
+  afterEditionChanges  OrderChange[] @relation("AfterEdition")
+  @@unique([courseId, edition])
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  gradeId       String
+  classId       String
+  textbookId    String
+  originalQty   Int         @default(0)
+  supplementQty Int         @default(0)
+  returnQty     Int         @default(0)
+  finalQty      Int         @default(0)
+  deliveredQty  Int         @default(0)
+  receivedQty   Int         @default(0)
+  status        String      @default("DRAFT")
+  term          String
+  remark        String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  grade         Grade       @relation(fields: [gradeId], references: [id])
+  class         Class       @relation(fields: [classId], references: [id])
+  textbook      Textbook    @relation(fields: [textbookId], references: [id])
+  changes       OrderChange[]
+  deliveryItems DeliveryItem[]
+  receiptItems  ReceiptItem[]
+
+  @@unique([term, classId, textbookId])
+}
+
+model OrderChange {
+  id           String     @id @default(cuid())
+  orderId      String
+  changeType   String
+  beforeQty    Int
+  afterQty     Int
+  beforeEditionId String?
+  afterEditionId  String?
+  transferIds  String?
+  operator     String
+  reason       String?
+  createdAt    DateTime   @default(now())
+  order        Order      @relation(fields: [orderId], references: [id])
+  beforeEdition Textbook? @relation("BeforeEdition", fields: [beforeEditionId], references: [id])
+  afterEdition  Textbook? @relation("AfterEdition", fields: [afterEditionId], references: [id])
+  linkedChangeId String?
+  linkedChange   OrderChange? @relation("LinkedChange", fields: [linkedChangeId], references: [id])
+  reverseChanges OrderChange[] @relation("LinkedChange")
+  transferLinks  OrderChangeTransfer[]
+}
+
+model TransferStudent {
+  id          String   @id @default(cuid())
+  classId     String
+  name        String
+  studentNo   String?
+  transferType String
+  transferDate DateTime
+  remark      String?
+  createdAt   DateTime @default(now())
+  class       Class    @relation(fields: [classId], references: [id])
+  orderChangeLinks OrderChangeTransfer[]
+}
+
+model OrderChangeTransfer {
+  orderChangeId     String
+  transferStudentId String
+  createdAt         DateTime @default(now())
+  orderChange       OrderChange @relation(fields: [orderChangeId], references: [id])
+  transferStudent   TransferStudent @relation(fields: [transferStudentId], references: [id])
+  @@id([orderChangeId, transferStudentId])
+}
+
+model Delivery {
+  id          String   @id @default(cuid())
+  supplierId  String
+  deliveryNo  String   @unique
+  deliveryDate DateTime
+  remark      String?
+  createdAt   DateTime @default(now())
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  items       DeliveryItem[]
+}
+
+model DeliveryItem {
+  id          String   @id @default(cuid())
+  deliveryId  String
+  orderId     String
+  textbookId  String
+  qty         Int
+  confirmed   Boolean  @default(false)
+  confirmedBy String?
+  confirmedAt DateTime?
+  createdAt   DateTime @default(now())
+  delivery    Delivery @relation(fields: [deliveryId], references: [id])
+  order       Order    @relation(fields: [orderId], references: [id])
+  textbook    Textbook @relation(fields: [textbookId], references: [id])
+}
+
+model Receipt {
+  id            String        @id @default(cuid())
+  classId       String
+  receiptNo     String        @unique
+  receiptDate   DateTime
+  status        String        @default("PENDING")
+  signedBy      String?
+  signedAt      DateTime?
+  remark        String?
+  createdAt     DateTime      @default(now())
+  class         Class         @relation(fields: [classId], references: [id])
+  items         ReceiptItem[]
+  transferMarked Boolean     @default(false)
+}
+
+model ReceiptItem {
+  id          String   @id @default(cuid())
+  receiptId   String
+  orderId     String
+  textbookId  String
+  expectedQty Int
+  actualQty   Int
+  shortageQty Int @default(0)
+  isTransfer  Boolean @default(false)
+  remark      String?
+  createdAt   DateTime @default(now())
+  receipt     Receipt  @relation(fields: [receiptId], references: [id])
+  order       Order    @relation(fields: [orderId], references: [id])
+  textbook    Textbook @relation(fields: [textbookId], references: [id])
+}
