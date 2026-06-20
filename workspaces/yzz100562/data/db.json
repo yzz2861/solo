@@ -1,0 +1,305 @@
+{
+  "technicians": [
+    {
+      "id": "1",
+      "name": "张师傅",
+      "phone": "13800001111",
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:07.808Z"
+    },
+    {
+      "id": "2",
+      "name": "李师傅",
+      "phone": "13800002222",
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:07.885Z"
+    },
+    {
+      "id": "3",
+      "name": "王师傅",
+      "phone": "13800003333",
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:07.885Z"
+    }
+  ],
+  "work_orders": [
+    {
+      "id": "1",
+      "order_no": "WO-20240601-001",
+      "customer_name": "客户甲",
+      "customer_phone": "13900001111",
+      "address": "幸福路10号",
+      "technician_id": "1",
+      "status": "in_progress",
+      "created_at": "2026-06-20T03:07:08.003Z"
+    },
+    {
+      "id": "2",
+      "order_no": "WO-20240602-002",
+      "customer_name": "客户乙",
+      "customer_phone": "13900002222",
+      "address": "花园小区3栋",
+      "technician_id": "2",
+      "status": "in_progress",
+      "created_at": "2026-06-20T03:07:08.003Z"
+    },
+    {
+      "id": "3",
+      "order_no": "WO-20240603-003",
+      "customer_name": "客户丙",
+      "customer_phone": "13900003333",
+      "address": "阳光大厦8层",
+      "technician_id": "3",
+      "status": "completed",
+      "created_at": "2026-06-20T03:07:08.003Z"
+    },
+    {
+      "id": "4",
+      "order_no": "WO-20240605-004",
+      "customer_name": "客户丁",
+      "customer_phone": "13900004444",
+      "address": "滨河路22号",
+      "technician_id": "1",
+      "status": "pending",
+      "created_at": "2026-06-20T03:07:08.003Z"
+    }
+  ],
+  "spare_parts": [
+    {
+      "id": "1",
+      "name": "洗衣机主板V3",
+      "category": "主板",
+      "sku": "MB-WASH-V3",
+      "stock_qty": 20,
+      "unit_price": 350,
+      "min_stock": 5,
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:07.953Z"
+    },
+    {
+      "id": "2",
+      "name": "空调电机A型",
+      "category": "电机",
+      "sku": "MT-AC-A",
+      "stock_qty": 15,
+      "unit_price": 280,
+      "min_stock": 3,
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:08.002Z"
+    },
+    {
+      "id": "3",
+      "name": "冰箱温度传感器",
+      "category": "传感器",
+      "sku": "SN-FR-TEMP",
+      "stock_qty": 30,
+      "unit_price": 65,
+      "min_stock": 10,
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:08.002Z"
+    },
+    {
+      "id": "4",
+      "name": "洗衣机主板V2",
+      "category": "主板",
+      "sku": "MB-WASH-V2",
+      "stock_qty": 3,
+      "unit_price": 300,
+      "min_stock": 5,
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:08.002Z"
+    },
+    {
+      "id": "5",
+      "name": "油烟机电机B型",
+      "category": "电机",
+      "sku": "MT-HOOD-B",
+      "stock_qty": 8,
+      "unit_price": 220,
+      "min_stock": 3,
+      "station_id": "1",
+      "created_at": "2026-06-20T03:07:08.002Z"
+    }
+  ],
+  "checkout_records": [
+    {
+      "id": "1",
+      "work_order_id": "1",
+      "spare_part_id": "1",
+      "technician_id": "1",
+      "qty": 1,
+      "reason": null,
+      "status": "installed",
+      "checkout_date": "2024-06-01T09:00:00Z",
+      "created_at": "2026-06-20T03:07:08.018Z"
+    },
+    {
+      "id": "2",
+      "work_order_id": "2",
+      "spare_part_id": "2",
+      "technician_id": "2",
+      "qty": 1,
+      "reason": null,
+      "status": "checked_out",
+      "checkout_date": "2024-06-02T10:30:00Z",
+      "created_at": "2026-06-20T03:07:08.018Z"
+    },
+    {
+      "id": "3",
+      "work_order_id": "3",
+      "spare_part_id": "3",
+      "technician_id": "3",
+      "qty": 2,
+      "reason": null,
+      "status": "installed",
+      "checkout_date": "2024-06-03T08:15:00Z",
+      "created_at": "2026-06-20T03:07:08.019Z"
+    }
+  ],
+  "install_records": [
+    {
+      "id": "1",
+      "checkout_record_id": "1",
+      "installed_at": "2024-06-01T14:00:00Z",
+      "installed_by": "1",
+      "notes": "已安装完成",
+      "created_at": "2026-06-20T03:07:08.019Z"
+    },
+    {
+      "id": "2",
+      "checkout_record_id": "3",
+      "installed_at": "2024-06-03T16:00:00Z",
+      "installed_by": "3",
+      "notes": "两个传感器均已更换",
+      "created_at": "2026-06-20T03:07:08.019Z"
+    }
+  ],
+  "old_part_recoveries": [
+    {
+      "id": "1",
+      "checkout_record_id": "1",
+      "spare_part_id": "1",
+      "work_order_id": "1",
+      "technician_id": "1",
+      "status": "pending",
+      "photo_paths": [],
+      "notes": null,
+      "recovered_at": null,
+      "recovered_by": null,
+      "created_at": "2026-06-20T03:07:08.019Z"
+    },
+    {
+      "id": "2",
+      "checkout_record_id": "3",
+      "spare_part_id": "3",
+      "work_order_id": "3",
+      "technician_id": "3",
+      "status": "recovered",
+      "photo_paths": [
+        "recovery-sample-1.jpg"
+      ],
+      "notes": "旧件已拍照",
+      "recovered_at": "2024-06-04T09:00:00Z",
+      "recovered_by": "3",
+      "created_at": "2026-06-20T03:07:08.049Z"
+    }
+  ],
+  "return_records": [],
+  "scrap_records": [
+    {
+      "id": "1",
+      "checkout_record_id": "3",
+      "spare_part_id": "3",
+      "scrap_qty": 1,
+      "reason": "旧传感器已损坏无法维修",
+      "status": "pending",
+      "scrap_at": "2024-06-05T10:00:00Z",
+      "scrap_by": "3",
+      "approved_by": null,
+      "approved_at": null,
+      "created_at": "2026-06-20T03:07:08.063Z"
+    }
+  ],
+  "inventory_flows": [
+    {
+      "id": "1",
+      "spare_part_id": "1",
+      "type": "checkout",
+      "qty": -1,
+      "reference_id": "1",
+      "reference_type": "checkout",
+      "operator_id": "1",
+      "notes": "工单WO-20240601-001领用",
+      "created_at": "2026-06-20T03:07:08.068Z"
+    },
+    {
+      "id": "2",
+      "spare_part_id": "2",
+      "type": "checkout",
+      "qty": -1,
+      "reference_id": "2",
+      "reference_type": "checkout",
+      "operator_id": "2",
+      "notes": "工单WO-20240602-002领用",
+      "created_at": "2026-06-20T03:07:08.070Z"
+    },
+    {
+      "id": "3",
+      "spare_part_id": "3",
+      "type": "checkout",
+      "qty": -2,
+      "reference_id": "3",
+      "reference_type": "checkout",
+      "operator_id": "3",
+      "notes": "工单WO-20240603-003领用",
+      "created_at": "2026-06-20T03:07:08.230Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "zhang",
+      "password": "123456",
+      "name": "张师傅",
+      "role": "technician",
+      "technician_id": "1",
+      "created_at": "2026-06-20T03:07:07.885Z"
+    },
+    {
+      "id": "2",
+      "username": "li",
+      "password": "123456",
+      "name": "李师傅",
+      "role": "technician",
+      "technician_id": "2",
+      "created_at": "2026-06-20T03:07:07.897Z"
+    },
+    {
+      "id": "3",
+      "username": "wang",
+      "password": "123456",
+      "name": "王师傅",
+      "role": "technician",
+      "technician_id": "3",
+      "created_at": "2026-06-20T03:07:07.899Z"
+    },
+    {
+      "id": "4",
+      "username": "admin_ku",
+      "password": "123456",
+      "name": "赵库管",
+      "role": "warehouse_manager",
+      "technician_id": null,
+      "created_at": "2026-06-20T03:07:07.928Z"
+    },
+    {
+      "id": "5",
+      "username": "admin_zhan",
+      "password": "123456",
+      "name": "孙站长",
+      "role": "station_manager",
+      "technician_id": null,
+      "created_at": "2026-06-20T03:07:07.945Z"
+    }
+  ]
+}
